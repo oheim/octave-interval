@@ -19,12 +19,12 @@ sqr (X)                     tightest
 sqrt (X)                    tightest
 fma (X, Y, Z)               tightest
 - - - - - POWER FUNCTIONS - - - - - 
-pown (X, P)                 accurate (tightest for P in {-1, 0, 1, 2} or
-                            integral boundaries with mag (pown) <= 2^53)
+pown (X, P)                 accurate (tightest where pow is tightest)
 pow (X, Y)                  accurate (tightest in each of the following cases:
                               - X in {0, 1, 2, 10}
                               - Y in {-1, 0.5, 0, 1, 2}
-                              - X and Y integral with mag (pow) <= 2^53)
+                              - X and Y integral with
+                                mag (pow (X, Y)) in [2^-53, 2^53])
 exp (X)                     accurate (tightest for 0 and 1)
 exp2 (X)                    accurate (tightest for integral boundaries)
 exp10 (X)                   accurate (tightest for integral boundaries)
