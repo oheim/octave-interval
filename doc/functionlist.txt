@@ -24,7 +24,7 @@ pow (X, Y)                  accurate (tightest in each of the following cases:
                               - X in {0, 1, 2, 10}
                               - Y in {-1, 0.5, 0, 1, 2}
                               - X and Y integral with
-                                mag (pow (X, Y)) in [2^-53, 2^53])
+                                abs (pow (X, Y)) in [2^-53, 2^53])
 exp (X)                     accurate (tightest for 0 and 1)
 exp2 (X)                    accurate (tightest for integral boundaries)
 exp10 (X)                   accurate (tightest for integral boundaries)
@@ -60,14 +60,14 @@ max (X, Y)                  tightest
 
 IEEE1788 SET OPERATIONS (C2.5.3)
 
-Function               Operator    Accurracy
+Function               Operator    Accuracy
 intersection (A, B)    A & B       tightest
 convexhull (A, B)      A | B       tightest
 
 
 IEEE1788 CONSTRUCTORS (C2.5.4)
 
-Function                 Accurracy
+Function                 Accuracy
 numstointerval (L, U)    tightest
 texttointerval (S)       tightest
 exacttointerval (S)      exact
@@ -75,7 +75,7 @@ exacttointerval (S)      exact
 
 IEEE1788 NUMERIC FUNCTIONS (C2.5.5)
 
-Function    Accurracy
+Function    Accuracy
 inf (X)     exact
 sup (X)     exact
 mid (X)     TODO
