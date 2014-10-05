@@ -78,9 +78,9 @@ IEEE1788 NUMERIC FUNCTIONS (C2.5.5)
 Function    Accuracy
 inf (X)     exact
 sup (X)     exact
-mid (X)     TODO
-wid (X)     TODO
-rad (X)     TODO
+mid (X)     rounded to nearest
+wid (X)     tightest
+rad (X)     tightest
 mag (X)     exact
 mig (X)     exact
 
