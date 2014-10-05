@@ -203,12 +203,24 @@ function p = powrnd (x, y, direction)
         p = nextdown (p);
     endif
     
-    ## Forth, integral powers of integrals are intergrals.
+    ## Forth, integral powers of integrals can sometimes be computed exactly.
     if (fix (x) == x && fix (y) == y)
-        if (direction > 0)
-            p = floor (p);
+        if (y >= 0)
+            ## Non-negative integral powers of intergral numbers are intergrals
+            if (direction > 0)
+                p = floor (p);
+            else
+                p = ceil (p);
+            endif
         else
-            p = ceil (p);
+            ## Negative integral powers of integral numbers can be computed
+            ## with correct rounding inside [2^-53, 1].
+            if (pow2 (-53) < abs (p) && abs (p) < 1)
+                p = realpow (x, -y); # this is exact
+                fesetround (direction);
+                p = 1 / p;
+                fesetround (0.5);
+            endif
         endif
     endif
 endfunction

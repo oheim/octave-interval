@@ -30,53 +30,50 @@ if (fix (p) ~= p)
     error (["exponent is not an integer: " num2str (p)]);
 endif
 
+if (p == 1) # x^1
+    result = x;
+    return
+endif
+
 if (isempty (x))
     result = empty ();
     return
 endif
 
-switch p
-    case -1
-        result = recip (x);
-        return
-    case 0
-        result = infsup (1);
-        return
-    case 1
-        result = x;
-        return
-    case 2
-        result = sqr (x)
-        return
-endswitch
+if (p == 0) # x^0
+    result = infsup (1);
+    return
+endif
 
-if (rem (p, 2) == 0)
-    if (x.sup <= 0)
-        base.inf = -x.sup;
-        base.sup = -x.inf;
-    elseif (x.inf >= 0)
-        base.inf = x.inf;
-        base.sup = x.sup;
+## Special case: x = [0]. The pow function used below would be undefined.
+if (x.inf == 0 && x.sup == 0)
+    if (p >= 0)
+        result = infsup (0);
+        return
     else
-        base.inf = 0;
-        base.sup = max (-x.inf, x.sup);
+        ## not in domain
+        result = empty ();
     endif
+endif
+
+if (x.inf >= 0)
+    result = pow (x, infsup (p));
 else
-    base.inf = x.inf;
-    base.sup = x.sup;
+    if (rem (p, 2) == 0) # p even
+        if (x.sup <= 0)
+            result = pow (neg (x), infsup (p));
+        else
+            result = pow (infsup (0, max (-x.inf, x.sup)), infsup (p));
+        endif
+    else # p odd
+        if (x.sup <= 0)
+            result = neg (pow (neg (x), infsup (p)));
+        else
+            result = convexhull (...
+                        pow (x, infsup (p)), ...
+                        neg (pow (neg (x), infsup (p))));
+        endif
+    endif
 endif
-
-r.inf = nextdown (realpow (base.inf, p));
-r.sup = nextup (realpow (base.sup, p));
-
-## Integral powers of integrals are intergrals.
-if (fix (base.inf) == base.inf)
-    r.inf = ceil (r.inf);
-endif
-if (fix (base.sup) == base.sup)
-    r.sup = floor (r.sup);
-endif
-
-result = infsup (r.inf, r.sup);
 
 endfunction
