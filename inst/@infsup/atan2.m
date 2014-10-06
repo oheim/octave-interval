@@ -58,7 +58,7 @@ if (x.sup <= 0)
         if (x.inf == 0)
             at2.inf = inf (neg (pi)) / 2;
         elseif (x.inf == -inf)
-            at2.inf = inf (neg (pi))
+            at2.inf = inf (neg (pi));
         else
             fesetround (-inf);
             at2.inf = atan2 (y.sup, x.inf);
@@ -99,7 +99,7 @@ elseif (x.inf >= 0)
         elseif (x.inf == 0)
             at2.sup = sup (pi) / 2;
         else
-            fesetround (inf)
+            fesetround (inf);
             at2.sup = atan2 (y.sup, x.inf);
             fesetround (0.5);
         endif
