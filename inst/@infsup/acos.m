@@ -13,19 +13,19 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  asin (X)
+## -- IEEE 1788 interval function:  acos (X)
 ##
-## Compute inverse sine (arcsine) for all elements of interval X.
+## Compute inverse cosine (arccosine) for all elements of interval X.
 ##
 ## See also:
-##  acos, atan
+##  asin, atan
 ##
 
 ## Author: Oliver Heimlich
 ## Keywords: tightest interval function
 ## Created: 2014-10-06
 
-function result = asin (x)
+function result = acos (x)
 
 if (isempty (x) || x.inf > 1 || x.sup < -1)
     result = empty ();
@@ -33,23 +33,22 @@ if (isempty (x) || x.inf > 1 || x.sup < -1)
 endif
 
 if (x.inf <= -1)
-    ## - pi / 2
-    as.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56)); 
+    ## pi
+    ac.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55); 
 else
-    fesetround (-inf);
-    as.inf = asin (x.inf);
+    fesetround (inf);
+    ac.sup = acos (x.inf);
     fesetround (0.5);
 endif
 
 if (x.sup >= 1)
-    ## + pi / 2
-    as.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56);
+    ac.inf = 0;
 else
-    fesetround (inf);
-    as.sup = asin (x.sup);
+    fesetround (-inf);
+    ac.inf = acos (x.sup);
     fesetround (0.5);
 endif
 
-result = infsup (as.inf, as.sup);
+result = infsup (ac.inf, ac.sup);
 
 endfunction
