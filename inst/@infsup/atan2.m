@@ -32,25 +32,23 @@ if (isempty (x) || isempty (y) || ...
     return
 endif
 
+pi = infsup ("pi");
+
 if (x.sup <= 0)
     if (y.inf >= 0)
         if (y.sup == 0)
-            ## pi
-            at2.inf = 0x6487ED5 * pow2 (-25) + 0x442D180 * pow2 (-55);
+            at2.inf = inf (pi);
         elseif (y.sup == inf || x.sup == 0)
-            ## pi / 2
-            at2.inf = 0x6487ED5 * pow2 (-26) + 0x442D180 * pow2 (-56);
+            at2.inf = inf (pi) / 2;
         else
             fesetround (-inf);
             at2.inf = atan2 (y.sup, x.sup);
             fesetround (0.5);
         endif
         if (x.inf == 0)
-            ## pi / 2
-            at2.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56);
+            at2.sup = sup (pi) / 2;
         elseif (x.inf == -inf || y.inf == 0)
-            ## pi
-            at2.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+            at2.sup = sup (pi);
         else
             fesetround (inf);
             at2.sup = atan2 (y.inf, x.inf);
@@ -58,19 +56,16 @@ if (x.sup <= 0)
         endif
     elseif (y.sup <= 0)
         if (x.inf == 0)
-            ## -pi / 2
-            at2.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56));
+            at2.inf = inf (neg (pi)) / 2;
         elseif (x.inf == -inf)
-            ## -pi
-            at2.inf = - (0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55));
+            at2.inf = inf (neg (pi))
         else
             fesetround (-inf);
             at2.inf = atan2 (y.sup, x.inf);
             fesetround (0.5);
         endif
         if (y.inf == -inf || x.sup == 0)
-            ## -pi / 2
-            at2.sup = - (0x6487ED5 * pow2 (-26) + 0x442D180 * pow2 (-56));
+            at2.sup = sup (neg (pi)) / 2;
         else
             fesetround (inf);
             at2.sup = atan2 (y.inf, x.sup);
@@ -78,25 +73,20 @@ if (x.sup <= 0)
         endif
     else
         if (x.inf == 0)
-            ## -pi / 2
-            at2.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56));
+            at2.inf = inf (neg (pi)) / 2;
         else
-            ## -pi
-            at2.inf = - (0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55));
+            at2.inf = inf (neg (pi));
         endif
         if (x.inf == 0)
-            ## pi / 2
-            at2.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56);
+            at2.sup = sup (pi) / 2;
         else
-            ## pi
-            at2.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+            at2.sup = sup (pi);
         endif
     endif
 elseif (x.inf >= 0)
     if (y.inf >= 0)
         if (x.sup == 0)
-            ## pi / 2
-            at2.inf = 0x6487ED5 * pow2 (-26) + 0x442D180 * pow2 (-56);
+            at2.inf = inf (pi) / 2;
         elseif (y.inf == 0)
             at2.inf = 0;
         else
@@ -107,8 +97,7 @@ elseif (x.inf >= 0)
         if (y.sup == 0)
             at2.sup = 0;
         elseif (x.inf == 0)
-            ## pi / 2
-            at2.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56);
+            at2.sup = sup (pi) / 2;
         else
             fesetround (inf)
             at2.sup = atan2 (y.sup, x.inf);
@@ -116,16 +105,14 @@ elseif (x.inf >= 0)
         endif
     elseif (y.sup <= 0)
         if (x.inf == 0)
-            ## -pi / 2
-            at2.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56));
+            at2.inf = inf (neg (pi)) / 2;
         else
             fesetround (-inf);
             at2.inf = atan2 (y.inf, x.inf);
             fesetround (0.5);
         endif
         if (x.sup == 0)
-            ## -pi / 2
-            at2.sup = - (0x6487ED5 * pow2 (-26) + 0x442D180 * pow2 (-56));
+            at2.sup = sup (neg (pi)) / 2;
         elseif (y.sup == 0)
             at2.sup = 0;
         else
@@ -135,10 +122,8 @@ elseif (x.inf >= 0)
         endif
     else
         if (x.inf == 0)
-            ## -pi / 2
-            at2.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56));
-            ## pi / 2
-            at2.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56);
+            at2.inf = inf (neg (pi)) / 2;
+            at2.sup = sup (pi) / 2;
         else
             fesetround (-inf);
             at2.inf = atan2 (y.inf, x.inf);
@@ -150,8 +135,7 @@ elseif (x.inf >= 0)
 else
     if (y.inf == 0)
         at2.inf = 0;
-        ## pi
-        at2.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+        at2.sup = sup (pi);
     elseif (y.inf > 0)
         fesetround (-inf);
         at2.inf = atan2 (y.inf, x.sup);
@@ -159,10 +143,8 @@ else
         at2.sup = atan2 (y.inf, x.inf);
         fesetround (0.5);
     elseif (y.sup >= 0)
-        ## -pi
-        at2.inf = - (0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55));
-        ## pi
-        at2.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+        at2.inf = inf (neg (pi));
+        at2.sup = sup (pi);
     else # y.sup < 0
         fesetround (-inf);
         at2.inf = atan2 (y.sup, x.inf);
