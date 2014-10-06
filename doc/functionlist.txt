@@ -34,7 +34,7 @@ log10 (X)                   tightest
 TRIGONOMETRIC / HYPERBOLIC FUNCTIONS
 sin (X)                     accurate (tightest for 0)
 cos (X)                     accurate (tightest for 0)
-tan (X)                     TODO
+tan (X)                     accurate (tightest for 0)
 asin (X)                    TODO
 acos (X)                    TODO
 atan (X)                    TODO
