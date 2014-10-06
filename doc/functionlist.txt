@@ -38,7 +38,7 @@ tan (X)                     accurate (tightest for 0)
 asin (X)                    tightest
 acos (X)                    tightest
 atan (X)                    tightest
-atan2 (X)                   TODO
+atan2 (X)                   tightest
 sinh (X)                    TODO
 cosh (X)                    TODO
 tanh (X)                    TODO
