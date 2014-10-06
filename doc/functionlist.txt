@@ -35,7 +35,7 @@ TRIGONOMETRIC / HYPERBOLIC FUNCTIONS
 sin (X)                     accurate (tightest for 0)
 cos (X)                     accurate (tightest for 0)
 tan (X)                     accurate (tightest for 0)
-asin (X)                    TODO
+asin (X)                    tightest
 acos (X)                    TODO
 atan (X)                    TODO
 atan2 (X)                   TODO

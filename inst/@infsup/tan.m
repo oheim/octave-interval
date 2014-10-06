@@ -23,7 +23,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: accurate interval function
-## Created: 2014-10-05
+## Created: 2014-10-06
 
 function result = tan (x)
 
