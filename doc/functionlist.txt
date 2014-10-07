@@ -85,11 +85,12 @@ mag (X)     exact
 mig (X)     exact
 
 
-IEEE1788 BOOLEAN FUNCTIONS (C2.5.6)
+IEEE1788 BOOLEAN FUNCTIONS (C2.5.6, 10.6.3)
 
 Function           Operator
 isempty (X)
 isentire (X)
+issingleton (X)
 equal (A, B)       A == B
 subset (A, B)
 interior (A, B)
