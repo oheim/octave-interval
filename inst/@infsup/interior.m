@@ -49,6 +49,7 @@ if (isempty (b) || isentire (a))
     return
 endif
 
-result = (b.inf < a.inf && a.sup < b.sup);
+result = ((b.inf < a.inf || (b.inf == -inf && a.inf == -inf)) && ...
+          (a.sup < b.sup || (a.sup == inf && b.sup == inf)));
 
 endfunction
