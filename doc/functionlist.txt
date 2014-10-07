@@ -41,7 +41,7 @@ atan (X)                    tightest
 atan2 (X)                   tightest
 sinh (X)                    accurate
 cosh (X)                    accurate
-tanh (X)                    TODO
+tanh (X)                    tightest
 asinh (X)                   TODO
 acosh (X)                   TODO
 atanh (X)                   TODO
