@@ -13,40 +13,44 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  tanh (X)
+## -- IEEE 1788 interval function:  atanh (X)
 ##
-## Compute hyperbolic tangent for all elements of interval X.
+## Compute inverse hyperbolic tangent for all elements of interval X.
 ##
 ## See also:
-##  atanh, sinh, cosh
+##  tanh, asinh, acosh
 ##
 
 ## Author: Oliver Heimlich
 ## Keywords: tightest interval function
 ## Created: 2014-10-07
 
-function result = tanh (x)
+function result = atanh (x)
 
-if (isempty (x))
+if (isempty (x) || x.sup <= -1 || x.inf >= 1)
     result = empty ();
     return
 endif
 
-if (x.inf == 0)
-    th.inf = 0;
+if (x.inf == -1)
+    ath.inf = -inf;
+elseif (x.inf == 0)
+    ath.inf = 0;
 else
     fesetround (-inf);
-    th.inf = tanh (x.inf);
+    ath.inf = atanh (x.inf);
 endif
 
-if (x.sup == 0)
-    th.sup = 0;
+if (x.sup == 1)
+    ath.sup = inf;
+elseif (x.sup == 0)
+    ath.sup = 0;
 else
     fesetround (inf);
-    th.sup = tanh (x.sup);
+    ath.sup = atanh (x.sup);
 endif
 fesetround (0.5);
 
-result = infsup (th.inf, th.sup);
+result = infsup (ath.inf, ath.sup);
 
 endfunction

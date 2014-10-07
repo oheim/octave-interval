@@ -42,9 +42,9 @@ atan2 (X)                   tightest
 sinh (X)                    accurate
 cosh (X)                    accurate
 tanh (X)                    tightest
-asinh (X)                   TODO
-acosh (X)                   TODO
-atanh (X)                   TODO
+asinh (X)                   tightest
+acosh (X)                   tightest
+atanh (X)                   tightest
 - - - - - INTEGER FUNCTIONS - - - - 
 sign (X)                    tightest
 ceil (X)                    tightest
