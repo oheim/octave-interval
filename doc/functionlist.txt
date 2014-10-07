@@ -40,7 +40,7 @@ acos (X)                    tightest
 atan (X)                    tightest
 atan2 (X)                   tightest
 sinh (X)                    accurate
-cosh (X)                    TODO
+cosh (X)                    accurate
 tanh (X)                    TODO
 asinh (X)                   TODO
 acosh (X)                   TODO
