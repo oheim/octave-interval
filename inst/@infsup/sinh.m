@@ -22,7 +22,7 @@
 ##
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: accurate interval function
 ## Created: 2014-10-06
 
 function result = sinh (x)
@@ -35,18 +35,14 @@ endif
 if (x.inf == 0)
     sh.inf = 0;
 else
-    fesetround (-inf);
-    sh.inf = sinh (x.inf);
+    sh.inf = nextdown (sinh (x.inf));
 endif
 
 if (x.sup == 0)
     sh.sup = 0;
 else
-    fesetround (inf);
-    sh.sup = sinh (x.sup);
+    sh.sup = nextup (sinh (x.sup));
 endif
-
-fesetround (0.5);
 
 result = infsup (sh.inf, sh.sup);
 
