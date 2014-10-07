@@ -39,7 +39,7 @@ asin (X)                    tightest
 acos (X)                    tightest
 atan (X)                    tightest
 atan2 (X)                   tightest
-sinh (X)                    TODO
+sinh (X)                    tightest
 cosh (X)                    TODO
 tanh (X)                    TODO
 asinh (X)                   TODO
