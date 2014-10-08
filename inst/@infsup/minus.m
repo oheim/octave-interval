@@ -13,15 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: X - Y
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Z} =} @var{X} - @var{Y}
+## @cindex IEEE1788 sub
+## 
+## Subtract all numbers of interval @var{Y} from all numbers of @var{X}.
 ##
-## Implement the minus operator on intervals for convenience.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  sub
+## @example
+## @group
+## x = infsup (2, 3);
+## y = infsup (1, 2);
+## x - y
+##   @result{} [0, 2]
+## @end group
+## @end example
+## @seealso{plus}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval operator
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = minus (x, y)
@@ -31,6 +43,17 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-result = sub (x, y);
+if (isempty (x) || isempty (y))
+    result = empty ();
+    return
+endif
+
+fesetround (-inf);
+dif.inf = x.inf - y.inf;
+fesetround (inf);
+dif.sup = x.sup - y.sup;
+fesetround (0.5);
+
+result = infsup (dif.inf, dif.sup);
 
 endfunction
