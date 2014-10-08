@@ -13,17 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: A <= B
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} <= @var{B}
+## @cindex IEEE1788 less
+## 
+## Compare intervals @var{A} and @var{B} for weakly less.
 ##
-## Compare intervals A and B for weakly less.
+## True, if all numbers from @var{A} are weakly less than any number in
+## @var{B}.  False, if @var{A} contains a number which is strictly greater than
+## all numbers in @var{B}.
 ##
-## Implement the less or equal operator on intervals for convenience.
-##
-## See also:
-##  less
+## @seealso{eq, lt, ge, subset, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison operator
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = le(a, b)
@@ -33,6 +37,16 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = less (a, b);
+if (isempty (a) && isempty (b))
+    result = true ();
+    return
+endif
+
+if (isempty (a) || isempty (b))
+    result = false ();
+    return
+endif
+
+result = (a.inf <= b.inf && a.sup <= b.sup);
 
 endfunction
