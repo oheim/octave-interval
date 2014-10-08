@@ -13,15 +13,26 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  atan2 (Y, X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Z} =} atan2 (@var{Y}, @var{X})
+## @cindex IEEE1788 atan2
+## 
+## Compute the inverse tangent with two arguments for each pair of numbers from
+## intervals @var{Y} and @var{X}.
 ##
-## Compute inverse tangent with two arguments (arctangent 2).
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  atan
+## @example
+## @group
+## atan2 (infsup (1), infsup(-1))
+##   @result{} [2.3561944901923448, 2.3561944901923453]
+## @end group
+## @end example
+## @seealso{tan}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-06
 
 function result = atan2 (y, x)

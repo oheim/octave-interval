@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  acosh (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} acosh (@var{X})
+## @cindex IEEE1788 acosh
+## 
+## Compute the inverse hyperbolic cosine for each number in interval @var{X}.
 ##
-## Compute inverse hyperbolic cosine for all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  cosh, acosh, atanh
-##
+## @example
+## @group
+## acosh (infsup (2))
+##   @result{} [1.3169578969248165, 1.3169578969248168]
+## @end group
+## @end example
+## @seealso{cosh}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = acosh (x)

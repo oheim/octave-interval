@@ -13,24 +13,40 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval constant:  empty ()
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Constant} {@var{X} =} empty ()
+## @cindex IEEE1788 empty
+## 
 ## Return the empty interval.
 ##
-## See also:
-##  entire
+## The empty interval contains no real numbers.  All interval functions return
+## an empty result if the input is either empty or outside of the function's
+## domain.
 ##
-## Example:
-##  i = empty ();
-##  if (isempty (i))
-##    display ("success");
-##  endif
+## Accuracy: The representation of the empty interval is exact.
+##
+## @example
+## @group
+## x = empty ()
+##   @result{} [Empty]
+## inf (x)
+##   @result{} Inf
+## sup (x)
+##   @result{} -Inf
+## @end group
+## @end example
+## @seealso{isempty, entire}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval constant
+## Keywords: interval
 ## Created: 2014-09-27
 
 function interval = empty ()
 
 interval = infsup ();
 return
+%!test "Check [Empty] boundaries";
+%! x = empty ();
+%! assert (inf (x) == inf);
+%! assert (sup (x) == -inf);

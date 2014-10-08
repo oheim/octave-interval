@@ -13,16 +13,26 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  asin (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} asin (@var{X})
+## @cindex IEEE1788 asin
+## 
+## Compute the inverse sine in radians (arcsine) for each number in
+## interval @var{X}.
 ##
-## Compute inverse sine (arcsine) for all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  acos, atan
-##
+## @example
+## @group
+## asin (infsup (.5))
+##   @result{} [.5235987755982988, .523598775598299]
+## @end group
+## @end example
+## @seealso{sin}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-06
 
 function result = asin (x)

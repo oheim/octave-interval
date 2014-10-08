@@ -13,20 +13,39 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 constructor:  numstointerval (L, U)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Constructor} {@var{X} =} numstointerval (@var{L}, @var{U})
+## @cindex IEEE1788 numsToInterval
+## 
 ## Create an interval from two numeric boundaries.
 ##
-## [L, U] = { x in reals | L <= x <= U }
+## The lower boundary @var{L} must be less than or equal to the upper boundary
+## @var{U}.  The following GNU Octave data types can be used as parameters:
+## double, single, [u]int[8,16,32,64].  However, the boundaries of the
+## constructed interval are always in double precision.
 ##
-## See also:
-##  infsup
+## Interval construction fails if @var{U} is less than @var{L}.  The interval
+## may fail to enclose a desired number if the number is given as a numeric
+## literal that is not an exact binary floating point in double precision,
+## e. g., @code{0.1} should only be used with a string based constructor.
 ##
-## Example:
-##  x = numstointerval (2, 3); # interval from 2 to 3 (inclusive)
+## Accuracy: The interval is a tight enclosure of the numbers.
+##
+## @example
+## @group
+## x = numstointerval (-2.5, 3)
+##   @result{} [-2.5, +3]
+## y = numstointerval (9, 9)
+##   @result{} [9]
+## z = numstointerval (-inf, inf)
+##   @result{} [Entire]
+## @end group
+## @end example
+## @seealso{texttointerval, exacttointerval}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval constructor
+## Keywords: interval
 ## Created: 2014-09-30
 
 function interval = numstointerval (l, u)
@@ -40,3 +59,23 @@ if (isempty (interval))
 endif
 
 endfunction
+%!test "double precision";
+%! x = numstointerval (-2.5, 3);
+#! assert (inf (x) == -2.5);
+#! assert (sup (x) == 3);
+%!test "single precision";
+%! x = numstointerval (single (-2.5), single (3));
+#! assert (inf (x) == -2.5);
+#! assert (sup (x) == 3);
+%!test "integer";
+%! x = numstointerval (int16 (-2), int16 (3));
+#! assert (inf (x) == -2);
+#! assert (sup (x) == 3);
+%!test "unsigned integer";
+%! x = numstointerval (uint64 (2), uint64 (3));
+#! assert (inf (x) == 2);
+#! assert (sup (x) == 3);
+%!error "empty interval";
+%! x = numstointerval (inf, -inf);
+%!error "illegal boundaries";
+%! x = numstointerval (1, 0);

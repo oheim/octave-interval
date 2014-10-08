@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  cos (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} cos (@var{X})
+## @cindex IEEE1788 cos
+## 
+## Compute the cosine for each number in interval @var{X} in radians.
 ##
-## Compute cosine for all elements of interval X.
+## Accuracy: The result is an accurate enclosure.
 ##
-## See also:
-##  sin, tan
-##
+## @example
+## @group
+## cos (infsup (1))
+##   @result{} [.5403023058681396, .5403023058681399]
+## @end group
+## @end example
+## @seealso{acos, cosh}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-10-05
 
 function result = cos (x)

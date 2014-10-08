@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  atan (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} atan (@var{X})
+## @cindex IEEE1788 atan
+## 
+## Compute the inverse tangent in radians for each number in interval @var{X}.
 ##
-## Compute inverse tangent (arctangent) for all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  asin, acos
-##
+## @example
+## @group
+## atan (infsup (1))
+##   @result{} [.7853981633974482, .7853981633974484]
+## @end group
+## @end example
+## @seealso{tan, atan2}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-06
 
 function result = atan (x)

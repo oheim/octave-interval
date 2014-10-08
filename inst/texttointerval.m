@@ -13,31 +13,51 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 constructor:  [X, ISEXACT] = texttointerval (S)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} texttointerval (@var{S})
+## @cindex IEEE1788 textToInterval
+## 
 ## Create an interval from an interval literal.
 ##
-## For all intervals X is an accurate subset of
-## texttointerval (intervaltotext (X)).  A second, logical output ISEXACT
-## indicates if texttointerval (S) strictly equals the mathematical interval
-## denoted by S.
+## Interval literals @var{S} can be special values or in inf-sup form.  Special
+## values are: @code{[]} and @code{[empty]} for the empty interval and
+## @code{[entire]} for the entire set of real numbers.  Literals in inf-sup
+## form must be inside square brackets.  Boundaries in inf-sup form can be a
+## [+-]inf[inity] or a decimal number in the form [+-]d[.]d[[eE][+-]d].  In
+## inf-sup form it is possible to use @code{[m]} as an abbreviation for
+## @code{[m, m]}.
 ##
-## Supported literals: named constants and inf-sup form in decimal format.
+## Non-standard behavior: In inf-sup form the following mathematical constants
+## may be used as a boundary: @code{pi} (3.14...) and @code{e} (2.71...).
+## 
+## A second, logical output @var{ISEXACT} indicates whether
+## @code{texttointerval (@var{S})} strictly equals the mathematical interval
+## denoted by @var{S}.
 ##
-## See also:
-##  exacttointerval, intervaltotext
+## Accuracy: The interval is a tight enclosure of the decimal numbers used in 
+## inf-sup form.  For all intervals @var{X} is an accurate subset of
+## @code{texttointerval (intervaltotext (@var{X}))}.
 ##
-## Example:
-##  w = texttointerval ("[empty]"); # empty set
-##  x = texttointerval ("[2, 3]"); # exact interval from 2 to 3 (inclusive)
-##  y = texttointerval ("[entire]"); # entire set of reals
-##  z = texttointerval ("[2.1e-1]"); # thight enclosure of the decimal 0.21
+## @example
+## @group
+## w = texttointerval ("[ ]")
+##   @result{} [Empty]
+## x = texttointerval ("[2, 3]")
+##   @result{} [2, 3]
+## y = texttointerval ("[,]")
+##   @result{} [Entire]
+## z = texttointerval ("[2.1e-1]")
+##   @result{} [.20999999999999999, .21000000000000002]
+## @end group
+## @end example
+## @seealso{numstointerval, exacttointerval, intervaltotext}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval constructor
+## Keywords: interval 
 ## Created: 2014-09-30
 
-function [interval, isexact] = texttointerval (s)
+function [x, isexact] = texttointerval (s)
 
 s = strtrim (s);
 
@@ -50,10 +70,10 @@ s = strtrim (s(2:end-1));
 
 switch lower (s)
     case "entire"
-        interval = entire ();
+        x = entire ();
         isexact = true ();
-    case "empty"
-        interval = empty ();
+    case {"empty", ""}
+        x = empty ();
         isexact = true ();
     otherwise
         s = strsplit (s, ",");
@@ -67,10 +87,10 @@ switch lower (s)
             u = strtrim (s{2});
         endif
         ## All the logic in the infsup constructor can be used, except ...
-        [interval, isexact] = infsup (l, u);
+        [x, isexact] = infsup (l, u);
         ## ... this constructor must not allow construction of an empty
         ## interval.
-        if (isempty (interval))
+        if (isempty (x))
             error ("empty interval not allowed")
         endif
 endswitch

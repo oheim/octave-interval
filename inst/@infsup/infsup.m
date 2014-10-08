@@ -13,38 +13,52 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: INTERVAL = infsup ()
-## usage: [INTERVAL, ISEXACT] = infsup (X)
-## usage: [INTERVAL, ISEXACT] = infsup (L, U)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup ()
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
+## 
 ## Create an interval from boundaries.  Convert boundaries to double precision.
 ##
 ## The syntax without parameters creates an (exact) empty interval.  The syntax
-## with a single parameter infsup (X) equals infsup (X, X).  A second, logical
-## output ISEXACT indicates if INTERVAL's boundaries both have been converted
-## without precision loss.
+## with a single parameter @code{infsup (@var{M})} equals
+## @code{infsup (@var{M}, @var{M})}.  A second, logical output @var{ISEXACT}
+## indicates if @var{X}'s boundaries both have been converted without precision
+## loss.
 ##
-## Each boundary can be provided in the following formats:
-##  - literal constants: [+-]inf[inity], e, pi
-##  - scalar real numeric data types, i. e., double, single, [u]int[8,16,32,64]
-##  - decimal numbers as strings of the form [+-]d[,.]d[[eE][+-]d]
+## Each boundary can be provided in the following formats: literal constants
+## [+-]inf[inity], e, pi; scalar real numeric data types, i. e., double,
+## single, [u]int[8,16,32,64]; or decimal numbers as strings of the form
+## [+-]d[,.]d[[eE][+-]d].
 ## 
 ## If decimal numbers are no binary64 floating point numbers, a tight enclosure
 ## will be computed.  int64 and uint64 numbers of high magnitude (> 2^53) can
 ## also be affected from precision loss.
 ##
-## Example:
-##  v = infsup ();             # empty interval
-##  w = infsup (1);            # interval containing only the number 1
-##  x = infsup (2, 3);         # interval from 2 to 3 (inclusive)
-##  y = infsup ("0.1");        # interval enclosure of the number 0.1
-##  z = infsup ("0.1", "0.2"); # interval enclosure of numbers from 0.1 to 0.2
+## Non-standard behavior: This class constructor is not described by IEEE 1788.
+## 
+## @example
+## @group
+## v = infsup ()
+##   @result{} [Empty]
+## w = infsup (1)
+##   @result{} [1]
+## x = infsup (2, 3)
+##   @result{} [2, 3]
+## y = infsup ("0.1")
+##   @result{} [.09999999999999999, .10000000000000001]
+## z = infsup ("0.1", "0.2")
+##   @result{} [.09999999999999999, .20000000000000002]
+## @end group
+## @end example
+## @seealso{numstointerval, texttointerval, exacttointerval}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval constructor
+## Keywords: interval
 ## Created: 2014-09-27
 
-function [interval, isexact] = infsup (l, u)
+function [x, isexact] = infsup (l, u)
 
 if (nargin == 0)
     ## representation of the empty interval is always [inf,-inf]
@@ -57,14 +71,20 @@ if (nargin == 1)
     u = l;
 endif
 
-interval.inf = l;
-interval.sup = u;
+x.inf = l;
+x.sup = u;
 isexact = true ();
 
 ## check parameters and conversion to double precision
-for [boundary, key] = interval
+for [boundary, key] = x
     if (isempty (boundary))
-        error (["illegal " key " boundary: must not be empty"]);
+        switch key
+            case "inf"
+                x.inf = -inf;
+            case "sup"
+                x.sup = inf;
+        endswitch
+        continue
     endif
     
     if (isnumeric (boundary))
@@ -80,19 +100,19 @@ for [boundary, key] = interval
             endif
             ## Simple case: the boundary already is a binary floating point
             ## number is single or double precision.
-            interval.(key) = double (boundary);
+            x.(key) = double (boundary);
             continue
         endif
         
         ## Integer or logical, try to approximate in double precision
-        interval.(key) = double (boundary);
-        isexact = and (isexact, interval.(key) == boundary);
+        x.(key) = double (boundary);
+        isexact = and (isexact, x.(key) == boundary);
         
         ## Check rounding direction of the approximation
         ## Mixed mode comparison works as intended
-        if (interval.(key) == boundary || ... # exact conversion
-            (interval.(key) < boundary && key == "inf") || ... # lower bound
-            (interval.(key) > boundary && key == "sup")) # upper bound
+        if (x.(key) == boundary || ... # exact conversion
+            (x.(key) < boundary && key == "inf") || ... # lower bound
+            (x.(key) > boundary && key == "sup")) # upper bound
             ## Conversion to double has used desired rounding direction
         else
             ## Approximation is not exact and not rounded as needed.
@@ -100,9 +120,9 @@ for [boundary, key] = interval
             ## is right next to the desired number.
             switch key
                 case "inf"
-                    interval.(key) = nextdown (interval.(key));
+                    x.inf = nextdown (x.inf);
                 case "sup"
-                    interval.(key) = nextup (interval.(key));
+                    x.sup = nextup (x.sup);
             endswitch
         endif
     elseif (not (ischar (boundary)))
@@ -111,27 +131,27 @@ for [boundary, key] = interval
         ## parse string
         switch lower(boundary)
             case {"-inf", "-infinity"}
-                interval.(key) = -inf;
+                x.(key) = -inf;
             case {"inf", "+inf", "infinity", "+infinity"}
-                interval.(key) = inf;
+                x.(key) = inf;
             case "e"
                 isexact = false ();
                 switch key
                     case "inf"
-                        interval.inf = 0x56FC2A2 * pow2 (-25) ...
+                        x.inf = 0x56FC2A2 * pow2 (-25) ...
                                      + 0x628AED2 * pow2 (-52);
                     case "sup"
-                        interval.sup = 0x56FC2A2 * pow2 (-25) ...
+                        x.sup = 0x56FC2A2 * pow2 (-25) ...
                                      + 0x628AED4 * pow2 (-52);
                 endswitch
             case "pi"
                 isexact = false ();
                 switch key
                     case "inf"
-                        interval.inf = 0x6487ED5 * pow2 (-25) ...
+                        x.inf = 0x6487ED5 * pow2 (-25) ...
                                      + 0x442D180 * pow2 (-55);
                     case "sup"
-                        interval.sup = 0x6487ED5 * pow2 (-25) ...
+                        x.sup = 0x6487ED5 * pow2 (-25) ...
                                      + 0x442D190 * pow2 (-55);
                 endswitch
             otherwise
@@ -159,15 +179,15 @@ for [boundary, key] = interval
                     switch key
                         case "inf"
                             if (decimal.s) # -inf ... -realmax
-                                interval.(key) = -inf;
+                                x.inf = -inf;
                             else # realmax ... inf
-                                interval.(key) = realmax ();
+                                x.inf = realmax ();
                             endif
                         case "sup"
                             if (decimal.s) # -inf ... -realmax
-                                interval.(key) = -realmax ();
+                                x.sup = -realmax ();
                             else # realmax ... inf
-                                interval.(key) = inf;
+                                x.sup = inf;
                             endif
                     endswitch
                     isexact = false ();
@@ -183,50 +203,50 @@ for [boundary, key] = interval
                 if (comparison == 0 || ... # approximation is exact
                     (comparison < 0 && key == "inf") || ... # lower bound
                     (comparison > 0 && key == "sup")) # upper bound
-                    interval.(key) = binary;
+                    x.(key) = binary;
                 else
                     ## Approximation is not exact and not rounded as needed.
                     ## However, because of faithful rounding the approximation
                     ## is right next to the desired number.
                     switch key
                         case "inf"
-                            interval.(key) = nextdown (binary);
+                            x.inf = nextdown (binary);
                         case "sup"
-                            interval.(key) = nextup (binary);
+                            x.sup = nextup (binary);
                     endswitch
                 endif
         endswitch
     endif
 endfor
 
-assert (isa (interval.inf, "double"));
-assert (isa (interval.sup, "double"));
-assert (not (isnan (interval.inf)));
-assert (not (isnan (interval.sup)));
+assert (isa (x.inf, "double"));
+assert (isa (x.sup, "double"));
+assert (not (isnan (x.inf)));
+assert (not (isnan (x.sup)));
 
 ## normalize boundaries:
 ## representation of the set containing only zero is always [-0,+0]
-if (interval.inf == 0)
-    interval.inf = -0;
+if (x.inf == 0)
+    x.inf = -0;
 endif
-if (interval.sup == 0)
-    interval.sup = +0;
+if (x.sup == 0)
+    x.sup = +0;
 endif
 
 ## check for illegal boundaries [inf,inf] and [-inf,-inf]
-if (isequal (interval.inf, interval.sup, inf) || ...
-    isequal (interval.inf, interval.sup, -inf))
+if (isequal (x.inf, x.sup, inf) || ...
+    isequal (x.inf, x.sup, -inf))
     error ("illegal interval boundaries: infimum = supremum = +/- infinity");
 endif
 
 ## check boundary order
-if (interval.inf > interval.sup)
-    if (isfinite (interval.inf) || isfinite (interval.sup))
+if (x.inf > x.sup)
+    if (isfinite (x.inf) || isfinite (x.sup))
         error ("illegal interval boundaries: infimum greater than supremum");
     else
         ## okay: empty set [inf;-inf]
     endif
 endif
 
-interval = class (interval, "infsup");
+x = class (x, "infsup");
 endfunction

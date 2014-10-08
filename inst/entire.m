@@ -13,24 +13,40 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval constant:  entire ()
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Constant} {@var{X} =} entire ()
+## @cindex IEEE1788 entire
+## 
 ## Return the entire set of real numbers.
 ##
-## See also:
-##  empty
+## The entire set of real numbers is a closed interval.  If used as boundaries
+## for a certain value, it represents a state of minimum constraints.  An
+## interval function which evaluates to [Entire] yields no information at all.
 ##
-## Example:
-##  i = entire ();
-##  if (isentire (i))
-##    display ("success");
-##  endif
+## Accuracy: The representation of the entire set of real numbers is exact.
+##
+## @example
+## @group
+## x = entire ()
+##   @result{} [Entire]
+## inf (x)
+##   @result{} -Inf
+## sup (x)
+##   @result{} Inf
+## @end group
+## @end example
+## @seealso{isentire, empty}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval constant
+## Keywords: interval
 ## Created: 2014-09-27
 
 function interval = entire ()
 
 interval = infsup (-inf, inf);
 return
+%!test "Check [Entire] boundaries";
+%! x = entire ();
+%! assert (inf (x) == -inf);
+%! assert (sup (x) == inf);

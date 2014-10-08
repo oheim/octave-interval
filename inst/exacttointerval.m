@@ -13,23 +13,41 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 constructor:  exacttointerval (S)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Constructor} {@var{X} =} exacttointerval (@var{S})
+## @cindex IEEE1788 exactToInterval
+## 
 ## Create an interval from an interval literal.  Fail, if the interval cannot
 ## exactly represent the input S.
 ##
-## The equation X == exacttointerval (intervaltoexact (X)) holds for all
-## intervals.
+## Interval literals @var{S} can be special values or in inf-sup form.  Special
+## values are: @code{[]} and @code{[empty]} for the empty interval and
+## @code{[entire]} for the entire set of real numbers.  Literals in inf-sup
+## form must be inside square brackets.  Boundaries in inf-sup form can be a
+## [+-]inf[inity] or a decimal number in the form [+-]d[.]d[[eE][+-]d].  In
+## inf-sup form it is possible to use @code{[m]} as an abbreviation for
+## @code{[m, m]}.
 ##
-## See also:
-##  texttointerval, intervaltoexact, numstointerval
+## Accuracy: The equation @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))}
+## holds for all intervals.
 ##
-## Example:
-##  x = exacttointerval ("[2, 3]"); # ok
-##  y = exacttointerval ("[2, 3.1]"); # fails, “3.1” is no binary64 number
+## @example
+## @group
+## w = texttointerval ("[ ]")
+##   @result{} [Empty]
+## x = texttointerval ("[2, 3]")
+##   @result{} [2, 3]
+## y = texttointerval ("[,]")
+##   @result{} [Entire]
+## z = texttointerval ("[2.1e-1]")
+##   @result{} error: rounding occurred during interval construction
+## @end group
+## @end example
+## @seealso{numstointerval, texttointerval, intervaltoexact}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval constructor
+## Keywords: interval
 ## Created: 2014-10-01
 
 function x = exacttointerval (s)

@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  atanh (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} atanh (@var{X})
+## @cindex IEEE1788 atanh
+## 
+## Compute the inverse hyperbolic tangent for each number in interval @var{X}.
 ##
-## Compute inverse hyperbolic tangent for all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  tanh, asinh, acosh
-##
+## @example
+## @group
+## atanh (infsup (.5))
+##   @result{} [.5493061443340547, .5493061443340549]
+## @end group
+## @end example
+## @seealso{tanh}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = atanh (x)

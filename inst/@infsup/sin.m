@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  sin (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} sin (@var{X})
+## @cindex IEEE1788 sin
+## 
+## Compute the sine for each number in interval @var{X} in radians.
 ##
-## Compute sine for all elements of interval X.
+## Accuracy: The result is an accurate enclosure.
 ##
-## See also:
-##  cos, tan
-##
+## @example
+## @group
+## sin (infsup (1))
+##   @result{} [.8414709848078963, .8414709848078967]
+## @end group
+## @end example
+## @seealso{asin, sinh}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-10-05
 
 function result = sin (x)

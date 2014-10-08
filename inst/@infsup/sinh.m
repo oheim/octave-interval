@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  sinh (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} sinh (@var{X})
+## @cindex IEEE1788 sinh
+## 
+## Compute the hyperbolic sine for each number in interval @var{X}.
 ##
-## Compute hyperbolic sine for all elements of interval X.
+## Accuracy: The result is an accurate enclosure.
 ##
-## See also:
-##  asinh, cosh, tanh
-##
+## @example
+## @group
+## sinh (infsup (1))
+##   @result{} [1.1752011936438011, 1.1752011936438017]
+## @end group
+## @end example
+## @seealso{asinh, cosh, tanh}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-10-06
 
 function result = sinh (x)

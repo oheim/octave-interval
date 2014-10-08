@@ -1,18 +1,24 @@
-IEEE1788 INTERVAL CONSTANTS (C2.5.1)
+IEEE1788    GNU Octave    GNU Octave
+Function    Function      Operator
 
-Function     Accuracy
-empty ()     tightest
-entire ()    tightest
+- - - - - INTERVAL CONSTANTS - - - - 
+
+empty ()
+entire ()
 
 
-IEEE1788 ELEMENTARY FUNCTIONS (C2.5.2)
+- - - - - - CONSTRUCTORS - - - - - - 
 
-Function        Operator    Accuracy
+numstointerval (L, U)    tightest
+texttointerval (S)       tightest
+exacttointerval (S)      exact
+
 - - - - - BASIC OPERATIONS - - - - -
-neg (X)         - X         tightest
-add (X, Y)      X + Y       tightest
-sub (X, Y)      X - Y       tightest
-mul (X, Y)      X * Y       tightest
+
+neg (X)     uminus (X)    - X         tightest
+add (X, Y)  plus (X, Y)   X + Y       tightest
+sub (X, Y)  minus (X, Y)  X - Y       tightest
+mul (X, Y)  mtimes (X, Y) X * Y       tightest
 div (X, Y)      X / Y       tightest
 recip (X)                   tightest
 sqr (X)                     tightest
@@ -63,14 +69,6 @@ IEEE1788 SET OPERATIONS (C2.5.3)
 Function               Operator    Accuracy
 intersection (A, B)    A & B       tightest
 convexhull (A, B)      A | B       tightest
-
-
-IEEE1788 CONSTRUCTORS (C2.5.4)
-
-Function                 Accuracy
-numstointerval (L, U)    tightest
-texttointerval (S)       tightest
-exacttointerval (S)      exact
 
 
 IEEE1788 NUMERIC FUNCTIONS (C2.5.5)

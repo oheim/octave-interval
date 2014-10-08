@@ -13,18 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  abs (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} abs (@var{X})
+## @cindex IEEE1788 abs
+## 
+## Compute the absolute value of numbers in interval @var{X}.
 ##
-## Compute the absolute value of each element of X.
+## Accuracy: The result is exact.
 ##
-## Example:
-##  abs (infsup (2.5, 3.5))
-##   |=> [2.5, 3.5]
-##  abs (infsup (-0.5, 5.5))
-##   |=> [0, 5.5]
+## @example
+## @group
+## abs (infsup (2.5, 3.5))
+##   @result{} [2.5, 3.5]
+## abs (infsup (-0.5, 5.5))
+##   @result{} [0, 5.5]
+## @end group
+## @end example
+## @seealso{mag, mig}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = abs (x)

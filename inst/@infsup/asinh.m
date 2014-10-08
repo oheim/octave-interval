@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  asinh (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} asinh (@var{X})
+## @cindex IEEE1788 asinh
+## 
+## Compute the inverse hyperbolic sine for each number in interval @var{X}.
 ##
-## Compute inverse hyperbolic sine for all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  sinh, acosh, atanh
-##
+## @example
+## @group
+## asinh (infsup (1))
+##   @result{} [.8813735870195429, .8813735870195431]
+## @end group
+## @end example
+## @seealso{sinh}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = asinh (x)

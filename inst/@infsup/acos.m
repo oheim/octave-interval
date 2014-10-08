@@ -13,16 +13,26 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  acos (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} acos (@var{X})
+## @cindex IEEE1788 acos
+## 
+## Compute the inverse cosine in radians (arccosine) for each number in
+## interval @var{X}.
 ##
-## Compute inverse cosine (arccosine) for all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  asin, atan
-##
+## @example
+## @group
+## acos (infsup (.5))
+##   @result{} [1.0471975511965976, 1.0471975511965979]
+## @end group
+## @end example
+## @seealso{cos}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-06
 
 function result = acos (x)

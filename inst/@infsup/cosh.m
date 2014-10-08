@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  cosh (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} cosh (@var{X})
+## @cindex IEEE1788 cosh
+## 
+## Compute the hyperbolic cosine for each number in interval @var{X}.
 ##
-## Compute hyperbolic cosine for all elements of interval X.
+## Accuracy: The result is an accurate enclosure.
 ##
-## See also:
-##  acosh, sinh, tanh
-##
+## @example
+## @group
+## cosh (infsup (1))
+##   @result{} [1.5430806348152434, 1.543080634815244]
+## @end group
+## @end example
+## @seealso{acosh, sinh, tanh}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = cosh (x)
