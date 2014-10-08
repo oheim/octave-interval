@@ -13,22 +13,14 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  isempty (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Y} =} isempty (@var{X})
+## @cindex IEEE1788 isEmpty
+## 
+## Check if the interval represents the empty set.
 ##
-## Check if interval X represents the empty set.
-##
-## See also:
-##  isentire
-##
-## Example:
-##  a = infsup (2, 3);
-##  if (not (isempty (a)))
-##    display ("success");
-##  endif
-##  b = empty ();
-##  if (isempty (b))
-##    display ("success");
-##  endif
+## @seealso{eq, isentire, issingleton}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -13,22 +13,14 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  isentire (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Y} =} isentire (@var{X})
+## @cindex IEEE1788 isEntire
+## 
+## Check if the interval represents the entire set of real numbers.
 ##
-## Check if interval X represents the entire set of real numbers.
-##
-## See also:
-##  isempty
-##
-## Example:
-##  a = infsup (2, 3);
-##  if (not (isentire (a)))
-##    display ("success");
-##  endif
-##  b = entire ();
-##  if (isentire (b))
-##    display ("success");
-##  endif
+## @seealso{eq, isempty, issingleton}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

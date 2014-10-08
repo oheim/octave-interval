@@ -13,19 +13,14 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 boolean function:  issingleton (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Y} =} issingleton (@var{X})
+## @cindex IEEE1788 isSingleton
+## 
+## Check if the interval represents a set that contains a single real only.
 ##
-## Check if interval X represents the set of a single real.
-##
-## Example:
-##  a = infsup (2, 3);
-##  if (not (issingleton (a)))
-##    display ("success");
-##  endif
-##  b = infsup (2);
-##  if (issingleton (b))
-##    display ("success");
-##  endif
+## @seealso{eq, isentire, isempty}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

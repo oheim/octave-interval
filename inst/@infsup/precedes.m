@@ -13,24 +13,19 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  precedes (A, B)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} precedes (@var{A}, @var{B})
+## @cindex IEEE1788 precedes
+## 
 ## Evaluate precedes comparison on intervals.
 ##
-## True, if A is left of B. The intervals may touch.
+## True, if @var{A} is left of @var{B}. The intervals may touch.
 ##
-## See also:
-##  subset, interior, disjoint, less
-##
-## Example:
-##  x = infsup (1, 2);
-##  y = infsup (2, 3);
-##  if (precedes (x, y))
-##    display ("success")
-##  endif
+## @seealso{eq, le, lt, gt, strictprecedes, subset, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = precedes (a, b)

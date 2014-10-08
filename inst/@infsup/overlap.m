@@ -13,23 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  [STATE, BITMASK] = overlap (A, B)
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
+## @cindex IEEE1788 overlap
+## 
+## Extensively compare the positions of intervals @var{A} and @var{B} on the
+## real number line.  Return the @var{STATE} as a string, e. g.,
+## @code{bothEmpty} or @code{before}.  Return the @var{BITMASK} of the state as
+## an uint16 number, which represents one of the 16 possible states by taking a
+## value 2^i (i = 0 .. 15).
 ##
-## Extensively compare the positions of intervals A and B on the real number
-## line.  Return the STATE as a string, e. g., "bothEmpty" or "before".
-## Return the BITMASK of the state as an uint16 number, which represents one of
-## the 16 possible states by taking a value 2^i (i = 0 .. 15).
-##
-## Example:
-##  [s, b] = overlap (empty (), empty ())
-##   |=> s = "bothEmpty"
-##   |=> b = 2^15
-##  [s, b] = overlap (infsup (1), infsup (2))
-##   |=> s = "before"
-##   |=> b = 2^12
+## @seealso{eq, subset, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison
+## Keywords: interval
 ## Created: 2014-10-04
 
 function [state, bitmask] = overlap (a, b)

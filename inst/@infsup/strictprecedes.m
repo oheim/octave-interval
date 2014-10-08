@@ -14,14 +14,14 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} strictprecedes(@var{A}, @var{B})
+## @deftypefn {Interval Comparison} {@var{Z} =} strictprecedes (@var{A}, @var{B})
 ## @cindex IEEE1788 strictPrecedes
 ## 
 ## Evaluate strict precedes comparison on intervals.
 ##
 ## True, if @var{A} is strictly left of @var{B}. The intervals may not touch.
 ##
-## @seealso{eq, le, lt, gt, subset, interior, disjoint}
+## @seealso{eq, le, lt, gt, precedes, subset, interior, disjoint}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
