@@ -13,15 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: X + Y
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Z} =} @var{X} + @var{Y}
+## @cindex IEEE1788 add
+## 
+## Add all numbers of interval @var{X} to all numbers of @var{Y}.
 ##
-## Implement the plus operator in intervals for convenience.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  add
+## @example
+## @group
+## x = infsup (2, 3);
+## y = infsup (1, 2);
+## x + y
+##   @result{} [3 , 5]
+## @end group
+## @end example
+## @seealso{sub}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval operator
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = plus (x, y)
@@ -31,6 +43,17 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-result = add (x, y);
+if (isempty (x) || isempty (y))
+    result = empty ();
+    return
+endif
+
+fesetround (-inf);
+sum.inf = x.inf + y.inf;
+fesetround (inf);
+sum.sup = x.sup + y.sup;
+fesetround (0.5);
+
+result = infsup (sum.inf, sum.sup);
 
 endfunction
