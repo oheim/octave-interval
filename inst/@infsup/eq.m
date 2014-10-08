@@ -13,17 +13,28 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: A == B
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} == @var{B}
+## @cindex IEEE1788 equal
+## 
 ## Compare intervals A and B for equality.
 ##
-## Implement the equality operator on intervals for convenience.
+## True, if all numbers from A are also contained in B and vice versa.
+## False, if A contains a number which is not a member in B or vice versa.
 ##
-## See also:
-##  equal
+## @example
+## @group
+## x = infsup (2, 3);
+## y = infsup (1, 2);
+## x == y
+##   @result{} False
+## @end group
+## @end example
+## @seealso{subset, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison operator
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = eq(a, b)
@@ -33,6 +44,6 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = equal (a, b);
+result = (a.inf == b.inf && a.sup == b.sup);
 
 endfunction

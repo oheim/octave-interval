@@ -20,7 +20,7 @@
 ## Implement the unary plus operator on intervals for convenience.
 
 ## Author: Oliver Heimlich
-## Keywords: interval operator
+## Keywords: interval
 ## Created: 2014-09-30
 
 function x = uplus (x)
