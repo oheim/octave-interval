@@ -69,9 +69,8 @@ else
         if (x.sup <= 0)
             result = neg (pow (neg (x), infsup (p)));
         else
-            result = convexhull (...
-                        pow (x, infsup (p)), ...
-                        neg (pow (neg (x), infsup (p))));
+            result = pow (x, infsup (p)) | ...
+                     neg (pow (neg (x), infsup (p)));
         endif
     endif
 endif
