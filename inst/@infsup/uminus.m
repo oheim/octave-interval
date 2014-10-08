@@ -13,21 +13,34 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: - x
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} - @var{X}
+## @cindex IEEE1788 neg
+## 
 ## Negate all numbers in the interval.
 ##
-## Implement the unary minus operator on intervals for convenience.
+## Accuracy: The result is exact.
 ##
-## See also:
-##  neg
+## @example
+## @group
+## x = infsup (2, 3);
+## - x
+##   @result{} [-3, -2]
+## @end group
+## @end example
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval operator
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = uminus (x)
 
-result = neg (x);
+if (isempty (x))
+    result = empty ();
+    return
+endif
+
+result = infsup (-x.sup, -x.inf);
 
 endfunction
