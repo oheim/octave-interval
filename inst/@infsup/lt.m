@@ -13,17 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: A < B
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} < @var{B}
+## @cindex IEEE1788 strictLess
+## 
+## Compare intervals @var{A} and @var{B} for strictly less.
 ##
-## Compare intervals A and B for strictly less.
+## True, if all numbers from @var{A} are strict less than any number in
+## @var{B}.  False, if @var{A} contains a number which is greater than all
+## numbers in @var{B} or is equal to the greates number of @var{B}.
 ##
-## Implement the strict less operator on intervals for convenience.
-##
-## See also:
-##  stictless
+## @seealso{eq, le, gt, subset, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison operator
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = lt(a, b)
@@ -33,6 +37,17 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = strictless (a, b);
+if (isempty (a) && isempty (b))
+    result = true ();
+    return
+endif
+
+if (isempty (a) || isempty (b))
+    result = false ();
+    return
+endif
+
+result = ((a.inf < b.inf || (a.inf == -inf && b.inf == -inf)) && ...
+          (a.sup < b.sup || (a.sup == inf && b.sup == inf)));
 
 endfunction

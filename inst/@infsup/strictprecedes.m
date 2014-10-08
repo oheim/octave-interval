@@ -13,24 +13,19 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  strictprecedes (A, B)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} strictprecedes(@var{A}, @var{B})
+## @cindex IEEE1788 strictPrecedes
+## 
 ## Evaluate strict precedes comparison on intervals.
 ##
-## True, if A is strictly left of B. The intervals may not touch.
+## True, if @var{A} is strictly left of @var{B}. The intervals may not touch.
 ##
-## See also:
-##  subset, interior, disjoint, precedes
-##
-## Example:
-##  x = infsup (1, 2);
-##  y = infsup (2, 3);
-##  if (not (strictprecedes (x, y)))
-##    display ("success")
-##  endif
+## @seealso{eq, le, lt, gt, subset, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = strictprecedes (a, b)
