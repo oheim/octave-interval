@@ -13,25 +13,20 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  disjoint (A, B)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} disjoint (@var{A}, @var{B})
+## @cindex IEEE1788 disjoint
+## 
 ## Evaluate disjoint comparison on intervals.
 ##
-## True, if all numbers from A are not contained in B and vice versa.
-## False, if A and B have at least one element in common.
+## True, if all numbers from @var{A} are not contained in @var{B} and vice
+## versa.  False, if @var{A} and @var{B} have at least one element in common.
 ##
-## See also:
-##  subset, equal, interior
-##
-## Example:
-##  x = infsup (1, 2);
-##  y = infsup (3, 4);
-##  if (disjoint (x, y))
-##    display ("success")
-##  endif
+## @seealso{eq, subset, interior}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = disjoint (a, b)

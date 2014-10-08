@@ -17,10 +17,11 @@
 ## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} == @var{B}
 ## @cindex IEEE1788 equal
 ## 
-## Compare intervals A and B for equality.
+## Compare intervals @var{A} and @var{B} for equality.
 ##
-## True, if all numbers from A are also contained in B and vice versa.
-## False, if A contains a number which is not a member in B or vice versa.
+## True, if all numbers from @var{A} are also contained in @var{B} and vice
+## versa.  False, if @var{A} contains a number which is not a member in @var{B}
+## or vice versa.
 ##
 ## @example
 ## @group

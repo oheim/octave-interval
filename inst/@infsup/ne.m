@@ -13,16 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: a ~= b
-## usage: a != b
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} ~= @var{B}
+## @deftypefx {Interval Comparison} {@var{Z} =} @var{A} != @var{B}
+## 
+## Compare intervals @var{A} and @var{B} for inequality.
 ##
-## Implement the not equal to operator on intervals for convenience.
+## True, if @var{A} contains a number which is not a member in @var{B} or vice
+## versa.  False, if all numbers from @var{A} are also contained in @var{B} and
+## vice versa.
 ##
-## See also:
-##  equal
+## @seealso{eq, subset, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison operator
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = ne(a, b)

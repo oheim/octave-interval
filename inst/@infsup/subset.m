@@ -13,25 +13,20 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  subset (A, B)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} subset (@var{A}, @var{B})
+## @cindex IEEE1788 subset
+## 
 ## Evaluate subset comparison on intervals.
 ##
-## True, if all numbers from A are also contained in B.
-## False, if A contains a number which is not a member in B.
+## True, if all numbers from @var{A} are also contained in @var{B}.
+## False, if @var{A} contains a number which is not a member in @var{B}.
 ##
-## See also:
-##  interior, equal, disjoint
-##
-## Example:
-##  x = infsup (1, 3);
-##  y = infsup (2, 3);
-##  if (subset (y, x))
-##    display ("success")
-##  endif
+## @seealso{eq, interior, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = subset (a, b)

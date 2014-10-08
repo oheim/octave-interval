@@ -13,26 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval comparison:  interior (A, B)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} interior (@var{A}, @var{B})
+## @cindex IEEE1788 interior
+## 
 ## Evaluate interior comparison on intervals.
 ##
-## True, if all numbers from A are also contained in B, but are no boundaries
-## of B.  False, if A contains a number which is not a member in B or which is
-## a boundary of B.
+## True, if all numbers from @var{A} are also contained in @var{B}, but are no
+## boundaries of @var{B}.  False, if @var{A} contains a number which is not a
+## member in @var{B} or which is a boundary of @var{B}.
 ##
-## See also:
-##  subset, equal, disjoint
-##
-## Example:
-##  x = infsup (1, 4);
-##  y = infsup (2, 3);
-##  if (interior (y, x))
-##    display ("success")
-##  endif
+## @seealso{eq, subset, disjoint}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = interior (a, b)
