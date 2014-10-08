@@ -13,15 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: A | B
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{C} =} @var{A} | @var{B}
+## @cindex IEEE1788 convexHull
+## 
+## Build the interval hull of the union of two intervals.
 ##
-## Implement the convex hull operator on intervals for convenience.
+## Accuracy: The result is exact.
 ##
-## See also:
-##  convexhull
+## @example
+## @group
+## x = infsup (1, 3);
+## y = infsup (2, 4);
+## x | y
+##   @result{} [1, 4]
+## @end group
+## @end example
+## @seealso{or}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval set operator
+## Keywords: interval
 ## Created: 2014-10-02
 
 function result = or(a, b)
@@ -31,6 +43,16 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = convexhull (a, b);
+if (isempty (a) || isentire (b))
+    result = b;
+    return
+endif
+
+if (isempty (b) || isentire (a))
+    result = a;
+    return
+endif
+
+result = infsup (min (a.inf, b.inf), max (a.sup, b.sup));
 
 endfunction
