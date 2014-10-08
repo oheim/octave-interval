@@ -13,17 +13,16 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: A >= B
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} >= @var{B}
+## 
+## Compare intervals @var{A} and @var{B} for weakly greater.
 ##
-## Compare intervals A and B for weakly greater.
-##
-## Implement the greater or equal operator on intervals for convenience.
-##
-## See also:
-##  less
+## @seealso{eq, le, gt}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison operator
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = ge(a, b)
@@ -33,6 +32,6 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = less (b, a);
+result = le (b, a);
 
 endfunction

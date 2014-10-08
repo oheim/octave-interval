@@ -13,17 +13,16 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: A > B
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} > @var{B}
+## 
+## Compare intervals @var{A} and @var{B} for strict greater.
 ##
-## Compare intervals A and B for strictly greater.
-##
-## Implement the strict greater operator on intervals for convenience.
-##
-## See also:
-##  stictless
+## @seealso{eq, lt, ge}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval comparison operator
+## Keywords: interval
 ## Created: 2014-10-07
 
 function result = gt(a, b)
@@ -33,6 +32,6 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = strictless (b, a);
+result = lt (b, a);
 
 endfunction
