@@ -75,31 +75,31 @@ if (c.inf == c.sup)
         result = infsup (-1, 1);
         return
     endif
-    result = intersection (infsup (-1, 1), ...
+    result = infsup (-1, 1) & ...
                   nextout (infsup (min (s.inf, s.sup), ...
-                                   max (s.inf, s.sup))));
+                                   max (s.inf, s.sup)));
     ## sin (0) == 0
     if ((x.inf == 0 && min (s.inf, s.sup) == s.inf) || ...
         (x.sup == 0 && min (s.inf, s.sup) == s.sup))
-        result = intersection (infsup (0, 1), result);
+        result = infsup (0, 1) & result;
     endif
     if ((x.inf == 0 && max (s.inf, s.sup) == s.inf) || ...
         (x.sup == 0 && max (s.inf, s.sup) == s.sup))
-        result = intersection (infsup (-1, 0), result);
+        result = infsup (-1, 0) & result;
     endif
 elseif (c.inf == -1 && c.sup == 1)
     result = infsup (-1, min (1, nextup (max (s.inf, s.sup))));
     ## sin (0) == 0
     if ((x.inf == 0 && max (s.inf, s.sup) == s.inf) || ...
         (x.sup == 0 && max (s.inf, s.sup) == s.sup))
-        result = intersection (infsup (-1, 0), result);
+        result = infsup (-1, 0) & result;
     endif
 elseif (c.inf == 1 && c.sup == -1)
     result = infsup (max (-1, nextdown (min (s.inf, s.sup))), 1);
     ## sin (0) == 0
     if ((x.inf == 0 && min (s.inf, s.sup) == s.inf) || ...
         (x.sup == 0 && min (s.inf, s.sup) == s.sup))
-        result = intersection (infsup (0, 1), result);
+        result = infsup (0, 1) & result;
     endif
 endif
 

@@ -81,9 +81,9 @@ if (s.inf == s.sup)
         result = infsup (-1, 1);
         return
     endif
-    result = intersection (infsup (-1, 1), ...
+    result = infsup (-1, 1) & ...
                   nextout (infsup (min (c.inf, c.sup), ...
-                                   max (c.inf, c.sup))));
+                                   max (c.inf, c.sup)));
 elseif (s.inf == -1 && s.sup == 1)
     result = infsup (-1, min (1, nextup (max (c.inf, c.sup))));
 elseif (s.inf == 1 && s.sup == -1)

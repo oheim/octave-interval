@@ -13,15 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: A & B
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{C} =} @var{A} & @var{B}
+## @cindex IEEE1788 intersection
+## 
+## Intersect two intervals.
 ##
-## Implement the intersection operator on intervals for convenience.
+## Accuracy: The result is exact.
 ##
-## See also:
-##  intersection
+## @example
+## @group
+## x = infsup (1, 3);
+## y = infsup (2, 4);
+## x & y
+##   @result{} [2, 3]
+## @end group
+## @end example
+## @seealso{or}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval set operator
+## Keywords: interval
 ## Created: 2014-10-02
 
 function result = and(a, b)
@@ -31,6 +43,26 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = intersection (a, b);
+if (isempty (a) || isempty (b))
+    result = empty ();
+    return
+endif
+
+if (isentire (a))
+    result = b;
+    return
+endif
+
+if (isentire (b))
+    result = a;
+    return
+endif
+
+if (a.sup < b.inf || b.sup < a.inf)
+    result = empty ();
+    return
+endif
+
+result = infsup (max (a.inf, b.inf), min (a.sup, b.sup));
 
 endfunction
