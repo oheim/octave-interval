@@ -62,37 +62,10 @@ function [x, isexact] = texttointerval (s)
 s = strtrim (s);
 
 if (isempty (s) || s(1) ~= "[" || s(end) ~= "]")
-    error ("interval string does not begin/end with square brackets")
+    error ("interval literal does not begin/end with square brackets")
 endif
 
-## Strip square brackets and whitespace
-s = strtrim (s(2:end-1));
-
-switch lower (s)
-    case "entire"
-        x = entire ();
-        isexact = true ();
-    case {"empty", ""}
-        x = empty ();
-        isexact = true ();
-    otherwise
-        s = strsplit (s, ",");
-        if (isempty (s) || length (s) > 2)
-            error ("interval string is not in inf-sup form")
-        endif
-        l = strtrim (s{1});
-        if (length (s) == 1)
-            u = l;
-        else
-            u = strtrim (s{2});
-        endif
-        ## All the logic in the infsup constructor can be used, except ...
-        [x, isexact] = infsup (l, u);
-        ## ... this constructor must not allow construction of an empty
-        ## interval.
-        if (isempty (x))
-            error ("empty interval not allowed")
-        endif
-endswitch
+## All the logic in the infsup constructor can be used
+[x, isexact] = infsup (s);
 
 endfunction

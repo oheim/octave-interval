@@ -16,15 +16,19 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup ()
 ## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
 ## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
 ## 
 ## Create an interval from boundaries.  Convert boundaries to double precision.
 ##
 ## The syntax without parameters creates an (exact) empty interval.  The syntax
 ## with a single parameter @code{infsup (@var{M})} equals
-## @code{infsup (@var{M}, @var{M})}.  A second, logical output @var{ISEXACT}
-## indicates if @var{X}'s boundaries both have been converted without precision
-## loss.
+## @code{infsup (@var{M}, @var{M})}.  The syntax @code{infsup (@var{S})} parses
+## an interval literal in inf-sup form or as a special value, where
+## @code{infsup ("[@var{S1}, @var{S2}]")} is equivalent to
+## @code{infsup ("@var{S1}", "@var{S2}")}.  A second, logical output
+## @var{ISEXACT} indicates if @var{X}'s boundaries both have been converted
+## without precision loss.
 ##
 ## Each boundary can be provided in the following formats: literal constants
 ## [+-]inf[inity], e, pi; scalar real numeric data types, i. e., double,
@@ -67,8 +71,35 @@ if (nargin == 0)
 endif
 
 if (nargin == 1)
-    ## syntax infsup (x) has to be equivalent with infsup (x, x)
-    u = l;
+    if (ischar (l) && not (isempty (l)) && l(1) == "[" && l(end) == "]")
+        ## Parse interval literal
+        
+        ## Strip square brackets and whitespace
+        s = strtrim (l(2:end-1));
+        
+        switch lower (s)
+            case "entire"
+                l = -inf;
+                u = inf;
+            case {"empty", ""}
+                l = inf;
+                u = -inf;
+            otherwise
+                s = strsplit (s, ",");
+                if (isempty (s) || length (s) > 2)
+                    error ("interval literal is not in inf-sup form")
+                endif
+                l = strtrim (s{1});
+                if (length (s) == 1)
+                    u = l;
+                else
+                    u = strtrim (s{2});
+                endif
+        endswitch    
+    else
+        ## syntax infsup (x) has to be equivalent with infsup (x, x)
+        u = l;
+    endif
 endif
 
 x.inf = l;
