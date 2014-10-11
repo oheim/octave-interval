@@ -68,7 +68,7 @@ if (t.inf > t.sup || ...
     result = entire ();
     return
 else
-    ## Now we can be sure that there is no singuarity between x.inf and x.sup
+    ## Now we can be sure that there is no singularity between x.inf and x.sup
 endif
 
 if (x.inf ~= 0)

@@ -13,19 +13,26 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  recip (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Z} =} recip (@var{X})
+## @cindex IEEE1788 recip
+## 
+## Compute reciprocal of all numbers of interval @var{X}.
 ##
-## Compute reciprocal of all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  pow, pown
-##
-## Example:
-##  x = infsup(1, 5);
-##  recip (x) # == [0.2, 1]
+## @example
+## @group
+## x = infsup (1, 5);
+## recip (x)
+##   @result{} [.19999999999999998, 1]
+## @end group
+## @end example
+## @seealso{pown, pow, mrdivide}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = recip (x)

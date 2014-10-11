@@ -34,6 +34,11 @@ function [state, bitmask] = overlap (a, b)
 
 assert (nargin == 2);
 
+## Convert second parameter into interval, if necessary
+if (not (isa (b, "infsup")))
+    b = infsup (b);
+endif
+
 if (isempty (a) && isempty (b))
     state = "bothEmpty";
     bitmask = uint16 (pow2 (15));

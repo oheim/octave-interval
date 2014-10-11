@@ -13,43 +13,46 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: str2decimal (S)
-##
-## Parse a decimal number string S and split the sign, the mantissa and the
-## exponent information.
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{X} =} str2decimal (@var{S})
+## 
+## Parse a decimal number string @var{S} and split the sign, the mantissa and
+## the exponent information.
 ##
 ## The input number format is [+-]d[,.]d[[eE][+-]d] (cf. str2double).
-##
-## Sign:     true (-) or false (+)
-## Mantissa: Vector that holds the decimal digits after the decimal point.
-##           Normalization: The first digit is not zero.
-##           Normalization: Trailing zeroes are removed.
-## Exponent: Integral exponent (base 10).
 ##
 ## Limitations: The decimal exponent of the input format must be a number
 ## between -2^53 (exclusive) and +2^53 (exclusive).
 ## The number itself either must equal zero or its absolute value must be
 ## between 10^(-2^62) (inclusive) and 10^(2^63 - 1) (exclusive).
 ##
-## See also:
-##  double2decimal, decimalcompare
+## Sign: true (-) or false (+)
 ##
-## Example:
-##  x = str2decimal ("-12.3e14");
-##      # x.s = 1
-##      # x.m = [1 2 3]'
-##      # x.e = 16
-##  y = str2decimal ("0.00123e-14");
-##      # y.s = 0
-##      # y.m = [1 2 3]'
-##      # y.e = -12
-##  z = str2decimal ("0");
-##      # z.s = 0
-##      # z.m = []
-##      # z.e = 0
+## Mantissa: Vector that holds the decimal digits after the decimal point.  The
+## first digit is not zero.  Trailing zeroes are removed.
+##
+## Exponent: Integral exponent (base 10).
+##
+## @example
+## @group
+## x = str2decimal ("-12.3e14")
+##   @result{} x.s = 1
+##   @result{} x.m = [1 2 3]'
+##   @result{} x.e = 16
+## y = str2decimal ("0.00123e-14")
+##   @result{} y.s = 0
+##   @result{} y.m = [1 2 3]'
+##   @result{} y.e = -12
+## z = str2decimal ("0")
+##   @result{} z.s = 0
+##   @result{} z.m = []
+##   @result{} z.e = 0
+## @end group
+## @end example
+## @seealso{double2decimal}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: string decimal conversion
 ## Created: 2014-09-27
 
 function decimal = str2decimal (string)

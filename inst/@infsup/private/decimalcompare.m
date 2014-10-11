@@ -13,20 +13,19 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: decimalcompare (X, Y)
-##
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{Z} =} decimalcompare (@var{X}, @var{Y})
+## 
 ## Compare two decimal floating point numbers.
 ##
-## See also:
-##  str2decimal, double2decimal
+## The result is a negative number, if @code{@var{X} < @var{Y}};
+## zero, if @code{@var{X} == @var{Y}}; a positive number,
+## if @code{@var{X} > @var{Y}}.
 ##
-## Result:
-##  negative number, if X < Y,
-##  zero, if X == Y,
-##  positive number, if X > Y
+## @seealso{str2decimal, double2decimal}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: decimal comparison
 ## Created: 2014-09-29
 
 function result = decimalcompare (x, y)

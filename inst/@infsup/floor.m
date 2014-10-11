@@ -13,18 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 integer function:  floor (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} floor (@var{X})
+## @cindex IEEE1788 floor
+## 
+## Round each number in interval @var{X} towards -Inf.
 ##
-## Round each element of X towards -inf.
+## Accuracy: The result is a tight enclosure.
 ##
-## Example:
-##  floor (infsup (2.5, 3.5))
-##   |=> [2, 3]
-##  floor (infsup (-0.5, 5))
-##   |=> [-1, 5]
+## @example
+## @group
+## floor (infsup (2.5, 3.5))
+##   @result{} [2, 3]
+## floor (infsup (-0.5, 5))
+##   @result{} [-1, 5]
+## @end group
+## @end example
+## @seealso{ceil, round, roundb, fix}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval integer function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = floor (x)

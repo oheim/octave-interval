@@ -13,19 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  sqrt (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} sqrt (@var{X})
+## @cindex IEEE1788 sqrt
+## 
+## Compute the square root for all non-negative numbers in @var{X}.
 ##
-## Compute square root of all non-negative elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  sqr, pow
-##
-## Example:
-##  x = infsup(-6, 4);
-##  sqrt (x) # == [0, 2]
+## @example
+## @group
+## sqrt (infsup (-6, 4))
+##   @result{} [0, 2]
+## @end group
+## @end example
+## @seealso{sqr, pow}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-01
 
 function result = sqrt (x)

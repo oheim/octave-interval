@@ -13,15 +13,28 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  min (X, Y)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Z} =} min (@var{X}, @var{Y})
+## @cindex IEEE1788 min
+## 
+## Compute the minimum value for each pair of numbers chosen from intervals
+## @var{X} and @var{Y}.
 ##
-## Compute the minimum value for each pair of elements from X and Y.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  max
+## @example
+## @group
+## x = infsup (2, 3);
+## y = infsup (1, 2);
+## min (x, y)
+##   @result{} [1 , 2]
+## @end group
+## @end example
+## @seealso{min}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = min (x, y)

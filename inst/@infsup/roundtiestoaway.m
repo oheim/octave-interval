@@ -13,22 +13,31 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 integer function:  roundtiestoaway (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} round (@var{X})
+## @cindex IEEE1788 roundTiesToAway
+## 
+## Round each number in interval @var{X} to the nearest integer.  Ties are
+## rounded away from zero (towards +Inf or -Inf depending on the sign).
 ##
-## Round each element of X towards the nearest integer.  Ties are rounded
-## towards even integers.
+## Accuracy: The result is a tight enclosure.
 ##
-## Example:
-##  roundtiestoaway (infsup (2.5, 3.5))
-##   |=> [3, 4]
-##  roundtiestoaway (infsup (-0.5, 5.5))
-##   |=> [-1, 6]
+## @example
+## @group
+## round (infsup (2.5, 3.5))
+##   @result{} [3, 4]
+## round (infsup (-0.5, 5))
+##   @result{} [-1, 5]
+## @end group
+## @end example
+## @seealso{floor, ceil, roundb, fix}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval integer function
+## Keywords: interval
 ## Created: 2014-10-04
 
-function result = roundtiestoaway (x)
+function result = round (x)
 
 if (isempty (x))
     result = empty ();

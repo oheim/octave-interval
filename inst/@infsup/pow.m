@@ -13,15 +13,42 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  pow (X, Y)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} pow (@var{X}, @var{Y})
+## @cindex IEEE1788 pow
+## 
+## Compute the simple power function on intervals defined by 
+## @code{exp (@var{Y} * log (@var{X}))}.
 ##
-## Power function on intervals: exp (Y * log (X))
+## The function is only defined where @var{X} is positive, cf. log function.
+## A general power function is implemented by @code{mpower}.
+##
+## Accuracy: The result is an accurate enclosure.  The result is tightest in
+## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{Y} in
+## @{-1, 0.5, 0, 1, 2@}, or @var{X} and @var{Y} integral with
+## @code{abs (pow (@var{X}, @var{Y})) in [2^-53, 2^53]}
+##
+## @example
+## @group
+## pow (infsup (5, 6), infsup (2, 3))
+##   @result{} [25, 216]
+## @end group
+## @end example
+## @seealso{pown, pow2, pow10, exp, mpower}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = pow (x, y)
+
+assert (nargin == 2);
+
+## Convert second parameter into interval, if necessary
+if (not (isa (y, "infsup")))
+    y = infsup (y);
+endif
 
 if (isempty (x) || isempty (y) || x.sup <= 0)
     result = empty ();
@@ -30,54 +57,54 @@ endif
 
 ## Simple case with no limit values, see Table 3.3 in
 ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-## Diplomarbeit, Institute for Computer Science, University of Wuerzburg.
+## Diplomarbeit, Institute for Computer Science, University of Würzburg.
 ## http://exp.ln0.de/heimlich-power-2011.htm.
 if (0 <= y.inf)
     if (x.sup <= 1)
         if (x.inf > 0)
-            p.inf = powrnd (x.inf, y.sup, -inf);
+            p.inf = powrounded (x.inf, y.sup, -inf);
         endif
-        p.sup = powrnd (x.sup, y.inf, inf);
+        p.sup = powrounded (x.sup, y.inf, inf);
     elseif (x.inf < 1 && 1 < x.sup)
         if (x.inf > 0)
-            p.inf = powrnd (x.inf, y.sup, -inf);
+            p.inf = powrounded (x.inf, y.sup, -inf);
         endif
-        p.sup = powrnd (x.sup, y.sup, inf);
+        p.sup = powrounded (x.sup, y.sup, inf);
     else # 1 <= x.inf
-        p.inf = powrnd (x.inf, y.inf, -inf);
-        p.sup = powrnd (x.sup, y.sup, inf);
+        p.inf = powrounded (x.inf, y.inf, -inf);
+        p.sup = powrounded (x.sup, y.sup, inf);
     endif
 elseif (y.inf < 0 && 0 < y.sup)
     if (x.sup <= 1)
         if (x.inf > 0)
-            p.inf = powrnd (x.inf, y.sup, -inf);
-            p.sup = powrnd (x.inf, y.inf, inf);
+            p.inf = powrounded (x.inf, y.sup, -inf);
+            p.sup = powrounded (x.inf, y.inf, inf);
         endif
     elseif (x.inf < 1 && 1 < x.sup)
         if (x.inf > 0)
-            p.inf = min (powrnd (x.inf, y.sup, -inf), ...
-                         powrnd (x.sup, y.inf, -inf));
-            p.sup = max (powrnd (x.inf, y.inf, inf), ...
-                         powrnd (x.sup, y.sup, inf));
+            p.inf = min (powrounded (x.inf, y.sup, -inf), ...
+                         powrounded (x.sup, y.inf, -inf));
+            p.sup = max (powrounded (x.inf, y.inf, inf), ...
+                         powrounded (x.sup, y.sup, inf));
         endif
     else # 1 <= x.inf
-        p.inf = powrnd (x.sup, y.inf, -inf);
-        p.sup = powrnd (x.sup, y.sup, inf);
+        p.inf = powrounded (x.sup, y.inf, -inf);
+        p.sup = powrounded (x.sup, y.sup, inf);
     endif
 else # y.sup <= 0
     if (x.sup <= 1)
-        p.inf = powrnd (x.sup, y.sup, -inf);
+        p.inf = powrounded (x.sup, y.sup, -inf);
         if (x.inf > 0)
-            p.sup = powrnd (x.inf, y.inf, inf);
+            p.sup = powrounded (x.inf, y.inf, inf);
         endif
     elseif (x.inf < 1 && 1 < x.sup)
-        p.inf = powrnd (x.sup, y.inf, -inf);
+        p.inf = powrounded (x.sup, y.inf, -inf);
         if (x.inf > 0)
-            p.sup = powrnd (x.inf, y.inf, inf);
+            p.sup = powrounded (x.inf, y.inf, inf);
         endif
     else # 1 <= x.inf
-        p.inf = powrnd (x.sup, y.inf, -inf);
-        p.sup = powrnd (x.inf, y.sup, inf);
+        p.inf = powrounded (x.sup, y.inf, -inf);
+        p.sup = powrounded (x.inf, y.sup, inf);
     endif
 endif
 
@@ -100,7 +127,7 @@ result = infsup (p.inf, p.sup);
 
 endfunction
 
-function p = powrnd (x, y, direction)
+function p = powrounded (x, y, direction)
     assert (x > 0);
 
     ## We do not have access to a rounded pow or exp function.
@@ -192,7 +219,7 @@ function p = powrnd (x, y, direction)
     ## rounded exp, mul and log operations, which will introduce a relative
     ## error of 2^-41, see Lemma 3.6 in
     ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-    ## Diplomarbeit, Institute for Computer Science, University of Wuerzburg.
+    ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
     ## http://exp.ln0.de/heimlich-power-2011.htm.
     p = realpow (x, y);
     

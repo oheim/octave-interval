@@ -13,39 +13,42 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: double2decimal (X)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{Y} =} double2decimal (@var{X})
+## 
+## Convert a binary floating point number @var{X} in double precision to a
+## decimal floating point number with arbitrary precision.  The number must be
+## a finite number and must not be NaN.
 ##
-## Convert a binary floating point number X in double precision to a decimal
-## floating point number with arbitrary precision.  The number must be a finite
-## number and must not be NaN.
+## Conversion is exact, because @code{rem (10, 2) == 0}.
 ##
-## Conversion is exact, because rem (10, 2) == 0.
+## Sign: true (-) or false (+)
 ##
-## Sign:     true (-) or false (+)
-## Mantissa: Vector that holds the decimal digits after the decimal point.
-##           Normalization: The first digit is not zero.
-##           Normalization: Trailing zeroes are removed.
+## Mantissa: Vector that holds the decimal digits after the decimal point.  The
+## first digit is not zero.  Trailing zeroes are removed.
+##
 ## Exponent: Integral exponent (base 10).
 ##
-## See also:
-##  str2decimal
-##
-## Example:
-##  x = double2decimal (-200);
-##      # x.s = 1
-##      # x.m = [2]
-##      # x.e = 2
-##  y = str2decimal (0.125);
-##      # y.s = 0
-##      # y.m = [1 2 5]'
-##      # y.e = 0
-##  z = str2decimal (0);
-##      # z.s = 0
-##      # z.m = []
-##      # z.e = 0
+## @example
+## @group
+## x = double2decimal (-200)
+##   @result{} x.s = 1
+##   @result{} x.m = [2]
+##   @result{} x.e = 2
+## y = double2decimal (0.125)
+##   @result{} y.s = 0
+##   @result{} y.m = [1 2 5]'
+##   @result{} y.e = 0
+## z = double2decimal (0)
+##   @result{} z.s = 0
+##   @result{} z.m = []
+##   @result{} z.e = 0
+## @end group
+## @end example
+## @seealso{str2decimal}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: binary decimal conversion
 ## Created: 2014-09-29
 
 function decimal = double2decimal (binary)

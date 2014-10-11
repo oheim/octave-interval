@@ -13,20 +13,28 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 numeric function:  mig (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Numeric} {@var{Y} =} mig (@var{X})
+## @cindex IEEE1788 mig
+## 
+## Get the mignitude of numbers in interval @var{X}, that is the minimum of
+## absolute values for each element.
 ##
-## Get the mignitude of elements in interval X, that is the minimum of absolute
-## values for each element.
+## If @var{X} is empty, @code{mig (@var{X})} is NaN.
 ##
-## See also:
-##  mag
+## Accuracy: The result is exact.
 ##
-## Example:
-##  x = infsup(-2, -1);
-##  mig (x) # == 1
+## @example
+## @group
+## mig (infsup (-2, -1))
+##   @result{} 1
+## @end group
+## @end example
+## @seealso{mag, inf, sup}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval numeric function
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = mig (x)

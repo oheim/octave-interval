@@ -38,6 +38,8 @@
 
 function result = mtimes (x, y)
 
+assert (nargin == 2);
+
 ## Convert multiplier into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);

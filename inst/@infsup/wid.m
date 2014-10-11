@@ -13,21 +13,29 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 numeric function:  wid (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Numeric} {@var{Y} =} wid (@var{X})
+## @cindex IEEE1788 wid
+## 
+## Get the width of interval @var{X}.
 ##
-## Get width of interval X.
+## If @var{X} is empty, @code{wid (@var{X})} is NaN.
+## If @var{X} is unbounded in one or both directions, @code{wid (@var{X})} is 
+## positive infinity.
 ##
-## If X is empty, wid (X) is NaN.
-## If X is unbounded in one or two directions, wid (X) is inf.
-## If X is bound, wid (X) will make a tight enclosure of the interval's actual
-## width.
+## Accuracy: The result is a tight enclosure of the interval's actual width.
 ##
-## Example:
-##  wid (infsup (2, 3));
-##   |=> 1
+## @example
+## @group
+## wid (infsup (2.5, 3.5))
+##   @result{} 1
+## @end group
+## @end example
+## @seealso{inf, sup, rad}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval numeric function
+## Keywords: interval
 ## Created: 2014-10-05
 
 function width = wid (x)

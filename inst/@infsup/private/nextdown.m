@@ -13,13 +13,16 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: nextdown (X)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{Y} =} nextdown (@var{X})
+## 
+## Return the greatest floating point number which is smaller than @var{X}.
 ##
-## Return the greatest floating point number which is smaller than X.
-## If X is -inf, return -inf.
+## If @var{X} is -Inf, return -Inf.
+## @seealso{nextup}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: floating point
 ## Created: 2014-09-30
 
 function result = nextdown (x)

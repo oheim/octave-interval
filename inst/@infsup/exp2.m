@@ -13,22 +13,29 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  exp2 (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} pow2 (@var{X})
+## @cindex IEEE1788 exp2
+## 
+## Compute @code{2^x} for all numbers in @var{X}.
 ##
-## Compute 2^x for all elements x of X.
+## Accuracy: The result is an accurate enclosure.  The result is tightest when
+## interval boundaries are integral.
 ##
-## See also:
-##  pow2
-##
-## Example:
-##  exp2 (infsup (5))
-##   |=> [32]
+## @example
+## @group
+## pow2 (infsup (5))
+##   @result{} [32]
+## @end group
+## @end example
+## @seealso{log2, pow, pow10, exp}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-09-30
 
-function result = exp2 (x)
+function result = pow2 (x)
 
 if (isempty (x))
     result = empty ();

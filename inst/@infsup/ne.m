@@ -32,6 +32,8 @@
 
 function result = ne(a, b)
 
+assert (nargin == 2);
+
 result = not (eq (a, b));
 
 endfunction

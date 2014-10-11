@@ -13,20 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 numeric function:  inf (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Numeric} {@var{Y} =} inf (@var{X})
+## @cindex IEEE1788 inf
+## 
+## Get the (greatest) lower boundary for all numbers of interval @var{X}.
 ##
-## Get (greatest) lower boundary for all elements of interval X.
+## If @var{X} is empty, @code{inf (@var{X})} is positive infinity.
 ##
-## If X is empty, inf (X) is positive infinity.
+## Accuracy: The result is exact.
 ##
-## Example:
-##  x = infsup (2, 3);
-##  if (inf (x) == 2)
-##    display ("success");
-##  endif
+## @example
+## @group
+## inf (infsup (2.5, 3.5))
+##   @result{} 2.5
+## @end group
+## @end example
+## @seealso{sup, mid}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval numeric function
+## Keywords: interval
 ## Created: 2014-09-27
 
 function infimum = inf (interval)

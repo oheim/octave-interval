@@ -13,16 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  exp (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} exp (@var{X})
+## @cindex IEEE1788 exp
+## 
+## Compute the exponential function for all numbers in @var{X}.
 ##
-## Compute the exponential function for all elements x of X.
+## Accuracy: The result is an accurate enclosure.
 ##
-## Example:
-##  exp (1)
-##   |=> [2.7...]
+## @example
+## @group
+## exp (infsup (1))
+##   @result{} [2.718281828459045, 2.7182818284590456]
+## @end group
+## @end example
+## @seealso{log, pow}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = exp (x)

@@ -37,6 +37,13 @@
 
 function result = atan2 (y, x)
 
+assert (nargin == 2);
+
+## Convert second parameter into interval, if necessary
+if (not (isa (x, "infsup")))
+    x = infsup (x);
+endif
+
 if (isempty (x) || isempty (y) || ...
     (x.inf == 0 && x.sup == 0 && y.inf == 0 && y.sup == 0))
     result = empty ();

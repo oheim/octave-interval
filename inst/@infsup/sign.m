@@ -13,20 +13,28 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 integer function:  sign (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} sign (@var{X})
+## @cindex IEEE1788 sign
+## 
+## Compute the signum function for each number in interval @var{X}.
 ##
-## Compute the sign of each element of X.
+## Accuracy: The result is a tight enclosure.
 ##
-## Example:
-##  sign (infsup (2, 3))
-##   |=> [1]
-##  sign (infsup (0, 5))
-##   |=> [0, 1]
-##  sign (infsup (-17))
-##   |=> [-1]
+## @example
+## @group
+## sign (infsup (2, 3))
+##   @result{} [1]
+## sign (infsup (0, 5))
+##   @result{} [0, 1]
+## sign (infsup (-17))
+##   @result{} [-1]
+## @end group
+## @end example
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval integer function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = sign (x)

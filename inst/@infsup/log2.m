@@ -13,12 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  log2 (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} log2 (@var{X})
+## @cindex IEEE1788 log2
+## 
+## Compute the binary (base-2) logarithm for all numbers in interval @var{X}.
 ##
-## Compute binary logarithm for all elements of X.
+## The function is only defined where @var{X} is positive.
+##
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## log2 (infsup (2))
+##   @result{} [1]
+## @end group
+## @end example
+## @seealso{pow2, log, log10}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = log2 (x)

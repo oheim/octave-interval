@@ -13,32 +13,50 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  fma (X, Y, Z)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{R} =} fma (@var{X}, @var{Y}, @var{Z})
+## @cindex IEEE1788 fma
+## 
+## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.  Multiply each
+## number of interval @var{X} with each number of interval @var{Y} and add
+## each number of interval @var{Z}.
 ##
-## Fused multiply and add (X * Y) + Z.
-## Multiply each element of interval X with each element of interval Y and add
-## each element of Z.
+## This function is semantically equivalent to evaluating multiplication and
+## addition separately, but in addition guarantees a tight enclosure of the
+## result.  The fused multiply and add is much slower.
 ##
-## This function is semantically equivalent to add (mul (X, Y), Z)
-## but in addition guarantees a tight enclosure of the result.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  mul, add
-##
-## Example:
-##  x = infsup (1+eps);
-##  fma (x, x, x)
-##   |=> [2.0000000000000008, 2.0000000000000009]
-##  x * x + x
-##   |=> [2.0000000000000004, 2.0000000000000009]
+## @example
+## @group
+## x = infsup (1+eps);
+## fma (x, x, x)
+##   @result{} [2.0000000000000008, 2.0000000000000009]
+## x * x + x
+##   @result{} [2.0000000000000004, 2.0000000000000009]
+## @end group
+## @end example
+## @seealso{plus, mtimes}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-03
 
 function result = fma (x, y, z)
 
 assert (nargin == 3);
+
+## Convert second parameter into interval, if necessary
+if (not (isa (y, "infsup")))
+    y = infsup (y);
+endif
+
+## Convert third parameter into interval, if necessary
+if (not (isa (z, "infsup")))
+    z = infsup (z);
+endif
+
 
 if (isempty (x) || isempty (y) || isempty (z))
     result = empty ();

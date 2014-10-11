@@ -13,11 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## usage: + x
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{X} =} + @var{X}
+## 
 ## Return the interval itself.
 ##
-## Implement the unary plus operator on intervals for convenience.
+## Accuracy: The result is exact.
+##
+## @example
+## @group
+## x = infsup (2, 3);
+## + x
+##   @result{} [2, 3]
+## @end group
+## @end example
+## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

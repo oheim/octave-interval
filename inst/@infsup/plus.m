@@ -38,6 +38,8 @@
 
 function result = plus (x, y)
 
+assert (nargin == 2);
+
 ## Convert addend into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);

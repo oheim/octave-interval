@@ -13,20 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 numeric function:  sup (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Numeric} {@var{Y} =} sup (@var{X})
+## @cindex IEEE1788 sup
+## 
+## Get the (least) upper boundary for all numbers of interval @var{X}.
 ##
-## Get (least) upper boundary for all elements of interval X.
+## If @var{X} is empty, @code{sup (@var{X})} is negative infinity.
 ##
-## If X is empty, sup (X) is negative infinity.
+## Accuracy: The result is exact.
 ##
-## Example:
-##  x = infsup (2, 3);
-##  if (sup (x) == 3)
-##    display ("success");
-##  endif
+## @example
+## @group
+## sup (infsup (2.5, 3.5))
+##   @result{} 3.5
+## @end group
+## @end example
+## @seealso{inf, mid}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval numeric function
+## Keywords: interval
 ## Created: 2014-09-27
 
 function supremum = sup (interval)

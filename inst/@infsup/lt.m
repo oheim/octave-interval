@@ -19,9 +19,9 @@
 ## 
 ## Compare intervals @var{A} and @var{B} for strictly less.
 ##
-## True, if all numbers from @var{A} are strict less than any number in
-## @var{B}.  False, if @var{A} contains a number which is greater than all
-## numbers in @var{B} or is equal to the greates number of @var{B}.
+## True, if all numbers from @var{A} are strict less than at least one number
+## in @var{B}.  False, if @var{A} contains a number which is greater than all
+## numbers in @var{B} or is equal to the greatest number of @var{B}.
 ##
 ## @seealso{eq, le, gt, subset, interior, disjoint}
 ## @end deftypefn
@@ -31,6 +31,8 @@
 ## Created: 2014-10-07
 
 function result = lt(a, b)
+
+assert (nargin == 2);
 
 ## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))

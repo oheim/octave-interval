@@ -13,20 +13,28 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 numeric function:  mag (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Numeric} {@var{Y} =} mag (@var{X})
+## @cindex IEEE1788 mag
+## 
+## Get the magnitude of numbers in interval @var{X}, that is the maximum of
+## absolute values for each element.
 ##
-## Get the magnitude of elements in interval X, that is the maximum of absolute
-## values for each element.
+## If @var{X} is empty, @code{mag (@var{X})} is NaN.
 ##
-## See also:
-##  mig
+## Accuracy: The result is exact.
 ##
-## Example:
-##  x = infsup(-3, 2);
-##  mag (x) # == 3
+## @example
+## @group
+## mag (infsup (-3, 2))
+##   @result{} 3
+## @end group
+## @end example
+## @seealso{mig, inf, sup}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval numeric function
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = mag (x)

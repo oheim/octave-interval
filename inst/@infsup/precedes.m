@@ -32,6 +32,11 @@ function result = precedes (a, b)
 
 assert (nargin == 2);
 
+## Convert second parameter into interval, if necessary
+if (not (isa (b, "infsup")))
+    b = infsup (b);
+endif
+
 ## This comparison also works for empty intervels, where the comparison must
 ## always return true.
 result = (a.sup <= b.inf);

@@ -13,21 +13,31 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 integer function:  trunc (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} fix (@var{X})
+## @cindex IEEE1788 truc
+## 
+## Truncate fractional portion of each number in interval @var{X}.  This is
+## equivalent to rounding towards zero.
 ##
-## Round each element of X towards zero.
+## Accuracy: The result is a tight enclosure.
 ##
-## Example:
-##  trunc (infsup (2.5, 3.5))
-##   |=> [2, 3]
-##  trunc (infsup (-0.5, 5.5))
-##   |=> [0, 5]
+## @example
+## @group
+## fix (infsup (2.5, 3.5))
+##   @result{} [2, 3]
+## fix (infsup (-0.5, 5))
+##   @result{} [0, 5]
+## @end group
+## @end example
+## @seealso{floor, ceil, round, roundb}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval integer function
+## Keywords: interval
 ## Created: 2014-10-04
 
-function result = trunc (x)
+function result = fix (x)
 
 if (isempty (x))
     result = empty ();

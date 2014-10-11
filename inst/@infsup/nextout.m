@@ -13,18 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 accessory function:  nextout (X)
-##
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} nextout (@var{X})
+## @cindex IEEE1788 nextOut
+## 
 ## Increases the interval's boundaries in each direction to the next number.
 ##
-## This is the equivalent function to IEEE 754's nextdown and nextup.
+## This is the equivalent function to IEEE 754's nextDown and nextUp.
 ##
-## Example:
-##  x = infsup (1);
-##  y = nextout (x); # == [1-eps, 1+eps]
+## @example
+## @group
+## x = infsup (1);
+## nextout (x) == infsup (1 - eps / 2, 1 + eps)
+##   @result{} True
+## @end group
+## @end example
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval function
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = nextout (x)

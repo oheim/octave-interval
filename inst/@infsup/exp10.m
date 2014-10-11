@@ -13,19 +13,29 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  exp10 (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} pow10 (@var{X})
+## @cindex IEEE1788 exp10
+## 
+## Compute @code{10^x} for all numbers in @var{X}.
 ##
-## Compute 10^x for all elements x of X.
+## Accuracy: The result is an accurate enclosure.  The result is tightest when
+## interval boundaries are integral.
 ##
-## Example:
-##  exp10 (infsup (5))
-##   |=> [100000]
+## @example
+## @group
+## pow10 (infsup (5))
+##   @result{} [100000]
+## @end group
+## @end example
+## @seealso{log10, pow, pow2, exp}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: accurate interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
-function result = exp10 (x)
+function result = pow10 (x)
 
 if (isempty (x))
     result = empty ();

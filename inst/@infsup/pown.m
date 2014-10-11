@@ -13,18 +13,36 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  pown (X, P)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} pown (@var{X}, @var{P})
+## @cindex IEEE1788 pown
+## 
+## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.
 ##
-## Compute the monomial x^P for all elements of X.
+## Monomials are defined for all real numbers and the special monomial
+## @code{@var{P} == 0} evaluates to @code{1} everywhere.
 ##
-## See also:
-##  pow, exp, exp2, exp10
+## Accuracy: The result is an accurate enclosure.  The result is tightest in
+## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{P} in
+## @{-1, 0.5, 0, 1, 2@}, or @var{X} integral with
+## @code{abs (pown (@var{X}, @var{P})) in [2^-53, 2^53]}
+##
+## @example
+## @group
+## pown (infsup (5, 6), 2)
+##   @result{} [25, 36]
+## @end group
+## @end example
+## @seealso{pow, pow2, pow10, exp}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = pown (x, p)
+
+assert (nargin == 2);
 
 if (fix (p) ~= p)
     error (["exponent is not an integer: " num2str (p)]);

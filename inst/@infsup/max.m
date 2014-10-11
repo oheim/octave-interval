@@ -13,18 +13,38 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  max (X, Y)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Z} =} max (@var{X}, @var{Y})
+## @cindex IEEE1788 max
+## 
+## Compute the maximum value for each pair of numbers chosen from intervals
+## @var{X} and @var{Y}.
 ##
-## Compute the maximum value for each pair of elements from X and Y.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  min
+## @example
+## @group
+## x = infsup (2, 3);
+## y = infsup (1, 2);
+## max (x, y)
+##   @result{} [2 , 3]
+## @end group
+## @end example
+## @seealso{min}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = max (x, y)
+
+assert (nargin == 2);
+
+## Convert second parameter into interval, if necessary
+if (not (isa (y, "infsup")))
+    y = infsup (y);
+endif
 
 if (isempty (x) || isempty (y))
     result = empty ();

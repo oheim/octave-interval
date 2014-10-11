@@ -13,19 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval function:  sqr (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} sqr (@var{X})
+## @cindex IEEE1788 sqr
+## 
+## Compute the square for all numbers in @var{X}.
 ##
-## Square all elements of interval X.
+## Accuracy: The result is a tight enclosure.
 ##
-## See also:
-##  sqrt, pow, pown
-##
-## Example:
-##  x = infsup(-2, 1);
-##  sqr (x) # == [0, 4]
+## @example
+## @group
+## sqr (infsup (-2, 1))
+##   @result{} [0, 4]
+## @end group
+## @end example
+## @seealso{sqrt, pown, pow}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-09-30
 
 function result = sqr (x)

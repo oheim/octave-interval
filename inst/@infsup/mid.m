@@ -13,21 +13,33 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 numeric function:  mid (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Numeric} {@var{Y} =} mid (@var{X})
+## @cindex IEEE1788 mid
+## 
+## Get the midpoint of interval @var{X}.
 ##
-## Get midpoint of interval X.
+## If @var{X} is empty, @code{mid (@var{X})} is NaN.
+## If @var{X} is entire, @code{mid (@var{X})} is 0.
+## If @var{X} is unbounded in one direction, @code{mid (@var{X})} is positive
+## or negative @code{realmax ()}.
 ##
-## If X is empty, mid (X) is NaN.
-## If X is entire, mid (X) is 0.
-## If X is unbounded in one direction, mid (X) is +/- realmax ().
-## If X is bound, mid (X) is the actual midpoint rounded to nearest.
+## Accuracy: The result is rounded to the nearest floating point number and
+## may thus be exact or not.  However, it is guaranteed that the interval
+## @var{X} is tightly enclosed by
+## @code{[mid (@var{X}) - rad (@var{X}), mid (@var{X}) + rad (@var{X})]}.
 ##
-## Example:
-##  mid (infsup (2, 3));
-##   |=> 2.5
+## @example
+## @group
+## mid (infsup (2.5, 3.5))
+##   @result{} 3
+## @end group
+## @end example
+## @seealso{inf, sup, rad}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval numeric function
+## Keywords: interval
 ## Created: 2014-10-05
 
 function midpoint = mid (x)
@@ -44,7 +56,7 @@ else
     ## First divide by 2 and then add, because this will prevent overflow.
     ## The different rounding modes for division will make errors of 2^-1075
     ## with subnormal numbers cancel each other out, or will make the round
-    ## to nearest prefer the side that had a rounding error.
+    ## to nearest prefer the side that had an underflow error.
     fesetround (-inf);
     l = x.inf / 2;
     fesetround (inf);

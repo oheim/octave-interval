@@ -13,12 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 interval function:  log10 (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} log10 (@var{X})
+## @cindex IEEE1788 log10
+## 
+## Compute the decimal (base-10) logarithm for all numbers in interval @var{X}.
 ##
-## Compute decimal logarithm for all elements of X.
+## The function is only defined where @var{X} is positive.
+##
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## log10 (infsup (2))
+##   @result{} [.30102999566398114, .3010299956639812]
+## @end group
+## @end example
+## @seealso{pow10, log, log2}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: tightest interval function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = log10 (x)

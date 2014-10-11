@@ -13,18 +13,27 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 integer function:  ceil (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} ceil (@var{X})
+## @cindex IEEE1788 ceil
+## 
+## Round each number in interval @var{X} towards +Inf.
 ##
-## Round each element of X towards +inf.
+## Accuracy: The result is a tight enclosure.
 ##
-## Example:
-##  ceil (infsup (2.5, 3.5))
-##   |=> [3, 4]
-##  ceil (infsup (-0.5, 5))
-##   |=> [0, 5]
+## @example
+## @group
+## ceil (infsup (2.5, 3.5))
+##   @result{} [3, 4]
+## ceil (infsup (-0.5, 5))
+##   @result{} [0, 5]
+## @end group
+## @end example
+## @seealso{floor, round, roundb, fix}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval integer function
+## Keywords: interval
 ## Created: 2014-10-04
 
 function result = ceil (x)

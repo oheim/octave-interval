@@ -38,6 +38,8 @@
 
 function result = minus (x, y)
 
+assert (nargin == 2);
+
 ## Convert subtrahend into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);

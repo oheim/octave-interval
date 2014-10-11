@@ -13,22 +13,31 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEE1788 integer function:  roundtiestoeven (X)
+## -*- texinfo -*-
+## @deftypefn {Interval Function} {@var{Y} =} roundb (@var{X})
+## @cindex IEEE1788 roundTiesToEven
+## 
+## Round each number in interval @var{X} to the nearest integer.  Ties are
+## rounded towards the nearest even integer.
 ##
-## Round each element of X towards the nearest integer.  Ties are rounded
-## towards even integers.
+## Accuracy: The result is a tight enclosure.
 ##
-## Example:
-##  roundtiestoeven (infsup (2.5, 3.5))
-##   |=> [2, 4]
-##  roundtiestoeven (infsup (-0.5, 5.5))
-##   |=> [0, 6]
+## @example
+## @group
+## roundb (infsup (2.5, 3.5))
+##   @result{} [2, 4]
+## roundb (infsup (-0.5, 5.5))
+##   @result{} [0, 6]
+## @end group
+## @end example
+## @seealso{floor, ceil, round, fix}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval integer function
+## Keywords: interval
 ## Created: 2014-10-04
 
-function result = roundtiestoeven (x)
+function result = roundb (x)
 
 if (isempty (x))
     result = empty ();

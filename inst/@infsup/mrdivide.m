@@ -38,6 +38,8 @@
 
 function result = mrdivide (x, y)
 
+assert (nargin == 2);
+
 ## Convert divisor into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
