@@ -19,7 +19,8 @@
 ## 
 ## Compute the exponential function for all numbers in @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is an accurate enclosure.  The result is tightest for
+## boundaries @code{0} and @code{1}.
 ##
 ## @example
 ## @group
