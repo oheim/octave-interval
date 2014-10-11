@@ -39,6 +39,11 @@ function result = atan2 (y, x)
 
 assert (nargin == 2);
 
+## Convert first parameter into interval, if necessary
+if (not (isa (y, "infsup")))
+    y = infsup (y);
+endif
+
 ## Convert second parameter into interval, if necessary
 if (not (isa (x, "infsup")))
     x = infsup (x);

@@ -47,6 +47,11 @@ function result = fma (x, y, z)
 
 assert (nargin == 3);
 
+## Convert first parameter into interval, if necessary
+if (not (isa (x, "infsup")))
+    x = infsup (x);
+endif
+
 ## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);

@@ -33,6 +33,11 @@ function result = subset (a, b)
 
 assert (nargin == 2);
 
+## Convert first parameter into interval, if necessary
+if (not (isa (a, "infsup")))
+    a = infsup (a);
+endif
+
 ## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);

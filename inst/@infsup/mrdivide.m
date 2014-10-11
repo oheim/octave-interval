@@ -40,6 +40,11 @@ function result = mrdivide (x, y)
 
 assert (nargin == 2);
 
+## Convert first parameter into interval, if necessary
+if (not (isa (x, "infsup")))
+    x = infsup (x);
+endif
+
 ## Convert divisor into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);

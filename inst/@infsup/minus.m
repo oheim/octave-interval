@@ -40,6 +40,11 @@ function result = minus (x, y)
 
 assert (nargin == 2);
 
+## Convert first parameter into interval, if necessary
+if (not (isa (x, "infsup")))
+    x = infsup (x);
+endif
+
 ## Convert subtrahend into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
