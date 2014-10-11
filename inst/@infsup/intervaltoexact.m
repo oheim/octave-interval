@@ -13,26 +13,25 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval output: intervaltoexact (X)
-##
-## Build an exact representation of the interval X in decimal format.
+## -*- texinfo -*-
+## @deftypefn {Interval Output} {@var{S} =} intervaltoexact (@var{X})
+## @cindex IEEE1788 intervalToExact
+## 
+## Build an exact representation of the interval @var{X} in decimal format.
 ##
 ## The interval boundaries are stored in binary floating point format and can
 ## be converted to decimal format without precision loss. The decimal number
 ## might have a lot of digits.
 ##
-## The equation X == exacttointerval (intervaltoexact (X)) holds for all
-## intervals.
+## The equation @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))}
+## holds for all intervals @var{X}.
 ##
-## See also:
-##  intervaltotext, exacttointerval
-##
-## Example:
-##  x = intervaltoexact (infsup (2, 3)); # [2, 3]
-##  y = intervaltoexact (infsup (2, "3.1")); # [2, 3.1...] (very long string)
+## Accuracy: The output is exact.
+## @seealso{intervaltotext, exacttointerval}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval output
+## Keywords: interval
 ## Created: 2014-10-01
 
 function s = intervaltoexact (x)

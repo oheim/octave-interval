@@ -25,10 +25,9 @@
 ## with a single parameter @code{infsup (@var{M})} equals
 ## @code{infsup (@var{M}, @var{M})}.  The syntax @code{infsup (@var{S})} parses
 ## an interval literal in inf-sup form or as a special value, where
-## @code{infsup ("[@var{S1}, @var{S2}]")} is equivalent to
-## @code{infsup ("@var{S1}", "@var{S2}")}.  A second, logical output
-## @var{ISEXACT} indicates if @var{X}'s boundaries both have been converted
-## without precision loss.
+## @code{infsup ("[S1, S2]")} is equivalent to @code{infsup ("S1", "S2")}.  A
+## second, logical output @var{ISEXACT} indicates if @var{X}'s boundaries both
+## have been converted without precision loss.
 ##
 ## Each boundary can be provided in the following formats: literal constants
 ## [+-]inf[inity], e, pi; scalar real numeric data types, i. e., double,

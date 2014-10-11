@@ -13,12 +13,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -- IEEE 1788 interval output:  intervaltotext (X)
-##
-## Build an approximate representation of the interval X in decimal format.
-##
-## For all intervals X is an accurate subset of
-## texttointerval (intervaltotext (X)).  
+## -*- texinfo -*-
+## @deftypefn {Interval Output} {@var{S} =} intervaltotext (@var{X})
+## @deftypefnx {Interval Output} {@var{S} =} intervaltotext (@var{X}, @var{EXACT})
+## @cindex IEEE1788 intervalToText
+## 
+## Build an approximate representation of the interval @var{X} in decimal
+## format.
 ##
 ## The interval boundaries are stored in binary floating point format and are
 ## converted to decimal format with possible precision loss. If output is not
@@ -28,24 +29,28 @@
 ## Enough decimal digits are used to ensure separation of subsequent floting
 ## point numbers.
 ##
-## See also:
-##  texttointerval, intervaltoexact
+## Accuracy: For all intervals @var{X} is an accurate subset of
+## @code{texttointerval (intervaltotext (@var{X}))}.  If parameter @var{EXACT}
+## is used and is set to @code{True} the output is exact.
 ##
-## Example:
-##  x = infsup (1 + eps);
-##  intervaltotext (x)
-##   # Note that x contains only a single number! However, the output gives an
-##   # approximate enclosure.
-##   # [1.0000000000000002, 1.0000000000000003]
-##  y = nextout (x);
-##  intervaltotext (y)
-##   # [1, 1.0000000000000005]
-##  z = infsup (1);
-##  intervaltotext (z)
-##   # [1]
+## @example
+## @group
+## x = infsup (1 + eps);
+## intervaltotext (x)
+##   @result{} [1.0000000000000002, 1.0000000000000003]
+## y = nextout (x);
+## intervaltotext (y)
+##   @result{} [1, 1.0000000000000005]
+## z = infsup (1);
+## intervaltotext (z)
+##   @result{} [1]
+## @end group
+## @end example
+## @seealso{texttointerval, intervaltoexact}
+## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval output
+## Keywords: interval
 ## Created: 2014-09-30
 
 function s = intervaltotext (x, exact)
