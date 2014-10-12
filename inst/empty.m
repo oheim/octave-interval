@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## x = empty ()
-##   @result{} [Empty]
+##   @result{} [Empty]_trv
 ## inf (x)
 ##   @result{} Inf
 ## sup (x)
@@ -44,7 +44,7 @@
 
 function interval = empty ()
 
-interval = infsup ();
+interval = infsupdec ();
 return
 %!test "Check [Empty] boundaries";
 %! x = empty ();

@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## x = entire ()
-##   @result{} [Entire]
+##   @result{} [Entire]_dac
 ## inf (x)
 ##   @result{} -Inf
 ## sup (x)
@@ -44,7 +44,7 @@
 
 function interval = entire ()
 
-interval = infsup (-inf, inf);
+interval = infsupdec (-inf, inf, "dac");
 return
 %!test "Check [Entire] boundaries";
 %! x = entire ();
