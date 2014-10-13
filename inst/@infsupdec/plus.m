@@ -50,6 +50,16 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
+if (isnai (y))
+    result = y;
+    return
+endif
+
 result = plus (intervalpart (x), intervalpart (y));
 ## plus is continous and defined everywhere
 result = decorateresult (result, {x, y});

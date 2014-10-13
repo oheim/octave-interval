@@ -50,6 +50,16 @@ if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif
 
+if (isnai (a))
+    result = a;
+    return
+endif
+
+if (isnai (b))
+    result = b;
+    return
+endif
+
 result = or (intervalpart (a), intervalpart (b));
 ## convexHull must not retain any useful decoration
 result = decorateresult (result, {a, b}, "trv");

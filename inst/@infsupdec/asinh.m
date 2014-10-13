@@ -36,6 +36,11 @@
 
 function result = asinh (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = asinh (intervalpart (x));
 ## asinh is defined and continuous everywhere
 result = decorateresult (result, {x});

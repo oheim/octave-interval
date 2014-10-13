@@ -39,6 +39,11 @@
 
 function result = fix (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = fix (intervalpart (x));
 if (issingleton (result) && ...
     (x.sup >= 0 || fix (x.sup) ~= x.sup) && ...

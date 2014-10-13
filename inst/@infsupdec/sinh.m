@@ -36,6 +36,11 @@
 
 function result = sinh (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = sinh (intervalpart (x));
 ## sinh is defined and continuous everywhere
 result = decorateresult (result, {x});

@@ -49,6 +49,16 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
+if (isnai (y))
+    result = y;
+    return
+endif
+
 result = atan2 (intervalpart (y), intervalpart (x));
 
 if (ismember (0, y))

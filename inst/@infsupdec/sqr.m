@@ -36,6 +36,11 @@
 
 function result = sqr (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = sqr (intervalpart (x));
 ## sqr is defined and continuous everywhere
 result = decorateresult (result, {x});

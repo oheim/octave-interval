@@ -53,7 +53,7 @@ if (not (isa (b, "infsupdec")))
 endif
 
 if (isnai (a) || isnai (b))
-    result = false();
+    result = false ();
 else
     result = eq (intervalpart (a), intervalpart (b)) && strcmp (a.dec, b.dec);
 endif

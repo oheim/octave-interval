@@ -36,6 +36,11 @@
 
 function result = sqrt (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = sqrt (intervalpart (x));
 ## sqrt is continuous everywhere, but defined for x >= 0 only
 if (subset (x, infsup(0, inf)))

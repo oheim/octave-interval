@@ -38,6 +38,11 @@
 
 function result = abs (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = abs (intervalpart (x));
 ## abs is defined and continuous everywhere
 result = decorateresult (result, {x});

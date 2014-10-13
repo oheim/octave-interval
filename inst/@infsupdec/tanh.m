@@ -36,6 +36,11 @@
 
 function result = tanh (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = tanh (intervalpart (x));
 ## tanh is defined and continuous everywhere
 result = decorateresult (result, {x});

@@ -38,6 +38,11 @@
 
 function result = ceil (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = ceil (intervalpart (x));
 if (issingleton (result) && fix (x.sup) ~= x.sup)
     ## Between two integral numbers the function is constant, thus continuous

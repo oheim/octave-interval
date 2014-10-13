@@ -38,6 +38,11 @@
 
 function result = log10 (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = log10 (intervalpart (x));
 ## log10 is continuous everywhere, but defined for x > 0 only
 if (interior (x, infsup(0, inf)))

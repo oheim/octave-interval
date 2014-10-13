@@ -55,6 +55,16 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
+if (isnai (y))
+    result = y;
+    return
+endif
+
 result = pow (intervalpart (x), intervalpart (y));
 ## pow is continuous everywhere, but defined for x > 0 only
 if (interior (x, infsup(0, inf)))

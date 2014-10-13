@@ -36,6 +36,11 @@
 
 function result = acosh (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = acosh (intervalpart (x));
 ## acosh is continuous everywhere, but defined for [1, Inf] only
 if (subset (x, infsup(1, inf)))

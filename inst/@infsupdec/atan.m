@@ -36,6 +36,11 @@
 
 function result = atan (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = atan (intervalpart (x));
 ## atan is defined and continuous everywhere
 result = decorateresult (result, {x});

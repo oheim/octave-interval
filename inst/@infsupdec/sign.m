@@ -39,6 +39,11 @@
 
 function result = sign (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = sign (intervalpart (x));
 ## sign is defined everywhere and continuous for x ~= 0
 if (ismember (0, x))

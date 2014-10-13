@@ -37,6 +37,11 @@
 
 function result = pow2 (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = log2 (intervalpart (x));
 ## log2 is continuous everywhere, but defined for x > 0 only
 if (interior (x, infsup(0, inf)))

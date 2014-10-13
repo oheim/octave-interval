@@ -39,6 +39,10 @@
 
 function result = roundb (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
 
 result = roundb (intervalpart (x));
 if (issingleton (result) && ...

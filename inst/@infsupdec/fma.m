@@ -62,6 +62,21 @@ if (not (isa (z, "infsupdec")))
     z = infsupdec (z);
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
+if (isnai (y))
+    result = y;
+    return
+endif
+
+if (isnai (z))
+    result = z;
+    return
+endif
+
 result = fma (intervalpart (x), intervalpart (y), intervalpart (z));
 ## fma is defined and continuous everywhere
 result = decorateresult (result, {x, y, z});

@@ -50,6 +50,16 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
+if (isnai (y))
+    result = y;
+    return
+endif
+
 result = mtimes (intervalpart (x), intervalpart (y));
 ## mtimes is defined and continuous everywhere
 result = decorateresult (result, {x, y});

@@ -44,6 +44,11 @@ function result = pown (x, p)
 
 assert (nargin == 2);
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = pown (intervalpart (x), p);
 if (p < 0 && ismember (0, x))
     ## x^P is undefined for x == 0 and P < 0

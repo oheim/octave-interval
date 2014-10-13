@@ -37,6 +37,11 @@
 
 function result = acos (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = acos (intervalpart (x));
 ## acos is continuous everywhere, but defined for [-1, 1] only
 if (subset (x, infsup(-1, 1)))

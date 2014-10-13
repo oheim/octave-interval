@@ -38,6 +38,11 @@
 
 function result = floor (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = floor (intervalpart (x));
 if (issingleton (result) && fix (x.inf) ~= x.inf)
     ## Between two integral numbers the function is constant, thus continuous

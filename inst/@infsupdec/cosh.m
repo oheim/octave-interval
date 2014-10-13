@@ -36,6 +36,11 @@
 
 function result = cosh (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = cosh (intervalpart (x));
 ## cosh is defined and continuous everywhere
 result = decorateresult (result, {x});

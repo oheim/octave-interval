@@ -50,6 +50,16 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
+if (isnai (y))
+    result = y;
+    return
+endif
+
 result = mrdivide (intervalpart (x), intervalpart (y));
 if (ismember (0, y))
     ## division by zero is undefined

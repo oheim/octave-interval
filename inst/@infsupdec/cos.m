@@ -36,6 +36,11 @@
 
 function result = cos (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = cos (intervalpart (x));
 ## cos is defined and continuous everywhere
 result = decorateresult (result, {x});

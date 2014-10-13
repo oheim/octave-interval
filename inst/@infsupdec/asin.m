@@ -37,6 +37,11 @@
 
 function result = asin (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = asin (intervalpart (x));
 ## asin is continuous everywhere, but defined for [-1, 1] only
 if (subset (x, infsup(-1, 1)))

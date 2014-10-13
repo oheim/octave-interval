@@ -39,6 +39,11 @@
 
 function result = round (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = round (intervalpart (x));
 if (issingleton (result) && ...
     (x.sup >= 0 || fix (x.sup) == x.sup || fix (x.sup * 2) / 2 ~= x.sup) && ...

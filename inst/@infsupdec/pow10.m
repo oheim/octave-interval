@@ -37,6 +37,11 @@
 
 function result = pow10 (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = pow10 (intervalpart (x));
 ## pow10 is defined and continuous everywhere
 result = decorateresult (result, {x});

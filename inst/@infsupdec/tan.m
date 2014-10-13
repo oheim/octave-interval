@@ -36,6 +36,11 @@
 
 function result = tan (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = tan (intervalpart (x));
 
 if (isentire (result))

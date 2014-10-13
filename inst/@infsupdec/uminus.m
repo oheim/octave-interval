@@ -36,6 +36,11 @@
 
 function result = uminus (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = uminus (intervalpart (x));
 ## uminus is defined and continuous everywhere
 result = decorateresult (result, {x});

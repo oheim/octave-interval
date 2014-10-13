@@ -36,6 +36,11 @@
 
 function result = sin (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = sin (intervalpart (x));
 ## sin is defined and continuous everywhere
 result = decorateresult (result, {x});

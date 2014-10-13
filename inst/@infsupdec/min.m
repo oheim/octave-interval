@@ -51,6 +51,16 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
+if (isnai (y))
+    result = y;
+    return
+endif
+
 result = min (intervalpart (x), intervalpart (y));
 ## min is defined and continuous everywhere
 result = decorateresult (result, {x, y});

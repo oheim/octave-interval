@@ -37,6 +37,11 @@
 
 function result = exp (x)
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = exp (intervalpart (x));
 ## exp is defined and continuous everywhere
 result = decorateresult (result, {x});
