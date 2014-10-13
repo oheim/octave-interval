@@ -86,7 +86,7 @@ try
                 [bare, isexact] = infsup ();
             case 2
                 if (isa (varargin{1}, "infsup"))
-                    bare = varargin{1};
+                    bare = infsup (inf (varargin{1}), sup (varargin{1}));
                     isexact = true ();
                 else
                     [bare, isexact] = infsup (varargin{1});
@@ -118,7 +118,7 @@ try
                 [bare, isexact] = infsup ();
             case 1
                 if (isa (varargin{1}, "infsup"))
-                    bare = varargin{1};
+                    bare = infsup (inf (varargin{1}), sup (varargin{1}));
                     isexact = true ();
                 else
                     [bare, isexact] = infsup (varargin{1});
