@@ -46,7 +46,7 @@
 ##   @result{} [1]
 ## @end group
 ## @end example
-## @seealso{texttointerval, intervaltoexact}
+## @seealso{intervaltoexact}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

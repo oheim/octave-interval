@@ -20,6 +20,8 @@
 ## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
 ## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
 ## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
+## @cindex IEEE1788 numsToInterval
+## @cindex IEEE1788 textToInterval
 ## 
 ## Create a decorated interval from boundaries.  Convert boundaries to double
 ## precision.
@@ -50,7 +52,9 @@
 ## will be computed.  int64 and uint64 numbers of high magnitude (> 2^53) can
 ## also be affected from precision loss.
 ##
-## Non-standard behavior: This class constructor is not described by IEEE 1788.
+## Non-standard behavior: This class constructor is not described by IEEE 1788,
+## however it implements both IEEE 1788 functions numsToInterval and
+## textToInterval.
 ## 
 ## @example
 ## @group
@@ -66,7 +70,7 @@
 ##   @result{} [.09999999999999999, .20000000000000002]_com
 ## @end group
 ## @end example
-## @seealso{numstointerval, texttointerval, exacttointerval}
+## @seealso{exacttointerval}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -33,17 +33,17 @@
 ##
 ## @example
 ## @group
-## w = texttointerval ("[ ]")
+## w = exacttointerval ("[ ]")
 ##   @result{} [Empty]
-## x = texttointerval ("[2, 3]")
+## x = exacttointerval ("[2, 3]")
 ##   @result{} [2, 3]
-## y = texttointerval ("[,]")
+## y = exacttointerval ("[,]")
 ##   @result{} [Entire]
-## z = texttointerval ("[2.1e-1]")
+## z = exacttointerval ("[2.1e-1]")
 ##   @result{} error: rounding occurred during interval construction
 ## @end group
 ## @end example
-## @seealso{numstointerval, texttointerval, intervaltoexact}
+## @seealso{intervaltoexact}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -52,7 +52,7 @@
 
 function x = exacttointerval (s)
 
-[x, exactconversion] = texttointerval (s);
+[x, exactconversion] = infsup (s);
 
 if (not (exactconversion))
     error ("rounding occurred during interval construction")

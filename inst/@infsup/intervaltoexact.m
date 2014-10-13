@@ -27,7 +27,7 @@
 ## holds for all intervals @var{X}.
 ##
 ## Accuracy: The output is exact.
-## @seealso{intervaltotext, exacttointerval}
+## @seealso{exacttointerval}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
