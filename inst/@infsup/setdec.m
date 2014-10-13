@@ -47,6 +47,6 @@ elseif (not (isfinite (x.inf) && isfinite (x.sup)))
     endif
 endif
 
-xd = infsupdec (x, d);
+xd = infsupdec (x.inf, x.sup, d);
 
 endfunction

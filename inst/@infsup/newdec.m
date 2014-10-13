@@ -34,12 +34,6 @@
 
 function xd = newdec (x)
 
-if (isempty (x))
-    xd = setdec (x, "trv");
-elseif (isfinite (x.inf) && isfinite (x.sup))
-    xd = setdec (x, "com");
-else # unbounded
-    xd = setdec (x, "dac");
-endif
+xd = infsupdec (x.inf, x.sup);
 
 endfunction

@@ -31,6 +31,14 @@
 
 function result = ismember (real, interval)
 
+assert (nargin == 2);
+
+## Convert second parameter into interval, if necessary
+if (not (isa (interval, "infsup")))
+    interval = infsup (interval);
+endif
+
+
 if (isreal (real) && isfloat (real))
     ## Simple checking is only possible with floating point numbers
     result = interval.inf <= real && real <= interval.sup;
