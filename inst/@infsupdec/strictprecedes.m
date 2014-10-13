@@ -14,46 +14,38 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} <= @var{B}
-## @cindex IEEE1788 less
+## @deftypefn {Interval Comparison} {@var{Z} =} strictprecedes (@var{A}, @var{B})
+## @cindex IEEE1788 strictPrecedes
 ## 
-## Compare intervals @var{A} and @var{B} for weakly less.
+## Evaluate strict precedes comparison on intervals.
 ##
-## True, if all numbers from @var{A} are weakly less than any number in
-## @var{B}.  False, if @var{A} contains a number which is strictly greater than
-## all numbers in @var{B}.
+## True, if @var{A} is strictly left of @var{B}. The intervals may not touch.
 ##
-## @seealso{eq, lt, ge, subset, interior, disjoint}
+## @seealso{eq, le, lt, gt, precedes, subset, interior, disjoint}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-07
+## Created: 2014-10-13
 
-function result = le (a, b)
+function result = strictprecedes (a, b)
 
 assert (nargin == 2);
 
 ## Convert first parameter into interval, if necessary
-if (not (isa (a, "infsup")))
-    a = infsup (a);
+if (not (isa (a, "infsupdec")))
+    a = infsupdec (a);
 endif
 
 ## Convert second parameter into interval, if necessary
-if (not (isa (b, "infsup")))
-    b = infsup (b);
+if (not (isa (b, "infsupdec")))
+    b = infsupdec (b);
 endif
 
-if (isempty (a) && isempty (b))
-    result = true ();
-    return
+if (isnai (a) || isnai (b))
+    error ("interval comparison with NaI")
 endif
 
-if (isempty (a) || isempty (b))
-    result = false ();
-    return
-endif
-
-result = (a.inf <= b.inf && a.sup <= b.sup);
+result = strictprecedes (intervalpart (a), intervalpart (b));
 
 endfunction

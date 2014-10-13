@@ -28,32 +28,26 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-07
+## Created: 2014-10-13
 
 function result = le (a, b)
 
 assert (nargin == 2);
 
 ## Convert first parameter into interval, if necessary
-if (not (isa (a, "infsup")))
-    a = infsup (a);
+if (not (isa (a, "infsupdec")))
+    a = infsupdec (a);
 endif
 
 ## Convert second parameter into interval, if necessary
-if (not (isa (b, "infsup")))
-    b = infsup (b);
+if (not (isa (b, "infsupdec")))
+    b = infsupdec (b);
 endif
 
-if (isempty (a) && isempty (b))
-    result = true ();
-    return
+if (isnai (a) || isnai (b))
+    error ("interval comparison with NaI")
 endif
 
-if (isempty (a) || isempty (b))
-    result = false ();
-    return
-endif
-
-result = (a.inf <= b.inf && a.sup <= b.sup);
+result = le (intervalpart (a), intervalpart (b));
 
 endfunction

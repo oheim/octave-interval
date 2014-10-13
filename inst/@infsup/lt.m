@@ -30,7 +30,7 @@
 ## Keywords: interval
 ## Created: 2014-10-07
 
-function result = lt(a, b)
+function result = lt (a, b)
 
 assert (nargin == 2);
 
