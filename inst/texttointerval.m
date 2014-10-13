@@ -61,11 +61,11 @@ function [x, isexact] = texttointerval (s)
 
 s = strtrim (s);
 
-if (isempty (s) || s(1) ~= "[" || s(end) ~= "]")
-    error ("interval literal does not begin/end with square brackets")
+if (isempty (s) || s(1) ~= "[")
+    error ("interval literal does not begin with square brackets")
 endif
 
 ## All the logic in the infsup constructor can be used
-[x, isexact] = infsup (s);
+[x, isexact] = infsupdec (s);
 
 endfunction

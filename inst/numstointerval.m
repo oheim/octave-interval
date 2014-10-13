@@ -34,11 +34,11 @@
 ## @example
 ## @group
 ## x = numstointerval (-2.5, 3)
-##   @result{} [-2.5, +3]
+##   @result{} [-2.5, +3]_com
 ## y = numstointerval (9, 9)
-##   @result{} [9]
+##   @result{} [9]_com
 ## z = numstointerval (-inf, inf)
-##   @result{} [Entire]
+##   @result{} [Entire]_dac
 ## @end group
 ## @end example
 ## @seealso{texttointerval, exacttointerval}
@@ -50,32 +50,29 @@
 
 function interval = numstointerval (l, u)
 
-## All the logic in the infsup constructor can be used, except ...
-interval = infsup (l, u);
-
-## ... this constructor must not allow construction of an empty interval.
-if (isempty (interval))
-    error ("empty interval not allowed")
-endif
+## All the logic in the infsupdec constructor can be used
+interval = infsupdec (l, u);
 
 endfunction
 %!test "double precision";
 %! x = numstointerval (-2.5, 3);
-#! assert (inf (x) == -2.5);
-#! assert (sup (x) == 3);
+%! assert (inf (x) == -2.5);
+%! assert (sup (x) == 3);
 %!test "single precision";
 %! x = numstointerval (single (-2.5), single (3));
-#! assert (inf (x) == -2.5);
-#! assert (sup (x) == 3);
+%! assert (inf (x) == -2.5);
+%! assert (sup (x) == 3);
 %!test "integer";
 %! x = numstointerval (int16 (-2), int16 (3));
-#! assert (inf (x) == -2);
-#! assert (sup (x) == 3);
+%! assert (inf (x) == -2);
+%! assert (sup (x) == 3);
 %!test "unsigned integer";
 %! x = numstointerval (uint64 (2), uint64 (3));
-#! assert (inf (x) == 2);
-#! assert (sup (x) == 3);
-%!error "empty interval";
+%! assert (inf (x) == 2);
+%! assert (sup (x) == 3);
+%!test "empty interval";
 %! x = numstointerval (inf, -inf);
-%!error "illegal boundaries";
+%! assert (isempty (x));
+%!test "illegal boundaries";
 %! x = numstointerval (1, 0);
+%! assert (isnai (x));

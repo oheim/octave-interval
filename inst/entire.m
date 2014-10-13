@@ -21,7 +21,8 @@
 ##
 ## The entire set of real numbers is a closed interval.  If used as boundaries
 ## for a certain value, it represents a state of minimum constraints.  An
-## interval function which evaluates to [Entire] yields no information at all.
+## interval function which evaluates to [Entire] yields no information at all
+## if no interval decoration is present.
 ##
 ## Accuracy: The representation of the entire set of real numbers is exact.
 ##
@@ -44,7 +45,7 @@
 
 function interval = entire ()
 
-interval = infsupdec (-inf, inf, "dac");
+interval = infsupdec (-inf, inf);
 return
 %!test "Check [Entire] boundaries";
 %! x = entire ();

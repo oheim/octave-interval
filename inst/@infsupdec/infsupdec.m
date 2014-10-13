@@ -14,20 +14,32 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup ()
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
+## @deftypefn {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec ()
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M})
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M}, @var{D})
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
+## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
 ## 
-## Create an interval from boundaries.  Convert boundaries to double precision.
+## Create a decorated interval from boundaries.  Convert boundaries to double
+## precision.
 ##
 ## The syntax without parameters creates an (exact) empty interval.  The syntax
-## with a single parameter @code{infsup (@var{M})} equals
-## @code{infsup (@var{M}, @var{M})}.  The syntax @code{infsup (@var{S})} parses
-## an interval literal in inf-sup form or as a special value, where
-## @code{infsup ("[S1, S2]")} is equivalent to @code{infsup ("S1", "S2")}.  A
-## second, logical output @var{ISEXACT} indicates if @var{X}'s boundaries both
-## have been converted without precision loss.
+## with a single parameter @code{infsupdec (@var{M})} equals
+## @code{infsupdec (@var{M}, @var{M})}.  The syntax
+## @code{infsupdec (@var{M}, @var{D})} equals
+## @code{infsupdec (@var{M}, @var{M}, @var{D})}.  The syntax
+## @code{infsupdec (@var{S})} parses a possibly decorated interval literal in
+## inf-sup form or as a special value, where @code{infsupdec ("[S1, S2]")} is
+## equivalent to @code{infsupdec ("S1", "S2")} and
+## @code{infsupdec ("[S1, S2]_D")} is equivalent to
+## @code{infsupdec ("S1", "S2", "D")}.  A second, logical output @var{ISEXACT}
+## indicates if @var{X}'s boundaries both have been converted without precision
+## loss.
+##
+## If construction fails, the special value [NaI], “not an interval,” will be
+## returned and a warning message will be raised.  [NaI] is equivalent to
+## [Empty] together with an ill-formed decoration.
 ##
 ## Each boundary can be provided in the following formats: literal constants
 ## [+-]inf[inity], e, pi; scalar real numeric data types, i. e., double,
@@ -42,16 +54,16 @@
 ## 
 ## @example
 ## @group
-## v = infsup ()
-##   @result{} [Empty]
-## w = infsup (1)
-##   @result{} [1]
+## v = infsupdec ()
+##   @result{} [Empty]_trv
+## w = infsupdec (1)
+##   @result{} [1]_com
 ## x = infsup (2, 3)
-##   @result{} [2, 3]
+##   @result{} [2, 3]_com
 ## y = infsup ("0.1")
-##   @result{} [.09999999999999999, .10000000000000001]
+##   @result{} [.09999999999999999, .10000000000000001]_com
 ## z = infsup ("0.1", "0.2")
-##   @result{} [.09999999999999999, .20000000000000002]
+##   @result{} [.09999999999999999, .20000000000000002]_com
 ## @end group
 ## @end example
 ## @seealso{numstointerval, texttointerval, exacttointerval}
@@ -61,49 +73,81 @@
 ## Keywords: interval
 ## Created: 2014-10-12
 
-function [x, isexact] = infsupdec (p1, p2, p3)
+function [x, isexact] = infsupdec (varargin)
 
 ## The decorated version must return NaI instead of an error if interval
-## construction failed
+## construction failed, so we use a try & catch block.
 try
-    switch nargin
-        case 0
-            [bare, isexact] = infsup ();
-            dec = "trv";
-        case 1
-            if (isa (p1, "infsup"))
-                bare = p1;
-                isexact = true ();
-                dec = "trv";
-            else
+    if (nargin >= 1 && max(strcmpi (varargin{end}, {"com","dac","def","trv"})))
+        ## The decoration has been passed as the last parameter
+        dec = varargin{end};
+        switch nargin
+            case 1
                 [bare, isexact] = infsup ();
-                dec = p1;
+            case 2
+                [bare, isexact] = infsup (varargin{1});
+            case 3
+                [bare, isexact] = infsup (varargin{1}, varargin{2});
+            otherwise
+                error ("too many arguments")
+        endswitch
+    elseif (nargin == 1 && ischar (varargin{1}))
+        ## interval literal or single decimal number
+        literal = strsplit (varargin{1}, "_");
+        if (isempty (literal))
+            [bare, isexact] = infsup ("");
+        else
+            ## If literal{1} is the representation of NaI, the infsup
+            ## constructor will trigger an error.
+            [bare, isexact] = infsup (literal{1});
+            if (length (literal) == 2) # decorated interval literal
+                dec = literal{2};
+            elseif (length (literal) > 2)
+                error ("illegal decorated interval literal")
             endif
-        case 2
-            if (isa (p1, "infsup"))
-                bare = p1;
-                isexact = true ();
-            else
-                [bare, isexact] = infsup (p1);
-            endif
-            dec = p2;
-        case 3
-            [bare, isexact] = infsup (p1, p2);
-            dec = p3;
-    endswitch
+        endif
+    else
+        ## Undecorated interval boundaries
+        switch nargin
+            case 0
+                [bare, isexact] = infsup ();
+            case 1
+                [bare, isexact] = infsup (varargin{1});
+            case 2
+                [bare, isexact] = infsup (varargin{1}, varargin{2});
+            otherwise
+                error ("too many arguments")
+        endswitch
+    endif
+    
+    assert (isa (bare, "infsup"));
+    
+    if (not (exist ("dec", "var")))
+        ## Add missing decoration
+        if (isempty (bare))
+            dec = "trv";
+        elseif (not (isfinite (inf (bare)) && isfinite (sup (bare))))
+            dec = "dac";
+        else # bounded & non-empty
+            dec = "com";
+        endif
+    endif
     dec = lower (dec);
+    
+    ## Check decoration
     if (isempty (bare) && dec ~= "trv")
         error ("illegal decoration for empty interval")
     endif
     if (not (isfinite (inf (bare)) && isfinite (sup (bare))) && dec == "com")
         error ("illegal decoration for unbound interval")
     endif
-    if (dec ~= "com" && dec ~= "dac" && dec ~= "def" && dec ~= "trv")
+    if (not (max(strcmp (dec, {"com","dac","def","trv"}))))
         error ("illegal decoration");
     endif
 catch
+    warning (lasterror.message)
     ## NaI representation is unique.
-    bare = empty ();
+    bare = infsup ();
     dec = "ill";
     isexact = false ();
 end_try_catch
