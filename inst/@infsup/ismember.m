@@ -1,0 +1,43 @@
+## Copyright 2014 Oliver Heimlich
+##
+## This program is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation; either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, see <http://www.gnu.org/licenses/>.
+
+## -*- texinfo -*-
+## @deftypefn {Interval Comparison} {@var{Y} =} ismember (@var{M}, @var{X})
+## @cindex IEEE1788 isMember
+## 
+## Check if the interval @var{X} contains the number @var{M}.
+##
+## The number can be a numerical data type or a string representation of a 
+## decimal number.
+##
+## @seealso{eq, isentire, issingleton, isempty}
+## @end deftypefn
+
+## Author: Oliver Heimlich
+## Keywords: interval
+## Created: 2014-10-13
+
+function result = ismember (real, interval)
+
+if (isreal (real) && isfloat (real))
+    ## Simple checking is only possible with floating point numbers
+    result = interval.inf <= real && real <= interval.sup;
+else
+    ## Mixed mode comparison between integers and floats can be problematic
+    ## as well as comparison with decimal numbers
+    result = subset (infsup (real), interval);
+endif
+
+return

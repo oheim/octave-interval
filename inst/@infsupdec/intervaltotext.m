@@ -45,9 +45,12 @@ if (nargin < 2)
     exact = false ();
 endif
 
-if (x.dec == "ill")
+if (isnai (x))
     s = "[NaI]";
 else
+    ## Using intervalpart we can call the superclass' method.
+    ## In later GNU Octave versions it is also possible to call
+    ## intervaltotext@infsup (x, exact);
     s = intervaltotext (intervalpart (x), exact);
     s = strcat (s, "_", x.dec);
 endif
