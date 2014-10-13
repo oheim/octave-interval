@@ -14,21 +14,37 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} sign (@var{X})
+## @cindex IEEE1788 sign
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the signum function for each number in interval @var{X}.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## sign (infsupdec (2, 3))
+##   @result{} [1]_com
+## sign (infsupdec (0, 5))
+##   @result{} [0, 1]_def
+## sign (infsup (-17))
+##   @result{} [-1]_com
+## @end group
+## @end example
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-04
 
-function bare = intervalpart (x)
+function result = sign (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = sign (intervalpart (x));
+## sign is defined everywhere and continuous for x ~= 0
+if (ismember (0, x))
+    result = decorateresult (result, {x}, "def");
+else
+    result = decorateresult (result, {x});
+endif
 
 endfunction

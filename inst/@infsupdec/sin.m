@@ -14,21 +14,30 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} sin (@var{X})
+## @cindex IEEE1788 sin
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the sine for each number in interval @var{X} in radians.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is an accurate enclosure.
+##
+## @example
+## @group
+## sin (infsupdec (1))
+##   @result{} [.8414709848078963, .8414709848078967]_com
+## @end group
+## @end example
+## @seealso{asin, sinh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-05
 
-function bare = intervalpart (x)
+function result = sin (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = sin (intervalpart (x));
+## sin is defined and continuous everywhere
+result = decorateresult (result, {x});
 
 endfunction

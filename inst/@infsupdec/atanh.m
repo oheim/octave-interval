@@ -14,21 +14,34 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} atanh (@var{X})
+## @cindex IEEE1788 atanh
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the inverse hyperbolic tangent for each number in interval @var{X}.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## atanh (infsupdec (.5))
+##   @result{} [.5493061443340547, .5493061443340549]_com
+## @end group
+## @end example
+## @seealso{tanh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-07
 
-function bare = intervalpart (x)
+function result = atanh (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = atanh (intervalpart (x));
+## atanh is continuous everywhere, but defined for [-1, 1] only
+if (subset (x, infsup(-1, 1)))
+    result = decorateresult (result, {x});
+else
+    result = decorateresult (result, {x}, "trv");
+endif
 
 endfunction

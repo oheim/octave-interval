@@ -14,21 +14,30 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} - @var{X}
+## @cindex IEEE1788 neg
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Negate all numbers in the interval.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is exact.
+##
+## @example
+## @group
+## x = infsupdec (2, 3);
+## - x
+##   @result{} [-3, -2]_com
+## @end group
+## @end example
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-09-30
 
-function bare = intervalpart (x)
+function result = uminus (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = uminus (intervalpart (x));
+## uminus is defined and continuous everywhere
+result = decorateresult (result, {x});
 
 endfunction

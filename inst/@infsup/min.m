@@ -27,7 +27,7 @@
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
 ## min (x, y)
-##   @result{} [1 , 2]
+##   @result{} [1, 2]
 ## @end group
 ## @end example
 ## @seealso{min}

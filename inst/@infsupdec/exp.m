@@ -14,21 +14,31 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} exp (@var{X})
+## @cindex IEEE1788 exp
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the exponential function for all numbers in @var{X}.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is an accurate enclosure.  The result is tightest for
+## boundaries @code{0} and @code{1}.
+##
+## @example
+## @group
+## exp (infsupdec (1))
+##   @result{} [2.718281828459045, 2.7182818284590456]_com
+## @end group
+## @end example
+## @seealso{log, pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-09-30
 
-function bare = intervalpart (x)
+function result = exp (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = exp (intervalpart (x));
+## exp is defined and continuous everywhere
+result = decorateresult (result, {x});
 
 endfunction

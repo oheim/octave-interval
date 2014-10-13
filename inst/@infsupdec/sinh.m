@@ -14,21 +14,30 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} sinh (@var{X})
+## @cindex IEEE1788 sinh
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the hyperbolic sine for each number in interval @var{X}.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is an accurate enclosure.
+##
+## @example
+## @group
+## sinh (infsupdec (1))
+##   @result{} [1.1752011936438011, 1.1752011936438017]_com
+## @end group
+## @end example
+## @seealso{asinh, cosh, tanh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-06
 
-function bare = intervalpart (x)
+function result = sinh (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = sinh (intervalpart (x));
+## sinh is defined and continuous everywhere
+result = decorateresult (result, {x});
 
 endfunction

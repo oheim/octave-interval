@@ -24,7 +24,7 @@
 ##
 ## @example
 ## @group
-## atan2 (infsup (1), infsup(-1))
+## atan2 (infsup (1), infsup (-1))
 ##   @result{} [2.3561944901923448, 2.3561944901923453]
 ## @end group
 ## @end example

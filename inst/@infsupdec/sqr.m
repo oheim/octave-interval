@@ -14,21 +14,30 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} sqr (@var{X})
+## @cindex IEEE1788 sqr
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the square for all numbers in @var{X}.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## sqr (infsupdec (-2, 1))
+##   @result{} [0, 4]_com
+## @end group
+## @end example
+## @seealso{sqrt, pown, pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-09-30
 
-function bare = intervalpart (x)
+function result = sqr (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = sqr (intervalpart (x));
+## sqr is defined and continuous everywhere
+result = decorateresult (result, {x});
 
 endfunction

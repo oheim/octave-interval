@@ -14,21 +14,34 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} sqrt (@var{X})
+## @cindex IEEE1788 sqrt
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the square root for all non-negative numbers in @var{X}.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## sqrt (infsupdec (-6, 4))
+##   @result{} [0, 2]_trv
+## @end group
+## @end example
+## @seealso{sqr, pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-01
 
-function bare = intervalpart (x)
+function result = sqrt (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = sqrt (intervalpart (x));
+## sqrt is continuous everywhere, but defined for x >= 0 only
+if (subset (x, infsup(0, inf)))
+    result = decorateresult (result, {x});
+else
+    result = decorateresult (result, {x}, "trv");
+endif
 
 endfunction

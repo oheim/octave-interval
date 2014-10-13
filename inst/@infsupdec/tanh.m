@@ -14,21 +14,30 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} tanh (@var{X})
+## @cindex IEEE1788 tanh
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the hyperbolic tangent for each number in interval @var{X}.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## tanh (infsupdec (1))
+##   @result{} [.7615941559557647, .761594155955765]_com
+## @end group
+## @end example
+## @seealso{atanh, sinh, cosh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-07
 
-function bare = intervalpart (x)
+function result = tanh (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = tanh (intervalpart (x));
+## tanh is defined and continuous everywhere
+result = decorateresult (result, {x});
 
 endfunction

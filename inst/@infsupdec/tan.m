@@ -14,21 +14,37 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} tan (@var{X})
+## @cindex IEEE1788 tan
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the tangent for each number in interval @var{X} in radians.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is an accurate enclosure.
+##
+## @example
+## @group
+## tan (infsupdec (1))
+##   @result{} [1.557407724654902, 1.5574077246549026]_com
+## @end group
+## @end example
+## @seealso{atan, tanh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-06
 
-function bare = intervalpart (x)
+function result = tan (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = tan (intervalpart (x));
+
+if (isentire (result))
+    ## Because tan (nextdown (pi / 2)) < realmax, we can simple check for
+    ## a singularity by comparing the result with entire.
+    result = decorateresult (result, {x}, "trv");
+else
+    ## tan has been evaluated where it is defined and continuous
+    result = decorateresult (result, {x});
+endif
 
 endfunction

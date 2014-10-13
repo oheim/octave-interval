@@ -14,21 +14,36 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} log10 (@var{X})
+## @cindex IEEE1788 log10
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the decimal (base-10) logarithm for all numbers in interval @var{X}.
 ##
-## @seealso{decorationpart}
+## The function is only defined where @var{X} is positive.
+##
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## log10 (infsupdec (2))
+##   @result{} [.30102999566398114, .3010299956639812]_com
+## @end group
+## @end example
+## @seealso{pow10, log, log2}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-04
 
-function bare = intervalpart (x)
+function result = log10 (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = log10 (intervalpart (x));
+## log10 is continuous everywhere, but defined for x > 0 only
+if (interior (x, infsup(0, inf)))
+    result = decorateresult (result, {x});
+else
+    result = decorateresult (result, {x}, "trv");
+endif
 
 endfunction

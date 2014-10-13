@@ -14,21 +14,36 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} log (@var{X})
+## @cindex IEEE1788 log
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Compute the natural logarithm for all numbers in interval @var{X}.
 ##
-## @seealso{decorationpart}
+## The function is only defined where @var{X} is positive.
+##
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## log (infsupdec (2))
+##   @result{} [.6931471805599452, .6931471805599454]_com
+## @end group
+## @end example
+## @seealso{exp, log2, log10}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-04
 
-function bare = intervalpart (x)
+function result = log (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = log (intervalpart (x));
+## log is continuous everywhere, but defined for x > 0 only
+if (interior (x, infsup(0, inf)))
+    result = decorateresult (result, {x});
+else
+    result = decorateresult (result, {x}, "trv");
+endif
 
 endfunction

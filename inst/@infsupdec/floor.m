@@ -14,21 +14,36 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @deftypefn {Interval Function} {@var{Y} =} floor (@var{X})
+## @cindex IEEE1788 floor
 ## 
-## Return the bare interval for the decorated interval @var{X}.
+## Round each number in interval @var{X} towards -Inf.
 ##
-## @seealso{decorationpart}
+## Accuracy: The result is a tight enclosure.
+##
+## @example
+## @group
+## floor (infsupdec (2.5, 3.5))
+##   @result{} [2, 3]_def
+## floor (infsupdec (-0.5, 5))
+##   @result{} [-1, 5]_def
+## @end group
+## @end example
+## @seealso{ceil, round, roundb, fix}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-10-04
 
-function bare = intervalpart (x)
+function result = floor (x)
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+result = floor (intervalpart (x));
+if (issingleton (result) && fix (x.inf) ~= x.inf)
+    ## Between two integral numbers the function is constant, thus continuous
+    result = decorateresult (result, {x});
+else
+    result = decorateresult (result, {x}, "def");
+endif
 
 endfunction
