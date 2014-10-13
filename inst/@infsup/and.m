@@ -51,22 +51,22 @@ if (not (isa (b, "infsup")))
 endif
 
 if (isempty (a) || isempty (b))
-    result = empty ();
+    result = infsup ();
     return
 endif
 
 if (isentire (a))
-    result = b;
+    result = infsup (b.inf, b.sup);
     return
 endif
 
 if (isentire (b))
-    result = a;
+    result = infsup(a.inf, a.sup);
     return
 endif
 
 if (a.sup < b.inf || b.sup < a.inf)
-    result = empty ();
+    result = infsup ();
     return
 endif
 

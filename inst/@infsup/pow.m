@@ -56,7 +56,7 @@ if (not (isa (y, "infsup")))
 endif
 
 if (isempty (x) || isempty (y) || x.sup <= 0)
-    result = empty ();
+    result = infsup ();
     return
 endif
 

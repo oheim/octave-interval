@@ -37,7 +37,7 @@
 function result = nextout (x)
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 

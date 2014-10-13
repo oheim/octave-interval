@@ -39,7 +39,7 @@
 function result = log10 (x)
 
 if (isempty (x) || x.sup <= 0)
-    result = empty ();
+    result = infsup ();
     return
 endif
 

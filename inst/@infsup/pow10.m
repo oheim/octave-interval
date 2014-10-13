@@ -38,7 +38,7 @@
 function result = pow10 (x)
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 

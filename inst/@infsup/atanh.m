@@ -37,7 +37,7 @@
 function result = atanh (x)
 
 if (isempty (x) || x.sup <= -1 || x.inf >= 1)
-    result = empty ();
+    result = infsup ();
     return
 endif
 

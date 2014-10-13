@@ -39,7 +39,7 @@
 function result = ceil (x)
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 

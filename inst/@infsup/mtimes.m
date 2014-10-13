@@ -51,7 +51,7 @@ if (not (isa (y, "infsup")))
 endif
 
 if (isempty (x) || isempty (y))
-    result = empty ();
+    result = infsup ();
     return
 endif
 
@@ -62,7 +62,7 @@ if ((x.inf == 0 && x.sup == 0) || ...
 endif
 
 if (isentire (x) || isentire (y))
-    result = entire ();
+    result = infsup(-inf, inf);
     return
 endif
 

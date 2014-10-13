@@ -38,7 +38,7 @@
 function result = asin (x)
 
 if (isempty (x) || x.inf > 1 || x.sup < -1)
-    result = empty ();
+    result = infsup ();
     return
 endif
 

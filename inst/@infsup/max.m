@@ -52,7 +52,7 @@ if (not (isa (y, "infsup")))
 endif
 
 if (isempty (x) || isempty (y))
-    result = empty ();
+    result = infsup ();
     return
 endif
 

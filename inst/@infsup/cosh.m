@@ -37,7 +37,7 @@
 function result = cosh (x)
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 

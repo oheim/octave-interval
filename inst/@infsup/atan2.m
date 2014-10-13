@@ -51,7 +51,7 @@ endif
 
 if (isempty (x) || isempty (y) || ...
     (x.inf == 0 && x.sup == 0 && y.inf == 0 && y.sup == 0))
-    result = empty ();
+    result = infsup ();
     return
 endif
 

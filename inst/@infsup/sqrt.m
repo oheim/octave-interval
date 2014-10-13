@@ -37,7 +37,7 @@
 function result = sqrt (x)
 
 if (isempty (x) || x.sup < 0)
-    result = empty ();
+    result = infsup ();
     return
 endif
 

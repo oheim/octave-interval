@@ -37,12 +37,12 @@
 function result = tan (x)
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 
 if (not (isfinite (x.inf) && isfinite (x.sup)))
-    result = entire ();
+    result = infsup (-inf, inf);
     return
 endif
 
@@ -52,7 +52,7 @@ width = x.sup - x.inf;
 fesetround (0.5);
 pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
 if (width >= pi.sup)
-    result = entire ();
+    result = infsup (-inf, inf);
     return
 endif
 
@@ -65,7 +65,7 @@ if (t.inf > t.sup || ...
                                             # width of pi / 2
         max (abs (t.inf), abs (t.sup)) < 1))) # could only happen within max
                                               # width of pi / 2
-    result = entire ();
+    result = infsup (-inf, inf);
     return
 else
     ## Now we can be sure that there is no singularity between x.inf and x.sup

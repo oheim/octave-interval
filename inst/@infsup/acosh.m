@@ -37,7 +37,7 @@
 function result = acosh (x)
 
 if (isempty (x) || x.sup < 1)
-    result = empty ();
+    result = infsup ();
     return
 endif
 

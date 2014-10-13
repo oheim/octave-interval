@@ -64,7 +64,7 @@ endif
 
 
 if (isempty (x) || isempty (y) || isempty (z))
-    result = empty ();
+    result = infsup ();
     return
 endif
 
@@ -75,7 +75,7 @@ if ((x.inf == 0 && x.sup == 0) || ...
 endif
 
 if (isentire (x) || isentire (y) || isentire (z))
-    result = entire ();
+    result = infsup (-inf, inf);
     return
 endif
 

@@ -40,7 +40,7 @@
 function result = sign (x)
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 

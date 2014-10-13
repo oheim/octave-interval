@@ -54,7 +54,7 @@ if (p == 1) # x^1
 endif
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 
@@ -70,7 +70,7 @@ if (x.inf == 0 && x.sup == 0)
         return
     else
         ## not in domain
-        result = empty ();
+        result = infsup ();
     endif
 endif
 

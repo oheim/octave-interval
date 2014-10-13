@@ -40,7 +40,7 @@
 function result = round (x)
 
 if (isempty (x))
-    result = empty ();
+    result = infsup ();
     return
 endif
 
