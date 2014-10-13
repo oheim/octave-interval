@@ -38,11 +38,11 @@ function xd = setdec (x, d)
 assert (nargin == 2);
 
 if (isempty (x))
-    if (d == "def" || d == "dac" || d == "com")
+    if (max (strcmpi (d, {"def", "dac", "com"})))
         d = "trv";
     endif
 elseif (not (isfinite (x.inf) && isfinite (x.sup)))
-    if (d == "com")
+    if (strcmpi (d, "com"))
         d = "dac";
     endif
 endif
