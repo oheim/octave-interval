@@ -85,7 +85,12 @@ try
             case 1
                 [bare, isexact] = infsup ();
             case 2
-                [bare, isexact] = infsup (varargin{1});
+                if (isa (varargin{1}, "infsup"))
+                    bare = varargin{1};
+                    isexact = true ();
+                else
+                    [bare, isexact] = infsup (varargin{1});
+                endif
             case 3
                 [bare, isexact] = infsup (varargin{1}, varargin{2});
             otherwise
@@ -112,7 +117,12 @@ try
             case 0
                 [bare, isexact] = infsup ();
             case 1
-                [bare, isexact] = infsup (varargin{1});
+                if (isa (varargin{1}, "infsup"))
+                    bare = varargin{1};
+                    isexact = true ();
+                else
+                    [bare, isexact] = infsup (varargin{1});
+                endif
             case 2
                 [bare, isexact] = infsup (varargin{1}, varargin{2});
             otherwise

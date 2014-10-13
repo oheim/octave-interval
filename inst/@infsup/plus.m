@@ -26,7 +26,7 @@
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
 ## x + y
-##   @result{} [3 , 5]
+##   @result{} [3, 5]
 ## @end group
 ## @end example
 ## @seealso{minus}
