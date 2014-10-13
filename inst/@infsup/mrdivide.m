@@ -50,19 +50,9 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (isempty (x) || isempty (y))
-    result = empty ();
+if (isempty (x) || isempty (y) || (y.inf == 0 && y.sup == 0))
+    result = infsup ();
     return
-endif
-
-if ((y.inf < 0 && y.sup > 0) || ...
-    (x.inf <= 0 && x.sup >= 0 && y.inf == 0 && y.sup == 0))
-    result = entire ();
-    return
-endif
-
-if ((x.sup < 0 || x.inf > 0) && y.inf == 0 && y.sup == 0)
-    result = empty ();
 endif
 
 if (x.sup <= 0)
