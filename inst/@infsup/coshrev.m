@@ -14,17 +14,18 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} acosh (@var{X})
-## @cindex IEEE1788 acosh
+## @deftypefn {Interval Function} {@var{X} =} coshrev (@var{C}, @var{X})
+## @deftypefnx {Interval Function} {@var{X} =} coshrev (@var{C})
+## @cindex IEEE1788 coshRev
 ## 
-## Compute the inverse hyperbolic cosine for each number in interval @var{X}.
+## Compute the reverse hyperbolic cosine function.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## acosh (infsup (2))
-##   @result{} [1.3169578969248165, 1.3169578969248168]
+## coshrev (infsup (-2, 1))
+##   @result{} [0]
 ## @end group
 ## @end example
 ## @seealso{cosh}
@@ -32,30 +33,27 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-07
+## Created: 2014-10-13
 
-function result = acosh (x)
+function result = coshrev (c, x)
 
-if (isempty (x) || x.sup < 1)
-    result = infsup ();
-    return
+if (nargin < 2)
+    x = infsup (-inf, inf);
 endif
 
-if (x.inf <= 1)
-    ach.inf = 0;
-else
-    fesetround (-inf);
-    ach.inf = acosh (x.inf);
+## Convert first parameter into interval, if necessary
+if (not (isa (c, "infsup")))
+    c = infsup (c);
 endif
 
-if (x.sup == 1)
-    ach.sup = 0;
-else
-    fesetround (inf);
-    ach.sup = acosh (x.sup);
+## Convert second parameter into interval, if necessary
+if (not (isa (x, "infsup")))
+    x = infsup (x);
 endif
-fesetround (0.5);
 
-result = infsup (ach.inf, ach.sup);
+p = acosh (c);
+n = - p;
+
+result = (p & x) | (n & x);
 
 endfunction
