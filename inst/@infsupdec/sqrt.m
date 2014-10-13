@@ -32,7 +32,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-01
+## Created: 2014-10-13
 
 function result = sqrt (x)
 

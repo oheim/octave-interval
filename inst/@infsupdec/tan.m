@@ -32,7 +32,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-06
+## Created: 2014-10-13
 
 function result = tan (x)
 

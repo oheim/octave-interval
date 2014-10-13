@@ -41,7 +41,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-03
+## Created: 2014-10-13
 
 function result = fma (x, y, z)
 

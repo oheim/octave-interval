@@ -34,7 +34,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-04
+## Created: 2014-10-13
 
 function result = log10 (x)
 

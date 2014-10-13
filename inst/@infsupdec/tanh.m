@@ -32,7 +32,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-07
+## Created: 2014-10-13
 
 function result = tanh (x)
 
