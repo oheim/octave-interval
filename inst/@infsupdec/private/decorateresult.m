@@ -23,7 +23,7 @@
 ##
 ## Using a third input parameter, it is possible do define a maximum decoration
 ## for the final interval, e. g., if the arithmetic function is undefined or
-## continuous for some of the input parameters.
+## not continuous for some of the input parameters.
 ##
 ## @example
 ## @group
@@ -69,7 +69,7 @@ if (nargin >= 2)
     if (nargin >= 3)
         assert (ischar (maxdec));
         assert (max (strcmp (maxdec, {"com", "dac", "def", "trv"})));
-        decorations{i + 1} = maxdec;
+        decorations{end} = maxdec;
     endif
     
     ## Determine and apply the minimum decoration
