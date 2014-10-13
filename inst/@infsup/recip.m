@@ -37,6 +37,6 @@
 
 function result = recip (x)
 
-result = infsup (1) / x;
+result = mrdivide (infsup (1), x);
 
 endfunction

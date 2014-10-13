@@ -166,4 +166,9 @@ x.dec = dec;
 
 x = class (x, "infsupdec", bare);
 
+## Enable all mixed mode functions to use decorated variants
+## FIXME This does not work for operators atm,
+## see http://savannah.gnu.org/bugs/?42735
+superiorto ("infsup");
+
 endfunction
