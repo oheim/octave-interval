@@ -38,5 +38,13 @@
 
 function supremum = sup (interval)
 
+if (isa (interval, "infsupdec"))
+    ## We cannot override this function in infsupdec, because that would create
+    ## an infinite loop.
+    if (isnai (interval))
+        error ("NaI has no supremum")
+    endif
+endif
+
 supremum = interval.sup;
 return

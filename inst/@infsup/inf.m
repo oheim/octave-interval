@@ -38,5 +38,13 @@
 
 function infimum = inf (interval)
 
+if (isa (interval, "infsupdec"))
+    ## We cannot override this function in infsupdec, because that would create
+    ## an infinite loop.
+    if (isnai (interval))
+        error ("NaI has no infimum")
+    endif
+endif
+
 infimum = interval.inf;
 return

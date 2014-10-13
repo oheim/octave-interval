@@ -28,6 +28,10 @@
 
 function bare = intervalpart (x)
 
+if (isnai (x))
+    error ("NaI has no interval part")
+endif
+
 ## This also works for the empty interval
 bare = infsup (inf (x), sup (x));
 
