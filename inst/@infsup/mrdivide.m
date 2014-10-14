@@ -93,7 +93,7 @@ elseif (x.inf >= 0)
     else # y.inf == 0
         fesetround (-inf);
         quot.inf = x.inf / y.sup;
-        quot.sup = 1;
+        quot.sup = inf;
     endif
 else
     if (y.sup < 0)
