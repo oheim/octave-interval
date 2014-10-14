@@ -182,7 +182,7 @@ function p = powrounded (x, y, direction)
             elseif (fix (y) == y)
                 ## y is an integer
                 ## This operation is exact
-                p = pow2 (y)
+                p = pow2 (y);
                 return
             endif
         case 10 # 10^y
