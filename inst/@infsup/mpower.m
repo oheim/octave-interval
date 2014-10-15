@@ -63,7 +63,7 @@ endif
 ## http://exp.ln0.de/heimlich-power-2011.htm.
 if (isempty (x) || isempty (y) || ...
     (x.inf == 0 && x.sup == 0 && y.sup <= 0))
-    result = infsup ();
+    z = infsup ();
     return
 endif
 
