@@ -29,5 +29,5 @@
 function result = issingleton (x)
 
 ## This check also works for empty intervals (-inf ~= +inf)
-result = (interval.inf == interval.sup);
+result = (x.inf == x.sup);
 return

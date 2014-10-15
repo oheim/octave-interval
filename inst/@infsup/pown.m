@@ -79,16 +79,16 @@ if (x.inf >= 0)
 else
     if (rem (p, 2) == 0) # p even
         if (x.sup <= 0)
-            result = pow (neg (x), infsup (p));
+            result = pow (-x, infsup (p));
         else
             result = pow (infsup (0, max (-x.inf, x.sup)), infsup (p));
         endif
     else # p odd
         if (x.sup <= 0)
-            result = neg (pow (neg (x), infsup (p)));
+            result = -pow (-x, infsup (p));
         else
             result = pow (x, infsup (p)) | ...
-                     neg (pow (neg (x), infsup (p)));
+                     -pow (-x, infsup (p));
         endif
     endif
 endif
