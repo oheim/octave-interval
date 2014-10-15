@@ -173,16 +173,30 @@ elseif (base == inf)
         z.sup = 1;
     endif
 else # 0 < base < inf
-    if (evenexponent == inf)
-        z.sup = inf;
-    elseif (evenexponent == -inf)
-        z.sup = 0
+    if (not (isfinite (evenexponent)))
+        if (base == 1)
+            z.sup = 1;
+        elseif ((base < 1 && evenexponent > 0) || ...
+                (base > 1 && evenexponent < 0))
+            z.sup = 0;
+        else
+            z.sup = inf;
+        endif
     else
         z.sup = sup (pown (infsup (base), evenexponent));
     endif
     if (oddexponent == evenexponent)
         ## This can happen with big exponents.
         z.inf = -z.sup;
+    elseif (not (isfinite (oddexponent)))
+        if (base == 1)
+            z.inf = -1;
+        elseif ((base < 1 && oddexponent > 0) || ...
+                (base > 1 && oddexponent < 0))
+            z.inf = 0;
+        else
+            z.inf = -inf;
+        endif
     else
         z.inf = -sup (pown (infsup (base), oddexponent));
     endif
