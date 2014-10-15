@@ -3,14 +3,13 @@ Version: 0.0.1
 Date: 2014-10-02
 Author: Oliver Heimlich <oheim@posteo.de>
 Maintainer: Oliver Heimlich
-Title: Interval Arithmetic on Real Numbers (IEEE 1788)
+Title: Interval arithmetic on real numbers (IEEE 1788)
 Description: Standard-conforming implementation of intervals
  in inf-sup format based on interval boundaries in IEEE-754
  binary64 numbers.
 Categories: interval arithmetic
-Problems: Development is not completed, not yet standard-conforming
-Url: http://grouper.ieee.org/groups/1788/
+Problems: Development is not completed, not yet standard-conforming, IEEE 1788 is no official standard yet
+Url: http://wiki.octave.org/Interval_package
 Autoload: true
 Depends: fenv (>= 0.1.0)
 License: GPLv3+
-
