@@ -41,7 +41,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2011
+## Created: 2014-10-15
 
 function z = mpower (x, y)
 
@@ -71,7 +71,7 @@ z = mpower (intervalpart (x), intervalpart (y));
 ## The general power function is continuous where it is defined
 if (not (isempty (z)) && ...
     (inf (x) > 0 || ... # defined for all x > 0
-    (inf (x) == 0 && inf (y) > 0) || ... # defined for x = 0 if y > 0
+        (inf (x) == 0 && inf (y) > 0) || ... # defined for x = 0 if y > 0
         (issingleton (y) && fix (inf (y)) == inf (y) && ... # defined for x < 0
                                                             # only where y is
                                                             # integral
