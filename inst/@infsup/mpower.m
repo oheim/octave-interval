@@ -21,9 +21,12 @@
 ## positive; (3) negative base @var{X} together with integral exponent @var{Y}.
 ##
 ## This definition complies with the common complex valued power function,
-## restricted to the domain where results are real.  The complex power function
-## is defined by @code{exp (@var{Y} * log (@var{X}))} with initial branch of
-## complex logarithm and complex exponential function.
+## restricted to the domain where results are real, plus limit values where
+## @var{X} is zero.  The complex power function is defined by
+## @code{exp (@var{Y} * log (@var{X}))} with initial branch of complex
+## logarithm and complex exponential function.
+##
+## Warning: This function is not defined by IEEE 1788.
 ##
 ## Accuracy: The result is an accurate enclosure.  The result is tightest in
 ## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{Y} in
