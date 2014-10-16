@@ -128,7 +128,7 @@ if (b.inf < a.inf && a.inf < b.sup && b.sup < a.sup)
     return
 endif
 
-if (b.inf < b.sup && b.sup = a.inf && a.inf < a.sup)
+if (b.inf < b.sup && b.sup == a.inf && a.inf < a.sup)
     state = "metBy";
     bitmask = uint16 (pow2 (1));
     return
