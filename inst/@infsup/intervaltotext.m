@@ -53,7 +53,9 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function s = intervaltotext (x, exact)
+function [s, isexact] = intervaltotext (x, exact)
+
+isexact = true ();
 
 if (isempty (x))
     s = "[Empty]";
@@ -127,6 +129,8 @@ for [boundary, key] = boundaries
                       
             accurracylost = find (decimal.m(...
                     decimal.e + keepfractiondigits + 1 : end) ~= 0, 1);
+            
+            isexact = isexact && isempty (accurracylost);
             
             ## Strip irrelevant digits (round towards zero)
             decimal.m = decimal.m(1 : decimal.e + keepfractiondigits);

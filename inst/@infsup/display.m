@@ -15,8 +15,16 @@
 
 function  display (x)
 
-fprintf ("%s = ", inputname (1));
-fprintf (intervaltotext (x));
+[s, isexact] = intervaltotext (x);
+
+fprintf ("%s ", inputname (1));
+if (isexact)
+    fprintf ("=");
+else
+    fprintf ("⊂");
+endif
+fprintf (" ");
+fprintf (s);
 fprintf ("\n");
 
 endfunction

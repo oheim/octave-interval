@@ -39,7 +39,7 @@
 ## Keywords: interval
 ## Created: 2014-10-12
 
-function s = intervaltotext (x, exact)
+function [s, isexact] = intervaltotext (x, exact)
 
 if (nargin < 2)
     exact = false ();
@@ -47,11 +47,12 @@ endif
 
 if (isnai (x))
     s = "[NaI]";
+    isexact = true ();
 else
     ## Using intervalpart we can call the superclass' method.
     ## In later GNU Octave versions it is also possible to call
     ## intervaltotext@infsup (x, exact);
-    s = intervaltotext (intervalpart (x), exact);
+    [s, isexact] = intervaltotext (intervalpart (x), exact);
     s = strcat (s, "_", x.dec);
 endif
 
