@@ -52,10 +52,21 @@
 
 function x = exacttointerval (s)
 
-[x, exactconversion] = infsup (s);
+[x, exactconversion] = infsupdec (s);
 
 if (not (exactconversion))
     error ("rounding occurred during interval construction")
 endif
 
 endfunction
+%!test "Positive cases";
+%! x = exacttointerval ("[Empty]");
+%! assert (isempty (x));
+%! y = exacttointerval ("[0, 1]");
+%! assert (inf (y) == 0);
+%! assert (sup (y) == 1);
+%! assert (strcmp (decorationpart (y), "com"));
+%!error "Interval [0, 0.1] must fail - not exact";
+%! exacttointerval ("[0, 0.1]");
+%!error "Interval [1, 0] must fail - invalid";
+%! exacttointerval ("[1, 0]");

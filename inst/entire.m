@@ -47,7 +47,8 @@ function interval = entire ()
 
 interval = infsupdec (-inf, inf);
 return
-%!test "Check [Entire] boundaries";
+%!test "Check [Entire] properties";
 %! x = entire ();
 %! assert (inf (x) == -inf);
 %! assert (sup (x) == inf);
+%! assert (strcmp (decorationpart (x), "dac"));

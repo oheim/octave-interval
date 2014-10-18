@@ -46,7 +46,8 @@ function interval = empty ()
 
 interval = infsupdec ();
 return
-%!test "Check [Empty] boundaries";
+%!test "Check [Empty] properties";
 %! x = empty ();
 %! assert (inf (x) == inf);
 %! assert (sup (x) == -inf);
+%! assert (strcmp (decorationpart (x), "trv"));
