@@ -20,7 +20,7 @@
 ## Compute the hyperbolic tangent for each number in interval @var{X}.
 ##
 ## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7.5 ULPs of the exact enclosure.
+## 7 ULPs of the tightest enclosure.
 ##
 ## @example
 ## @group
@@ -42,8 +42,14 @@ if (isempty (x))
     return
 endif
 
-th.inf = ulpadd (tanh (x.inf), -4);
-th.sup = ulpadd (tanh (x.sup), 4);
+## Using directed rounding, we can decrease the worst case error by 0.5 ULP
+fesetround (-inf);
+th.inf = tanh (x.inf);
+fesetround (inf);
+th.sup = tanh (x.sup);
+fesetround (0.5);
+th.inf = ulpadd (th.inf, -3);
+th.sup = ulpadd (th.sup, 3);
 
 if (x.inf >= 0)
     th.inf = max (0, th.inf);
