@@ -330,8 +330,8 @@ else
             y = y.inf;
         endif
     else
-        d = log (x)
-        n = log (z)
+        d = log (x);
+        n = log (z);
         if ((direction > 0) == (sign (d) == sign (n)))
             d = nextdown (d);
             n = nextup (n);
