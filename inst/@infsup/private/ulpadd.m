@@ -41,15 +41,9 @@ if (not (isfinite (x)))
     return
 endif
 
-delta = sign (n) * pow2 (-1074);
+ulp = pow2 (max(-1074, floor (log2 (abs (x))) - 52));
 fesetround(sign (n) * inf);
-## Add first ulp
-y = x + delta;
-if (abs (n) > 1)
-    ## Add remaining ulps
-    ulp = y - x;
-    y = x + abs (n) * ulp;
-endif
+y = x + abs (n) * ulp;
 fesetround(0.5);
 
 endfunction
