@@ -43,7 +43,7 @@ endif
 
 ulp = pow2 (max(-1074, floor (log2 (abs (x))) - 52));
 fesetround(sign (n) * inf);
-y = x + abs (n) * ulp;
+y = x + n * ulp;
 fesetround(0.5);
 
 endfunction
