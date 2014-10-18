@@ -20,12 +20,12 @@
 ## Compute the inverse cosine in radians (arccosine) for each number in
 ## interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
 ## acos (infsup (.5))
-##   @result{} [1.0471975511965976, 1.0471975511965979]
+##   @result{} [1.0471975511965976, 1.0471975511965981]
 ## @end group
 ## @end example
 ## @seealso{cos}
@@ -44,19 +44,30 @@ endif
 
 if (x.inf <= -1)
     ## pi
-    ac.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55); 
+    ac.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+elseif (x.inf == 1)
+    ac.sup = 0;
 else
-    fesetround (inf);
-    ac.sup = acos (x.inf);
-    fesetround (0.5);
+    ac.sup = ulpadd (acos (x.inf), 1);
+    if (x.inf >= 0)
+        ac.sup = min (ac.sup, ...
+                 ## pi / 2
+                 ac.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56)); 
+    endif
 endif
 
 if (x.sup >= 1)
     ac.inf = 0;
+elseif (x.sup == -1)
+    ## pi
+    ac.inf = 0x6487ED5 * pow2 (-25) + 0x442D180 * pow2 (-55);
 else
-    fesetround (-inf);
-    ac.inf = acos (x.sup);
-    fesetround (0.5);
+    ac.inf = ulpadd (acos (x.sup), -1);
+    if (x.sup <= 0)
+        ac.inf = max (ac.inf, ...
+                 ## pi / 2
+                 ac.inf = 0x6487ED5 * pow2 (-26) + 0x442D180 * pow2 (-56));
+    endif
 endif
 
 result = infsup (ac.inf, ac.sup);

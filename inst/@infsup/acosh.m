@@ -19,12 +19,13 @@
 ## 
 ## Compute the inverse hyperbolic cosine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 8 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group
 ## acosh (infsup (2))
-##   @result{} [1.3169578969248165, 1.3169578969248168]
+##   @result{} [1.3169578969248156, 1.3169578969248175]
 ## @end group
 ## @end example
 ## @seealso{cosh}
@@ -44,17 +45,15 @@ endif
 if (x.inf <= 1)
     ach.inf = 0;
 else
-    fesetround (-inf);
-    ach.inf = acosh (x.inf);
+    ## Most implementations should be within 2 ULP, but must guarantee 4 ULP.
+    ach.inf = max (0, ulpadd (acosh (x.inf), -4));
 endif
 
 if (x.sup == 1)
     ach.sup = 0;
 else
-    fesetround (inf);
-    ach.sup = acosh (x.sup);
+    ach.sup = ulpadd (acosh (x.sup), 4);
 endif
-fesetround (0.5);
 
 result = infsup (ach.inf, ach.sup);
 

@@ -20,12 +20,13 @@
 ## Compute the inverse tangent with two arguments for each pair of numbers from
 ## intervals @var{Y} and @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 5.5 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group
 ## atan2 (infsup (1), infsup (-1))
-##   @result{} [2.3561944901923448, 2.3561944901923453]
+##   @result{} [2.3561944901923435, 2.3561944901923462]
 ## @end group
 ## @end example
 ## @seealso{tan}
@@ -64,18 +65,18 @@ if (x.sup <= 0)
         elseif (y.sup == inf || x.sup == 0)
             at2.inf = inf (pi) / 2;
         else
-            fesetround (-inf);
-            at2.inf = atan2 (y.sup, x.sup);
-            fesetround (0.5);
+            ## The atan2 should be within 2.5 ULPs of the exact result.
+            at2.inf = ulpadd (atan2 (y.sup, x.sup), -3);
+            at2.inf = max (at2.inf, inf (pi) / 2);
         endif
+        
         if (x.inf == 0)
             at2.sup = sup (pi) / 2;
         elseif (x.inf == -inf || y.inf == 0)
             at2.sup = sup (pi);
         else
-            fesetround (inf);
-            at2.sup = atan2 (y.inf, x.inf);
-            fesetround (0.5);
+            at2.sup = ulpadd (atan2 (y.inf, x.inf), 3);
+            at2.sup = min (at2.sup, sup (pi));
         endif
     elseif (y.sup <= 0)
         if (x.inf == 0)
@@ -83,18 +84,17 @@ if (x.sup <= 0)
         elseif (x.inf == -inf)
             at2.inf = inf (neg (pi));
         else
-            fesetround (-inf);
-            at2.inf = atan2 (y.sup, x.inf);
-            fesetround (0.5);
+            at2.inf = ulpadd (atan2 (y.sup, x.inf), -3);
+            at2.inf = max (at2.inf, inf (neg (pi)));
         endif
+        
         if (y.inf == -inf || x.sup == 0)
             at2.sup = sup (neg (pi)) / 2;
         else
-            fesetround (inf);
-            at2.sup = atan2 (y.inf, x.sup);
-            fesetround (0.5);
+            at2.sup = ulpadd (atan2 (y.inf, x.sup), 3);
+            at2.sup = min (at2.sup, inf (neg (pi)));
         endif
-    else
+    else # 0 is inner point of y
         if (x.inf == 0)
             at2.inf = inf (neg (pi)) / 2;
         else
@@ -113,67 +113,61 @@ elseif (x.inf >= 0)
         elseif (y.inf == 0)
             at2.inf = 0;
         else
-            fesetround (-inf);
-            at2.inf = atan2 (y.inf, x.sup);
-            fesetround (0.5);
+            at2.inf = ulpadd (atan2 (y.inf, x.sup), -3);
+            at2.inf = max (at2.inf, 0);
         endif
+        
         if (y.sup == 0)
             at2.sup = 0;
         elseif (x.inf == 0)
             at2.sup = sup (pi) / 2;
         else
-            fesetround (inf);
-            at2.sup = atan2 (y.sup, x.inf);
-            fesetround (0.5);
+            at2.sup = ulpadd (atan2 (y.sup, x.inf), 3);
+            at2.sup = min (at2.sup, sup (pi) / 2);
         endif
     elseif (y.sup <= 0)
         if (x.inf == 0)
             at2.inf = inf (neg (pi)) / 2;
         else
-            fesetround (-inf);
-            at2.inf = atan2 (y.inf, x.inf);
-            fesetround (0.5);
+            at2.inf = ulpadd (atan2 (y.inf, x.inf), -3);
+            at2.inf = max (at2.inf, inf (neg (pi)) / 2);
         endif
         if (x.sup == 0)
             at2.sup = sup (neg (pi)) / 2;
         elseif (y.sup == 0)
             at2.sup = 0;
         else
-            fesetround (inf);
-            at2.sup = atan2 (y.sup, x.sup);
-            fesetround (0.5);
+            at2.sup = ulpadd (atan2 (y.sup, x.sup), 3);
+            at2.sup = min (at2.sup, sup (neg (pi)) / 2)
         endif
-    else
+    else # 0 is inner point of y
         if (x.inf == 0)
             at2.inf = inf (neg (pi)) / 2;
             at2.sup = sup (pi) / 2;
         else
-            fesetround (-inf);
-            at2.inf = atan2 (y.inf, x.inf);
-            fesetround (inf);
-            at2.sup = atan2 (y.sup, x.inf);
-            fesetround (0.5);
+            at2.inf = ulpadd (atan2 (y.inf, x.inf), -3);
+            at2.inf = max (at2.inf, inf (neg (pi)) / 2);
+            at2.sup = ulpadd (atan2 (y.sup, x.inf), 3);
+            at2.sup = min (at2.sup, sup (pi) / 2)
         endif
     endif
-else
+else # 0 is inner point of x
     if (y.inf == 0)
         at2.inf = 0;
         at2.sup = sup (pi);
     elseif (y.inf > 0)
-        fesetround (-inf);
-        at2.inf = atan2 (y.inf, x.sup);
-        fesetround (inf);
-        at2.sup = atan2 (y.inf, x.inf);
-        fesetround (0.5);
+        at2.inf = ulpadd (atan2 (y.inf, x.sup), -3);
+        at2.inf = max (at2.inf, 0);
+        at2.sup = ulpadd (atan2 (y.inf, x.inf), 3);
+        at2.sup = min (at2.sup, sup (pi));
     elseif (y.sup >= 0)
         at2.inf = inf (neg (pi));
         at2.sup = sup (pi);
     else # y.sup < 0
-        fesetround (-inf);
-        at2.inf = atan2 (y.sup, x.inf);
-        fesetround (inf);
-        at2.sup = atan2 (y.sup, x.sup);
-        fesetround (0.5);
+        at2.inf = ulpadd (atan2 (y.sup, x.inf), -3);
+        at2.inf = max (at2.inf, inf (neg (pi)));
+        at2.sup = ulpadd (atan2 (y.sup, x.sup), 3);
+        at2.sup = min (at2.sup, 0);
     endif
 endif
 

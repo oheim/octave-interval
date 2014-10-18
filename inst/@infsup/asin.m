@@ -20,12 +20,12 @@
 ## Compute the inverse sine in radians (arcsine) for each number in
 ## interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
 ## asin (infsup (.5))
-##   @result{} [.5235987755982988, .523598775598299]
+##   @result{} [.5235987755982988, .5235987755982991]
 ## @end group
 ## @end example
 ## @seealso{sin}
@@ -46,18 +46,20 @@ if (x.inf <= -1)
     ## - pi / 2
     as.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56)); 
 else
-    fesetround (-inf);
-    as.inf = asin (x.inf);
-    fesetround (0.5);
+    as.inf = ulpadd (asin (x.inf), -1);
+    if (x.inf >= 0)
+        as.inf = max (0, as.inf);
+    endif
 endif
 
 if (x.sup >= 1)
     ## + pi / 2
     as.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56);
 else
-    fesetround (inf);
-    as.sup = asin (x.sup);
-    fesetround (0.5);
+    as.sup = ulpadd (asin (x.sup), 1);
+    if (x.sup <= 0)
+        as.sup = min (0, as.sup);
+    endif
 endif
 
 result = infsup (as.inf, as.sup);

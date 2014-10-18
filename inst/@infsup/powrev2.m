@@ -315,11 +315,33 @@ elseif (z == inf)
         y = inf;
     endif
 else
-    fesetround (-direction);
-    d = log (x);
-    fesetround (direction);
-    n = log (z);
-    y = n / d;
-    fesetround (0.5);
+    if (x == 2)
+        y = log2 (infsup (z));
+        if (direction > 0)
+            y = y.sup;
+        else
+            y = y.inf;
+        endif
+    elseif (x == 10)
+        y = log10 (infsup (z));
+        if (direction > 0)
+            y = y.sup;
+        else
+            y = y.inf;
+        endif
+    else
+        d = log (x);
+        n = log (z);
+        if ((direction > 0) == (sign (d) == sign (n)))
+            d = nextdown (d);
+            n = nextup (n);
+        else
+            d = nextdown (d);
+            n = nextup (n);
+        endif
+        fesetround (direction);
+        y = n / d;
+        fesetround (0.5);
+    endif
 endif
 endfunction

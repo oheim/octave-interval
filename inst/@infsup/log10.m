@@ -21,12 +21,13 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 7.5 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group
 ## log10 (infsup (2))
-##   @result{} [.30102999566398114, .3010299956639812]
+##   @result{} [.30102999566398097, .30102999566398143]
 ## @end group
 ## @end example
 ## @seealso{pow10, log, log2}
@@ -46,13 +47,20 @@ endif
 if (x.inf <= 0)
     l.inf = -inf;
 else
-    fesetround  (-inf);
     l.inf = log10 (x.inf);
+    if (fix (l.inf) ~= l.inf || l.inf < 0 || l.inf > 22 || ...
+        realpow (10, l.inf) ~= x.inf)
+        ## Only exact for 10^n with n in [0, 22]
+        ## Otherwise within 2 ULP (3.5 ULP guaranteed)
+        l.inf = ulpadd (l.inf, -4);
+    endif
 endif
 
-fesetround (inf);
 l.sup = log10 (x.sup);
-fesetround (0.5);
+if (fix (l.sup) ~= l.sup || l.sup < 0 || l.sup > 22 || ...
+    realpow (10, l.sup) ~= x.sup)
+    l.sup = ulpadd (l.sup, 4);
+endif
 
 result = infsup (l.inf, l.sup);
 

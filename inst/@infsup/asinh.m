@@ -19,12 +19,13 @@
 ## 
 ## Compute the inverse hyperbolic sine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 14 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group
 ## asinh (infsup (1))
-##   @result{} [.8813735870195429, .8813735870195431]
+##   @result{} [.8813735870195422, .8813735870195439]
 ## @end group
 ## @end example
 ## @seealso{sinh}
@@ -41,20 +42,15 @@ if (isempty (x))
     return
 endif
 
-if (x.inf == 0)
-    ash.inf = 0;
-else
-    fesetround (-inf);
-    ash.inf = asinh (x.inf);
+## Most implementations should be within 2 ULP, but must guarantee 7 ULP.
+ash.inf = ulpadd (asinh (x.inf), -7);
+ash.sup = ulpadd (asinh (x.sup), 7);
+if (x.inf >= 0)
+    ash.inf = max (0, ash.inf);
 endif
-
-if (x.sup == 0)
-    ash.sup = 0;
-else
-    fesetround (inf);
-    ash.sup = asinh (x.sup);
+if (x.sup <= 0)
+    ash.sup = min (0, ash.sup);
 endif
-fesetround (0.5);
 
 result = infsup (ash.inf, ash.sup);
 

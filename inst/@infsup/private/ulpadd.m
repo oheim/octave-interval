@@ -14,44 +14,42 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} tanh (@var{X})
-## @cindex IEEE1788 tanh
+## @deftypefn {Function File} {@var{Y} =} ulpadd (@var{X}, @var{N})
 ## 
-## Compute the hyperbolic tangent for each number in interval @var{X}.
+## Add @var{N} ULPs to the number @var{X}.  @var{N} may be negative.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7.5 ULPs of the exact enclosure.
+## If the result would be no floating point number, the distance between
+## @var{X} and @var{Y} may be larger than expected.
 ##
-## @example
-## @group
-## tanh (infsup (1))
-##   @result{} [.7615941559557644, .7615941559557653]
-## @end group
-## @end example
-## @seealso{atanh, sinh, cosh}
+## @seealso{nextup, nextdown}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
-## Keywords: interval
-## Created: 2014-10-07
+## Created: 2014-10-18
 
-function result = tanh (x)
+function y = ulpadd (x, n)
 
-if (isempty (x))
-    result = infsup ();
+assert (isa (x, "double"));
+assert (n ~= 0);
+
+if (not (isfinite (x)))
+    if (sign (x) == sign (n))
+        y = x;
+    else
+        y = sign (x) * realmax ();
+    endif
     return
 endif
 
-th.inf = ulpadd (tanh (x.inf), -4);
-th.sup = ulpadd (tanh (x.sup), 4);
-
-if (x.inf >= 0)
-    th.inf = max (0, th.inf);
+delta = sign (n) * pow2 (-1074);
+fesetround(sign (n) * inf);
+## Add first ulp
+y = x + delta;
+if (abs (n) > 1)
+    ## Add remaining ulps
+    ulp = y - x;
+    y = x + abs (n) * ulp;
 endif
-if (x.sup <= 0)
-    th.sup = min (0, th.sup);
-endif
-
-result = infsup (th.inf, th.sup);
+fesetround(0.5);
 
 endfunction

@@ -21,7 +21,7 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
@@ -46,13 +46,18 @@ endif
 if (x.inf <= 0)
     l.inf = -inf;
 else
-    fesetround  (-inf);
     l.inf = log2 (x.inf);
+    if (fix (l.inf) ~= l.inf || l.inf < -1074 || l.inf > 1023 || ...
+        pow2 (l.inf) ~= x.inf)
+        l.inf = nextdown (l.inf);
+    endif
 endif
 
-fesetround (inf);
 l.sup = log2 (x.sup);
-fesetround (0.5);
+if (fix (l.sup) ~= l.sup || l.sup < -1074 || l.sup > 1023 || ...
+    pow2 (l.sup) ~= x.sup)
+    l.sup = nextup (l.sup);
+endif
 
 result = infsup (l.inf, l.sup);
 

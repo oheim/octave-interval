@@ -19,12 +19,12 @@
 ## 
 ## Compute the inverse tangent in radians for each number in interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
 ## atan (infsup (1))
-##   @result{} [.7853981633974482, .7853981633974484]
+##   @result{} [.7853981633974481, .7853981633974484]
 ## @end group
 ## @end example
 ## @seealso{tan, atan2}
@@ -41,22 +41,17 @@ if (isempty (x))
     return
 endif
 
-if (x.sup == inf)
-    ## pi / 2
-    at.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56); 
-else
-    fesetround (inf);
-    at.sup = atan (x.sup);
-    fesetround (0.5);
+at.sup = min (ulpadd (atan (x.sup), 1), ...
+              ## pi / 2
+              at.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56));
+at.inf = max (ulpadd (atan (x.inf), -1), ...
+              ## - pi / 2
+              - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56)));
+if (x.inf >= 0)
+    at.inf = max (0, at.inf);
 endif
-
-if (x.inf == -inf)
-    ## - pi / 2
-    at.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56));
-else
-    fesetround (-inf);
-    at.inf = atan (x.inf);
-    fesetround (0.5);
+if (x.sup <= 0)
+    at.sup = min (0, at.sup);
 endif
 
 result = infsup (at.inf, at.sup);
