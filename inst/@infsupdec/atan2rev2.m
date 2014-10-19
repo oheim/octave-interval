@@ -64,7 +64,7 @@ if (isnai (x))
     return
 endif
 
-if (isnai (b))
+if (isnai (a))
     result = b;
     return
 endif
@@ -74,7 +74,7 @@ if (isnai (c))
     return
 endif
 
-result = atan2rev2 (intervalpart (b), intervalpart (c), intervalpart (x));
+result = atan2rev2 (intervalpart (a), intervalpart (c), intervalpart (x));
 ## inverse atan2 is not a point function
 result = setdec (result, "trv");
 
