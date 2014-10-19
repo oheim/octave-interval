@@ -87,31 +87,31 @@ if (x.sup <= 0)
         endif
     elseif (y.sup <= 0)
         if (x.inf == 0)
-            at2.inf = inf (neg (pi)) / 2;
+            at2.inf = inf (-pi) / 2;
         elseif (x.inf == -inf)
-            at2.inf = inf (neg (pi));
+            at2.inf = inf (-pi);
         else
             fesetround (-inf);
             at2.inf = atan2 (y.sup, x.inf);
             fesetround (0.5);
             at2.inf = ulpadd (at2.inf, -2);
-            at2.inf = max (at2.inf, inf (neg (pi)));
+            at2.inf = max (at2.inf, inf (-pi));
         endif
         
         if (y.inf == -inf || x.sup == 0)
-            at2.sup = sup (neg (pi)) / 2;
+            at2.sup = sup (-pi) / 2;
         else
             fesetround (inf);
             at2.sup = atan2 (y.inf, x.sup);
             fesetround (0.5);
             at2.sup = ulpadd (at2.sup, 2);
-            at2.sup = min (at2.sup, inf (neg (pi)));
+            at2.sup = min (at2.sup, inf (-pi));
         endif
     else # 0 is inner point of y
         if (x.inf == 0)
-            at2.inf = inf (neg (pi)) / 2;
+            at2.inf = inf (-pi) / 2;
         else
-            at2.inf = inf (neg (pi));
+            at2.inf = inf (-pi);
         endif
         if (x.inf == 0)
             at2.sup = sup (pi) / 2;
@@ -146,16 +146,16 @@ elseif (x.inf >= 0)
         endif
     elseif (y.sup <= 0)
         if (x.inf == 0)
-            at2.inf = inf (neg (pi)) / 2;
+            at2.inf = inf (-pi) / 2;
         else
             fesetround (-inf);
             at2.inf = atan2 (y.inf, x.inf);
             fesetround (0.5);
             at2.inf = ulpadd (at2.inf, -2);
-            at2.inf = max (at2.inf, inf (neg (pi)) / 2);
+            at2.inf = max (at2.inf, inf (-pi) / 2);
         endif
         if (x.sup == 0)
-            at2.sup = sup (neg (pi)) / 2;
+            at2.sup = sup (-pi) / 2;
         elseif (y.sup == 0)
             at2.sup = 0;
         else
@@ -163,18 +163,18 @@ elseif (x.inf >= 0)
             at2.sup = atan2 (y.sup, x.sup);
             fesetround (0.5);
             at2.sup = ulpadd (at2.sup, 2);
-            at2.sup = min (at2.sup, sup (neg (pi)) / 2)
+            at2.sup = min (at2.sup, sup (-pi) / 2)
         endif
     else # 0 is inner point of y
         if (x.inf == 0)
-            at2.inf = inf (neg (pi)) / 2;
+            at2.inf = inf (-pi) / 2;
             at2.sup = sup (pi) / 2;
         else
             fesetround (-inf);
             at2.inf = atan2 (y.inf, x.inf);
             fesetround (0.5);
             at2.inf = ulpadd (at2.inf, -2);
-            at2.inf = max (at2.inf, inf (neg (pi)) / 2);
+            at2.inf = max (at2.inf, inf (-pi) / 2);
             fesetround (inf);
             at2.sup = atan2 (y.sup, x.inf);
             fesetround (0.5);
@@ -198,14 +198,14 @@ else # 0 is inner point of x
         at2.sup = ulpadd (at2.sup, 2);
         at2.sup = min (at2.sup, sup (pi));
     elseif (y.sup >= 0)
-        at2.inf = inf (neg (pi));
+        at2.inf = inf (-pi);
         at2.sup = sup (pi);
     else # y.sup < 0
         fesetround (-inf);
         at2.inf = atan2 (y.sup, x.inf);
         fesetround (0.5);
         at2.inf = ulpadd (at2.inf, -2);
-        at2.inf = max (at2.inf, inf (neg (pi)));
+        at2.inf = max (at2.inf, inf (-pi));
         fesetround (inf);
         at2.sup = atan2 (y.sup, x.sup);
         fesetround (0.5);
