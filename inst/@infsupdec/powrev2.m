@@ -59,6 +59,21 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
+if (isnai (y))
+    result = y;
+    return
+endif
+
+if (isnai (b))
+    result = b;
+    return
+endif
+
+if (isnai (c))
+    result = c;
+    return
+endif
+
 result = powrev2 (intervalpart (b), intervalpart (c), intervalpart (y));
 ## inverse power is not a point function
 result = setdec (result, "trv");
