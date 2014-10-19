@@ -59,8 +59,8 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
+if (isnai (y))
+    result = y;
     return
 endif
 
@@ -74,7 +74,7 @@ if (isnai (c))
     return
 endif
 
-result = atan2rev1 (intervalpart (b), intervalpart (c), intervalpart (x));
+result = atan2rev1 (intervalpart (b), intervalpart (c), intervalpart (y));
 ## inverse atan2 is not a point function
 result = setdec (result, "trv");
 
