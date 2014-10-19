@@ -56,9 +56,9 @@ if (isempty (x) || isempty (y))
 endif
 
 fesetround (-inf);
-dif.inf = x.inf - y.inf;
+dif.inf = x.inf - y.sup;
 fesetround (inf);
-dif.sup = x.sup - y.sup;
+dif.sup = x.sup - y.inf;
 fesetround (0.5);
 
 result = infsup (dif.inf, dif.sup);
