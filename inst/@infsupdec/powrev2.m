@@ -64,7 +64,7 @@ if (isnai (y))
     return
 endif
 
-if (isnai (b))
+if (isnai (a))
     result = b;
     return
 endif
@@ -74,7 +74,7 @@ if (isnai (c))
     return
 endif
 
-result = powrev2 (intervalpart (b), intervalpart (c), intervalpart (y));
+result = powrev2 (intervalpart (a), intervalpart (c), intervalpart (y));
 ## inverse power is not a point function
 result = setdec (result, "trv");
 
