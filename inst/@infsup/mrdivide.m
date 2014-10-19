@@ -69,7 +69,7 @@ if (x.sup <= 0)
     elseif (y.sup == 0)
         fesetround (-inf);
         quot.inf = x.sup / y.inf;
-        quot.sup = 1;
+        quot.sup = inf;
     else # y.inf == 0
         quot.inf = -1;
         fesetround (inf);
@@ -87,7 +87,7 @@ elseif (x.inf >= 0)
         fesetround (inf);
         quot.sup = x.sup / y.inf;
     elseif (y.sup == 0)
-        quot.inf = -1;
+        quot.inf = -inf;
         fesetround (inf);
         quot.sup = x.inf / y.inf;
     else # y.inf == 0
