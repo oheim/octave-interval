@@ -73,3 +73,24 @@ endif
 result = infsup (max (a.inf, b.inf), min (a.sup, b.sup));
 
 endfunction
+%!test "Empty interval";
+%! assert (and (infsup (), infsup ()) == infsup ());
+%! assert (and (infsup (), infsup (1)) == infsup ());
+%! assert (and (infsup (0), infsup ()) == infsup ());
+%! assert (and (infsup (-inf, inf), infsup ()) == infsup ());
+%!test "Singleton intervals";
+%! assert (and (infsup (0), infsup (1)) == infsup ());
+%! assert (and (infsup (0), infsup (0)) == infsup (0));
+%!test "Bounded intervals";
+%! assert (and (infsup (1, 2), infsup (3, 4)) == infsup ());
+%! assert (and (infsup (1, 2), infsup (2, 3)) == infsup (2));
+%! assert (and (infsup (1, 2), infsup (1.5, 2.5)) == infsup (1.5, 2));
+%! assert (and (infsup (1, 2), infsup (1, 2)) == infsup (1, 2));
+%!test "Unbounded intervals";
+%! assert (and (infsup (0, inf), infsup (-inf, 0)) == infsup (0));
+%! assert (and (infsup (1, inf), infsup (-inf, -1)) == infsup ());
+%! assert (and (infsup (-1, inf), infsup (-inf, 1)) == infsup (-1, 1));
+%! assert (and (infsup (-inf, inf), infsup (42)) == infsup (42));
+%! assert (and (infsup (42), infsup (-inf, inf)) == infsup (42));
+%! assert (and (infsup (-inf, 0), infsup (-inf, inf)) == infsup (-inf, 0));
+%! assert (and (infsup (-inf, inf), infsup (-inf, inf)) == infsup (-inf, inf));
