@@ -47,3 +47,26 @@ endif
 result = infsup (fix (x.inf), fix (x.sup));
 
 endfunction
+%!test "Empty interval";
+%! assert (fix (infsup ()) == infsup ());
+%!test "Singleton intervals";
+%! assert (fix (infsup (0)) == infsup (0));
+%! assert (fix (infsup (1)) == infsup (1));
+%! assert (fix (infsup (1+eps)) == infsup (1));
+%! assert (fix (infsup (-1)) == infsup (-1));
+%! assert (fix (infsup (0.5)) == infsup (0));
+%! assert (fix (infsup (-0.5)) == infsup (0));
+%!test "Bounded intervals";
+%! assert (fix (infsup (-0.5, 0)) == infsup (0));
+%! assert (fix (infsup (0, 0.5)) == infsup (0));
+%! assert (fix (infsup (0.25, 0.5)) == infsup (0));
+%! assert (fix (infsup (-1, 0)) == infsup (-1, 0));
+%! assert (fix (infsup (-1, 1)) == infsup (-1, 1));
+%! assert (fix (infsup (-realmin, realmin)) == infsup (0));
+%! assert (fix (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
+%!test "Unbounded intervals";
+%! assert (fix (infsup (-realmin, inf)) == infsup (0, inf));
+%! assert (fix (infsup (-realmax, inf)) == infsup (-realmax, inf));
+%! assert (fix (infsup (-inf, realmin)) == infsup (-inf, 0));
+%! assert (fix (infsup (-inf, realmax)) == infsup (-inf, realmax));
+%! assert (fix (infsup (-inf, inf)) == infsup (-inf, inf));

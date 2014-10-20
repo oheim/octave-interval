@@ -55,3 +55,23 @@ endif
 result = (a.inf == b.inf && a.sup == b.sup);
 
 endfunction
+%!test "Empty interval";
+%! assert (eq (infsup (), infsup ()) == true);
+%! assert (eq (infsup (), infsup (1)) == false);
+%! assert (eq (infsup (0), infsup ()) == false);
+%! assert (eq (infsup (-inf, inf), infsup ()) == false);
+%!test "Singleton intervals";
+%! assert (eq (infsup (0), infsup (1)) == false);
+%! assert (eq (infsup (0), infsup (0)) == true);
+%!test "Bounded intervals";
+%! assert (eq (infsup (1, 2), infsup (3, 4)) == false);
+%! assert (eq (infsup (1, 2), infsup (2, 3)) == false);
+%! assert (eq (infsup (1, 2), infsup (1.5, 2.5)) == false);
+%! assert (eq (infsup (1, 2), infsup (1, 2)) == true);
+%!test "Unbounded intervals";
+%! assert (eq (infsup (0, inf), infsup (-inf, 0)) == false);
+%! assert (eq (infsup (0, inf), infsup (0, inf)) == true);
+%! assert (eq (infsup (-inf, 0), infsup (-inf, 0)) == true);
+%! assert (eq (infsup (-inf, inf), infsup (42)) == false);
+%! assert (eq (infsup (-inf, 0), infsup (-inf, inf)) == false);
+%! assert (eq (infsup (-inf, inf), infsup (-inf, inf)) == true);

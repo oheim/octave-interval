@@ -46,3 +46,23 @@ endif
 result = infsup (ceil (x.inf), ceil (x.sup));
 
 endfunction
+%!test "Empty interval";
+%! assert (ceil (infsup ()) == infsup ());
+%!test "Singleton intervals";
+%! assert (ceil (infsup (0)) == infsup (0));
+%! assert (ceil (infsup (0.5)) == infsup (1));
+%! assert (ceil (infsup (-0.5)) == infsup (0));
+%!test "Bounded intervals";
+%! assert (ceil (infsup (-0.5, 0)) == infsup (0));
+%! assert (ceil (infsup (0, 0.5)) == infsup (0, 1));
+%! assert (ceil (infsup (0.25, 0.5)) == infsup (1));
+%! assert (ceil (infsup (-1, 0)) == infsup (-1, 0));
+%! assert (ceil (infsup (-1, 1)) == infsup (-1, 1));
+%! assert (ceil (infsup (-realmin, realmin)) == infsup (0, 1));
+%! assert (ceil (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
+%!test "Unbounded intervals";
+%! assert (ceil (infsup (-realmin, inf)) == infsup (0, inf));
+%! assert (ceil (infsup (-realmax, inf)) == infsup (-realmax, inf));
+%! assert (ceil (infsup (-inf, realmin)) == infsup (-inf, 1));
+%! assert (ceil (infsup (-inf, realmax)) == infsup (-inf, realmax));
+%! assert (ceil (infsup (-inf, inf)) == infsup (-inf, inf));

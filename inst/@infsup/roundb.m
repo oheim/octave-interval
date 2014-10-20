@@ -47,3 +47,27 @@ endif
 result = infsup (roundb (x.inf), roundb (x.sup));
 
 endfunction
+%!test "Empty interval";
+%! assert (roundb (infsup ()) == infsup ());
+%!test "Singleton intervals";
+%! assert (roundb (infsup (0)) == infsup (0));
+%! assert (roundb (infsup (0.5)) == infsup (0));
+%! assert (roundb (infsup (0.25)) == infsup (0));
+%! assert (roundb (infsup (0.75)) == infsup (1));
+%! assert (roundb (infsup (1.5)) == infsup (2));
+%! assert (roundb (infsup (-0.5)) == infsup (0));
+%! assert (roundb (infsup (-1.5)) == infsup (-2));
+%!test "Bounded intervals";
+%! assert (roundb (infsup (-0.5, 0)) == infsup (0));
+%! assert (roundb (infsup (0, 0.5)) == infsup (0));
+%! assert (roundb (infsup (0.25, 0.5)) == infsup (0));
+%! assert (roundb (infsup (-1, 0)) == infsup (-1, 0));
+%! assert (roundb (infsup (-1, 1)) == infsup (-1, 1));
+%! assert (roundb (infsup (-realmin, realmin)) == infsup (0));
+%! assert (roundb (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
+%!test "Unbounded intervals";
+%! assert (roundb (infsup (-realmin, inf)) == infsup (0, inf));
+%! assert (roundb (infsup (-realmax, inf)) == infsup (-realmax, inf));
+%! assert (roundb (infsup (-inf, realmin)) == infsup (-inf, 0));
+%! assert (roundb (infsup (-inf, realmax)) == infsup (-inf, realmax));
+%! assert (roundb (infsup (-inf, inf)) == infsup (-inf, inf));
