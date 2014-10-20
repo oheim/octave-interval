@@ -34,11 +34,12 @@
 ## Each boundary can be provided in the following formats: literal constants
 ## [+-]inf[inity], e, pi; scalar real numeric data types, i. e., double,
 ## single, [u]int[8,16,32,64]; or decimal numbers as strings of the form
-## [+-]d[,.]d[[eE][+-]d].
+## [+-]d[,.]d[[eE][+-]d]; or hexadecimal numbers as string of the form
+## [+-]0xh[,.]h[[pP][+-]d].
 ## 
-## If decimal numbers are no binary64 floating point numbers, a tight enclosure
-## will be computed.  int64 and uint64 numbers of high magnitude (> 2^53) can
-## also be affected from precision loss.
+## If decimal or hexadecimal numbers are no binary64 floating point numbers, a
+## tight enclosure will be computed.  int64 and uint64 numbers of high
+## magnitude (> 2^53) can also be affected from precision loss.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
 ## however it implements both IEEE 1788 functions numsToInterval and
@@ -46,16 +47,18 @@
 ## 
 ## @example
 ## @group
-## v = infsup ()
+## infsup ()
 ##   @result{} [Empty]
-## w = infsup ("[1]")
+## infsup ("[1]")
 ##   @result{} [1]
-## x = infsup (2, 3)
+## infsup (2, 3)
 ##   @result{} [2, 3]
-## y = infsup ("0.1")
+## infsup ("0.1")
 ##   @result{} [.09999999999999999, .10000000000000001]
-## z = infsup ("0.1", "0.2")
+## infsup ("0.1", "0.2")
 ##   @result{} [.09999999999999999, .20000000000000002]
+## infsup ("0xff", "0x1.ffp14")
+##   @result{} [255, 32704]
 ## @end group
 ## @end example
 ## @seealso{exacttointerval}
@@ -191,6 +194,22 @@ for [boundary, key] = x
             otherwise
                 ## We have to parse a string boundary and round the result
                 ## up or down depending on the boundary (inf = down, sup = up).
+                if (strfind (boundary, "0x"))
+                    ## Hexadecimal floating point number
+                    switch key
+                        case "inf"
+                            direction = -inf;
+                        case "sup"
+                            direction = inf;
+                    endswitch
+                    
+                    [x.(key), exactconversion] = ...
+                            hex2double (boundary, direction);
+                    isexact = and (isexact, exactconversion);
+                    continue
+                endif
+                
+                
                 ## str2double will produce the correct answer in 50 % of all
                 ## cases, because it uses rounding mode “to nearest”.
                 ## The input and a double format approximation can be compared
