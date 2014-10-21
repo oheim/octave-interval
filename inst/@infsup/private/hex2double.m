@@ -64,11 +64,6 @@ else
     hex.e = int64 (hex.e);
 endif
 
-## Normalize mantissa: remove leading zeroes within string representation
-## before point. This does not affect the exponent and is therefore
-## preferred over the normalization below, which might produce overflow errors.
-hex.m = hex.m(find(hex.m ~= "0", 1):end);
-
 ## Split Mantissa at point
 hex.m = strsplit (hex.m, ".,");
 switch length(hex.m)
@@ -90,8 +85,8 @@ hex.e -= length (hex.m{2}) * 4;
 hex.m = strcat (hex.m{1}, hex.m{2});
 
 ## Conversion to binary must be done in several steps, because hex2dec uses
-## double precision. Blocks of 13 hex digits are converted to blocks of
-## 52 binary digits.
+## double precision. Blocks of (up to) 13 hex digits are converted to blocks of
+## (up to) 52 binary digits.
 binarydigits = "";
 for i = 1 : 13 : length (hex.m)
     blocksize = min (13, length (hex.m) - i + 1);
@@ -116,9 +111,9 @@ elseif (isempty (firstnonzerodigit))
     return
 endif
 
-## Move point to the left, right after the first binary digit
+## Move point to the left, right after the first significand binary digit
 if (length (hex.m) > 1)
-    if (hex.e + length (hex.m) - 1 >= intmax (class (hex.e)))
+    if (hex.e + (length (hex.m) - 1) >= intmax (class (hex.e)))
         error (["exponent overflow during normalization: " string ]);
     endif
     hex.e += length (hex.m) - 1;
@@ -157,10 +152,10 @@ endif
 if (hex.e < -1022)
     ## Subnormal numbers
     hex.m = strcat (prepad ("", "0", -1022 - hex.e), hex.m);
-    exponent = -1023;
+    ieee754exponent = -1023;
 else
     ## Normal numbers
-    exponent = hex.e;
+    ieee754exponent = hex.e;
 endif
 
 ## Only the most significand 53 bits are relevant.
@@ -175,12 +170,12 @@ significand (1) = [];
 ieee754mantissa = dec2hex (bin2dec (significand), 13);
 
 if (not (hex.s))
-    signandexponent = exponent + 1023;
+    ieee754signandexponent = ieee754exponent + 1023;
 else
-    signandexponent = exponent + 1023 + pow2 (11);
+    ieee754signandexponent = ieee754exponent + 1023 + pow2 (11);
 endif
 
-ieee754double = strcat (dec2hex (signandexponent, 3), ieee754mantissa);
+ieee754double = strcat (dec2hex (ieee754signandexponent, 3), ieee754mantissa);
 binary = hex2num (ieee754double);
 
 ## Last, consider the rounding direction
