@@ -102,6 +102,33 @@ if (nargin == 1)
                     u = strtrim (s{2});
                 endif
         endswitch    
+    elseif (ischar (l) && strfind (l, "?"))
+        ## Uncertain form: At this point we only split lower and upper boundary
+        ## and remove the ??. ULP arithmetic is performed below when parsing 
+        ## the decimal number.
+        uncertain = lower (l)
+        if (strfind (uncertain, "u")) # up
+            ## The uncertainty only affects the upper boundary
+            l = strcat (uncertain (1 : (find (uncertain == "?", 1) - 1)), ...
+                    uncertain ((find (uncertain == "u", 1) + 1) : end));
+            u = strrep (uncertain (1 : end), "u", "");
+        elseif (strfind (uncertain, "d")) # down
+            ## The uncertainty only affects the lower boundary
+            l = strrep (uncertain (1 : end), "d", "");
+            u = strcat (uncertain (1 : (find (uncertain == "?", 1) - 1)), ...
+                    uncertain ((find (uncertain == "d", 1) + 1) : end));
+        else
+            ## The uncertainty affects both boundaries
+            l = uncertain;
+            u = uncertain;
+        endif
+        clear uncertain;
+        if (strfind (l, "??"))
+            l = -inf;
+        endif
+        if (strfind (u, "??"))
+            u = inf;
+        endif
     else
         ## syntax infsup (x) has to be equivalent with infsup (x, x)
         u = l;
@@ -203,15 +230,41 @@ for [boundary, key] = x
                                      + 0x442D190 * pow2 (-55);
                 endswitch
             otherwise
-                ## We have to parse a string boundary and round the result
-                ## up or down depending on the boundary (inf = down, sup = up).
+                ## We have to parse a decimal string boundary and round the
+                ## result up or down depending on the boundary
+                ## (inf = down, sup = up).
                 ## str2double will produce the correct answer in 50 % of all
                 ## cases, because it uses rounding mode “to nearest”.
                 ## The input and a double format approximation can be compared
                 ## in a decimal floating point format without precision loss.
                 
+                if (strfind (boundary, "?"))
+                    ## Special case: uncertain-form
+                    [boundary, uncertain] = uncertainsplit (boundary);
+                else
+                    uncertain = [];
+                endif
+                
                 ## Parse input
                 decimal = str2decimal (boundary);
+                
+                ## Parse and add uncertainty
+                if (not (isempty (uncertain)))
+                    uncertain = str2decimal (uncertain);
+                    if ((key == "inf") == decimal.s)
+                        uncertain.s = decimal.s;
+                    else
+                        uncertain.s = not (decimal.s);
+                    endif
+                    decimal = decimaladd (decimal, uncertain);
+                    ## Write result back into boundary for conversion to double
+                    boundary = ["0.", num2str(decimal.m)', ...
+                                "e", num2str(decimal.e)];
+                    if (decimal.s)
+                        boundary = ["-", boundary];
+                    endif
+                endif
+                clear uncertain;
                 
                 ## Check if number is outside of range
                 ## Realmax == 1.7...e308 == 0.17...e309
