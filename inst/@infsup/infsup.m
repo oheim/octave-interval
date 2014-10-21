@@ -164,6 +164,17 @@ for [boundary, key] = x
         endif
     elseif (not (ischar (boundary)))
         error (["illegal " key " boundary: must be numeric or string"]);
+    elseif (strfind (boundary, "0x"))
+        ## Hexadecimal floating point number
+        switch key
+            case "inf"
+                direction = -inf;
+            case "sup"
+                direction = inf;
+        endswitch
+        
+        [x.(key), exactconversion] = hex2double (boundary, direction);
+        isexact = and (isexact, exactconversion);
     else
         ## parse string
         switch lower(boundary)
@@ -194,22 +205,6 @@ for [boundary, key] = x
             otherwise
                 ## We have to parse a string boundary and round the result
                 ## up or down depending on the boundary (inf = down, sup = up).
-                if (strfind (boundary, "0x"))
-                    ## Hexadecimal floating point number
-                    switch key
-                        case "inf"
-                            direction = -inf;
-                        case "sup"
-                            direction = inf;
-                    endswitch
-                    
-                    [x.(key), exactconversion] = ...
-                            hex2double (boundary, direction);
-                    isexact = and (isexact, exactconversion);
-                    continue
-                endif
-                
-                
                 ## str2double will produce the correct answer in 50 % of all
                 ## cases, because it uses rounding mode “to nearest”.
                 ## The input and a double format approximation can be compared
