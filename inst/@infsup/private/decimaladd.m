@@ -87,6 +87,18 @@ while (1)
 endwhile
 clear highestnegative highestpositive;
 
+## Normalize mantissa: remove leading zeroes
+firstnonzerodigit = find (decimal.m ~= 0, 1, "first");
+if (firstnonzerodigit > 1)
+    decimal.m = decimal.m(firstnonzerodigit:end);
+    decimal.e -= firstnonzerodigit - 1;
+elseif (isempty (firstnonzerodigit)) # all digits are zero
+    decimal.s = false;
+    decimal.m = [];
+    decimal.e = int64 (0);
+    return
+endif
+
 ## Remove trailing zeros
 decimal.m = decimal.m(1 : find (decimal.m ~= 0, 1, "last"));
 

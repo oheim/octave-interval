@@ -35,7 +35,15 @@
 ## [+-]inf[inity], e, pi; scalar real numeric data types, i. e., double,
 ## single, [u]int[8,16,32,64]; or decimal numbers as strings of the form
 ## [+-]d[,.]d[[eE][+-]d]; or hexadecimal numbers as string of the form
-## [+-]0xh[,.]h[[pP][+-]d].
+## [+-]0xh[,.]h[[pP][+-]d]; or decimal numbers in rational form
+## [+-]d/d.
+##
+## Also it is possible, to construct intervals from the uncertain form in the
+## form <code>m?ruE</code>, where <code>m</code> is a decimal mantissa,
+## <code>r</code> is empty (= half ULP) or a decimal integer ULP count or a
+## second <code>?</code> character for unbounded intervals, <code>u</code> is
+## empty or a direction character (u: up, d: down), and <code>E</code> is an
+## exponential field.
 ## 
 ## If decimal or hexadecimal numbers are no binary64 floating point numbers, a
 ## tight enclosure will be computed.  int64 and uint64 numbers of high
@@ -59,6 +67,18 @@
 ##   @result{} [.09999999999999999, .20000000000000002]
 ## infsup ("0xff", "0x1.ffp14")
 ##   @result{} [255, 32704]
+## infsup ("1/3")
+##   @result{} [.33333333333333331, .33333333333333338]
+## infsup ("[1/9, 47/11]")
+##   @result{} [.1111111111111111, 4.2727272727272734]
+## infsup ("7.3?9u")
+##   @result{} [7.2999999999999998, 8.200000000000002]
+## infsup ("0??")
+##   @result{} [Entire]
+## infsup ("911??de-2")
+##   @result{} [-Inf, +9.110000000000002]
+## infsup ("10?")
+##   @result{} [9.5, 10.5]
 ## @end group
 ## @end example
 ## @seealso{exacttointerval}
@@ -106,7 +126,7 @@ if (nargin == 1)
         ## Uncertain form: At this point we only split lower and upper boundary
         ## and remove the ??. ULP arithmetic is performed below when parsing 
         ## the decimal number.
-        uncertain = lower (l)
+        uncertain = lower (l);
         if (strfind (uncertain, "u")) # up
             ## The uncertainty only affects the upper boundary
             l = strcat (uncertain (1 : (find (uncertain == "?", 1) - 1)), ...
@@ -245,8 +265,29 @@ for [boundary, key] = x
                     uncertain = [];
                 endif
                 
-                ## Parse input
-                decimal = str2decimal (boundary);
+                if (strfind (boundary, "/"))
+                    ## Special case: rational form
+                    boundary = strsplit (boundary, "/");
+                    if (length (boundary) ~= 2)
+                        error (["illegal " key " boundary: rational form ", ...
+                                "must contain single slash"]);
+                    endif
+                    [decimal, remainder] = decimaldivide (...
+                            str2decimal (boundary {1}), ...
+                            str2decimal (boundary {2}), 18);
+                    if (not (isempty (remainder.m)))
+                        decimal.m = [decimal.m; 1];
+                        isexact = false ();
+                    endif
+                    ## Write result back into boundary for conversion to double
+                    boundary = ["0.", num2str(decimal.m)', ...
+                                "e", num2str(decimal.e)];
+                    if (decimal.s)
+                        boundary = ["-", boundary];
+                    endif
+                else
+                    decimal = str2decimal (boundary);
+                endif
                 
                 ## Parse and add uncertainty
                 if (not (isempty (uncertain)))
