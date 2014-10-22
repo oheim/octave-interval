@@ -110,10 +110,10 @@ for [boundary, key] = boundaries
             ## Calculate distance to next possible interval boundary.
             if (key == "inf" && boundary > -realmax () || ...
                 key == "sup" && boundary == realmax ())
-                fesetround(inf);
+                fesetround (inf);
                 numberdistance = boundary - nextdown (boundary);
             else
-                fesetround(inf);
+                fesetround (inf);
                 numberdistance = nextup (boundary) - boundary;
             endif
             fesetround (0.5);

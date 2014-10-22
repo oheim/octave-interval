@@ -65,7 +65,7 @@ else
 endif
 
 ## Split Mantissa at point
-hex.m = strsplit (hex.m, ".,");
+hex.m = strsplit (hex.m, {".",","});
 switch length(hex.m)
     case 0
         hex.m = {"", ""};

@@ -91,7 +91,7 @@ endif
 decimal.m = decimal.m(find(decimal.m ~= "0", 1):end);
 
 ## Split Mantissa at decimal point
-decimal.m = strsplit (decimal.m, ".,");
+decimal.m = strsplit (decimal.m, {".",","});
 switch length(decimal.m)
     case 0
         decimal.m = {"", ""};
