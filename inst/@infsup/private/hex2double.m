@@ -40,7 +40,7 @@ else
 endif
 
 ## Strip hex indicator
-if (strncmp ("0x", string, 2))
+if (strncmpi ("0x", string, 2))
     string = string (3:end);
 else
     error (["invalid hex number does not start with 0x: " string]);

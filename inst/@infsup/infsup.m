@@ -191,7 +191,7 @@ for [boundary, key] = x
         endif
     elseif (not (ischar (boundary)))
         error (["illegal " key " boundary: must be numeric or string"]);
-    elseif (strfind (boundary, "0x"))
+    elseif (strfind (lower (boundary), "0x"))
         ## Hexadecimal floating point number
         switch key
             case "inf"
