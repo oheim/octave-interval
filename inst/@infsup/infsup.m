@@ -276,7 +276,8 @@ for [boundary, key] = x
                             str2decimal (boundary {1}), ...
                             str2decimal (boundary {2}), 18);
                     if (not (isempty (remainder.m)))
-                        decimal.m = [decimal.m; 1];
+                        ## This will guarantee the enclosure of the exact value
+                        decimal.m (19) = 1;
                         isexact = false ();
                     endif
                     ## Write result back into boundary for conversion to double
