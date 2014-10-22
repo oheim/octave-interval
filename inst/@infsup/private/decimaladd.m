@@ -102,9 +102,4 @@ endif
 ## Remove trailing zeros
 decimal.m = decimal.m(1 : find (decimal.m ~= 0, 1, "last"));
 
-if (isempty (decimal.m))
-    decimal.s = false;
-    decimal.e = int64 (0);
-endif
-
 endfunction
