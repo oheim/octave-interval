@@ -55,6 +55,17 @@ if (isempty (x) || isempty (y) || (y.inf == 0 && y.sup == 0))
     return
 endif
 
+if (x.inf == 0 && x.sup == 0)
+    result = infsup (0);
+    return
+endif
+
+if ((y.inf < 0 && y.sup > 0) || (x.inf < 0 && x.sup > 0 && ...
+    (y.inf == 0 || y.sup == 0)))
+    result = infsup (-inf, inf);
+    return
+endif
+
 if (x.sup <= 0)
     if (y.sup < 0)
         fesetround (-inf);
@@ -71,7 +82,7 @@ if (x.sup <= 0)
         quot.inf = x.sup / y.inf;
         quot.sup = inf;
     else # y.inf == 0
-        quot.inf = -1;
+        quot.inf = -inf;
         fesetround (inf);
         quot.sup = x.sup / y.sup;
     endif
