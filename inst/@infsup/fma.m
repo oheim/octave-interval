@@ -70,7 +70,7 @@ endif
 
 if ((x.inf == 0 && x.sup == 0) || ...
     (y.inf == 0 && y.sup == 0))
-    result = z;
+    result = infsup (z.inf, z.sup);
     return
 endif
 
@@ -383,7 +383,7 @@ endif
 
 ## Extract up to 53 bits for an approximate double
 ## Subnormal numbers must have less than 53 bit.
-fraction = accumulator((max (e + 1074 + length (accumulator), 53) + 1) : end);
+fraction = accumulator((min (e + 1074 + length (accumulator), 53) + 1) : end);
 accumulator = accumulator(1 : (length (accumulator) - length (fraction)));
 e += length (fraction);
 
