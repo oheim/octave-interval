@@ -45,7 +45,7 @@ function result = pown (x, p)
 assert (nargin == 2);
 
 if (fix (p) ~= p)
-    error (["exponent is not an integer: " num2str (p)]);
+    error ("InvalidOperand: exponent is not an integer");
 endif
 
 if (p == 1) # x^1

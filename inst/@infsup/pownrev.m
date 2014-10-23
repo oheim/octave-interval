@@ -40,6 +40,10 @@ if (nargin < 3)
     x = infsup (-inf, inf);
 endif
 
+if (fix (p) ~= p)
+    error ("InvalidOperand: exponent is not an integer");
+endif
+
 ## Convert first parameter into interval, if necessary
 if (not (isa (c, "infsup")))
     c = infsup (c);

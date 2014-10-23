@@ -29,7 +29,7 @@
 function bare = intervalpart (x)
 
 if (isnai (x))
-    error ("NaI has no interval part")
+    error ("IntvlPartOfNaI: NaI has no interval part")
 endif
 
 ## This also works for the empty interval

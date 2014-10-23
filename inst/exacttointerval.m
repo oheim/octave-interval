@@ -55,7 +55,7 @@ function x = exacttointerval (s)
 [x, exactconversion] = infsupdec (s);
 
 if (not (exactconversion))
-    error ("rounding occurred during interval construction")
+    error ("UndefinedOperation: interval construction can't be exact")
 endif
 
 endfunction
