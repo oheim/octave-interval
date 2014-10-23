@@ -66,7 +66,7 @@ endif
 
 if (x.sup <= -324)
     p.sup = pow2 (-1074);
-elseif (x.sup > 308)
+elseif (x.sup >= 309)
     p.sup = inf;
 elseif (fix (x.sup) == x.sup)
     ## x.sup is an integer, we can compute a tight enclosure
