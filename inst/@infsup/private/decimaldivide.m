@@ -49,7 +49,7 @@ while (i <= length (quotient.m))
         break
     endif
     
-    while (sign (decimalcompare (remainder, divisor)) == (-1) ^ remainder.s)
+    while (sign (decimalcompare (divisor, remainder)) ~= (-1) ^ remainder.s)
         quotient.m (i) ++;
         
         ## Subtract divisor from remainder
