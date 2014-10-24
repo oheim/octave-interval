@@ -29,11 +29,10 @@
 ##
 ## @example
 ## @group
-## x = infsup (1+eps);
-## fma (x, x, x)
-##   @result{} [2.0000000000000008, 2.0000000000000009]
-## x * x + x
-##   @result{} [2.0000000000000004, 2.0000000000000009]
+## fma (infsup (1+eps), infsup (7), infsup ("0.1"))
+##   @result{} [7.1000000000000014, 7.1000000000000024]
+## infsup (1+eps) * infsup (7) + infsup ("0.1")
+##   @result{} [7.1000000000000005, 7.1000000000000024]
 ## @end group
 ## @end example
 ## @seealso{plus, mtimes}
