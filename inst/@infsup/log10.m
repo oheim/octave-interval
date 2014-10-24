@@ -47,22 +47,34 @@ endif
 if (x.inf <= 0)
     l.inf = -inf;
 else
-    fesetround (-inf);
-    l.inf = log10 (x.inf);
-    fesetround (0.5);
+    if (x.inf >= 1 && fix (x.inf) == x.inf)
+        ## Try to compute the exact value
+        l.inf = log10 (x.inf);
+    else
+        l.inf = -1;
+    endif
     if (fix (l.inf) ~= l.inf || l.inf < 0 || l.inf > 22 || ...
         realpow (10, l.inf) ~= x.inf)
         ## Only exact for 10^n with n in [0, 22]
         ## Otherwise within 1.5 ULP (3 ULP guaranteed)
+        fesetround (-inf);
+        l.inf = log10 (x.inf);
+        fesetround (0.5);
         l.inf = ulpadd (l.inf, -3);
     endif
 endif
 
-fesetround (inf);
-l.sup = log10 (x.sup);
-fesetround (0.5);
+if (x.sup >= 1 && fix (x.sup) == x.sup)
+    ## Try to compute the exact value
+    l.sup = log10 (x.sup);
+else
+    l.sup = -1;
+endif
 if (fix (l.sup) ~= l.sup || l.sup < 0 || l.sup > 22 || ...
     realpow (10, l.sup) ~= x.sup)
+    fesetround (inf);
+    l.sup = log10 (x.sup);
+    fesetround (0.5);
     l.sup = ulpadd (l.sup, 3);
 endif
 
