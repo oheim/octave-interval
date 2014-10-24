@@ -267,8 +267,8 @@ adbc = extendedprecision.x.high * extendedprecision.y.low ...
 bd = extendedprecision.x.low * extendedprecision.y.low;
 
 ## a * c * 2^52 + (a * d + b * c) * 2^26 + b * d
-accumulator = [prepad(dec2bin (ac) == "1", 54, 0, 2), ...
-               prepad(dec2bin (bd) == "1", 52, 0, 2)];
+accumulator = single ([prepad(dec2bin (ac) == "1", 54, 0, 2), ...
+               prepad(dec2bin (bd) == "1", 52, 0, 2)]);
 accumulator(27 : 80) += prepad(dec2bin (adbc) == "1", 54, 0, 2);
 clear ac adbc bd;
 ## Carry
