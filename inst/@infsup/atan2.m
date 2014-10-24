@@ -21,7 +21,7 @@
 ## intervals @var{Y} and @var{X}.
 ##
 ## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 5 ULPs of the tightest enclosure.
+## 2.5 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group

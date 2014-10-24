@@ -14,28 +14,29 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} pow2 (@var{X})
-## @cindex IEEE1788 exp2
+## @deftypefn {Interval Function} {@var{Y} =} log2 (@var{X})
+## @cindex IEEE1788 log2
 ## 
-## Compute @code{2^x} for all numbers in @var{X}.
+## Compute the binary (base-2) logarithm for all numbers in interval @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest when
-## interval boundaries are integral.
+## The function is only defined where @var{X} is positive.
+##
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
-## pow2 (infsupdec (5))
-##   @result{} [32]_com
+## log2 (infsupdec (2))
+##   @result{} [1]_com
 ## @end group
 ## @end example
-## @seealso{log2, pow, pow10, exp}
+## @seealso{pow2, log, log10}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2014-10-04
 
-function result = pow2 (x)
+function result = log2 (x)
 
 if (isnai (x))
     result = x;

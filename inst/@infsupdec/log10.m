@@ -21,12 +21,13 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 3.5 ULPs of the tightest enclosure.
 ##
 ## @example
 ## @group
 ## log10 (infsupdec (2))
-##   @result{} [.30102999566398114, .3010299956639812]_com
+##   @result{} [.30102999566398097, .30102999566398143]_com
 ## @end group
 ## @end example
 ## @seealso{pow10, log, log2}

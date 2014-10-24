@@ -20,12 +20,13 @@
 ## Compute the inverse tangent with two arguments for each pair of numbers from
 ## intervals @var{Y} and @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 2.5 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group
 ## atan2 (infsupdec (1), infsupdec (-1))
-##   @result{} [2.3561944901923448, 2.3561944901923453]_com
+##   @result{} [2.3561944901923435, 2.3561944901923462]_com
 ## @end group
 ## @end example
 ## @seealso{tan}

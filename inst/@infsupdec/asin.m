@@ -20,12 +20,12 @@
 ## Compute the inverse sine in radians (arcsine) for each number in
 ## interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
 ## asin (infsupdec (.5))
-##   @result{} [.5235987755982988, .523598775598299]_com
+##   @result{} [.5235987755982988, .5235987755982991]_com
 ## @end group
 ## @end example
 ## @seealso{sin}

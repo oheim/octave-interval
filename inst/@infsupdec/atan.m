@@ -19,12 +19,12 @@
 ## 
 ## Compute the inverse tangent in radians for each number in interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
 ## atan (infsupdec (1))
-##   @result{} [.7853981633974482, .7853981633974484]_com
+##   @result{} [.7853981633974481, .7853981633974484]_com
 ## @end group
 ## @end example
 ## @seealso{tan, atan2}

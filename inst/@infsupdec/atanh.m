@@ -19,12 +19,13 @@
 ## 
 ## Compute the inverse hyperbolic tangent for each number in interval @var{X}.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 4 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group
 ## atanh (infsupdec (.5))
-##   @result{} [.5493061443340547, .5493061443340549]_com
+##   @result{} [.5493061443340543, .5493061443340553]_com
 ## @end group
 ## @end example
 ## @seealso{tanh}

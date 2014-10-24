@@ -22,7 +22,7 @@
 ## The function is only defined where @var{X} is positive.
 ##
 ## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7 ULPs of the tightest enclosure.
+## 3.5 ULPs of the tightest enclosure.
 ##
 ## @example
 ## @group

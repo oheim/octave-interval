@@ -21,12 +21,12 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
 ## log (infsupdec (2))
-##   @result{} [.6931471805599452, .6931471805599454]_com
+##   @result{} [.6931471805599451, .6931471805599454]_com
 ## @end group
 ## @end example
 ## @seealso{exp, log2, log10}

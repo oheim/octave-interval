@@ -19,12 +19,13 @@
 ## 
 ## Compute the hyperbolic sine for each number in interval @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a valid enclosure.  Interval boundaries are within
+## 4 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group
 ## sinh (infsupdec (1))
-##   @result{} [1.1752011936438011, 1.1752011936438017]_com
+##   @result{} [1.1752011936438004, 1.1752011936438023]_com
 ## @end group
 ## @end example
 ## @seealso{asinh, cosh, tanh}
