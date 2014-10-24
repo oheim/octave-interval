@@ -153,44 +153,24 @@ parameters.x = x;
 parameters.y = y;
 parameters.z = z;
 for [doubleprecision, key] = parameters
-    hex = num2hex (doubleprecision); # 16 hexadecimal digits (leading zeroes)
-    ## The conversion has to be done in 2 steps, because hex2dec uses binary
-    ## floating point numbers instead of a uint64.
-    bits1 = prepad (dec2bin (hex2dec (hex(1 : 8))), 32, "0", 2);
-    bits2 = prepad (dec2bin (hex2dec (hex(9 : end))), 32, "0", 2);
-    bits = [bits1 bits2];
-    clear hex bits1 bits2;
     
-    ## Separate sign, exponent, and mantissa bits.
-    extendedprecision.(key).sign = bits(1) == "1";
-    exponent = bits(2 : 12);
-    fraction = bits(13 : end);
-    clear bits;
+    [extendedprecision.(key).sign, ...
+    extendedprecision.(key).exponent, ...
+    mantissa] = parsedouble (doubleprecision);
     
-    assert (sum (exponent == "1") < 11, ...
-            "NaNs and infinite values not allowed");
-
-    ## Decode IEEE 754 exponent
-    exponent = bin2dec (exponent) - 1023;
-
-    if (exponent == -1023)
-        # denormalized numbers
-        fraction = ["0" fraction];
-        exponent ++;
-    else # normalized numbers
-        fraction = ["1" fraction];
+    if (length (mantissa) < 53)
+        # subnormal numbers
+        mantissa = [mantissa; false];
+        assert (length (mantissa) == 53);
     endif
-    
-    assert (length (fraction) == 53);
 
     ## Move the point to the end of the mantissa and interpret mantissa as a
     ## binary integer number that is now in front of the point.
-    exponent -= length (fraction) - 1;
-    extendedprecision.(key).exponent = int16(exponent);
+    extendedprecision.(key).exponent -= length (mantissa);
     
     ## Split mantissa into two parts with 27 and 26 bits
-    extendedprecision.(key).high = uint64 (bin2dec (fraction(1:27)));
-    extendedprecision.(key).low = uint64 (bin2dec (fraction(28:end)));
+    extendedprecision.(key).high = uint64 (bin2dec (num2str (mantissa (1:27))'));
+    extendedprecision.(key).low = uint64 (bin2dec (num2str (mantissa (28:end))'));
 endfor
 
 ## Check, if we really have to add the numbers:

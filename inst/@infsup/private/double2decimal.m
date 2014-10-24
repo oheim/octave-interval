@@ -53,52 +53,24 @@
 
 function decimal = double2decimal (binary)
 
-assert (isa (binary, "double"));
-assert (not (isnan (binary)));
-assert (isfinite (binary));
+[decimal.s, exponent, fraction] = parsedouble (binary);
 
-## Decode bit representation
-hex = num2hex (binary); # 16 hexadecimal digits (with leading zeroes)
-## The conversion has to be done in 2 steps, because hex2dec uses binary
-## floating point numbers instead of a uint64.
-bits1 = prepad (dec2bin (hex2dec (hex(1 : 8))), 32, "0", 2) == "1";
-bits2 = prepad (dec2bin (hex2dec (hex(9 : end))), 32, "0", 2) == "1";
-bits = [bits1, bits2];
-clear hex bits1 bits2;
-
-## Separate sign, exponent, and mantissa bits.
-decimal.s = bits(1);
-exponent = bits(2 : 12);
-fraction = bits(13 : end)';
-clear bits;
-
-assert (sum (exponent) < 11, "NaNs and infinite values not allowed");
-
-if (sum (exponent) == 0) # denormalized numbers
-    if (sum (fraction) == 0) # this number equals zero
-        decimal.s = false; # normalize: remove sign from -0
-        decimal.m = [];
-        decimal.e = int64 (0);
-        return
-    endif
-else # normalized numbers
-    fraction = [true(); fraction];
+if (sum (fraction) == 0) # this number equals zero
+    decimal.s = false; # normalize: remove sign from -0
+    decimal.m = [];
+    decimal.e = int64 (0);
+    return
 endif
 
-## Decode IEEE 754 exponent
-exponent = int64(bin2dec (num2str (exponent))) - 1023;
-
-## binary == (-1) ^ sign * fraction (=X.XXXXX… in binary) * 2 ^ exponent
-
 ## Remove trailing zeroes if this might reduce the number of loop cycles below
-if (exponent < length (fraction) - 1)
+if (exponent < length (fraction))
     fraction = fraction(1:find (fraction, 1, "last"));
 endif
 
 ## Move the point to the end of the mantissa and interpret mantissa as a binary
 ## integer number that is now in front of the point. Convert binary integer
 ## to decimal.
-exponent -= length (fraction) - 1;
+exponent -= length (fraction);
 decimal.m = zeros ();
 for i = 1 : length(fraction)
     ## Multiply by 2
