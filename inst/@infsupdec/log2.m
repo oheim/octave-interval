@@ -21,7 +21,8 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is an accurate enclosure.  The result is tightest for
+## powers of two.
 ##
 ## @example
 ## @group

@@ -22,7 +22,8 @@
 ## The function is only defined where @var{X} is positive.
 ##
 ## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 3.5 ULPs of the tightest enclosure.
+## 7 ULPs of the exact enclosure.  The result is tightest for powers of ten
+## between 10^0 and 10^22 (inclusive).
 ##
 ## @example
 ## @group
@@ -49,6 +50,7 @@ if (x.inf <= 0)
 else
     if (x.inf >= 1 && fix (x.inf) == x.inf)
         ## Try to compute the exact value
+        ## If we set the rounding mode, log10 will not compute the exact value
         l.inf = log10 (x.inf);
     else
         l.inf = -1;

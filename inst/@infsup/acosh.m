@@ -20,7 +20,7 @@
 ## Compute the inverse hyperbolic cosine for each number in interval @var{X}.
 ##
 ## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 4 ULPs of the exact enclosure.
+## 8 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group

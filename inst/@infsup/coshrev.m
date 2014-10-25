@@ -21,7 +21,7 @@
 ## Compute the reverse hyperbolic cosine function.
 ##
 ## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 4 ULPs of the exact enclosure.
+## 8 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group

@@ -20,7 +20,7 @@
 ## Compute the inverse hyperbolic sine for each number in interval @var{X}.
 ##
 ## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7 ULPs of the exact enclosure.
+## 14 ULPs of the exact enclosure.
 ##
 ## @example
 ## @group

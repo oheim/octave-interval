@@ -21,7 +21,7 @@
 ## Compute the reverse atan2 function with
 ## @code{atan2 (@var{Y}, @var{B}) = @var{C}}.
 ##
-## Accuracy: The result is a valid enclosure.
+## Accuracy: The result is an accurate enclosure.
 ##
 ## @example
 ## @group
