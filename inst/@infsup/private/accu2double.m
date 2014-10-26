@@ -25,17 +25,25 @@
 
 function [binary, isexact] = accu2double (accumulator, direction)
 
+## Carry
+## All operations on the accumulator perform a lazy carry and use the 8 bits
+## as good as possible.  Now we want at most 1 bit (plus sign) per digit.
+while (find (abs(accumulator.m) > 1, 1))
+
+    carry = (accumulator.m - rem (accumulator.m, 2)) / 2;
+    accumulator.m += [carry(2 : end), zeros(1, 1, "int8")] ...
+                   - int8(2) * carry;
+    if (carry (1) ~= 0)
+        accumulator.e ++;
+        accumulator.m = [carry(1), accumulator.m];
+    endif
+endwhile
+
 ## Resolve negative bits in the accumulator
 s = false ();
 while (1)
     highestnegativebit = find (accumulator.m < 0, 1);
     if (isempty (highestnegativebit))
-        ## Carry
-        while (find (accumulator.m > 1, 1))
-            accumulator.m = [0, rem(accumulator.m, 2)] ...
-                          + [floor(accumulator.m ./ 2), 0];
-            accumulator.e ++;
-        endwhile
         break;
     endif
     highestpositivebit = find (accumulator.m > 0, 1);
@@ -49,7 +57,7 @@ while (1)
         ## Exchange 2 bits against 1 higher bit.
         assert (accumulator.m (1) >= 0);
         accumulator.m += 2 * (accumulator.m < 0) ...
-                       - [(accumulator.m (2:end) < 0), 0];
+                       - [(accumulator.m (2:end) < 0), zeros(1, 1, "int8")];
     endif
 endwhile
 clear highestnegativebit highestpositivebit;

@@ -149,7 +149,7 @@ if (not (isfinite (x) && isfinite (y) && isfinite (z)))
 endif
 
 accumulator.e = 0;
-accumulator.m = [];
+accumulator.m = zeros (1, 0, "int8");
 accumulator = accuaddproduct (accumulator, x, y);
 accumulator = accuadd (accumulator, z);
 result = accu2double (accumulator, direction);

@@ -86,13 +86,6 @@ binaryproduct = int8 ([prepad(dec2bin (ac) == "1", 54, 0, 2), ...
 binaryproduct(27 : 80) += prepad(dec2bin (adbc) == "1", 54, 0, 2);
 clear ac adbc bd;
 
-## Carry
-while (find (binaryproduct > 1, 1))
-    assert (binaryproduct (1) <= 1);
-    binaryproduct = [rem(binaryproduct, 2)] ...
-                  + [floor(binaryproduct (2 : end) ./ 2), 0];
-endwhile
-
 ## x * y = s * binaryproduct * 2^e
 s = sign (multiplicand) * sign (multiplier);
 e = extendedprecision.x.exponent + extendedprecision.y.exponent;
@@ -100,17 +93,28 @@ assert (length (binaryproduct) == 106);
 
 ## Increase the accumulator's size if neccessary
 if (e + length (binaryproduct) > accumulator.e)
-    accumulator.m = [zeros(1, e + length (binaryproduct) - accumulator.e), ...
+    accumulator.m = [zeros(1, ...
+                     e + length (binaryproduct) - accumulator.e, "int8"), ...
                      accumulator.m];
     accumulator.e = e + length (binaryproduct);
 endif
 if (accumulator.e - length (accumulator.m) > e)
     accumulator.m = [accumulator.m, ...
-                     zeros(1, accumulator.e - length (accumulator.m) - e)];
+                     zeros(1, ...
+                     accumulator.e - length (accumulator.m) - e, "int8")];
 endif
 
 ## Add the product into the accumulator
 accumulator.m ((accumulator.e - e - length (binaryproduct) + 1) : ...
                (accumulator.e - e)) += s * binaryproduct;
+
+## Lazy carry
+carry = (accumulator.m - rem (accumulator.m, 64)) / 2;
+accumulator.m += [carry(2 : end), zeros(1, 1, "int8")] ...
+               - int8 (2) * carry;
+if (carry (1) ~= 0)
+    accumulator.e ++;
+    accumulator.m = [carry(1), accumulator.m];
+endif
 
 endfunction

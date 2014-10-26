@@ -46,10 +46,10 @@ endif
 
 ## Initialize accumulators
 l.e = int64 (0);
-l.m = [];
+l.m = zeros (1, 0, "int8");
 l.unbound = false ();
 u.e = int64 (0);
-u.m = [];
+u.m = zeros (1, 0, "int8");
 u.unbound = false ();
 
 for i = 1 : nargin

@@ -37,17 +37,26 @@ assert (isfinite (addend));
     
 ## Increase the accumulator's size if neccessary
 if (e > accumulator.e)
-    accumulator.m = [zeros(1, e - accumulator.e), accumulator.m];
+    accumulator.m = [zeros(1, e - accumulator.e, "int8"), accumulator.m];
     accumulator.e = e;
 endif
 if (length (mantissa) + accumulator.e - e > length (accumulator.m))
     accumulator.m = [accumulator.m, ...
                      zeros(1, length (mantissa) - length (accumulator.m) ...
-                            + accumulator.e - e)];
+                            + accumulator.e - e, "int8")];
 endif
 
 ## Add the number into the accumulator
 accumulator.m ((1 + accumulator.e - e) : ...
                (length (mantissa) + accumulator.e - e)) += (-1)^s * mantissa';
+
+## Lazy carry
+carry = (accumulator.m - rem (accumulator.m, 64)) / 2;
+accumulator.m += [carry(2 : end), zeros(1, 1, "int8")] ...
+               - int8 (2) * carry;
+if (carry (1) ~= 0)
+    accumulator.e ++;
+    accumulator.m = [carry(1), accumulator.m];
+endif
 
 endfunction
