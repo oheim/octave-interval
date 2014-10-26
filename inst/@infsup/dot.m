@@ -17,10 +17,16 @@
 ## @deftypefn {Interval Function} {@var{Z} =} dot (@var{X}, @var{Y})
 ## @cindex IEEE1788 dot
 ## 
-## Compute the dot product between two lists of intervals.
+## Compute the dot product between two vectors of intervals.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
+## @example
+## @group
+## dot ([infsup(1), 2, 3], [infsup(2), 3, 4])
+##   @result{} [20]
+## @end group
+## @end example
 ## @seealso{plus, sum, mtimes, sumabs, sumsquare}
 ## @end deftypefn
 
@@ -48,23 +54,16 @@ u.m = zeros (1, 0, "int8");
 u.unbound = false ();
 
 for i = 1:length(x)
-    if (not (isa (x {i}, "infsup")))
-        x {i} = infsup (x {i});
-    endif
-    if (not (isa (y {i}, "infsup")))
-        y {i} = infsup (y {i});
-    endif
-
-    if (isempty (x {i}) || isempty (y {i}))
+    if (isempty (x (i)) || isempty (y (i)))
         result = infsup ();
         isexact = true ();
         return
     endif
     
-    x_inf = inf (x {i});
-    x_sup = sup (x {i});
-    y_inf = inf (y {i});
-    y_sup = sup (y {i});
+    x_inf = inf (x (i));
+    x_sup = sup (x (i));
+    y_inf = inf (y (i));
+    y_sup = sup (y (i));
     
     if ((x_inf == 0 && x_sup == 0) || ...
         (y_inf == 0 && y_sup == 0))
