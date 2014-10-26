@@ -14,29 +14,27 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} sum (@var{X}…)
-## @cindex IEEE1788 sum
+## @deftypefn {Interval Function} {@var{Z} =} sumabs (@var{X}…)
+## @cindex IEEE1788 sumAbs
 ## 
-## Compute the sum of a list of intervals.
+## Compute the sum of absolute values of a list of intervals.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## sum (infsup (1), pow2 (-1074), -1)
-##   @result{} [4e-324, 5e-324]
-## infsup (1) + pow2 (-1074) - 1
-##   @result{} [0, 2.2204460492503131e-16]
+## sumabs (infsup (1), pow2 (-1074), -1)
+##   @result{} [2, 2.0000000000000005]
 ## @end group
 ## @end example
-## @seealso{plus}
+## @seealso{sum, plus, abs}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = sum (varargin)
+function [result, isexact] = sumabs (varargin)
 
 if (nargin == 0)
     result = infsup ();
@@ -47,7 +45,6 @@ endif
 ## Initialize accumulators
 l.e = int64 (0);
 l.m = zeros (1, 0, "int8");
-l.unbound = false ();
 u.e = int64 (0);
 u.m = zeros (1, 0, "int8");
 u.unbound = false ();
@@ -63,13 +60,8 @@ for i = 1 : nargin
         isexact = true ();
         return
     endif
-    if (isfinite (inf (varargin {i})))
-        if (not (l.unbound))
-            l = accuadd (l, inf (varargin {i}));
-        endif
-    else
-        l.unbound = true ();
-    endif
+    varargin {i} = abs (varargin {i});
+    l = accuadd (l, inf (varargin {i}));
     if (isfinite (sup (varargin {i})))
         if (not (u.unbound))
             u = accuadd (u, sup (varargin {i}));
@@ -79,12 +71,7 @@ for i = 1 : nargin
     endif
 endfor
 
-if (l.unbound)
-    l = -inf;
-    isexact = true ();
-else
-    [l, isexact] = accu2double (l, -inf);
-endif
+[l, isexact] = accu2double (l, -inf);
 
 if (u.unbound)
     u = inf;

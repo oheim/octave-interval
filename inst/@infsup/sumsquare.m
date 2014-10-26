@@ -14,29 +14,27 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} sum (@var{X}…)
-## @cindex IEEE1788 sum
+## @deftypefn {Interval Function} {@var{Z} =} sumsquare (@var{X}…)
+## @cindex IEEE1788 sumSquare
 ## 
-## Compute the sum of a list of intervals.
+## Compute the sum of squares of a list of intervals.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## sum (infsup (1), pow2 (-1074), -1)
-##   @result{} [4e-324, 5e-324]
-## infsup (1) + pow2 (-1074) - 1
-##   @result{} [0, 2.2204460492503131e-16]
+## sumsquare (infsup (1), pow2 (-1074), -1)
+##   @result{} [2, 2.0000000000000005]
 ## @end group
 ## @end example
-## @seealso{plus}
+## @seealso{plus, sum, sumabs, sqr}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = sum (varargin)
+function [result, isexact] = sumsquare (varargin)
 
 if (nargin == 0)
     result = infsup ();
@@ -47,7 +45,6 @@ endif
 ## Initialize accumulators
 l.e = int64 (0);
 l.m = zeros (1, 0, "int8");
-l.unbound = false ();
 u.e = int64 (0);
 u.m = zeros (1, 0, "int8");
 u.unbound = false ();
@@ -63,28 +60,25 @@ for i = 1 : nargin
         isexact = true ();
         return
     endif
-    if (isfinite (inf (varargin {i})))
-        if (not (l.unbound))
-            l = accuadd (l, inf (varargin {i}));
-        endif
+    
+    if (ismember (0, varargin {i}))
+        ## 0 in interval^2, nothing to do
     else
-        l.unbound = true ();
+        m = mig (varargin {i});
+        l = accuaddproduct (l, m, m);
     endif
-    if (isfinite (sup (varargin {i})))
+    
+    m = mag (varargin {i});
+    if (isfinite (m))
         if (not (u.unbound))
-            u = accuadd (u, sup (varargin {i}));
+            u = accuaddproduct (u, m, m);
         endif
     else
         u.unbound = true ();
     endif
 endfor
 
-if (l.unbound)
-    l = -inf;
-    isexact = true ();
-else
-    [l, isexact] = accu2double (l, -inf);
-endif
+[l, isexact] = accu2double (l, -inf);
 
 if (u.unbound)
     u = inf;
