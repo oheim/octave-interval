@@ -45,10 +45,10 @@ if (nargin == 0)
 endif
 
 ## Initialize accumulators
-l.e = 0;
+l.e = int64 (0);
 l.m = [];
 l.unbound = false ();
-u.e = 0;
+u.e = int64 (0);
 u.m = [];
 u.unbound = false ();
 
