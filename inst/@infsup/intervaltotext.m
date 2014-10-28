@@ -55,6 +55,8 @@
 
 function [s, isexact] = intervaltotext (x, exact)
 
+assert (numel (x) == 1, "not supported for interval vectors / matrix");
+
 isexact = true ();
 
 if (isempty (x))

@@ -13,18 +13,93 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-function  display (x)
+## Author: Oliver Heimlich
+## Keywords: interval
+## Created: 2014-10-28
 
-[s, isexact] = intervaltotext (x);
+function display (x)
 
-fprintf ("%s ", inputname (1));
-if (isexact)
-    fprintf ("=");
-else
-    fprintf ("⊂");
+assert (numel (x) >= 1);
+
+if (numel (x) == 1)
+    [s, isexact] = intervaltotext (x);
+    if (length (inputname (1)) > 0)
+        fprintf ("%s ", inputname (1));
+        if (isexact)
+            fprintf ("= ");
+        else
+            fprintf ("⊂ ");
+        endif
+    endif
+    fprintf (s);
+    fprintf ("\n");
+    return
 endif
-fprintf (" ");
-fprintf (s);
-fprintf ("\n");
+
+string = cell (1, columns (x));
+columnwidth = zeros (columns (x), 1, "uint8");
+isexact = true ();
+idx.type = "()"; # subsref with operator syntax doesn't work below
+## Build text representation for each column
+for column = 1 : columns (x)
+    columnstring = cell (rows (x), 1);
+    for row = 1 : rows (x)
+        idx.subs = {row, column};
+        interval = subsref (x, idx);
+        [columnstring{row}, elementisexact] = ...
+            intervaltotext (interval);
+        isexact = and (isexact, elementisexact);
+        columnwidth (column) = max (columnwidth (column), ...
+                                    length (columnstring {row}));
+    endfor
+    ## Right align elements within their column
+    columnwidth (column) += 3; # add 3 spaces between columns
+    for row = 1 : rows (x)
+        columnstring {row} = prepad (columnstring {row}, ...
+                                     columnwidth (column), " ");
+    endfor
+    string {column} = columnstring;
+endfor
+
+## Print variable name and header
+if (length (inputname (1)) > 0)
+    fprintf ("%s ", inputname (1));
+    if (isexact)
+        fprintf ("=");
+    else
+        fprintf ("⊂");
+    endif
+    fprintf (" %d×%d interval ", size (x, 1), size (x, 2));
+    if (isvector (x))
+        fprintf ("vector");
+    else
+        fprintf ("matrix");
+    endif
+    fprintf ("\n\n");
+endif
+
+## Print all columns
+maxwidth = terminal_size () (2);
+cstart = uint32 (1);
+while (cstart <= columns (x))
+    ## Determine number of columns to print, print at least one column
+    cend = cstart;
+    usedwidth = columnwidth (cend);
+    while (cend < columns (x) && ...
+           usedwidth + columnwidth (cend + 1) <= maxwidth)
+        cend ++;
+        usedwidth += columnwidth (cend);
+    endwhile
+    if (cstart > 1 || cend < columns (x))
+        if (cend > cstart)
+            fprintf (" Columns %d through %d:\n\n", cstart, cend);
+        else
+            fprintf (" Column %d:\n\n", cstart);
+        endif
+    endif
+    fprintf (strjoin (strcat (string {cstart : cend}), "\n"));
+    fprintf ("\n\n");
+    cstart = cend + 1;
+endwhile
 
 endfunction
