@@ -107,7 +107,8 @@ if (nargin == 1)
         u = cell (size (c));
         
         for i = 1 : numel (c)
-            if (ischar (c {i}) && c {i} ([1, end]) == "[]")
+            if (ischar (c {i}) && not (isempty (c {i})) && ...
+                c {i} ([1, end]) == "[]")
                 ## Strip square brackets and whitespace
                 nobrackets = lower (strtrim (c {i} (2 : (end-1))));
                 switch nobrackets
@@ -195,7 +196,10 @@ for [boundaries, key] = input
             boundary = boundaries (i);
         endif
         
-        if (isnumeric (boundary))
+        if (isempty (boundary))
+            x.inf (i) = -inf;
+            x.sup (i) = inf;
+        elseif (isnumeric (boundary))
             if (not (isreal (boundary)))
                 error (["illegal " key " boundary: must not be complex"]);
             endif
@@ -364,7 +368,7 @@ for [boundaries, key] = input
                     endif
                     
                     ## Compute approximation, this only works between ± realmax
-                    binary = str2double (boundary);
+                    binary = str2double (strrep (boundary, ",", "."));
                     
                     ## Check approximation value
                     comparison = decimalcompare (double2decimal (binary), ...
