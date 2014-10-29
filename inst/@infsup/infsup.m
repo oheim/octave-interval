@@ -197,8 +197,12 @@ for [boundaries, key] = input
         endif
         
         if (isempty (boundary))
-            x.inf (i) = -inf;
-            x.sup (i) = inf;
+            switch key
+                case "inf"
+                    x.inf (i) = -inf;
+                case "sup"
+                    x.sup (i) = inf;
+            endswitch
         elseif (isnumeric (boundary))
             if (not (isreal (boundary)))
                 error (["illegal " key " boundary: must not be complex"]);
