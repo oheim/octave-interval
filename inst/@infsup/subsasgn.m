@@ -31,9 +31,14 @@ endif
 A.inf = subsasgn (A.inf, S, B.inf);
 A.sup = subsasgn (A.sup, S, B.sup);
 
-## It might happen, that implicit zeros have been added, normalize boundaries:
-## representation of the set containing only zero is always [-0,+0]
-A.inf (A.inf == 0) = -0;
-A.sup (A.sup == 0) = +0;
+## Implicit new elements in the matrices take the value 0. We can detect them
+## in the inf matrix, because zeros in the inf matrix are set to -0 by the
+## infsup constructor.
 
+newelements = not (signbit (A.inf)) & (A.inf == 0);
+
+## Set the implicit new elements to [Empty].
+A.inf (newelements) = inf;
+A.sup (newelements) = -inf;
+ 
 endfunction
