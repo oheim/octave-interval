@@ -29,9 +29,9 @@ if (not (isa (B, "infsup")))
 endif
 
 A.inf = subsasgn (A.inf, S, B.inf);
-A.sup = subsasgn (A.sup, S, B.inf);
+A.sup = subsasgn (A.sup, S, B.sup);
 
-## normalize boundaries:
+## It might happen, that implicit zeros have been added, normalize boundaries:
 ## representation of the set containing only zero is always [-0,+0]
 A.inf (A.inf == 0) = -0;
 A.sup (A.sup == 0) = +0;
