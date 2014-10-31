@@ -18,6 +18,8 @@
 ## 
 ## Compute the inverse of the square matrix @var{A}.
 ##
+## Accuracy: The result is a valid enclosure.
+##
 ## @example
 ## @group
 ## inv (infsup ([2, 1, 1;0, 1, 0; 1, 0, 0]))
