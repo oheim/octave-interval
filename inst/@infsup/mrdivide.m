@@ -147,7 +147,8 @@ endfor
 ##         Solve L * s = inv (P) * x'
 
 s = cell (n, m);
-x = inv (P) * x';
+x.inf = inv (P) * x.inf';
+x.sup = inv (P) * x.sup';
 
 for i = 1 : m
     s {1, i} = infsup (x.inf (1, i), x.sup (1, i)) ./ L {1, 1};
