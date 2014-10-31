@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} ~= @var{B}
-## @deftypefx {Interval Comparison} {@var{Z} =} @var{A} != @var{B}
+## @deftypefn {Interval Comparison} {} @var{A} ~= @var{B}
+## @deftypefx {Interval Comparison} {} @var{A} != @var{B}
 ## 
 ## Compare intervals @var{A} and @var{B} for inequality.
 ##
@@ -30,9 +30,12 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = ne(a, b)
+function result = ne (a, b)
 
-assert (nargin == 2);
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 
 result = not (eq (a, b));
 

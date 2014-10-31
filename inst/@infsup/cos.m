@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} cos (@var{X})
+## @deftypefn {Interval Function} {} cos (@var{X})
 ## @cindex IEEE1788 cos
 ## 
 ## Compute the cosine for each number in interval @var{X} in radians.
@@ -36,58 +36,50 @@
 
 function result = cos (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = u = cosl = cosu = sinsignl = sinsignu = zeros (size (x));
 
-if (not (isfinite (x.inf) && isfinite (x.sup)))
-    result = infsup (-1, 1);
-    return
-endif
-
-## Check, if wid (x) is certainly greater than 2*pi.
+## Check, if wid (x) is certainly greater than 2*pi. This can save the
+## computation if some cosine values.
 fesetround (-inf);
 width = x.sup - x.inf;
 fesetround (0.5);
 twopi.sup = 0x6487ED5 * pow2 (-24) + 0x442D190 * pow2 (-54);
-if (width >= twopi.sup)
-    result = infsup (-1, 1);
-    return
-endif
+certainlyfullperiod = width >= twopi.sup;
+l (certainlyfullperiod) = -1;
+u (certainlyfullperiod) = 1;
 
-if (x.inf == 0 && 0 == x.sup)
-    ## cos (0) == 1
-    result = infsup (1);
-    return
-endif
+possiblynotfullperiod = not (certainlyfullperiod);
+cosl (possiblynotfullperiod) = cos (x.inf (possiblynotfullperiod));
+cosu (possiblynotfullperiod) = cos (x.sup (possiblynotfullperiod));
+
+l (possiblynotfullperiod) = max (-1, ulpadd (min (...
+        cosl (possiblynotfullperiod), cosu (possiblynotfullperiod)), -1));
+u (possiblynotfullperiod) = min (1, ulpadd (max (...
+        cosl (possiblynotfullperiod), cosu (possiblynotfullperiod)), 1));
 
 ## We use sign (-sin) to know the gradient at the boundaries.
-c.inf = cos (x.inf);
-c.sup = cos (x.sup);
-s.inf = sign (-sin (x.inf));
-s.sup = sign (-sin (x.sup));
-## In case of sign (-sin) == 0, we conservatively use sign (-sin) of nextout.
-if (s.inf == 0)
-    s.inf = (-1) * sign (c.inf);
-endif
-if (s.sup == 0)
-    s.sup = sign (c.sup);
-endif
+sinsignl (possiblynotfullperiod) = sign (-sin (x.inf (possiblynotfullperiod)));
+sinsignu (possiblynotfullperiod) = sign (-sin (x.sup (possiblynotfullperiod)));
 
-if (s.inf == s.sup)
-    if (width > 4)
-        ## Just to be sure...
-        result = infsup (-1, 1);
-        return
-    endif
-    result = infsup (-1, 1) & ...
-                  nextout (infsup (min (c.inf, c.sup), ...
-                                   max (c.inf, c.sup)));
-elseif (s.inf == -1 && s.sup == 1)
-    result = infsup (-1, min (1, nextup (max (c.inf, c.sup))));
-elseif (s.inf == 1 && s.sup == -1)
-    result = infsup (max (-1, nextdown (min (c.inf, c.sup))), 1);
-endif
+## In case of sign (-sin) == 0, we conservatively use sign (-sin) of nextout.
+sinsignl (sinsignl == 0) = (-1) * sign (cosl (sinsignl == 0));
+sinsignu (sinsignu == 0) = sign (cosu (sinsignu == 0));
+
+containsinf = possiblynotfullperiod & ((sinsignl == -1 & sinsignu == 1) | ...
+                                       (sinsignl == sinsignu & width > 4));
+l (containsinf) = -1;
+
+containssup = possiblynotfullperiod & ((sinsignl == 1 & sinsignu == -1) | ...
+                                       (sinsignl == sinsignu & width > 4));
+u (containssup) = 1;
+
+## cos (0) == 1
+l (x.inf == 0 & x.sup == 0) = 1;
+
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

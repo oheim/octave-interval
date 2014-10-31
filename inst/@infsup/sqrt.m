@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sqrt (@var{X})
+## @deftypefn {Interval Function} {} sqrt (@var{X})
 ## @cindex IEEE1788 sqrt
 ## 
 ## Compute the square root for all non-negative numbers in @var{X}.
@@ -36,21 +36,16 @@
 
 function result = sqrt (x)
 
-if (isempty (x) || x.sup < 0)
-    result = infsup ();
-    return
-endif
-
-if (x.inf <= 0)
-    root.inf = 0;
-else
-    fesetround (-inf);
-    root.inf = realsqrt (x.inf);
-endif
+fesetround (-inf);
+l = realsqrt (max (0, x.inf));
 fesetround (inf);
-root.sup = realsqrt (x.sup);
-
+u = realsqrt (max (0, x.sup));
 fesetround (0.5);
-result = infsup (root.inf, root.sup);
+
+emptyresult = isempty (x) | x.sup < 0;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

@@ -13,12 +13,18 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Numeric} {} rows (@var{A})
+##
+## Return the number of rows of @var{A}.
+## @seealso{numel, size, length, columns}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function r = rows (A)
+function result = rows (a)
 
-r = rows (A.inf);
+result = rows (a.inf);
 
 endfunction

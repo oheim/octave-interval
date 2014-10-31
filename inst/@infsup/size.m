@@ -13,16 +13,39 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Numeric} {} size (@var{A})
+## @deftypefnx {Interval Numeric} {} size (@var{A}, @var{DIM})
+##
+## Return the number of rows and columns of @var{A}.
+##
+## With one input argument and one output argument, the result is returned in a
+## row vector.  If there are multiple output arguments, the number of rows is
+## assigned to the first, and the number of columns to the second, etc.
+##
+## If given a second argument, @code{size} will return the size of the
+## corresponding dimension.
+## @seealso{length, numel, rows, columns}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function s = size (A, dim)
+function varargout = size (a, dim)
+
+if (nargin == 0)
+    print_usage ();
+    return
+endif
 
 if (nargin == 1)
-    s = size (A.inf);
+    if (nargout <= 1)
+        varargout {1} = size (a.inf);
+    else
+        varargout = mat2cell (size (a.inf) (1 : nargout)', ones (nargout, 1));
+    endif
 else
-    s = size (A.inf, dim);
+    varargout {1} = size (a.inf, dim);
 endif
 
 endfunction

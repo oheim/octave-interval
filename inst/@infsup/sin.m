@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sin (@var{X})
+## @deftypefn {Interval Function} {} sin (@var{X})
 ## @cindex IEEE1788 sin
 ## 
 ## Compute the sine for each number in interval @var{X} in radians.
@@ -36,71 +36,51 @@
 
 function result = sin (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = u = sinl = sinu = cossignl = cossignu = zeros (size (x));
 
-if (not (isfinite (x.inf) && isfinite (x.sup)))
-    result = infsup (-1, 1);
-    return
-endif
-
-## Check, if wid (x) is certainly greater than 2*pi.
+## Check, if wid (x) is certainly greater than 2*pi. This can save the
+## computation if some sine values.
 fesetround (-inf);
 width = x.sup - x.inf;
 fesetround (0.5);
 twopi.sup = 0x6487ED5 * pow2 (-24) + 0x442D190 * pow2 (-54);
-if (width >= twopi.sup)
-    result = infsup (-1, 1);
-    return
-endif
+certainlyfullperiod = width >= twopi.sup;
+l (certainlyfullperiod) = -1;
+u (certainlyfullperiod) = 1;
+
+possiblynotfullperiod = not (certainlyfullperiod);
+sinl (possiblynotfullperiod) = sin (x.inf (possiblynotfullperiod));
+sinu (possiblynotfullperiod) = sin (x.sup (possiblynotfullperiod));
+
+l (possiblynotfullperiod) = max (-1, ulpadd (min (...
+        sinl (possiblynotfullperiod), sinu (possiblynotfullperiod)), -1));
+u (possiblynotfullperiod) = min (1, ulpadd (max (...
+        sinl (possiblynotfullperiod), sinu (possiblynotfullperiod)), 1));
 
 ## We use sign (cos) to know the gradient at the boundaries.
-s.inf = sin (x.inf);
-s.sup = sin (x.sup);
-c.inf = sign (cos (x.inf));
-c.sup = sign (cos (x.sup));
-## In case of sign (cos) == 0, we conservatively use sign (cos) of nextout.
-if (c.inf == 0)
-    c.inf = sign (s.inf);
-endif
-if (c.sup == 0)
-    c.sup = (-1) * sign (c.sup);
-endif
+cossignl (possiblynotfullperiod) = sign (cos (x.inf (possiblynotfullperiod)));
+cossignu (possiblynotfullperiod) = sign (cos (x.sup (possiblynotfullperiod)));
 
-if (c.inf == c.sup)
-    if (width > 4)
-        ## Just to be sure...
-        result = infsup (-1, 1);
-        return
-    endif
-    result = infsup (-1, 1) & ...
-                  nextout (infsup (min (s.inf, s.sup), ...
-                                   max (s.inf, s.sup)));
-    ## sin (0) == 0
-    if ((x.inf == 0 && min (s.inf, s.sup) == s.inf) || ...
-        (x.sup == 0 && min (s.inf, s.sup) == s.sup))
-        result = infsup (0, 1) & result;
-    endif
-    if ((x.inf == 0 && max (s.inf, s.sup) == s.inf) || ...
-        (x.sup == 0 && max (s.inf, s.sup) == s.sup))
-        result = infsup (-1, 0) & result;
-    endif
-elseif (c.inf == -1 && c.sup == 1)
-    result = infsup (-1, min (1, nextup (max (s.inf, s.sup))));
-    ## sin (0) == 0
-    if ((x.inf == 0 && max (s.inf, s.sup) == s.inf) || ...
-        (x.sup == 0 && max (s.inf, s.sup) == s.sup))
-        result = infsup (-1, 0) & result;
-    endif
-elseif (c.inf == 1 && c.sup == -1)
-    result = infsup (max (-1, nextdown (min (s.inf, s.sup))), 1);
-    ## sin (0) == 0
-    if ((x.inf == 0 && min (s.inf, s.sup) == s.inf) || ...
-        (x.sup == 0 && min (s.inf, s.sup) == s.sup))
-        result = infsup (0, 1) & result;
-    endif
-endif
+## In case of sign (cos) == 0, we conservatively use sign (cos) of nextout.
+cossignl (cossignl == 0) = sign (sinl (cossignl == 0));
+cossignu (cossignu == 0) = (-1) * sign (sinu (cossignu == 0));
+
+containsinf = possiblynotfullperiod & ((cossignl == -1 & cossignu == 1) | ...
+                                       (cossignl == cossignu & width > 4));
+l (containsinf) = -1;
+
+containssup = possiblynotfullperiod & ((cossignl == 1 & cossignu == -1) | ...
+                                       (cossignl == cossignu & width > 4));
+u (containssup) = 1;
+
+## sin (0) == 0
+l (x.inf == 0 & l == -pow2 (-1074)) = 0;
+u (x.sup == 0 & u == pow2 (-1074)) = 0;
+
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

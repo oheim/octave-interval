@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sqr (@var{X})
+## @deftypefn {Interval Function} {} sqr (@var{X})
 ## @cindex IEEE1788 sqr
 ## 
 ## Compute the square for all numbers in @var{X}.
@@ -36,29 +36,14 @@
 
 function result = sqr (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = mig (x);
+u = mag (x);
 
-if (x.inf < 0 && x.sup > 0)
-    square.inf = 0;
-    square.sup = mag (x);
-    fesetround (inf);
-    square.sup = square.sup * square.sup; # no sqr function in GNU octave
-else
-    square.inf = abs (x.inf);
-    square.sup = abs (x.sup);
-    if (square.inf > square.sup)
-        [square.inf, square.sup] = deal (square.sup, square.inf);
-    endif
-    fesetround (-inf);
-    square.inf = square.inf * square.inf;
-    fesetround (inf);
-    square.sup = square.sup * square.sup;
-endif
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-fesetround (0.5);
-result = infsup (square.inf, square.sup);
+x = infsup (l, u);
+result = x .* x;
 
 endfunction

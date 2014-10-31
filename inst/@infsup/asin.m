@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} asin (@var{X})
+## @deftypefn {Interval Function} {} asin (@var{X})
 ## @cindex IEEE1788 asin
 ## 
 ## Compute the inverse sine in radians (arcsine) for each number in
@@ -37,31 +37,22 @@
 
 function result = asin (x)
 
-if (isempty (x) || x.inf > 1 || x.sup < -1)
-    result = infsup ();
-    return
-endif
+l = ulpadd (real (asin (x.inf)), -1);
+u = ulpadd (real (asin (x.sup)), 1);
 
-if (x.inf <= -1)
-    ## - pi / 2
-    as.inf = - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56)); 
-else
-    as.inf = ulpadd (asin (x.inf), -1);
-    if (x.inf >= 0)
-        as.inf = max (0, as.inf);
-    endif
-endif
+## Make the function tightest for some parameters
+pi = infsup ("pi");
+l (x.inf <= -1) = inf (-pi) / 2;
+nonnegative = (x.inf >= 0);
+l (nonnegative) = max (0, l (nonnegative));
+u (x.sup >= 1) = sup (pi) / 2;
+nonpositive = (x.sup <= 0);
+u (nonpositive) = min (0, u (nonpositive));
 
-if (x.sup >= 1)
-    ## + pi / 2
-    as.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56);
-else
-    as.sup = ulpadd (asin (x.sup), 1);
-    if (x.sup <= 0)
-        as.sup = min (0, as.sup);
-    endif
-endif
+emptyresult = isempty (x) | x.inf > 1 | x.sup < -1;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsup (as.inf, as.sup);
+result = infsup (l, u);
 
 endfunction

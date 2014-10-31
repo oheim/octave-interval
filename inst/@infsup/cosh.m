@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} cosh (@var{X})
+## @deftypefn {Interval Function} {} cosh (@var{X})
 ## @cindex IEEE1788 cosh
 ## 
 ## Compute the hyperbolic cosine for each number in interval @var{X}.
@@ -37,19 +37,16 @@
 
 function result = cosh (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = max (1, ulpadd (cosh (mig (x)), -3));
+u = ulpadd (cosh (mag (x)), 3);
 
-ch.inf = max (1, ulpadd (cosh (mig (x)), -3));
+## Make function tightest for x == 0
+u (x.inf == 0 & x.sup == 0) = 1;
 
-if (x.inf == 0 && x.sup == 0)
-    ch.sup = 1;
-else
-    ch.sup = ulpadd (cosh (mag (x)), 3);
-endif
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsup (ch.inf, ch.sup);
+result = infsup (l, u);
 
 endfunction

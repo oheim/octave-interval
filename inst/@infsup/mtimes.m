@@ -38,89 +38,71 @@
 
 function result = mtimes (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert multiplier into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (isempty (x) || isempty (y))
-    result = infsup ();
-    return
+## Resize, if scalar × matrix
+if (isscalar (x.inf) ~= isscalar (y.inf))
+    x.inf = ones (size (y.inf)) .* x.inf;
+    x.sup = ones (size (y.inf)) .* x.sup;
+    y.inf = ones (size (x.inf)) .* y.inf;
+    y.sup = ones (size (x.inf)) .* y.sup;
 endif
 
-if ((x.inf == 0 && x.sup == 0) || ...
-    (y.inf == 0 && y.sup == 0))
-    result = infsup (0, 0);
-    return
-endif
+## Partitionize the function's domain
+q1 = y.sup <= 0 & x.sup <= 0;
+q2 = y.sup <= 0 & x.inf >= 0 & x.sup > 0;
+q3 = y.sup <= 0 & x.inf < 0 & x.sup > 0;
+q4 = y.inf >= 0 & y.sup > 0 & x.sup <= 0;
+q5 = y.inf >= 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
+q6 = y.inf >= 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
+q7 = y.inf < 0 & y.sup > 0 & x.sup <= 0;
+q8 = y.inf < 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
+q9 = y.inf < 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
 
-if (isentire (x) || isentire (y))
-    result = infsup(-inf, inf);
-    return
-endif
-
-if (y.sup <= 0)
-    if (x.sup <= 0)
-        fesetround (-inf);
-        prod.inf = x.sup * y.sup;
-        fesetround (inf);
-        prod.sup = x.inf * y.inf;
-    elseif (x.inf >= 0)
-        fesetround (-inf);
-        prod.inf = x.sup * y.inf;
-        fesetround (inf);
-        prod.sup = x.inf * y.sup;
-    else
-        fesetround (-inf);
-        prod.inf = x.sup * y.inf;
-        fesetround (inf);
-        prod.sup = x.inf * y.inf;
-    endif
-elseif (y.inf >= 0)
-    if (x.sup <= 0)
-        fesetround (-inf);
-        prod.inf = x.inf * y.sup;
-        fesetround (inf);
-        prod.sup = x.sup * y.inf;
-    elseif (x.inf >= 0)
-        fesetround (-inf);
-        prod.inf = x.inf * y.inf;
-        fesetround (inf);
-        prod.sup = x.sup * y.sup;
-    else
-        fesetround (-inf);
-        prod.inf = x.inf * y.sup;
-        fesetround (inf);
-        prod.sup = x.sup * y.sup;
-    endif
-else
-    if (x.sup <= 0)
-        fesetround (-inf);
-        prod.inf = x.inf * y.sup;
-        fesetround (inf);
-        prod.sup = x.inf * y.inf;
-    elseif (x.inf >= 0)
-        fesetround (-inf);
-        prod.inf = x.sup * y.inf;
-        fesetround (inf);
-        prod.sup = x.sup * y.sup;
-    else
-        fesetround (-inf);
-        prod.inf = min (x.inf * y.sup, x.sup * y.inf);
-        fesetround (inf);
-        prod.sup = max (x.inf * y.inf, x.sup * y.sup);
-    endif
-endif
-
+l = u = zeros (size (x.inf));
+fesetround (-inf);
+l (q1) = x.sup (q1) .* y.sup (q1);
+l (q2) = x.sup (q2) .* y.inf (q2);
+l (q3) = x.sup (q3) .* y.inf (q3);
+l (q4) = x.inf (q4) .* y.sup (q4);
+l (q5) = x.inf (q5) .* y.inf (q5);
+l (q6) = x.inf (q6) .* y.sup (q6);
+l (q7) = x.inf (q7) .* y.sup (q7);
+l (q8) = x.sup (q8) .* y.inf (q8);
+l (q9) = min (x.inf (q9) .* y.sup (q9), x.sup (q9) .* y.inf (q9));
+fesetround (inf);
+u (q1) = x.inf (q1) .* y.inf (q1);
+u (q2) = x.inf (q2) .* y.sup (q2);
+u (q3) = x.inf (q3) .* y.inf (q3);
+u (q4) = x.sup (q4) .* y.inf (q4);
+u (q5) = x.sup (q5) .* y.sup (q5);
+u (q6) = x.sup (q6) .* y.sup (q6);
+u (q7) = x.inf (q7) .* y.inf (q7);
+u (q8) = x.sup (q8) .* y.sup (q8);
+u (q9) = max (x.inf (q9) .* y.inf (q9), x.sup (q9) .* y.sup (q9));
 fesetround (0.5);
 
-result = infsup (prod.inf, prod.sup);
+entireresult = isentire (x) | isentire (y);
+l (entireresult) = -inf;
+u (entireresult) = inf;
+
+zeroresult = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
+l (zeroresult) = 0;
+u (zeroresult) = 0;
+
+emptyresult = isempty (x) | isempty (y);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

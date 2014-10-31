@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{C} =} @var{A} | @var{B}
+## @deftypefn {Interval Function} {} @var{A} | @var{B}
 ## @cindex IEEE1788 convexHull
 ## 
 ## Build the interval hull of the union of two intervals.
@@ -36,30 +36,23 @@
 ## Keywords: interval
 ## Created: 2014-10-02
 
-function result = or(a, b)
+function result = or (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-if (isempty (a) || isentire (b))
-    result = b;
-    return
-endif
+## This also works for unbound intervals and empty intervals
+l = min (a.inf, b.inf);
+u = max (a.sup, b.sup);
 
-if (isempty (b) || isentire (a))
-    result = a;
-    return
-endif
-
-result = infsup (min (a.inf, b.inf), max (a.sup, b.sup));
+result = infsup (l, u);
 
 endfunction

@@ -13,13 +13,34 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Constructor} {} subsref (@var{A}, @var{IDX})
+##
+## Perform the subscripted element selection operation according to the
+## subscript specified by @var{IDX}.
+##
+## The subscript @var{IDX} is expected to be a structure array with fields
+## @code{type} and @code{subs}.  Only valid value for @var{type} is
+## @code{"()"}.  The @code{subs} field may be either @code{":"} or a cell array
+## of index values.
+## @seealso{subsasgn}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function A = subsref (A, S)
+function result = subsref (A, S)
 
-A.inf = subsref (A.inf, S);
-A.sup = subsref (A.sup, S);
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
+
+assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
+
+l = subsref (A.inf, S);
+u = subsref (A.sup, S);
+
+result = infsup (l, u);
 
 endfunction

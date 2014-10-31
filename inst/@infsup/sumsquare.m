@@ -14,16 +14,18 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} sumsquare (@var{X}…)
+## @deftypefn {Interval Function} {} sumsquare (@var{X})
+## @deftypefnx {Interval Function} {} sumsquare (@var{X}, @var{DIM})
 ## @cindex IEEE1788 sumSquare
 ## 
-## Compute the sum of squares of a list of intervals.
+## Sum of squares along dimension @var{DIM}.  If @var{DIM} is omitted,
+## it defaults to the first non-singleton dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## sumsquare (infsup (1), pow2 (-1074), -1)
+## sumsquare ([infsup(1), pow2(-1074), -1])
 ##   @result{} [2, 2.0000000000000005]
 ## @end group
 ## @end example
@@ -34,59 +36,88 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = sumsquare (varargin)
+function [result, isexact] = sumsquare (x)
 
-if (nargin == 0)
-    result = infsup ();
-    isexact = true ();
-    return
+if (nargin < 2)
+    ## Try to find non-singleton dimension
+    dim = find (size (x.inf) > 1, 1);
+    if (isempty (dim))
+        dim = 1;
+    endif
 endif
 
-## Initialize accumulators
-l.e = int64 (0);
-l.m = zeros (1, 0, "int8");
-u.e = int64 (0);
-u.m = zeros (1, 0, "int8");
-u.unbound = false ();
+if (dim == 1)
+    resultsize = [1, size(x.inf, 2)];
+elseif (dim == 2)
+    resultsize = [size(x.inf, 1), 1];
+else
+    error ("sumsquare: DIM must be a valid dimension")
+endif
 
-for i = 1 : nargin
-    ## Convert to interval, if necessary
-    if (not (isa (varargin {i}, "infsup")))
-        varargin {i} = infsup (varargin {i});
-    endif
+isexact = true (resultsize);
+doublel = doubleu = zeros (resultsize);
+
+for n = 1 : numel (isexact)
+    ## Initialize accumulators
+    l.e = int64 (0);
+    l.m = zeros (1, 0, "int8");
+    l.unbound = false ();
+    u.e = int64 (0);
+    u.m = zeros (1, 0, "int8");
+    u.unbound = false ();
+    empty = false ();
     
-    if (isempty (varargin {i}))
-        result = infsup ();
-        isexact = true ();
-        return
-    endif
-    
-    if (ismember (0, varargin {i}))
-        ## 0 in interval^2, nothing to do
-    else
-        m = mig (varargin {i});
-        l = accuaddproduct (l, m, m);
-    endif
-    
-    m = mag (varargin {i});
-    if (isfinite (m))
-        if (not (u.unbound))
-            u = accuaddproduct (u, m, m);
+    for i = 1 : size (x.inf, dim)
+        if (dim == 1)
+            x_inf = x.inf (i, n);
+            x_sup = x.sup (i, n);
+        else
+            x_inf = x.inf (n, i);
+            x_sup = x.sup (n, i);
         endif
+    
+        if (x_inf == inf)
+            empty = true;
+            break
+        endif
+        
+        if (x_inf <= 0 && 0 <= x.sup)
+            ## 0 in interval^2, nothing to do
+        else
+            m = min (abs (x_inf), abs(x_sup));
+            l = accuaddproduct (l, m, m);
+        endif
+    
+        m = max (abs (x_inf), abs (x_sup));
+        if (isfinite (m))
+            if (not (u.unbound))
+                u = accuaddproduct (u, m, m);
+            endif
+        else
+            u.unbound = true ();
+        endif
+    endfor
+    
+    if (empty)
+        doublel (n) = inf;
+        doubleu (n) = -inf;
+        isexact (n) = true ();
     else
-        u.unbound = true ();
+        if (l.unbound)
+            doublel (n) = -inf
+        else
+            [doublel(n), isexact(n)] = accu2double (l, -inf);
+        endif
+        
+        if (u.unbound)
+            doubleu (n) = inf;
+        else
+            [doubleu(n), upperisexact] = accu2double (u, inf);
+            isexact (n) = and (isexact (n), upperisexact);
+        endif
     endif
 endfor
 
-[l, isexact] = accu2double (l, -inf);
-
-if (u.unbound)
-    u = inf;
-else
-    [u, upperisexact] = accu2double (u, inf);
-    isexact = or (isexact, upperisexact);
-endif
-
-result = infsup (l, u);
+result = infsup (doublel, doubleu);
 
 endfunction

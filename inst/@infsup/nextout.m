@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} nextout (@var{X})
+## @deftypefn {Interval Function} {} nextout (@var{X})
 ## @cindex IEEE1788 nextOut
 ## 
 ## Increases the interval's boundaries in each direction to the next number.
@@ -36,11 +36,13 @@
 
 function result = nextout (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = nextdown (x.inf);
+u = nextup (x.sup);
 
-result = infsup (nextdown (x.inf), nextup (x.sup));
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

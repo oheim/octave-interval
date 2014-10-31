@@ -38,26 +38,25 @@
 
 function result = atan2rev1 (b, c, y)
 
-assert (nargin >= 2)
-
+if (nargin < 2)
+    print_usage ();
+    return
+endif
 if (nargin < 3)
     y = infsup (-inf, inf);
 endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (c, "infsup")))
     c = infsup (c);
 endif
-
-## Convert third parameter into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
+
+assert (isscalar (b) && isscalar (c) && isscalar (y), ...
+        "only implemented for interval scalars");
 
 pi = infsup ("pi");
 

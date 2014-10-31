@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} asinh (@var{X})
+## @deftypefn {Interval Function} {} asinh (@var{X})
 ## @cindex IEEE1788 asinh
 ## 
 ## Compute the inverse hyperbolic sine for each number in interval @var{X}.
@@ -37,21 +37,20 @@
 
 function result = asinh (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
-
 ## Most implementations should be within 2 ULP, but must guarantee 7 ULP.
-ash.inf = ulpadd (asinh (x.inf), -7);
-ash.sup = ulpadd (asinh (x.sup), 7);
-if (x.inf >= 0)
-    ash.inf = max (0, ash.inf);
-endif
-if (x.sup <= 0)
-    ash.sup = min (0, ash.sup);
-endif
+l = ulpadd (asinh (x.inf), -7);
+u = ulpadd (asinh (x.sup), 7);
 
-result = infsup (ash.inf, ash.sup);
+## Make the function tightest for x = 0
+nonnegative = x.inf >= 0;
+l (nonnegative) = max (0, l (nonnegative));
+nonpositive = x.sup <= 0;
+u (nonpositive) = min (0, u (nonpositive));
+
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

@@ -14,10 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Y} =} isempty (@var{X})
+## @deftypefn {Interval Comparison} {} isempty (@var{X})
 ## @cindex IEEE1788 isEmpty
 ## 
 ## Check if the interval represents the empty set.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, isentire, issingleton}
 ## @end deftypefn

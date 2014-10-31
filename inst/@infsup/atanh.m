@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} atanh (@var{X})
+## @deftypefn {Interval Function} {} atanh (@var{X})
 ## @cindex IEEE1788 atanh
 ## 
 ## Compute the inverse hyperbolic tangent for each number in interval @var{X}.
@@ -37,29 +37,19 @@
 
 function result = atanh (x)
 
-if (isempty (x) || x.sup <= -1 || x.inf >= 1)
-    result = infsup ();
-    return
-endif
+l = ulpadd (real (atanh (x.inf)), -4);
+u = ulpadd (real (atanh (x.sup)), 4);
 
-if (x.inf == -1)
-    ath.inf = -inf;
-else
-    ath.inf = ulpadd (atanh (x.inf), -4);
-    if (x.inf >= 0)
-        ath.inf = max (ath.inf, 0);
-    endif
-endif
+## Make funtion tightest for x == 0
+nonnegative = x.inf >= 0;
+l (nonnegative) = max (l (nonnegative), 0);
+nonpositive = x.sup <= 0;
+u (nonpositive) = min (u (nonpositive), 0);
 
-if (x.sup == 1)
-    ath.sup = inf;
-else
-    ath.sup = ulpadd (atanh (x.sup), 4);
-    if (x.sup <= 0)
-        ath.sup = min (ath.sup, 0);
-    endif
-endif
+emptyresult = isempty (x) | x.sup <= -1 | x.inf >= 1;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsup (ath.inf, ath.sup);
+result = infsup (l, u);
 
 endfunction

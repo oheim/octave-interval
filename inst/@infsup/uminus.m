@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} - @var{X}
+## @deftypefn {Interval Function} {} - @var{X}
 ## @cindex IEEE1788 neg
 ## 
 ## Negate all numbers in the interval.
@@ -36,11 +36,10 @@
 
 function result = uminus (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+## This also works for empty / entire intervals
+l = -x.sup;
+u = -x.inf;
 
-result = infsup (-x.sup, -x.inf);
+result = infsup (l, u);
 
 endfunction

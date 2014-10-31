@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {@var{Y} =} inf (@var{X})
+## @deftypefn {Interval Numeric} {} inf (@var{X})
 ## @cindex IEEE1788 inf
 ## 
 ## Get the (greatest) lower boundary for all numbers of interval @var{X}.
@@ -36,15 +36,15 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function infimum = inf (interval)
+function result = inf (x)
 
-if (isa (interval, "infsupdec"))
+if (isa (x, "infsupdec"))
     ## We cannot override this function in infsupdec, because that would create
     ## an infinite loop.
-    if (isnai (interval))
+    if (isnai (x))
         error ("NaI has no infimum")
     endif
 endif
 
-infimum = interval.inf;
+result = x.inf;
 return

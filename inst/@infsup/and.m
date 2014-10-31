@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{C} =} @var{A} & @var{B}
+## @deftypefn {Interval Function} {} @var{A} & @var{B}
 ## @cindex IEEE1788 intersection
 ## 
 ## Intersect two intervals.
@@ -36,41 +36,29 @@
 ## Keywords: interval
 ## Created: 2014-10-02
 
-function result = and(a, b)
+function result = and (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-if (isempty (a) || isempty (b))
-    result = infsup ();
-    return
-endif
+## This also works for unbound intervals and empty intervals
+l = max (a.inf, b.inf);
+u = min (a.sup, b.sup);
 
-if (isentire (a))
-    result = infsup (b.inf, b.sup);
-    return
-endif
+## If the intervals do not intersect, the result must be empty.
+emptyresult = a.sup < b.inf | b.sup < a.inf;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-if (isentire (b))
-    result = infsup(a.inf, a.sup);
-    return
-endif
-
-if (a.sup < b.inf || b.sup < a.inf)
-    result = infsup ();
-    return
-endif
-
-result = infsup (max (a.inf, b.inf), min (a.sup, b.sup));
+result = infsup (l, u);
 
 endfunction
 %!test "Empty interval";

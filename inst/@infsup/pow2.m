@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} pow2 (@var{X})
+## @deftypefn {Interval Function} {} pow2 (@var{X})
 ## @cindex IEEE1788 exp2
 ## 
 ## Compute @code{2^x} for all numbers in @var{X}.
@@ -37,37 +37,6 @@
 
 function result = pow2 (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
-
-if (x.inf < -1074)
-    p.inf = 0;
-elseif (x.inf >= 1024)
-    p.inf = realmax();
-elseif (fix (x.inf) == x.inf)
-    ## x.inf is an integer
-    ## This operation is exact
-    p.inf = pow2 (x.inf);
-else
-    ## No directed rounding available
-    p.inf = max (0, nextdown (pow2 (x.inf)));
-endif
-
-if (x.sup <= -1074)
-    p.sup = pow2 (-1074);
-elseif (x.sup >= 1024)
-    p.sup = inf;
-elseif (fix (x.sup) == x.sup)
-    ## x.sup is an integer
-    ## This operation is exact
-    p.sup = pow2 (x.sup);
-else
-    ## No directed rounding available
-    p.sup = nextup (pow2 (x.sup));
-endif
-
-result = infsup (p.inf, p.sup);
+result = pow (2, x);
 
 endfunction

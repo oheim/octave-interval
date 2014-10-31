@@ -19,7 +19,13 @@
 
 function display (x)
 
-assert (numel (x) >= 1);
+if (numel (x) < 1)
+    if (length (inputname (1)) > 0)
+        fprintf ("%s = ", inputname (1));
+    endif
+    fprintf ("%d×%d interval matrix\n", size (x, 1), size (x, 2));
+    return
+endif
 
 if (numel (x) == 1)
     [s, isexact] = intervaltotext (x);

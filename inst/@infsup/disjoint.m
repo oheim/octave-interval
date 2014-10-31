@@ -14,13 +14,15 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} disjoint (@var{A}, @var{B})
+## @deftypefn {Interval Comparison} {} disjoint (@var{A}, @var{B})
 ## @cindex IEEE1788 disjoint
 ## 
 ## Evaluate disjoint comparison on intervals.
 ##
 ## True, if all numbers from @var{A} are not contained in @var{B} and vice
 ## versa.  False, if @var{A} and @var{B} have at least one element in common.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, subset, interior}
 ## @end deftypefn
@@ -31,28 +33,19 @@
 
 function result = disjoint (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-if (isempty (a) || isempty (b))
-    result = true ();
-    return
-endif
+result = (a.sup < b.inf | b.sup < a.inf);
 
-if (isentire (a) || isentire (b))
-    result = false ();
-    return
-endif
-
-result = (a.sup < b.inf || b.sup < a.inf);
+result (isempty (a) | isempty (b)) = true ();
 
 endfunction

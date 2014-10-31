@@ -40,16 +40,14 @@ function result = cosrev (c, x)
 if (nargin < 2)
     x = infsup (-inf, inf);
 endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (c, "infsup")))
     c = infsup (c);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
+
+assert (isscalar (c) && isscalar (x), "only implemented for interval scalars");
 
 arccosine = acos (c);
 

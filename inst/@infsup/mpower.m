@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} @var{X} ^ @var{Y}
+## @deftypefn {Interval Function} {} @var{X} ^ @var{Y}
 ## 
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
@@ -46,59 +46,75 @@
 ## Keywords: interval
 ## Created: 2011
 
-function z = mpower (x, y)
+function result = mpower (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-## Implements Algorithm A.3 in
-## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-## Diplomarbeit, Institute for Computer Science, University of Würzburg.
-## http://exp.ln0.de/heimlich-power-2011.htm.
-if (isempty (x) || isempty (y) || ...
-    (x.inf == 0 && x.sup == 0 && y.sup <= 0))
-    z = infsup ();
-    return
+## Resize, if scalar × matrix
+if (isscalar (x.inf) ~= isscalar (y.inf))
+    x.inf = ones (size (y.inf)) .* x.inf;
+    x.sup = ones (size (y.inf)) .* x.sup;
+    y.inf = ones (size (x.inf)) .* y.inf;
+    y.sup = ones (size (x.inf)) .* y.sup;
 endif
+
+l = u = zeros (size (x.inf));
 
 zPlus = pow (x, y); # pow is only defined for x > 0
 
-if (y.sup > 0 && ismember (0, x))
-    zZero = infsup (0);
-else
-    zZero = infsup ();
-endif
+for i = 1 : numel (x.inf)
+    ## Implements Algorithm A.3 in
+    ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
+    ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
+    ## http://exp.ln0.de/heimlich-power-2011.htm.
+    if (x.inf (i) == inf || y.inf (i) == inf || ...
+        (x.inf (i) == 0 && x.sup (i) == 0 && y.sup (i) <= 0))
+        l (i) = inf;
+        u (i) = -inf;
+        continue
+    endif
+    
+    if (y.sup (i) > 0 && ismember (0, infsup (x.inf (i), x.sup (i))))
+        zZero = infsup (0);
+    else
+        zZero = infsup ();
+    endif
+    
+    if (x.inf (i) >= 0)
+        ## no negative x
+        zMinus = infsup ();
+    elseif (isfinite (y.inf (i)) && isfinite (y.sup (i)) && ceil (y.inf (i)) > floor (y.sup (i)))
+        ## y contains no integer
+        zMinus = infsup ();
+    elseif (isfinite (y.inf (i)) && isfinite (y.sup (i)) && ceil (y.inf (i)) == floor (y.sup (i)))
+        ## y contains a single integer
+        xMinus = infsup (x.inf (i), x.sup (i)) & infsup (-inf, 0); # speed up computation of pown
+        zMinus = pown (xMinus, ceil (y.inf (i)));
+    else
+        ## y contains several integers
+        zMinus = multipleintegers (infsup (x.inf (i), x.sup (i)), infsup (y.inf (i), y.sup (i)));
+    endif
+    
+    z = zMinus | zZero | infsup (zPlus.inf (i), zPlus.sup (i));
+    l (i) = z.inf;
+    u (i) = z.sup;
+endfor
 
-if (x.inf >= 0)
-    ## no negative x
-    zMinus = infsup ();
-elseif (isfinite (y.inf) && isfinite (y.sup) && ceil (y.inf) > floor (y.sup))
-    ## y contains no integer
-    zMinus = infsup ();
-elseif (isfinite (y.inf) && isfinite (y.sup) && ceil (y.inf) == floor (y.sup))
-    ## y contains a single integer
-    xMinus = x & infsup (-inf, 0); # speed up computation of pown
-    zMinus = pown (xMinus, ceil (y.inf));
-else
-    ## y contains several integers
-    zMinus = multipleintegers (x, y);
-endif
-
-z = zMinus | zZero | zPlus;
+result = infsup (l, u);
 
 endfunction
 
 function z = multipleintegers (x, y)
-## Value of mpower on NEGATIVE base and multiple integral exponents
+## Value of power on NEGATIVE base and multiple integral exponents
 
 x = x & infsup (-inf, 0);
 y = ceil (y) & floor (y);
@@ -129,7 +145,7 @@ endif
 endfunction
 
 function z = twointegers (base, oddexponent, evenexponent)
-## Range of mpower on single NEGATIVE base and two integral exponents
+## Range of power on single NEGATIVE base and two integral exponents
 ##
 ## twointegers (base, oddexponent, evenexponent) returns the interval
 ## [-abs(base) ^ oddexponent, abs(base) ^ evenexponent] with correctly

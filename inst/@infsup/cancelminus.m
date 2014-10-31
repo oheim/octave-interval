@@ -29,33 +29,33 @@
 
 function result = cancelminus (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert divisor into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (isempty (x))
-    result = infsup ();
-else
-    if (isempty (y) || y.inf == -inf || y.sup == inf || ...
-        x.inf == -inf || x.sup == inf || ...
-        wid (x) < wid (y))
-        result = infsup (-inf, inf);
-    else
-        fesetround (-inf);
-        l = x.inf - y.inf;
-        fesetround (inf);
-        u = x.sup - y.sup;
-        fesetround (0.5);
-        result = infsup (l, u);
-    endif
-endif
+fesetround (-inf);
+l = x.inf - y.inf;
+fesetround (inf);
+u = x.sup - y.sup;
+fesetround (0.5);
+
+entireresult = isempty (y) | wid (x) < wid (y) | ...
+               y.inf == -inf | y.sup == inf | ...
+               x.inf == -inf | x.sup == inf;
+l (entireresult) = -inf;
+u (entireresult) = inf;
+
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

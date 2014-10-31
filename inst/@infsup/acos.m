@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} acos (@var{X})
+## @deftypefn {Interval Function} {} acos (@var{X})
 ## @cindex IEEE1788 acos
 ## 
 ## Compute the inverse cosine in radians (arccosine) for each number in
@@ -37,39 +37,24 @@
 
 function result = acos (x)
 
-if (isempty (x) || x.inf > 1 || x.sup < -1)
-    result = infsup ();
-    return
-endif
+l = ulpadd (real (acos (x.sup)), -1);
+u = ulpadd (real (acos (x.inf)), 1);
 
-if (x.inf <= -1)
-    ## pi
-    ac.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
-elseif (x.inf == 1)
-    ac.sup = 0;
-else
-    ac.sup = ulpadd (acos (x.inf), 1);
-    if (x.inf >= 0)
-        ac.sup = min (ac.sup, ...
-                 ## pi / 2
-                 ac.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56)); 
-    endif
-endif
+## Make the function tightest for special parameters
+pi = infsup ("pi");
+nonpositive = x.sup <= 0;
+nonnegative = x.inf >= 0;
+l (x.sup >= 1) = 0;
+l (nonpositive) = max (l (nonpositive), inf (pi) / 2);
+l (x.sup == -1) = inf (pi);
+u (x.inf <= -1) = sup (pi);
+u (nonnegative) = min (u (nonnegative), sup (pi) / 2);
+u (x.inf == 1) = 0;
 
-if (x.sup >= 1)
-    ac.inf = 0;
-elseif (x.sup == -1)
-    ## pi
-    ac.inf = 0x6487ED5 * pow2 (-25) + 0x442D180 * pow2 (-55);
-else
-    ac.inf = ulpadd (acos (x.sup), -1);
-    if (x.sup <= 0)
-        ac.inf = max (ac.inf, ...
-                 ## pi / 2
-                 ac.inf = 0x6487ED5 * pow2 (-26) + 0x442D180 * pow2 (-56));
-    endif
-endif
+emptyresult = isempty (x) | x.inf > 1 | x.sup < -1;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsup (ac.inf, ac.sup);
+result = infsup (l, u);
 
 endfunction

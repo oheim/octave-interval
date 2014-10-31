@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} <= @var{B}
+## @deftypefn {Interval Comparison} {} @var{A} <= @var{B}
 ## @cindex IEEE1788 less
 ## 
 ## Compare intervals @var{A} and @var{B} for weakly less.
@@ -22,6 +22,8 @@
 ## True, if all numbers from @var{A} are weakly less than any number in
 ## @var{B}.  False, if @var{A} contains a number which is strictly greater than
 ## all numbers in @var{B}.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, lt, ge, subset, interior, disjoint}
 ## @end deftypefn
@@ -32,28 +34,17 @@
 
 function result = le (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-if (isempty (a) && isempty (b))
-    result = true ();
-    return
-endif
-
-if (isempty (a) || isempty (b))
-    result = false ();
-    return
-endif
-
-result = (a.inf <= b.inf && a.sup <= b.sup);
+result = (a.inf <= b.inf & a.sup <= b.sup);
 
 endfunction

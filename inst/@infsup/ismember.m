@@ -14,13 +14,15 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Y} =} ismember (@var{M}, @var{X})
+## @deftypefn {Interval Comparison} {} ismember (@var{M}, @var{X})
 ## @cindex IEEE1788 isMember
 ## 
 ## Check if the interval @var{X} contains the number @var{M}.
 ##
 ## The number can be a numerical data type or a string representation of a 
 ## decimal number.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, isentire, issingleton, isempty}
 ## @end deftypefn
@@ -31,17 +33,17 @@
 
 function result = ismember (real, interval)
 
-assert (nargin == 2);
-
-## Convert second parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (interval, "infsup")))
     interval = infsup (interval);
 endif
 
-
 if (isreal (real) && isfloat (real))
     ## Simple checking is only possible with floating point numbers
-    result = interval.inf <= real && real <= interval.sup;
+    result = interval.inf <= real & real <= interval.sup;
 else
     ## Mixed mode comparison between integers and floats can be problematic
     ## as well as comparison with decimal numbers

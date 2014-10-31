@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{XD} =} newdec (@var{X})
+## @deftypefn {Interval Constructor} {} newdec (@var{X})
 ## @cindex IEEE1788 newDec
 ## 
 ## Create a decorated interval from a bare interval.

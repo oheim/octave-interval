@@ -13,12 +13,22 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Function} {} ctranspose (@var{X})
+##
+## Return the complex conjugate transpose of @var{X}.
+##
+## Since intervals are only defined for real numbers, this function and
+## @code{transpose} are equivalent.
+##
+## @seealso{transpose}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function A = ctranspose (A)
+function result = ctranspose (x)
 
-A = transpose (A);
+result = transpose (x);
 
 endfunction

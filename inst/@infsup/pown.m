@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} pown (@var{X}, @var{P})
+## @deftypefn {Interval Function} {} pown (@var{X}, @var{P})
 ## @cindex IEEE1788 pown
 ## 
 ## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.
@@ -42,55 +42,49 @@
 
 function result = pown (x, p)
 
-assert (nargin == 2);
-
-if (fix (p) ~= p)
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
+if (not (isnumeric (p)) || fix (p) ~= p)
     error ("InvalidOperand: exponent is not an integer");
 endif
 
 if (p == 1) # x^1
-    result = x;
-    return
-endif
-
-if (isempty (x))
-    result = infsup ();
+    result = infsup (x.inf, x.sup);
     return
 endif
 
 if (p == 0) # x^0
-    result = infsup (1);
+    result = infsup (ones (size (x)));
+    result.inf (isempty (x)) = inf;
+    result.sup (isempty (x)) = -inf;
     return
 endif
 
-## Special case: x = [0]. The pow function used below would be undefined.
-if (x.inf == 0 && x.sup == 0)
-    if (p >= 0)
-        result = infsup (0);
-        return
-    else
-        ## not in domain
-        result = infsup ();
-    endif
+if (p == 2) # x^2
+    result = sqr (x);
+    return
 endif
 
-if (x.inf >= 0)
-    result = pow (x, infsup (p));
-else
-    if (rem (p, 2) == 0) # p even
-        if (x.sup <= 0)
-            result = pow (-x, infsup (p));
-        else
-            result = pow (infsup (0, max (-x.inf, x.sup)), infsup (p));
-        endif
-    else # p odd
-        if (x.sup <= 0)
-            result = -pow (-x, infsup (p));
-        else
-            result = pow (x, infsup (p)) | ...
-                     -pow (-x, infsup (p));
-        endif
-    endif
+if (rem (p, 2) == 0) # p even
+    x.mig = mig (x);
+    x.mag = mag (x);
+    x.inf = x.mig;
+    x.inf (isnan (x.inf)) = inf;
+    x.sup = x.mag;
+    x.sup (isnan (x.sup)) = -inf;
+    result = pow (x, p);
+else # p odd
+    result = pow (x, infsup (p)) | ...
+             -pow (-x, infsup (p));
+endif
+
+## Special case: x = [0]. The pow function used above would be undefined.
+if (p >= 0)
+    zero = x.inf == 0 & x.sup == 0;
+    result.inf (zero) = -0;
+    result.sup (zero) = +0;
 endif
 
 endfunction

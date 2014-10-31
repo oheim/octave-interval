@@ -37,27 +37,25 @@
 
 function result = tanh (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
-
 ## Using directed rounding, we can decrease the worst case error by 0.5 ULP
 fesetround (-inf);
-th.inf = tanh (x.inf);
+l = tanh (x.inf);
 fesetround (inf);
-th.sup = tanh (x.sup);
+u = tanh (x.sup);
 fesetround (0.5);
-th.inf = ulpadd (th.inf, -3);
-th.sup = ulpadd (th.sup, 3);
 
-if (x.inf >= 0)
-    th.inf = max (0, th.inf);
-endif
-if (x.sup <= 0)
-    th.sup = min (0, th.sup);
-endif
+l = max (-1, ulpadd (l, -3));
+u = min (1, ulpadd (u, 3));
 
-result = infsup (th.inf, th.sup);
+nonnegative = x.inf >= 0;
+l (nonnegative) = max (0, l (nonnegative));
+nonpositive = x.sup <= 0;
+u (nonpositive) = min (0, u (nonpositive));
+
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

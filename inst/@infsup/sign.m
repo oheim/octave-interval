@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sign (@var{X})
+## @deftypefn {Interval Function} {} sign (@var{X})
 ## @cindex IEEE1788 sign
 ## 
 ## Compute the signum function for each number in interval @var{X}.
@@ -39,27 +39,13 @@
 
 function result = sign (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = sign (x.inf);
+u = sign (x.sup);
 
-if (x.inf < 0)
-    if (x.sup > 0)
-        result = infsup (-1, 1);
-    elseif (x.sup == 0)
-        result = infsup (-1, 0);
-    else
-        result = infsup (-1);
-    endif
-elseif (x.inf == 0)
-    if (x.sup == 0)
-        result = infsup (0, 0);
-    else
-        result = infsup (0, 1);
-    endif
-else
-    result = infsup (1);
-endif
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

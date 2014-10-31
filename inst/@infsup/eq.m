@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} == @var{B}
+## @deftypefn {Interval Comparison} {} @var{A} == @var{B}
 ## @cindex IEEE1788 equal
 ## 
 ## Compare intervals @var{A} and @var{B} for equality.
@@ -38,21 +38,20 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = eq(a, b)
+function result = eq (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-result = (a.inf == b.inf && a.sup == b.sup);
+result = (a.inf == b.inf & a.sup == b.sup);
 
 endfunction
 %!test "Empty interval";

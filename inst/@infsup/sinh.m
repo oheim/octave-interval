@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sinh (@var{X})
+## @deftypefn {Interval Function} {} sinh (@var{X})
 ## @cindex IEEE1788 sinh
 ## 
 ## Compute the hyperbolic sine for each number in interval @var{X}.
@@ -37,21 +37,18 @@
 
 function result = sinh (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = ulpadd (sinh (x.inf), -4);
+u = ulpadd (sinh (x.sup), 4);
 
-sh.inf = ulpadd (sinh (x.inf), -4);
-sh.sup = ulpadd (sinh (x.sup), 4);
+nonnegative = x.inf >= 0;
+l (nonnegative) = max (l (nonnegative), 0);
+nonpositive = x.sup <= 0;
+u (nonpositive) = min (u (nonpositive), 0);
 
-if (x.inf >= 0)
-    sh.inf = max (sh.inf, 0);
-endif
-if (x.sup <= 0)
-    sh.sup = min (sh.sup, 0);
-endif
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsup (sh.inf, sh.sup);
+result = infsup (l, u);
 
 endfunction

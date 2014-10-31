@@ -38,90 +38,79 @@
 
 function result = mrdivide (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert divisor into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (isempty (x) || isempty (y) || (y.inf == 0 && y.sup == 0))
-    result = infsup ();
-    return
+## Resize, if scalar × matrix
+if (isscalar (x.inf) ~= isscalar (y.inf))
+    x.inf = ones (size (y.inf)) .* x.inf;
+    x.sup = ones (size (y.inf)) .* x.sup;
+    y.inf = ones (size (x.inf)) .* y.inf;
+    y.sup = ones (size (x.inf)) .* y.sup;
 endif
 
-if (x.inf == 0 && x.sup == 0)
-    result = infsup (0);
-    return
-endif
+## Partitionize the function's domain
+q1 = x.sup <= 0 & y.sup < 0;
+q2 = x.sup <= 0 & y.inf > 0;
+q3 = x.sup <= 0 & y.sup == 0;
+q4 = x.sup <= 0 & y.sup > 0 & y.inf == 0;
+q5 = x.inf >= 0 & x.sup > 0 & y.sup < 0;
+q6 = x.inf >= 0 & x.sup > 0 & y.inf > 0;
+q7 = x.inf >= 0 & x.sup > 0 & y.sup == 0;
+q8 = x.inf >= 0 & x.sup > 0 & y.sup > 0 & y.inf == 0;
+q9 = x.inf < 0 & 0 < x.sup & y.sup < 0;
+q10 = x.inf < 0 & 0 < x.sup & y.inf > 0;
 
-if ((y.inf < 0 && y.sup > 0) || (x.inf < 0 && x.sup > 0 && ...
-    (y.inf == 0 || y.sup == 0)))
-    result = infsup (-inf, inf);
-    return
-endif
+l = u = zeros (size (x.inf));
 
-if (x.sup <= 0)
-    if (y.sup < 0)
-        fesetround (-inf);
-        quot.inf = x.sup / y.inf;
-        fesetround (inf);
-        quot.sup = x.inf / y.sup;
-    elseif (y.inf > 0)
-        fesetround (-inf);
-        quot.inf = x.inf / y.inf;
-        fesetround (inf);
-        quot.sup = x.sup / y.sup;
-    elseif (y.sup == 0)
-        fesetround (-inf);
-        quot.inf = x.sup / y.inf;
-        quot.sup = inf;
-    else # y.inf == 0
-        quot.inf = -inf;
-        fesetround (inf);
-        quot.sup = x.sup / y.sup;
-    endif
-elseif (x.inf >= 0)
-    if (y.sup < 0)
-        fesetround (-inf);
-        quot.inf = x.sup / y.sup;
-        fesetround (inf);
-        quot.sup = x.inf / y.inf;
-    elseif (y.inf > 0)
-        fesetround (-inf);
-        quot.inf = x.inf / y.sup;
-        fesetround (inf);
-        quot.sup = x.sup / y.inf;
-    elseif (y.sup == 0)
-        quot.inf = -inf;
-        fesetround (inf);
-        quot.sup = x.inf / y.inf;
-    else # y.inf == 0
-        fesetround (-inf);
-        quot.inf = x.inf / y.sup;
-        quot.sup = inf;
-    endif
-else
-    if (y.sup < 0)
-        fesetround (-inf);
-        quot.inf = x.sup / y.sup;
-        fesetround (inf);
-        quot.sup = x.inf / y.sup;
-    else # y.inf > 0
-        fesetround (-inf);
-        quot.inf = x.inf / y.inf;
-        fesetround (inf);
-        quot.sup = x.sup / y.inf;
-    endif
-endif
+## We use division by zero below
+olddivbyzerowarningstate = warning ("query", "Octave:divide-by-zero").state;
+warning ("off", "Octave:divide-by-zero");
 
+fesetround (-inf);
+l (q1) = x.sup (q1) ./ y.inf (q1);
+l (q2) = x.inf (q2) ./ y.inf (q2);
+l (q3) = x.sup (q3) ./ y.inf (q3);
+l (q4) = -inf;
+l (q5) = x.sup (q5) ./ y.sup (q5);
+l (q6) = x.inf (q6) ./ y.sup (q6);
+l (q7) = -inf;
+l (q8) = x.inf (q8) ./ y.sup (q8);
+l (q9) = x.sup (q9) ./ y.sup (q9);
+l (q10) = x.inf (q10) ./ y.inf (q10);
+fesetround (inf);
+u (q1) = x.inf (q1) ./ y.sup (q1);
+u (q2) = x.sup (q2) ./ y.sup (q2);
+u (q3) = inf;
+u (q4) = x.sup (q4) ./ y.sup (q4);
+u (q5) = x.inf (q5) ./ y.inf (q5);
+u (q6) = x.sup (q6) ./ y.inf (q6);
+u (q7) = x.inf (q7) ./ y.inf (q7);
+u (q8) = inf;
+u (q9) = x.inf (q9) ./ y.sup (q9);
+u (q10) = x.sup (q10) ./ y.inf (q10);
 fesetround (0.5);
 
-result = infsup (quot.inf, quot.sup);
+## Restore old warning settings
+warning (olddivbyzerowarningstate, "Octave:divide-by-zero");
+
+entireresult = (y.inf < 0 & y.sup > 0) | (x.inf < 0 & x.sup > 0 & ...
+                                          (y.inf == 0 | y.sup == 0));
+l (entireresult) = -inf;
+u (entireresult) = inf;
+
+emptyresult = isempty (x) | isempty (y) | (y.inf == 0 & y.sup == 0);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

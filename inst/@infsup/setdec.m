@@ -35,7 +35,10 @@
 
 function xd = setdec (x, d)
 
-assert (nargin == 2);
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 
 if (isempty (x))
     if (max (strcmpi (d, {"def", "dac", "com"})))

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} fix (@var{X})
+## @deftypefn {Interval Function} {} fix (@var{X})
 ## @cindex IEEE1788 truc
 ## 
 ## Truncate fractional portion of each number in interval @var{X}.  This is
@@ -38,11 +38,6 @@
 ## Created: 2014-10-04
 
 function result = fix (x)
-
-if (isempty (x))
-    result = infsup ();
-    return
-endif
 
 result = infsup (fix (x.inf), fix (x.sup));
 

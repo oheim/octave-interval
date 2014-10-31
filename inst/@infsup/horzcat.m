@@ -13,22 +13,32 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Constructor} {} horzcat (@var{ARRAY}…)
+##
+## Return the horizontal concatenation of interval array objects along
+## dimension 2.
+## @seealso{vertcat}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function A = horzcat (A, B)
+function result = horzcat (varargin)
 
-assert (nargin == 2);
+l = u = cell (1, nargin);
 
-if (not (isa (A, "infsup")))
-    A = infsup (A);
-endif
-if (not (isa (B, "infsup")))
-    B = infsup (B);
-endif
+for i = 1 : nargin
+    if (not (isa (varargin {i}, "infsup")))
+        varargin {i} = infsup (varargin {i});
+    endif
+    l {i} = inf (varargin {i});
+    u {i} = sup (varargin {i});
+endfor
 
-A.inf = horzcat (A.inf, B.inf);
-A.sup = horzcat (A.sup, B.sup);
+l = cell2mat (l);
+u = cell2mat (u);
+
+result = infsup (l, u);
 
 endfunction

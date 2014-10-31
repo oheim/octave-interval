@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {@var{Y} =} sup (@var{X})
+## @deftypefn {Interval Numeric} {} sup (@var{X})
 ## @cindex IEEE1788 sup
 ## 
 ## Get the (least) upper boundary for all numbers of interval @var{X}.
@@ -36,15 +36,15 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function supremum = sup (interval)
+function result = sup (x)
 
-if (isa (interval, "infsupdec"))
+if (isa (x, "infsupdec"))
     ## We cannot override this function in infsupdec, because that would create
     ## an infinite loop.
-    if (isnai (interval))
+    if (isnai (x))
         error ("NaI has no supremum")
     endif
 endif
 
-supremum = interval.sup;
+result = x.sup;
 return

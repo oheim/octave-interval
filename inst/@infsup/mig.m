@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {@var{Y} =} mig (@var{X})
+## @deftypefn {Interval Numeric} {} mig (@var{X})
 ## @cindex IEEE1788 mig
 ## 
 ## Get the mignitude of numbers in interval @var{X}, that is the minimum of
@@ -39,15 +39,8 @@
 
 function result = mig (x)
 
-if (isempty (x))
-    result = nan ();
-    return
-endif
-
-if (sign (x.inf) == sign (x.sup))
-    result = min (abs (x.inf), abs (x.sup));
-else
-    result = 0;
-endif
+result = min (abs (x.inf), abs (x.sup));
+result (sign (x.inf) ~= sign (x.sup)) = 0;
+result (isempty (x)) = nan ();
 
 endfunction

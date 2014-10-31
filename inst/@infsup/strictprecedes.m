@@ -14,12 +14,14 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} strictprecedes (@var{A}, @var{B})
+## @deftypefn {Interval Comparison} {} strictprecedes (@var{A}, @var{B})
 ## @cindex IEEE1788 strictPrecedes
 ## 
 ## Evaluate strict precedes comparison on intervals.
 ##
 ## True, if @var{A} is strictly left of @var{B}. The intervals may not touch.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, le, lt, gt, precedes, subset, interior, disjoint}
 ## @end deftypefn
@@ -30,23 +32,19 @@
 
 function result = strictprecedes (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-if (isempty (a) || isempty (b))
-    result = true ();
-    return
-endif
-
 result = (a.sup < b.inf);
+
+result (isempty (a) | isempty (b)) = true ();
 
 endfunction

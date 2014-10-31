@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} floor (@var{X})
+## @deftypefn {Interval Function} {} floor (@var{X})
 ## @cindex IEEE1788 floor
 ## 
 ## Round each number in interval @var{X} towards -Inf.
@@ -37,11 +37,6 @@
 ## Created: 2014-10-04
 
 function result = floor (x)
-
-if (isempty (x))
-    result = infsup ();
-    return
-endif
 
 result = infsup (floor (x.inf), floor (x.sup));
 

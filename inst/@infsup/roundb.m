@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} roundb (@var{X})
+## @deftypefn {Interval Function} {} roundb (@var{X})
 ## @cindex IEEE1788 roundTiesToEven
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
@@ -38,11 +38,6 @@
 ## Created: 2014-10-04
 
 function result = roundb (x)
-
-if (isempty (x))
-    result = infsup ();
-    return
-endif
 
 result = infsup (roundb (x.inf), roundb (x.sup));
 

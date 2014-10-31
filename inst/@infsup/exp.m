@@ -37,33 +37,20 @@
 
 function result = exp (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = max (0, ulpadd (exp (x.inf), -1));
+u = ulpadd (exp (x.sup), 1);
 
-if (x.inf == 1)
-    ## 2.7...
-    p.inf = 0x56FC2A2 * pow2 (-25) ...
-          + 0x628AED2 * pow2 (-52);
-elseif (x.inf == 0)
-    p.inf = 1;
-else
-    ## No directed rounding available
-    p.inf = max (0, nextdown (exp (x.inf)));
-endif
+## Make function tightest for some parameters
+e = infsup ("e");
+l (x.inf == 1) = inf (e);
+l (x.inf == 0) = 1;
+u (x.sup == 1) = sup (e);
+u (x.sup == 0) = 1;
 
-if (x.sup == 1)
-    ## 2.7...
-    p.sup = 0x56FC2A2 * pow2 (-25) ...
-          + 0x628AED4 * pow2 (-52);
-elseif (x.sup == 0)
-    p.sup = 1;
-else
-    ## No directed rounding available
-    p.sup = nextup (exp (x.sup));
-endif
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsup (p.inf, p.sup);
+result = infsup (l, u);
 
 endfunction

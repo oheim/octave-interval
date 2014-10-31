@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {@var{Y} =} mid (@var{X})
+## @deftypefn {Interval Numeric} {} mid (@var{X})
 ## @cindex IEEE1788 mid
 ## 
 ## Get the midpoint of interval @var{X}.
@@ -42,27 +42,22 @@
 ## Keywords: interval
 ## Created: 2014-10-05
 
-function midpoint = mid (x)
+function result = mid (x)
 
-if (isempty (x))
-    midpoint = nan ();
-elseif (isentire (x))
-    midpoint = 0;
-elseif (x.sup == inf)
-    midpoint = realmax ();
-elseif (x.inf == -inf)
-    midpoint = -realmax ();
-else
-    ## First divide by 2 and then add, because this will prevent overflow.
-    ## The different rounding modes for division will make errors of 2^-1075
-    ## with subnormal numbers cancel each other out, or will make the round
-    ## to nearest prefer the side that had an underflow error.
-    fesetround (-inf);
-    l = x.inf / 2;
-    fesetround (inf);
-    u = x.sup / 2;
-    fesetround (0.5);
-    midpoint = l + u;
-endif
+## First divide by 2 and then add, because this will prevent overflow.
+## The different rounding modes for division will make errors of 2^-1075
+## with subnormal numbers cancel each other out, or will make the round
+## to nearest prefer the side that had an underflow error.
+fesetround (-inf);
+l = x.inf / 2;
+fesetround (inf);
+u = x.sup / 2;
+fesetround (0.5);
+result = l + u;
+
+result (x.inf == -inf) = -realmax ();
+result (x.sup == inf) = realmax ();
+result (isentire (x)) = 0;
+result (isempty (x)) = nan ();
 
 return

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {@var{Y} =} mag (@var{X})
+## @deftypefn {Interval Numeric} {} mag (@var{X})
 ## @cindex IEEE1788 mag
 ## 
 ## Get the magnitude of numbers in interval @var{X}, that is the maximum of
@@ -39,11 +39,7 @@
 
 function result = mag (x)
 
-if (isempty (x))
-    result = nan ();
-    return
-endif
-
 result = max (abs (x.inf), abs (x.sup));
+result (isempty (x)) = nan ();
 
 endfunction

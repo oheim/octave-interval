@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} log2 (@var{X})
+## @deftypefn {Interval Function} {} log2 (@var{X})
 ## @cindex IEEE1788 log2
 ## 
 ## Compute the binary (base-2) logarithm for all numbers in interval @var{X}.
@@ -39,27 +39,20 @@
 
 function result = log2 (x)
 
-if (isempty (x) || x.sup <= 0)
-    result = infsup ();
-    return
-endif
+l = real (log2 (x.inf));
+notexact = fix (l) ~= l | l < -1074 | l > 1023 | pow2 (l) ~= x.inf;
+l (notexact) = ulpadd (l (notexact), -1);
 
-if (x.inf <= 0)
-    l.inf = -inf;
-else
-    l.inf = log2 (x.inf);
-    if (fix (l.inf) ~= l.inf || l.inf < -1074 || l.inf > 1023 || ...
-        pow2 (l.inf) ~= x.inf)
-        l.inf = nextdown (l.inf);
-    endif
-endif
+u = real (log2 (x.sup));
+notexact = fix (u) ~= u | u < -1074 | u > 1023 | pow2 (u) ~= x.sup;
+u (notexact) = ulpadd (u (notexact), 1);
 
-l.sup = log2 (x.sup);
-if (fix (l.sup) ~= l.sup || l.sup < -1074 || l.sup > 1023 || ...
-    pow2 (l.sup) ~= x.sup)
-    l.sup = nextup (l.sup);
-endif
+l (x.inf <= 0) = -inf;
 
-result = infsup (l.inf, l.sup);
+emptyresult = isempty (x) | x.sup <= 0;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Y} =} iscommoninterval (@var{X})
+## @deftypefn {Interval Comparison} {} iscommoninterval (@var{X})
 ## @cindex IEEE1788 isCommonInterval
 ## 
 ## Check if the interval is a common interval, that is a nonemty, closed
@@ -22,6 +22,8 @@
 ##
 ## Common intervals are used in class Moore interval arithmetic and are
 ## flavor-independent in IEEE1788 interval arithmetic.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, isentire, isempty, issingleton}
 ## @end deftypefn
@@ -32,5 +34,5 @@
 
 function result = iscommoninterval (x)
 
-result = isfinite (x.inf) && isfinite (x.sup);
+result = isfinite (x.inf) & isfinite (x.sup);
 return

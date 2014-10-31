@@ -29,7 +29,10 @@
 
 function result = cancelplus (x, y)
 
-assert (nargin == 2);
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 
 result = cancelminus (x, -y);
 

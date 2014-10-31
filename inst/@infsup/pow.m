@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} pow (@var{X}, @var{Y})
+## @deftypefn {Interval Function} {} pow (@var{X}, @var{Y})
 ## @cindex IEEE1788 pow
 ## 
 ## Compute the simple power function on intervals defined by 
@@ -43,92 +43,104 @@
 
 function result = pow (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (isempty (x) || isempty (y) || x.sup <= 0)
-    result = infsup ();
-    return
+## Resize, if scalar × matrix
+if (isscalar (x.inf) ~= isscalar (y.inf))
+    x.inf = ones (size (y.inf)) .* x.inf;
+    x.sup = ones (size (y.inf)) .* x.sup;
+    y.inf = ones (size (x.inf)) .* y.inf;
+    y.sup = ones (size (x.inf)) .* y.sup;
 endif
 
-## Simple case with no limit values, see Table 3.3 in
-## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-## Diplomarbeit, Institute for Computer Science, University of Würzburg.
-## http://exp.ln0.de/heimlich-power-2011.htm.
-if (0 <= y.inf)
-    if (x.sup <= 1)
-        if (x.inf > 0)
-            p.inf = powrounded (x.inf, y.sup, -inf);
-        endif
-        p.sup = powrounded (x.sup, y.inf, inf);
-    elseif (x.inf < 1 && 1 < x.sup)
-        if (x.inf > 0)
-            p.inf = powrounded (x.inf, y.sup, -inf);
-        endif
-        p.sup = powrounded (x.sup, y.sup, inf);
-    else # 1 <= x.inf
-        p.inf = powrounded (x.inf, y.inf, -inf);
-        p.sup = powrounded (x.sup, y.sup, inf);
-    endif
-elseif (y.inf < 0 && 0 < y.sup)
-    if (x.sup <= 1)
-        if (x.inf > 0)
-            p.inf = powrounded (x.inf, y.sup, -inf);
-            p.sup = powrounded (x.inf, y.inf, inf);
-        endif
-    elseif (x.inf < 1 && 1 < x.sup)
-        if (x.inf > 0)
-            p.inf = min (powrounded (x.inf, y.sup, -inf), ...
-                         powrounded (x.sup, y.inf, -inf));
-            p.sup = max (powrounded (x.inf, y.inf, inf), ...
-                         powrounded (x.sup, y.sup, inf));
-        endif
-    else # 1 <= x.inf
-        p.inf = powrounded (x.sup, y.inf, -inf);
-        p.sup = powrounded (x.sup, y.sup, inf);
-    endif
-else # y.sup <= 0
-    if (x.sup <= 1)
-        p.inf = powrounded (x.sup, y.sup, -inf);
-        if (x.inf > 0)
-            p.sup = powrounded (x.inf, y.inf, inf);
-        endif
-    elseif (x.inf < 1 && 1 < x.sup)
-        p.inf = powrounded (x.sup, y.inf, -inf);
-        if (x.inf > 0)
-            p.sup = powrounded (x.inf, y.inf, inf);
-        endif
-    else # 1 <= x.inf
-        p.inf = powrounded (x.sup, y.inf, -inf);
-        p.sup = powrounded (x.inf, y.sup, inf);
-    endif
-endif
+l = u = nan (size (x.inf));
 
-## Limit values for base zero
-if (x.inf <= 0)
-    if (y.inf == 0 && 0 == y.sup)
-        p.inf = 1;
-        p.sup = 1;
-    else
-        if (0 <= y.inf || (y.inf < 0 && 0 < y.sup))
-            p.inf = 0;
+for i = 1 : numel (x.inf)
+    if (x.inf (i) == inf || y.inf (i) == inf || x.sup (i) <= 0)
+        l (i) = inf;
+        u (i) = -inf;
+        continue
+    endif
+    
+    ## Simple case with no limit values, see Table 3.3 in
+    ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
+    ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
+    ## http://exp.ln0.de/heimlich-power-2011.htm.
+    if (0 <= y.inf (i))
+        if (x.sup (i) <= 1)
+            if (x.inf (i) > 0)
+                l (i) = powrounded (x.inf (i), y.sup (i), -inf);
+            endif
+            u (i) = powrounded (x.sup (i), y.inf (i), inf);
+        elseif (x.inf (i) < 1 && 1 < x.sup (i))
+            if (x.inf > 0)
+                l (i) = powrounded (x.inf (i), y.sup (i), -inf);
+            endif
+            u (i) = powrounded (x.sup (i), y.sup (i), inf);
+        else # 1 <= x.inf (i)
+            l (i) = powrounded (x.inf (i), y.inf (i), -inf);
+            u (i) = powrounded (x.sup (i), y.sup (i), inf);
         endif
-        if (y.sup <= 0 || (y.inf < 0 && 0 < y.sup))
-            p.sup = inf;
+    elseif (y.inf (i) < 0 && 0 < y.sup (i))
+        if (x.sup (i) <= 1)
+            if (x.inf (i) > 0)
+                l (i) = powrounded (x.inf (i), y.sup (i), -inf);
+                u (i) = powrounded (x.inf (i), y.inf (i), inf);
+            endif
+        elseif (x.inf (i) < 1 && 1 < x.sup (i))
+            if (x.inf (i) > 0)
+                l (i) = min (powrounded (x.inf (i), y.sup (i), -inf), ...
+                             powrounded (x.sup (i), y.inf (i), -inf));
+                u (i) = max (powrounded (x.inf (i), y.inf (i), inf), ...
+                             powrounded (x.sup (i), y.sup (i), inf));
+            endif
+        else # 1 <= x.inf (i)
+            l (i) = powrounded (x.sup (i), y.inf (i), -inf);
+            u (i) = powrounded (x.sup (i), y.sup (i), inf);
+        endif
+    else # y.sup (i) <= 0
+        if (x.sup (i) <= 1)
+            l (i) = powrounded (x.sup (i), y.sup (i), -inf);
+            if (x.inf > 0)
+                u (i) = powrounded (x.inf (i), y.inf (i), inf);
+            endif
+        elseif (x.inf (i) < 1 && 1 < x.sup (i))
+            l (i) = powrounded (x.sup (i), y.inf (i), -inf);
+            if (x.inf (i) > 0)
+                u (i) = powrounded (x.inf (i), y.inf (i), inf);
+            endif
+        else # 1 <= x.inf (i)
+            l (i) = powrounded (x.sup (i), y.inf (i), -inf);
+            u (i) = powrounded (x.inf (i), y.sup (i), inf);
         endif
     endif
-endif
+    
+    ## Limit values for base zero
+    if (x.inf (i) <= 0)
+        if (y.inf (i) == 0 && 0 == y.sup (i))
+            l (i) = 1;
+            u (i) = 1;
+        else
+            if (0 <= y.inf (i) || (y.inf (i) < 0 && 0 < y.sup (i)))
+                l (i) = 0;
+            endif
+            if (y.sup (i) <= 0 || (y.inf (i) < 0 && 0 < y.sup (i)))
+                u (i) = inf;
+            endif
+        endif
+    endif
+endfor
 
-result = infsup (p.inf, p.sup);
+result = infsup (l, u);
 
 endfunction
 

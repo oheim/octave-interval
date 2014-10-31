@@ -13,12 +13,18 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Numeric} {} numel (@var{A})
+##
+## Return the number of elements in the interval object @var{A}.
+## @seealso{length, size, rows, columns}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function n = numel (A)
+function result = numel (a)
 
-n = numel (A.inf);
+result = numel (a.inf);
 
 endfunction

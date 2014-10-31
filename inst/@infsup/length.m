@@ -13,12 +13,22 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Numeric} {} length (@var{A})
+##
+## Return the length of interval object @var{A}.
+##
+## The length is 0 for empty objects, 1 for scalars, and the number of elements
+## for vectors.  For matrix objects, the length is the number of rows or
+## columns, whichever is greater.
+## @seealso{numel, size, rows, columns}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function l = length (A)
+function result = length (a)
 
-l = length (A.inf);
+result = length (a.inf);
 
 endfunction

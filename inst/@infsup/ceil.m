@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} ceil (@var{X})
+## @deftypefn {Interval Function} {} ceil (@var{X})
 ## @cindex IEEE1788 ceil
 ## 
 ## Round each number in interval @var{X} towards +Inf.
@@ -37,11 +37,6 @@
 ## Created: 2014-10-04
 
 function result = ceil (x)
-
-if (isempty (x))
-    result = infsup ();
-    return
-endif
 
 result = infsup (ceil (x.inf), ceil (x.sup));
 

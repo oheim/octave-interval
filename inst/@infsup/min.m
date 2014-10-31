@@ -14,11 +14,13 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} min (@var{X}, @var{Y})
+## @deftypefn {Interval Function} {} min (@var{X}, @var{Y})
 ## @cindex IEEE1788 min
 ## 
 ## Compute the minimum value for each pair of numbers chosen from intervals
 ## @var{X} and @var{Y}.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -39,23 +41,22 @@
 
 function result = min (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (isempty (x) || isempty (y))
-    result = infsup ();
-    return
-endif
+l = min (x.inf, y.inf);
+u = min (x.sup, y.sup);
 
-result = infsup (min (x.inf, y.inf), min (x.sup, y.sup));
+l (isempty (x) | isempty (y)) = inf;
+
+result = infsup (l, u);
 
 endfunction

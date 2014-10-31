@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} @var{X} + @var{Y}
+## @deftypefn {Interval Function} {} @var{X} + @var{Y}
 ## @cindex IEEE1788 add
 ## 
 ## Add all numbers of interval @var{X} to all numbers of @var{Y}.
@@ -38,29 +38,28 @@
 
 function result = plus (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert addend into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (isempty (x) || isempty (y))
-    result = infsup ();
-    return
-endif
-
 fesetround (-inf);
-sum.inf = x.inf + y.inf;
+l = x.inf + y.inf;
 fesetround (inf);
-sum.sup = x.sup + y.sup;
+u = x.sup + y.sup;
 fesetround (0.5);
 
-result = infsup (sum.inf, sum.sup);
+## Sum of empty intervals must be empty
+emptyresult = isempty (x) | isempty (y);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

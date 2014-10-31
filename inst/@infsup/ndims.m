@@ -13,12 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Numeric} {} ndims (@var{A})
+##
+##  Return the number of dimensions of @var{A}.
+##
+## For any array, the result will always be larger than or equal to 2.
+## Trailing singleton dimensions are not counted.
+## @seealso{length, numel, size, rows, columns}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function n = ndims (A)
+function result = ndims (a)
 
-n = ndims (A.inf);
+result = ndims (a.inf);
 
 endfunction

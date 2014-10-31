@@ -44,23 +44,22 @@
 
 function result = fma (x, y, z)
 
-assert (nargin == 3);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 3)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
-
-## Convert third parameter into interval, if necessary
 if (not (isa (z, "infsup")))
     z = infsup (z);
 endif
 
+assert (isscalar (x) && isscalar (y) && isscalar (z), ...
+        "only implemented for interval scalars");
 
 if (isempty (x) || isempty (y) || isempty (z))
     result = infsup ();
@@ -142,7 +141,6 @@ if (x == 0 || y == 0)
 endif
 
 if (not (isfinite (x) && isfinite (y) && isfinite (z)))
-    fesetround (0.5); # otherwise an overflow of x * y could break the result
     result = x * y + z; # == inf, -inf or NaN
     assert (not (isfinite (result)));
     return

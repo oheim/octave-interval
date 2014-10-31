@@ -13,13 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Function} {} transpose (@var{X})
+##
+## Return the transpose of @var{X}.
+## @seealso{ctranspose}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function A = transpose (A)
+function result = transpose (x)
 
-A.inf = transpose (A.inf);
-A.sup = transpose (A.sup);
+l = transpose (x.inf);
+u = transpose (x.sup);
+
+result = infsup (l, u);
 
 endfunction

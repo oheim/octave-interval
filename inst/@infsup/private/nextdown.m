@@ -29,11 +29,6 @@ function result = nextdown (x)
 
 assert (isa (x, "double"));
 
-if (x == inf)
-    result = realmax ();
-    return
-endif
-
 ## smallest denormalized number, i. e., smallest delta between two numbers
 delta = pow2 (-1074);
 
@@ -42,5 +37,7 @@ result = x - delta;
 
 ## reset standard rounding mode
 fesetround(0.5);
+
+result (result == inf) = realmax ();
 
 endfunction

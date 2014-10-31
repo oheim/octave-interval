@@ -14,16 +14,18 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} sumabs (@var{X}…)
+## @deftypefn {Interval Function} {} sumabs (@var{X})
+## @deftypefnx {Interval Function} {} sumabs (@var{X}, @var{DIM})
 ## @cindex IEEE1788 sumAbs
 ## 
-## Compute the sum of absolute values of a list of intervals.
+## Sum of absolute values along dimension @var{DIM}.  If @var{DIM} is omitted,
+## it defaults to the first non-singleton dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## sumabs (infsup (1), pow2 (-1074), -1)
+## sumabs ([infsup(1), pow2(-1074), -1])
 ##   @result{} [2, 2.0000000000000005]
 ## @end group
 ## @end example
@@ -34,52 +36,12 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = sumabs (varargin)
+function [result, isexact] = sumabs (x, dim)
 
-if (nargin == 0)
-    result = infsup ();
-    isexact = true ();
-    return
-endif
-
-## Initialize accumulators
-l.e = int64 (0);
-l.m = zeros (1, 0, "int8");
-u.e = int64 (0);
-u.m = zeros (1, 0, "int8");
-u.unbound = false ();
-
-for i = 1 : nargin
-    ## Convert to interval, if necessary
-    if (not (isa (varargin {i}, "infsup")))
-        varargin {i} = infsup (varargin {i});
-    endif
-    
-    if (isempty (varargin {i}))
-        result = infsup ();
-        isexact = true ();
-        return
-    endif
-    varargin {i} = abs (varargin {i});
-    l = accuadd (l, inf (varargin {i}));
-    if (isfinite (sup (varargin {i})))
-        if (not (u.unbound))
-            u = accuadd (u, sup (varargin {i}));
-        endif
-    else
-        u.unbound = true ();
-    endif
-endfor
-
-[l, isexact] = accu2double (l, -inf);
-
-if (u.unbound)
-    u = inf;
+if (nargin < 2)
+    [result, isexact] = sum (abs (x));
 else
-    [u, upperisexact] = accu2double (u, inf);
-    isexact = or (isexact, upperisexact);
+    [result, isexact] = sum (abs (x), dim);
 endif
-
-result = infsup (l, u);
 
 endfunction

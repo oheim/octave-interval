@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} log10 (@var{X})
+## @deftypefn {Interval Function} {} log10 (@var{X})
 ## @cindex IEEE1788 log10
 ## 
 ## Compute the decimal (base-10) logarithm for all numbers in interval @var{X}.
@@ -40,46 +40,31 @@
 
 function result = log10 (x)
 
-if (isempty (x) || x.sup <= 0)
-    result = infsup ();
-    return
-endif
+l = u = -ones (size (x));
+## Try to compute the exact value for powers 10^n with n in [0, 22].
+## If we set the rounding mode, log10 will not compute the exact value.
+possiblyexact = x.inf >= 1 & fix (x.inf) == x.inf;
+l (possiblyexact) = real (log10 (x.inf (possiblyexact)));
+notexact = fix (l) ~= l | l < 0 | l > 22 | realpow (10, l) ~= x.inf;
+fesetround (-inf);
+l (notexact) = real (log10 (x.inf (notexact)));
+fesetround (0.5);
+l (notexact) = ulpadd (l (notexact), -3);
 
-if (x.inf <= 0)
-    l.inf = -inf;
-else
-    if (x.inf >= 1 && fix (x.inf) == x.inf)
-        ## Try to compute the exact value
-        ## If we set the rounding mode, log10 will not compute the exact value
-        l.inf = log10 (x.inf);
-    else
-        l.inf = -1;
-    endif
-    if (fix (l.inf) ~= l.inf || l.inf < 0 || l.inf > 22 || ...
-        realpow (10, l.inf) ~= x.inf)
-        ## Only exact for 10^n with n in [0, 22]
-        ## Otherwise within 1.5 ULP (3 ULP guaranteed)
-        fesetround (-inf);
-        l.inf = log10 (x.inf);
-        fesetround (0.5);
-        l.inf = ulpadd (l.inf, -3);
-    endif
-endif
+possiblyexact = x.sup >= 1 & fix (x.sup) == x.sup;
+u (possiblyexact) = real (log10 (x.sup (possiblyexact)));
+notexact = fix (u) ~= u | u < 0 | u > 22 | realpow (10, u) ~= x.sup;
+fesetround (inf);
+u (notexact) = real (log10 (x.sup (notexact)));
+fesetround (0.5);
+u (notexact) = ulpadd (u (notexact), 3);
 
-if (x.sup >= 1 && fix (x.sup) == x.sup)
-    ## Try to compute the exact value
-    l.sup = log10 (x.sup);
-else
-    l.sup = -1;
-endif
-if (fix (l.sup) ~= l.sup || l.sup < 0 || l.sup > 22 || ...
-    realpow (10, l.sup) ~= x.sup)
-    fesetround (inf);
-    l.sup = log10 (x.sup);
-    fesetround (0.5);
-    l.sup = ulpadd (l.sup, 3);
-endif
+l (x.inf <= 0) = -inf;
 
-result = infsup (l.inf, l.sup);
+emptyresult = isempty (x) | x.sup <= 0;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} atan (@var{X})
+## @deftypefn {Interval Function} {} atan (@var{X})
 ## @cindex IEEE1788 atan
 ## 
 ## Compute the inverse tangent in radians for each number in interval @var{X}.
@@ -36,24 +36,20 @@
 
 function result = atan (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+pi = infsup ("pi");
+l = max (ulpadd (atan (x.inf), -1), inf (-pi) / 2);
+u = min (ulpadd (atan (x.sup), 1), sup (pi) / 2);
 
-at.sup = min (ulpadd (atan (x.sup), 1), ...
-              ## pi / 2
-              at.sup = 0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56));
-at.inf = max (ulpadd (atan (x.inf), -1), ...
-              ## - pi / 2
-              - (0x6487ED5 * pow2 (-26) + 0x442D190 * pow2 (-56)));
-if (x.inf >= 0)
-    at.inf = max (0, at.inf);
-endif
-if (x.sup <= 0)
-    at.sup = min (0, at.sup);
-endif
+## Make function tightest for x == 0
+nonnegative = x.inf >= 0;
+l (nonnegative) = max (0, l (nonnegative)); 
+nonpositive = x.sup <= 0;
+u (nonpositive) = min (0, u (nonpositive));
 
-result = infsup (at.inf, at.sup);
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

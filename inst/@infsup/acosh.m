@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} acosh (@var{X})
+## @deftypefn {Interval Function} {} acosh (@var{X})
 ## @cindex IEEE1788 acosh
 ## 
 ## Compute the inverse hyperbolic cosine for each number in interval @var{X}.
@@ -37,24 +37,17 @@
 
 function result = acosh (x)
 
-if (isempty (x) || x.sup < 1)
-    result = infsup ();
-    return
-endif
+## Most implementations should be within 2 ULP, but must guarantee 4 ULP.
+l = max (0, ulpadd (real (acosh (x.inf)), -4));
+u = ulpadd (real (acosh (x.sup)), 4);
 
-if (x.inf <= 1)
-    ach.inf = 0;
-else
-    ## Most implementations should be within 2 ULP, but must guarantee 4 ULP.
-    ach.inf = max (0, ulpadd (acosh (x.inf), -4));
-endif
+## Make the function tightest for some parameters
+u (x.sup == 1) = 0;
 
-if (x.sup == 1)
-    ach.sup = 0;
-else
-    ach.sup = ulpadd (acosh (x.sup), 4);
-endif
+emptyresult = isempty (x) | x.sup < 1;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsup (ach.inf, ach.sup);
+result = infsup (l, u);
 
 endfunction

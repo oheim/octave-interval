@@ -33,26 +33,26 @@
 
 function result = pownrev (c, x, p)
 
-assert (nargin >= 2)
-
+if (nargin < 2)
+    print_usage ();
+    return
+endif
 if (nargin < 3)
     p = x;
     x = infsup (-inf, inf);
 endif
-
-if (fix (p) ~= p)
-    error ("InvalidOperand: exponent is not an integer");
-endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (c, "infsup")))
     c = infsup (c);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
+
+if (not (isnumeric (p)) || fix (p) ~= p)
+    error ("InvalidOperand: exponent is not an integer");
+endif
+
+assert (isscalar (c) && isscalar (x), "only implemented for interval scalars");
 
 switch p
     case -1

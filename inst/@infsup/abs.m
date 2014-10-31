@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} abs (@var{X})
+## @deftypefn {Interval Function} {} abs (@var{X})
 ## @cindex IEEE1788 abs
 ## 
 ## Compute the absolute value of numbers in interval @var{X}.
@@ -38,18 +38,20 @@
 
 function result = abs (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+## This is already correct, if the interval(s) are non-negative.
+l = x.inf;
+u = x.sup;
 
-if (x.inf >= 0)
-    result = x;
-elseif (x.sup <= 0)
-    result = infsup (-x.sup, -x.inf);
-else
-    result = infsup (0, max (-x.inf, x.sup));
-endif
+## This is even correct, if the interval(s) are empty.
+notpositive = x.sup <= 0;
+l (notpositive) = -x.sup (notpositive);
+u (notpositive) = -x.inf (notpositive);
+
+zerointerior = x.inf < 0 & not (notpositive);
+l (zerointerior) = 0;
+u (zerointerior) = max (-x.inf (zerointerior), x.sup (zerointerior));
+
+result = infsup (l, u);
 
 endfunction
 %!test "Empty interval";

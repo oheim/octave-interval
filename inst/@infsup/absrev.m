@@ -40,19 +40,15 @@ function result = absrev (c, x)
 if (nargin < 2)
     x = infsup (-inf, inf);
 endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (c, "infsup")))
     c = infsup (c);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
 p = c & infsup (0, inf);
-n = - p;
+n = -p;
 
 result = (p & x) | (n & x);
 

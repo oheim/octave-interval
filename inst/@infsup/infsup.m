@@ -178,17 +178,6 @@ x.sup = zeros (size (u));
 input.inf = l;
 input.sup = u;
 for [boundaries, key] = input
-    if (isempty (boundaries))
-        ## Unknown boundaries => entire set of reals
-        switch key
-            case "inf"
-                x.inf = -inf;
-            case "sup"
-                x.sup = inf;
-        endswitch
-        continue
-    endif
-    
     for i = 1 : numel (boundaries)
         if (iscell (boundaries))
             boundary = boundaries {i};

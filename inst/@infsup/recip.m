@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} recip (@var{X})
+## @deftypefn {Interval Function} {} recip (@var{X})
 ## @cindex IEEE1788 recip
 ## 
 ## Compute reciprocal of all numbers of interval @var{X}.
@@ -37,6 +37,6 @@
 
 function result = recip (x)
 
-result = mrdivide (infsup (1), x);
+result = 1 ./ x;
 
 endfunction

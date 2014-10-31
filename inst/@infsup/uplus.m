@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} + @var{X}
+## @deftypefn {Interval Function} {} + @var{X}
 ## 
 ## Return the interval itself.
 ##

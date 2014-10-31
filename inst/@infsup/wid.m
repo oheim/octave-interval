@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {@var{Y} =} wid (@var{X})
+## @deftypefn {Interval Numeric} {} wid (@var{X})
 ## @cindex IEEE1788 wid
 ## 
 ## Get the width of interval @var{X}.
@@ -38,16 +38,12 @@
 ## Keywords: interval
 ## Created: 2014-10-05
 
-function width = wid (x)
+function result = wid (x)
 
-if (isempty (x))
-    width = nan ();
-elseif (isentire (x) || not (isfinite (x.inf) && isfinite (x.sup)))
-    width = inf;
-else
-    fesetround (inf);
-    width = x.sup - x.inf;
-    fesetround (0.5);
-endif
+fesetround (inf);
+result = x.sup - x.inf;
+fesetround (0.5);
+
+result (isempty (x)) = nan ();
 
 return

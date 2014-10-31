@@ -13,12 +13,26 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Comparison} {} ismatrix (@var{A})
+##
+## Return true if @var{A} is an interval matrix.
+##
+## Scalars (1x1 matrices) and vectors (1xN or Nx1 matrices) are subsets of the
+## more general N-dimensional matrix and @code{ismatrix} will return true for
+## these objects as well.
+## @seealso{isscalar, isvector}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function m = ismatrix (A)
+function result = ismatrix (A)
 
-m = ismatrix (A.inf);
+## Note: The builtin ismatrix function does not work on interval matrices.
+## However, the builtin isvector and isscalar functions can be used on interval
+## matrices/vectors/scalars and need not be overridden by the infsup class.
+
+result = ismatrix (A.inf);
 
 endfunction

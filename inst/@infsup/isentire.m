@@ -14,10 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Y} =} isentire (@var{X})
+## @deftypefn {Interval Comparison} {} isentire (@var{X})
 ## @cindex IEEE1788 isEntire
 ## 
 ## Check if the interval represents the entire set of real numbers.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, isempty, issingleton}
 ## @end deftypefn
@@ -28,5 +30,5 @@
 
 function result = isentire (interval)
 
-result = (interval.inf == -inf && interval.sup == inf);
+result = (interval.inf == -inf & interval.sup == inf);
 return

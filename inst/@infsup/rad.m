@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {@var{Y} =} rad (@var{X})
+## @deftypefn {Interval Numeric} {} rad (@var{X})
 ## @cindex IEEE1788 rad
 ## 
 ## Get the radius of interval @var{X}.
@@ -39,21 +39,16 @@
 ## Keywords: interval
 ## Created: 2014-10-05
 
-function radius = rad (x)
+function result = rad (x)
 
-if (isempty (x))
-    radius = nan ();
-elseif (isentire (x) || not (isfinite (x.inf) && isfinite (x.sup)))
-    radius = inf;
-else
-    m = mid (x);
-    ## The midpoint is rounded to nearest and the radius must cover
-    ## both boundaries.
-    fesetround (inf);
-    r1 = m - x.inf;
-    r2 = x.sup - m;
-    fesetround (0.5);
-    radius = max (r1, r2);
-endif
+m = mid (x);
+## The midpoint is rounded to nearest and the radius must cover both boundaries
+fesetround (inf);
+r1 = m - x.inf;
+r2 = x.sup - m;
+fesetround (0.5);
+result = max (r1, r2);
+
+result (isempty (x)) = nan ();
 
 return

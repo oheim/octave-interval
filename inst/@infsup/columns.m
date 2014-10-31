@@ -13,12 +13,18 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## @deftypefn {Interval Numeric} {} columns (@var{A})
+##
+## Return the number of columns of @var{A}.
+## @seealso{numel, size, length, rows}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function c = columns (A)
+function result = columns (a)
 
-c = columns (A.inf);
+result = columns (a.inf);
 
 endfunction

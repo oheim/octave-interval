@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} tan (@var{X})
+## @deftypefn {Interval Function} {} tan (@var{X})
 ## @cindex IEEE1788 tan
 ## 
 ## Compute the tangent for each number in interval @var{X} in radians.
@@ -36,53 +36,42 @@
 
 function result = tan (x)
 
-if (isempty (x))
-    result = infsup ();
-    return
-endif
+l = u = tanl = tanu = zeros (size (x));
 
-if (not (isfinite (x.inf) && isfinite (x.sup)))
-    result = infsup (-inf, inf);
-    return
-endif
-
-## Check, if wid (x) is certainly greater than pi.
+## Check, if wid (x) is certainly greater than pi. This may save computation of
+## some tangent values.
 fesetround (-inf);
 width = x.sup - x.inf;
 fesetround (0.5);
 pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
-if (width >= pi.sup)
-    result = infsup (-inf, inf);
-    return
-endif
+certainlyfullperiod = width >= pi.sup;
+l (certainlyfullperiod) = -inf;
+u (certainlyfullperiod) = inf;
 
-t.inf = tan (x.inf);
-t.sup = tan (x.sup);
+possiblynotfullperiod = not (certainlyfullperiod);
+tanl (possiblynotfullperiod) = tan (x.inf);
+tanu (possiblynotfullperiod) = tan (x.sup);
 
-if (t.inf > t.sup || ...
-    (width > 2 && (
-        sign (t.inf) == sign (t.sup) || ... # could only happen within max
-                                            # width of pi / 2
-        max (abs (t.inf), abs (t.sup)) < 1))) # could only happen within max
-                                              # width of pi / 2
-    result = infsup (-inf, inf);
-    return
-else
-    ## Now we can be sure that there is no singularity between x.inf and x.sup
-endif
+singularity = certainlyfullperiod | ...
+              tanl > tanu | (...
+                  width > 2 & (...
+                      sign (tanl) == sign (tanu) | ...
+                      max (abs (tanl), abs (tanu)) < 1));
 
-if (x.inf ~= 0)
-    t.inf = nextdown (t.inf);
-else
-    ## tan (0) == 0
-endif
+nosingularity = not (singularity);
+l (singularity) = -inf;
+u (singularity) = inf;
+l (nosingularity) = ulpadd (tanl, -1);
+u (nosingularity) = ulpadd (tanu, 1);
 
-if (x.sup ~= 0)
-    t.sup = nextup (t.sup);
-else
-    ## tan (0) == 0
-endif
+## tan (0) == 0
+l (nosingularity & x.inf == 0) = 0;
+u (nosingularity & x.sup == 0) = 0;
 
-result = infsup (t.inf, t.sup);
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction

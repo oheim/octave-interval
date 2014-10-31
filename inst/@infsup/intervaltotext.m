@@ -55,7 +55,7 @@
 
 function [s, isexact] = intervaltotext (x, exact)
 
-assert (numel (x) == 1, "not supported for interval vectors / matrix");
+assert (isscalar (x), "only implemented for interval scalars");
 
 isexact = true ();
 

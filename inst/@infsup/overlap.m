@@ -23,6 +23,8 @@
 ## an uint16 number, which represents one of the 16 possible states by taking a
 ## value 2^i (i = 0 .. 15).
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, subset, interior, disjoint}
 ## @end deftypefn
 
@@ -32,114 +34,53 @@
 
 function [state, bitmask] = overlap (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-if (isempty (a) && isempty (b))
-    state = "bothEmpty";
-    bitmask = uint16 (pow2 (15));
-    return
+emptya = isempty (a);
+emptyb = isempty (b);
+notempty = not (emptya | emptyb);
+comparison = {...
+    "bothEmpty", (emptya & emptyb); ...
+    "firstEmpty", (emptya & not (emptyb)); ...
+    "secondEmpty", (emptyb & not (emptya)); ...
+    "before", (notempty & a.sup < b.inf); ...
+    "meets", (notempty & a.inf < a.sup & a.sup == b.inf & b.inf < b.sup); ...
+    "overlaps", (notempty & a.inf < b.inf & b.inf < a.sup & a.sup < b.sup); ...
+    "starts", (notempty & a.inf == b.inf & a.sup < b.sup); ...
+    "containedBy", (notempty & b.inf < a.inf & a.sup < b.sup); ...
+    "finishes", (notempty & b.inf < a.inf & a.sup == b.sup); ...
+    "equal", (notempty & a.inf == b.inf & a.sup == b.sup); ...
+    "finishedBy", (notempty & a.inf < b.inf & b.sup == a.sup); ...
+    "contains", (notempty & a.inf < b.inf & b.sup < a.sup); ...
+    "startedBy", (notempty & b.inf == a.inf & b.sup < a.sup); ...
+    "overlappedBy", ...
+            (notempty & b.inf < a.inf & a.inf < b.sup & b.sup < a.sup); ...
+    "metBy", (notempty & b.inf < b.sup & b.sup == a.inf & a.inf < a.sup); ...
+    "after", (notempty & b.sup < a.inf)};
+
+if (nargout >= 2)
+    bitmask = zeros (size (comparison {1, 2}), "uint16");
+    for i = 1 : rows (comparison)
+        bitmask (comparison {i, 2}) = pow2 (16 - i);
+    endfor
 endif
 
-if (isempty (a))
-    state = "firstEmpty";
-    bitmask = uint16 (pow2 (14));
-    return
-endif
+state = cell (size (comparison {1, 2}));
+for i = 1 : rows (comparison)
+    state (comparison {i, 2}) = comparison {i, 1};
+endfor 
 
-if (isempty (b))
-    state = "secondEmpty";
-    bitmask = uint16 (pow2 (13));
-    return
+if (numel (state) == 1)
+    state = state {1};
 endif
-
-if (a.sup < b.inf)
-    state = "before";
-    bitmask = uint16 (pow2 (12));
-    return
-endif
-
-if (a.inf < a.sup && a.sup == b.inf && b.inf < b.sup)
-    state = "meets";
-    bitmask = uint16 (pow2 (11));
-    return
-endif
-
-if (a.inf < b.inf && b.inf < a.sup && a.sup < b.sup)
-    state = "overlaps";
-    bitmask = uint16 (pow2 (10));
-    return
-endif
-
-if (a.inf == b.inf && a.sup < b.sup)
-    state = "starts";
-    bitmask = uint16 (pow2 (9));
-    return
-endif
-
-if (b.inf < a.inf && a.sup < b.sup)
-    state = "containedBy";
-    bitmask = uint16 (pow2 (8));
-    return
-endif
-
-if (b.inf < a.inf && a.sup == b.sup)
-    state = "finishes";
-    bitmask = uint16 (pow2 (7));
-    return
-endif
-
-if (a.inf == b.inf && a.sup == b.sup)
-    state = "equal";
-    bitmask = uint16 (pow2 (6));
-    return
-endif
-
-if (a.inf < b.inf && b.sup == a.sup)
-    state = "finishedBy";
-    bitmask = uint16 (pow2 (5));
-    return
-endif
-
-if (a.inf < b.inf && b.sup < a.sup)
-    state = "contains";
-    bitmask = uint16 (pow2 (4));
-    return
-endif
-
-if (b.inf == a.inf && b.sup < a.sup)
-    state = "startedBy";
-    bitmask = uint16 (pow2 (3));
-    return
-endif
-
-if (b.inf < a.inf && a.inf < b.sup && b.sup < a.sup)
-    state = "overlappedBy";
-    bitmask = uint16 (pow2 (2));
-    return
-endif
-
-if (b.inf < b.sup && b.sup == a.inf && a.inf < a.sup)
-    state = "metBy";
-    bitmask = uint16 (pow2 (1));
-    return
-endif
-
-if (b.sup < a.inf)
-    state = "after";
-    bitmask = uint16 (pow2 (0));
-    return
-endif
-
-assert (false);
 
 endfunction

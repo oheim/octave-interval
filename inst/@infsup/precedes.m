@@ -14,12 +14,14 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} precedes (@var{A}, @var{B})
+## @deftypefn {Interval Comparison} {} precedes (@var{A}, @var{B})
 ## @cindex IEEE1788 precedes
 ## 
 ## Evaluate precedes comparison on intervals.
 ##
 ## True, if @var{A} is left of @var{B}. The intervals may touch.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, le, lt, gt, strictprecedes, subset, interior, disjoint}
 ## @end deftypefn
@@ -30,14 +32,13 @@
 
 function result = precedes (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif

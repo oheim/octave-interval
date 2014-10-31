@@ -38,26 +38,25 @@
 
 function result = powrev1 (b, c, x)
 
-assert (nargin >= 2)
-
+if (nargin < 2)
+    print_usage ();
+    return
+endif
 if (nargin < 3)
     x = infsup (-inf, inf);
 endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (c, "infsup")))
     c = infsup (c);
 endif
-
-## Convert third parameter into interval, if necessary
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
+
+assert (isscalar (b) && isscalar (c) && isscalar (x), ...
+        "only implemented for interval scalars");
 
 if (isempty (x) || isempty (b) || isempty (c) || x.sup <= 0 || c.sup <= 0)
     result = infsup ();

@@ -41,24 +41,24 @@
 
 function [u, v] = divtopair (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-
-## Convert divisor into interval, if necessary
 if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-if (y.inf < 0 && 0 < y.sup)
-    u = x / infsup (y.inf, 0);
-    v = x / infsup (0, y.sup);
-else
-    u = x / y;
-    v = infsup ();
-endif
+u = x / (y & infsup (-inf, 0));
+v = x / (y & infsup (0, inf));
+
+swap = (y.sup <= 0 | 0 <= y.inf) & isempty (u);
+u.inf (swap) = v.inf (swap);
+u.sup (swap) = v.sup (swap);
+v.inf (swap) = inf;
+v.sup (swap) = -inf;
 
 endfunction
