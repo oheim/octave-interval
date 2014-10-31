@@ -102,7 +102,7 @@ if (nargin == 1)
     endif
     if (iscell (l))
         ## Parse interval literals
-        c = l;
+        c = lower (l);
         l = cell (size (c));
         u = cell (size (c));
         
@@ -110,7 +110,7 @@ if (nargin == 1)
             if (ischar (c {i}) && not (isempty (c {i})) && ...
                 c {i} ([1, end]) == "[]")
                 ## Strip square brackets and whitespace
-                nobrackets = lower (strtrim (c {i} (2 : (end-1))));
+                nobrackets = strtrim (c {i} (2 : (end-1)));
                 switch nobrackets
                     case "entire"
                         l {i} = -inf;
@@ -167,6 +167,13 @@ if (nargin == 1)
     endif
 endif
 
+if (ischar (l))
+    l = cellstr (lower (l));
+endif
+if (ischar (u))
+    u = cellstr (lower (u));
+endif
+
 if (not (size_equal (l, u)))
     error ("size of upper and lower bounds must match")
 endif
@@ -184,7 +191,7 @@ for [boundaries, key] = input
         else
             boundary = boundaries (i);
         endif
-        
+
         if (isempty (boundary))
             switch key
                 case "inf"

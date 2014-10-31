@@ -107,6 +107,9 @@ entireresult = (y.inf < 0 & y.sup > 0) | (x.inf < 0 & x.sup > 0 & ...
 l (entireresult) = -inf;
 u (entireresult) = inf;
 
+zeroresult = x.inf == 0 & x.sup == 0;
+l (zeroresult) = u (zeroresult) = 0;
+
 emptyresult = isempty (x) | isempty (y) | (y.inf == 0 & y.sup == 0);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;

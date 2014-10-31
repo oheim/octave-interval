@@ -96,8 +96,7 @@ l (entireresult) = -inf;
 u (entireresult) = inf;
 
 zeroresult = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
-l (zeroresult) = 0;
-u (zeroresult) = 0;
+l (zeroresult) = u (zeroresult) = 0;
 
 emptyresult = isempty (x) | isempty (y);
 l (emptyresult) = inf;
