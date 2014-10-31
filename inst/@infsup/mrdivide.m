@@ -144,7 +144,7 @@ for i = 1 : (n - 1)
 endfor
 
 ## Step 2: Forward substitution 
-##         Solve L * s = x'
+##         Solve L * s = inv (P) * x'
 
 s = cell (n, m);
 x = inv (P) * x';
