@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} @var{X} / @var{Y}
+## @deftypefn {Interval Function} {} @var{X} ./ @var{Y}
 ## @cindex IEEE1788 div
 ## 
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
@@ -29,14 +29,14 @@
 ##   @result{} [1, 3]
 ## @end group
 ## @end example
-## @seealso{mtimes}
+## @seealso{times}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = mrdivide (x, y)
+function result = rdivide (x, y)
 
 if (nargin ~= 2)
     print_usage ();

@@ -35,7 +35,7 @@
 ##   @result{} [7.1000000000000005, 7.1000000000000024]
 ## @end group
 ## @end example
-## @seealso{plus, mtimes}
+## @seealso{plus, times}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -22,7 +22,7 @@
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
-## @seealso{mtimes}
+## @seealso{times}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

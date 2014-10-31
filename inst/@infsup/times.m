@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} @var{X} * @var{Y}
+## @deftypefn {Interval Function} {} @var{X} .* @var{Y}
 ## @cindex IEEE1788 mul
 ## 
 ## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
@@ -29,14 +29,14 @@
 ##   @result{} [2, 6]
 ## @end group
 ## @end example
-## @seealso{mrdivide}
+## @seealso{rdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = mtimes (x, y)
+function result = times (x, y)
 
 if (nargin ~= 2)
     print_usage ();

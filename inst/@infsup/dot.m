@@ -31,7 +31,7 @@
 ##   @result{} [20]
 ## @end group
 ## @end example
-## @seealso{plus, sum, mtimes, sumabs, sumsquare}
+## @seealso{plus, sum, times, sumabs, sumsquare}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

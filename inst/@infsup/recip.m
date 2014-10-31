@@ -28,7 +28,7 @@
 ##   @result{} [.19999999999999998, 1]
 ## @end group
 ## @end example
-## @seealso{pown, pow, mrdivide}
+## @seealso{pown, pow, rdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

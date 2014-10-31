@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} @var{X} ^ @var{Y}
+## @deftypefn {Interval Function} {} @var{X} .^ @var{Y}
 ## 
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
@@ -46,7 +46,7 @@
 ## Keywords: interval
 ## Created: 2011
 
-function result = mpower (x, y)
+function result = power (x, y)
 
 if (nargin ~= 2)
     print_usage ();

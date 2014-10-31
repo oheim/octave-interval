@@ -21,7 +21,7 @@
 ## @code{exp (@var{Y} * log (@var{X}))}.
 ##
 ## The function is only defined where @var{X} is positive, cf. log function.
-## A general power function is implemented by @code{mpower}.
+## A general power function is implemented by @code{power}.
 ##
 ## Accuracy: The result is an accurate enclosure.  The result is tightest in
 ## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{Y} in
@@ -34,7 +34,7 @@
 ##   @result{} [25, 216]
 ## @end group
 ## @end example
-## @seealso{pown, pow2, pow10, exp, mpower}
+## @seealso{pown, pow2, pow10, exp, power}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
