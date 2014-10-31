@@ -54,6 +54,21 @@ if (isscalar (x) || isscalar (y))
     return
 endif
 
-assert (false, "not yet implemented");
+if (max (size (x.inf) ~= fliplr (size (y.inf))))
+    error ("operator *: nonconformant arguments");
+endif
+
+l = u = zeros (size (x.inf, 1), size (y.inf, 2));
+
+for i = 1 : rows (l)
+    for j = 1 : columns (l)
+        element = dot (infsup (x.inf (i, :), x.sup (i, :)), ...
+                       infsup (y.inf (:, j), y.sup (:, j)));
+        l (i, j) = element.inf;
+        u (i, j) = element.sup;
+    endfor
+endfor
+
+result = infsup (l, u);
 
 endfunction

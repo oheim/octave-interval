@@ -51,7 +51,9 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-assert (size (x.inf) == size (y.inf), "dot: sizes of X and Y must match");
+assert ((isvector (x.inf) && isvector (y.inf) && ...
+            numel (x.inf) == numel (y.inf)) || ...
+        size (x.inf) == size (y.inf), "dot: sizes of X and Y must match");
 
 if (nargin < 3)
     ## Try to find non-singleton dimension
@@ -83,7 +85,12 @@ for n = 1 : numel (isexact)
     empty = false ();
     
     for i = 1 : size (x.inf, dim)
-        if (dim == 1)
+        if (isvector (x.inf))
+            x_inf = x.inf (i);
+            x_sup = x.sup (i);
+            y_inf = y.inf (i);
+            y_sup = y.sup (i);
+        elseif (dim == 1)
             x_inf = x.inf (i, n);
             x_sup = x.sup (i, n);
             y_inf = y.inf (i, n);
