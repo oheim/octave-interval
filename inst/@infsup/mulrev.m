@@ -48,7 +48,7 @@ if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
-assert (isscalar (b) && isscalar (c) && isscalar (y), ...
+assert (isscalar (b) && isscalar (c) && isscalar (x), ...
         "only implemented for interval scalars");
 
 if (isempty (x) || isempty (b) || isempty (c))
@@ -89,6 +89,8 @@ warning ("off", "Octave:divide-by-zero");
 if (ismember (0, c))
     if (ismember (0, b))
         result = infsup (x.inf, x.sup);
+    elseif (c.inf == 0 && c.sup == 0)
+        result = infsup ();
     elseif (b.sup < 0)
         fesetround (-inf);
         l = cu / bu;

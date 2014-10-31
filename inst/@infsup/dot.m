@@ -228,7 +228,7 @@ for n = 1 : numel (isexact)
         isexact (n) = true ();
     else
         if (l.unbound)
-            doublel (n) = -inf
+            doublel (n) = -inf;
         else
             [doublel(n), isexact(n)] = accu2double (l, -inf);
         endif

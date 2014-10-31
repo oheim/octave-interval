@@ -104,7 +104,8 @@ endif
 
 ## Extract up to 53 bits for an approximate double
 ## Subnormal numbers must have less than 53 bit.
-significand = abs (accumulator.m (1 : (min (53, accumulator.e + 1074))));
+significand = abs (accumulator.m (1 : (min (length (accumulator.m), ...
+                                       min (53, accumulator.e + 1074)))));
 rest = accumulator.m ((1 + length (significand)) : end);
 
 ## The following calculation is exact in double format
