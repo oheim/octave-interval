@@ -54,7 +54,7 @@ if (isscalar (x) || isscalar (y))
     return
 endif
 
-if (max (size (x.inf) ~= fliplr (size (y.inf))))
+if (size (x.inf, 2) ~= size (y.inf, 1))
     error ("operator *: nonconformant arguments");
 endif
 
