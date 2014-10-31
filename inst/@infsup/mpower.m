@@ -61,6 +61,42 @@ if (isscalar (x))
     return
 endif
 
-assert (false, "not yet implemented");
+if (not (isreal (y)) && fix (y) ~= y)
+    error ("mpower: only integral powers can be computed");
+endif
+
+if (size (x, 1) ~= size (x, 2))
+    error ("mpower: must be square matrix");
+endif
+
+## Implements log-time algorithm A.1 in
+## Heimlich, Oliver. 2011. “The General Interval Power Function.”
+## Diplomarbeit, Institute for Computer Science, University of Würzburg.
+## http://exp.ln0.de/heimlich-power-2011.htm.
+
+result = infsup (eye (length (x)));
+while (y ~= 0)
+    if (rem (y, 2) == 0) # y is even
+        x = x * x;
+        y /= 2;
+    else # y is odd
+        result = result * x;
+        if (min (min (isempty (result))) || min (min (isentire (result))))
+            ## We can stop the computation here, this is a fixed point
+            break
+        endif
+        if (y > 0)
+            y --;
+        else
+            y ++;
+            if (y == 0)
+                ## Inversion after computation of a negative power.
+                ## Inversion should be the last step, because it is not
+                ## tightest and would otherwise increase rounding errors.
+                result = inv (result);
+            endif
+        endif
+    endif
+endwhile
 
 endfunction
