@@ -128,8 +128,7 @@ endfor
 
 ## Initialize L and U
 U = L = cell (n);
-y.inf = P * y.inf'; # no interval arithmetic needed (better performance)
-y.sup = P * y.sup';
+y = P * y';
 for i = 1 : n
     for k = 1 : n
         ## Store P * y' in U
@@ -157,8 +156,7 @@ endfor
 ##         Solve L * s = inv (P) * x'
 
 s = cell (n, m);
-x.inf = inv (P) * x.inf'; # no interval arithmetic needed (better performance)
-x.sup = inv (P) * x.sup';
+x = inv (P) * x';
 
 for i = 1 : m
     s {1, i} = infsup (x.inf (1, i), x.sup (1, i)) ./ L {1, 1};
