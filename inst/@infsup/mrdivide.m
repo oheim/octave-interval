@@ -72,64 +72,74 @@ m = rows (x.inf);
 ##         permutation matrix P
 ##         P * y' = L * U
 
+## Compute P such that the computation of L below will not fail because of
+## division by zero.  P * y' should not have zeros in its main diagonal.
+## The computation of P is a greedy heuristic algorithm, which I developed for
+## the implementation of this function.
+P = zeros (n);
+migU = mig (y');
+magU = mag (y');
+for i = 1 : n
+    ## Choose next pivot in one of the columns with the fewest mig (U) > 0.
+    columnrating = sum (migU > 0, 1);
+    ## Don't choose used columns
+    columnrating (max (migU, [], 1) == inf) = inf;
+    
+    ## Use first possible column
+    possiblecolumns = columnrating == min (columnrating);
+    column = find (possiblecolumns, 1);
+    assert (not (isempty (column)));
+    
+    if (columnrating (column) == 1)
+        ## Take the only remaining useful row
+        row = find (migU (:, column) > 0, 1);
+    elseif (columnrating (column) == 0)
+        ## Only intervals left which contain zero. Try to use the widest
+        ## interval.
+        possiblerows = migU (:, column) >= 0;
+        rowrating = magU (:, column);
+        rowrating (not (possiblerows)) = -inf;
+        row = find (rowrating == max (rowrating), 1);
+    else
+        ## There are several good choices, take the one that will hopefully
+        ## not hinder the choice of further pivot elements.
+        ## That is, the row with the least mig (U) > 0.
+        possiblerows = sum (migU (:, column) > 0, 2);
+        rowrating = sum (migU > 0, 2);
+        ## We weight the rating in the columns with few mig (U) > 0 in order to
+        ## prevent problems during the choice of pivots in the near future.
+        rowrating += 0.5 * sum (migU (:, possiblecolumns) > 0, 2);
+        rowrating (not (possiblerows)) = inf;
+        row = find (rowrating == min (rowrating), 1);
+    endif
+    assert (not (isempty (row)));
+    
+    assert (0 <= migU (row, column) && migU (row, column) < inf);
+
+    P (row, column) = 1;
+    
+    ## In mig (U), for the choice of further pivots:
+    ##  - mark used columns with inf
+    ##  - mark used rows in unused columns with -inf
+    migU (row, :) -= inf;
+    migU (isnan (migU)) = inf;
+    migU (:, column) = inf;
+endfor
+
 ## Initialize L and U
 U = L = cell (n);
+y.inf = P * y.inf'; # no interval arithmetic needed (better performance)
+y.sup = P * y.sup';
 for i = 1 : n
     for k = 1 : n
-        ## Store transpose (y) in U
-        U {i, k} = infsup (y.inf (k, i), y.sup (k, i));
+        ## Store P * y' in U
+        U {i, k} = infsup (y.inf (i, k), y.sup (i, k));
         ## Store eye (n) in L
-        if (i == k)
-            L {i, k} = infsup (1);
-        else
-            L {i, k} = infsup (0);
-        endif
+        L {i, k} = infsup (double (i == k));
     endfor
 endfor
 
-## Compute P
-P = eye (n);
-for i = 1 : n
-    ## Choose optimal pivot (greedy)
-    pivot = U {i, i};
-    pivotorigin = i;
-    for k = (i + 1) : n
-        candidate = U {k, i};
-        candidateorigin = k;
-        if ((candidate.inf == 0 && candidate.sup == 0) || ...
-            (ismember (0, candidate) && not (ismember (0, pivot))))
-            ## candidate is not suitable
-            continue
-        endif
-        if (ismember (0, pivot) && not (ismember (0, candidate)))
-            ## candidate is definitely better
-            pivot = candidate;
-            pivotorigin = candidateorigin;
-            continue
-        endif
-        if (ismember (0, pivot))
-            if (mag (candidate) < mag (pivot))
-                ## Width of division will be smaller
-                pivot = candidate;
-                pivotorigin = candidateorigin;
-            endif
-        else
-            if (mig (candidate) > mig (pivot))
-                ## Width of division will be smaller
-                pivot = candidate;
-                pivotorigin = candidateorigin;
-            endif
-        endif
-    endfor
-    ## Swap rows
-    [U(i, :), U(pivotorigin, :)] = deal (...
-        U (pivotorigin, :), ...
-        U (i, :));
-    [P(:, i), P(:, pivotorigin)] = deal (...
-        P (:, pivotorigin), ...
-        P (:, i));
-endfor
-
+## Compute L and U
 for i = 1 : (n - 1)
     ## Go through rows of the remaining matrix
     for k = (i + 1) : n
@@ -147,7 +157,7 @@ endfor
 ##         Solve L * s = inv (P) * x'
 
 s = cell (n, m);
-x.inf = inv (P) * x.inf';
+x.inf = inv (P) * x.inf'; # no interval arithmetic needed (better performance)
 x.sup = inv (P) * x.sup';
 
 for i = 1 : m
@@ -189,7 +199,6 @@ endfor
 
 ## Transpose z' into z
 z.inf = z.sup = zeros (fliplr (size (zt)));
-
 for i = 1 : n
     for k = 1 : m
         z.inf (k, i) = inf (zt {i, k});
