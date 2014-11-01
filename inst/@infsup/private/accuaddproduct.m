@@ -83,11 +83,22 @@ bd = extendedprecision.x.low * extendedprecision.y.low;
 
 ## a * c * 2^52 + (a * d + b * c) * 2^26 + b * d
 
-bin = dec2bin ([ac, bd, adbc], 54) == "1";
+binaryaddends = zeros (3, 54);
+integeraddends = [ac; bd; adbc];
+for i = length (binaryaddends) : -1 : 1
+    if (max (integeraddends) == 0)
+        break
+    endif
+    binaryaddends (:, i) = rem (integeraddends, 2);
+    integeraddends = (integeraddends - binaryaddends (:, i)) / 2;
+endfor
 
-binaryproduct = int8 ([bin(1, :), bin(2, 3 : end)]);
-binaryproduct(27 : 80) += bin(3, :);
-clear ac adbc bd;
+ac = binaryaddends (1, :);
+bd = binaryaddends (2, 3 : end);
+adbc = binaryaddends (3, :);
+
+binaryproduct = int8 ([ac, bd]);
+binaryproduct(27 : 80) += adbc;
 
 ## x * y = s * binaryproduct * 2^e
 s = sign (multiplicand) * sign (multiplier);

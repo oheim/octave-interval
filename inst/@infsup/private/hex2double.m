@@ -84,20 +84,15 @@ endif
 hex.e -= length (hex.m{2}) * 4;
 hex.m = strcat (hex.m{1}, hex.m{2});
 
-## Conversion to binary must be done in several steps, because hex2dec uses
-## double precision. Blocks of (up to) 13 hex digits are converted to blocks of
-## (up to) 52 binary digits.
-binarydigits = "";
-for i = 1 : 13 : length (hex.m)
-    blocksize = min (13, length (hex.m) - i + 1);
-    binarydigits = strcat (binarydigits, dec2bin (hex2dec (...
-                  hex.m (i : (i + blocksize - 1))), blocksize * 4));
-endfor
-hex.m = binarydigits;
-clear binarydigits;
+hexvalues = rem (uint8 (hex.m) - 47, 39); # 1 .. 16
+lookup = [0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1;...
+          0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1;...
+          0 0 1 1 0 0 1 1 0 0 1 1 0 0 1 1;...
+          0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1];
+hex.m = (logical (lookup (:, hexvalues))) (:)';
 
 ## Normalize mantissa: remove leading zeroes
-firstnonzerodigit = find (hex.m ~= "0", 1, "first");
+firstnonzerodigit = find (hex.m, 1, "first");
 if (firstnonzerodigit > 1)
     hex.m = hex.m (firstnonzerodigit:end);
 elseif (isempty (firstnonzerodigit))
@@ -151,7 +146,7 @@ endif
 
 if (hex.e < -1022)
     ## Subnormal numbers
-    hex.m = strcat (prepad ("", "0", -1022 - hex.e), hex.m);
+    hex.m = [zeros(1, -1022 - hex.e), hex.m];
     ieee754exponent = -1023;
 else
     ## Normal numbers
@@ -159,15 +154,15 @@ else
 endif
 
 ## Only the most significand 53 bits are relevant.
-significand = postpad (hex.m, 53, "0", 2);
+significand = postpad (hex.m, 53, 0, 2);
 isexact = length (hex.m) <= length (significand) || ...
-          isempty (find (hex.m (54:end) ~= "0", 1));
+          isempty (find (hex.m (54:end), 1));
 
 ## The first bit can be omitted (normalization).
 significand (1) = [];
 
 ## The remaining 52 bits can be converted to 13 hex digits
-ieee754mantissa = dec2hex (bin2dec (significand), 13);
+ieee754mantissa = dec2hex (pow2 (51 : -1 : 0) * significand', 13);
 
 if (not (hex.s))
     ieee754signandexponent = ieee754exponent + 1023;
