@@ -168,7 +168,7 @@ s = cell (n, m);
 x = permute (inv (P), x');
 
 for i = 1 : m
-    s {1, i} = infsup (x.inf (1, i), x.sup (1, i)) ./ L {1, 1};
+    s {1, i} = infsup (x.inf (1, i), x.sup (1, i));
     for k = 2 : n
         suml = sumu = zeros (k, 2);
         for j = 1 : (k - 1)
@@ -180,7 +180,7 @@ for i = 1 : m
         sum = dot (infsup (suml (:, 1), sumu (:, 1)), ...
                    infsup (suml (:, 2), sumu (:, 2)));
         
-        s {k, i} = -sum ./ L {k, k};
+        s {k, i} = -sum;
     endfor
 endfor
 
@@ -189,7 +189,7 @@ endfor
 
 zt = cell (n, m);
 for i = 1 : m
-    zt {n, i} = s {n, i} ./ U {n, n};
+    zt {n, i} = csdivide (s {n, i}, U {n, n});
     for k = (n - 1) : -1 : 1
         suml = sumu = zeros (n - k + 1, 2);
         for j = (k + 1) : n
@@ -200,7 +200,7 @@ for i = 1 : m
         sumu (n - k + 1, :) = [-1, sup(s {k, i})];
         sum = dot (infsup (suml (:, 1), sumu (:, 1)), ...
                    infsup (suml (:, 2), sumu (:, 2)));
-        zt {k, i} = -sum ./ U {k, k};
+        zt {k, i} = csdivide (-sum, U {k, k});
     endfor
 endfor
 
@@ -233,5 +233,20 @@ for i = 1 : rows (P)
 endfor
 
 B = infsup (l, u);
+
+endfunction
+
+## Containment-Set theoretic division
+function z = csdivide (x, y)
+
+if (ismember (0, y))
+    if (isempty (x))
+        z = infsup (inf, -inf);
+    else
+        z = infsup (-inf, inf);
+    endif
+else
+    z = x ./ y;
+endif
 
 endfunction
