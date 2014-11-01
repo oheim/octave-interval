@@ -79,6 +79,9 @@ m = rows (x.inf);
 P = zeros (n);
 migU = mig (y');
 magU = mag (y');
+## Empty intervals are as bad as intervals containing only zero.
+migU (isnan (migU)) = 0;
+magU (isnan (magU)) = 0;
 for i = 1 : n
     ## Choose next pivot in one of the columns with the fewest mig (U) > 0.
     columnrating = sum (migU > 0, 1);
@@ -90,21 +93,27 @@ for i = 1 : n
     column = find (possiblecolumns, 1);
     assert (not (isempty (column)));
     
-    if (columnrating (column) == 1)
-        ## Take the only remaining useful row
-        row = find (migU (:, column) > 0, 1);
-    elseif (columnrating (column) == 0)
-        ## Only intervals left which contain zero. Try to use the widest
-        ## interval.
-        possiblerows = migU (:, column) >= 0;
-        rowrating = magU (:, column);
-        rowrating (not (possiblerows)) = -inf;
-        row = find (rowrating == max (rowrating), 1);
+    if (columnrating (column) >= 1)
+        ## Greedy: Use only intervals that do not contain zero.
+        possiblerows = migU (:, column) > 0;
+    else
+        ## Only intervals left which contain zero. Try to use an interval
+        ## that additionally contains other numbers.
+        possiblerows = migU (:, column) >= 0 & magU (:, column) > 0;
+        if (not (max (possiblerows)))
+            ## All possible intervals contain only zero.
+            possiblerows = migU (:, column) >= 0;
+        endif
+    endif
+
+    if (sum (possiblerows) == 1)
+        ## Short-ciruit: Take the only remaining useful row
+        row = find (possiblerows, 1);
     else
         ## There are several good choices, take the one that will hopefully
         ## not hinder the choice of further pivot elements.
         ## That is, the row with the least mig (U) > 0.
-        possiblerows = sum (migU (:, column) > 0, 2);
+        
         rowrating = sum (migU > 0, 2);
         ## We weight the rating in the columns with few mig (U) > 0 in order to
         ## prevent problems during the choice of pivots in the near future.
@@ -128,7 +137,7 @@ endfor
 
 ## Initialize L and U
 U = L = cell (n);
-y = P * y';
+y = permute (P, y');
 for i = 1 : n
     for k = 1 : n
         ## Store P * y' in U
@@ -156,7 +165,7 @@ endfor
 ##         Solve L * s = inv (P) * x'
 
 s = cell (n, m);
-x = inv (P) * x';
+x = permute (inv (P), x');
 
 for i = 1 : m
     s {1, i} = infsup (x.inf (1, i), x.sup (1, i)) ./ L {1, 1};
@@ -205,5 +214,24 @@ for i = 1 : n
 endfor
 
 result = infsup (z.inf, z.sup);
+
+endfunction
+
+## Apply permutation matrix P to an interval matrix: B = P * A.
+## This is much faster than a matrix product, because the matrix product would
+## use a lot of dot products.
+function B = permute (P, A)
+
+## Note: [B.inf, B.sup] = deal (P * A.inf, P * A.sup) is not possible, because
+## empty or unbound intervals would create NaNs during multiplication with P.
+
+l = u = zeros (size (A));
+for i = 1 : rows (P)
+    targetrow = find (P (i, :) == 1, 1);
+    l (targetrow, :) = A.inf (i, :);
+    u (targetrow, :) = A.sup (i, :);
+endfor
+
+B = infsup (l, u);
 
 endfunction
