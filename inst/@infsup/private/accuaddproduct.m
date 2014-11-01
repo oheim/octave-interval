@@ -52,8 +52,9 @@ for [doubleprecision, key] = doubles
     extendedprecision.(key).exponent -= length (mantissa);
     
     ## Split mantissa into two parts with 27 and 26 bits
-    extendedprecision.(key).high = uint64 (bin2dec (num2str (mantissa (1:27))'));
-    extendedprecision.(key).low = uint64 (bin2dec (num2str (mantissa (28:end))'));
+    
+    extendedprecision.(key).high = uint64 (pow2 (26:-1:0) * mantissa (1:27));
+    extendedprecision.(key).low = uint64 (pow2 (25:-1:0) * mantissa (28:end));
 endfor
 
 ## Compute the exact product x * y.
@@ -81,9 +82,11 @@ adbc = extendedprecision.x.high * extendedprecision.y.low ...
 bd = extendedprecision.x.low * extendedprecision.y.low;
 
 ## a * c * 2^52 + (a * d + b * c) * 2^26 + b * d
-binaryproduct = int8 ([prepad(dec2bin (ac) == "1", 54, 0, 2), ...
-                       prepad(dec2bin (bd) == "1", 52, 0, 2)]);
-binaryproduct(27 : 80) += prepad(dec2bin (adbc) == "1", 54, 0, 2);
+
+bin = dec2bin ([ac, bd, adbc], 54) == "1";
+
+binaryproduct = int8 ([bin(1, :), bin(2, 3 : end)]);
+binaryproduct(27 : 80) += bin(3, :);
 clear ac adbc bd;
 
 ## x * y = s * binaryproduct * 2^e

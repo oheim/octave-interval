@@ -32,21 +32,18 @@ assert (not (isnan (binary)));
 assert (isfinite (binary));
 
 ## Decode bit representation
-hex = num2hex (binary); # 16 hexadecimal digits (with leading zeroes)
-## The conversion has to be done in 2 steps, because hex2dec uses binary
-## floating point numbers instead of a uint64.
-bits1 = prepad (dec2bin (hex2dec (hex(1 : 8))), 32, "0", 2) == "1";
-bits2 = prepad (dec2bin (hex2dec (hex(9 : end))), 32, "0", 2) == "1";
-bits = [bits1, bits2];
-clear hex bits1 bits2;
+hex = num2hex (binary); # 16 hexadecimal digits (with leading zeros)
+hexvalues = rem (uint8 (hex) - 47, 39); # 1 .. 16
+lookup = [0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1;...
+          0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1;...
+          0 0 1 1 0 0 1 1 0 0 1 1 0 0 1 1;...
+          0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1];
+bits = (logical (lookup (:, hexvalues))) (:)';
 
 ## Separate sign, exponent, and mantissa bits.
 sign = bits(1);
 exponent = bits(2 : 12);
 fraction = bits(13 : end)';
-clear bits;
-
-assert (sum (exponent) < 11, "NaNs and infinite values not allowed");
 
 if (sum (exponent) == 0) # denormalized numbers
     mantissa = fraction;
@@ -55,7 +52,7 @@ else # normalized numbers
 endif
 
 ## Decode IEEE 754 exponent
-exponent = int64(bin2dec (num2str (exponent))) - 1023;
+exponent = int64(pow2 (10 : -1 : 0) * exponent') - 1023;
 
 ## binary == (-1) ^ sign * fraction (=X.XXXXX… in binary) * 2 ^ exponent
 
