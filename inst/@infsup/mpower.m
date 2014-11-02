@@ -16,27 +16,25 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} @var{X} ^ @var{Y}
 ## 
-## Compute the general power function on intervals, which is defined for
-## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
-## positive; (3) negative base @var{X} together with integral exponent @var{Y}.
+## Return the matrix power operation of @var{X} raised to the @var{Y} power.
 ##
-## This definition complies with the common complex valued power function,
-## restricted to the domain where results are real, plus limit values where
-## @var{X} is zero.  The complex power function is defined by
-## @code{exp (@var{Y} * log (@var{X}))} with initial branch of complex
-## logarithm and complex exponential function.
+## If @var{X} is a scalar, this function and @code{power} are equivalent.
+## Otherwise, @var{X} must be a square matrix and @var{Y} must be a single
+## integer.
 ##
 ## Warning: This function is not defined by IEEE 1788.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest in
-## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{Y} in
-## @{-1, 0.5, 0, 1, 2@}, or @var{X} and @var{Y} integral with
-## @code{abs (pow (@var{X}, @var{Y})) in [2^-53, 2^53]}
+## Accuracy: The result is a valid enclosure.  The result is tightest for
+## @var{Y} in @{0, 1, 2@}.
 ##
 ## @example
 ## @group
-## infsup (-5, 6) ^ infsup (2, 3)
-##   @result{} [-125, +216]
+## infsup (magic (3)) ^ 2
+##   @result {}3×3 interval matrix
+##
+##      [91]   [67]   [67]
+##      [67]   [91]   [67]
+##      [67]   [67]   [91]
 ## @end group
 ## @end example
 ## @seealso{pow, pown, pow2, pow10, exp}
