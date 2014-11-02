@@ -13,24 +13,34 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -*- texinfo -*-
-## @deftypefn {Interval Output} {@var{S} =} decorationpart (@var{X})
-## @cindex IEEE1788 decorationPart
-## 
-## Return the decoration of the decorated interval @var{X}.
+## @deftypefn {Interval Constructor} {} horzcat (@var{ARRAY}…)
 ##
-## The decoration is a cell array of character strings and its size equals the
-## size of its intervalpart.
-##
-## @seealso{intervalpart}
+## Return the horizontal concatenation of interval array objects along
+## dimension 2.
+## @seealso{vertcat}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-11-02
 
-function dec = decorationpart (x)
+function result = horzcat (varargin)
 
-dec = x.dec;
+l = u = dx = cell (1, nargin);
+
+for i = 1 : nargin
+    if (not (isa (varargin {i}, "infsupdec")))
+        varargin {i} = infsupdec (varargin {i});
+    endif
+    l {i} = inf (varargin {i});
+    u {i} = sup (varargin {i});
+    dx {i} = decorationpart (varargin {i});
+endfor
+
+l = cell2mat (l);
+u = cell2mat (u);
+dx = horzcat (dx {:});
+
+result = infsupdec (l, u, dx);
 
 endfunction

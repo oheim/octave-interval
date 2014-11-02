@@ -53,7 +53,7 @@ else
     ## In later GNU Octave versions it is also possible to call
     ## intervaltotext@infsup (x, exact);
     [s, isexact] = intervaltotext (intervalpart (x), exact);
-    s = strcat (s, "_", x.dec);
+    s = strcat (s, "_", x.dec {1});
 endif
 
 endfunction

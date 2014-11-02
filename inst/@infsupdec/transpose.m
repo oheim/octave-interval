@@ -13,24 +13,21 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -*- texinfo -*-
-## @deftypefn {Interval Output} {@var{S} =} decorationpart (@var{X})
-## @cindex IEEE1788 decorationPart
-## 
-## Return the decoration of the decorated interval @var{X}.
+## @deftypefn {Interval Function} {} transpose (@var{X})
 ##
-## The decoration is a cell array of character strings and its size equals the
-## size of its intervalpart.
-##
-## @seealso{intervalpart}
+## Return the transpose of @var{X}.
+## @seealso{ctranspose}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-11-02
 
-function dec = decorationpart (x)
+function result = transpose (x)
 
-dec = x.dec;
+dx = transpose (x.dec);
+x = transpose (intervalpart (x));
+
+result = infsupdec (x, dx);
 
 endfunction

@@ -22,6 +22,7 @@
 ## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
 ## @cindex IEEE1788 numsToInterval
 ## @cindex IEEE1788 textToInterval
+## @cindex IEEE1788 newDec
 ## 
 ## Create a decorated interval from boundaries.  Convert boundaries to double
 ## precision.
@@ -46,14 +47,23 @@
 ## Each boundary can be provided in the following formats: literal constants
 ## [+-]inf[inity], e, pi; scalar real numeric data types, i. e., double,
 ## single, [u]int[8,16,32,64]; or decimal numbers as strings of the form
-## [+-]d[,.]d[[eE][+-]d].
+## [+-]d[,.]d[[eE][+-]d]; or hexadecimal numbers as string of the form
+## [+-]0xh[,.]h[[pP][+-]d]; or decimal numbers in rational form
+## [+-]d/d.
+##
+## Also it is possible, to construct intervals from the uncertain form in the
+## form @code{m?ruE}, where @code{m} is a decimal mantissa,
+## @code{r} is empty (= half ULP) or a decimal integer ULP count or a
+## second @code{?} character for unbounded intervals, @code{u} is
+## empty or a direction character (u: up, d: down), and @code{E} is an
+## exponential field.
 ## 
-## If decimal numbers are no binary64 floating point numbers, a tight enclosure
-## will be computed.  int64 and uint64 numbers of high magnitude (> 2^53) can
-## also be affected from precision loss.
+## If decimal or hexadecimal numbers are no binary64 floating point numbers, a
+## tight enclosure will be computed.  int64 and uint64 numbers of high
+## magnitude (> 2^53) can also be affected from precision loss.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
-## however it implements both IEEE 1788 functions numsToInterval and
+## however it implements the IEEE 1788 functions newDec, numsToInterval, and
 ## textToInterval.
 ## 
 ## @example
@@ -62,11 +72,11 @@
 ##   @result{} [Empty]_trv
 ## w = infsupdec (1)
 ##   @result{} [1]_com
-## x = infsup (2, 3)
+## x = infsupdec (2, 3)
 ##   @result{} [2, 3]_com
-## y = infsup ("0.1")
+## y = infsupdec ("0.1")
 ##   @result{} [.09999999999999999, .10000000000000001]_com
-## z = infsup ("0.1", "0.2")
+## z = infsupdec ("0.1", "0.2")
 ##   @result{} [.09999999999999999, .20000000000000002]_com
 ## @end group
 ## @end example
@@ -82,87 +92,111 @@ function [x, isexact] = infsupdec (varargin)
 ## The decorated version must return NaI instead of an error if interval
 ## construction failed, so we use a try & catch block.
 try
-    if (nargin >= 1 && max(strcmpi (varargin{end}, {"com","dac","def","trv"})))
-        ## The decoration has been passed as the last parameter
-        dec = varargin{end};
+    if (nargin >= 1 && ischar (varargin {end}))
+        varargin {end} = cellstr (varargin {end});
+    endif
+        
+    if (nargin >= 1 && ...
+        iscellstr (varargin {end}) && ...
+        not (isempty (varargin {end})) && ...
+        max (strcmpi (varargin {end} {1}, {"com", "dac", "def", "trv"})))
+        ## The decoration information has been passed as the last parameter
+        dec = varargin {end};
         switch nargin
             case 1
                 [bare, isexact] = infsup ();
             case 2
-                if (isa (varargin{1}, "infsup"))
-                    bare = infsup (inf (varargin{1}), sup (varargin{1}));
+                if (isa (varargin {1}, "infsup"))
+                    bare = infsup (inf (varargin {1}), sup (varargin {1}));
                     isexact = true ();
                 else
-                    [bare, isexact] = infsup (varargin{1});
+                    [bare, isexact] = infsup (varargin {1});
                 endif
             case 3
-                [bare, isexact] = infsup (varargin{1}, varargin{2});
+                [bare, isexact] = infsup (varargin {1}, varargin {2});
             otherwise
                 error ("too many arguments")
         endswitch
-    elseif (nargin == 1 && ischar (varargin{1}))
-        ## interval literal or single decimal number
-        literal = strsplit (varargin{1}, "_");
-        if (isempty (literal))
-            [bare, isexact] = infsup ("");
-        else
-            ## If literal{1} is the representation of NaI, the infsup
-            ## constructor will trigger an error.
-            [bare, isexact] = infsup (literal{1});
-            if (length (literal) == 2) # decorated interval literal
-                dec = literal{2};
-            elseif (length (literal) > 2)
-                error ("illegal decorated interval literal")
+    elseif (nargin == 1 && iscell (varargin {1}))
+        ## Parse possibly decorated interval literals
+        dec = cell (size (varargin {1}));
+        dec (:) = {""};
+        for i = 1 : numel (varargin {1})
+            if (ischar (varargin {1} {i}))
+                literal = strsplit (varargin {1} {i}, "_");
+                if (length (literal) == 2) # decorated interval literal
+                    varargin {1} {i} = literal {1};
+                    dec {i} = literal {2};
+                elseif (length (literal) > 2)
+                       error ("illegal decorated interval literal")
+                endif
             endif
-        endif
+        endfor
+        
+        ## Note: The representation of NaI, will trigger an error in the infsup
+        ## constructor
+        [bare, isexact] = infsup (varargin {1});
     else
         ## Undecorated interval boundaries
+        dec = {""};
         switch nargin
             case 0
                 [bare, isexact] = infsup ();
             case 1
-                if (isa (varargin{1}, "infsup"))
-                    bare = infsup (inf (varargin{1}), sup (varargin{1}));
+                if (isa (varargin {1}, "infsup"))
+                    bare = infsup (inf (varargin {1}), sup (varargin {1}));
                     isexact = true ();
                 else
-                    [bare, isexact] = infsup (varargin{1});
+                    [bare, isexact] = infsup (varargin {1});
                 endif
             case 2
-                [bare, isexact] = infsup (varargin{1}, varargin{2});
+                [bare, isexact] = infsup (varargin {1}, varargin {2});
             otherwise
                 error ("too many arguments")
         endswitch
     endif
     
     assert (isa (bare, "infsup"));
-    
-    if (not (exist ("dec", "var")))
-        ## Add missing decoration
-        if (isempty (bare))
-            dec = "trv";
-        elseif (not (isfinite (inf (bare)) && isfinite (sup (bare))))
-            dec = "dac";
-        else # bounded & non-empty
-            dec = "com";
-        endif
-    endif
+    assert (iscellstr (dec));
+
     dec = lower (dec);
     
+    ## Broadcast decoration
+    if (isscalar (dec) && not (isscalar (bare)))
+        decvalue = dec {1};
+        dec = cell (size (bare));
+        dec (:) = {decvalue};
+    endif
+    
+    if (not (min (size (dec) == size (bare))))
+        error ("decoration size mismatch")
+    endif
+    
+    ## Add missing decoration
+    missingdecoration = strcmp (dec, "");
+    dec (missingdecoration) = "dac";
+    dec (missingdecoration & isempty (bare)) = "trv";
+    dec (missingdecoration & iscommoninterval (bare)) = "com";
+    
     ## Check decoration
-    if (isempty (bare) && dec ~= "trv")
+    if (max (max (isempty (bare) & not (strcmp (dec, "trv")))))
         error ("illegal decoration for empty interval")
     endif
-    if (not (isfinite (inf (bare)) && isfinite (sup (bare))) && dec == "com")
-        error ("illegal decoration for unbound interval")
+    if (max (max (not (iscommoninterval (bare)) & strcmp (dec, "com"))))
+        error ("illegal decoration for uncommon interval")
     endif
-    if (not (max(strcmp (dec, {"com","dac","def","trv"}))))
+    if (not (min (min ( ...
+            strcmp (dec, "com") | ...
+            strcmp (dec, "dac") | ...
+            strcmp (dec, "def") | ...
+            strcmp (dec, "trv")))))
         error ("illegal decoration");
     endif
 catch
     warning (lasterror.message)
     ## NaI representation is unique.
     bare = infsup ();
-    dec = "ill";
+    dec = {"ill"};
     isexact = false ();
 end_try_catch
 

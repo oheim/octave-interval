@@ -13,24 +13,32 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## -*- texinfo -*-
-## @deftypefn {Interval Output} {@var{S} =} decorationpart (@var{X})
-## @cindex IEEE1788 decorationPart
-## 
-## Return the decoration of the decorated interval @var{X}.
+## @deftypefn {Interval Constructor} {} subsref (@var{A}, @var{IDX})
 ##
-## The decoration is a cell array of character strings and its size equals the
-## size of its intervalpart.
+## Perform the subscripted element selection operation according to the
+## subscript specified by @var{IDX}.
 ##
-## @seealso{intervalpart}
+## The subscript @var{IDX} is expected to be a structure array with fields
+## @code{type} and @code{subs}.  Only valid value for @var{type} is
+## @code{"()"}.  The @code{subs} field may be either @code{":"} or a cell array
+## of index values.
+## @seealso{subsasgn}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-12
+## Created: 2014-11-02
 
-function dec = decorationpart (x)
+function result = subsref (A, S)
 
-dec = x.dec;
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
+
+x = subsref (intervalpart (A), S);
+dx = subsref (A.dec, S);
+
+result = infsupdec (x, dx);
 
 endfunction

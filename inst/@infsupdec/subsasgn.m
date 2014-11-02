@@ -27,7 +27,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-29
+## Created: 2014-11-02
 
 function result = subsasgn (A, S, B)
 
@@ -35,28 +35,30 @@ if (nargin ~= 3)
     print_usage ();
     return
 endif
-if (not (isa (A, "infsup")))
-    A = infsup (A);
+if (not (isa (A, "infsupdec")))
+    A = infsupdec (A);
 endif
-if (not (isa (B, "infsup")))
-    B = infsup (B);
+if (not (isa (B, "infsupdec")))
+    B = infsupdec (B);
 endif
 
-assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
+if (isnai (A))
+    result = A;
+    return
+endif
+if (isnai (B))
+    result = B;
+    return
+endif
 
-l = subsasgn (A.inf, S, B.inf);
-u = subsasgn (A.sup, S, B.sup);
+x = subsasgn (intervalpart (A), S, intervalpart (B));
+dx = subsasgn (A.dec, S, B.dec);
 
-## Implicit new elements in the matrices take the value 0. We can detect them
-## in the inf matrix, because zeros in the inf matrix are set to -0 by the
-## infsup constructor.
+## Implicit new elements carry the value [Empty] and must be initialized with
+## decoration trv.  Old elements that have been [Empty] before, already have
+## the decoration trv.
+dx (isempty (x)) = "trv";
 
-newelements = not (signbit (l)) & (l == 0);
-
-## Set the implicit new elements to [Empty].
-l (newelements) = inf;
-u (newelements) = -inf;
-
-result = infsup (l, u);
+result = infsupdec (x, dx);
  
 endfunction

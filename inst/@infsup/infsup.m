@@ -39,10 +39,10 @@
 ## [+-]d/d.
 ##
 ## Also it is possible, to construct intervals from the uncertain form in the
-## form <code>m?ruE</code>, where <code>m</code> is a decimal mantissa,
-## <code>r</code> is empty (= half ULP) or a decimal integer ULP count or a
-## second <code>?</code> character for unbounded intervals, <code>u</code> is
-## empty or a direction character (u: up, d: down), and <code>E</code> is an
+## form @code{m?ruE}, where @code{m} is a decimal mantissa,
+## @code{r} is empty (= half ULP) or a decimal integer ULP count or a
+## second @code{?} character for unbounded intervals, @code{u} is
+## empty or a direction character (u: up, d: down), and @code{E} is an
 ## exponential field.
 ## 
 ## If decimal or hexadecimal numbers are no binary64 floating point numbers, a
