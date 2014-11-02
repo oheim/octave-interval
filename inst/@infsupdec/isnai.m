@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Y} =} isnai (@var{X})
+## @deftypefn {Interval Comparison} {} isnai (@var{X})
 ## @cindex IEEE1788 isNaI
 ## 
 ## Check if the interval is the result of a failed interval construction.

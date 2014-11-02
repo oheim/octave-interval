@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} floor (@var{X})
+## @deftypefn {Interval Function} {} floor (@var{X})
 ## @cindex IEEE1788 floor
 ## 
 ## Round each number in interval @var{X} towards -Inf.
@@ -43,12 +43,11 @@ if (isnai (x))
     return
 endif
 
-result = floor (intervalpart (x));
-if (issingleton (result) && fix (x.inf) ~= x.inf)
-    ## Between two integral numbers the function is constant, thus continuous
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "def");
-endif
+result = infsupdec (floor (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
+## Between two integral numbers the function is constant, thus continuous
+discontinuous = not (issingleton (result) && fix (inf (x)) ~= inf (x));
+result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
 
 endfunction

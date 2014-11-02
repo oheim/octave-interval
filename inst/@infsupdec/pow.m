@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} pow (@var{X}, @var{Y})
+## @deftypefn {Interval Function} {} pow (@var{X}, @var{Y})
 ## @cindex IEEE1788 pow
 ## 
 ## Compute the simple power function on intervals defined by 
@@ -43,14 +43,13 @@
 
 function result = pow (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
@@ -59,18 +58,19 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return
 endif
 
-result = pow (intervalpart (x), intervalpart (y));
+result = infsupdec (pow (intervalpart (x), intervalpart (y)));
+result.dec = mindec (result.dec, x.dec, y.dec);
+
 ## pow is continuous everywhere, but defined for x > 0 only
-if (interior (x, infsup(0, inf)))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "trv");
+domain = interior (x, infsup (0, inf));
+if (isscalar (x) && not (isscalar (y)))
+    domain = domain * ones (size (y));
 endif
+result.dec (not (domain)) = "trv";
 
 endfunction

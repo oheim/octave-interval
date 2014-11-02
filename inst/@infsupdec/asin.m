@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} asin (@var{X})
+## @deftypefn {Interval Function} {} asin (@var{X})
 ## @cindex IEEE1788 asin
 ## 
 ## Compute the inverse sine in radians (arcsine) for each number in
@@ -42,12 +42,9 @@ if (isnai (x))
     return
 endif
 
-result = asin (intervalpart (x));
+result = infsupdec (asin (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
 ## asin is continuous everywhere, but defined for [-1, 1] only
-if (subset (x, infsup(-1, 1)))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "trv");
-endif
+result.dec (not (subset (x, infsup (-1, 1)))) = "trv";
 
 endfunction

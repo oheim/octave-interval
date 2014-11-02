@@ -29,14 +29,13 @@
 
 function result = cancelminus (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert divisor into interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
@@ -45,7 +44,6 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return;
@@ -53,6 +51,6 @@ endif
 
 result = cancelminus (intervalpart (x), intervalpart (y));
 ## cancelMinus must not retain any useful decoration
-result = decorateresult (result, {x, y}, "trv");
+result = infsupdec (result, "trv");
 
 endfunction

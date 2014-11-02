@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} interior (@var{A}, @var{B})
+## @deftypefn {Interval Comparison} {} interior (@var{A}, @var{B})
 ## @cindex IEEE1788 interior
 ## 
 ## Evaluate interior comparison on intervals.
@@ -32,14 +32,13 @@
 
 function result = interior (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif

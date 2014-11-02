@@ -14,7 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constant} {@var{X} =} entire ()
+## @deftypefn {Interval Constant} {} entire ()
+## @deftypefnx {Interval Constant} {} entire (@var{N})
+## @deftypefnx {Interval Constant} {} entire (@var{N}, @var{M})
 ## @cindex IEEE1788 entire
 ## 
 ## Return the entire set of real numbers.
@@ -43,10 +45,21 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function interval = entire ()
+function interval = entire (n, m)
 
-interval = infsupdec (-inf, inf);
-return
+switch nargin
+    case 0
+        interval = infsupdec (-inf, inf);
+    case 1
+        interval = infsupdec (-inf (n), inf (n));
+    case 2
+        interval = infsupdec (-inf (n, m), inf (n, m));
+    otherwise
+        print_usage();
+        return
+endswitch
+
+endfunction
 %!test "Check [Entire] properties";
 %! x = entire ();
 %! assert (inf (x) == -inf);

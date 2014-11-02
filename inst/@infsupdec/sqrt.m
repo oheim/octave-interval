@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sqrt (@var{X})
+## @deftypefn {Interval Function} {} sqrt (@var{X})
 ## @cindex IEEE1788 sqrt
 ## 
 ## Compute the square root for all non-negative numbers in @var{X}.
@@ -41,12 +41,11 @@ if (isnai (x))
     return
 endif
 
-result = sqrt (intervalpart (x));
+result = infsupdec (sqrt (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
 ## sqrt is continuous everywhere, but defined for x >= 0 only
-if (subset (x, infsup(0, inf)))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "trv");
-endif
+defined = subset (x, infsup (0, inf));
+result (not (defined)) = "trv";
 
 endfunction

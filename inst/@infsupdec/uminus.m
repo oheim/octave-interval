@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} - @var{X}
+## @deftypefn {Interval Function} {} - @var{X}
 ## @cindex IEEE1788 neg
 ## 
 ## Negate all numbers in the interval.
@@ -41,8 +41,7 @@ if (isnai (x))
     return
 endif
 
-result = uminus (intervalpart (x));
 ## uminus is defined and continuous everywhere
-result = decorateresult (result, {x});
+result = infsupdec (uminus (intervalpart (x)), x.dec);
 
 endfunction

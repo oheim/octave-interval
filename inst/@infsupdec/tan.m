@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} tan (@var{X})
+## @deftypefn {Interval Function} {} tan (@var{X})
 ## @cindex IEEE1788 tan
 ## 
 ## Compute the tangent for each number in interval @var{X} in radians.
@@ -41,15 +41,12 @@ if (isnai (x))
     return
 endif
 
-result = tan (intervalpart (x));
+result = infsupdec (tan (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
 
-if (isentire (result))
-    ## Because tan (nextdown (pi / 2)) < realmax, we can simple check for
-    ## a singularity by comparing the result with entire.
-    result = decorateresult (result, {x}, "trv");
-else
-    ## tan has been evaluated where it is defined and continuous
-    result = decorateresult (result, {x});
-endif
+## Because tan (nextdown (pi / 2)) < realmax, we can simple check for
+## a singularity by comparing the result with entire.
+domain = not (isentire (result));
+result.dec (not (domain)) = "trv";
 
 endfunction

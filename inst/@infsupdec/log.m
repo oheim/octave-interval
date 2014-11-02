@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} log (@var{X})
+## @deftypefn {Interval Function} {} log (@var{X})
 ## @cindex IEEE1788 log
 ## 
 ## Compute the natural logarithm for all numbers in interval @var{X}.
@@ -43,12 +43,10 @@ if (isnai (x))
     return
 endif
 
-result = log (intervalpart (x));
+result = infsupdec (log (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
 ## log is continuous everywhere, but defined for x > 0 only
-if (interior (x, infsup(0, inf)))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "trv");
-endif
+result.dec (not (interior (x, infsup(0, inf)))) = "trv";
 
 endfunction

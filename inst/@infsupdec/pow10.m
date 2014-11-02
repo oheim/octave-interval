@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} pow10 (@var{X})
+## @deftypefn {Interval Function} {} pow10 (@var{X})
 ## @cindex IEEE1788 exp10
 ## 
 ## Compute @code{10^x} for all numbers in @var{X}.
@@ -42,8 +42,8 @@ if (isnai (x))
     return
 endif
 
-result = pow10 (intervalpart (x));
+result = infsupdec (pow10 (intervalpart (x)));
 ## pow10 is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

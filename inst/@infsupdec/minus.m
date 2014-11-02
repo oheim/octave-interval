@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} @var{X} - @var{Y}
+## @deftypefn {Interval Function} {} @var{X} - @var{Y}
 ## @cindex IEEE1788 sub
 ## 
 ## Subtract all numbers of interval @var{Y} from all numbers of @var{X}.
@@ -38,14 +38,13 @@
 
 function result = minus (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert subtrahend into interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
@@ -54,14 +53,13 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return
 endif
 
-result = minus (intervalpart (x), intervalpart (y));
+result = infsupdec (minus (intervalpart (x), intervalpart (y)));
 ## minus is defined and continuous everywhere
-result = decorateresult (result, {x, y});
+result.dec = mindec (result.dec, x.dec, y.dec);
 
 endfunction

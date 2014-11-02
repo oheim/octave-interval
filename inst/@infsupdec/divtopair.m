@@ -41,14 +41,13 @@
 
 function [u, v] = divtopair (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert divisor into interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
@@ -57,20 +56,22 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return
 endif
 
 [u, v] = divtopair (intervalpart (x), intervalpart (y));
-if (ismember (0, y))
-    ## division by zero is undefined
-    u = decorateresult (u, {x, y}, "trv");
-    v = decorateresult (v, {x, y}, "trv");
-else
-    u = decorateresult (u, {x, y});
-    v = decorateresult (v, {x, y});
+u = infsupdec (u);
+u.dec = mindec (u.dec, x.dec, y.dec);
+v = infsupdec (v);
+v.dec = mindec (v.dec, x.dec, y.dec);
+
+divisionbyzero = ismember (0, y);
+if (isscalar (y) && not (isscalar (x)))
+    divisionbyzero = divisionbyzero * ones (size (x));
 endif
+u.dec (divisionbyzero) = "trv";
+v.dec (divisionbyzero) = "trv";
 
 endfunction

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} @var{X} + @var{Y}
+## @deftypefn {Interval Function} {} @var{X} + @var{Y}
 ## @cindex IEEE1788 add
 ## 
 ## Add all numbers of interval @var{X} to all numbers of @var{Y}.
@@ -38,14 +38,13 @@
 
 function result = plus (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into decorated interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert addend into decorated interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
@@ -54,14 +53,13 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return
 endif
 
-result = plus (intervalpart (x), intervalpart (y));
+result = infsupdec (plus (intervalpart (x), intervalpart (y)));
 ## plus is continous and defined everywhere
-result = decorateresult (result, {x, y});
+result.dec = mindec (result.dec, x.dec, y.dec);
 
 endfunction

@@ -42,8 +42,8 @@ if (isnai (x))
     return
 endif
 
-result = cosh (intervalpart (x));
+result = infsupdec (cosh (intervalpart (x)));
 ## cosh is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

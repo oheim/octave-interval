@@ -33,19 +33,17 @@
 
 function result = pownrev (c, x, p)
 
-assert (nargin >= 2)
-
+if (nargin < 2)
+    print_usage ();
+    return
+endif
 if (nargin < 3)
     p = x;
     x = infsupdec (-inf, inf);
 endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (c, "infsupdec")))
     c = infsupdec (c);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
@@ -54,20 +52,17 @@ if (isnai (c))
     result = c;
     return
 endif
-
 if (isnai (x))
     result = x;
     return
 endif
 
-result = pownrev (intervalpart (c), intervalpart (x), p);
-if (rem (p, 2) ~= 0 || inf (x) >= 0 || sup (x) <= 0)
-    ## For this restriction of x's domain, the reverse function is a continuous
-    ## point function
-    result = decorateresult (result, {x});
-else
-    ## reverse function can't be decorated, it is not a point function
-    result = setdec (result, "trv");
-endif
+result = infsupdec (pownrev (intervalpart (c), intervalpart (x), p));
+result.dec = mindec (result.dec, x.dec);
+
+## For this restriction of x's domain, the reverse function is a continuous
+## point function
+pointfunction = rem (p, 2) ~= 0 | inf (x) >= 0 | sup (x) <= 0;
+result.dec (not (pointfunction)) = "trv";
 
 endfunction

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} @var{X} ^ @var{Y}
+## @deftypefn {Interval Function} {} @var{X} .^ @var{Y}
 ## 
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
@@ -46,42 +46,38 @@
 ## Keywords: interval
 ## Created: 2014-10-15
 
-function z = mpower (x, y)
+function result = power (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
 if (isnai (x))
-    z = x;
+    result = x;
     return
 endif
-
 if (isnai (y))
-    z = y;
+    result = y;
     return
 endif
 
-z = mpower (intervalpart (x), intervalpart (y));
+result = infsupdec (power (intervalpart (x), intervalpart (y)));
+result.dec = mindec (result.dec, x.dec, y.dec);
+
 ## The general power function is continuous where it is defined
-if (not (isempty (z)) && ...
-    (inf (x) > 0 || ... # defined for all x > 0
-        (inf (x) == 0 && inf (y) > 0) || ... # defined for x = 0 if y > 0
-        (issingleton (y) && fix (inf (y)) == inf (y) && ... # defined for x < 0
-                                                            # only where y is
-                                                            # integral
-            (inf (y) > 0 || not (ismember (0, x)))))) # not defined for 0 ^ 0
-    z = decorateresult (z, {x, y});
-else
-    z = decorateresult (z, {x, y}, "trv");
-endif
+domain = not (isempty (result)) & (...
+            inf (x) > 0 | ... # defined for all x > 0
+            (inf (x) == 0 & inf (y) > 0) | ... # defined for x = 0 if y > 0
+            # defined for x < 0 only where y is integral
+            (issingleton (y) & fix (inf (y)) == inf (y) & ... 
+                (inf (y) > 0 | not (ismember (0, x))))); # not defined for 0^0
+result.dec (not (domain)) = "trv";
 
 endfunction

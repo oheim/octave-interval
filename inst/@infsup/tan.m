@@ -61,8 +61,8 @@ singularity = certainlyfullperiod | ...
 nosingularity = not (singularity);
 l (singularity) = -inf;
 u (singularity) = inf;
-l (nosingularity) = ulpadd (tanl, -1);
-u (nosingularity) = ulpadd (tanu, 1);
+l (nosingularity) = ulpadd (tanl (nosingularity), -1);
+u (nosingularity) = ulpadd (tanu (nosingularity), 1);
 
 ## tan (0) == 0
 l (nosingularity & x.inf == 0) = 0;

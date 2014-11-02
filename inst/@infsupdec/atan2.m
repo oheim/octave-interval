@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} atan2 (@var{Y}, @var{X})
+## @deftypefn {Interval Function} {} atan2 (@var{Y}, @var{X})
 ## @cindex IEEE1788 atan2
 ## 
 ## Compute the inverse tangent with two arguments for each pair of numbers from
@@ -38,14 +38,13 @@
 
 function result = atan2 (y, x)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
-if (not (isa (y, "infsupdec)))
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
+if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
@@ -54,27 +53,19 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return
 endif
 
-result = atan2 (intervalpart (y), intervalpart (x));
+result = infsupdec (atan2 (intervalpart (y), intervalpart (x)));
+result.dec = mindec (result.dec, y.dec, x.dec);
 
-if (ismember (0, y))
-    if (ismember (0, x))
-        ## The only undefined input is <0,0>
-        result = decorateresult (result, {y, x}, "trv");
-        return
-    elseif (x.inf < 0)
-        ## The function is discontinuous for x <= 0 and y == 0
-        result = decorateresult (result, {y, x}, "def");
-        return
-    endif
-endif
+## The function is discontinuous for x <= 0 and y == 0
+discontinuos = ismember (0, y) & inf (x) < 0;
+result.dec (discontinuos) = mindec (result.dec (discontinuos), "def");
 
-## The function is defined and continuous everywhere else.
-result = decorateresult (result, {y, x});
+## The only undefined input is <0,0>
+result.dec (ismember (0, y) & ismember (0, x)) = "trv";
 
 endfunction

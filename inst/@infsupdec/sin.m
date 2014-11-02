@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sin (@var{X})
+## @deftypefn {Interval Function} {} sin (@var{X})
 ## @cindex IEEE1788 sin
 ## 
 ## Compute the sine for each number in interval @var{X} in radians.
@@ -41,8 +41,8 @@ if (isnai (x))
     return
 endif
 
-result = sin (intervalpart (x));
+result = infsupdec (sin (intervalpart (x)));
 ## sin is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

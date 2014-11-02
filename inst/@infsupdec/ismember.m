@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Y} =} ismember (@var{M}, @var{X})
+## @deftypefn {Interval Comparison} {} ismember (@var{M}, @var{X})
 ## @cindex IEEE1788 isMember
 ## 
 ## Check if the interval @var{X} contains the number @var{M}.
@@ -31,9 +31,10 @@
 
 function result = ismember (real, interval)
 
-assert (nargin == 2);
-
-## Convert second parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (interval, "infsupdec")))
     interval = infsupdec (interval);
 endif

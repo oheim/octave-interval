@@ -43,12 +43,11 @@ if (isnai (x))
     return
 endif
 
-result = ceil (intervalpart (x));
-if (issingleton (result) && fix (x.sup) ~= x.sup)
-    ## Between two integral numbers the function is constant, thus continuous
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "def");
-endif
+result = infsupdec (ceil (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
+## Between two integral numbers the function is constant, thus continuous
+discontinuos = not (issingleton (result) & fix (sup (x)) ~= sup (x));
+result.dec (discontinuos) = mindec (result.dec (discontinuos), "def");
 
 endfunction

@@ -14,10 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} @var{X} / @var{Y}
-## @cindex IEEE1788 div
+## @deftypefn {Interval Function} {} @var{X} .* @var{Y}
+## @cindex IEEE1788 mul
 ## 
-## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
+## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -25,27 +25,26 @@
 ## @group
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
-## x / y
-##   @result{} [1, 3]_com
+## x * y
+##   @result{} [2, 6]_com
 ## @end group
 ## @end example
-## @seealso{mtimes}
+## @seealso{mrdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = mrdivide (x, y)
+function result = times (x, y)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert divisor into interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
@@ -54,18 +53,13 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return
 endif
 
-result = mrdivide (intervalpart (x), intervalpart (y));
-if (ismember (0, y))
-    ## division by zero is undefined
-    result = decorateresult (result, {x, y}, "trv");
-else
-    result = decorateresult (result, {x, y});
-endif
+result = infsupdec (times (intervalpart (x), intervalpart (y)));
+## times is defined and continuous everywhere
+result.dec = mindec (result.dec, x.dec, y.dec);
 
 endfunction

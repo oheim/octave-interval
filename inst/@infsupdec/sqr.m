@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sqr (@var{X})
+## @deftypefn {Interval Function} {} sqr (@var{X})
 ## @cindex IEEE1788 sqr
 ## 
 ## Compute the square for all numbers in @var{X}.
@@ -41,8 +41,8 @@ if (isnai (x))
     return
 endif
 
-result = sqr (intervalpart (x));
+result = infsupdec (sqr (intervalpart (x)));
 ## sqr is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

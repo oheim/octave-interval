@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} tanh (@var{X})
+## @deftypefn {Interval Function} {} tanh (@var{X})
 ## @cindex IEEE1788 tanh
 ## 
 ## Compute the hyperbolic tangent for each number in interval @var{X}.
@@ -42,8 +42,8 @@ if (isnai (x))
     return
 endif
 
-result = tanh (intervalpart (x));
+result = infsupdec (tanh (intervalpart (x)));
 ## tanh is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

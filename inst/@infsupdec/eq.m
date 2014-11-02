@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Z} =} @var{A} == @var{B}
+## @deftypefn {Interval Comparison} {} @var{A} == @var{B}
 ## @cindex IEEE1788 equal
 ## 
 ## Compare intervals @var{A} and @var{B} for equality.
@@ -40,14 +40,13 @@
 
 function result = eq(a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif
@@ -55,7 +54,8 @@ endif
 if (isnai (a) || isnai (b))
     result = false ();
 else
-    result = eq (intervalpart (a), intervalpart (b)) && strcmp (a.dec, b.dec);
+    result = eq (intervalpart (a), intervalpart (b)) & ...
+             strcmp (a.dec, b.dec);
 endif
 
 endfunction

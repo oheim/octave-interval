@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{C} =} @var{A} | @var{B}
+## @deftypefn {Interval Function} {} @var{A} | @var{B}
 ## @cindex IEEE1788 convexHull
 ## 
 ## Build the interval hull of the union of two intervals.
@@ -38,14 +38,13 @@
 
 function result = or(a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif
@@ -54,7 +53,6 @@ if (isnai (a))
     result = a;
     return
 endif
-
 if (isnai (b))
     result = b;
     return
@@ -62,6 +60,6 @@ endif
 
 result = or (intervalpart (a), intervalpart (b));
 ## convexHull must not retain any useful decoration
-result = decorateresult (result, {a, b}, "trv");
+result = infsupdec (result, "trv");
 
 endfunction

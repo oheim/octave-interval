@@ -31,23 +31,19 @@
 
 function result = mulrev (b, c, x)
 
-assert (nargin >= 2)
-
+if (nargin < 2)
+    print_usage ();
+    return
+endif
 if (nargin < 3)
     x = infsupdec (-inf, inf);
 endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (c, "infsupdec")))
     c = infsupdec (c);
 endif
-
-## Convert third parameter into interval, if necessary
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
@@ -56,23 +52,21 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (b))
     result = b;
     return
 endif
-
 if (isnai (c))
     result = c;
     return
 endif
 
-result = mulrev (intervalpart (b), intervalpart (c), intervalpart (x));
+result = infsupdec (...
+        mulrev (intervalpart (b), intervalpart (c), intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
 ## inverse multiplication is continuous, but not a point function for 0
-if (not (ismember (0, x)))
-    result = decorateresult (result, {x});
-else
-    result = setdec (result, "trv");
-endif
+discontinuous = ismember (0, x);
+result.dec (discontinuous) = "trv";
 
 endfunction

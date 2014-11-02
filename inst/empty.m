@@ -14,7 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constant} {@var{X} =} empty ()
+## @deftypefn {Interval Constant} {} empty ()
+## @deftypefnx {Interval Constant} {} empty (@var{N})
+## @deftypefnx {Interval Constant} {} empty (@var{N}, @var{M})
 ## @cindex IEEE1788 empty
 ## 
 ## Return the empty interval.
@@ -42,10 +44,21 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function interval = empty ()
+function interval = empty (n, m)
 
-interval = infsupdec ();
-return
+switch nargin
+    case 0
+        interval = infsupdec ();
+    case 1
+        interval = infsupdec (inf (n), -inf (n));
+    case 2
+        interval = infsupdec (inf (n, m), -inf (n, m));
+    otherwise
+        print_usage();
+        return
+endswitch
+
+endfunction
 %!test "Check [Empty] properties";
 %! x = empty ();
 %! assert (inf (x) == inf);

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} sign (@var{X})
+## @deftypefn {Interval Function} {} sign (@var{X})
 ## @cindex IEEE1788 sign
 ## 
 ## Compute the signum function for each number in interval @var{X}.
@@ -44,12 +44,11 @@ if (isnai (x))
     return
 endif
 
-result = sign (intervalpart (x));
+result = infsupdec (sign (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
 ## sign is defined everywhere and continuous for x ~= 0
-if (ismember (0, x))
-    result = decorateresult (result, {x}, "def");
-else
-    result = decorateresult (result, {x});
-endif
+discontinuous = ismember (0, x);
+result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
 
 endfunction

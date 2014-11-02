@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} asinh (@var{X})
+## @deftypefn {Interval Function} {} asinh (@var{X})
 ## @cindex IEEE1788 asinh
 ## 
 ## Compute the inverse hyperbolic sine for each number in interval @var{X}.
@@ -42,8 +42,8 @@ if (isnai (x))
     return
 endif
 
-result = asinh (intervalpart (x));
+result = infsupdec (asinh (intervalpart (x)));
 ## asinh is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

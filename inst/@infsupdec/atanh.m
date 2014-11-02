@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} atanh (@var{X})
+## @deftypefn {Interval Function} {} atanh (@var{X})
 ## @cindex IEEE1788 atanh
 ## 
 ## Compute the inverse hyperbolic tangent for each number in interval @var{X}.
@@ -42,12 +42,9 @@ if (isnai (x))
     return
 endif
 
-result = atanh (intervalpart (x));
+result = infsupdec (atanh (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
 ## atanh is continuous everywhere, but defined for [-1, 1] only
-if (subset (x, infsup(-1, 1)))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "trv");
-endif
+result.dec (not (subset (x, infsup (-1, 1)))) = "trv";
 
 endfunction

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} fix (@var{X})
-## @cindex IEEE1788 truc
+## @cindex IEEE1788 trunc
 ## 
 ## Truncate fractional portion of each number in interval @var{X}.  This is
 ## equivalent to rounding towards zero.

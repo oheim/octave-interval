@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} round (@var{X})
+## @deftypefn {Interval Function} {} round (@var{X})
 ## @cindex IEEE1788 roundTiesToAway
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
@@ -44,14 +44,15 @@ if (isnai (x))
     return
 endif
 
-result = round (intervalpart (x));
-if (issingleton (result) && ...
-    (x.sup >= 0 || fix (x.sup) == x.sup || fix (x.sup * 2) / 2 ~= x.sup) && ...
-    (x.inf <= 0 || fix (x.inf) == x.inf || fix (x.inf * 2) / 2 ~= x.inf))
-    ## Round is like a scaled fix function
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "def");
-endif
+result = infsupdec (round (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
+## Round is like a scaled fix function
+discontinuous = not (issingleton (result) & ...
+    (sup (x) >= 0 | ...
+            fix (sup (x)) == sup (x) | fix (sup (x) * 2) / 2 ~= sup (x)) & ...
+    (inf (x) <= 0 | ...
+            fix (inf (x)) == inf (x) | fix (inf (x) * 2) / 2 ~= inf (x)));
+result.dec (discontinuous) = mindec (result.dec (discontinuous), "trv");
 
 endfunction

@@ -38,23 +38,19 @@
 
 function result = atan2rev2 (a, c, x)
 
-assert (nargin >= 2)
-
+if (nargin < 2)
+    print_usage ();
+    return
+endif
 if (nargin < 3)
     x = infsupdec (-inf, inf);
 endif
-
-## Convert first parameter into interval, if necessary
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (c, "infsupdec")))
     c = infsup (c);
 endif
-
-## Convert third parameter into interval, if necessary
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
@@ -63,12 +59,10 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (a))
     result = b;
     return
 endif
-
 if (isnai (c))
     result = c;
     return
@@ -76,6 +70,6 @@ endif
 
 result = atan2rev2 (intervalpart (a), intervalpart (c), intervalpart (x));
 ## inverse atan2 is not a point function
-result = setdec (result, "trv");
+result = infsupdec (result, "trv");
 
 endfunction

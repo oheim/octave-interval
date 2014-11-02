@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} abs (@var{X})
+## @deftypefn {Interval Function} {} abs (@var{X})
 ## @cindex IEEE1788 abs
 ## 
 ## Compute the absolute value of numbers in interval @var{X}.
@@ -43,8 +43,8 @@ if (isnai (x))
     return
 endif
 
-result = abs (intervalpart (x));
+result = infsupdec (abs (intervalpart (x)));
 ## abs is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

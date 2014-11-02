@@ -42,12 +42,9 @@ if (isnai (x))
     return
 endif
 
-result = acosh (intervalpart (x));
+result = infsupdec (acosh (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
 ## acosh is continuous everywhere, but defined for [1, Inf] only
-if (subset (x, infsup(1, inf)))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "trv");
-endif
+result.dec (not (subset (x, infsup (1, inf)))) = "trv";
 
 endfunction

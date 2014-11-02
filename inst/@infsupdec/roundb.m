@@ -44,14 +44,13 @@ if (isnai (x))
     return
 endif
 
-result = roundb (intervalpart (x));
-if (issingleton (result) && ...
-    (rem (result.inf, 2) ~= 0 ||
-        ((fix (x.sup) == x.sup || fix (x.sup * 2) / 2 ~= x.sup) && ...
-         (fix (x.inf) == x.inf || fix (x.inf * 2) / 2 ~= x.inf))))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "def");
-endif
+result = infsupdec (roundb (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
+discontinuous = not (issingleton (result) & ...
+    (rem (inf (result), 2) ~= 0 | ...
+        ((fix (sup (x)) == sup (x) | fix (sup (x) * 2) / 2 ~= sup (x)) & ...
+         (fix (inf (x)) == inf (x) | fix (inf (x) * 2) / 2 ~= inf (x)))));
+result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
 
 endfunction

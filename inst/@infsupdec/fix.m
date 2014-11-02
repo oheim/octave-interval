@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} fix (@var{X})
-## @cindex IEEE1788 truc
+## @deftypefn {Interval Function} {} fix (@var{X})
+## @cindex IEEE1788 trunc
 ## 
 ## Truncate fractional portion of each number in interval @var{X}.  This is
 ## equivalent to rounding towards zero.
@@ -44,15 +44,15 @@ if (isnai (x))
     return
 endif
 
-result = fix (intervalpart (x));
-if (issingleton (result) && ...
-    (x.sup >= 0 || fix (x.sup) ~= x.sup) && ...
-    (x.inf <= 0 || fix (x.inf) ~= x.inf))
-    ## Between two integral numbers the function is constant, thus continuous
-    ## At x == 0 the function is continuous.
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "def");
-endif
+result = infsupdec (fix (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
+## Between two integral numbers the function is constant, thus continuous
+## At x == 0 the function is continuous.
+discontinuous = not (...
+    issingleton (result) & ...
+    (sup (x) >= 0 | fix (sup (x)) ~= sup (x)) & ...
+    (inf (x) <= 0 | fix (inf (x)) ~= inf (x)));
+result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
 
 endfunction

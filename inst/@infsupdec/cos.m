@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} cos (@var{X})
+## @deftypefn {Interval Function} {} cos (@var{X})
 ## @cindex IEEE1788 cos
 ## 
 ## Compute the cosine for each number in interval @var{X} in radians.
@@ -41,8 +41,8 @@ if (isnai (x))
     return
 endif
 
-result = cos (intervalpart (x));
+result = infsupdec (cos (intervalpart (x)));
 ## cos is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

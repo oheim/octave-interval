@@ -42,19 +42,21 @@
 
 function result = pown (x, p)
 
-assert (nargin == 2);
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 
 if (isnai (x))
     result = x;
     return
 endif
 
-result = pown (intervalpart (x), p);
-if (p < 0 && ismember (0, x))
-    ## x^P is undefined for x == 0 and P < 0
-    result = decorateresult (result, {x}, "trv");
-else
-    result = decorateresult (result, {x});
-endif
+result = infsupdec (pown (intervalpart (x), p));
+result.dec = mindec (result.dec, x.dec);
+
+## x^P is undefined for x == 0 and P < 0
+domain = p >= 0 | not (ismember (0, x));
+result.dec (not (domain)) = "trv";
 
 endfunction

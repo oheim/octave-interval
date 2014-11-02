@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} atan (@var{X})
+## @deftypefn {Interval Function} {} atan (@var{X})
 ## @cindex IEEE1788 atan
 ## 
 ## Compute the inverse tangent in radians for each number in interval @var{X}.
@@ -41,8 +41,8 @@ if (isnai (x))
     return
 endif
 
-result = atan (intervalpart (x));
+result = infsupdec (atan (intervalpart (x)));
 ## atan is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

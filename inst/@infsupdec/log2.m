@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} log2 (@var{X})
+## @deftypefn {Interval Function} {} log2 (@var{X})
 ## @cindex IEEE1788 log2
 ## 
 ## Compute the binary (base-2) logarithm for all numbers in interval @var{X}.
@@ -44,12 +44,10 @@ if (isnai (x))
     return
 endif
 
-result = log2 (intervalpart (x));
+result = infsupdec (log2 (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
 ## log2 is continuous everywhere, but defined for x > 0 only
-if (interior (x, infsup(0, inf)))
-    result = decorateresult (result, {x});
-else
-    result = decorateresult (result, {x}, "trv");
-endif
+result.dec (not (interior (x, infsup(0, inf)))) = "trv";
 
 endfunction

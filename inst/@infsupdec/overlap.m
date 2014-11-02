@@ -32,14 +32,13 @@
 
 function [state, bitmask] = overlap (a, b)
 
-assert (nargin == 2);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif

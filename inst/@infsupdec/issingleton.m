@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {@var{Y} =} issingleton (@var{X})
+## @deftypefn {Interval Comparison} {} issingleton (@var{X})
 ## @cindex IEEE1788 isSingleton
 ## 
 ## Check if the interval represents a set that contains a single real only.

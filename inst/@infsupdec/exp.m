@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} exp (@var{X})
+## @deftypefn {Interval Function} {} exp (@var{X})
 ## @cindex IEEE1788 exp
 ## 
 ## Compute the exponential function for all numbers in @var{X}.
@@ -42,8 +42,8 @@ if (isnai (x))
     return
 endif
 
-result = exp (intervalpart (x));
+result = infsupdec (exp (intervalpart (x)));
 ## exp is defined and continuous everywhere
-result = decorateresult (result, {x});
+result.dec = mindec (result.dec, x.dec);
 
 endfunction

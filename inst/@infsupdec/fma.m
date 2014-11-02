@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{R} =} fma (@var{X}, @var{Y}, @var{Z})
+## @deftypefn {Interval Function} {} fma (@var{X}, @var{Y}, @var{Z})
 ## @cindex IEEE1788 fma
 ## 
 ## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.  Multiply each
@@ -44,19 +44,16 @@
 
 function result = fma (x, y, z)
 
-assert (nargin == 3);
-
-## Convert first parameter into interval, if necessary
+if (nargin ~= 2)
+    print_usage ();
+    return
+endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-
-## Convert second parameter into interval, if necessary
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
-
-## Convert third parameter into interval, if necessary
 if (not (isa (z, "infsupdec")))
     z = infsupdec (z);
 endif
@@ -65,19 +62,18 @@ if (isnai (x))
     result = x;
     return
 endif
-
 if (isnai (y))
     result = y;
     return
 endif
-
 if (isnai (z))
     result = z;
     return
 endif
 
-result = fma (intervalpart (x), intervalpart (y), intervalpart (z));
+result = infsupdec (...
+        fma (intervalpart (x), intervalpart (y), intervalpart (z)));
 ## fma is defined and continuous everywhere
-result = decorateresult (result, {x, y, z});
+result.dec = mindec (result.dec, x.dec, y.dec, z.dec);
 
 endfunction
