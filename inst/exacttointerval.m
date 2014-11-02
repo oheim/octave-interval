@@ -14,19 +14,11 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{X} =} exacttointerval (@var{S})
+## @deftypefn {Interval Constructor} {} exacttointerval (@var{S})
 ## @cindex IEEE1788 exactToInterval
 ## 
 ## Create an interval from an interval literal.  Fail, if the interval cannot
 ## exactly represent the input S.
-##
-## Interval literals @var{S} can be special values or in inf-sup form.  Special
-## values are: @code{[]} and @code{[empty]} for the empty interval and
-## @code{[entire]} for the entire set of real numbers.  Literals in inf-sup
-## form must be inside square brackets.  Boundaries in inf-sup form can be a
-## [+-]inf[inity] or a decimal number in the form [+-]d[.]d[[eE][+-]d].  In
-## inf-sup form it is possible to use @code{[m]} as an abbreviation for
-## @code{[m, m]}.
 ##
 ## Accuracy: The equation @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))}
 ## holds for all intervals.
