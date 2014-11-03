@@ -13,10 +13,20 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## @deftypefn {Interval Constructor} {} horzcat (@var{ARRAY}…)
+## @deftypefn {Interval Constructor} {} [@var{ARRAY1}, @var{ARRAY2}, ...]
 ##
 ## Return the horizontal concatenation of interval array objects along
 ## dimension 2.
+##
+## @example
+## @group
+## a = infsupdec (2, 5);
+## [a, a, a]
+##   @result{} 1×3 interval vector
+##
+##      [2, 5]_com   [2, 5]_com   [2, 5]_com
+## @end group
+## @end example
 ## @seealso{vertcat}
 ## @end deftypefn
 

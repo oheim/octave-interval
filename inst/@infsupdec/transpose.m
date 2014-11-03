@@ -13,9 +13,20 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## @deftypefn {Interval Function} {} transpose (@var{X})
+## @deftypefn {Interval Function} {} @var{X} .'
 ##
-## Return the transpose of @var{X}.
+## Return the transpose of interval matrix or vector @var{X}.
+##
+## @example
+## @group
+## infsupdec (zeros (1, 3), ones (1, 3)) .'
+##   @result{} 3×1 interval vector
+##
+##      [0, 1]_com
+##      [0, 1]_com
+##      [0, 1]_com
+## @end group
+## @end example
 ## @seealso{ctranspose}
 ## @end deftypefn
 
@@ -25,9 +36,6 @@
 
 function result = transpose (x)
 
-dx = transpose (x.dec);
-x = transpose (intervalpart (x));
-
-result = infsupdec (x, dx);
+result = infsupdec (transpose (intervalpart (x)), transpose (x.dec));
 
 endfunction

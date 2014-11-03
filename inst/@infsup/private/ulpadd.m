@@ -33,7 +33,7 @@ assert (isa (x, "double"));
 assert (n ~= 0);
 assert (isscalar (n));
 
-ulp = pow2 (max(-1074, floor (log2 (abs (x))) - 52));
+ulp = pow2 (max (-1074, floor (log2 (abs (x))) - 52));
 fesetround(sign (n) * inf);
 result = x + n * ulp;
 fesetround(0.5);
