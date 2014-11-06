@@ -135,27 +135,27 @@ for i = 1 : n
 endfor
 
 ## Initialize L and U
-U = L = cell (n);
-x = permute (P, x);
-for i = 1 : n
-    for k = 1 : n
-        ## Store P * x in U
-        U {i, k} = infsup (x.inf (i, k), x.sup (i, k));
-        ## Store eye (n) in L
-        L {i, k} = infsup (double (i == k));
-    endfor
-endfor
+L = infsup (eye (n));
+U = permute (P, x);
 
 ## Compute L and U
+varidx.type = rowstart.type = curelement.type = refelement.type = "()";
 for i = 1 : (n - 1)
+    varidx.subs = {i, i};
     ## Go through rows of the remaining matrix
     for k = (i + 1) : n
+        rowstart.subs = {k, i};
         ## Compute L
-        L {k, i} = U {k, i} ./ U {i, i};
+        L = subsasgn (L, rowstart, ...
+                      subsref (U, rowstart) ./ subsref (U, varidx));
         ## Go through columns of the remaining matrix
         for j = i : n
+            curelement.subs = {k, j};
+            refelement.subs = {i, j};
             ## Compute U
-            U {k, j} = U {k, j} - L {k, i} .* U {i, j};
+            U = subsasgn (U, curelement, ...
+                          subsref (U, curelement) - ...
+                          subsref (L, rowstart) .* subsref (U, refelement));
         endfor
     endfor
 endfor
@@ -163,48 +163,57 @@ endfor
 ## Step 2: Forward substitution 
 ##         Solve L * s = inv (P) * y
 
-s = cell (n, m);
-y = permute (inv (P), y);
-
+s = permute (inv (P), y);
+prevvars.type = Lrowidx.type =  "()";
 for i = 1 : m
-    s {1, i} = infsup (y.inf (1, i), y.sup (1, i));
+    ## Special case: k == 1
+    ## s (k, i) already is correct
     for k = 2 : n
-        suml = sumu = zeros (k, 2);
-        for j = 1 : (k - 1)
-            suml (j, :) = [inf(L {k, j}), inf(s {j, i})];
-            sumu (j, :) = [sup(L {k, j}), sup(s {j, i})];
-        endfor
-        suml (k, :) = [-1, y.inf(k, i)];
-        sumu (k, :) = [-1, y.sup(k, i)];
-        sum = dot (infsup (suml (:, 1), sumu (:, 1)), ...
-                   infsup (suml (:, 2), sumu (:, 2)));
+        curelement.subs = {k, i};
+        prevvars.subs = {1 : k, i};
+        Lrowidx.subs = {k, 1 : k};
         
-        s {k, i} = -sum;
+        varcol = subsref (s, prevvars);
+        Lrow = subsref (L, Lrowidx);
+        
+        ## We have to subtract varcol (1 : (k - 1)) * Lrow (1 : (k - 1)) from
+        ## s (k, i). Since varcol (k) == s (k, i), we can simply set
+        ## Lrow (k) = -1 and the dot product will compute the difference for us
+        ## with high accurracy.
+        Lrow.inf (k) = Lrow.sup (k) = -1;
+        
+        ## Then, we only have to flip the sign afterwards.
+        s = subsasgn (s, curelement, -dot (Lrow, varcol));
     endfor
 endfor
 
 ## Step 3: Backward substitution
 ##         Solve U * z = s
 
-z = infsup (inf (n, m), -inf (n, m));
-idx.type = "()"; # we cannot access subsref / subsasgn using operators
+z = s;
+Urowstart.type = Urowrest.type = "()";
 for i = 1 : m
-    idx.subs = {n, i};
-    z = subsasgn (z, idx, csdivide (s {n, i}, U {n, n}));
+    ## Special case: k == n
+    curelement.subs = {n, i};
+    Urowstart.subs = {n, n};
+    z = subsasgn (z, curelement, ...
+                  csdivide (subsref (z, curelement), subsref (U, Urowstart)));
     for k = (n - 1) : -1 : 1
-        suml = sumu = zeros (n - k + 1, 2);
-        for j = (k + 1) : n
-            idx.subs = {j, i};
-            suml (j - k, :) = [inf(U {k, j}), inf(subsref (z, idx))];
-            sumu (j - k, :) = [sup(U {k, j}), sup(subsref (z, idx))];
-        endfor
-        suml (n - k + 1, :) = [-1, inf(s {k, i})];
-        sumu (n - k + 1, :) = [-1, sup(s {k, i})];
-        sum = dot (infsup (suml (:, 1), sumu (:, 1)), ...
-                   infsup (suml (:, 2), sumu (:, 2)));
+        curelement.subs = {k, i};
+        Urowstart.subs = {k, k};
+        prevvars.subs = {k : n, i};
+        Urowrest.subs = {k, k : n};
         
-        idx.subs = {k, i};
-        z = subsasgn (z, idx, csdivide (-sum, U {k, k}));
+        varcol = subsref (z, prevvars);
+        Urow = subsref (U, Urowrest);
+        
+        ## Use the same trick like above during forward substitution.
+        Urow.inf (1) = Urow.sup (1) = -1;
+        
+        ## Additionally we must divide the element by the current diagonal
+        ## element of U.
+        z = subsasgn (z, curelement, ...
+                      csdivide (-dot (Urow, varcol), subsref (U, Urowstart)));
     endfor
 endfor
 
