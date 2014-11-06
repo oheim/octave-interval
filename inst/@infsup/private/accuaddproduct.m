@@ -29,13 +29,22 @@ if (multiplicand == 0 || multiplier == 0)
     return
 endif
 
+if (abs (multiplicand) == 1 || abs (multiplier) == 1)
+    ## This product is exact, no overflow or underflow may occur
+    product = multiplicand * multiplier;
+    ## Addition is much cheaper than the product logic below
+    accumulator = accuadd (accumulator, product);
+    return
+endif
+
 doubles.x = multiplicand;
 doubles.y = multiplier;
 
 for [doubleprecision, key] = doubles
-    assert (isa (doubleprecision, "double"));
-    assert (not (isnan (doubleprecision)));
-    assert (isfinite (doubleprecision));
+    if (not (isa (doubleprecision, "double") && isfinite (doubleprecision))...
+        || isnan (doubleprecision))
+        assert (false, "Illegal call to accu operation");
+    endif
 
     [extendedprecision.(key).sign, ...
     extendedprecision.(key).exponent, ...
