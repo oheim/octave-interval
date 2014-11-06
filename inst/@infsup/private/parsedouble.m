@@ -27,9 +27,9 @@
 
 function [sign, exponent, mantissa] = parsedouble (binary)
 
-assert (isa (binary, "double"));
-assert (not (isnan (binary)));
-assert (isfinite (binary));
+if (not (isa (binary, "double") && isfinite (binary)) || isnan (binary))
+    assert (false (), "Invalid call to parsedouble");
+endif
 
 ## Decode bit representation
 hex = num2hex (binary); # 16 hexadecimal digits (with leading zeros)
