@@ -58,17 +58,25 @@ if (size (x.inf, 2) ~= size (y.inf, 1))
     error ("operator *: nonconformant arguments");
 endif
 
-l = u = zeros (size (x.inf, 1), size (y.inf, 2));
+## Initialize result matrix
+result = infsup (inf (size (x.inf, 1), size (y.inf, 2)), ...
+                -inf (size (x.inf, 1), size (y.inf, 2)));
 
-for i = 1 : rows (l)
-    for j = 1 : columns (l)
-        element = dot (infsup (x.inf (i, :), x.sup (i, :)), ...
-                       infsup (y.inf (:, j), y.sup (:, j)));
-        l (i, j) = element.inf;
-        u (i, j) = element.sup;
+## Minimize the number of dot calls: Compute the result row-wise or column-wise
+idx.type = "()";
+idx.subs = {":", ":"};
+if (size (x.inf, 1) >= size (y.inf, 2))
+    for i = 1 : size (x.inf, 1)
+        idx.subs {1} = i;
+        result = subsasgn (result, idx, ...
+                           dot (subsref (x, idx)', y, 1));
     endfor
-endfor
-
-result = infsup (l, u);
+else
+    for j = 1 : size (y.inf, 2)
+        idx.subs {2} = j;
+        result = subsasgn (result, idx, ...
+                           dot (x, subsref (y, idx)', 2));
+    endfor
+endif
 
 endfunction
