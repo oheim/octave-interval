@@ -29,11 +29,16 @@
 
 function result = ulpadd (x, n)
 
-assert (isa (x, "double"));
-assert (n ~= 0);
-assert (isscalar (n));
+if (not (isa (x, "double") && isscalar (n)))
+    assert (false (), "Illegal call to ulpadd");
+endif
 
-ulp = pow2 (max (-1074, floor (log2 (abs (x))) - 52));
+if (abs (n) <= 1)
+    ulp = pow2 (-1074);
+else
+    ulp = pow2 (max (-1074, floor (log2 (abs (x))) - 52));
+endif
+
 fesetround(sign (n) * inf);
 result = x + n * ulp;
 fesetround(0.5);
