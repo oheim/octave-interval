@@ -139,24 +139,21 @@ L = infsup (eye (n));
 U = permute (P, x);
 
 ## Compute L and U
-varidx.type = rowstart.type = curelement.type = refelement.type = "()";
+varidx.type = rowstart.type = Urefrow.type = Urow.type = "()";
 for i = 1 : (n - 1)
     varidx.subs = {i, i};
+    Urefrow.subs = {i, i : n};
     ## Go through rows of the remaining matrix
     for k = (i + 1) : n
         rowstart.subs = {k, i};
         ## Compute L
-        L = subsasgn (L, rowstart, ...
-                      subsref (U, rowstart) ./ subsref (U, varidx));
+        Lcurrentelement = subsref (U, rowstart) ./ subsref (U, varidx);
+        L = subsasgn (L, rowstart, Lcurrentelement);
         ## Go through columns of the remaining matrix
-        for j = i : n
-            curelement.subs = {k, j};
-            refelement.subs = {i, j};
-            ## Compute U
-            U = subsasgn (U, curelement, ...
-                          subsref (U, curelement) - ...
-                          subsref (L, rowstart) .* subsref (U, refelement));
-        endfor
+        Urow.subs = {k, i : n};
+        ## Compute U
+        U = subsasgn (U, Urow, subsref (U, Urow) - ...
+                      Lcurrentelement .* subsref (U, Urefrow));
     endfor
 endfor
 
@@ -164,7 +161,7 @@ endfor
 ##         Solve L * s = inv (P) * y
 
 s = permute (inv (P), y);
-prevvars.type = Lrowidx.type =  "()";
+curelement.type = prevvars.type = Lrowidx.type =  "()";
 for i = 1 : m
     ## Special case: k == 1
     ## s (k, i) already is correct
