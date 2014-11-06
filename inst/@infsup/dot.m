@@ -86,10 +86,11 @@ endif
 resultsize = max (size (x.inf), size (y.inf));
 resultsize (dim) = 1;
 
-isexact = true (resultsize);
-l = u = zeros (resultsize);
+empty = isexact = true (resultsize);
+l = u = cell (resultsize);
 
-for n = 1 : numel (isexact)
+## Accu operations may be executed in parallel
+parfor n = 1 : numel (isexact)
     idx.type = "()";
     idx.subs = cell (1, 2);
     idx.subs {dim} = ":";
@@ -107,15 +108,39 @@ for n = 1 : numel (isexact)
         vector.y = subsref (y, idx);
     endif
     
-    [l(n), u(n), isexact(n)] = vectordot (vector.x, vector.y);
+    [l{n}, u{n}, empty(n)] = vectordot (vector.x, vector.y);
+endparfor
+
+## Conversion from accu to double not in parfor loop, because it sets the
+## floating-point environment and this might be problematic
+for n = 1 : numel (isexact)
+    if (empty (n))
+        l {n} = inf;
+        u {n} = -inf;
+        isexact (n) = true ();
+    else
+        if (l {n}.unbound)
+            l {n} = -inf;
+            isexact (n) = true ();
+        else
+            [l{n}, isexact(n)] = accu2double (l {n}, -inf);
+        endif
+        
+        if (u {n}.unbound)
+            u {n} = inf;
+        else
+            [u{n}, upperisexact] = accu2double (u {n}, inf);
+            isexact (n) = and (isexact (n), upperisexact);
+        endif
+    endif
 endfor
 
 result = infsup (l, u);
 
 endfunction
 
-## Dot product of two interval vectors or one vector and one scalar
-function [l, u, isexact] = vectordot (x, y)
+## Dot product of two interval vectors; or one vector and one scalar
+function [l, u, empty] = vectordot (x, y)
 
 ## Initialize accumulators
 l.e = int64 (0);
@@ -264,26 +289,6 @@ for i = 1 : max (numel (x.inf), numel (y.inf))
     endif
 endfor
     
-if (empty)
-    l = inf;
-    u = -inf;
-    isexact = true ();
-else
-    if (l.unbound)
-        l = -inf ();
-        isexact = true ();
-    else
-        [l, isexact] = accu2double (l, -inf);
-    endif
-    
-    if (u.unbound)
-        u = inf ();
-    else
-        [u, upperisexact] = accu2double (u, inf);
-        isexact = and (isexact, upperisexact);
-    endif
-endif
-
 endfunction
 
 %!test "matrix × matrix";
