@@ -151,9 +151,18 @@ for i = 1 : (n - 1)
         L = subsasgn (L, rowstart, Lcurrentelement);
         ## Go through columns of the remaining matrix
         Urow.subs = {k, i : n};
+        
         ## Compute U
-        U = subsasgn (U, Urow, subsref (U, Urow) - ...
-                      Lcurrentelement .* subsref (U, Urefrow));
+        ##
+        ## P * x shall be a subset of L * U, because L * U will define a linear
+        ## system with less or equal constraints.  We have to find Unew such
+        ## that subset (Uold, Unew + Lcurrentelement * Uref) == true.
+        ## It suffices to subtract (from Uold) an arbitrary element from
+        ## Lcurrentelement * Uref, the midpoint is the best choice.
+        subtrahend = mid (Lcurrentelement .* subsref (U, Urefrow));
+        subtrahend (isnan (subtrahend)) = 0;
+        
+        U = subsasgn (U, Urow, subsref (U, Urow) - subtrahend);
     endfor
 endfor
 
@@ -194,7 +203,7 @@ for i = 1 : m
     curelement.subs = {n, i};
     Urowstart.subs = {n, n};
     z = subsasgn (z, curelement, ...
-                  csdivide (subsref (z, curelement), subsref (U, Urowstart)));
+                  mulrev (subsref (U, Urowstart), subsref (z, curelement)));
     for k = (n - 1) : -1 : 1
         curelement.subs = {k, i};
         Urowstart.subs = {k, k};
@@ -210,7 +219,7 @@ for i = 1 : m
         ## Additionally we must divide the element by the current diagonal
         ## element of U.
         z = subsasgn (z, curelement, ...
-                      csdivide (-dot (Urow, varcol), subsref (U, Urowstart)));
+                      mulrev (subsref (U, Urowstart), -dot (Urow, varcol)));
     endfor
 endfor
 
@@ -234,20 +243,5 @@ for i = 1 : rows (P)
 endfor
 
 B = infsup (l, u);
-
-endfunction
-
-## Containment-Set theoretic division
-function z = csdivide (x, y)
-
-if (ismember (0, y))
-    if (isempty (x))
-        z = infsup (inf, -inf);
-    else
-        z = infsup (-inf, inf);
-    endif
-else
-    z = x ./ y;
-endif
 
 endfunction
