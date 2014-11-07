@@ -43,6 +43,6 @@
 
 function result = inv (x)
 
-result = eye (length (x)) / x;
+result = mldivide (x, eye (length (x)));
 
 endfunction
