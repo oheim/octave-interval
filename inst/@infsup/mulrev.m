@@ -113,7 +113,7 @@ elseif (c.sup < 0)
         fesetround (-inf);
         l = cu / bl;
         fesetround (inf);
-        u = cu / bu;
+        u = cl / bu;
         fesetround (0.5);
         result = infsup (l, u) & x;
     elseif (b.inf >= 0)
