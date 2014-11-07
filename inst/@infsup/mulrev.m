@@ -90,7 +90,7 @@ if (ismember (0, c))
     if (ismember (0, b))
         result = infsup (x.inf, x.sup);
     elseif (c.inf == 0 && c.sup == 0)
-        result = infsup ();
+        result = infsup (0);
     elseif (b.sup < 0)
         fesetround (-inf);
         l = cu / bu;
@@ -102,7 +102,7 @@ if (ismember (0, c))
         fesetround (-inf);
         l = cl / bl;
         fesetround (inf);
-        u = cu / cl;
+        u = cu / bl;
         fesetround (0.5);
         result = infsup(l, u) & x;
     endif
