@@ -15,6 +15,7 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} inv (@var{A})
+## @cindex IEEE1788 recip
 ## 
 ## Compute the inverse of the square matrix @var{A}.
 ##
@@ -43,6 +44,21 @@
 
 function result = inv (x)
 
-result = mldivide (x, eye (length (x)));
+n = length (x);
+if (n <= 1)
+    result = 1 ./ x;
+    return
+endif
+
+result = mldivide (x, eye (n));
+
+if (not (max (max (isempty (result)))) && ...
+    not (min (min (issingleton (result)))))
+    ## mldivide's accuracy is not tightest and this is a brainless way to
+    ## improve the result's boundaries, because inv (x) == inv (x')'.
+    ## FIXME: It would be better to improve mldivide's accuracy, which could
+    ## save us 50% execution time here.
+    result = result & transpose (mldivide (transpose (x), eye (n)));
+endif
 
 endfunction
