@@ -147,7 +147,7 @@ for i = 1 : (n - 1)
     for k = (i + 1) : n
         rowstart.subs = {k, i};
         ## Compute L
-        Lcurrentelement = subsref (U, rowstart) ./ subsref (U, varidx);
+        Lcurrentelement = mulrev (subsref (U, varidx), subsref (U, rowstart));
         L = subsasgn (L, rowstart, Lcurrentelement);
         ## Go through columns of the remaining matrix
         Urow.subs = {k, i : n};
