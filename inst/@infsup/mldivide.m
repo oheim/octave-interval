@@ -64,7 +64,7 @@ n = length (x.inf);
 m = columns (y.inf);
 
 ## We have to compute z = inv (x) * y.
-## This can be done by Gaussian elimination by solving the following equation
+## This can be done by Gaußian elimination by solving the following equation
 ## for the variable z: x * z = y
 
 ## Step 1: Perform LUP decomposition of x into triangular matrices L, U and
@@ -222,6 +222,94 @@ for i = 1 : m
                       mulrev (subsref (U, Urowstart), -dot (Urow, varcol)));
     endfor
 endfor
+
+## Now we have solved inv (P) * L * U * z = y for z.
+##
+## The current result for z is only a rough estimation in general, because
+## inv (P) * L * U is only an enclosure of the original linear interval
+## system x * z = y and the Gaußian elimination above introduces several
+## inaccuracies because of aggregated intermediate results and accumulated
+## rounding errors.
+##
+## We can further try to improve the boundaries of the result with the original
+## linear system.  This is an iterative method using the mulrev operation.  It
+## is quite accurate in each step, because it only depends on one (tightest)
+## dot operation and one (tightest) mulrev operation.  However, the convergence
+## speed is slow and each cycle costs as much as a full matrix product.  So we
+## have to cancel after some iterations.
+##
+## The method used here is similar to the Gauß-Seidel-method.  In contrast to
+## the Gauß-Seidel-method we use the full matrix during each step and not
+## only its main diagonal.  Thus, we do not depend on the matrix to have a
+## certain form.  In particular, the matrix may be sparse and may have zeros on
+## its main diagonal.
+##
+## The accuracy gain for sparse matrices and matrices with thin intervals is
+## quite good after a few iterations.
+
+cyclecount = 0;
+improve = true ();
+xrowidx.type = yidx.type = zcolidx.type = "()";
+while (improve)
+    improve = false ();
+    
+    if (min (min (issingleton (z))))
+        ## Improvement is not neccessary if the system has been solved exactly
+        break
+    endif
+    
+    if (max (max (isempty (z))))
+        ## The linear system is guaranteed to have no solution. There is no
+        ## need to improve the boundaries further.
+        break
+    endif
+
+    if (cyclecount ++ >= 10)
+        ## Prevent long improvement sessions
+        break
+    endif
+    
+    for k = 1 : m
+        zcolidx.subs = {1 : n, k};
+        zcol = subsref (z, zcolidx);
+        for j = 1 : n
+            z_jk = infsup (zcol.inf (j), zcol.sup (j));
+            for i = 1 : n # the classical Gauß-Seidel-method uses only i = j
+                xrowidx.subs = {i, 1 : n};
+                xrow = subsref (x, xrowidx);
+                yidx.subs = {i, k};
+                yelement = subsref (y, yidx);
+                x_ij = infsup (xrow.inf (j), xrow.sup (j));
+                
+                if (x_ij.inf < 0 && x_ij.sup > 0)
+                    ## No improvement can be achieved.
+                    continue
+                endif
+                
+                ## x (i, 1 : n) * z (1 : n, k) shall equal y (i, k).
+                ## 1. Solve this equation for x (i, j) * z (j, k).
+                ## 2. Compute a (possibly better) enclosure for z (j, k).
+                
+                myxrow = xrow;
+                myxrow.inf (j) = yelement.inf;
+                myxrow.sup (j) = yelement.sup;
+                myzcol = zcol;
+                myzcol.inf (j) = myzcol.sup (j) = -1;
+                newvalue = mulrev (x_ij, -dot (myxrow, myzcol), z_jk);
+                
+                if (z_jk ~= newvalue)
+                    ## Stop iterative improvement if the relative improvement
+                    ## of each element falls below 6.25 %.
+                    improve = improve || ...
+                              (1 - wid (newvalue) / wid (z_jk)) >= 0.0625;
+                    z_jk = newvalue;
+                endif
+            endfor
+            z.inf (j, k) = z_jk.inf;
+            z.sup (j, k) = z_jk.sup;
+        endfor
+    endfor
+endwhile
 
 result = z;
 
