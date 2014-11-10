@@ -246,7 +246,7 @@ for k = 1 : m
             ## No improvement can be achieved.
             continue
         endif
-        i = find (migx (j, :) == max (migx (j, :)), 1);
+        i = find (migx (:, j) == max (migx (:, j)), 1);
         xrowidx.subs = {i, 1 : n};
         xrow = subsref (x, xrowidx);
         if (xrow.inf (j) < 0 && xrow.sup (j) > 0)
