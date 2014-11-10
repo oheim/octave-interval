@@ -52,13 +52,4 @@ endif
 
 result = mldivide (x, eye (n));
 
-if (not (max (max (isempty (result)))) && ...
-    not (min (min (issingleton (result)))))
-    ## mldivide's accuracy is not tightest and this is a brainless way to
-    ## improve the result's boundaries, because inv (x) == inv (x')'.
-    ## FIXME: It would be better to improve mldivide's accuracy, which could
-    ## save us 50% execution time here.
-    result = result & transpose (mldivide (transpose (x), eye (n)));
-endif
-
 endfunction
