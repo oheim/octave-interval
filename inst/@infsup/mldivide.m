@@ -55,10 +55,10 @@ endif
 
 ## x must be square
 assert (size (x.inf, 1) == size (x.inf, 2), ...
-        "operator /: nonconformant arguments");
+        "operator \: nonconformant arguments, X is not square");
 ## vertical sizes of x and y must equal
 assert (rows (x.inf) == rows (y.inf), ...
-        "operator /: nonconformant arguments");
+        "operator \: nonconformant arguments, first dimension mismatch");
 
 n = length (x.inf);
 m = columns (y.inf);
@@ -76,8 +76,8 @@ m = columns (y.inf);
 ## The computation of P is a greedy heuristic algorithm, which I developed for
 ## the implementation of this function.
 P = zeros (n);
-migU = mig (x);
-magU = migx = mag (x);
+migU = migx = mig (x);
+magU = mag (x);
 ## Empty intervals are as bad as intervals containing only zero.
 migU (isnan (migU)) = 0;
 magU (isnan (magU)) = 0;
@@ -228,8 +228,8 @@ endfor
 ## linear system.  This is an iterative method using the mulrev operation.  It
 ## is quite accurate in each step, because it only depends on one (tightest)
 ## dot operation and one (tightest) mulrev operation.  However, the convergence
-## speed is slow and each cycle is costly, so we have to cancel after few
-## iterations.
+## speed is slow and each cycle is costly, so we have to cancel after one
+## iteration.
 ##
 ## The method used here is similar to the Gauß-Seidel-method.  Instead of
 ## diagonal elements of the matrix we use an arbitrary element that does not
