@@ -77,7 +77,7 @@ m = columns (y.inf);
 ## the implementation of this function.
 P = zeros (n);
 migU = mig (x);
-magU = mag (x);
+magU = migx = mag (x);
 ## Empty intervals are as bad as intervals containing only zero.
 migU (isnan (migU)) = 0;
 magU (isnan (magU)) = 0;
@@ -153,16 +153,9 @@ for i = 1 : (n - 1)
         Urow.subs = {k, i : n};
         
         ## Compute U
-        ##
-        ## P * x shall be a subset of L * U, because L * U will define a linear
-        ## system with less or equal constraints.  We have to find Unew such
-        ## that subset (Uold, Unew + Lcurrentelement * Uref) == true.
-        ## It suffices to subtract (from Uold) an arbitrary element from
-        ## Lcurrentelement * Uref, the midpoint is the best choice.
-        subtrahend = mid (Lcurrentelement .* subsref (U, Urefrow));
-        subtrahend (isnan (subtrahend)) = 0;
-        
-        U = subsasgn (U, Urow, subsref (U, Urow) - subtrahend);
+        minuend = subsref (U, Urow);        
+        subtrahend = Lcurrentelement .* subsref (U, Urefrow);
+        U = subsasgn (U, Urow, minuend - subtrahend);
     endfor
 endfor
 
@@ -235,81 +228,48 @@ endfor
 ## linear system.  This is an iterative method using the mulrev operation.  It
 ## is quite accurate in each step, because it only depends on one (tightest)
 ## dot operation and one (tightest) mulrev operation.  However, the convergence
-## speed is slow and each cycle costs as much as a full matrix product.  So we
-## have to cancel after some iterations.
+## speed is slow and each cycle is costly, so we have to cancel after few
+## iterations.
 ##
-## The method used here is similar to the Gauß-Seidel-method.  In contrast to
-## the Gauß-Seidel-method we use the full matrix during each step and not
-## only its main diagonal.  Thus, we do not depend on the matrix to have a
-## certain form.  In particular, the matrix may be sparse and may have zeros on
-## its main diagonal.
-##
-## The accuracy gain for sparse matrices and matrices with thin intervals is
-## quite good after a few iterations.
+## The method used here is similar to the Gauß-Seidel-method.  Instead of
+## diagonal elements of the matrix we use an arbitrary element that does not
+## contain zero as an inner element.
 
-cyclecount = 0;
-improve = true ();
 xrowidx.type = yidx.type = zcolidx.type = "()";
-while (improve)
-    improve = false ();
-    
-    if (min (min (issingleton (z))))
-        ## Improvement is not neccessary if the system has been solved exactly
-        break
-    endif
-    
-    if (max (max (isempty (z))))
-        ## The linear system is guaranteed to have no solution. There is no
-        ## need to improve the boundaries further.
-        break
-    endif
-
-    if (cyclecount ++ >= 10)
-        ## Prevent long improvement sessions
-        break
-    endif
-    
-    for k = 1 : m
-        zcolidx.subs = {1 : n, k};
-        zcol = subsref (z, zcolidx);
-        for j = 1 : n
-            z_jk = infsup (zcol.inf (j), zcol.sup (j));
-            for i = 1 : n # the classical Gauß-Seidel-method uses only i = j
-                xrowidx.subs = {i, 1 : n};
-                xrow = subsref (x, xrowidx);
-                yidx.subs = {i, k};
-                yelement = subsref (y, yidx);
-                x_ij = infsup (xrow.inf (j), xrow.sup (j));
-                
-                if (x_ij.inf < 0 && x_ij.sup > 0)
-                    ## No improvement can be achieved.
-                    continue
-                endif
-                
-                ## x (i, 1 : n) * z (1 : n, k) shall equal y (i, k).
-                ## 1. Solve this equation for x (i, j) * z (j, k).
-                ## 2. Compute a (possibly better) enclosure for z (j, k).
-                
-                myxrow = xrow;
-                myxrow.inf (j) = yelement.inf;
-                myxrow.sup (j) = yelement.sup;
-                myzcol = zcol;
-                myzcol.inf (j) = myzcol.sup (j) = -1;
-                newvalue = mulrev (x_ij, -dot (myxrow, myzcol), z_jk);
-                
-                if (z_jk ~= newvalue)
-                    ## Stop iterative improvement if the relative improvement
-                    ## of each element falls below 6.25 %.
-                    improve = improve || ...
-                              (1 - wid (newvalue) / wid (z_jk)) >= 0.0625;
-                    z_jk = newvalue;
-                endif
-            endfor
-            z.inf (j, k) = z_jk.inf;
-            z.sup (j, k) = z_jk.sup;
-        endfor
+migx (isnan (migx)) = 0;
+for k = 1 : m
+    zcolidx.subs = {1 : n, k};
+    zcol = subsref (z, zcolidx);
+    for j = n : -1 : 1
+        z_jk = infsup (zcol.inf (j), zcol.sup (j));
+        if (isempty (z_jk) || issingleton (z_jk))
+            ## No improvement can be achieved.
+            continue
+        endif
+        i = find (migx (j, :) == max (migx (j, :)), 1);
+        xrowidx.subs = {i, 1 : n};
+        xrow = subsref (x, xrowidx);
+        if (xrow.inf (j) < 0 && xrow.sup (j) > 0)
+            ## No improvement can be achieved.
+            continue
+        endif
+        x_ij = infsup (xrow.inf (j), xrow.sup (j));
+        yidx.subs = {i, k};
+        yelement = subsref (y, yidx);
+        
+        ## x (i, 1 : n) * z (1 : n, k) shall equal y (i, k).
+        ## 1. Solve this equation for x (i, j) * z (j, k).
+        ## 2. Compute a (possibly better) enclosure for z (j, k).
+        
+        xrow.inf (j) = yelement.inf;
+        xrow.sup (j) = yelement.sup;
+        zcol.inf (j) = zcol.sup (j) = -1;
+        z_jk = mulrev (x_ij, -dot (xrow, zcol), z_jk);
+        
+        zcol.inf (j) = z.inf (j, k) = z_jk.inf;
+        zcol.sup (j) = z.sup (j, k) = z_jk.sup;
     endfor
-endwhile
+endfor
 
 result = z;
 
