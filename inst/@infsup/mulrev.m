@@ -57,7 +57,7 @@ if (isempty (x) || isempty (b) || isempty (c))
 endif
 
 if (isentire (b) || isentire (c))
-    result = infsup (x.inf, x.sup);
+    result = x;
     return
 endif
 
@@ -88,7 +88,7 @@ warning ("off", "Octave:divide-by-zero");
 
 if (ismember (0, c))
     if (ismember (0, b))
-        result = infsup (x.inf, x.sup);
+        result = x;
     elseif (c.inf == 0 && c.sup == 0)
         result = infsup (0);
     elseif (b.sup < 0)
@@ -124,7 +124,7 @@ elseif (c.sup < 0)
         fesetround (0.5);
         result = infsup (l, u) & x;
     else
-        result = infsup (x.inf, x.sup);
+        result = x;
     endif
 else # c.inf > 0
     if (b.inf == 0 && b.sup == 0)
@@ -144,7 +144,7 @@ else # c.inf > 0
         fesetround (0.5);
         result = infsup (l, u) & x;
     else
-        result = infsup (x.inf, x.sup);
+        result = x;
     endif
 endif
 
