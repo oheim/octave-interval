@@ -27,7 +27,7 @@
 
 function [sign, exponent, mantissa] = parsedouble (binary)
 
-if (not (isa (binary, "double") && isfinite (binary)) || isnan (binary))
+if (not (isfinite (binary)) || isnan (binary))
     assert (false (), "Invalid call to parsedouble");
 endif
 
