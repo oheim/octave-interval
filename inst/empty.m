@@ -59,8 +59,12 @@ switch nargin
 endswitch
 
 endfunction
-%!test "Check [Empty] properties";
-%! x = empty ();
-%! assert (inf (x) == inf);
-%! assert (sup (x) == -inf);
-%! assert (strcmp (decorationpart (x), "trv"));
+%!assert (inf (empty ()), inf);
+%!assert (sup (empty ()), -inf);
+%!assert (decorationpart (empty ()), {"trv"});
+%!assert (inf (empty (5)), inf (5));
+%!assert (sup (empty (5)), -inf (5));
+%!assert (strcmp (decorationpart (empty (5)), "trv"), true (5));
+%!assert (inf (empty (5, 6)), inf (5, 6));
+%!assert (sup (empty (5, 6)), -inf (5, 6));
+%!assert (strcmp (decorationpart (empty (5, 6)), "trv"), true (5, 6));

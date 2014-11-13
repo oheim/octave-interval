@@ -58,3 +58,20 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+%!test "Empty interval";
+%! assert (acos (infsup ()) == infsup ());
+%!test "Singleton intervals";
+%! assert (acos (infsup (-1)) == infsup ("pi"));
+%! assert (subset (acos (infsup (-.5)), (infsup ("pi") / 2) | infsup ("pi")));
+%! assert (acos (infsup (0)) == infsup ("pi") / 2);
+%! assert (subset (acos (infsup (.5)), (infsup ("pi") / 2) | infsup (0)));
+%! assert (acos (infsup (1)) == infsup (0));
+%!test "Bounded intervals";
+%! assert (acos (infsup (-1, 0)) == ((infsup ("pi") / 2) | infsup ("pi")));
+%! assert (acos (infsup (0, 1)) == ((infsup ("pi") / 2) | infsup (0)));
+%! assert (acos (infsup (-1, 1)) == infsup (0, "pi"));
+%! assert (acos (infsup (-2, 2)) == infsup (0, "pi"));
+%!test "Unbounded intervals";
+%! assert (acos (infsup (0, inf)) == ((infsup ("pi") / 2) | infsup (0)));
+%! assert (acos (infsup (-inf, 0)) == ((infsup ("pi") / 2) | infsup ("pi")));
+%! assert (acos (infsup (-inf, inf)) == infsup (0, "pi"));

@@ -51,14 +51,22 @@ if (not (exactconversion))
 endif
 
 endfunction
-%!test "Positive cases";
-%! x = exacttointerval ("[Empty]");
-%! assert (isempty (x));
+%!assert (isempty (exacttointerval ("[Empty]")));
+%!assert (isentire (exacttointerval ("[Entire]")));
+%!test "common interval";
 %! y = exacttointerval ("[0, 1]");
-%! assert (inf (y) == 0);
-%! assert (sup (y) == 1);
-%! assert (strcmp (decorationpart (y), "com"));
-%!error "Interval [0, 0.1] must fail - not exact";
-%! exacttointerval ("[0, 0.1]");
-%!error "Interval [1, 0] must fail - invalid";
-%! exacttointerval ("[1, 0]");
+%! assert (inf (y), 0);
+%! assert (sup (y), 1);
+%! assert (decorationpart (y), {"com"});
+%!test "point interval";
+%! y = exacttointerval ("[42]");
+%! assert (inf (y), 42);
+%! assert (sup (y), 42);
+%! assert (decorationpart (y), {"com"});
+%!test "unbound interval";
+%! y = exacttointerval ("[-4, Infinity]");
+%! assert (inf (y), -4);
+%! assert (sup (y), inf);
+%! assert (decorationpart (y), {"dac"});
+%!error exacttointerval ("[0, 0.1]");
+%!error exacttointerval ("[1, 0]");

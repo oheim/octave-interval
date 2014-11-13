@@ -60,8 +60,12 @@ switch nargin
 endswitch
 
 endfunction
-%!test "Check [Entire] properties";
-%! x = entire ();
-%! assert (inf (x) == -inf);
-%! assert (sup (x) == inf);
-%! assert (strcmp (decorationpart (x), "dac"));
+%!assert (inf (entire ()), -inf);
+%!assert (sup (entire ()), inf);
+%!assert (decorationpart (entire ()), {"dac"});
+%!assert (inf (entire (5)), -inf (5));
+%!assert (sup (entire (5)), inf (5));
+%!assert (strcmp (decorationpart (entire (5)), "dac"), true (5));
+%!assert (inf (entire (5, 6)), -inf (5, 6));
+%!assert (sup (entire (5, 6)), inf (5, 6));
+%!assert (strcmp (decorationpart (entire (5, 6)), "dac"), true (5, 6));
