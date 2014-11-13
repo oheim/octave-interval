@@ -37,8 +37,19 @@
 
 function result = acosh (x)
 
-## The evaluation of log (…) is more accurate than acosh +- 4 ULP.
-result = log (x + sqrt (x + 1) .* sqrt (x - 1)) & infsup (0, inf);
+## Most implementations should be within 2 ULP, but must guarantee 4 ULP.
+l = max (0, ulpadd (real (acosh (x.inf)), -4));
+u = ulpadd (real (acosh (x.sup)), 4);
+
+## Make the function tightest for some parameters
+u (x.sup == 1) = 0;
+
+emptyresult = isempty (x) | x.sup < 1;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+## The evaluation of log (…) is more accurate than acosh for some values
+result = infsup (l, u) & log (x + sqrt (x + 1) .* sqrt (x - 1));
 
 endfunction
 %!test "Empty interval";
