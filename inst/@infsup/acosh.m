@@ -25,7 +25,7 @@
 ## @example
 ## @group
 ## acosh (infsup (2))
-##   @result{} [1.3169578969248156, 1.3169578969248175]
+##   @result{} [1.3169578969248163, 1.3169578969248171]
 ## @end group
 ## @end example
 ## @seealso{cosh}
@@ -37,17 +37,22 @@
 
 function result = acosh (x)
 
-## Most implementations should be within 2 ULP, but must guarantee 4 ULP.
-l = max (0, ulpadd (real (acosh (x.inf)), -4));
-u = ulpadd (real (acosh (x.sup)), 4);
-
-## Make the function tightest for some parameters
-u (x.sup == 1) = 0;
-
-emptyresult = isempty (x) | x.sup < 1;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
-
-result = infsup (l, u);
+## The evaluation of log (…) is more accurate than acosh +- 4 ULP.
+result = log (x + sqrt (x + 1) .* sqrt (x - 1)) & infsup (0, inf);
 
 endfunction
+%!test "Empty interval";
+%! assert (acosh (infsup ()) == infsup ());
+%!test "Singleton intervals";
+%! assert (acosh (infsup (0)) == infsup ());
+%! assert (acosh (infsup (1)) == infsup (0));
+%! x = infsup (1 : 3 : 100);
+%! assert (min (acosh (x) == log (x + sqrt (x + 1) .* sqrt (x - 1))));
+%!test "Bounded intervals";
+%! assert (acosh (infsup (0, 1)) == infsup (0));
+%!test "Unbounded intervals";
+%! assert (acosh (infsup (-inf, 0)) == infsup ());
+%! assert (acosh (infsup (-inf, 1)) == infsup (0));
+%! assert (acosh (infsup (0, inf)) == infsup (0, inf));
+%! assert (acosh (infsup (1, inf)) == infsup (0, inf));
+%! assert (subset (acosh (infsup (2, inf)), infsup (1, inf)));
