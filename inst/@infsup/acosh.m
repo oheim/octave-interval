@@ -48,7 +48,7 @@ emptyresult = isempty (x) | x.sup < 1;
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-## The evaluation of log (…) is more accurate than acosh for some values
+## The evaluation of log (…) is more accurate than ± 4 ULP for small values
 result = infsup (l, u) & log (x + sqrt (x + 1) .* sqrt (x - 1));
 
 endfunction
@@ -58,7 +58,7 @@ endfunction
 %! assert (acosh (infsup (0)) == infsup ());
 %! assert (acosh (infsup (1)) == infsup (0));
 %! x = infsup (1 : 3 : 100);
-%! assert (min (acosh (x) == log (x + sqrt (x + 1) .* sqrt (x - 1))));
+%! assert (min (subset (acosh (x), log (x + sqrt (x + 1) .* sqrt (x - 1)))));
 %!test "Bounded intervals";
 %! assert (acosh (infsup (0, 1)) == infsup (0));
 %!test "Unbounded intervals";

@@ -51,6 +51,7 @@ emptyresult = isempty (x);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-result = infsup (l, u);
+## The evaluation of log (…) is more accurate than ± 7 ULP for small values
+result = infsup (l, u) & log (x + sqrt (sqr (x) + 1));
 
 endfunction

@@ -50,6 +50,7 @@ emptyresult = isempty (x) | x.sup <= -1 | x.inf >= 1;
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-result = infsup (l, u);
+## The evaluation of log (…) is more accurate than ± 4 ULP for small values
+result = infsup (l, u) & (log ((1 + x) ./ (1 - x)) ./ 2);
 
 endfunction
