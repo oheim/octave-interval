@@ -1,0 +1,143 @@
+CONFORMANCE CLAIM
+
+The inverval package version X for GNU Octave is conforming to the P1788
+Standard for Interval Arithmetic, version D9.5 (October 2014).  It is
+conforming to the set-based flavor with IEEE 754 conformance for the infsup
+binary64 interval type and without compressed arithmetic.  Additionally it
+provides no further flavors.
+
+
+CONFORMANCE QUESTIONNAIRE
+
+a) Implementation-defined behavior
+    1) What status flags or other means to signal the occurrence of certain
+       decoration values in computations does the implementation provide if
+       any?
+       
+       The implementation does not signal the occurrence of decoration values.
+
+b) Documentation of behavior
+    1) If the implementation supports implicit interval types, how is the
+       interval hull operation realized?
+       
+       The implementation only supports explicit interval types.
+       
+    2) What accuracy is achieved (i.e., tightest, accurate, or valid) for each
+       of the implementation’s interval operations?
+       
+       The accuracy requirements of IEEE 1788 are fulfilled.  Some operations
+       do not achieve accurate tightness.  The tightness of each operation is
+       documented in the function's documentation string and can be displayed
+       with the help command.
+       
+    3) Under what conditions is a constructor unable to determine whether a
+       level 1 value exists that corresponds to the supplied inputs?
+       
+       Exponents, if used, must be between -2^53 (exclusive) and +2^53
+       (exclusive).  Non-zero decimal numbers must be between 10^(-2^62)
+       (inclusive) and 10^(2^63 - 1) (exclusive).  Non-zero hexadecimal numbers
+       must be between 2^(-2^62) (inclusive) and 2^(2^63 - 1) (exclusive).
+       
+    4) How are ties broken in rounding numbers if multiple numbers qualify as
+       the rounded result?
+       
+       Tie-breaking uses the IEEE 754 default: round ties to even.
+       
+    5) How are interval datums converted to their exact text representations?
+       
+       The binary64 boundaries are converted into hexadecimal-significand form
+       as required by the standard.  It is also possible to convert interval
+       datums to exact interval literals in decimal form.
+       
+c) Implementation-defined behavior
+    1) Does the implementation include the interval overlapping function?  If
+       so, how is it made available to the user?
+       
+       Yes, the interval overlapping function is implemented under the name
+       overlap.
+       
+    2) Does the implementation store additional information in a NaI? What
+       functions are provided for the user to set and read this information?
+       
+       No additional information is stored in a NaI.
+       
+    3) What means if any does the implementation provide for an exception to be
+       signaled when a NaI is produced?
+       
+       The creation of a NaI is signaled with GNU Octave's warning mechanism.
+       
+    4) What interval types are supported besides the required ones?
+       
+       None.
+       
+    5) What mechanisms of exception handling are used in exception handlers
+       provided by the implementation?  What additional exception handling is
+       provided by the implementation?
+       
+       The exceptions described by IEEE 1788 raise an error, which can be
+       handled with GNU Octave's error mechanism.  The implementation provides
+       no additional exception handling.
+       
+    6) [Question does not apply to IEEE 754 conforming types.]
+       
+    7) Does the implementation include different versions of the same operation
+       for a given type and how are these provided to the user?
+       
+       The implementation does not include different versions of any operation.
+       
+    8) What combinations of formats are supported in interval constructors?
+       
+       Any reasonable combination of the formats described in the standard
+       document is supported.
+       
+    9) [Question does not apply to IEEE 754 conforming types.]
+       
+   10) What methods are used to read or write strings from or to character
+       streams?  Does the implementation employ variations in locales (such as
+       specific character case matching)?  This includes the syntax used in the
+       strings for reading and writing.
+       
+       Input and output is implemented with GNU Octave string variables in
+       UTF-8 encoding.  There is no discrimination between different locales.
+       Character case is ignored during input.  The syntax for interval
+       literals is used as described by the standard document.
+       
+   11) What is the tightness for the interval to string conversion for all
+       interval types?
+       
+       The general-purpose interval to string conversion produces the tightest
+       decimal infsup form which has no more digits than are necessary to
+       separate two binary64 numbers.
+       
+   12) What is the result of level 3 operations for invalid inputs?
+       
+       Interval constructors prevent the creation of invalid level 3 interval
+       datums.
+       
+       Any non-interval input to level 3 operations is implicitly converted
+       into an interval and the operation silently continues on interval
+       inputs.  If at least one input is a decorated interval, bare interval
+       inputs are implicitly decorated as described by newDec in the standard
+       document.
+       
+       If implicit conversion fails, bare interval operations raise an error,
+       whereas the decorated interval operations continue on NaI inputs.
+       
+       Some level 3 operations (especially interval comparison operations) are
+       not allowed for NaI inputs and raise an error if evaluated for invalid
+       inputs.
+       
+   13) [Question does not apply to IEEE 754 conforming types.]
+       
+   14) What decorations does the implementation provide and what is their
+       mathematical definition?  How are these decorations mapped when
+       converting an interval to the interchange format?
+       
+       The implementation provides the decorations com, dac, def, trv, and ill
+       as described by the standard document.
+       
+   15) [Question does not apply to IEEE 754 conforming types.]
+
+d) [Question applies to compressed arithmetic only, which is not supported.]
+
+e) [Questions apply to non-standard flavors only, which are not supported.]

@@ -8,7 +8,7 @@ Description: Standard-conforming implementation of intervals
  in inf-sup format based on interval boundaries in IEEE-754
  binary64 numbers.
 Categories: interval arithmetic
-Problems: Development is not completed, not yet standard-conforming, IEEE 1788 is no official standard yet
+Problems: Development is not completed, IEEE 1788 is no official standard yet
 Url: http://wiki.octave.org/Interval_package
 Autoload: true
 Depends: fenv (>= 0.1.0)
