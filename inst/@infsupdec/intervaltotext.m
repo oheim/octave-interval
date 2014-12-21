@@ -39,10 +39,10 @@
 ## Keywords: interval
 ## Created: 2014-10-12
 
-function [s, isexact] = intervaltotext (x, exact)
+function [s, isexact] = intervaltotext (x, format)
 
 if (nargin < 2)
-    exact = false ();
+    format = "decimal";
 endif
 
 if (isnai (x))
@@ -51,8 +51,8 @@ if (isnai (x))
 else
     ## Using intervalpart we can call the superclass' method.
     ## In later GNU Octave versions it is also possible to call
-    ## intervaltotext@infsup (x, exact);
-    [s, isexact] = intervaltotext (intervalpart (x), exact);
+    ## intervaltotext@infsup (x, format);
+    [s, isexact] = intervaltotext (intervalpart (x), format);
     s = strcat (s, "_", x.dec {1});
 endif
 
