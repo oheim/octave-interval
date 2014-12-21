@@ -15,24 +15,25 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {Interval Output} {@var{S} =} intervaltotext (@var{X})
-## @deftypefnx {Interval Output} {@var{S} =} intervaltotext (@var{X}, @var{EXACT})
+## @deftypefnx {Interval Output} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
 ## @cindex IEEE1788 intervalToText
 ## 
-## Build an approximate representation of the interval @var{X} in decimal
-## format.
-##
+## Build an approximate representation of the interval @var{X}.
+## 
 ## The interval boundaries are stored in binary floating point format and are
-## converted to decimal format with possible precision loss. If output is not
-## exact, the boundaries are rounded accordingly (e. g. the upper boundary is
-## rounded towards infinite for output representation).
+## converted to decimal or hexadecimal format with possible precision loss.  If
+## output is not exact, the boundaries are rounded accordingly (e. g. the upper
+## boundary is rounded towards infinite for output representation).
+## 
+## Enough digits are used to ensure separation of subsequent floting point
+## numbers.  The exact decimal format may produce a lot of digits.
 ##
-## Enough decimal digits are used to ensure separation of subsequent floting
-## point numbers.
-##
+## Possible values for @var{FORMAT} are: @code{decimal} (default),
+## @code{exact decimal}, @code{exact hexadecimal}
+## 
 ## Accuracy: For all intervals @var{X} is an accurate subset of
-## @code{texttointerval (intervaltotext (@var{X}))}.  If parameter @var{EXACT}
-## is used and is set to @code{True} the output is exact.
-##
+## @code{texttointerval (intervaltotext (@var{X}))}.
+## 
 ## @example
 ## @group
 ## x = infsup (1 + eps);
@@ -53,7 +54,7 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function [s, isexact] = intervaltotext (x, exact)
+function [s, isexact] = intervaltotext (x, format)
 
 assert (isscalar (x), "only implemented for interval scalars");
 
@@ -70,7 +71,7 @@ if (isentire (x))
 endif
 
 if (nargin < 2)
-    exact = false ();
+    format = "decimal";
 endif
 
 signpresent = false ();
@@ -80,7 +81,11 @@ for [boundary, key] = boundaries
     ## Sign
     if (boundary == 0)
         ## Never use a sign for zero
-        boundarystring.(key) = "0";
+        if (strcmp (format, "exact hexadecimal"))
+            boundarystring.(key) = "0x0";
+        else
+            boundarystring.(key) = "0";
+        endif
         continue
     elseif (boundary < 0)
         ## Negative numbers must have a sign
@@ -96,9 +101,46 @@ for [boundary, key] = boundaries
     
     if (not (isfinite (boundary)))
         boundarystring.(key) = strcat (boundarystring.(key), "Inf");
-    else # boundary != 0, -inf, inf
+    elseif (strcmp (format, "exact hexadecimal"))
+        ## hexadecimal-significand form
+        [binary.s, binary.exponent, binary.mantissa] = parsedouble (boundary);
+        
+        if (binary.exponent == -1022)
+            ## subnormal number
+            boundarystring.(key) = strcat (boundarystring.(key), "0x0");
+        else
+            ## normal number
+            boundarystring.(key) = strcat (boundarystring.(key), "0x1");
+            binary.exponent --;
+            binary.mantissa = binary.mantissa (2 : end);
+        endif
+        
+        ## Normalize mantissa: remove trailing zeros
+        binary.mantissa = binary.mantissa (1 : find (binary.mantissa ~= 0, 1, 
+                                                     "last"));
+        if (not (isempty (binary.mantissa)))
+            ## Pad with zeros
+            binary.mantissa = ...
+                postpad (binary.mantissa, ...
+                         ceil (length (binary.mantissa) / 4) * 4, ...
+                         false (), ...
+                         1);
+            
+            boundarystring.(key) = ...
+                strcat (boundarystring.(key), ...
+                        ".", ...
+                        dec2hex (bin2dec (num2str (binary.mantissa'))));
+        endif
+        
+        if (binary.exponent ~= 0)
+            boundarystring.(key) = strcat (boundarystring.(key), ...
+                                           "p", ...
+                                           num2str (binary.exponent));
+        endif
+        
+    else # decimal or exact decimal 
         decimal = double2decimal (boundary);
-        if (not (exact))
+        if (not (strcmp ("exact decimal", format)))
             ## We want the following number of digits in the output:
             ##   1. Two different interval boundary values must have two
             ##      different output representations

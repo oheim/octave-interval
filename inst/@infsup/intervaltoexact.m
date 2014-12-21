@@ -17,11 +17,11 @@
 ## @deftypefn {Interval Output} {@var{S} =} intervaltoexact (@var{X})
 ## @cindex IEEE1788 intervalToExact
 ## 
-## Build an exact representation of the interval @var{X} in decimal format.
+## Build an exact representation of the interval @var{X} in
+## hexadecimal-significand form.
 ##
 ## The interval boundaries are stored in binary floating point format and can
-## be converted to decimal format without precision loss. The decimal number
-## might have a lot of digits.
+## be converted to hexadecimal format without precision loss.
 ##
 ## The equation @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))}
 ## holds for all intervals @var{X}.
@@ -36,6 +36,6 @@
 
 function s = intervaltoexact (x)
 
-s = intervaltotext (x, true ());
+s = intervaltotext (x, "exact hexadecimal");
 
 endfunction
