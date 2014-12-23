@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {[@var{U}, @var{V}] =} divtopair (@var{X}, @var{Y})
-## @cindex IEEE1788 divToPair
+## @deftypefn {Interval Function} {[@var{U}, @var{V}] =} mulrevtopair (@var{X}, @var{Y})
+## @cindex IEEE1788 mulRevToPair
 ## 
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.  If the 
 ## set division of the intervals would be a union of two disjoint intervals,
@@ -25,11 +25,11 @@
 ##
 ## @example
 ## @group
-## x = infsup (1);
-## y = infsup (-inf, inf);
-## [u, v] = divtopair (x, y)
-##   @result{} [-Inf, 0]
-##   @result{} [0, Inf]
+## x = infsupdec (1);
+## y = infsupdec (-inf, inf);
+## [u, v] = mulrevtopair (x, y)
+##   @result{} [-Inf, 0]_trv
+##   @result{} [0, Inf]_trv
 ## @end group
 ## @end example
 ## @seealso{mrdivide}
@@ -39,26 +39,39 @@
 ## Keywords: interval
 ## Created: 2014-10-19
 
-function [u, v] = divtopair (x, y)
+function [u, v] = mulrevtopair (x, y)
 
 if (nargin ~= 2)
     print_usage ();
     return
 endif
-if (not (isa (x, "infsup")))
-    x = infsup (x);
+if (not (isa (x, "infsupdec")))
+    x = infsupdec (x);
 endif
-if (not (isa (y, "infsup")))
-    y = infsup (y);
+if (not (isa (y, "infsupdec")))
+    y = infsupdec (y);
 endif
 
-u = x / (y & infsup (-inf, 0));
-v = x / (y & infsup (0, inf));
+if (isnai (x))
+    result = x;
+    return
+endif
+if (isnai (y))
+    result = y;
+    return
+endif
 
-swap = (y.sup <= 0 | 0 <= y.inf) & isempty (u);
-u.inf (swap) = v.inf (swap);
-u.sup (swap) = v.sup (swap);
-v.inf (swap) = inf;
-v.sup (swap) = -inf;
+[u, v] = mulrevtopair (intervalpart (x), intervalpart (y));
+u = infsupdec (u);
+u.dec = mindec (u.dec, x.dec, y.dec);
+v = infsupdec (v);
+v.dec = mindec (v.dec, x.dec, y.dec);
+
+divisionbyzero = ismember (0, y);
+if (isscalar (y) && not (isscalar (x)))
+    divisionbyzero = divisionbyzero * ones (size (x));
+endif
+u.dec (divisionbyzero) = "trv";
+v.dec (divisionbyzero) = "trv";
 
 endfunction
