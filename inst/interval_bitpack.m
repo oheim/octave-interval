@@ -18,8 +18,8 @@
 ## 
 ## Decode interval from its interchange format @var{X}.
 ##
-## The input must be a matrix of n × 128 bits for n bare intervals, or a matrix
-## of n × 136 bits for n decorated intervals.  Bits are in increasing order.
+## The input must be a matrix of n Ã— 128 bits for n bare intervals, or a matrix
+## of n Ã— 136 bits for n decorated intervals.  Bits are in increasing order.
 ##
 ## The result is a row vector of intervals.
 ##
