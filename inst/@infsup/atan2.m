@@ -149,7 +149,7 @@ q74 = q7 & y.inf == 0;
 l (q74) = 0;
 u (q74) = sup (pi);
 
-emptyresult = isempty (x) | isempty (x) | ...
+emptyresult = isempty (x) | isempty (y) | ...
               (x.inf == 0 & x.sup == 0 & y.inf == 0 & y.sup == 0);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
