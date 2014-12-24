@@ -16,10 +16,15 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interchange encoding} {} interval_bitpack (@var{X})
 ## 
-## Convert bit encoding @var{X} into interval.
+## Decode interval from its interchange format @var{X}.
 ##
-## The encoding is in big-endian byte order.  However, bits are in increasing
-## order.
+## The input must be a matrix of n × 128 bits for n bare intervals, or a matrix
+## of n × 136 bits for n decorated intervals.  Bits are in increasing order.
+##
+## The result is a row vector of intervals.
+##
+## For all valid interchange encodings the following equation holds:
+## @code{@var{X} == bitunpack (interval_bitpack (@var{X}))}.
 ##
 ## @seealso{bitunpack}
 ## @end deftypefn

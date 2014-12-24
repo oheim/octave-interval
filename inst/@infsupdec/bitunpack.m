@@ -16,10 +16,16 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interchange encoding} {} bitunpack (@var{X})
 ## 
-## Convert interval @var{X} into its bit encoding.
+## Encode decorated interval @var{X} in interchange format.
 ##
-## The encoding is in big-endian byte order.  However, bits are returned in
-## increasing order.
+## The result is a raw bit pattern of length 136 that derive from two binary64
+## numbers plus 8 bit for the decoration.  Bits are in increasing order.
+##
+## The result is a row vector if @var{X} is a row vector; otherwise, it is a
+## column vector.
+##
+## For all scalar intervals the following equation holds:
+## @code{@VAR{X} == interval_bitpack (bitunpack (@var{X}))}.
 ##
 ## @seealso{interval_bitpack}
 ## @end deftypefn
@@ -43,6 +49,7 @@ d = bitunpack (uint8 (...
         strcmp (x.dec, 'dac') * 12 + ...
         strcmp (x.dec, 'com') * 16));
 
+## Initialize result vector
 result = zeros (1, length (bare) + length (d), 'logical');
 if (not (isrow (bare)))
     result = result';

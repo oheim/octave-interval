@@ -16,10 +16,16 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interchange encoding} {} bitunpack (@var{X})
 ## 
-## Convert interval @var{X} into its bit encoding.
+## Encode bare interval @var{X} in interchange format.
 ##
-## The encoding is in big-endian byte order.  However, bits are returned in
-## increasing order.
+## The result is a raw bit pattern of length 128 that derive from two binary64
+## numbers.  Bits are in increasing order.
+##
+## The result is a row vector if @var{X} is a row vector; otherwise, it is a
+## column vector.
+##
+## For all scalar intervals the following equation holds:
+## @code{@var{X} == interval_bitpack (bitunpack (@var{X}))}.
 ##
 ## @seealso{interval_bitpack}
 ## @end deftypefn
@@ -37,12 +43,13 @@ function result = bitunpack (x)
 l = bitunpack (x.inf);
 u = bitunpack (x.sup);
 
+## Initialize result vector
 result = zeros (1, length (l) * 2, 'logical');
 if (not (isrow (l)))
     result = result';
 endif
 
-## Merge alternating 64 bit blocks from l and u together into result.
+## Merge 64 bit blocks from l and u (alternating) together into result.
 ## Because of increasing bit order, u comes first.
 target = reshape (1 : length (result), 64, numel (x.inf) * 2);
 target (:, 2 : 2 : size (target, 2)) = [];
