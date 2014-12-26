@@ -43,7 +43,7 @@ endif
 
 if (isreal (real) && isfloat (real))
     ## Simple checking is only possible with floating point numbers
-    result = interval.inf <= real & real <= interval.sup;
+    result = isfinite (real) & interval.inf <= real & real <= interval.sup;
 else
     ## Mixed mode comparison between integers and floats can be problematic
     ## as well as comparison with decimal numbers
