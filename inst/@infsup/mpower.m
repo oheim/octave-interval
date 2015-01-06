@@ -59,7 +59,7 @@ if (isscalar (x))
     return
 endif
 
-if (not (isreal (y)) && fix (y) ~= y)
+if (not (isreal (y)) || fix (y) ~= y)
     error ("mpower: only integral powers can be computed");
 endif
 
