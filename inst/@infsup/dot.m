@@ -80,11 +80,10 @@ if (nargin < 3)
     endif
 endif
 if (nargin < 4)
-    accuracy = "valid";
+    accuracy = "tight";
 else
     if (not (max (strcmp (accuracy, {"valid", "tight"}))))
-        print_usage ();
-        return
+        error ("invalid value for parameter ACCURACY")
     endif
 endif
 
