@@ -16,6 +16,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} dot (@var{X}, @var{Y})
 ## @deftypefnx {Interval Function} {} dot (@var{X}, @var{Y}, @var{DIM})
+## @deftypefnx {Interval Function} {} dot (@var{X}, @var{Y}, @var{DIM}, @var{ACCURACY})
 ## @cindex IEEE1788 dot
 ## 
 ## Compute the dot product of two interval vectors.  If @var{X} and @var{Y} are
@@ -23,12 +24,24 @@
 ## dimension.  If the optional argument @var{DIM} is given, calculate the dot
 ## products along this dimension.
 ##
-## Accuracy: The result is a tight enclosure.
+## The function can be evaluated in fast (valid) or accurate (tight) mode.  The
+## fast mode produces roundoff errors of intermediate results which will sum up
+## and lead to poor results -- especially in cases where overflow occurs.  The
+## accurate mode is significandly slower (approx. factor 10).
+##
+## Accuracy: The result either is a @code{tight} enclosure or is a @code{valid}
+## enclosure, depending on the value of @var{ACCURACY} (default: tight).
 ##
 ## @example
 ## @group
 ## dot ([infsup(1), 2, 3], [infsup(2), 3, 4])
 ##   @result{} [20]
+## @end group
+## @group
+## dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1, "valid")
+##   @result{} [-Inf, 0]
+## dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1, "tight")
+##   @result{} [-2.2250738585072014e-308, -2.2250738585072013e-308]
 ## @end group
 ## @end example
 ## @seealso{plus, sum, times, sumabs, sumsquare}
@@ -38,7 +51,7 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = dot (x, y, dim)
+function [result, isexact] = dot (x, y, dim, accuracy)
 
 if (nargin < 2)
     print_usage ();
@@ -64,6 +77,14 @@ if (nargin < 3)
         if (isempty (dim))
             dim = 1;
         endif
+    endif
+endif
+if (nargin < 4)
+    accuracy = "valid";
+else
+    if (not (max (strcmp (accuracy, {"valid", "tight"}))))
+        print_usage ();
+        return
     endif
 endif
 
@@ -112,8 +133,12 @@ for n = 1 : numel (isexact)
         l (n) = inf;
         u (n) = -inf;
         isexact (n) = true ();
-    else
+    elseif (strcmp (accuracy, "tight"))
+        ## accurate, but slow
         [l(n), u(n), isexact(n)] = tight_vectordot (vector.x, vector.y);
+    else
+        ## fast, but not accurate and prone to overflow
+        [l(n), u(n), isexact(n)] = valid_vectordot (vector.x, vector.y);
     endif
 endfor
 
@@ -280,6 +305,129 @@ else
     [u, upperisexact] = accu2double (u, inf);
     isexact = and (isexact, upperisexact);
 endif
+
+endfunction
+
+## Dot product of two interval vectors; or one vector and one scalar.
+## Accuracy is valid. No interval must be empty.
+function [l, u, isexact] = valid_vectordot (x, y)
+
+isexact = false ();
+
+if (isscalar (x.inf) && isscalar (y.inf))
+    ## Short-circuit: scalar × scalar
+    z = x .* y;
+    l = z.inf;
+    u = z.sup;
+    return
+endif
+
+## Resize, if scalar × vector
+if (isscalar (x.inf) || isscalar (y.inf))
+    x.inf = ones (size (y.inf)) .* x.inf;
+    x.sup = ones (size (y.inf)) .* x.sup;
+    y.inf = ones (size (x.inf)) .* y.inf;
+    y.sup = ones (size (x.inf)) .* y.sup;
+endif
+
+x = vec (x);
+y = vec (y);
+
+## [0] × anything = [0] × [0]
+## [Entire] × anything but [0] = [Entire] × [Entire]
+## This prevents the cases where 0 × inf would produce NaNs.
+entireproduct = isentire (x) | isentire (y);
+zeroproduct = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
+x.inf (entireproduct) = y.inf (entireproduct) = -inf;
+x.sup (entireproduct) = y.sup (entireproduct) = inf;
+x.inf (zeroproduct) = x.sup (zeroproduct) = ...
+    y.inf (zeroproduct) = y.sup (zeroproduct) = 0;
+
+## Partitionize the vectors, the interval dot product can be computed within
+## each partition using BLAS routines on the interval boundaries with directed
+## rounding.
+## (cf. the times function on intervals)
+q1 = y.sup <= 0 & x.sup <= 0;
+q2 = y.sup <= 0 & x.inf >= 0 & x.sup > 0;
+q3 = y.sup <= 0 & x.inf < 0 & x.sup > 0;
+q4 = y.inf >= 0 & y.sup > 0 & x.sup <= 0;
+q5 = y.inf >= 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
+q6 = y.inf >= 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
+q7 = y.inf < 0 & y.sup > 0 & x.sup <= 0;
+q8 = y.inf < 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
+q9 = q10 = y.inf < 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
+a = b = zeros (size (x.inf));
+a (q9) = x.inf (q9) .* y.sup (q9);
+b (q9) = x.sup (q9) .* y.inf (q9);
+q9 = q9 & (a <= b);
+q10 = q10 & (a > b);
+
+l = u = zeros (10, 1);
+fesetround (-inf);
+if (not (isempty (q1)))
+    l (1) = x.sup (q1)' * y.sup (q1);
+endif
+if (not (isempty (q2)))
+    l (2) = x.sup (q2)' * y.inf (q2);
+endif
+if (not (isempty (q3)))
+    l (3) = x.sup (q3)' * y.inf (q3);
+endif
+if (not (isempty (q4)))
+    l (4) = x.inf (q4)' * y.sup (q4);
+endif
+if (not (isempty (q5)))
+    l (5) = x.inf (q5)' * y.inf (q5);
+endif
+if (not (isempty (q6)))
+    l (6) = x.inf (q6)' * y.sup (q6);
+endif
+if (not (isempty (q7)))
+    l (7) = x.inf (q7)' * y.sup (q7);
+endif
+if (not (isempty (q8)))
+    l (8) = x.sup (q8)' * y.inf (q8);
+endif
+if (not (isempty (q9)))
+    l (9) = x.inf (q9)' * y.sup (q9);
+endif
+if (not (isempty (q10)))
+    l (10) = x.sup (q10)' * y.inf (q10);
+endif
+l = sum (l);
+fesetround (inf);
+if (not (isempty (q1)))
+    u (1) = x.inf (q1)' * y.inf (q1);
+endif
+if (not (isempty (q2)))
+    u (2) = x.inf (q2)' * y.sup (q2);
+endif
+if (not (isempty (q3)))
+    u (3) = x.inf (q3)' * y.inf (q3);
+endif
+if (not (isempty (q4)))
+    u (4) = x.sup (q4)' * y.inf (q4);
+endif
+if (not (isempty (q5)))
+    u (5) = x.sup (q5)' * y.sup (q5);
+endif
+if (not (isempty (q6)))
+    u (6) = x.sup (q6)' * y.sup (q6);
+endif
+if (not (isempty (q7)))
+    u (7) = x.inf (q7)' * y.inf (q7);
+endif
+if (not (isempty (q8)))
+    u (8) = x.sup (q8)' * y.sup (q8);
+endif
+if (not (isempty (q9)))
+    u (9) = x.sup (q9)' * y.sup (q9);
+endif
+if (not (isempty (q10)))
+    u (10) = x.inf (q10)' * y.inf (q10);
+endif
+u = sum (u);
+fesetround (0.5);
 
 endfunction
 
