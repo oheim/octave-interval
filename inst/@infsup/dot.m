@@ -86,11 +86,10 @@ endif
 resultsize = max (size (x.inf), size (y.inf));
 resultsize (dim) = 1;
 
-empty = isexact = true (resultsize);
-l = u = cell (resultsize);
+isexact = true (resultsize);
+l = u = zeros (resultsize);
 
-## Accu operations may be executed in parallel
-parfor n = 1 : numel (isexact)
+for n = 1 : numel (isexact)
     idx.type = "()";
     idx.subs = cell (1, 2);
     idx.subs {dim} = ":";
@@ -108,30 +107,13 @@ parfor n = 1 : numel (isexact)
         vector.y = subsref (y, idx);
     endif
     
-    [l{n}, u{n}, empty(n)] = vectordot (vector.x, vector.y);
-endparfor
-
-## Conversion from accu to double not in parfor loop, because it sets the
-## floating-point environment and this might be problematic
-for n = 1 : numel (isexact)
-    if (empty (n))
-        l {n} = inf;
-        u {n} = -inf;
+    if (max (isempty (vector.x)) || max (isempty (vector.y)))
+        ## One of the intervals is empty
+        l (n) = inf;
+        u (n) = -inf;
         isexact (n) = true ();
     else
-        if (l {n}.unbound)
-            l {n} = -inf;
-            isexact (n) = true ();
-        else
-            [l{n}, isexact(n)] = accu2double (l {n}, -inf);
-        endif
-        
-        if (u {n}.unbound)
-            u {n} = inf;
-        else
-            [u{n}, upperisexact] = accu2double (u {n}, inf);
-            isexact (n) = and (isexact (n), upperisexact);
-        endif
+        [l(n), u(n), isexact(n)] = tight_vectordot (vector.x, vector.y);
     endif
 endfor
 
@@ -139,8 +121,9 @@ result = infsup (l, u);
 
 endfunction
 
-## Dot product of two interval vectors; or one vector and one scalar
-function [l, u, empty] = vectordot (x, y)
+## Dot product of two interval vectors; or one vector and one scalar.
+## Accuracy is tightest. No interval must be empty.
+function [l, u, isexact] = tight_vectordot (x, y)
 
 ## Initialize accumulators
 l.e = int64 (0);
@@ -149,8 +132,7 @@ l.unbound = false ();
 u.e = int64 (0);
 u.m = zeros (1, 0, "int8");
 u.unbound = false ();
-empty = false ();
-    
+
 for i = 1 : max (numel (x.inf), numel (y.inf))
     if (isscalar (x.inf))
         ## Broadcast scalar value
@@ -169,11 +151,6 @@ for i = 1 : max (numel (x.inf), numel (y.inf))
         y_sup = y.sup (i);
     endif
 
-    if (x_inf == inf || y_inf == inf)
-        empty = true;
-        break
-    endif
-    
     if ((x_inf == 0 && x_sup == 0) || ...
         (y_inf == 0 && y_sup == 0))
         continue
@@ -288,7 +265,22 @@ for i = 1 : max (numel (x.inf), numel (y.inf))
         endif
     endif
 endfor
-    
+
+## Conversion from accu to double
+if (l.unbound)
+    l = -inf;
+    isexact = true ();
+else
+    [l, isexact] = accu2double (l, -inf);
+endif
+
+if (u.unbound)
+    u = inf;
+else
+    [u, upperisexact] = accu2double (u, inf);
+    isexact = and (isexact, upperisexact);
+endif
+
 endfunction
 
 %!test "matrix × matrix";
