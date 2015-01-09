@@ -4,4 +4,6 @@ syntax: regexp
 # project's top-level directory".
 
 (^|/)octave-core$
+\.oct$
+\.o$
 
