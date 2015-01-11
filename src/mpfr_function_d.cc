@@ -112,12 +112,46 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     mp_rnd = MPFR_RNDN;
   
   // Choose the function to evaluate
-  if (function.compare ("sin") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_sin);
+  if      (function.compare ("acos") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_acos);
+  else if (function.compare ("acosh") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_acosh);
+  else if (function.compare ("asin") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_asin);
+  else if (function.compare ("asinh") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_asinh);
+  else if (function.compare ("atan") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_atan);
+  else if (function.compare ("atan2") == 0)
+    evaluate (arg1, arg2, mp_rnd, &mpfr_atan2);
+  else if (function.compare ("atanh") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_atanh);
   else if (function.compare ("cos") == 0)
     evaluate (arg1, mp_rnd, &mpfr_cos);
+  else if (function.compare ("cosh") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_cosh);
+  else if (function.compare ("exp") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_exp);
+  else if (function.compare ("log") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_log);
+  else if (function.compare ("log2") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_log2);
+  else if (function.compare ("log10") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_log10);
+  else if (function.compare ("power") == 0)
+    evaluate (arg1, arg2, mp_rnd, &mpfr_pow);
+  else if (function.compare ("pow2") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_exp2);
+  else if (function.compare ("pow10") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_exp10);
+  else if (function.compare ("sin") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_sin);
+  else if (function.compare ("sinh") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_sinh);
   else if (function.compare ("tan") == 0)
     evaluate (arg1, mp_rnd, &mpfr_tan);
+  else if (function.compare ("tanh") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_tanh);
   else
     error ("mpfr_function_d: unsupported function");
 
