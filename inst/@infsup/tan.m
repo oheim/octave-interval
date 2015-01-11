@@ -19,12 +19,12 @@
 ## 
 ## Compute the tangent for each number in interval @var{X} in radians.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## tan (infsup (1))
-##   @result{} [1.557407724654902, 1.5574077246549026]
+##   @result{} [1.557407724654902, 1.5574077246549023]
 ## @end group
 ## @end example
 ## @seealso{atan, tanh}
@@ -36,7 +36,7 @@
 
 function result = tan (x)
 
-l = u = tanl = tanu = zeros (size (x));
+l = u = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than pi. This may save computation of
 ## some tangent values.
@@ -49,24 +49,18 @@ l (certainlyfullperiod) = -inf;
 u (certainlyfullperiod) = inf;
 
 possiblynotfullperiod = not (certainlyfullperiod);
-tanl (possiblynotfullperiod) = tan (x.inf);
-tanu (possiblynotfullperiod) = tan (x.sup);
+l (possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf);
+u (possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup);
 
 singularity = certainlyfullperiod | ...
-              tanl > tanu | (...
+              l > u | (...
                   width > 2 & (...
-                      sign (tanl) == sign (tanu) | ...
-                      max (abs (tanl), abs (tanu)) < 1));
+                      sign (l) == sign (u) | ...
+                      max (abs (l), abs (u)) < 1));
 
 nosingularity = not (singularity);
 l (singularity) = -inf;
 u (singularity) = inf;
-l (nosingularity) = ulpadd (tanl (nosingularity), -1);
-u (nosingularity) = ulpadd (tanu (nosingularity), 1);
-
-## tan (0) == 0
-l (nosingularity & x.inf == 0) = 0;
-u (nosingularity & x.sup == 0) = 0;
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;

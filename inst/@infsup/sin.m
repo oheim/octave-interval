@@ -19,12 +19,12 @@
 ## 
 ## Compute the sine for each number in interval @var{X} in radians.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## sin (infsup (1))
-##   @result{} [.8414709848078963, .8414709848078967]
+##   @result{} [.8414709848078965, .8414709848078967]
 ## @end group
 ## @end example
 ## @seealso{asin, sinh}
@@ -36,7 +36,7 @@
 
 function result = sin (x)
 
-l = u = sinl = sinu = cossignl = cossignu = zeros (size (x));
+l = u = cossignl = cossignu = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than 2*pi. This can save the
 ## computation if some sine values.
@@ -49,21 +49,22 @@ l (certainlyfullperiod) = -1;
 u (certainlyfullperiod) = 1;
 
 possiblynotfullperiod = not (certainlyfullperiod);
-sinl (possiblynotfullperiod) = sin (x.inf (possiblynotfullperiod));
-sinu (possiblynotfullperiod) = sin (x.sup (possiblynotfullperiod));
-
-l (possiblynotfullperiod) = max (-1, ulpadd (min (...
-        sinl (possiblynotfullperiod), sinu (possiblynotfullperiod)), -1));
-u (possiblynotfullperiod) = min (1, ulpadd (max (...
-        sinl (possiblynotfullperiod), sinu (possiblynotfullperiod)), 1));
+l (possiblynotfullperiod) = min (...
+    mpfr_function_d ('sin', -inf, x.inf (possiblynotfullperiod)), ...
+    mpfr_function_d ('sin', -inf, x.sup (possiblynotfullperiod)));
+u (possiblynotfullperiod) = max (...
+    mpfr_function_d ('sin', inf, x.inf (possiblynotfullperiod)), ...
+    mpfr_function_d ('sin', inf, x.sup (possiblynotfullperiod)));
 
 ## We use sign (cos) to know the gradient at the boundaries.
-cossignl (possiblynotfullperiod) = sign (cos (x.inf (possiblynotfullperiod)));
-cossignu (possiblynotfullperiod) = sign (cos (x.sup (possiblynotfullperiod)));
+cossignl (possiblynotfullperiod) = sign (...
+    mpfr_function_d ('cos', .5, x.inf (possiblynotfullperiod)));
+cossignu (possiblynotfullperiod) = sign (...
+    mpfr_function_d ('cos', .5, x.sup (possiblynotfullperiod)));
 
 ## In case of sign (cos) == 0, we conservatively use sign (cos) of nextout.
-cossignl (cossignl == 0) = sign (sinl (cossignl == 0));
-cossignu (cossignu == 0) = (-1) * sign (sinu (cossignu == 0));
+cossignl (cossignl == 0) = sign (l (cossignl == 0));
+cossignu (cossignu == 0) = (-1) * sign (u (cossignu == 0));
 
 containsinf = possiblynotfullperiod & ((cossignl == -1 & cossignu == 1) | ...
                                        (cossignl == cossignu & width > 4));
@@ -72,10 +73,6 @@ l (containsinf) = -1;
 containssup = possiblynotfullperiod & ((cossignl == 1 & cossignu == -1) | ...
                                        (cossignl == cossignu & width > 4));
 u (containssup) = 1;
-
-## sin (0) == 0
-l (x.inf == 0 & l == -pow2 (-1074)) = 0;
-u (x.sup == 0 & u == pow2 (-1074)) = 0;
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;
