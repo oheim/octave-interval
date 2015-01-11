@@ -354,12 +354,7 @@ q5 = y.inf >= 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
 q6 = y.inf >= 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
 q7 = y.inf < 0 & y.sup > 0 & x.sup <= 0;
 q8 = y.inf < 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
-q9 = q10 = y.inf < 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
-a = b = zeros (size (x.inf));
-a (q9) = x.inf (q9) .* y.sup (q9);
-b (q9) = x.sup (q9) .* y.inf (q9);
-q9 = q9 & (a <= b);
-q10 = q10 & (a > b);
+q9 = y.inf < 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
 
 l = u = zeros (10, 1);
 fesetround (-inf);
@@ -388,10 +383,19 @@ if (not (isempty (q8)))
     l (8) = x.sup (q8)' * y.inf (q8);
 endif
 if (not (isempty (q9)))
-    l (9) = x.inf (q9)' * y.sup (q9);
+    a = b = zeros (size (x.inf));
+    a (q9) = x.inf (q9) .* y.sup (q9);
+    b (q9) = x.sup (q9) .* y.inf (q9);
+    q9_1 = q9 & (a <= b);
+    q9_2 = q9 & (a > b);
+    if (not (isempty (q9_1)))
+        l (9) = x.inf (q9_1)' * y.sup (q9_1);
+    endif
+    if (not (isempty (q9_2)))
+        l (10) = x.sup (q9_2)' * y.inf (q9_2);
+    endif
 endif
 if (not (isempty (q10)))
-    l (10) = x.sup (q10)' * y.inf (q10);
 endif
 l = sum (l);
 fesetround (inf);
@@ -420,10 +424,18 @@ if (not (isempty (q8)))
     u (8) = x.sup (q8)' * y.sup (q8);
 endif
 if (not (isempty (q9)))
-    u (9) = x.sup (q9)' * y.sup (q9);
-endif
-if (not (isempty (q10)))
-    u (10) = x.inf (q10)' * y.inf (q10);
+    ## We must compute q9_1 and q9_2 again. a and b have previously been
+    ## computed with a different rounding mode!
+    a (q9) = x.inf (q9) .* y.sup (q9);
+    b (q9) = x.sup (q9) .* y.inf (q9);
+    q9_1 = q9 & (a <= b);
+    q9_2 = q9 & (a > b);
+    if (not (isempty (q9_1)))
+        u (9) = x.sup (q9_1)' * y.sup (q9_1);
+    endif
+    if (not (isempty (q9_2)))
+        u (10) = x.inf (q9_2)' * y.inf (q9_2);
+    endif
 endif
 u = sum (u);
 fesetround (0.5);
