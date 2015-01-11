@@ -49,8 +49,8 @@ l (certainlyfullperiod) = -inf;
 u (certainlyfullperiod) = inf;
 
 possiblynotfullperiod = not (certainlyfullperiod);
-l (possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf);
-u (possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup);
+l (possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf (possiblynotfullperiod));
+u (possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup (possiblynotfullperiod));
 
 singularity = certainlyfullperiod | ...
               l > u | (...
