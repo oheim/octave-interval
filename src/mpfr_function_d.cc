@@ -30,7 +30,7 @@ void evaluate (
   mpfr_t mp;
   mpfr_init2 (mp, DOUBLE_PRECISION);
   
-  int n = arg1.numel ();
+  const int n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp, arg1.elem (i), rnd);
@@ -53,11 +53,23 @@ void evaluate (
   mpfr_init2 (mp1, DOUBLE_PRECISION);
   mpfr_init2 (mp2, DOUBLE_PRECISION);
   
-  int n = arg1.numel ();
+  bool scalar1 = arg1.numel () == 1;
+  bool scalar2 = arg2.numel () == 1;
+  
+  if (scalar1 && ! scalar2)
+    {
+      arg1.resize (arg2.dims (), arg1.elem (0));
+      scalar1 = false;
+    }
+  
+  const int n = std::max (arg1.numel (), arg2.numel ());
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp1, arg1.elem (i), rnd);
-      mpfr_set_d (mp2, arg2.elem (i), rnd);
+      mpfr_set_d (mp2,
+                  (scalar2) ? arg2.elem (0) // broadcast
+                            : arg2.elem (i),
+                  rnd);
       (*ptr_binary_fun) (mp1, mp1, mp2, rnd);
       arg1.elem (i) = mpfr_get_d (mp1, rnd);
     }
@@ -68,33 +80,41 @@ void evaluate (
 
 DEFUN_DLD (mpfr_function_d, args, nargout, 
   "-*- texinfo -*-\n"
-  "@deftypefn  {Function File} {} mpfr_function_d ('acos', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('acosh', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('asin', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('asinh', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('atan', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('atan2', ±inf, @var{Y}, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('atanh', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('cos', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('cosh', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('exp', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('log', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('log2', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('log10', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('power', ±inf, @var{X}, @var{Y})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('pow2', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('pow10', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('sin', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('sinh', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('sinh', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('sinh', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('tan', ±inf, @var{X})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('tanh', ±inf, @var{X})\n"
+  "@deftypefn  {Function File} {} mpfr_function_d ('acos', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('acosh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('asin', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('asinh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('atan', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('atan2', @var{R}, @var{Y}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('atanh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('cos', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('cosh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('exp', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('log', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('log2', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('log10', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('minus', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('plus', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('power', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('pow2', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('pow10', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('rdivide', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('sin', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('sqr', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('sqrt', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('tan', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('tanh', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('times', @var{R}, @var{X}, @var{Y})\n"
   "\n"
   "Evaluate a function in double precision with correctly rounded result."
   "\n\n"
-  "Parameter 1 is the function's name, Parameter 2 is the rounding "
-  "direction.  Parameters 3 and (possibly) 4 are operands to the function."
+  "Parameter 1 is the function's name in GNU Octave, Parameter 2 is the "
+  "rounding direction (0: towards zero, 0.5 towards nearest and ties to even, "
+  "inf towards positive infinity, -inf towards negative infinity.  "
+  "Parameters 3 and (possibly) 4 are operands to the function."
   "\n"
   "@seealso{fesetround}\n"
   "@end deftypefn"
@@ -157,20 +177,32 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     evaluate (arg1, mp_rnd, &mpfr_log2);
   else if (function.compare ("log10") == 0)
     evaluate (arg1, mp_rnd, &mpfr_log10);
+  else if (function.compare ("minus") == 0)
+    evaluate (arg1, arg2, mp_rnd, &mpfr_sub);
+  else if (function.compare ("plus") == 0)
+    evaluate (arg1, arg2, mp_rnd, &mpfr_add);
   else if (function.compare ("power") == 0)
     evaluate (arg1, arg2, mp_rnd, &mpfr_pow);
   else if (function.compare ("pow2") == 0)
     evaluate (arg1, mp_rnd, &mpfr_exp2);
   else if (function.compare ("pow10") == 0)
     evaluate (arg1, mp_rnd, &mpfr_exp10);
+  else if (function.compare ("rdivide") == 0)
+    evaluate (arg1, arg2, mp_rnd, &mpfr_div);
   else if (function.compare ("sin") == 0)
     evaluate (arg1, mp_rnd, &mpfr_sin);
   else if (function.compare ("sinh") == 0)
     evaluate (arg1, mp_rnd, &mpfr_sinh);
+  else if (function.compare ("sqr") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_sqr);
+  else if (function.compare ("sqrt") == 0)
+    evaluate (arg1, mp_rnd, &mpfr_sqrt);
   else if (function.compare ("tan") == 0)
     evaluate (arg1, mp_rnd, &mpfr_tan);
   else if (function.compare ("tanh") == 0)
     evaluate (arg1, mp_rnd, &mpfr_tanh);
+  else if (function.compare ("times") == 0)
+    evaluate (arg1, arg2, mp_rnd, &mpfr_mul);
   else
     error ("mpfr_function_d: unsupported function");
 
