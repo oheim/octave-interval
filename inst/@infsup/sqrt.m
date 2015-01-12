@@ -36,11 +36,8 @@
 
 function result = sqrt (x)
 
-fesetround (-inf);
-l = realsqrt (max (0, x.inf));
-fesetround (inf);
-u = realsqrt (max (0, x.sup));
-fesetround (0.5);
+l = mpfr_function_d ('sqrt', -inf, max (0, x.inf));
+u = mpfr_function_d ('sqrt', +inf, max (0, x.sup));
 
 emptyresult = isempty (x) | x.sup < 0;
 l (emptyresult) = inf;

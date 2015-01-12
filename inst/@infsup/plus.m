@@ -49,11 +49,8 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-fesetround (-inf);
-l = x.inf + y.inf;
-fesetround (inf);
-u = x.sup + y.sup;
-fesetround (0.5);
+l = mpfr_function_d ('plus', -inf, x.inf, y.inf);
+u = mpfr_function_d ('plus', +inf, x.sup, y.sup);
 
 ## Sum of empty intervals must be empty
 emptyresult = isempty (x) | isempty (y);

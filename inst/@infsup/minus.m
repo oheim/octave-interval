@@ -49,11 +49,8 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-fesetround (-inf);
-l = x.inf - y.sup;
-fesetround (inf);
-u = x.sup - y.inf;
-fesetround (0.5);
+l = mpfr_function_d ('minus', -inf, x.inf, y.sup);
+u = mpfr_function_d ('minus', +inf, x.sup, y.inf);
 
 ## Difference of empty intervals must be empty
 emptyresult = isempty (x) | isempty (y);

@@ -36,14 +36,14 @@
 
 function result = sqr (x)
 
-l = mig (x);
-u = mag (x);
+x = abs (x);
+l = mpfr_function_d ('sqr', -inf, mig (x));
+u = mpfr_function_d ('sqr', +inf, mag (x));
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-x = infsup (l, u);
-result = x .* x;
+result = infsup (l, u);
 
 endfunction
