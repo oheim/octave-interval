@@ -21,12 +21,12 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## log (infsup (2))
-##   @result{} [.6931471805599451, .6931471805599454]
+##   @result{} [.6931471805599452, .6931471805599454]
 ## @end group
 ## @end example
 ## @seealso{exp, log2, log10}
@@ -38,12 +38,10 @@
 
 function result = log (x)
 
-l = ulpadd (real (log (x.inf)), -1);
-u = ulpadd (real (log (x.sup)), 1);
+l = mpfr_function_d ('log', -inf, x.inf);
+u = mpfr_function_d ('log', +inf, x.sup);
 
 l (x.inf <= 0) = -inf;
-l (x.inf == 1) = 0;
-u (x.sup == 1) = 0;
 
 emptyresult = isempty (x) | x.sup <= 0;
 l (emptyresult) = inf;

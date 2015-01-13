@@ -124,13 +124,11 @@ else
         ## Rounding occurred as desired
     else
         delta = pow2 (-1074);
-        fesetround (direction);
         if (direction > 0)
-            binary = binary + delta;
+            binary = mpfr_function_d ('plus', direction, binary, delta);
         else
-            binary = binary - delta;
+            binary = mpfr_function_d ('minus', direction, binary, delta);
         endif
-        fesetround (0.5);
     endif
 endif
 endfunction

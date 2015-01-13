@@ -36,8 +36,9 @@
 
 function result = nextout (x)
 
-l = nextdown (x.inf);
-u = nextup (x.sup);
+delta = pow2 (-1074);
+l = mpfr_function_d ('minus', +inf, x.inf, delta);
+u = mpfr_function_d ('plus',  -inf, x.sup, delta);
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;

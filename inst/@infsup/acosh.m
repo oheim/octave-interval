@@ -19,13 +19,12 @@
 ## 
 ## Compute the inverse hyperbolic cosine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 8 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## acosh (infsup (2))
-##   @result{} [1.3169578969248163, 1.3169578969248171]
+##   @result{} [1.3169578969248165, 1.3169578969248168]
 ## @end group
 ## @end example
 ## @seealso{cosh}
@@ -37,19 +36,18 @@
 
 function result = acosh (x)
 
-## Most implementations should be within 2 ULP, but must guarantee 4 ULP.
-l = max (0, ulpadd (real (acosh (x.inf)), -4));
-u = ulpadd (real (acosh (x.sup)), 4);
+l = mpfr_function_d ('acosh', -inf, x.inf);
+u = mpfr_function_d ('acosh', +inf, x.sup);
 
 ## Make the function tightest for some parameters
+l (x.inf <= 1) = 0;
 u (x.sup == 1) = 0;
 
 emptyresult = isempty (x) | x.sup < 1;
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-## The evaluation of log (…) is more accurate than ± 4 ULP for small values
-result = infsup (l, u) & log (x + sqrt (x + 1) .* sqrt (x - 1));
+result = infsup (l, u);
 
 endfunction
 %!test "Empty interval";

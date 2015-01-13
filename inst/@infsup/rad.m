@@ -43,10 +43,8 @@ function result = rad (x)
 
 m = mid (x);
 ## The midpoint is rounded to nearest and the radius must cover both boundaries
-fesetround (inf);
-r1 = m - x.inf;
-r2 = x.sup - m;
-fesetround (0.5);
+r1 = mpfr_function_d ('minus', +inf, m, x.inf);
+r2 = mpfr_function_d ('minus', +inf, x.sup, m);
 result = max (r1, r2);
 
 result (isempty (x)) = nan ();

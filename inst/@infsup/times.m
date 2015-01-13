@@ -79,7 +79,7 @@ l (q7) = mpfr_function_d ('times', -inf, x.inf (q7), y.sup (q7));
 l (q8) = mpfr_function_d ('times', -inf, x.sup (q8), y.inf (q8));
 l (q9) = min (...
               mpfr_function_d ('times', -inf, x.inf (q9), y.sup (q9)), ...
-              mpfr_function_d ('times', -inf,  x.sup (q9), y.inf (q9)));
+              mpfr_function_d ('times', -inf, x.sup (q9), y.inf (q9)));
 u (q1) = mpfr_function_d ('times', +inf, x.inf (q1), y.inf (q1));
 u (q2) = mpfr_function_d ('times', +inf, x.inf (q2), y.sup (q2));
 u (q3) = mpfr_function_d ('times', +inf, x.inf (q3), y.inf (q3));
@@ -89,8 +89,8 @@ u (q6) = mpfr_function_d ('times', +inf, x.sup (q6), y.sup (q6));
 u (q7) = mpfr_function_d ('times', +inf, x.inf (q7), y.inf (q7));
 u (q8) = mpfr_function_d ('times', +inf, x.sup (q8), y.sup (q8));
 u (q9) = max (...
-              mpfr_function_d ('times', +inf, x.inf (q9) .* y.inf (q9)), ...
-              mpfr_function_d ('times', +inf, x.sup (q9) .* y.sup (q9)));
+              mpfr_function_d ('times', +inf, x.inf (q9), y.inf (q9)), ...
+              mpfr_function_d ('times', +inf, x.sup (q9), y.sup (q9)));
 
 entireresult = isentire (x) | isentire (y);
 l (entireresult) = -inf;

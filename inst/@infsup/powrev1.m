@@ -233,17 +233,10 @@ elseif (fix (y) == y)
     endif
 else
     if (z > 1)
-        fesetround (direction);
+        y = mpfr_function_d ('rdivide', direction, 1, y);
     else
-        fesetround (-direction);
+        y = mpfr_function_d ('rdivide', -direction, 1, y);
     endif
-    y = 1 / y;
-    fesetround (0.5);
-    x = realpow (z, y);
-    if (direction > 0)
-        x = nextup (x);
-    else
-        x = nextdown (x);
-    endif
+    x = mpfr_function_d ('pow', direction, z, y);
 endif
 endfunction

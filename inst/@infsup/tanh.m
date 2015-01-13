@@ -19,13 +19,12 @@
 ## 
 ## Compute the hyperbolic tangent for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## tanh (infsup (1))
-##   @result{} [.7615941559557644, .7615941559557653]
+##   @result{} [.7615941559557648, .761594155955765]
 ## @end group
 ## @end example
 ## @seealso{atanh, sinh, cosh}
@@ -37,15 +36,8 @@
 
 function result = tanh (x)
 
-## Using directed rounding, we can decrease the worst case error by 0.5 ULP
-fesetround (-inf);
-l = tanh (x.inf);
-fesetround (inf);
-u = tanh (x.sup);
-fesetround (0.5);
-
-l = max (-1, ulpadd (l, -3));
-u = min (1, ulpadd (u, 3));
+l = mpfr_function_d ('tanh', -inf, x.inf);
+u = mpfr_function_d ('tanh', +inf, x.sup);
 
 nonnegative = x.inf >= 0;
 l (nonnegative) = max (0, l (nonnegative));

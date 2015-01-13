@@ -329,18 +329,14 @@ else
             y = y.inf;
         endif
     else
-        d = log (x);
-        n = log (z);
         if ((direction > 0) == (sign (d) == sign (n)))
-            d = nextdown (d);
-            n = nextup (n);
+            d = mpfr_function_d ('log', -inf, x);
+            n = mpfr_function_d ('log', +inf, z);
         else
-            d = nextup (d);
-            n = nextdown (n);
+            d = mpfr_function_d ('log', +inf, x);
+            n = mpfr_function_d ('log', -inf, z);
         endif
-        fesetround (direction);
-        y = n / d;
-        fesetround (0.5);
+        y = mpfr_function_d ('rdivide', direction, n, d);
     endif
 endif
 endfunction

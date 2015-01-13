@@ -230,9 +230,11 @@ for [boundaries, key] = input
                 ## is right next to the desired number.
                 switch key
                     case "inf"
-                        x.inf (i) = nextdown (x.inf (i));
+                        x.inf (i) = mpfr_function_d ('minus', +inf, ...
+                                        x.inf (i), pow2 (-1074));
                     case "sup"
-                        x.sup (i) = nextup (x.sup (i));
+                        x.sup (i) = mpfr_function_d ('plus', -inf, ...
+                                        x.sup (i), pow2 (-1074));
                 endswitch
             endif
         elseif (not (ischar (boundary)))
@@ -384,9 +386,11 @@ for [boundaries, key] = input
                         ## approximation is right next to the desired number.
                         switch key
                             case "inf"
-                                x.inf (i) = nextdown (binary);
+                                x.inf (i) = mpfr_function_d ('minus', +inf, ...
+                                                binary, pow2 (-1074));
                             case "sup"
-                                x.sup (i) = nextup (binary);
+                                x.sup (i) = mpfr_function_d ('plus', -inf, ...
+                                                binary, pow2 (-1074));
                         endswitch
                     endif
             endswitch

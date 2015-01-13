@@ -19,13 +19,12 @@
 ## 
 ## Compute the hyperbolic sine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 8 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## sinh (infsup (1))
-##   @result{} [1.1752011936438004, 1.1752011936438023]
+##   @result{} [1.1752011936438013, 1.1752011936438017]
 ## @end group
 ## @end example
 ## @seealso{asinh, cosh, tanh}
@@ -37,13 +36,8 @@
 
 function result = sinh (x)
 
-l = ulpadd (sinh (x.inf), -4);
-u = ulpadd (sinh (x.sup), 4);
-
-nonnegative = x.inf >= 0;
-l (nonnegative) = max (l (nonnegative), 0);
-nonpositive = x.sup <= 0;
-u (nonpositive) = min (u (nonpositive), 0);
+l = mpfr_function_d ('sinh', -inf, x.inf);
+u = mpfr_function_d ('sinh', +inf, x.sup);
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;

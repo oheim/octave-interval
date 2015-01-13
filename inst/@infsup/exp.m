@@ -19,8 +19,7 @@
 ## 
 ## Compute the exponential function for all numbers in @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest for
-## boundaries @code{0} and @code{1}.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
@@ -37,15 +36,8 @@
 
 function result = exp (x)
 
-l = max (0, ulpadd (exp (x.inf), -1));
-u = ulpadd (exp (x.sup), 1);
-
-## Make function tightest for some parameters
-e = infsup ("e");
-l (x.inf == 1) = inf (e);
-l (x.inf == 0) = 1;
-u (x.sup == 1) = sup (e);
-u (x.sup == 0) = 1;
+l = mpfr_function_d ('exp', -inf, x.inf);
+u = mpfr_function_d ('exp', +inf, x.sup);
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;

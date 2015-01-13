@@ -19,13 +19,12 @@
 ## 
 ## Compute the hyperbolic cosine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 6 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## cosh (infsup (1))
-##   @result{} [1.543080634815243, 1.5430806348152444]
+##   @result{} [1.5430806348152437, 1.543080634815244]
 ## @end group
 ## @end example
 ## @seealso{acosh, sinh, tanh}
@@ -37,11 +36,8 @@
 
 function result = cosh (x)
 
-l = max (1, ulpadd (cosh (mig (x)), -3));
-u = ulpadd (cosh (mag (x)), 3);
-
-## Make function tightest for x == 0
-u (x.inf == 0 & x.sup == 0) = 1;
+l = mpfr_function_d ('cosh', -inf, mig (x));
+u = mpfr_function_d ('cosh', +inf, mag (x));
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;

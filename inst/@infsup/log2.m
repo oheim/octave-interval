@@ -21,8 +21,7 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest for
-## powers of two.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
@@ -39,13 +38,8 @@
 
 function result = log2 (x)
 
-l = real (log2 (x.inf));
-notexact = fix (l) ~= l | l < -1074 | l > 1023 | pow2 (l) ~= x.inf;
-l (notexact) = ulpadd (l (notexact), -1);
-
-u = real (log2 (x.sup));
-notexact = fix (u) ~= u | u < -1074 | u > 1023 | pow2 (u) ~= x.sup;
-u (notexact) = ulpadd (u (notexact), 1);
+l = mpfr_function_d ('log2', -inf, x.inf);
+u = mpfr_function_d ('log2', +inf, x.sup);
 
 l (x.inf <= 0) = -inf;
 

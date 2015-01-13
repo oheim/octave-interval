@@ -72,9 +72,7 @@ else
     if (not (isempty (x & arctangentshifted)))
         u = min (x.sup, arctangentshifted.sup);
     else
-        fesetround (inf);
-        m = n - 1;
-        fesetround (0.5);
+        m = mpfr_function_d ('minus', +inf, n, 1);
         u = sup (arctangent + m * pi);
     endif
 endif
@@ -88,9 +86,7 @@ else
     if (not (isempty (x & arctangentshifted)))
         l = max (x.inf, arctangentshifted.inf);
     else
-        fesetround (-inf);
-        m = n + 1;
-        fesetround (0.5);
+        m = mpfr_function_d ('plus', -inf, n, 1);
         l = inf (arctangent + m * pi);
     endif
 endif

@@ -181,9 +181,7 @@ if (isexact || ...
     ## correct rounding direction
 else
     delta = pow2 (-1074);
-    fesetround (direction);
-    binary = binary + delta;
-    fesetround (0.5);
+    binary = mpfr_function_d ('plus', direction, binary, delta);
 endif
 
 endfunction

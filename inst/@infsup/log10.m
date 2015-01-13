@@ -21,14 +21,12 @@
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7 ULPs of the exact enclosure.  The result is tightest for powers of ten
-## between 10^0 and 10^22 (inclusive).
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## log10 (infsup (2))
-##   @result{} [.30102999566398097, .30102999566398143]
+##   @result{} [.30102999566398114, .3010299956639812]
 ## @end group
 ## @end example
 ## @seealso{pow10, log, log2}
@@ -40,24 +38,8 @@
 
 function result = log10 (x)
 
-l = u = -ones (size (x));
-## Try to compute the exact value for powers 10^n with n in [0, 22].
-## If we set the rounding mode, log10 will not compute the exact value.
-possiblyexact = x.inf >= 1 & fix (x.inf) == x.inf;
-l (possiblyexact) = real (log10 (x.inf (possiblyexact)));
-notexact = fix (l) ~= l | l < 0 | l > 22 | realpow (10, l) ~= x.inf;
-fesetround (-inf);
-l (notexact) = real (log10 (x.inf (notexact)));
-fesetround (0.5);
-l (notexact) = ulpadd (l (notexact), -3);
-
-possiblyexact = x.sup >= 1 & fix (x.sup) == x.sup;
-u (possiblyexact) = real (log10 (x.sup (possiblyexact)));
-notexact = fix (u) ~= u | u < 0 | u > 22 | realpow (10, u) ~= x.sup;
-fesetround (inf);
-u (notexact) = real (log10 (x.sup (notexact)));
-fesetround (0.5);
-u (notexact) = ulpadd (u (notexact), 3);
+l = mpfr_function_d ('log10', -inf, x.inf);
+u = mpfr_function_d ('log10', +inf, x.sup);
 
 l (x.inf <= 0) = -inf;
 

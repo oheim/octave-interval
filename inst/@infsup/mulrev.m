@@ -92,36 +92,24 @@ if (ismember (0, c))
     elseif (c.inf == 0 && c.sup == 0)
         result = infsup (0);
     elseif (b.sup < 0)
-        fesetround (-inf);
-        l = cu / bu;
-        fesetround (inf);
-        u = cl / bu;
-        fesetround (0.5);
+        l = mpfr_function_d ('rdivide', -inf, cu, bu);
+        u = mpfr_function_d ('rdivide', +inf, cl, bu);
         result = infsup(l, u) & x;
     else # b.inf > 0
-        fesetround (-inf);
-        l = cl / bl;
-        fesetround (inf);
-        u = cu / bl;
-        fesetround (0.5);
+        l = mpfr_function_d ('rdivide', -inf, cl, bl);
+        u = mpfr_function_d ('rdivide', +inf, cu, bl);
         result = infsup(l, u) & x;
     endif
 elseif (c.sup < 0)
     if (b.inf == 0 && b.sup == 0)
         result = infsup ();
     elseif (b.sup <= 0)
-        fesetround (-inf);
-        l = cu / bl;
-        fesetround (inf);
-        u = cl / bu;
-        fesetround (0.5);
+        l = mpfr_function_d ('rdivide', -inf, cu, bl);
+        u = mpfr_function_d ('rdivide', +inf, cl. bu);
         result = infsup (l, u) & x;
     elseif (b.inf >= 0)
-        fesetround (-inf);
-        l = cl / bl;
-        fesetround (inf);
-        u = cu / bu;
-        fesetround (0.5);
+        l = mpfr_function_d ('rdivide', -inf, cl, bl);
+        u = mpfr_function_d ('rdivide', +inf, cu, bu);
         result = infsup (l, u) & x;
     else
         result = x;
@@ -130,18 +118,12 @@ else # c.inf > 0
     if (b.inf == 0 && b.sup == 0)
         result = infsup ();
     elseif (b.sup <= 0)
-        fesetround (-inf);
-        l = cu / bu;
-        fesetround (inf);
-        u = cl / bl;
-        fesetround (0.5);
+        l = mpfr_function_d ('rdivide', -inf, cu, bu);
+        u = mpfr_function_d ('rdivide', +inf, cl, bl);
         result = infsup (l, u) & x;
     elseif (b.inf >= 0)
-        fesetround (-inf);
-        l = cl / bu;
-        fesetround (inf);
-        u = cu / bl;
-        fesetround (0.5);
+        l = mpfr_function_d ('rdivide', -inf, cl, bu);
+        u = mpfr_function_d ('rdivide', +inf, cu, bl);
         result = infsup (l, u) & x;
     else
         result = x;

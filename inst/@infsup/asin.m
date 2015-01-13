@@ -20,12 +20,12 @@
 ## Compute the inverse sine in radians (arcsine) for each number in
 ## interval @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## asin (infsup (.5))
-##   @result{} [.5235987755982988, .5235987755982991]
+##   @result{} [.5235987755982988, .523598775598299]
 ## @end group
 ## @end example
 ## @seealso{sin}
@@ -37,17 +37,13 @@
 
 function result = asin (x)
 
-l = ulpadd (real (asin (x.inf)), -1);
-u = ulpadd (real (asin (x.sup)), 1);
+l = mpfr_function_d ('asin', -inf, x.inf);
+u = mpfr_function_d ('asin', +inf, x.sup);
 
 ## Make the function tightest for some parameters
 pi = infsup ("pi");
 l (x.inf <= -1) = inf (-pi) / 2;
-nonnegative = (x.inf >= 0);
-l (nonnegative) = max (0, l (nonnegative));
 u (x.sup >= 1) = sup (pi) / 2;
-nonpositive = (x.sup <= 0);
-u (nonpositive) = min (0, u (nonpositive));
 
 emptyresult = isempty (x) | x.inf > 1 | x.sup < -1;
 l (emptyresult) = inf;
@@ -58,18 +54,3 @@ result = infsup (l, u);
 endfunction
 %!test "Empty interval";
 %! assert (asin (infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (acos (infsup (-1)) == infsup ("pi"));
-%! assert (subset (acos (infsup (-.5)), (infsup ("pi") / 2) | infsup ("pi")));
-%! assert (acos (infsup (0)) == infsup ("pi") / 2);
-%! assert (subset (acos (infsup (.5)), (infsup ("pi") / 2) | infsup (0)));
-%! assert (acos (infsup (1)) == infsup (0));
-%!test "Bounded intervals";
-%! assert (acos (infsup (-1, 0)) == ((infsup ("pi") / 2) | infsup ("pi")));
-%! assert (acos (infsup (0, 1)) == ((infsup ("pi") / 2) | infsup (0)));
-%! assert (acos (infsup (-1, 1)) == infsup (0, "pi"));
-%! assert (acos (infsup (-2, 2)) == infsup (0, "pi"));
-%!test "Unbounded intervals";
-%! assert (acos (infsup (0, inf)) == ((infsup ("pi") / 2) | infsup (0)));
-%! assert (acos (infsup (-inf, 0)) == ((infsup ("pi") / 2) | infsup ("pi")));
-%! assert (acos (infsup (-inf, inf)) == infsup (0, "pi"));

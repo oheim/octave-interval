@@ -40,9 +40,7 @@
 
 function result = wid (x)
 
-fesetround (inf);
-result = x.sup - x.inf;
-fesetround (0.5);
+result = mpfr_function_d ('minus', +inf, x.sup, x.inf);
 
 result (isempty (x)) = nan ();
 

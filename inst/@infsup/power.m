@@ -28,10 +28,8 @@
 ##
 ## Warning: This function is not defined by IEEE 1788.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest in
-## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{Y} in
-## @{-1, 0.5, 0, 1, 2@}, or @var{X} and @var{Y} integral with
-## @code{abs (pow (@var{X}, @var{Y})) in [2^-53, 2^53]}
+## Accuracy: The result is an accurate enclosure.  The result is tightest if
+## @var{X} >= 0 or @var{Y} in [2^-53, 2^53].
 ##
 ## @example
 ## @group
@@ -230,9 +228,7 @@ if (y.sup == inf)
 else
     e = floor (y.sup);
     if (rem (e, 2) == 0)
-        fesetround (inf);
-        e = e - 1;
-        fesetround (0.5);
+        e = mpfr_function_d ('minus', +inf, e, 1);
     endif
     if (e < y.inf)
         ## No odd number in interval
@@ -248,9 +244,7 @@ if (y.sup == inf)
 else
     e = floor (y.sup);
     if (rem (e, 2) ~= 0)
-        fesetround (inf);
-        e = e - 1;
-        fesetround (0.5);
+        e = mpfr_function_d ('minus', +inf, e, 1);
     endif
     if (e < y.inf)
         ## No even number in interval
@@ -266,9 +260,7 @@ if (y.inf == -inf)
 else
     e = ceil (y.inf);
     if (rem (e, 2) == 0)
-        fesetround (-inf);
-        e = e + 1;
-        fesetround (0.5);
+        e = mpfr_function_d ('plus', -inf, e, 1);
     endif
     if (e > y.sup)
         ## No odd number in interval
@@ -284,9 +276,7 @@ if (y.inf == -inf)
 else
     e = ceil (y.inf);
     if (rem (e, 2) ~= 0)
-        fesetround (-inf);
-        e = e + 1;
-        fesetround (0.5);
+        e = mpfr_function_d ('plus', -inf, e, 1);
     endif
     if (e > y.sup)
         ## No even number in interval

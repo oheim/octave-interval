@@ -95,7 +95,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Function File} {} mpfr_function_d ('log10', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('minus', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('plus', @var{R}, @var{X}, @var{Y})\n"
-  "@deftypefnx {Function File} {} mpfr_function_d ('power', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('pow', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('pow2', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('pow10', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('rdivide', @var{R}, @var{X}, @var{Y})\n"
@@ -181,7 +181,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     evaluate (arg1, arg2, mp_rnd, &mpfr_sub);
   else if (function.compare ("plus") == 0)
     evaluate (arg1, arg2, mp_rnd, &mpfr_add);
-  else if (function.compare ("power") == 0)
+  else if (function.compare ("pow") == 0)
     evaluate (arg1, arg2, mp_rnd, &mpfr_pow);
   else if (function.compare ("pow2") == 0)
     evaluate (arg1, mp_rnd, &mpfr_exp2);

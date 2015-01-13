@@ -40,11 +40,8 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-fesetround (-inf);
-l = x.inf - y.inf;
-fesetround (inf);
-u = x.sup - y.sup;
-fesetround (0.5);
+l = mpfr_function_d ('minus', -inf, x.inf, y.inf);
+u = mpfr_function_d ('minus', +inf, x.sup, y.sup);
 
 entireresult = isempty (y) | wid (x) < wid (y) | ...
                y.inf == -inf | y.sup == inf | ...

@@ -19,13 +19,12 @@
 ## 
 ## Compute the inverse hyperbolic sine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 14 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## asinh (infsup (1))
-##   @result{} [.8813735870195422, .8813735870195439]
+##   @result{} [.8813735870195429, .8813735870195431]
 ## @end group
 ## @end example
 ## @seealso{sinh}
@@ -37,21 +36,13 @@
 
 function result = asinh (x)
 
-## Most implementations should be within 2 ULP, but must guarantee 7 ULP.
-l = ulpadd (asinh (x.inf), -7);
-u = ulpadd (asinh (x.sup), 7);
-
-## Make the function tightest for x = 0
-nonnegative = x.inf >= 0;
-l (nonnegative) = max (0, l (nonnegative));
-nonpositive = x.sup <= 0;
-u (nonpositive) = min (0, u (nonpositive));
+l = mpfr_function_d ('asinh', -inf, x.inf);
+u = mpfr_function_d ('asinh', +inf, x.sup);
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-## The evaluation of log (…) is more accurate than ± 7 ULP for small values
-result = infsup (l, u) & log (x + sqrt (sqr (x) + 1));
+result = infsup (l, u);
 
 endfunction

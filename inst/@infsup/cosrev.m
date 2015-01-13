@@ -77,9 +77,7 @@ else
     if (not (isempty (x & arccosineshifted)))
         u = min (x.sup, arccosineshifted.sup);
     else
-        fesetround (inf);
-        m = n - 1;
-        fesetround (0.5);
+        m = mpfr_function_d ('minus', +inf, n, 1);
         if (rem (n, 2) == 0)
             u = sup (n * pi - arccosine);
         else
@@ -102,9 +100,7 @@ else
     if (not (isempty (x & arccosineshifted)))
         l = max (x.inf, arccosineshifted.inf);
     else
-        fesetround (-inf);
-        m = n + 1;
-        fesetround (0.5);
+        m = mpfr_function_d ('plus', -inf, n, 1);
         if (rem (n, 2) == 0)
             l = inf ((infsup (m) + 1) * pi - arccosine);
         else

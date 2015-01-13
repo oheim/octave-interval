@@ -70,29 +70,20 @@ q7 = (x.inf < 0 & 0 < x.sup);
 q71 = q7 & y.inf > 0;
 q72 = q7 & y.sup < 0;
 
-## The atan2 should be within 2.5 ULPs of the exact result.
-## The atan2 with directed rounding is 2 ULPs within tight result.
-fesetround (-inf);
-l (q1) = atan2 (y.sup (q1), x.sup (q1));
-l (q2) = atan2 (y.sup (q2), x.inf (q2));
-l (q4) = atan2 (y.inf (q4), x.sup (q4));
-l (q5) = atan2 (y.inf (q5), x.inf (q5));
-l (q6) = atan2 (y.inf (q6), x.inf (q6));
-l (q71) = atan2 (y.inf (q71), x.sup (q71));
-l (q72) = atan2 (y.sup (q72), x.inf (q72));
-fesetround (inf);
-u (q1) = atan2 (y.inf (q1), x.inf (q1));
-u (q2) = atan2 (y.inf (q2), x.sup (q2));
-u (q4) = atan2 (y.sup (q4), x.inf (q4));
-u (q5) = atan2 (y.sup (q5), x.sup (q5));
-u (q6) = atan2 (y.sup (q6), x.inf (q6));
-u (q71) = atan2 (y.inf (q71), x.inf (q71));
-u (q72) = atan2 (y.sup (q72), x.sup (q72));
-fesetround (0.5);
-
-## Consider ULP accurracy
-l = ulpadd (l, -2);
-u = ulpadd (u, 2);
+l (q1) = mpfr_function_d ('atan2', -inf, y.sup (q1), x.sup (q1));
+l (q2) = mpfr_function_d ('atan2', -inf, y.sup (q2), x.inf (q2));
+l (q4) = mpfr_function_d ('atan2', -inf, y.inf (q4), x.sup (q4));
+l (q5) = mpfr_function_d ('atan2', -inf, y.inf (q5), x.inf (q5));
+l (q6) = mpfr_function_d ('atan2', -inf, y.inf (q6), x.inf (q6));
+l (q71) = mpfr_function_d ('atan2', -inf, y.inf (q71), x.sup (q71));
+l (q72) = mpfr_function_d ('atan2', -inf, y.sup (q72), x.inf (q72));
+u (q1) = mpfr_function_d ('atan2', +inf, y.inf (q1), x.inf (q1));
+u (q2) = mpfr_function_d ('atan2', +inf, y.inf (q2), x.sup (q2));
+u (q4) = mpfr_function_d ('atan2', +inf, y.sup (q4), x.inf (q4));
+u (q5) = mpfr_function_d ('atan2', +inf, y.sup (q5), x.sup (q5));
+u (q6) = mpfr_function_d ('atan2', +inf, y.sup (q6), x.inf (q6));
+u (q71) = mpfr_function_d ('atan2', +inf, y.inf (q71), x.inf (q71));
+u (q72) = mpfr_function_d ('atan2', +inf, y.sup (q72), x.sup (q72));
 
 ## Make function tightest for some parameters and compute remaining partitions
 pi = infsup ("pi");

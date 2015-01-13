@@ -23,10 +23,7 @@
 ## The function is only defined where @var{X} is positive, cf. log function.
 ## A general power function is implemented by @code{power}.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest in
-## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{Y} in
-## @{-1, 0.5, 0, 1, 2@}, or @var{X} and @var{Y} integral with
-## @code{abs (pow (@var{X}, @var{Y})) in [2^-53, 2^53]}
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
@@ -78,49 +75,51 @@ for i = 1 : numel (x.inf)
     if (0 <= y.inf (i))
         if (x.sup (i) <= 1)
             if (x.inf (i) > 0)
-                l (i) = powrounded (x.inf (i), y.sup (i), -inf);
+                l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i));
             endif
-            u (i) = powrounded (x.sup (i), y.inf (i), inf);
+            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.inf (i));
         elseif (x.inf (i) < 1 && 1 < x.sup (i))
             if (x.inf > 0)
-                l (i) = powrounded (x.inf (i), y.sup (i), -inf);
+                l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i));
             endif
-            u (i) = powrounded (x.sup (i), y.sup (i), inf);
+            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i));
         else # 1 <= x.inf (i)
-            l (i) = powrounded (x.inf (i), y.inf (i), -inf);
-            u (i) = powrounded (x.sup (i), y.sup (i), inf);
+            l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.inf (i));
+            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i));
         endif
     elseif (y.inf (i) < 0 && 0 < y.sup (i))
         if (x.sup (i) <= 1)
             if (x.inf (i) > 0)
-                l (i) = powrounded (x.inf (i), y.sup (i), -inf);
-                u (i) = powrounded (x.inf (i), y.inf (i), inf);
+                l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i));
+                u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i));
             endif
         elseif (x.inf (i) < 1 && 1 < x.sup (i))
             if (x.inf (i) > 0)
-                l (i) = min (powrounded (x.inf (i), y.sup (i), -inf), ...
-                             powrounded (x.sup (i), y.inf (i), -inf));
-                u (i) = max (powrounded (x.inf (i), y.inf (i), inf), ...
-                             powrounded (x.sup (i), y.sup (i), inf));
+                l (i) = min (...
+                    mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i)), ...
+                    mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i)));
+                u (i) = max (...
+                    mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i)), ...
+                    mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i)));
             endif
         else # 1 <= x.inf (i)
-            l (i) = powrounded (x.sup (i), y.inf (i), -inf);
-            u (i) = powrounded (x.sup (i), y.sup (i), inf);
+            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i));
+            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i));
         endif
     else # y.sup (i) <= 0
         if (x.sup (i) <= 1)
-            l (i) = powrounded (x.sup (i), y.sup (i), -inf);
+            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.sup (i));
             if (x.inf > 0)
-                u (i) = powrounded (x.inf (i), y.inf (i), inf);
+                u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i));
             endif
         elseif (x.inf (i) < 1 && 1 < x.sup (i))
-            l (i) = powrounded (x.sup (i), y.inf (i), -inf);
+            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i));
             if (x.inf (i) > 0)
-                u (i) = powrounded (x.inf (i), y.inf (i), inf);
+                u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i));
             endif
         else # 1 <= x.inf (i)
-            l (i) = powrounded (x.sup (i), y.inf (i), -inf);
-            u (i) = powrounded (x.inf (i), y.sup (i), inf);
+            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i));
+            u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.sup (i));
         endif
     endif
     
@@ -142,129 +141,4 @@ endfor
 
 result = infsup (l, u);
 
-endfunction
-
-function p = powrounded (x, y, direction)
-    assert (x > 0);
-
-    ## We do not have access to a rounded pow or exp function.
-    ## First, try to handle special cases that can be computed correctly.
-    switch y
-        case -1 # x^-1
-            fesetround (direction);
-            p = 1 / x;
-            fesetround (0.5);
-            return
-        case 0 # x^0
-            p = 1;
-            return
-        case 0.5 # x^0.5
-            fesetround (direction);
-            p = realsqrt (x);
-            fesetround (0.5);
-            return
-        case 1 # x^1
-            p = x;
-            return
-        case 2 # x^2
-            fesetround (direction);
-            p = x * x;
-            fesetround (0.5);
-            return
-    endswitch
-    switch x
-        case 1 # 1^y
-            p = 1;
-            return
-        case 2 # 2^y
-            if (y <= -1074)
-                if (direction > 0)
-                    p = pow2 (-1074);
-                else
-                    p = 0;
-                endif
-                return
-            elseif (y >= 1024)
-                if (direction > 0)
-                    p = inf;
-                else
-                    p = realmax();
-                endif
-                return
-            elseif (fix (y) == y)
-                ## y is an integer
-                ## This operation is exact
-                p = pow2 (y);
-                return
-            endif
-        case 10 # 10^y
-            if (y <= -324)
-                if (direction > 0)
-                    p = pow2 (-1074);
-                else
-                    p = 0;
-                endif
-                return
-            elseif (y > 308)
-                if (direction > 0)
-                    p = inf;
-                else
-                    p = realmax();
-                endif
-                return
-            elseif (fix (y) == y)
-                ## y is an integer, we can compute a tight enclosure
-                if (abs (y) <= 22) # powers of 10 are binary64 numbers
-                                   # up to 10^22
-                    p = realpow (10, abs (y)); # this is exact
-                    if (y < 0)
-                        fesetround (direction);
-                        p = 1 / p;
-                        fesetround (0.5);
-                    endif
-                else
-                    ## infsup constructor can do the decimal arithmetic
-                    p = ["1e" num2str(y)];
-                endif
-                return
-            endif
-    endswitch
-    
-    ## Second, get a rounded-to-nearest value.
-    ##
-    ## This is better than doing the exp (y * log (x)) computation with
-    ## rounded exp, mul and log operations, which will introduce a relative
-    ## error of 2^-41, see Lemma 3.6 in
-    ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-    ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
-    ## http://exp.ln0.de/heimlich-power-2011.htm.
-    p = realpow (x, y);
-    
-    ## Third, consider rounding direction.
-    if (direction > 0)
-        p = nextup (p);
-    else
-        p = nextdown (p);
-    endif
-    
-    ## Forth, integral powers of integrals can sometimes be computed exactly.
-    if (fix (x) == x && fix (y) == y)
-        if (y >= 0)
-            ## Non-negative integral powers of intergral numbers are intergrals
-            if (direction > 0)
-                p = floor (p);
-            else
-                p = ceil (p);
-            endif
-        else
-            ## Negative integral powers of integral numbers can be computed
-            ## with correct rounding inside [2^-53, 1].
-            if (pow2 (-53) < abs (p) && abs (p) < 1)
-                p = realpow (x, -y); # this is exact
-                fesetround (direction);
-                p = 1 / p;
-                fesetround (0.5);
-            endif
-        endif
-    endif
 endfunction

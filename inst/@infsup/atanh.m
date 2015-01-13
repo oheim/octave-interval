@@ -19,13 +19,12 @@
 ## 
 ## Compute the inverse hyperbolic tangent for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 8 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## atanh (infsup (.5))
-##   @result{} [.5493061443340543, .5493061443340553]
+##   @result{} [.5493061443340547, .5493061443340549]
 ## @end group
 ## @end example
 ## @seealso{tanh}
@@ -37,20 +36,18 @@
 
 function result = atanh (x)
 
-l = ulpadd (real (atanh (x.inf)), -4);
-u = ulpadd (real (atanh (x.sup)), 4);
+l = mpfr_function_d ('atanh', -inf, x.inf);
+u = mpfr_function_d ('atanh', +inf, x.sup);
 
-## Make funtion tightest for x == 0
-nonnegative = x.inf >= 0;
-l (nonnegative) = max (l (nonnegative), 0);
-nonpositive = x.sup <= 0;
-u (nonpositive) = min (u (nonpositive), 0);
+pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+
+l (x.inf <= -1) = -pi.sup;
+u (x.sup >= +1) = +pi.sup;
 
 emptyresult = isempty (x) | x.sup <= -1 | x.inf >= 1;
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-## The evaluation of log (…) is more accurate than ± 4 ULP for small values
-result = infsup (l, u) & (log ((1 + x) ./ (1 - x)) ./ 2);
+result = infsup (l, u);
 
 endfunction

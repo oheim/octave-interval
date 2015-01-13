@@ -40,9 +40,7 @@ l = u = sinsignl = sinsignu = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than 2*pi. This can save the
 ## computation if some cosine values.
-fesetround (-inf);
-width = x.sup - x.inf;
-fesetround (0.5);
+width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
 twopi.sup = 0x6487ED5 * pow2 (-24) + 0x442D190 * pow2 (-54);
 certainlyfullperiod = width >= twopi.sup;
 l (certainlyfullperiod) = -1;

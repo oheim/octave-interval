@@ -48,11 +48,8 @@ function result = mid (x)
 ## The different rounding modes for division will make errors of 2^-1075
 ## with subnormal numbers cancel each other out, or will make the round
 ## to nearest prefer the side that had an underflow error.
-fesetround (-inf);
-l = x.inf / 2;
-fesetround (inf);
-u = x.sup / 2;
-fesetround (0.5);
+l = mpfr_function_d ('rdivide', -inf, x.inf, 2);
+u = mpfr_function_d ('rdivide', +inf, x.sup, 2);
 result = l + u;
 
 result (x.inf == -inf) = -realmax ();

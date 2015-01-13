@@ -40,9 +40,7 @@ l = u = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than pi. This may save computation of
 ## some tangent values.
-fesetround (-inf);
-width = x.sup - x.inf;
-fesetround (0.5);
+width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
 pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
 certainlyfullperiod = width >= pi.sup;
 l (certainlyfullperiod) = -inf;

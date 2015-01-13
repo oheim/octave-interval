@@ -20,12 +20,12 @@
 ## Compute the inverse cosine in radians (arccosine) for each number in
 ## interval @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## acos (infsup (.5))
-##   @result{} [1.0471975511965976, 1.0471975511965981]
+##   @result{} [1.0471975511965976, 1.0471975511965979]
 ## @end group
 ## @end example
 ## @seealso{cos}
@@ -37,18 +37,14 @@
 
 function result = acos (x)
 
-l = ulpadd (real (acos (x.sup)), -1);
-u = ulpadd (real (acos (x.inf)), 1);
+l = mpfr_function_d ('acos', -inf, x.sup);
+u = mpfr_function_d ('acos', +inf, x.inf);
 
 ## Make the function tightest for special parameters
 pi = infsup ("pi");
-nonpositive = x.sup <= 0;
-nonnegative = x.inf >= 0;
 l (x.sup >= 1) = 0;
-l (nonpositive) = max (l (nonpositive), inf (pi) / 2);
 l (x.sup == -1) = inf (pi);
 u (x.inf <= -1) = sup (pi);
-u (nonnegative) = min (u (nonnegative), sup (pi) / 2);
 u (x.inf == 1) = 0;
 
 emptyresult = isempty (x) | x.inf > 1 | x.sup < -1;
