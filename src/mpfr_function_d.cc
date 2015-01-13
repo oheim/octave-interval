@@ -78,6 +78,59 @@ void evaluate (
   mpfr_clear (mp2);
 }
 
+// Evaluate a ternary MPFR function on three double matrices
+void evaluate (
+  NDArray &arg1,         // Operand 1 and result
+  NDArray &arg2,         // Operand 2
+  NDArray &arg3,         // Operand 3
+  const mpfr_rnd_t rnd,  // Rounding direction
+  int (*ptr_ternary_fun) // The MPFR function to evaluate (element-wise)
+    (mpfr_t rop, const mpfr_t op1, const mpfr_t op2, const mpfr_t op3,
+        mpfr_rnd_t rnd))
+{
+  mpfr_t mp1, mp2, mp3;
+  mpfr_init2 (mp1, DOUBLE_PRECISION);
+  mpfr_init2 (mp2, DOUBLE_PRECISION);
+  mpfr_init2 (mp3, DOUBLE_PRECISION);
+  
+  bool scalar1 = arg1.numel () == 1;
+  bool scalar2 = arg2.numel () == 1;
+  bool scalar3 = arg3.numel () == 1;
+  
+  if (scalar1)
+    if (!scalar2)
+      {
+        arg1.resize (arg2.dims (), arg1.elem (0));
+        scalar1 = false;
+      }
+    else if (!scalar3)
+      {
+        arg1.resize (arg3.dims (), arg1.elem (0));
+        scalar1 = false;
+      }
+
+  const int n = std::max (std::max (arg1.numel (), arg2.numel ()),
+                          arg3.numel ());
+  for (octave_idx_type i = 0; i < n; i ++)
+    {
+      mpfr_set_d (mp1, arg1.elem (i), rnd);
+      mpfr_set_d (mp2,
+                  (scalar2) ? arg2.elem (0) // broadcast
+                            : arg2.elem (i),
+                  rnd);
+      mpfr_set_d (mp3,
+                  (scalar3) ? arg3.elem (0) // broadcast
+                            : arg3.elem (i),
+                  rnd);
+      (*ptr_ternary_fun) (mp1, mp1, mp2, mp3, rnd);
+      arg1.elem (i) = mpfr_get_d (mp1, rnd);
+    }
+  
+  mpfr_clear (mp1);
+  mpfr_clear (mp2);
+  mpfr_clear (mp3);
+}
+
 DEFUN_DLD (mpfr_function_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@deftypefn  {Function File} {} mpfr_function_d ('acos', @var{R}, @var{X})\n"
@@ -90,6 +143,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Function File} {} mpfr_function_d ('cos', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('cosh', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('exp', @var{R}, @var{X})\n"
+  "@deftypefnx {Function File} {} mpfr_function_d ('fma', @var{R}, @var{X}, @var{Y}, @var{Z})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('log', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('log2', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('log10', @var{R}, @var{X})\n"
@@ -122,7 +176,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
 {
   // Check call syntax
   int nargin = args.length ();
-  if (nargin != 3 && nargin != 4)
+  if (nargin < 3 || nargin > 5)
     {
       print_usage ();
       return octave_value_list ();
@@ -133,8 +187,11 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   NDArray     rnd      = args(1).array_value ();
   NDArray     arg1     = args(2).array_value ();
   NDArray     arg2;
+  NDArray     arg3;
   if (nargin >= 4)
     arg2               = args(3).array_value ();
+  if (nargin >= 5)
+    arg3               = args(4).array_value ();
   if (error_state)
     return octave_value_list ();
   
@@ -171,6 +228,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     evaluate (arg1, mp_rnd, &mpfr_cosh);
   else if (function.compare ("exp") == 0)
     evaluate (arg1, mp_rnd, &mpfr_exp);
+  else if (function.compare ("fma") == 0)
+    evaluate (arg1, arg2, arg3, mp_rnd, &mpfr_fma);
   else if (function.compare ("log") == 0)
     evaluate (arg1, mp_rnd, &mpfr_log);
   else if (function.compare ("log2") == 0)

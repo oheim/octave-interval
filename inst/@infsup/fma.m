@@ -79,77 +79,43 @@ endif
 
 if (y.sup <= 0)
     if (x.sup <= 0)
-        l = fmarounded (x.sup, y.sup, z.inf, -inf);
-        u = fmarounded (x.inf, y.inf, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.sup, y.sup, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup);
     elseif (x.inf >= 0)
-        l = fmarounded (x.sup, y.inf, z.inf, -inf);
-        u = fmarounded (x.inf, y.sup, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.inf, y.sup, z.sup);
     else
-        l = fmarounded (x.sup, y.inf, z.inf, -inf);
-        u = fmarounded (x.inf, y.inf, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup);
     endif
 elseif (y.inf >= 0)
     if (x.sup <= 0)
-        l = fmarounded (x.inf, y.sup, z.inf, -inf);
-        u = fmarounded (x.sup, y.inf, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.sup, y.inf, z.sup);
     elseif (x.inf >= 0)
-        l = fmarounded (x.inf, y.inf, z.inf, -inf);
-        u = fmarounded (x.sup, y.sup, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.inf, y.inf, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup);
     else
-        l = fmarounded (x.inf, y.sup, z.inf, -inf);
-        u = fmarounded (x.sup, y.sup, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup);
     endif
 else
     if (x.sup <= 0)
-        l = fmarounded (x.inf, y.sup, z.inf, -inf);
-        u = fmarounded (x.inf, y.inf, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup);
     elseif (x.inf >= 0)
-        l = fmarounded (x.sup, y.inf, z.inf, -inf);
-        u = fmarounded (x.sup, y.sup, z.sup, inf);
+        l = mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf);
+        u = mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup);
     else
         l = min (...
-            fmarounded (x.inf, y.sup, z.inf, -inf), ...
-            fmarounded (x.sup, y.inf, z.inf, -inf));
+            mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf), ...
+            mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf));
         u = max (...
-            fmarounded (x.inf, y.inf, z.sup, inf), ...
-            fmarounded (x.sup, y.sup, z.sup, inf));
+            mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup), ...
+            mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup));
     endif
 endif
 
 result = infsup (l, u);
-
-endfunction
-
-function result = fmarounded (x, y, z, direction)
-
-## Unfortunately we do not have access to an IEEE 754 fused multiply-add
-## operation with directed rounding in GNU Octave's M-files, so we have
-## to do the math in detail ourself...
-
-if (isnan (x) || isnan (y) || isnan (z))
-    result = nan ();
-    return
-endif
-
-if (x == 0 || y == 0)
-    if (isfinite (x) && isfinite (y))
-        result = z;
-    else
-        result = nan ();
-    endif
-    return
-endif
-
-if (not (isfinite (x) && isfinite (y) && isfinite (z)))
-    result = x * y + z; # == inf, -inf or NaN
-    assert (not (isfinite (result)));
-    return
-endif
-
-accumulator.e = 0;
-accumulator.m = zeros (1, 0, "int8");
-accumulator = accuaddproduct (accumulator, x, y);
-accumulator = accuadd (accumulator, z);
-result = accu2double (accumulator, direction);
 
 endfunction
