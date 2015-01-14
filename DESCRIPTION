@@ -10,7 +10,7 @@ Description: Standard-conforming implementation of intervals
 Categories: interval arithmetic
 Problems: Development is not completed, IEEE 1788 is no official standard yet
 Url: http://wiki.octave.org/Interval_package
-Depends: Octave (>= 3.8.0), fenv
+Depends: Octave (>= 3.8.0)
 SystemRequirements: [Debian] libmpfr4 (>= 3.1.2)
 BuildRequires: mpfr (>= 3.1.2) [Debian] libmpfr-dev (>= 3.1.2)
 License: GPLv3+, ALv2
