@@ -82,10 +82,6 @@ else
     cu = c.sup;
 endif
 
-## We use division by zero below
-olddivbyzerowarningstate = warning ("query", "Octave:divide-by-zero").state;
-warning ("off", "Octave:divide-by-zero");
-
 if (ismember (0, c))
     if (ismember (0, b))
         result = x;
@@ -129,8 +125,5 @@ else # c.inf > 0
         result = x;
     endif
 endif
-
-## Restore old warning settings
-warning (olddivbyzerowarningstate, "Octave:divide-by-zero");
 
 endfunction

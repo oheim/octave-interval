@@ -71,10 +71,6 @@ q10 = x.inf < 0 & 0 < x.sup & y.inf > 0;
 
 l = u = zeros (size (x.inf));
 
-## We use division by zero below
-olddivbyzerowarningstate = warning ("query", "Octave:divide-by-zero").state;
-warning ("off", "Octave:divide-by-zero");
-
 l (q1) = mpfr_function_d ('rdivide', -inf, x.sup (q1), y.inf (q1));
 l (q2) = mpfr_function_d ('rdivide', -inf, x.inf (q2), y.inf (q2));
 l (q3) = mpfr_function_d ('rdivide', -inf, x.sup (q3), y.inf (q3));
@@ -95,9 +91,6 @@ u (q7) = mpfr_function_d ('rdivide', +inf, x.inf (q7), y.inf (q7));
 u (q8) = inf;
 u (q9) = mpfr_function_d ('rdivide', +inf, x.inf (q9), y.sup (q9));
 u (q10) = mpfr_function_d ('rdivide', +inf, x.sup (q10), y.inf (q10));
-
-## Restore old warning settings
-warning (olddivbyzerowarningstate, "Octave:divide-by-zero");
 
 entireresult = (y.inf < 0 & y.sup > 0) | (x.inf < 0 & x.sup > 0 & ...
                                           (y.inf == 0 | y.sup == 0));
