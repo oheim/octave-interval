@@ -16,7 +16,6 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} sum (@var{X})
 ## @deftypefnx {Interval Function} {} sum (@var{X}, @var{DIM})
-## @cindex IEEE1788 sum
 ## 
 ## Sum of elements along dimension @var{DIM}.  If @var{DIM} is omitted, it
 ## defaults to the first non-singleton dimension.
