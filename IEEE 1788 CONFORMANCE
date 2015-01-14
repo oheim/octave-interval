@@ -20,15 +20,15 @@ b) Documentation of behavior
     1) If the implementation supports implicit interval types, how is the
        interval hull operation realized?
        
-       The implementation only supports explicit interval types.
+       The implementation supports explicit interval types only.
        
     2) What accuracy is achieved (i.e., tightest, accurate, or valid) for each
        of the implementation’s interval operations?
        
-       The accuracy requirements of IEEE 1788 are fulfilled.  Some operations
-       do not achieve accurate tightness.  The tightness of each operation is
-       documented in the function's documentation string and can be displayed
-       with the help command.
+       The accuracy requirements of IEEE 1788 are fulfilled.  Most operations
+       achieve tightest accuracy, some reverse operations do not.  The
+       tightness of each operation is documented in the function's
+       documentation string and can be displayed with the help command.
        
     3) Under what conditions is a constructor unable to determine whether a
        level 1 value exists that corresponds to the supplied inputs?
