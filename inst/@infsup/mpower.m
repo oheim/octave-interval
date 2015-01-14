@@ -67,15 +67,6 @@ if (size (x, 1) ~= size (x, 2))
     error ("mpower: must be square matrix");
 endif
 
-## Interval matrix operations are expensive with tight accuracy.  Since the
-## overall algorithm can't guarantee accuracy for the final result anyway, we
-## can reduce accuracy of intermediate results and speed up computation.
-if (abs (y) <= 4 || length (x) <= 3)
-    mtimes_accuracy = "tight";
-else
-    mtimes_accuracy = "valid";
-endif
-
 ## Implements log-time algorithm A.1 in
 ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
 ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
@@ -84,10 +75,10 @@ endif
 result = infsup (eye (length (x)));
 while (y ~= 0)
     if (rem (y, 2) == 0) # y is even
-        x = mtimes (x, x, mtimes_accuracy);
+        x = mtimes (x, x);
         y /= 2;
     else # y is odd
-        result = mtimes (result, x, mtimes_accuracy);
+        result = mtimes (result, x);
         if (min (min (isempty (result))) || min (min (isentire (result))))
             ## We can stop the computation here, this is a fixed point
             break

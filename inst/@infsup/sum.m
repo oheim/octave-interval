@@ -38,7 +38,7 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = sum (x, dim)
+function result = sum (x, dim)
 
 if (nargin < 2)
     ## Try to find non-singleton dimension
@@ -56,69 +56,31 @@ else
     error ("sum: DIM must be a valid dimension")
 endif
 
-isexact = true (resultsize);
-doublel = doubleu = zeros (resultsize);
+l = u = zeros (resultsize);
 
-for n = 1 : numel (isexact)
-    ## Initialize accumulators
-    l.e = int64 (0);
-    l.m = zeros (1, 0, "int8");
-    l.unbound = false ();
-    u.e = int64 (0);
-    u.m = zeros (1, 0, "int8");
-    u.unbound = false ();
-    empty = false ();
-    
-    for i = 1 : size (x.inf, dim)
-        if (dim == 1)
-            x_inf = x.inf (i, n);
-            x_sup = x.sup (i, n);
-        else
-            x_inf = x.inf (n, i);
-            x_sup = x.sup (n, i);
-        endif
-    
-        if (x_inf == inf)
-            empty = true;
-            break
-        endif
-        
-        if (isfinite (x_inf))
-            if (not (l.unbound))
-                l = accuadd (l, x_inf);
-            endif
-        else
-            l.unbound = true ();
-        endif
-        if (isfinite (x_sup))
-            if (not (u.unbound))
-                u = accuadd (u, x_sup);
-            endif
-        else
-            u.unbound = true ();
-        endif
-    endfor
-    
-    if (empty)
-        doublel (n) = inf;
-        doubleu (n) = -inf;
-        isexact (n) = true ();
+for n = 1 : numel (l)
+    idx.type = "()";
+    idx.subs = cell (1, 2);
+    idx.subs {dim} = ":";
+    idx.subs {3 - dim} = n;
+
+    ## Select current vector in matrix
+    if (size (x.inf, 3 - dim) == 1)
+        vector.x = x;
     else
-        if (l.unbound)
-            doublel (n) = -inf
-        else
-            [doublel(n), isexact(n)] = accu2double (l, -inf);
-        endif
-        
-        if (u.unbound)
-            doubleu (n) = inf;
-        else
-            [doubleu(n), upperisexact] = accu2double (u, inf);
-            isexact (n) = and (isexact (n), upperisexact);
-        endif
+        vector.x = subsref (x, idx);
+    endif
+    
+    if (max (isempty (vector.x)))
+        ## One of the intervals is empty
+        l (n) = inf;
+        u (n) = -inf;
+    else
+        l (n) = mpfr_vector_sum_d (-inf, x.inf);
+        u (n) = mpfr_vector_sum_d (+inf, x.sup);
     endif
 endfor
 
-result = infsup (doublel, doubleu);
+result = infsup (l, u);
 
 endfunction

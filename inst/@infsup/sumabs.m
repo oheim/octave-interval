@@ -36,12 +36,12 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = sumabs (x, dim)
+function result = sumabs (x, dim)
 
 if (nargin < 2)
-    [result, isexact] = sum (abs (x));
+    result = sum (abs (x));
 else
-    [result, isexact] = sum (abs (x), dim);
+    result = sum (abs (x), dim);
 endif
 
 endfunction

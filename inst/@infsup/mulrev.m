@@ -101,7 +101,7 @@ elseif (c.sup < 0)
         result = infsup ();
     elseif (b.sup <= 0)
         l = mpfr_function_d ('rdivide', -inf, cu, bl);
-        u = mpfr_function_d ('rdivide', +inf, cl. bu);
+        u = mpfr_function_d ('rdivide', +inf, cl, bu);
         result = infsup (l, u) & x;
     elseif (b.inf >= 0)
         l = mpfr_function_d ('rdivide', -inf, cl, bl);

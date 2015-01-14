@@ -1,7 +1,9 @@
 # The MKOCTFILE environment variable will be set by the package installation
 # process of GNU Octave.
 
-OBJ          = mpfr_function_d.oct
+OBJ          = mpfr_function_d.oct \
+               mpfr_vector_sum_d.oct \
+               mpfr_vector_dot_d.oct
 INC          = mpfr_commons.cc
 LDFLAGS_MPFR = -lmpfr -lgmp
 

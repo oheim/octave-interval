@@ -15,18 +15,12 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} @var{X} * @var{Y}
-## @deftypefnx {Interval Function} {} mtimes (@var{X}, @var{Y}, @var{ACCURACY})
+## @deftypefnx {Interval Function} {} mtimes (@var{X}, @var{Y})
 ## @cindex IEEE1788 mul
 ## 
 ## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
-## The function can be evaluated in fast (valid) or accurate (tight) mode.  The
-## fast mode produces roundoff errors of intermediate results which will sum up
-## and lead to poor results -- especially in cases where overflow occurs.  The
-## accurate mode is significandly slower (approx. factor 10).
-##
-## Accuracy: The result either is a @code{tight} enclosure or is a @code{valid}
-## enclosure, depending on the value of @var{ACCURACY} (default: tight).
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
@@ -43,7 +37,7 @@
 ## Keywords: interval
 ## Created: 2014-10-31
 
-function result = mtimes (x, y, accuracy)
+function result = mtimes (x, y)
 
 if (nargin < 2)
     print_usage ();
@@ -54,9 +48,6 @@ if (not (isa (x, "infsup")))
 endif
 if (not (isa (y, "infsup")))
     y = infsup (y);
-endif
-if (nargin < 3)
-    accuracy = "tight";
 endif
 
 if (isscalar (x) || isscalar (y))
@@ -79,13 +70,13 @@ if (size (x.inf, 1) >= size (y.inf, 2))
     for i = 1 : size (x.inf, 1)
         idx.subs {1} = i;
         result = subsasgn (result, idx, ...
-                           dot (subsref (x, idx)', y, 1, accuracy));
+                           dot (subsref (x, idx)', y, 1));
     endfor
 else
     for j = 1 : size (y.inf, 2)
         idx.subs {2} = j;
         result = subsasgn (result, idx, ...
-                           dot (x, subsref (y, idx)', 2, accuracy));
+                           dot (x, subsref (y, idx)', 2));
     endfor
 endif
 

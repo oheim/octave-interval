@@ -16,21 +16,13 @@
 ## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} dot (@var{X}, @var{Y})
 ## @deftypefnx {Interval Function} {} dot (@var{X}, @var{Y}, @var{DIM})
-## @deftypefnx {Interval Function} {} dot (@var{X}, @var{Y}, @var{DIM}, @var{ACCURACY})
-## @cindex IEEE1788 dot
 ## 
 ## Compute the dot product of two interval vectors.  If @var{X} and @var{Y} are
 ## matrices, calculate the dot products along the first non-singleton
 ## dimension.  If the optional argument @var{DIM} is given, calculate the dot
 ## products along this dimension.
 ##
-## The function can be evaluated in fast (valid) or accurate (tight) mode.  The
-## fast mode produces roundoff errors of intermediate results which will sum up
-## and lead to poor results -- especially in cases where overflow occurs.  The
-## accurate mode is significandly slower (approx. factor 10).
-##
-## Accuracy: The result either is a @code{tight} enclosure or is a @code{valid}
-## enclosure, depending on the value of @var{ACCURACY} (default: tight).
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
@@ -38,9 +30,7 @@
 ##   @result{} [20]
 ## @end group
 ## @group
-## dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1, "valid")
-##   @result{} [-Inf, 0]
-## dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1, "tight")
+## dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1)
 ##   @result{} [-2.2250738585072014e-308, -2.2250738585072013e-308]
 ## @end group
 ## @end example
@@ -51,7 +41,7 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function [result, isexact] = dot (x, y, dim, accuracy)
+function result = dot (x, y, dim)
 
 if (nargin < 2)
     print_usage ();
@@ -79,13 +69,6 @@ if (nargin < 3)
         endif
     endif
 endif
-if (nargin < 4)
-    accuracy = "tight";
-else
-    if (not (max (strcmp (accuracy, {"valid", "tight"}))))
-        error ("invalid value for parameter ACCURACY")
-    endif
-endif
 
 ## Empty input -> empty result
 if (isempty (x.inf) || isempty (y.inf))
@@ -106,10 +89,9 @@ endif
 resultsize = max (size (x.inf), size (y.inf));
 resultsize (dim) = 1;
 
-isexact = true (resultsize);
 l = u = zeros (resultsize);
 
-for n = 1 : numel (isexact)
+for n = 1 : numel (l)
     idx.type = "()";
     idx.subs = cell (1, 2);
     idx.subs {dim} = ":";
@@ -131,13 +113,8 @@ for n = 1 : numel (isexact)
         ## One of the intervals is empty
         l (n) = inf;
         u (n) = -inf;
-        isexact (n) = true ();
-    elseif (strcmp (accuracy, "tight"))
-        ## accurate, but slow
-        [l(n), u(n), isexact(n)] = tight_vectordot (vector.x, vector.y);
     else
-        ## fast, but not accurate and prone to overflow
-        [l(n), u(n), isexact(n)] = valid_vectordot (vector.x, vector.y);
+        [l(n), u(n)] = vectordot (vector.x, vector.y);
     endif
 endfor
 
@@ -147,171 +124,7 @@ endfunction
 
 ## Dot product of two interval vectors; or one vector and one scalar.
 ## Accuracy is tightest. No interval must be empty.
-function [l, u, isexact] = tight_vectordot (x, y)
-
-## Initialize accumulators
-l.e = int64 (0);
-l.m = zeros (1, 0, "int8");
-l.unbound = false ();
-u.e = int64 (0);
-u.m = zeros (1, 0, "int8");
-u.unbound = false ();
-
-for i = 1 : max (numel (x.inf), numel (y.inf))
-    if (isscalar (x.inf))
-        ## Broadcast scalar value
-        x_inf = x.inf;
-        x_sup = x.sup;
-    else
-        x_inf = x.inf (i);
-        x_sup = x.sup (i);
-    endif
-    if (isscalar (y.inf))
-        ## Broadcast scalar value
-        y_inf = y.inf;
-        y_sup = y.sup;
-    else
-        y_inf = y.inf (i);
-        y_sup = y.sup (i);
-    endif
-
-    if ((x_inf == 0 && x_sup == 0) || ...
-        (y_inf == 0 && y_sup == 0))
-        continue
-    endif
-    
-    if (y_sup <= 0)
-        if (x_sup <= 0)
-            if (not (l.unbound))
-                l = accuaddproduct (l, x_sup, y_sup);
-            endif
-            if (not (isfinite (x_inf) && isfinite (y_inf)))
-                u.unbound = true ();
-            elseif (not (u.unbound))
-                u = accuaddproduct (u, x_inf, y_inf);
-            endif
-        elseif (x_inf >= 0)
-            if (not (isfinite (x_sup) && isfinite (y_inf)))
-                l.unbound = true ();
-            elseif (not (l.unbound))
-                l = accuaddproduct (l, x_sup, y_inf);
-            endif
-            if (not (u.unbound))
-                 u = accuaddproduct (u, x_inf, y_sup);
-            endif
-        else
-            if (not (isfinite (x_sup) && isfinite (y_inf)))
-                l.unbound = true ();
-            elseif (not (l.unbound))
-                l = accuaddproduct (l, x_sup, y_inf);
-            endif
-            if (not (isfinite (x_inf) && isfinite (y_inf)))
-                u.unbound = true ();
-            elseif (not (u.unbound))
-                u = accuaddproduct (u, x_inf, y_inf);
-            endif
-        endif
-    elseif (y_inf >= 0)
-        if (x_sup <= 0)
-            if (not (isfinite (x_inf) && isfinite (y_sup)))
-                l.unbound = true ();
-            elseif (not (l.unbound))
-                l = accuaddproduct (l, x_inf, y_sup);
-            endif
-            if (not (u.unbound))
-                u = accuaddproduct (u, x_sup, y_inf);
-            endif
-        elseif (x_inf >= 0)
-            if (not (l.unbound))
-                l = accuaddproduct (l, x_inf, y_inf);
-            endif
-            if (not (isfinite (x_sup) && isfinite (y_sup)))
-                u.unbound = true ();
-            elseif (not (u.unbound))
-                u = accuaddproduct (u, x_sup, y_sup);
-            endif
-        else
-            if (not (isfinite (x_inf) && isfinite (y_sup)))
-                l.unbound = true ();
-            elseif (not (l.unbound))
-                l = accuaddproduct (l, x_inf, y_sup);
-            endif
-            if (not (isfinite (x_sup) && isfinite (y_sup)))
-                u.unbound = true ();
-            elseif (not (u.unbound))
-                u = accuaddproduct (u, x_sup, y_sup);
-            endif
-        endif
-    else
-        if (x_sup <= 0)
-            if (not (isfinite (x_inf) && isfinite (y_sup)))
-                l.unbound = true ();
-            elseif (not (l.unbound))
-                l = accuaddproduct (l, x_inf, y_sup);
-            endif
-            if (not (isfinite (x_inf) && isfinite (y_inf)))
-                u.unbound = true ();
-            elseif (not (u.unbound))
-                u = accuaddproduct (u, x_inf, y_inf);
-            endif
-        elseif (x_inf >= 0)
-            if (not (isfinite (x_sup) && isfinite (y_inf)))
-                l.unbound = true ();
-            elseif (not (l.unbound))
-                l = accuaddproduct (l, x_sup, y_inf);
-            endif
-            if (not (isfinite (x_sup) && isfinite (y_sup)))
-                u.unbound = true ();
-            elseif (not (u.unbound))
-                u = accuaddproduct (u, x_sup, y_sup);
-            endif
-        else
-            if (not (isfinite (x_inf) && isfinite (x_sup) && ...
-                     isfinite (y_inf) && isfinite (y_sup)))
-                l.unbound = true ();
-                u.unbound = true ();
-            else
-                if (not (l.unbound))
-                    if (x_inf * y_sup < x_sup * y_inf)
-                        l = accuaddproduct (l, x_inf, y_sup);
-                    else
-                        l = accuaddproduct (l, x_sup, y_inf);
-                    endif
-                endif
-                if (not (u.unbound))
-                    if (x_inf * y_inf > x_sup * y_sup)
-                        u = accuaddproduct (u, x_inf, y_inf);
-                    else
-                        u = accuaddproduct (u, x_sup, y_sup);
-                    endif
-                endif
-            endif
-        endif
-    endif
-endfor
-
-## Conversion from accu to double
-if (l.unbound)
-    l = -inf;
-    isexact = true ();
-else
-    [l, isexact] = accu2double (l, -inf);
-endif
-
-if (u.unbound)
-    u = inf;
-else
-    [u, upperisexact] = accu2double (u, inf);
-    isexact = and (isexact, upperisexact);
-endif
-
-endfunction
-
-## Dot product of two interval vectors; or one vector and one scalar.
-## Accuracy is valid. No interval must be empty.
-function [l, u, isexact] = valid_vectordot (x, y)
-
-isexact = false ();
+function [l, u] = vectordot (x, y)
 
 if (isscalar (x.inf) && isscalar (y.inf))
     ## Short-circuit: scalar × scalar
@@ -355,90 +168,63 @@ q6 = y.inf >= 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
 q7 = y.inf < 0 & y.sup > 0 & x.sup <= 0;
 q8 = y.inf < 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
 q9 = y.inf < 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
+a = b = zeros (size (x.inf));
+## FIXME compare product size with higher accuracy?
+a (q9) = mpfr_function_d ('times', .5, x.inf (q9), y.sup (q9));
+b (q9) = mpfr_function_d ('times', .5, x.sup (q9), y.inf (q9));
+q9_1 = q9 & (a <= b);
+q9_2 = q9 & (a > b);
 
-l = u = zeros (10, 1);
-fesetround (-inf);
-if (not (isempty (q1)))
-    l (1) = x.sup (q1)' * y.sup (q1);
-endif
-if (not (isempty (q2)))
-    l (2) = x.sup (q2)' * y.inf (q2);
-endif
-if (not (isempty (q3)))
-    l (3) = x.sup (q3)' * y.inf (q3);
-endif
-if (not (isempty (q4)))
-    l (4) = x.inf (q4)' * y.sup (q4);
-endif
-if (not (isempty (q5)))
-    l (5) = x.inf (q5)' * y.inf (q5);
-endif
-if (not (isempty (q6)))
-    l (6) = x.inf (q6)' * y.sup (q6);
-endif
-if (not (isempty (q7)))
-    l (7) = x.inf (q7)' * y.sup (q7);
-endif
-if (not (isempty (q8)))
-    l (8) = x.sup (q8)' * y.inf (q8);
-endif
-if (not (isempty (q9)))
-    a = b = zeros (size (x.inf));
-    a (q9) = x.inf (q9) .* y.sup (q9);
-    b (q9) = x.sup (q9) .* y.inf (q9);
-    q9_1 = q9 & (a <= b);
-    q9_2 = q9 & (a > b);
-    if (not (isempty (q9_1)))
-        l (9) = x.inf (q9_1)' * y.sup (q9_1);
-    endif
-    if (not (isempty (q9_2)))
-        l (10) = x.sup (q9_2)' * y.inf (q9_2);
-    endif
-endif
-if (not (isempty (q10)))
-endif
-l = sum (l);
-fesetround (inf);
-if (not (isempty (q1)))
-    u (1) = x.inf (q1)' * y.inf (q1);
-endif
-if (not (isempty (q2)))
-    u (2) = x.inf (q2)' * y.sup (q2);
-endif
-if (not (isempty (q3)))
-    u (3) = x.inf (q3)' * y.inf (q3);
-endif
-if (not (isempty (q4)))
-    u (4) = x.sup (q4)' * y.inf (q4);
-endif
-if (not (isempty (q5)))
-    u (5) = x.sup (q5)' * y.sup (q5);
-endif
-if (not (isempty (q6)))
-    u (6) = x.sup (q6)' * y.sup (q6);
-endif
-if (not (isempty (q7)))
-    u (7) = x.inf (q7)' * y.inf (q7);
-endif
-if (not (isempty (q8)))
-    u (8) = x.sup (q8)' * y.sup (q8);
-endif
-if (not (isempty (q9)))
-    ## We must compute q9_1 and q9_2 again. a and b have previously been
-    ## computed with a different rounding mode!
-    a (q9) = x.inf (q9) .* y.sup (q9);
-    b (q9) = x.sup (q9) .* y.inf (q9);
-    q9_1 = q9 & (a <= b);
-    q9_2 = q9 & (a > b);
-    if (not (isempty (q9_1)))
-        u (9) = x.sup (q9_1)' * y.sup (q9_1);
-    endif
-    if (not (isempty (q9_2)))
-        u (10) = x.inf (q9_2)' * y.inf (q9_2);
-    endif
-endif
-u = sum (u);
-fesetround (0.5);
+## Prepare Factors for dot product of lower boundary
+l1 = x.inf;
+l2 = y.inf;
+l1 (q1) = x.sup (q1);
+l2 (q1) = y.sup (q1);
+l1 (q2) = x.sup (q2);
+#l2 (q2) = y.inf (q2);
+l1 (q3) = x.sup (q3);
+#l2 (q3) = y.inf (q3);
+#l1 (q4) = x.inf (q4);
+l2 (q4) = y.sup (q4);
+#l1 (q5) = x.inf (q5);
+#l2 (q5) = y.inf (q5);
+#l1 (q6) = x.inf (q6);
+l2 (q6) = y.sup (q6);
+#l1 (q7) = x.inf (q7);
+l2 (q7) = y.sup (q7);
+l1 (q8) = x.sup (q8);
+#l2 (q8) = y.inf (q8);
+#l1 (q9_1) = x.inf (q9_1);
+l2 (q9_1) = y.sup (q9_1);
+l1 (q9_2) = x.sup (q9_2);
+#l2 (q9_2) = y.inf (q9_2);
+
+## Prepare Factors for dot product of upper boundary
+u1 = x.inf;
+u2 = y.inf;
+#u1 (q1) = x.inf (q1);
+#u2 (q1) = y.inf (q1);
+#u1 (q2) = x.inf (q2);
+u2 (q2) = y.sup (q2);
+#u1 (q3) = x.inf (q3);
+#u2 (q3) = y.inf (q3);
+u1 (q4) = x.sup (q4);
+#u2 (q4) = y.inf (q4);
+u1 (q5) = x.sup (q5);
+u2 (q5) = y.sup (q5);
+u1 (q6) = x.sup (q6);
+u2 (q6) = y.sup (q6);
+#u1 (q7) = x.inf (q7);
+#u2 (q7) = y.inf (q7);
+u1 (q8) = x.sup (q8);
+u2 (q8) = y.sup (q8);
+u1 (q9_1) = x.sup (q9_1);
+u2 (q9_1) = y.sup (q9_1);
+#u1 (q9_2) = x.inf (q9_2);
+#u2 (q9_2) = y.inf (q9_2);
+
+l = mpfr_vector_dot_d (-inf, l1, l2);
+u = mpfr_vector_dot_d (+inf, u1, u2);
 
 endfunction
 
