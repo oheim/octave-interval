@@ -329,7 +329,7 @@ else
             y = y.inf;
         endif
     else
-        if ((direction > 0) == (sign (d) == sign (n)))
+        if ((direction > 0) == (sign (x - 1) == sign (z - 1)))
             d = mpfr_function_d ('log', -inf, x);
             n = mpfr_function_d ('log', +inf, z);
         else
