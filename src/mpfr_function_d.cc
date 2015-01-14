@@ -17,8 +17,7 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
-
-#define DOUBLE_PRECISION 53
+#include "mpfr_commons.cc"
 
 // Evaluate an unary MPFR function on a double matrix
 void evaluate (
@@ -44,7 +43,7 @@ void evaluate (
 // Evaluate a binary MPFR function on two double matrices
 void evaluate (
   NDArray &arg1,        // Operand 1 and result
-  NDArray &arg2,        // Operand 2
+  const NDArray &arg2,  // Operand 2
   const mpfr_rnd_t rnd, // Rounding direction
   int (*ptr_binary_fun) // The MPFR function to evaluate (element-wise)
     (mpfr_t rop, const mpfr_t op1, const mpfr_t op2, mpfr_rnd_t rnd))
@@ -81,8 +80,8 @@ void evaluate (
 // Evaluate a ternary MPFR function on three double matrices
 void evaluate (
   NDArray &arg1,         // Operand 1 and result
-  NDArray &arg2,         // Operand 2
-  NDArray &arg3,         // Operand 3
+  const NDArray &arg2,   // Operand 2
+  const NDArray &arg3,   // Operand 3
   const mpfr_rnd_t rnd,  // Rounding direction
   int (*ptr_ternary_fun) // The MPFR function to evaluate (element-wise)
     (mpfr_t rop, const mpfr_t op1, const mpfr_t op2, const mpfr_t op3,
@@ -183,85 +182,74 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     }
   
   // Read parameters
-  std::string function = args(0).string_value ();
-  NDArray     rnd      = args(1).array_value ();
-  NDArray     arg1     = args(2).array_value ();
-  NDArray     arg2;
-  NDArray     arg3;
+  const std::string function = args(0).string_value ();
+  const mpfr_rnd_t  rnd      = parse_rounding_mode (
+                               args(1).array_value ());
+  NDArray           arg1     = args(2).array_value ();
+  NDArray           arg2;
+  NDArray           arg3;
   if (nargin >= 4)
-    arg2               = args(3).array_value ();
+    arg2                     = args(3).array_value ();
   if (nargin >= 5)
-    arg3               = args(4).array_value ();
+    arg3                     = args(4).array_value ();
   if (error_state)
     return octave_value_list ();
   
-  // Use rounding mode semantics from the GNU Octave fenv package
-  mpfr_rnd_t mp_rnd;
-  if (rnd.elem (0) == INFINITY)
-    mp_rnd = MPFR_RNDU;
-  else if (rnd.elem (0) == -INFINITY)
-    mp_rnd = MPFR_RNDD;
-  else if (rnd.elem (0) == 0)
-    mp_rnd = MPFR_RNDZ;
-  else
-    // default mode
-    mp_rnd = MPFR_RNDN;
-  
   // Choose the function to evaluate
   if      (function.compare ("acos") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_acos);
+    evaluate (arg1, rnd, &mpfr_acos);
   else if (function.compare ("acosh") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_acosh);
+    evaluate (arg1, rnd, &mpfr_acosh);
   else if (function.compare ("asin") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_asin);
+    evaluate (arg1, rnd, &mpfr_asin);
   else if (function.compare ("asinh") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_asinh);
+    evaluate (arg1, rnd, &mpfr_asinh);
   else if (function.compare ("atan") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_atan);
+    evaluate (arg1, rnd, &mpfr_atan);
   else if (function.compare ("atan2") == 0)
-    evaluate (arg1, arg2, mp_rnd, &mpfr_atan2);
+    evaluate (arg1, arg2, rnd, &mpfr_atan2);
   else if (function.compare ("atanh") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_atanh);
+    evaluate (arg1, rnd, &mpfr_atanh);
   else if (function.compare ("cos") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_cos);
+    evaluate (arg1, rnd, &mpfr_cos);
   else if (function.compare ("cosh") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_cosh);
+    evaluate (arg1, rnd, &mpfr_cosh);
   else if (function.compare ("exp") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_exp);
+    evaluate (arg1, rnd, &mpfr_exp);
   else if (function.compare ("fma") == 0)
-    evaluate (arg1, arg2, arg3, mp_rnd, &mpfr_fma);
+    evaluate (arg1, arg2, arg3, rnd, &mpfr_fma);
   else if (function.compare ("log") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_log);
+    evaluate (arg1, rnd, &mpfr_log);
   else if (function.compare ("log2") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_log2);
+    evaluate (arg1, rnd, &mpfr_log2);
   else if (function.compare ("log10") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_log10);
+    evaluate (arg1, rnd, &mpfr_log10);
   else if (function.compare ("minus") == 0)
-    evaluate (arg1, arg2, mp_rnd, &mpfr_sub);
+    evaluate (arg1, arg2, rnd, &mpfr_sub);
   else if (function.compare ("plus") == 0)
-    evaluate (arg1, arg2, mp_rnd, &mpfr_add);
+    evaluate (arg1, arg2, rnd, &mpfr_add);
   else if (function.compare ("pow") == 0)
-    evaluate (arg1, arg2, mp_rnd, &mpfr_pow);
+    evaluate (arg1, arg2, rnd, &mpfr_pow);
   else if (function.compare ("pow2") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_exp2);
+    evaluate (arg1, rnd, &mpfr_exp2);
   else if (function.compare ("pow10") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_exp10);
+    evaluate (arg1, rnd, &mpfr_exp10);
   else if (function.compare ("rdivide") == 0)
-    evaluate (arg1, arg2, mp_rnd, &mpfr_div);
+    evaluate (arg1, arg2, rnd, &mpfr_div);
   else if (function.compare ("sin") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_sin);
+    evaluate (arg1, rnd, &mpfr_sin);
   else if (function.compare ("sinh") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_sinh);
+    evaluate (arg1, rnd, &mpfr_sinh);
   else if (function.compare ("sqr") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_sqr);
+    evaluate (arg1, rnd, &mpfr_sqr);
   else if (function.compare ("sqrt") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_sqrt);
+    evaluate (arg1, rnd, &mpfr_sqrt);
   else if (function.compare ("tan") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_tan);
+    evaluate (arg1, rnd, &mpfr_tan);
   else if (function.compare ("tanh") == 0)
-    evaluate (arg1, mp_rnd, &mpfr_tanh);
+    evaluate (arg1, rnd, &mpfr_tanh);
   else if (function.compare ("times") == 0)
-    evaluate (arg1, arg2, mp_rnd, &mpfr_mul);
+    evaluate (arg1, arg2, rnd, &mpfr_mul);
   else
     error ("mpfr_function_d: unsupported function");
 
