@@ -4,12 +4,11 @@
 OBJ          = mpfr_function_d.oct \
                mpfr_vector_sum_d.oct \
                mpfr_vector_dot_d.oct
-INC          = mpfr_commons.cc
 LDFLAGS_MPFR = -lmpfr -lgmp
 
 all: $(OBJ)
 
-mpfr_%.oct: mpfr_%.cc $(INC)
+mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
 	$(MKOCTFILE) $(CFLAGS) -o $@ $(LDFLAGS) $(LDFLAGS_MPFR)  $<
 
 # The following build target are not required for the package installation
