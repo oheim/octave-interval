@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {Interval Comparison} {} @var{A} ~= @var{B}
-## @deftypefx {Interval Comparison} {} @var{A} != @var{B}
+## @deftypefnx {Interval Comparison} {} @var{A} != @var{B}
 ## 
 ## Compare intervals @var{A} and @var{B} for inequality.
 ##

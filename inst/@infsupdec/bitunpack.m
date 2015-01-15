@@ -25,7 +25,7 @@
 ## column vector.
 ##
 ## For all scalar intervals the following equation holds:
-## @code{@VAR{X} == interval_bitpack (bitunpack (@var{X}))}.
+## @code{@var{X} == interval_bitpack (bitunpack (@var{X}))}.
 ##
 ## @seealso{interval_bitpack}
 ## @end deftypefn
