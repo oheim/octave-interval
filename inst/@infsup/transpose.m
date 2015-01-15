@@ -13,6 +13,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## -*- texinfo -*-
 ## @deftypefn {Interval Function} {} @var{X} .'
 ##
 ## Return the transpose of interval matrix or vector @var{X}.
