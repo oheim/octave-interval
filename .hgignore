@@ -3,7 +3,10 @@ syntax: regexp
 # to mean "at any directory" while the ^ idiom means "from the
 # project's top-level directory".
 
-(^|/)octave-core$
+(^|/)octave-(core|workspace)$
 \.oct$
 \.o$
 
+# The following files are created during package build
+^interval-[^/]*\.tar\.gz
+^interval-html/
