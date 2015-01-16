@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} cancelplus (@var{X}, @var{Y})
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{Z} =} cancelplus (@var{X}, @var{Y})
 ## @cindex IEEE1788 cancelPlus
 ## 
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one

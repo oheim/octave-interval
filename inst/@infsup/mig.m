@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} mig (@var{X})
-## @cindex IEEE1788 mig
+## @documentencoding utf-8
+## @deftypefn {Function File} {} mig (@var{X})
 ## 
 ## Get the mignitude of numbers in interval @var{X}, that is the minimum of
 ## absolute values for each element.

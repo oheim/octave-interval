@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Output} {@var{S} =} intervaltoexact (@var{X})
-## @cindex IEEE1788 intervalToExact
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{S} =} intervaltoexact (@var{X})
 ## 
 ## Build an exact representation of the interval @var{X} in
 ## hexadecimal-significand form.

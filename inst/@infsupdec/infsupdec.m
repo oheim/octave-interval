@@ -14,15 +14,13 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec ()
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M}, @var{D})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
-## @cindex IEEE1788 numsToInterval
-## @cindex IEEE1788 textToInterval
-## @cindex IEEE1788 newDec
+## @documentencoding utf-8
+## @deftypefn {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec ()
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M})
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M}, @var{D})
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
 ## 
 ## Create a decorated interval from boundaries.  Convert boundaries to double
 ## precision.

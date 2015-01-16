@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {} isentire (@var{X})
-## @cindex IEEE1788 isEntire
+## @documentencoding utf-8
+## @deftypefn {Function File} {} isentire (@var{X})
 ## 
 ## Check if the interval represents the entire set of real numbers.
 ##

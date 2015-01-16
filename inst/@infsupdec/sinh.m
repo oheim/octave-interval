@@ -14,13 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} sinh (@var{X})
-## @cindex IEEE1788 sinh
+## @documentencoding utf-8
+## @deftypefn {Function File} {} sinh (@var{X})
 ## 
 ## Compute the hyperbolic sine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 8 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

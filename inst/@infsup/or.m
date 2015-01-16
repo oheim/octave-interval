@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} @var{A} | @var{B}
-## @cindex IEEE1788 convexHull
+## @documentencoding utf-8
+## @deftypefn {Interval Function} {} {} @var{A} | @var{B}
 ## 
 ## Build the interval hull of the union of two intervals.
 ##

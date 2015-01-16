@@ -14,13 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} pow10 (@var{X})
-## @cindex IEEE1788 exp10
+## @documentencoding utf-8
+## @deftypefn {Function File} {} pow10 (@var{X})
 ## 
 ## Compute @code{10^x} for all numbers in @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest when
-## interval boundaries are integral.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

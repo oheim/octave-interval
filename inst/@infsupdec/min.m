@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} min (@var{X}, @var{Y})
-## @cindex IEEE1788 min
+## @documentencoding utf-8
+## @deftypefn {Function File} {} min (@var{X}, @var{Y})
 ## 
 ## Compute the minimum value for each pair of numbers chosen from intervals
 ## @var{X} and @var{Y}.

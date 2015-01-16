@@ -14,10 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} sin (@var{X})
-## @cindex IEEE1788 sin
+## @documentencoding utf-8
+## @deftypefn {Function File} {} sin (@var{X})
 ## 
-## Compute the sine for each number in interval @var{X} in radians.
+## Compute the sine in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

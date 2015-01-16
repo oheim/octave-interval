@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} floor (@var{X})
-## @cindex IEEE1788 floor
+## @documentencoding utf-8
+## @deftypefn {Function File} {} floor (@var{X})
 ## 
 ## Round each number in interval @var{X} towards -Inf.
 ##

@@ -14,13 +14,13 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} acos (@var{X})
-## @cindex IEEE1788 acos
+## @documentencoding utf-8
+## @deftypefn {Function File} {} acos (@var{X})
 ## 
 ## Compute the inverse cosine in radians (arccosine) for each number in
 ## interval @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interchange encoding} {} bitunpack (@var{X})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} bitunpack (@var{X})
 ## 
 ## Encode bare interval @var{X} in interchange format.
 ##

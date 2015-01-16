@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} length (@var{A})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} length (@var{A})
 ##
 ## Return the length of interval object @var{A}.
 ##

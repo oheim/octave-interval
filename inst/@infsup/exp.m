@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} exp (@var{X})
-## @cindex IEEE1788 exp
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{Y} =} exp (@var{X})
 ## 
 ## Compute the exponential function for all numbers in @var{X}.
 ##

@@ -14,13 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Y} =} cosh (@var{X})
-## @cindex IEEE1788 cosh
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{Y} =} cosh (@var{X})
 ## 
 ## Compute the hyperbolic cosine for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 6 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

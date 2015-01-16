@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} log10 (@var{X})
-## @cindex IEEE1788 log10
+## @documentencoding utf-8
+## @deftypefn {Function File} {} log10 (@var{X})
 ## 
 ## Compute the decimal (base-10) logarithm for all numbers in interval @var{X}.
 ##

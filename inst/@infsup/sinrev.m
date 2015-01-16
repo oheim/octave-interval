@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} sinrev (@var{C}, @var{X})
-## @deftypefnx {Interval Function} {@var{X} =} sinrev (@var{C})
-## @cindex IEEE1788 sinRev
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} sinrev (@var{C}, @var{X})
+## @deftypefnx {Function File} {@var{X} =} sinrev (@var{C})
 ## 
 ## Compute the reverse sine function.
 ##
@@ -25,7 +25,7 @@
 ## @example
 ## @group
 ## sinrev (infsup (-1), infsup (0, 6))
-##   @result{} [4.7123889803846887, 4.7123889803846915]
+##   @result{} [4.7123889803846896, 4.7123889803846906]
 ## @end group
 ## @end example
 ## @seealso{sin}

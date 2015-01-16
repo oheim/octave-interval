@@ -14,14 +14,14 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup ()
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
-## @deftypefnx {Interval Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
-## @cindex IEEE1788 numsToInterval
-## @cindex IEEE1788 textToInterval
+## @documentencoding utf-8
+## @deftypefn {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup ()
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
+## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
 ## 
-## Create an interval from boundaries.  Convert boundaries to double precision.
+## Create an interval (from boundaries).  Convert boundaries to double
+## precision.
 ##
 ## The syntax without parameters creates an (exact) empty interval.  The syntax
 ## with a single parameter @code{infsup (@var{M})} equals

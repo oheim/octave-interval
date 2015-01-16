@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} round (@var{X})
-## @cindex IEEE1788 roundTiesToAway
+## @documentencoding utf-8
+## @deftypefn {Function File} {} round (@var{X})
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded away from zero (towards +Inf or -Inf depending on the sign).

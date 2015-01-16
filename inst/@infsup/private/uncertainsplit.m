@@ -14,6 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
+## @documentencoding utf-8
 ## @deftypefn {Function File} {[@var{BOUNDARY}, @var{UNCERTAIN}] =} uncertainsplit (@var{BOUNDARY})
 ## 
 ## The the decimal number itself and the decimal number that represents the

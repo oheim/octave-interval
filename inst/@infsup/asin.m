@@ -14,11 +14,11 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} asin (@var{X})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} asin (@var{X})
 ## @cindex IEEE1788 asin
 ## 
-## Compute the inverse sine in radians (arcsine) for each number in
-## interval @var{X}.
+## Compute the inverse sine in radians (arcsine).
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

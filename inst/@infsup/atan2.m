@@ -14,19 +14,17 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} atan2 (@var{Y}, @var{X})
-## @cindex IEEE1788 atan2
+## @documentencoding utf-8
+## @deftypefn {Function File} {} atan2 (@var{Y}, @var{X})
 ## 
-## Compute the inverse tangent with two arguments for each pair of numbers from
-## intervals @var{Y} and @var{X}.
+## Compute the inverse tangent with two arguments.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 5 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## atan2 (infsup (1), infsup (-1))
-##   @result{} [2.3561944901923435, 2.3561944901923462]
+##   @result{} [2.3561944901923448, 2.3561944901923453]
 ## @end group
 ## @end example
 ## @seealso{tan}

@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} inv (@var{A})
-## @cindex IEEE1788 recip
+## @documentencoding utf-8
+## @deftypefn {Function File} {} inv (@var{A})
 ## 
 ## Compute the inverse of the square matrix @var{A}.
 ##

@@ -14,16 +14,14 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} log10 (@var{X})
-## @cindex IEEE1788 log10
+## @documentencoding utf-8
+## @deftypefn {Function File} {} log10 (@var{X})
 ## 
-## Compute the decimal (base-10) logarithm for all numbers in interval @var{X}.
+## Compute the decimal (base-10) logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7 ULPs of the exact enclosure.  The result is tightest for powers of ten
-## between 10^0 and 10^22 (inclusive).
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

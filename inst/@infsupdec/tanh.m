@@ -14,13 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} tanh (@var{X})
-## @cindex IEEE1788 tanh
+## @documentencoding utf-8
+## @deftypefn {Function File} {} tanh (@var{X})
 ## 
 ## Compute the hyperbolic tangent for each number in interval @var{X}.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 7 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

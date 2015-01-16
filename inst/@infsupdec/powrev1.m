@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} powrev1 (@var{B}, @var{C}, @var{X})
-## @deftypefnx {Interval Function} {@var{X} =} powrev1 (@var{B}, @var{C})
-## @cindex IEEE1788 powRev1
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} powrev1 (@var{B}, @var{C}, @var{X})
+## @deftypefnx {Function File} {@var{X} =} powrev1 (@var{B}, @var{C})
 ## 
 ## Compute the reverse power function with
 ## @code{pow (@var{X}, @var{B}) = @var{C}}.

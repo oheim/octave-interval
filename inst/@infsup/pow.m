@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} pow (@var{X}, @var{Y})
-## @cindex IEEE1788 pow
+## @documentencoding utf-8
+## @deftypefn {Function File} {} pow (@var{X}, @var{Y})
 ## 
 ## Compute the simple power function on intervals defined by 
 ## @code{exp (@var{Y} * log (@var{X}))}.

@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} pow (@var{X}, @var{Y})
-## @cindex IEEE1788 pow
+## @documentencoding utf-8
+## @deftypefn {Function File} {} pow (@var{X}, @var{Y})
 ## 
 ## Compute the simple power function on intervals defined by 
 ## @code{exp (@var{Y} * log (@var{X}))}.
@@ -23,10 +23,7 @@
 ## The function is only defined where @var{X} is positive, cf. log function.
 ## A general power function is implemented by @code{mpower}.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest in
-## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{Y} in
-## @{-1, 0.5, 0, 1, 2@}, or @var{X} and @var{Y} integral with
-## @code{abs (pow (@var{X}, @var{Y})) in [2^-53, 2^53]}
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
-## @cindex IEEE1788 overlap
+## @documentencoding utf-8
+## @deftypefn {Function File} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
 ## 
 ## Extensively compare the positions of intervals @var{A} and @var{B} on the
 ## real number line.  Return the @var{STATE} as a string, e. g.,

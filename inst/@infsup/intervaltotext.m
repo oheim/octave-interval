@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Output} {@var{S} =} intervaltotext (@var{X})
-## @deftypefnx {Interval Output} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
-## @cindex IEEE1788 intervalToText
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{S} =} intervaltotext (@var{X})
+## @deftypefnx {Function File} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
 ## 
 ## Build an approximate representation of the interval @var{X}.
 ## 

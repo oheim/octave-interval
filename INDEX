@@ -1,0 +1,146 @@
+interval >> Real-valued interval arithmetic
+Interval constant
+ empty
+ entire
+Interval constructor
+ newdec = <f>@infsupdec/infsupdec</f>
+ numstointerval = <f>@infsup/infsup</f> or <f>@infsupdec/infsupdec</f>
+ texttointerval = <f>@infsup/infsup</f> or <f>@infsupdec/infsupdec</f>
+ @infsup/infsup
+ @infsup/setdec
+ @infsupdec/infsupdec
+Interval function with tightest accuracy
+ add = <f>@infsup/plus</f>
+ div = <f>@infsup/rdivide</f>
+ exp10 = <f>@infsup/pow10</f>
+ exp2 = <f>@infsup/pow2</f>
+ mul = <f>@infsup/times</f>
+ neg = <f>@infsup/uminus</f>
+ recip = <f>@infsup/inv</f>
+ roundtiestoaway = <f>@infsup/round</f>
+ roundtiestoeven = <f>@infsup/roundb</f>
+ sub = <f>@infsup/minus</f>
+ trunc = <f>@infsup/fix</f>
+ @infsup/abs
+ @infsup/acos
+ @infsup/acosh
+ @infsup/asin
+ @infsup/asinh
+ @infsup/atan
+ @infsup/atan2
+ @infsup/atanh
+ @infsup/cancelminus
+ @infsup/cancelplus
+ @infsup/ceil
+ @infsup/cos
+ @infsup/cosh
+ @infsup/exp
+ @infsup/fix
+ @infsup/floor
+ @infsup/fma
+ @infsup/ldivide
+ @infsup/log
+ @infsup/log10
+ @infsup/log2
+ @infsup/max
+ @infsup/min
+ @infsup/minus
+ @infsup/plus
+ @infsup/pow
+ @infsup/pow10
+ @infsup/pow2
+ @infsup/power
+ @infsup/pown
+ @infsup/rdivide
+ @infsup/round
+ @infsup/roundb
+ @infsup/sign
+ @infsup/sin
+ @infsup/sinh
+ @infsup/sqr
+ @infsup/sqrt
+ @infsup/tan
+ @infsup/tanh
+ @infsup/times
+ @infsup/uminus
+ @infsup/uplus
+Interval matrix operation
+ @infsup/dot
+ @infsup/inv
+ @infsup/mldivide
+ @infsup/mpower
+ @infsup/mrdivide
+ @infsup/sum
+ @infsup/sumabs
+ @infsup/sumsquare
+Interval comparison
+ @infsup/disjoint
+ @infsup/eq
+ @infsup/ge
+ @infsup/gt
+ @infsup/interior
+ @infsup/iscommoninterval
+ @infsup/isempty
+ @infsup/isentire
+ @infsup/ismember
+ @infsup/issingleton
+ @infsup/le
+ @infsup/lt
+ @infsup/ne
+ @infsup/overlap
+ @infsup/precedes
+ @infsup/strictprecedes
+ @infsup/subset
+ @infsupdec/isnai
+Set operation
+ intersection = <f>@infsup/and</f>
+ convexhull = <f>@infsup/or</f>
+ @infsup/and
+ @infsup/nextout
+ @infsup/or
+Interval reverse operation
+ @infsup/absrev
+ @infsup/atan2rev1
+ @infsup/atan2rev2
+ @infsup/coshrev
+ @infsup/cosrev
+ @infsup/mulrev
+ @infsup/mulrevtopair
+ @infsup/pownrev
+ @infsup/powrev1
+ @infsup/powrev2
+ @infsup/sinrev
+ @infsup/sqrrev
+ @infsup/tanrev
+Interval numeric function
+ @infsup/inf
+ @infsup/mag
+ @infsup/mid
+ @infsup/mig
+ @infsup/rad
+ @infsup/sup
+ @infsup/wid
+Interval input and output
+ interval_bitpack
+ exacttointerval
+ @infsup/bitunpack
+ @infsup/intervaltoexact
+ @infsup/intervaltotext
+Utility function
+ @infsup/columns
+ @infsup/ctranspose
+ @infsup/display
+ @infsup/horzcat
+ @infsup/ismatrix
+ @infsup/length
+ @infsup/ndims
+ @infsup/numel
+ @infsup/rows
+ @infsup/size
+ @infsup/subsasgn
+ @infsup/subsref
+ @infsup/transpose
+ @infsup/vertcat
+ @infsupdec/decorationpart
+ @infsupdec/intervalpart
+

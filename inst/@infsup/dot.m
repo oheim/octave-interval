@@ -14,13 +14,15 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} dot (@var{X}, @var{Y})
-## @deftypefnx {Interval Function} {} dot (@var{X}, @var{Y}, @var{DIM})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} dot (@var{X}, @var{Y})
+## @deftypefnx {Function File} {} dot (@var{X}, @var{Y}, @var{DIM})
 ## 
-## Compute the dot product of two interval vectors.  If @var{X} and @var{Y} are
-## matrices, calculate the dot products along the first non-singleton
-## dimension.  If the optional argument @var{DIM} is given, calculate the dot
-## products along this dimension.
+## Compute the dot product of two interval vectors.
+## 
+## If @var{X} and @var{Y} are matrices, calculate the dot products along the
+## first non-singleton dimension.  If the optional argument @var{DIM} is given,
+## calculate the dot products along this dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

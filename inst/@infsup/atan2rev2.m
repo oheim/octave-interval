@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} atan2rev2 (@var{A}, @var{C}, @var{X})
-## @deftypefnx {Interval Function} {@var{X} =} atan2rev2 (@var{A}, @var{C})
-## @cindex IEEE1788 atan2Rev2
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C}, @var{X})
+## @deftypefnx {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C})
 ## 
 ## Compute the reverse atan2 function with
 ## @code{atan2 (@var{A}, @var{X}) = @var{C}}.
@@ -26,10 +26,10 @@
 ## @example
 ## @group
 ## atan2rev2 (infsup (1, 2), infsup ("pi") / 4)
-##   @result{} [.9999999999999995, 2.0000000000000009]
+##   @result{} [.9999999999999997, 2.0000000000000005]
 ## @end group
 ## @end example
-## @seealso{pow}
+## @seealso{atan2}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -78,12 +78,12 @@ else
     if (c1.sup >= sup (pi) || a.sup == inf)
         l = -inf;
     else
-        l = inf (a.sup / tan (infsup (c1.sup)));
+        l = inf (a.sup ./ tan (infsup (c1.sup)));
     endif
     if (c1.inf <= inf (pi) / 2 || a.inf <= 0)
         u = 0;
     else
-        u = sup (a.inf / tan (infsup (c1.inf)));
+        u = sup (a.inf ./ tan (infsup (c1.inf)));
     endif
     result = x & infsup (l, u);
 endif
@@ -101,12 +101,12 @@ else
     if (c2.sup == 0 || c2.sup >= sup (pi) / 2)
         l = 0;
     else
-        l = max (0, inf (a.inf / tan (infsup (c2.sup))));
+        l = max (0, inf (a.inf ./ tan (infsup (c2.sup))));
     endif
     if (c2.inf == 0 || c2.sup == 0 || a.sup == inf)
         u = inf;
     else
-        u = sup (a.sup / tan (infsup (c2.inf)));
+        u = sup (a.sup ./ tan (infsup (c2.inf)));
     endif
     result = result | (x & infsup (l, u));
 endif
@@ -124,12 +124,12 @@ else
     if (c3.inf <= inf (-pi) / 2 || c3.inf == 0)
         l = 0;
     else
-        l = max (0, inf (a.sup / tan (infsup (c3.inf))));
+        l = max (0, inf (a.sup ./ tan (infsup (c3.inf))));
     endif
     if (c3.inf == 0 || c3.sup == 0 || a.inf == inf)
         u = inf;
     else
-        u = sup (a.inf / tan (infsup (c3.sup)));
+        u = sup (a.inf ./ tan (infsup (c3.sup)));
     endif
     result = result | (x & infsup (l, u));
 endif
@@ -147,12 +147,12 @@ else
     if (c4.inf <= inf (-pi) || a.inf == -inf)
         l = -inf;
     else
-        l = inf (a.inf / tan (infsup (c4.inf)));
+        l = inf (a.inf ./ tan (infsup (c4.inf)));
     endif
     if (c4.sup >= sup (-pi) / 2 || a.sup >= 0)
         u = 0;
     else
-        u = sup (a.sup / tan (infsup (c4.sup)));
+        u = sup (a.sup ./ tan (infsup (c4.sup)));
     endif
     result = result | (x & infsup (l, u));
 endif

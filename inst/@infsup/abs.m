@@ -14,12 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} abs (@var{X})
-## @cindex IEEE1788 abs
+## @documentencoding utf-8
+## @deftypefn {Function File} {} abs (@var{X})
 ## 
-## Compute the absolute value of numbers in interval @var{X}.
+## Compute the absolute value of numbers.
 ##
-## Accuracy: The result is exact.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

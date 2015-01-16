@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} sumsquare (@var{X})
-## @deftypefnx {Interval Function} {} sumsquare (@var{X}, @var{DIM})
-## @cindex IEEE1788 sumSquare
+## @documentencoding utf-8
+## @deftypefn {Function File} {} sumsquare (@var{X})
+## @deftypefnx {Function File} {} sumsquare (@var{X}, @var{DIM})
 ## 
 ## Sum of squares along dimension @var{DIM}.  If @var{DIM} is omitted,
 ## it defaults to the first non-singleton dimension.

@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} @var{X} .^ @var{Y}
+## @documentencoding utf-8
+## @deftypefn {Function File} {} {} @var{X} .^ @var{Y}
 ## 
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
@@ -28,8 +29,7 @@
 ##
 ## Warning: This function is not defined by IEEE 1788.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest if
-## @var{X} >= 0 or @var{Y} in [2^-53, 2^53].
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

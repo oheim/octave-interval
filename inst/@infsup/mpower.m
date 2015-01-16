@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} @var{X} ^ @var{Y}
+## @documentencoding utf-8
+## @deftypefn {Function File} {} {} @var{X} ^ @var{Y}
 ## 
 ## Return the matrix power operation of @var{X} raised to the @var{Y} power.
 ##

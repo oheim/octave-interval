@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} nextout (@var{X})
-## @cindex IEEE1788 nextOut
+## @documentencoding utf-8
+## @deftypefn {Function File} {} nextout (@var{X})
 ## 
 ## Increases the interval's boundaries in each direction to the next number.
 ##

@@ -14,10 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constant} {} entire ()
-## @deftypefnx {Interval Constant} {} entire (@var{N})
-## @deftypefnx {Interval Constant} {} entire (@var{N}, @var{M})
-## @cindex IEEE1788 entire
+## @documentencoding utf-8
+## @deftypefn {Function File} {} entire ()
+## @deftypefnx {Function File} {} entire (@var{N})
+## @deftypefnx {Function File} {} entire (@var{N}, @var{M})
 ## 
 ## Return the entire set of real numbers.
 ##

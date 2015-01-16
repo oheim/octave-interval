@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {} subsref (@var{A}, @var{IDX})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} subsref (@var{A}, @var{IDX})
 ##
 ## Perform the subscripted element selection operation according to the
 ## subscript specified by @var{IDX}.

@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} mulrev (@var{B}, @var{C}, @var{X})
-## @deftypefnx {Interval Function} {@var{X} =} mulrev (@var{B}, @var{C})
-## @cindex IEEE1788 mulRev
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} mulrev (@var{B}, @var{C}, @var{X})
+## @deftypefnx {Function File} {@var{X} =} mulrev (@var{B}, @var{C})
 ## 
 ## Compute the reverse multiplication function.
 ##

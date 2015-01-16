@@ -14,10 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constant} {} empty ()
-## @deftypefnx {Interval Constant} {} empty (@var{N})
-## @deftypefnx {Interval Constant} {} empty (@var{N}, @var{M})
-## @cindex IEEE1788 empty
+## @documentencoding utf-8
+## @deftypefn {Function File} {} empty ()
+## @deftypefnx {Function File} {} empty (@var{N})
+## @deftypefnx {Function File} {} empty (@var{N}, @var{M})
 ## 
 ## Return the empty interval.
 ##

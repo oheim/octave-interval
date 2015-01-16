@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} inf (@var{X})
-## @cindex IEEE1788 inf
+## @documentencoding utf-8
+## @deftypefn {Function File} {} inf (@var{X})
 ## 
 ## Get the (greatest) lower boundary for all numbers of interval @var{X}.
 ##

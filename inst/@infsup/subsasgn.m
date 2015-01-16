@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {} subsasgn (@var{A}, @var{IDX}, @var{RHS})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} subsasgn (@var{A}, @var{IDX}, @var{RHS})
 ##
 ## Perform the subscripted assignment operation according to the subscript
 ## specified by @var{IDX}.

@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} absrev (@var{C}, @var{X})
-## @deftypefnx {Interval Function} {@var{X} =} absrev (@var{C})
-## @cindex IEEE1788 absRev
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} absrev (@var{C}, @var{X})
+## @deftypefnx {Function File} {@var{X} =} absrev (@var{C})
 ## 
 ## Compute the reverse absolute value function.
 ##

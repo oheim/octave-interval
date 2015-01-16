@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} columns (@var{A})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} columns (@var{A})
 ##
 ## Return the number of columns of @var{A}.
 ## @seealso{numel, size, length, rows}

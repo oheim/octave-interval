@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} @var{X} .* @var{Y}
-## @cindex IEEE1788 mul
+## @documentencoding utf-8
+## @deftypefn {Function File} {} @var{X} .* @var{Y}
 ## 
 ## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
 ##

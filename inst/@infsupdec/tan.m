@@ -14,12 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} tan (@var{X})
-## @cindex IEEE1788 tan
+## @documentencoding utf-8
+## @deftypefn {Function File} {} tan (@var{X})
 ## 
 ## Compute the tangent for each number in interval @var{X} in radians.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

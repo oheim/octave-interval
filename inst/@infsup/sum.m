@@ -14,8 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} sum (@var{X})
-## @deftypefnx {Interval Function} {} sum (@var{X}, @var{DIM})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} sum (@var{X})
+## @deftypefnx {Function File} {} sum (@var{X}, @var{DIM})
 ## 
 ## Sum of elements along dimension @var{DIM}.  If @var{DIM} is omitted, it
 ## defaults to the first non-singleton dimension.

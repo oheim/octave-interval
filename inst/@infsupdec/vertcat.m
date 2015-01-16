@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {} [@var{ARRAY1}; @var{ARRAY2}; ...]
+## @documentencoding utf-8
+## @deftypefn {Function File} {} {} [@var{ARRAY1}; @var{ARRAY2}; ...]
 ##
 ## Return the vertical concatenation of interval array objects along
 ## dimension 1.

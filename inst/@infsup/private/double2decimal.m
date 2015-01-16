@@ -14,6 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
+## @documentencoding utf-8
 ## @deftypefn {Function File} {@var{Y} =} double2decimal (@var{X})
 ## 
 ## Convert a binary floating point number @var{X} in double precision to a

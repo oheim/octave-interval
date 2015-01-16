@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {[@var{U}, @var{V}] =} mulrevtopair (@var{X}, @var{Y})
-## @cindex IEEE1788 mulRevToPair
+## @documentencoding utf-8
+## @deftypefn {Function File} {[@var{U}, @var{V}] =} mulrevtopair (@var{X}, @var{Y})
 ## 
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.  If the 
 ## set division of the intervals would be a union of two disjoint intervals,

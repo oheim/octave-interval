@@ -14,6 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
+## @documentencoding utf-8
 ## @deftypefn {Function File} {[@var{X}, @var{ISEXACT}] =} hex2double (@var{S}, @var{DIRECTION})
 ## 
 ## Convert a hexadecimal floating point number @var{S} to double precision with

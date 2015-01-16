@@ -14,11 +14,11 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {} exacttointerval (@var{S})
-## @cindex IEEE1788 exactToInterval
+## @documentencoding utf-8
+## @deftypefn {Function File} {} exacttointerval (@var{S})
 ## 
 ## Create an interval from an interval literal.  Fail, if the interval cannot
-## exactly represent the input S.
+## exactly represent the input @var{S}.
 ##
 ## Accuracy: The equation @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))}
 ## holds for all intervals.

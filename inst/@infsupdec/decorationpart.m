@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Output} {} decorationpart (@var{X})
-## @cindex IEEE1788 decorationPart
+## @documentencoding utf-8
+## @deftypefn {Function File} {} decorationpart (@var{X})
 ## 
 ## Return the decoration of the decorated interval @var{X}.
 ##

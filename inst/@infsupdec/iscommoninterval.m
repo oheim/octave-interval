@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {} iscommoninterval (@var{X})
-## @cindex IEEE1788 isCommonInterval
+## @documentencoding utf-8
+## @deftypefn {Function File} {} iscommoninterval (@var{X})
 ## 
 ## Check if the interval is a common interval, that is a nonemty, closed
 ## bounded real interval.  If the interval is a computation result, the

@@ -14,10 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} acosh (@var{X})
-## @cindex IEEE1788 acosh
+## @documentencoding utf-8
+## @deftypefn {Function File} {} acosh (@var{X})
 ## 
-## Compute the inverse hyperbolic cosine for each number in interval @var{X}.
+## Compute the inverse hyperbolic cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

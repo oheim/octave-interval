@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {} precedes (@var{A}, @var{B})
-## @cindex IEEE1788 precedes
+## @documentencoding utf-8
+## @deftypefn {Function File} {} precedes (@var{A}, @var{B})
 ## 
 ## Evaluate precedes comparison on intervals.
 ##

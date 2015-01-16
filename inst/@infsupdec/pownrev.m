@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
-## @deftypefnx {Interval Function} {@var{X} =} pownrev (@var{C}, @var{P})
-## @cindex IEEE1788 pownRev
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
+## @deftypefnx {Function File} {@var{X} =} pownrev (@var{C}, @var{P})
 ## 
 ## Compute the reverse monomial @code{x^@var{P}}.
 ##

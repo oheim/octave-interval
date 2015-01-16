@@ -14,10 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} cosh (@var{X})
-## @cindex IEEE1788 cosh
+## @documentencoding utf-8
+## @deftypefn {Function File} {} cosh (@var{X})
 ## 
-## Compute the hyperbolic cosine for each number in interval @var{X}.
+## Compute the hyperbolic cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

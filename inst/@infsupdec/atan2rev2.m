@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} atan2rev2 (@var{A}, @var{C}, @var{X})
-## @deftypefnx {Interval Function} {@var{X} =} atan2rev2 (@var{A}, @var{C})
-## @cindex IEEE1788 atan2Rev2
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C}, @var{X})
+## @deftypefnx {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C})
 ## 
 ## Compute the reverse atan2 function with
 ## @code{atan2 (@var{A}, @var{X}) = @var{C}}.

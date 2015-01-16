@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} sqrt (@var{X})
-## @cindex IEEE1788 sqrt
+## @documentencoding utf-8
+## @deftypefn {Function File} {} sqrt (@var{X})
 ## 
 ## Compute the square root for all non-negative numbers in @var{X}.
 ##

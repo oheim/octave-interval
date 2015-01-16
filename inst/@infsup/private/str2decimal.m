@@ -14,6 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
+## @documentencoding utf-8
 ## @deftypefn {Function File} {@var{X} =} str2decimal (@var{S})
 ## 
 ## Parse a decimal number string @var{S} and split the sign, the mantissa and

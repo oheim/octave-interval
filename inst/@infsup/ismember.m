@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {} ismember (@var{M}, @var{X})
-## @cindex IEEE1788 isMember
+## @documentencoding utf-8
+## @deftypefn {Function File} {} ismember (@var{M}, @var{X})
 ## 
 ## Check if the interval @var{X} contains the number @var{M}.
 ##

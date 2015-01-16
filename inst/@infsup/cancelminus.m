@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{Z} =} cancelminus (@var{X}, @var{Y})
-## @cindex IEEE1788 cancelMinus
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{Z} =} cancelminus (@var{X}, @var{Y})
 ## 
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one
 ## knows @var{X} was obtained as the sum @var{Y} + @var{Z}.

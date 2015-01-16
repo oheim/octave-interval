@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {} @var{A} < @var{B}
-## @cindex IEEE1788 strictLess
+## @documentencoding utf-8
+## @deftypefn {Function File} {} {} @var{A} < @var{B}
 ## 
 ## Compare intervals @var{A} and @var{B} for strictly less.
 ##

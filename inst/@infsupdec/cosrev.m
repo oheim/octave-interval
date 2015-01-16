@@ -14,9 +14,9 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{X} =} cosrev (@var{C}, @var{X})
-## @deftypefnx {Interval Function} {@var{X} =} cosrev (@var{C})
-## @cindex IEEE1788 cosRev
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{X} =} cosrev (@var{C}, @var{X})
+## @deftypefnx {Function File} {@var{X} =} cosrev (@var{C})
 ## 
 ## Compute the reverse cosine function.
 ##

@@ -14,16 +14,14 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {@var{R} =} fma (@var{X}, @var{Y}, @var{Z})
-## @cindex IEEE1788 fma
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{R} =} fma (@var{X}, @var{Y}, @var{Z})
 ## 
-## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.  Multiply each
-## number of interval @var{X} with each number of interval @var{Y} and add
-## each number of interval @var{Z}.
+## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.
 ##
 ## This function is semantically equivalent to evaluating multiplication and
 ## addition separately, but in addition guarantees a tight enclosure of the
-## result.  The fused multiply and add is much slower.
+## result.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

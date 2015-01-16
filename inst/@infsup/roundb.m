@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} roundb (@var{X})
-## @cindex IEEE1788 roundTiesToEven
+## @documentencoding utf-8
+## @deftypefn {Function File} {} roundb (@var{X})
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded towards the nearest even integer.

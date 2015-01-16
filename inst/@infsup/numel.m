@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} numel (@var{A})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} numel (@var{A})
 ##
 ## Return the number of elements in the interval object @var{A}.
 ## @seealso{length, size, rows, columns}

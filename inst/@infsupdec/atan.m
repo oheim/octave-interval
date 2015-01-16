@@ -14,12 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} atan (@var{X})
-## @cindex IEEE1788 atan
+## @documentencoding utf-8
+## @deftypefn {Function File} {} atan (@var{X})
 ## 
 ## Compute the inverse tangent in radians for each number in interval @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

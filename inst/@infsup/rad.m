@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} rad (@var{X})
-## @cindex IEEE1788 rad
+## @documentencoding utf-8
+## @deftypefn {Function File} {} rad (@var{X})
 ## 
 ## Get the radius of interval @var{X}.
 ##

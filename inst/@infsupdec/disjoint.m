@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {} disjoint (@var{A}, @var{B})
-## @cindex IEEE1788 disjoint
+## @documentencoding utf-8
+## @deftypefn {Function File} {} disjoint (@var{A}, @var{B})
 ## 
 ## Evaluate disjoint comparison on intervals.
 ##

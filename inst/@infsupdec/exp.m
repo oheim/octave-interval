@@ -14,13 +14,12 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} exp (@var{X})
-## @cindex IEEE1788 exp
+## @documentencoding utf-8
+## @deftypefn {Function File} {} exp (@var{X})
 ## 
 ## Compute the exponential function for all numbers in @var{X}.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest for
-## boundaries @code{0} and @code{1}.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

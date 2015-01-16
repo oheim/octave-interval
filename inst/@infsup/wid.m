@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} wid (@var{X})
-## @cindex IEEE1788 wid
+## @documentencoding utf-8
+## @deftypefn {Function File} {} wid (@var{X})
 ## 
 ## Get the width of interval @var{X}.
 ##

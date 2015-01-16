@@ -14,7 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interchange encoding} {} interval_bitpack (@var{X})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} interval_bitpack (@var{X})
 ## 
 ## Decode interval from its interchange format @var{X}.
 ##
@@ -23,7 +24,7 @@
 ##
 ## The result is a row vector of intervals.
 ##
-## For all valid interchange encodings the following equation holds:
+## Accuracy: For all valid interchange encodings the following equation holds:
 ## @code{@var{X} == bitunpack (interval_bitpack (@var{X}))}.
 ##
 ## @seealso{bitunpack}

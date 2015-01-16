@@ -14,10 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} sqr (@var{X})
-## @cindex IEEE1788 sqr
+## @documentencoding utf-8
+## @deftypefn {Function File} {} sqr (@var{X})
 ## 
-## Compute the square for all numbers in @var{X}.
+## Compute the square.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

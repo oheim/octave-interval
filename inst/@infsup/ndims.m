@@ -14,9 +14,10 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Numeric} {} ndims (@var{A})
+## @documentencoding utf-8
+## @deftypefn {Function File} {} ndims (@var{A})
 ##
-##  Return the number of dimensions of @var{A}.
+## Return the number of dimensions of @var{A}.
 ##
 ## For any array, the result will always be larger than or equal to 2.
 ## Trailing singleton dimensions are not counted.

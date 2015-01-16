@@ -132,6 +132,7 @@ void evaluate (
 
 DEFUN_DLD (mpfr_function_d, args, nargout, 
   "-*- texinfo -*-\n"
+  "@documentencoding utf-8\n"
   "@deftypefn  {Function File} {} mpfr_function_d ('acos', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('acosh', @var{R}, @var{X})\n"
   "@deftypefnx {Function File} {} mpfr_function_d ('asin', @var{R}, @var{X})\n"

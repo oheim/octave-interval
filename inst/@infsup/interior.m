@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Comparison} {} interior (@var{A}, @var{B})
-## @cindex IEEE1788 interior
+## @documentencoding utf-8
+## @deftypefn {Function File} {} interior (@var{A}, @var{B})
 ## 
 ## Evaluate interior comparison on intervals.
 ##

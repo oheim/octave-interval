@@ -14,8 +14,8 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {@var{S} =} intervalpart (@var{X})
-## @cindex IEEE1788 intervalPart
+## @documentencoding utf-8
+## @deftypefn {Function File} {@var{S} =} intervalpart (@var{X})
 ## 
 ## Return the bare interval for the decorated interval @var{X}.
 ##

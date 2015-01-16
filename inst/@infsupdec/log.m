@@ -14,14 +14,14 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Function} {} log (@var{X})
-## @cindex IEEE1788 log
+## @documentencoding utf-8
+## @deftypefn {Function File} {} log (@var{X})
 ## 
-## Compute the natural logarithm for all numbers in interval @var{X}.
+## Compute the natural logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
