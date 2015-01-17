@@ -15,10 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup ()
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
+## @deftypefn {Function File} {[@var{X}, @var{ISEXACT}] =} infsup ()
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
 ## 
 ## Create an interval (from boundaries).  Convert boundaries to double
 ## precision.

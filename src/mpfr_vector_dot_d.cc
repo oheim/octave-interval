@@ -22,7 +22,7 @@
 DEFUN_DLD (mpfr_vector_dot_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding utf-8\n"
-  "@deftypefn  {Function File} {} mpfr_vector_dot_d (@var{R}, @var{X}, @var {Y})\n"
+  "@deftypefn  {Loadable Function} {} mpfr_vector_dot_d (@var{R}, @var{X}, @var {Y})\n"
   "\n"
   "Compute the dot product of vectors @var{X} and @var{Y} with double "
   "precision and correctly rounded result."

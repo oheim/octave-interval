@@ -15,12 +15,12 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec ()
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M})
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M}, @var{D})
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
-## @deftypefnx {Class Constructor} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
+## @deftypefn {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec ()
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M})
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M}, @var{D})
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
 ## 
 ## Create a decorated interval from boundaries.  Convert boundaries to double
 ## precision.

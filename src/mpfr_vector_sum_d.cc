@@ -22,7 +22,7 @@
 DEFUN_DLD (mpfr_vector_sum_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding utf-8\n"
-  "@deftypefn  {Function File} {} mpfr_vector_sum_d (@var{R}, @var{X})\n"
+  "@deftypefn  {Loadable Function} {} mpfr_vector_sum_d (@var{R}, @var{X})\n"
   "\n"
   "Compute the sum of all numbers in a vector @var{X} with double precision "
   "and correctly rounded result."
