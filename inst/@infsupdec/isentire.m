@@ -19,6 +19,8 @@
 ## 
 ## Check if the interval represents the entire set of real numbers.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, isempty, issingleton}
 ## @end deftypefn
 

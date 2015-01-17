@@ -16,7 +16,6 @@
 ## -*- texinfo -*-
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} round (@var{X})
-## @cindex IEEE1788 roundTiesToAway
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded away from zero (towards +Inf or -Inf depending on the sign).

@@ -21,6 +21,8 @@
 ##
 ## True, if @var{A} is strictly left of @var{B}. The intervals may not touch.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, le, lt, gt, precedes, subset, interior, disjoint}
 ## @end deftypefn
 

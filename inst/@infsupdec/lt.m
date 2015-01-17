@@ -23,6 +23,8 @@
 ## in @var{B}.  False, if @var{A} contains a number which is greater than all
 ## numbers in @var{B} or is equal to the greatest number of @var{B}.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, le, gt, subset, interior, disjoint}
 ## @end deftypefn
 

@@ -22,10 +22,7 @@
 ## Monomials are defined for all real numbers and the special monomial
 ## @code{@var{P} == 0} evaluates to @code{1} everywhere.
 ##
-## Accuracy: The result is an accurate enclosure.  The result is tightest in
-## each of the following cases:  @var{X} in @{0, 1, 2, 10@}, or @var{P} in
-## @{-1, 0.5, 0, 1, 2@}, or @var{X} integral with
-## @code{abs (pown (@var{X}, @var{P})) in [2^-53, 2^53]}
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

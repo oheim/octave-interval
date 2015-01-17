@@ -17,14 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} asinh (@var{X})
 ## 
-## Compute the inverse hyperbolic sine for each number in interval @var{X}.
+## Compute the inverse hyperbolic sine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## asinh (infsupdec (1))
-##   @result{} [.8813735870195422, .8813735870195439]_com
+##   @result{} [.8813735870195429, .8813735870195431]_com
 ## @end group
 ## @end example
 ## @seealso{sinh}

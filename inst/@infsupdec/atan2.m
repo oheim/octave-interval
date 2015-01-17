@@ -17,15 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} atan2 (@var{Y}, @var{X})
 ## 
-## Compute the inverse tangent with two arguments for each pair of numbers from
-## intervals @var{Y} and @var{X}.
+## Compute the inverse tangent with two arguments.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## atan2 (infsupdec (1), infsupdec (-1))
-##   @result{} [2.3561944901923435, 2.3561944901923462]_com
+##   @result{} [2.3561944901923448, 2.3561944901923453]_com
 ## @end group
 ## @end example
 ## @seealso{tan}

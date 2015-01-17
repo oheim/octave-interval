@@ -17,15 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} acos (@var{X})
 ## 
-## Compute the inverse cosine in radians (arccosine) for each number in
-## interval @var{X}.
+## Compute the inverse cosine in radians (arccosine).
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## acos (infsupdec (.5))
-##   @result{} [1.0471975511965976, 1.0471975511965981]_com
+##   @result{} [1.0471975511965976, 1.0471975511965979]_com
 ## @end group
 ## @end example
 ## @seealso{cos}

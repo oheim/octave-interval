@@ -20,6 +20,8 @@
 ## Compute the maximum value for each pair of numbers chosen from intervals
 ## @var{X} and @var{Y}.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example

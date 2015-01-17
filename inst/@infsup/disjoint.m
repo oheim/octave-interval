@@ -16,7 +16,6 @@
 ## -*- texinfo -*-
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} disjoint (@var{A}, @var{B})
-## @cindex IEEE1788 disjoint
 ## 
 ## Evaluate disjoint comparison on intervals.
 ##

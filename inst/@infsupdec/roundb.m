@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{Y} =} roundb (@var{X})
+## @deftypefn {Function File} {} roundb (@var{X})
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded towards the nearest even integer.

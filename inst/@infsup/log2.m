@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} log2 (@var{X})
 ## 
-## Compute the binary (base-2) logarithm for all numbers in interval @var{X}.
+## Compute the binary (base-2) logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
 ##

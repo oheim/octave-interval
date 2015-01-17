@@ -17,14 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} cos (@var{X})
 ## 
-## Compute the cosine for each number in interval @var{X} in radians.
+## Compute the cosine in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## cos (infsupdec (1))
-##   @result{} [.5403023058681396, .5403023058681399]_com
+##   @result{} [.5403023058681396, .5403023058681398]_com
 ## @end group
 ## @end example
 ## @seealso{acos, cosh}

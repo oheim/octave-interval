@@ -22,6 +22,8 @@
 ## The number can be a numerical data type or a string representation of a 
 ## decimal number.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, isentire, issingleton, isempty}
 ## @end deftypefn
 

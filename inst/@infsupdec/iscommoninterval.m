@@ -18,11 +18,16 @@
 ## @deftypefn {Function File} {} iscommoninterval (@var{X})
 ## 
 ## Check if the interval is a common interval, that is a nonemty, closed
-## bounded real interval.  If the interval is a computation result, the
-## evaluation must be common as well.
+## bounded real interval.
 ##
 ## Common intervals are used in class Moore interval arithmetic and are
 ## flavor-independent in IEEE1788 interval arithmetic.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## If the interval is a computation result, the evaluation must be common in 
+## all intermediate steps as well.
 ##
 ## @seealso{eq, isentire, isempty, issingleton}
 ## @end deftypefn

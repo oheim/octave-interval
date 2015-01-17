@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} @var{X} .* @var{Y}
+## @deftypefn {Function File} {} {} @var{X} .* @var{Y}
 ## 
 ## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
 ##

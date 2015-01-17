@@ -16,22 +16,24 @@
 ## -*- texinfo -*-
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {@var{S} =} intervaltotext (@var{X})
-## @deftypefnx {Function File} {@var{S} =} intervaltotext (@var{X}, @var{EXACT})
+## @deftypefnx {Function File} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
 ## 
-## Build an approximate representation of the interval @var{X} in decimal
-## format.
-##
+## Build an approximate representation of the interval @var{X}.
+## 
 ## The interval boundaries are stored in binary floating point format and are
-## converted to decimal format with possible precision loss. If output is not
-## exact, the boundaries are rounded accordingly (e. g. the upper boundary is
-## rounded towards infinite for output representation).
+## converted to decimal or hexadecimal format with possible precision loss.  If
+## output is not exact, the boundaries are rounded accordingly (e. g. the upper
+## boundary is rounded towards infinite for output representation).
+## 
+## Enough digits are used to ensure separation of subsequent floting point
+## numbers.  The exact decimal format may produce a lot of digits.
 ##
-## Enough decimal digits are used to ensure separation of subsequent floting
-## point numbers.
-##
+## Possible values for @var{FORMAT} are: @code{decimal} (default),
+## @code{exact decimal}, @code{exact hexadecimal}
+## 
 ## Accuracy: For all intervals @var{X} is an accurate subset of
-## @code{texttointerval (intervaltotext (@var{X}))}.  If parameter @var{EXACT}
-## is used and is set to @code{True} the output is exact.
+## @code{texttointerval (intervaltotext (@var{X}))}.
+## 
 ## @seealso{texttointerval, intervaltoexact}
 ## @end deftypefn
 

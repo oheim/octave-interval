@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} @var{A} | @var{B}
+## @deftypefn {Function File} {} {} @var{A} | @var{B}
 ## 
 ## Build the interval hull of the union of two intervals.
 ##

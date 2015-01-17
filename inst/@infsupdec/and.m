@@ -19,7 +19,7 @@
 ## 
 ## Intersect two intervals.
 ##
-## Accuracy: The result is exact.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

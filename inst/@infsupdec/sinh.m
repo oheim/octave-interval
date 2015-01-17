@@ -17,14 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} sinh (@var{X})
 ## 
-## Compute the hyperbolic sine for each number in interval @var{X}.
+## Compute the hyperbolic sine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## sinh (infsupdec (1))
-##   @result{} [1.1752011936438004, 1.1752011936438023]_com
+##   @result{} [1.1752011936438013, 1.1752011936438017]_com
 ## @end group
 ## @end example
 ## @seealso{asinh, cosh, tanh}

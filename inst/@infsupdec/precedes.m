@@ -15,11 +15,13 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{Z} =} precedes (@var{A}, @var{B})
+## @deftypefn {Function File} {} precedes (@var{A}, @var{B})
 ## 
 ## Evaluate precedes comparison on intervals.
 ##
 ## True, if @var{A} is left of @var{B}. The intervals may touch.
+##
+## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{eq, le, lt, gt, strictprecedes, subset, interior, disjoint}
 ## @end deftypefn

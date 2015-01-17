@@ -8,7 +8,7 @@ TARGET=$PACKAGE-$VERSION.tar.gz
 TARGET_DOC=$PACKAGE-html.tar.gz
 
 echo "Creating package archive ..."
-hg archive --exclude '.hg*' --exclude "$0" $TARGET
+hg archive --exclude '.hg*' --exclude "*.sh" $TARGET
 echo "Installing package ..."
 octave --quiet --eval "pkg install $TARGET"
 echo "Updating generate_html package ..."

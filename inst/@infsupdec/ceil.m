@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{Y} =} ceil (@var{X})
+## @deftypefn {Function File} {} ceil (@var{X})
 ## 
 ## Round each number in interval @var{X} towards +Inf.
 ##

@@ -22,6 +22,8 @@
 ## True, if all numbers from @var{A} are not contained in @var{B} and vice
 ## versa.  False, if @var{A} and @var{B} have at least one element in common.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, subset, interior}
 ## @end deftypefn
 

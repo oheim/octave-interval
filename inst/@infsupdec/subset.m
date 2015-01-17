@@ -22,6 +22,8 @@
 ## True, if all numbers from @var{A} are also contained in @var{B}.
 ## False, if @var{A} contains a number which is not a member in @var{B}.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, interior, disjoint}
 ## @end deftypefn
 

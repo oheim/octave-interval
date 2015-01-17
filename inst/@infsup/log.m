@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} log (@var{X})
 ## 
-## Compute the natural logarithm for all numbers in interval @var{X}.
+## Compute the natural logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
 ##

@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} exp (@var{X})
 ## 
-## Compute the exponential function for all numbers in @var{X}.
+## Compute the exponential function.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

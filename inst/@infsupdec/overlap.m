@@ -23,6 +23,8 @@
 ## an uint16 number, which represents one of the 16 possible states by taking a
 ## value 2^i (i = 0 .. 15).
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, subset, interior, disjoint}
 ## @end deftypefn
 

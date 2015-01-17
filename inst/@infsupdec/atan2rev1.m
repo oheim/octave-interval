@@ -21,12 +21,12 @@
 ## Compute the reverse atan2 function with
 ## @code{atan2 (@var{Y}, @var{B}) = @var{C}}.
 ##
-## Accuracy: The result is an accurate enclosure.
+## Accuracy: The result is a valid enclosure.
 ##
 ## @example
 ## @group
 ## atan2rev1 (infsupdec (1, 2), infsupdec ("pi") / 4)
-##   @result{} [.9999999999999997, 2.0000000000000009]_trv
+##   @result{} [.9999999999999998, 2.0000000000000005]_trv
 ## @end group
 ## @end example
 ## @seealso{pow}

@@ -15,16 +15,16 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{Y} =} cosh (@var{X})
+## @deftypefn {Function File} {} cosh (@var{X})
 ## 
-## Compute the hyperbolic cosine for each number in interval @var{X}.
+## Compute the hyperbolic cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## cosh (infsupdec (1))
-##   @result{} [1.543080634815243, 1.5430806348152444]_com
+##   @result{} [1.5430806348152437, 1.543080634815244]_com
 ## @end group
 ## @end example
 ## @seealso{acosh, sinh, tanh}

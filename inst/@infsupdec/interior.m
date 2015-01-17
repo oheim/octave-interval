@@ -23,6 +23,8 @@
 ## boundaries of @var{B}.  False, if @var{A} contains a number which is not a
 ## member in @var{B} or which is a boundary of @var{B}.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, subset, disjoint}
 ## @end deftypefn
 

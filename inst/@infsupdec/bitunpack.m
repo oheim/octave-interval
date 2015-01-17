@@ -16,6 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} bitunpack (@var{X})
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
 ## 
 ## Encode decorated interval @var{X} in interchange format.
 ##

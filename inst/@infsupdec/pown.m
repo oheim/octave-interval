@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{Y} =} pown (@var{X}, @var{P})
+## @deftypefn {Function File} {} pown (@var{X}, @var{P})
 ## 
 ## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.
 ##

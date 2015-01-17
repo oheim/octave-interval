@@ -17,9 +17,9 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} abs (@var{X})
 ## 
-## Compute the absolute value.
+## Compute the absolute value of numbers.
 ##
-## Accuracy: The result is exact.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

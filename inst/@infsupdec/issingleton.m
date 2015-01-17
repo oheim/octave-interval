@@ -19,6 +19,8 @@
 ## 
 ## Check if the interval represents a set that contains a single real only.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
 ## @seealso{eq, isentire, isempty}
 ## @end deftypefn
 

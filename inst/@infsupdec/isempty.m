@@ -19,6 +19,10 @@
 ## 
 ## Check if the interval represents the empty set.
 ##
+## Evaluated on interval matrices, this functions is applied element-wise.
+##
+## Warning: This function is not compatible with the builtin isempty function.
+##
 ## @seealso{eq, isentire, issingleton}
 ## @end deftypefn
 

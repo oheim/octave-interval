@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} @var{X} - @var{Y}
+## @deftypefn {Function File} {} {} @var{X} - @var{Y}
 ## 
 ## Subtract all numbers of interval @var{Y} from all numbers of @var{X}.
 ##

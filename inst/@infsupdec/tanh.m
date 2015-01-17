@@ -17,14 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} tanh (@var{X})
 ## 
-## Compute the hyperbolic tangent for each number in interval @var{X}.
+## Compute the hyperbolic tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## tanh (infsupdec (1))
-##   @result{} [.7615941559557644, .7615941559557653]_com
+##   @result{} [.7615941559557648, .761594155955765]_com
 ## @end group
 ## @end example
 ## @seealso{atanh, sinh, cosh}

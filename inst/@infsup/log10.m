@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} log10 (@var{X})
 ## 
-## Compute the decimal (base-10) logarithm for all numbers in interval @var{X}.
+## Compute the decimal (base-10) logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
 ##

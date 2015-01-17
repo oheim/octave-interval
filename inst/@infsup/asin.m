@@ -16,7 +16,6 @@
 ## -*- texinfo -*-
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} asin (@var{X})
-## @cindex IEEE1788 asin
 ## 
 ## Compute the inverse sine in radians (arcsine).
 ##

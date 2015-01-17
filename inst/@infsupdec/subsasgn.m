@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Funciton File} {} subsasgn (@var{A}, @var{IDX}, @var{RHS})
+## @deftypefn {Function File} {} subsasgn (@var{A}, @var{IDX}, @var{RHS})
 ##
 ## Perform the subscripted assignment operation according to the subscript
 ## specified by @var{IDX}.

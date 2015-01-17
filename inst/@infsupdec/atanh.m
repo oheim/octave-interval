@@ -17,15 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} atanh (@var{X})
 ## 
-## Compute the inverse hyperbolic tangent for each number in interval @var{X}.
+## Compute the inverse hyperbolic tangent.
 ##
-## Accuracy: The result is a valid enclosure.  Interval boundaries are within
-## 8 ULPs of the exact enclosure.
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## atanh (infsupdec (.5))
-##   @result{} [.5493061443340543, .5493061443340553]_com
+##   @result{} [.5493061443340547, .5493061443340549]_com
 ## @end group
 ## @end example
 ## @seealso{tanh}

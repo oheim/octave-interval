@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{R} =} fma (@var{X}, @var{Y}, @var{Z})
+## @deftypefn {Function File} {} fma (@var{X}, @var{Y}, @var{Z})
 ## 
 ## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.
 ##

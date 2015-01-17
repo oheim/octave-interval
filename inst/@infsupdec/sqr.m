@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} sqr (@var{X})
 ## 
-## Compute the square for all numbers in @var{X}.
+## Compute the square.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

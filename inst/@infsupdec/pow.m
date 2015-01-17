@@ -21,7 +21,7 @@
 ## @code{exp (@var{Y} * log (@var{X}))}.
 ##
 ## The function is only defined where @var{X} is positive, cf. log function.
-## A general power function is implemented by @code{mpower}.
+## A general power function is implemented by @code{power}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

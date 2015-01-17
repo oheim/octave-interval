@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## atan2rev2 (infsupdec (1, 2), infsupdec ("pi") / 4)
-##   @result{} [.9999999999999995, 2.0000000000000009]_trv
+##   @result{} [.9999999999999997, 2.0000000000000005]_trv
 ## @end group
 ## @end example
 ## @seealso{pow}

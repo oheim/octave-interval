@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{Y} =} tanh (@var{X})
+## @deftypefn {Function File} {} tanh (@var{X})
 ## 
-## Compute the hyperbolic tangent for each number in interval @var{X}.
+## Compute the hyperbolic tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

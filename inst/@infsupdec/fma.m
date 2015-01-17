@@ -21,7 +21,7 @@
 ##
 ## This function is semantically equivalent to evaluating multiplication and
 ## addition separately, but in addition guarantees a tight enclosure of the
-## result.  The fused multiply and add is much slower.
+## result.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

@@ -17,14 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} sin (@var{X})
 ## 
-## Compute the sine for each number in interval @var{X} in radians.
+## Compute the sine in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## sin (infsupdec (1))
-##   @result{} [.8414709848078963, .8414709848078967]_com
+##   @result{} [.8414709848078965, .8414709848078967]_com
 ## @end group
 ## @end example
 ## @seealso{asin, sinh}

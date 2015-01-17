@@ -17,14 +17,14 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} atan (@var{X})
 ## 
-## Compute the inverse tangent in radians for each number in interval @var{X}.
+## Compute the inverse tangent in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## atan (infsupdec (1))
-##   @result{} [.7853981633974481, .7853981633974484]_com
+##   @result{} [.7853981633974482, .7853981633974484]_com
 ## @end group
 ## @end example
 ## @seealso{tan, atan2}

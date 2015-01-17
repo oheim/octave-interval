@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} sqrt (@var{X})
 ## 
-## Compute the square root for all non-negative numbers in @var{X}.
+## Compute the square root (for all non-negative numbers).
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
