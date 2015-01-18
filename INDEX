@@ -143,4 +143,7 @@ Utility function
  @infsup/vertcat
  @infsupdec/decorationpart
  @infsupdec/intervalpart
-
+API functions to the MPFR library with correctly rounded results
+ mpfr_function_d
+ mpfr_vector_sum_d
+ mpfr_vector_dot_d
