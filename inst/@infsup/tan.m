@@ -27,7 +27,7 @@
 ##   @result{} [1.557407724654902, 1.5574077246549023]
 ## @end group
 ## @end example
-## @seealso{atan, tanh}
+## @seealso{@@infsup/atan, @@infsup/tanh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

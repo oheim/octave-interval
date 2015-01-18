@@ -27,7 +27,7 @@
 ##   @result{} [1.5430806348152437, 1.543080634815244]
 ## @end group
 ## @end example
-## @seealso{acosh, sinh, tanh}
+## @seealso{@@infsup/acosh, @@infsup/sinh, @@infsup/tanh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

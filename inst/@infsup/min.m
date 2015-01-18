@@ -32,7 +32,7 @@
 ##   @result{} [1, 2]
 ## @end group
 ## @end example
-## @seealso{min}
+## @seealso{@@infsup/max}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -28,7 +28,7 @@
 ##   @result{} [3.1415926535897931, 3.1415926535897936]
 ## @end group
 ## @end example
-## @seealso{tan}
+## @seealso{@@infsup/tan}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -21,9 +21,10 @@
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
-## Warning: This function is not compatible with the builtin isempty function.
+## Warning: This function is not compatible with the builtin @code{isempty}
+## function.
 ##
-## @seealso{eq, isentire, issingleton}
+## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/issingleton}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

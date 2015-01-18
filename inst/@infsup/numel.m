@@ -18,7 +18,7 @@
 ## @deftypefn {Function File} {} numel (@var{A})
 ##
 ## Return the number of elements in the interval object @var{A}.
-## @seealso{length, size, rows, columns}
+## @seealso{@@infsup/length, @@infsup/size, @@infsup/rows, @@infsup/columns}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

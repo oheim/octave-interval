@@ -31,7 +31,7 @@
 ##   @result{} [0, 2.2204460492503131e-16]
 ## @end group
 ## @end example
-## @seealso{plus}
+## @seealso{@@infsup/plus}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

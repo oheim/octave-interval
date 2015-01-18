@@ -27,7 +27,7 @@
 ## Accuracy: For all valid interchange encodings the following equation holds:
 ## @code{@var{X} == bitunpack (interval_bitpack (@var{X}))}.
 ##
-## @seealso{bitunpack}
+## @seealso{@@infsup/bitunpack, @@infsupdec/bitunpack}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

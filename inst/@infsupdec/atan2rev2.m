@@ -29,7 +29,7 @@
 ##   @result{} [.9999999999999997, 2.0000000000000005]_trv
 ## @end group
 ## @end example
-## @seealso{pow}
+## @seealso{@@infsupdec/atan2}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

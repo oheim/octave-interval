@@ -24,7 +24,7 @@
 ## versa.  False, if all numbers from @var{A} are also contained in @var{B} and
 ## vice versa.
 ##
-## @seealso{eq, subset, interior, disjoint}
+## @seealso{@@infsup/eq, @@infsup/subset, @@infsup/interior, @@infsup/disjoint}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

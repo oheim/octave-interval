@@ -27,7 +27,7 @@
 ##   @result{} [0, 2]
 ## @end group
 ## @end example
-## @seealso{sqr, pow}
+## @seealso{@@infsup/sqr, @@infsup/pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

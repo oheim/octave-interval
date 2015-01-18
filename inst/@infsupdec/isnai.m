@@ -19,7 +19,7 @@
 ## 
 ## Check if the interval is the result of a failed interval construction.
 ##
-## @seealso{eq, isentire, issingleton, isempty}
+## @seealso{@@infsupdec/eq, @@infsupdec/isentire, @@infsupdec/issingleton, @@infsupdec/isempty}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -35,7 +35,7 @@
 ##   @result{} error: rounding occurred during interval construction
 ## @end group
 ## @end example
-## @seealso{intervaltoexact}
+## @seealso{@@infsup/intervaltoexact, @@infsupdec/intervaltoexact}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

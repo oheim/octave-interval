@@ -31,8 +31,9 @@
 ## Possible values for @var{FORMAT} are: @code{decimal} (default),
 ## @code{exact decimal}, @code{exact hexadecimal}
 ## 
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
 ## Accuracy: For all intervals @var{X} is an accurate subset of
-## @code{texttointerval (intervaltotext (@var{X}))}.
+## @code{infsup (intervaltotext (@var{X}))}.
 ## 
 ## @example
 ## @group
@@ -47,7 +48,7 @@
 ##   @result{} [1]
 ## @end group
 ## @end example
-## @seealso{intervaltoexact}
+## @seealso{@@infsup/intervaltoexact}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

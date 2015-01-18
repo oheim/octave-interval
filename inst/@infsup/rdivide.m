@@ -29,7 +29,7 @@
 ##   @result{} [1, 3]
 ## @end group
 ## @end example
-## @seealso{times}
+## @seealso{@@infsup/times}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

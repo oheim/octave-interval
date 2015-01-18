@@ -24,7 +24,7 @@
 ## enclosure for @var{P} in @{-1, 0, 1, 2@}.  The result is an accurate
 ## enclosure in cases where @code{recip (infsup (@var{P}))} is a singleton.
 ##
-## @seealso{pown}
+## @seealso{@@infsupdec/pown}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

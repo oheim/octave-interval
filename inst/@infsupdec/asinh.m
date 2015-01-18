@@ -27,7 +27,7 @@
 ##   @result{} [.8813735870195429, .8813735870195431]_com
 ## @end group
 ## @end example
-## @seealso{sinh}
+## @seealso{@@infsupdec/sinh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

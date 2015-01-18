@@ -27,7 +27,7 @@
 ##   @result{} [.5403023058681396, .5403023058681398]
 ## @end group
 ## @end example
-## @seealso{acos, cosh}
+## @seealso{@@infsup/acos, @@infsup/cosh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

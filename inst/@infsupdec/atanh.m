@@ -27,7 +27,7 @@
 ##   @result{} [.5493061443340547, .5493061443340549]_com
 ## @end group
 ## @end example
-## @seealso{tanh}
+## @seealso{@@infsupdec/tanh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

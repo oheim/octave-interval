@@ -31,7 +31,7 @@
 ##   @result{} False
 ## @end group
 ## @end example
-## @seealso{subset, interior, disjoint}
+## @seealso{@@infsup/subset, @@infsup/interior, @@infsup/disjoint}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

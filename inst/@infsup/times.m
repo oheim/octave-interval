@@ -29,7 +29,7 @@
 ##   @result{} [2, 6]
 ## @end group
 ## @end example
-## @seealso{rdivide}
+## @seealso{@@infsup/rdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

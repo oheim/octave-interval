@@ -18,7 +18,7 @@
 ## @deftypefn {Function File} {} rows (@var{A})
 ##
 ## Return the number of rows of @var{A}.
-## @seealso{numel, size, length, columns}
+## @seealso{@@infsup/numel, @@infsup/size, @@infsup/length, @@infsup/columns}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

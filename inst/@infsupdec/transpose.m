@@ -29,7 +29,7 @@
 ##      [0, 1]_com
 ## @end group
 ## @end example
-## @seealso{ctranspose}
+## @seealso{@@infsupdec/ctranspose}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

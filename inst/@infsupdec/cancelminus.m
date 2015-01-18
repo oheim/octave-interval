@@ -21,6 +21,7 @@
 ## knows @var{X} was obtained as the sum @var{Y} + @var{Z}.
 ##
 ## Accuracy: The result is a tight enclosure.
+##
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

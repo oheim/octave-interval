@@ -37,7 +37,7 @@
 ##   @result{} [-125, +216]_trv
 ## @end group
 ## @end example
-## @seealso{pow, pown, pow2, pow10, exp}
+## @seealso{@@infsupdec/pow, @@infsupdec/pown, @@infsupdec/pow2, @@infsupdec/pow10, @@infsupdec/exp}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

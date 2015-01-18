@@ -29,7 +29,7 @@
 ##   @result{} [.6826061944859851, 2.584962500721157]
 ## @end group
 ## @end example
-## @seealso{pow}
+## @seealso{@@infsup/pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

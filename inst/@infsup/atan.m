@@ -27,7 +27,7 @@
 ##   @result{} [.7853981633974482, .7853981633974484]
 ## @end group
 ## @end example
-## @seealso{tan, atan2}
+## @seealso{@@infsup/tan, @@infsup/atan2}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

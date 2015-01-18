@@ -29,7 +29,7 @@
 ##   @result{} [.6931471805599452, .6931471805599454]
 ## @end group
 ## @end example
-## @seealso{exp, log2, log10}
+## @seealso{@@infsup/exp, @@infsup/log2, @@infsup/log10}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

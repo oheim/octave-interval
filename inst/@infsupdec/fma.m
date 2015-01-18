@@ -33,7 +33,7 @@
 ##   @result{} [7.1000000000000005, 7.1000000000000024]_com
 ## @end group
 ## @end example
-## @seealso{plus, mtimes}
+## @seealso{@@infsupdec/plus, @@infsupdec/mtimes}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

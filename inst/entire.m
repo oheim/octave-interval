@@ -38,7 +38,7 @@
 ##   @result{} Inf
 ## @end group
 ## @end example
-## @seealso{isentire, empty}
+## @seealso{@@infsup/isentire, empty}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

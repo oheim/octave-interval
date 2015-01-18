@@ -27,7 +27,7 @@
 ##   @result{} [2.718281828459045, 2.7182818284590456]_com
 ## @end group
 ## @end example
-## @seealso{log, pow}
+## @seealso{@@infsupdec/log, @@infsupdec/pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -19,7 +19,7 @@
 ## 
 ## Return the bare interval for the decorated interval @var{X}.
 ##
-## @seealso{decorationpart}
+## @seealso{@@infsupdec/decorationpart}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

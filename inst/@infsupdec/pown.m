@@ -30,7 +30,7 @@
 ##   @result{} [25, 36]_com
 ## @end group
 ## @end example
-## @seealso{pow, pow2, pow10, exp}
+## @seealso{@@infsupdec/pow, @@infsupdec/pow2, @@infsupdec/pow10, @@infsupdec/exp}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

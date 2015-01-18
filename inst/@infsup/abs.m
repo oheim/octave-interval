@@ -29,7 +29,7 @@
 ##   @result{} [0, 5.5]
 ## @end group
 ## @end example
-## @seealso{mag, mig}
+## @seealso{@@infsup/mag, @@infsup/mig}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

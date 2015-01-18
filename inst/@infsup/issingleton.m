@@ -21,7 +21,7 @@
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
-## @seealso{eq, isentire, isempty}
+## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/isempty}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

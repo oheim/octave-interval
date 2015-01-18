@@ -29,7 +29,7 @@
 ## If the interval is a computation result, the evaluation must be common in 
 ## all intermediate steps as well.
 ##
-## @seealso{eq, isentire, isempty, issingleton}
+## @seealso{@@infsupdec/eq, @@infsupdec/isentire, @@infsupdec/isempty, @@infsupdec/issingleton}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

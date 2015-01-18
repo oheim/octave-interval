@@ -30,7 +30,7 @@
 ##   @result{} [-1, 5]_def
 ## @end group
 ## @end example
-## @seealso{floor, ceil, roundb, fix}
+## @seealso{@@infsupdec/floor, @@infsupdec/ceil, @@infsupdec/roundb, @@infsupdec/fix}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

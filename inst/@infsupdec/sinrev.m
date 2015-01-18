@@ -28,7 +28,7 @@
 ##   @result{} [4.7123889803846896, 4.7123889803846906]_trv
 ## @end group
 ## @end example
-## @seealso{sin}
+## @seealso{@@infsupdec/sin}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

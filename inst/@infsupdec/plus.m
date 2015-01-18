@@ -29,7 +29,7 @@
 ##   @result{} [3, 5]_com
 ## @end group
 ## @end example
-## @seealso{minus}
+## @seealso{@@infsupdec/minus}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

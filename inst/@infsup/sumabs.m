@@ -29,7 +29,7 @@
 ##   @result{} [2, 2.0000000000000005]
 ## @end group
 ## @end example
-## @seealso{sum, plus, abs}
+## @seealso{@@infsup/sum, @@infsup/plus, @@infsup/abs}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

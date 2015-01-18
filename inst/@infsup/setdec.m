@@ -26,7 +26,7 @@
 ##   @result{} [Entire]_dac
 ## @end group
 ## @end example
-## @seealso{newdec}
+## @seealso{@@infsupdec/infsupdec}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

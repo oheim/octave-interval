@@ -28,7 +28,7 @@
 ##   @result{} [0]_trv
 ## @end group
 ## @end example
-## @seealso{cosh}
+## @seealso{@@infsupdec/cosh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

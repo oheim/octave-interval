@@ -29,7 +29,7 @@
 ##   @result{} [1]_com
 ## @end group
 ## @end example
-## @seealso{pow2, log, log10}
+## @seealso{@@infsupdec/pow2, @@infsupdec/log, @@infsupdec/log10}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

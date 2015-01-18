@@ -22,7 +22,7 @@
 ## Since intervals are only defined for real numbers, this function and
 ## @code{transpose} are equivalent.
 ##
-## @seealso{transpose}
+## @seealso{@@infsup/transpose}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

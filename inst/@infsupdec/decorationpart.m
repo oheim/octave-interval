@@ -22,7 +22,7 @@
 ## The decoration is a cell array of character strings and its size equals the
 ## size of its intervalpart.
 ##
-## @seealso{intervalpart}
+## @seealso{@@infsupdec/intervalpart}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

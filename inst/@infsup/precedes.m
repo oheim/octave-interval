@@ -23,7 +23,7 @@
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
-## @seealso{eq, le, lt, gt, strictprecedes, subset, interior, disjoint}
+## @seealso{@@infsup/eq, @@infsup/le, @@infsup/lt, @@infsup/gt, @@infsup/strictprecedes, @@infsup/subset, @@infsup/interior, @@infsup/disjoint}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

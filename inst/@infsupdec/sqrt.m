@@ -27,7 +27,7 @@
 ##   @result{} [0, 2]_trv
 ## @end group
 ## @end example
-## @seealso{sqr, pow}
+## @seealso{@@infsupdec/sqr, @@infsupdec/pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

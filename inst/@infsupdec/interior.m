@@ -25,7 +25,7 @@
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
-## @seealso{eq, subset, disjoint}
+## @seealso{@@infsupdec/eq, @@infsupdec/subset, @@infsupdec/disjoint}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

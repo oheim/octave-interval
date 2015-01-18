@@ -28,7 +28,7 @@
 ##   @result{} [-1, 1]_trv
 ## @end group
 ## @end example
-## @seealso{sqr}
+## @seealso{@@infsupdec/sqr}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

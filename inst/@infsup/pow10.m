@@ -27,7 +27,7 @@
 ##   @result{} [100000]
 ## @end group
 ## @end example
-## @seealso{log10, pow, pow2, exp}
+## @seealso{@@infsup/log10, @@infsup/pow, @@infsup/pow2, @@infsup/exp}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

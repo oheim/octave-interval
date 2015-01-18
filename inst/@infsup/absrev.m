@@ -28,7 +28,7 @@
 ##   @result{} [-1, 1]
 ## @end group
 ## @end example
-## @seealso{abs}
+## @seealso{@@infsup/abs}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

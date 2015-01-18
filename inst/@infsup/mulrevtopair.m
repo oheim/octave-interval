@@ -32,7 +32,7 @@
 ##   @result{} [0, Inf]
 ## @end group
 ## @end example
-## @seealso{mrdivide}
+## @seealso{@@infsup/mrdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

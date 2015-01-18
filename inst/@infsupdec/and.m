@@ -29,7 +29,7 @@
 ##   @result{} [2, 3]_trv
 ## @end group
 ## @end example
-## @seealso{or}
+## @seealso{@@infsupdec/or}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

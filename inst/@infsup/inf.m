@@ -29,7 +29,7 @@
 ##   @result{} 2.5
 ## @end group
 ## @end example
-## @seealso{sup, mid}
+## @seealso{@@infsup/sup, @@infsup/mid}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

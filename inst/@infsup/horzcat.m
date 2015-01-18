@@ -29,7 +29,7 @@
 ##      [2, 5]   [2, 5]   [2, 5]
 ## @end group
 ## @end example
-## @seealso{vertcat}
+## @seealso{@@infsup/vertcat}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

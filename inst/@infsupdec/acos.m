@@ -27,7 +27,7 @@
 ##   @result{} [1.0471975511965976, 1.0471975511965979]_com
 ## @end group
 ## @end example
-## @seealso{cos}
+## @seealso{@@infsupdec/cos}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

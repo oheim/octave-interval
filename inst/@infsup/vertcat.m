@@ -31,7 +31,7 @@
 ##      [2, 5]
 ## @end group
 ## @end example
-## @seealso{horzcat}
+## @seealso{@@infsup/horzcat}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

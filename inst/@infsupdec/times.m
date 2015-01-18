@@ -29,7 +29,7 @@
 ##   @result{} [2, 6]_com
 ## @end group
 ## @end example
-## @seealso{mrdivide}
+## @seealso{@@infsupdec/mrdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

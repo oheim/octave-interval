@@ -28,6 +28,7 @@
 ##   @result{} [-3, -2]
 ## @end group
 ## @end example
+## @seealso{@@infsup/uplus}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

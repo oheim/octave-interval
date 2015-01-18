@@ -22,6 +22,8 @@
 ## knows @var{X} was obtained as the difference @var{Z} - @var{Y}.
 ##
 ## Accuracy: The result is a tight enclosure.
+##
+## @seealso{@@infsup/cancelminus}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

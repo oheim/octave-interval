@@ -27,7 +27,7 @@
 ##   @result{} [1.3169578969248165, 1.3169578969248168]
 ## @end group
 ## @end example
-## @seealso{cosh}
+## @seealso{@@infsup/cosh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

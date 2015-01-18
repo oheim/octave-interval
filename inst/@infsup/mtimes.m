@@ -30,7 +30,7 @@
 ##   @result{} [2, 6]
 ## @end group
 ## @end example
-## @seealso{mrdivide}
+## @seealso{@@infsup/mrdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -36,7 +36,7 @@
 ##   @result{} [-2.2250738585072014e-308, -2.2250738585072013e-308]
 ## @end group
 ## @end example
-## @seealso{plus, sum, times, sumabs, sumsquare}
+## @seealso{@@infsup/plus, @@infsup/sum, @@infsup/times, @@infsup/sumabs, @@infsup/sumsquare}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

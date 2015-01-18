@@ -38,7 +38,7 @@
 ##      [67]   [67]   [91]
 ## @end group
 ## @end example
-## @seealso{pow, pown, pow2, pow10, exp}
+## @seealso{@@infsup/pow, @@infsup/pown, @@infsup/pow2, @@infsup/pow10, @@infsup/exp}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

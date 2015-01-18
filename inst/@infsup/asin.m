@@ -27,7 +27,7 @@
 ##   @result{} [.5235987755982988, .523598775598299]
 ## @end group
 ## @end example
-## @seealso{sin}
+## @seealso{@@infsup/sin}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

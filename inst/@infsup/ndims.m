@@ -21,7 +21,7 @@
 ##
 ## For any array, the result will always be larger than or equal to 2.
 ## Trailing singleton dimensions are not counted.
-## @seealso{length, numel, size, rows, columns}
+## @seealso{@@infsup/length, @@infsup/numel, @@infsup/size, @@infsup/rows, @@infsup/columns}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

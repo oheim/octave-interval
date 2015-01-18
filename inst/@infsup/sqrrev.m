@@ -28,7 +28,7 @@
 ##   @result{} [-1, 1]
 ## @end group
 ## @end example
-## @seealso{sqr}
+## @seealso{@@infsup/sqr}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

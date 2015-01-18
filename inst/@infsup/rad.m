@@ -32,7 +32,7 @@
 ##   @result{} 0.5
 ## @end group
 ## @end example
-## @seealso{inf, sup, mid, wid}
+## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/mid, @@infsup/wid}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

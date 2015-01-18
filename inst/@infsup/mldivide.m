@@ -29,7 +29,7 @@
 ##      [0]   [2]
 ## @end group
 ## @end example
-## @seealso{mtimes}
+## @seealso{@@infsup/mtimes}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

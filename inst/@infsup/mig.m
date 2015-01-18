@@ -30,7 +30,7 @@
 ##   @result{} 1
 ## @end group
 ## @end example
-## @seealso{mag, inf, sup}
+## @seealso{@@infsup/mag, @@infsup/inf, @@infsup/sup}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

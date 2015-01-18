@@ -35,7 +35,7 @@
 ##   @result{} 3
 ## @end group
 ## @end example
-## @seealso{inf, sup, rad}
+## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/rad}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
