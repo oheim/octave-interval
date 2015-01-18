@@ -59,8 +59,8 @@ l = u = zeros (size (x.inf));
 
 ## Partitionize the function's domain
 q1 = (x.sup <= 0 & y.inf >= 0);
-q2 = (x.sup <= 0 & y.sup <= 0 & y.inf < 0);
-q3 = (x.sup <= 0 & y.inf < 0 & 0 < y.sup);
+q2 = (x.sup <= 0 & x.inf < 0 & y.sup <= 0 & y.inf < 0);
+q3 = (x.sup <= 0 & y.inf < 0 & 0 <= y.sup);
 q4 = (x.inf >= 0 & x.sup > 0 & y.inf >= 0);
 q5 = (x.inf >= 0 & x.sup > 0 & y.sup <= 0 & y.inf < 0);
 q6 = (x.inf >= 0 & x.sup > 0 & y.inf < 0 & 0 < y.sup);
@@ -95,7 +95,7 @@ u (q1 & x.inf == 0) = sup (pi) / 2;
 l (q2) = max (l (q2), inf (-pi));
 l (q2 & x.inf == -inf) = inf (-pi);
 l (q2 & x.inf == 0) = inf (-pi) / 2;
-u (q2) = min (u (q2), inf (-pi));
+u (q2) = min (u (q2), inf (-pi) / 2);
 u (q2 & (y.inf == -inf | x.sup == 0)) = sup (-pi) / 2;
 
 q31 = q3 & x.inf ~= 0;
@@ -104,7 +104,7 @@ u (q31) = sup (pi);
 
 q32 = q3 & x.inf == 0;
 l (q32) = inf (-pi) / 2;
-u (q32) = sup (pi) / 2;
+u (q32) = sup (-pi) / 2;
 
 l (q4) = max (l (q4), 0);
 l (q4 & y.inf == 0) = 0;
@@ -115,7 +115,7 @@ u (q4 & y.sup == 0) = 0;
 
 l (q5) = max (l (q5), inf (-pi) / 2);
 l (q5 & x.inf == 0) = inf (-pi) / 2;
-u (q5) = min (u (q5), sup (-pi) / 2);
+u (q5) = min (u (q5), 0);
 u (q5 & y.sup == 0) = 0;
 u (q5 & x.sup == 0) = sup (-pi) / 2;
 
