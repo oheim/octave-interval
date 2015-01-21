@@ -1,6 +1,6 @@
 CONFORMANCE CLAIM
 
-The inverval package version 2014-12-24 for GNU Octave is conforming to the
+The inverval package version 0.1.0 for GNU Octave is conforming to the
 P1788 Standard for Interval Arithmetic, version D9.5 (October 2014).  It is
 conforming to the set-based flavor with IEEE 754 conformance for the infsup
 binary64 interval type and without compressed arithmetic.  Additionally it
