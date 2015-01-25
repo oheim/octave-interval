@@ -1,3 +1,12 @@
-2015-01-21
-Initial release version 0.1.0, which already contains all required operations
-of the preliminary standard document IEEE P1788.
+x.y.z xxxx-xx-xx
+================
+
+Bugfixes
+ * nextout: Function returned wrong results
+
+
+0.1.0 2015-01-21
+================
+
+Initial release version, which already contains all required operations of the
+preliminary standard document IEEE P1788.
