@@ -38,6 +38,11 @@
 
 function result = inf (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 if (isa (x, "infsupdec"))
     ## We cannot override this function in infsupdec, because that would create
     ## an infinite loop.
@@ -47,4 +52,4 @@ if (isa (x, "infsupdec"))
 endif
 
 result = x.inf;
-return
+endfunction

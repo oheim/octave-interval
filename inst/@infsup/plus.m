@@ -52,7 +52,6 @@ endif
 l = mpfr_function_d ('plus', -inf, x.inf, y.inf);
 u = mpfr_function_d ('plus', +inf, x.sup, y.sup);
 
-## Sum of empty intervals must be empty
 emptyresult = isempty (x) | isempty (y);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;

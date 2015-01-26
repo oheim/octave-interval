@@ -36,12 +36,15 @@
 
 function result = asinh (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+## asinh is monotonically increasing
+## This also works for empty intervals!
 l = mpfr_function_d ('asinh', -inf, x.inf);
 u = mpfr_function_d ('asinh', +inf, x.sup);
-
-emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
 
 result = infsup (l, u);
 

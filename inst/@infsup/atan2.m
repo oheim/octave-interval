@@ -55,93 +55,64 @@ if (isscalar (x.inf) ~= isscalar (y.inf))
     y.sup = ones (size (x.inf)) .* y.sup;
 endif
 
-l = u = zeros (size (x.inf));
-
 ## Partitionize the function's domain
-q1 = (x.sup <= 0 & y.inf >= 0);
-q2 = (x.sup <= 0 & x.inf < 0 & y.sup <= 0 & y.inf < 0);
-q3 = (x.sup <= 0 & y.inf < 0 & 0 <= y.sup);
-q4 = (x.inf >= 0 & x.sup > 0 & y.inf >= 0);
-q5 = (x.inf >= 0 & x.sup > 0 & y.sup <= 0 & y.inf < 0);
-q6 = (x.inf >= 0 & x.sup > 0 & y.inf < 0 & 0 < y.sup);
-q7 = (x.inf < 0 & 0 < x.sup);
-q71 = q7 & y.inf > 0;
-q72 = q7 & y.sup < 0;
+##          y
+##         ^
+##     p1  |  p2
+##   ------0------>
+##     p4  |  p3   x
+##
+x1 = x4 = x & infsup (-inf, 0);
+y1 = y2 = y & infsup (0, inf);
+x2 = x3 = x & infsup (0, inf);
+y3 = y4 = y & infsup (-inf, 0);
 
-l (q1) = mpfr_function_d ('atan2', -inf, y.sup (q1), x.sup (q1));
-l (q2) = mpfr_function_d ('atan2', -inf, y.sup (q2), x.inf (q2));
-l (q4) = mpfr_function_d ('atan2', -inf, y.inf (q4), x.sup (q4));
-l (q5) = mpfr_function_d ('atan2', -inf, y.inf (q5), x.inf (q5));
-l (q6) = mpfr_function_d ('atan2', -inf, y.inf (q6), x.inf (q6));
-l (q71) = mpfr_function_d ('atan2', -inf, y.inf (q71), x.sup (q71));
-l (q72) = mpfr_function_d ('atan2', -inf, y.sup (q72), x.inf (q72));
-u (q1) = mpfr_function_d ('atan2', +inf, y.inf (q1), x.inf (q1));
-u (q2) = mpfr_function_d ('atan2', +inf, y.inf (q2), x.sup (q2));
-u (q4) = mpfr_function_d ('atan2', +inf, y.sup (q4), x.inf (q4));
-u (q5) = mpfr_function_d ('atan2', +inf, y.sup (q5), x.sup (q5));
-u (q6) = mpfr_function_d ('atan2', +inf, y.sup (q6), x.inf (q6));
-u (q71) = mpfr_function_d ('atan2', +inf, y.inf (q71), x.inf (q71));
-u (q72) = mpfr_function_d ('atan2', +inf, y.sup (q72), x.sup (q72));
+## Intersect each partition with atan2's domain
+p1 = not (isempty (x1) | isempty (y1)) & (x1.inf < 0 | y1.sup > 0);
+p2 = not (isempty (x2) | isempty (y2)) & (x2.sup > 0 | y2.sup > 0);
+p3 = not (isempty (x3) | isempty (y3)) & (x3.sup > 0 | y3.inf < 0);
+p4 = not (isempty (x4) | isempty (y4)) & (x4.inf < 0 | y4.inf < 0);
 
-## Make function tightest for some parameters and compute remaining partitions
-pi = infsup ("pi");
-l (q1) = max (l (q1), inf (pi) / 2);
-l (q1 & (y.sup == inf | x.sup == 0)) = inf (pi) / 2;
-l (q1 & y.sup == 0) = inf (pi);
-u (q1) = min (u (q1), sup (pi));
-u (q1 & (x.inf == -inf | y.inf == 0)) = sup (pi);
-u (q1 & x.inf == 0) = sup (pi) / 2;
+## Prevent wrong limit values of atan2 (0, 0) in cases with y = 0.
+x1.inf (p1 & y1.sup == 0) = x1.sup (p1 & y1.sup == 0) = -1;
+x2.inf (p2 & y2.sup == 0) = x2.sup (p2 & y2.sup == 0) = 1;
+x3.inf (p3 & y3.inf == 0) = x3.sup (p3 & y3.inf == 0) = 1;
+p4 (y4.inf == 0) = false (); # don't consider y >= 0 in partition 4
 
-l (q2) = max (l (q2), inf (-pi));
-l (q2 & x.inf == -inf) = inf (-pi);
-l (q2 & x.inf == 0) = inf (-pi) / 2;
-u (q2) = min (u (q2), inf (-pi) / 2);
-u (q2 & (y.inf == -inf | x.sup == 0)) = sup (-pi) / 2;
+## Prevent wrong limit values of atan2 (0, 0) in cases with x = 0.
+y1.inf (p1 & x1.inf == 0) = y1.sup (p1 & x1.inf == 0) = 1;
+y2.inf (p2 & x2.sup == 0) = y2.sup (p2 & x2.sup == 0) = 1;
+y3.inf (p3 & x3.sup == 0) = y3.sup (p3 & x3.sup == 0) = -1;
+y4.inf (p4 & x4.inf == 0) = y4.sup (p4 & x4.inf == 0) = -1;
 
-q31 = q3 & x.inf ~= 0;
-l (q31) = inf (-pi);
-u (q31) = sup (pi);
+## Fix interval boundaries for y = 0 and x < 0, because atan2 (±0, -eps) = ±pi
+y1.inf (p1 & y1.inf == 0) = +0;
+y4.sup (p4 & y4.sup == 0) = -0;
 
-q32 = q3 & x.inf == 0;
-l (q32) = inf (-pi) / 2;
-u (q32) = sup (-pi) / 2;
+## Compute lower boundary (atan2 is increasing from p4 to p1)
+l = inf (size (p1));
+select = p4;
+l (select) = mpfr_function_d ('atan2', -inf, y4.sup (select), x4.inf (select));
+select = p3 & not (p4);
+l (select) = mpfr_function_d ('atan2', -inf, y3.inf (select), x3.inf (select));
+select = p2 & not (p3 | p4);
+l (select) = mpfr_function_d ('atan2', -inf, y2.inf (select), x2.sup (select));
+select = p1 & not (p2 | p3 | p4);
+l (select) = mpfr_function_d ('atan2', -inf, y1.sup (select), x1.sup (select));
 
-l (q4) = max (l (q4), 0);
-l (q4 & y.inf == 0) = 0;
-l (q4 & x.sup == 0) = inf (pi) / 2;
-u (q4) = min (u (q4), sup (pi) / 2);
-u (q4 & x.inf == 0) = sup (pi) / 2;
-u (q4 & y.sup == 0) = 0;
+## Compute upper boundary (atan2 is decreasing from p1 to p4)
+u = -inf (size (p1));
+select = p1;
+u (select) = mpfr_function_d ('atan2', +inf, y1.inf (select), x1.inf (select));
+select = p2 & not (p1);
+u (select) = mpfr_function_d ('atan2', +inf, y2.sup (select), x2.inf (select));
+select = p3 & not (p1 | p2);
+u (select) = mpfr_function_d ('atan2', +inf, y3.sup (select), x3.sup (select));
+select = p4 & not (p1 | p2 | p3);
+u (select) = mpfr_function_d ('atan2', +inf, y4.inf (select), x4.sup (select));
 
-l (q5) = max (l (q5), inf (-pi) / 2);
-l (q5 & x.inf == 0) = inf (-pi) / 2;
-u (q5) = min (u (q5), 0);
-u (q5 & y.sup == 0) = 0;
-u (q5 & x.sup == 0) = sup (-pi) / 2;
-
-l (q6) = max (l (q6), inf (-pi) / 2);
-l (q6 & x.inf == 0) = inf (-pi) / 2;
-u (q6) = min (u (q6), sup (pi) / 2);
-u (q6 & x.inf == 0) = sup (pi) / 2;
-
-l (q71) = max (l (q71), 0);
-u (q71) = min (u (q71), sup (pi));
-
-l (q72) = max (l (q72), inf (-pi));
-u (q72) = min (u (q72), 0);
-
-q73 = q7 & y.inf < 0 & y.sup >= 0;
-l (q73) = inf (-pi);
-u (q73) = sup (pi);
-
-q74 = q7 & y.inf == 0;
-l (q74) = 0;
-u (q74) = sup (pi);
-
-emptyresult = isempty (x) | isempty (y) | ...
-              (x.inf == 0 & x.sup == 0 & y.inf == 0 & y.sup == 0);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+## Now, we have computed l and u for all cases where p1 | p2 | p3 | p4.  In all
+## other cases, l and u will produce an empty interval.
 
 result = infsup (l, u);
 

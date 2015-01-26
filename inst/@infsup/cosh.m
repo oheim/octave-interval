@@ -36,6 +36,12 @@
 
 function result = cosh (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+## cosh is symmetric and has its global minimum located at (0, 0).
 l = mpfr_function_d ('cosh', -inf, mig (x));
 u = mpfr_function_d ('cosh', +inf, mag (x));
 

@@ -16,12 +16,23 @@
 ## -*- texinfo -*-
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} exacttointerval (@var{S})
+## @deftypefnx {Function File} {} exacttointerval (@var{L}, @var{U})
+## @deftypefnx {Function File} {} exacttointerval (@var{M})
 ## 
-## Create an interval from an interval literal.  Fail, if the interval cannot
-## exactly represent the input @var{S}.
+## Create a bare interval.  Fail, if the interval cannot exactly represent the
+## input.
 ##
-## Accuracy: The equation @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))}
-## holds for all intervals.
+## Typically, this function operates on interval literals @var{S}.  It is also
+## possible to pass lower and upper boundaries @var{L} and @var{U}, or create a
+## point-interval with a midpoint @var{M}.
+##
+## All valid input formats of the @code{infsup} class constructor are allowed.
+## If this function creates an interval matrix, all interval boundaries must be
+## representable with binary64 numbers.
+##
+## Accuracy: The equation
+## @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))} holds for all
+## intervals.
 ##
 ## @example
 ## @group
@@ -31,23 +42,33 @@
 ##   @result{} [2, 3]
 ## y = exacttointerval ("[,]")
 ##   @result{} [Entire]
-## z = exacttointerval ("[2.1e-1]")
-##   @result{} error: rounding occurred during interval construction
+## z = exacttointerval ("[21e-1]")
+##   @result{} error: interval wouldn't be exact
 ## @end group
 ## @end example
-## @seealso{@@infsup/intervaltoexact, @@infsupdec/intervaltoexact}
+## @seealso{@@infsup/intervaltoexact, @@infsup/infsup}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-01
 
-function x = exacttointerval (s)
+function result = exacttointerval (varargin)
 
-[x, exactconversion] = infsupdec (s);
+switch (nargin)
+    case 0
+        [result, exactconversion] = infsup ();
+    case 1
+        [result, exactconversion] = infsup (varargin {1});
+    case 2
+        [result, exactconversion] = infsup (varargin {1}, varargin {2});
+    otherwise
+        print_usage ();
+        return
+endswitch
 
 if (not (exactconversion))
-    error ("UndefinedOperation: interval construction can't be exact")
+    error ("exacttointerval: UndefinedOperation: interval wouldn't be exact")
 endif
 
 endfunction
@@ -57,16 +78,13 @@ endfunction
 %! y = exacttointerval ("[0, 1]");
 %! assert (inf (y), 0);
 %! assert (sup (y), 1);
-%! assert (decorationpart (y), {"com"});
 %!test "point interval";
 %! y = exacttointerval ("[42]");
 %! assert (inf (y), 42);
 %! assert (sup (y), 42);
-%! assert (decorationpart (y), {"com"});
 %!test "unbound interval";
 %! y = exacttointerval ("[-4, Infinity]");
 %! assert (inf (y), -4);
 %! assert (sup (y), inf);
-%! assert (decorationpart (y), {"dac"});
 %!error exacttointerval ("[0, 0.1]");
 %!error exacttointerval ("[1, 0]");

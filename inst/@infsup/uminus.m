@@ -37,6 +37,11 @@
 
 function result = uminus (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 ## This also works for empty / entire intervals
 l = -x.sup;
 u = -x.inf;

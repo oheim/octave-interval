@@ -44,18 +44,18 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function interval = empty (n, m)
+function result = empty (varargin)
 
 switch nargin
     case 0
-        interval = infsupdec ();
+        result = infsupdec ();
     case 1
-        interval = infsupdec (inf (n), -inf (n));
+        result = infsupdec (inf (varargin {1}), -inf (varargin {1}));
     case 2
-        interval = infsupdec (inf (n, m), -inf (n, m));
+        result = infsupdec (+inf (varargin {1}, varargin {2}), ...
+                            -inf (varargin {1}, varargin {2}));
     otherwise
         print_usage();
-        return
 endswitch
 
 endfunction

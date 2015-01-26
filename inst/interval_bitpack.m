@@ -17,10 +17,11 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} interval_bitpack (@var{X})
 ## 
-## Decode interval from its interchange format @var{X}.
+## Decode an interval from its interchange format.
 ##
-## The input must be a matrix of n × 128 bits for n bare intervals, or a matrix
-## of n × 136 bits for n decorated intervals.  Bits are in increasing order.
+## The input must either be a matrix of n × 128 bits for n bare intervals, or a
+## matrix of n × 136 bits for n decorated intervals.  Bits are in increasing
+## order.
 ##
 ## The result is a row vector of intervals.
 ##
@@ -35,6 +36,16 @@
 ## Created: 2014-12-23
 
 function result = interval_bitpack (x)
+
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+if (not (islogical (x)))
+    ## Built-in function bitpack will fail on other data types
+    error (['interval_bitpack: parameter must be a bool matrix, ' ...
+            'was: ' typeinfo(x)])
+endif
 
 switch size (x, 2)
     case 128 # (inf, sup)
@@ -54,9 +65,21 @@ switch size (x, 2)
         dec (d == 16) = 'com';
         
         result = infsupdec (l, u, dec);
-            
+        
     otherwise
-        error ('interval_bitpack: invalid bit-length, expected: 128 or 136')
+        error (['interval_bitpack: invalid bit-length, ' ...
+                'expected: 128 or 136, ' ...
+                'was: ' num2str(size (x, 2))])
 endswitch
 
 endfunction
+%!test "bare";
+%!  b = zeros (1, 128);
+%!  b ([53, 63, 116, 127]) = 1;
+%!  decoded = interval_bitpack (logical (b));
+%!  assert (eq (decoded, infsup (3, 4)));
+%!test "decorated";
+%!  b = zeros (1, 136);
+%!  b ([5, 61, 71, 124, 135]) = 1;
+%!  decoded = interval_bitpack (logical (b));
+%!  assert (eq (decoded, infsupdec (3, 4)));

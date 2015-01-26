@@ -36,6 +36,11 @@
 
 function result = sinh (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 l = mpfr_function_d ('sinh', -inf, x.inf);
 u = mpfr_function_d ('sinh', +inf, x.sup);
 

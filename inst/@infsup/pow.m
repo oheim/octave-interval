@@ -51,93 +51,34 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
-    x.inf = ones (size (y.inf)) .* x.inf;
-    x.sup = ones (size (y.inf)) .* x.sup;
-    y.inf = ones (size (x.inf)) .* y.inf;
-    y.sup = ones (size (x.inf)) .* y.sup;
-endif
+x = x & infsup (0, inf);
 
-l = u = nan (size (x.inf));
+## Simple cases with no limit values, see Table 3.3 in
+## Heimlich, Oliver. 2011. “The General Interval Power Function.”
+## Diplomarbeit, Institute for Computer Science, University of Würzburg.
+## http://exp.ln0.de/heimlich-power-2011.htm.
+##
+## The min/max is located at the boundaries of the input intervals.  Like with
+## the times function we do not start a case by case analysis but simply
+## compute all four combinations for each result boundary.
+##
+## We have to compensate for boundary x.inf = -0 with the abs function.
+## Otherwise the limit values of the MPFR pow function would be wrong.
 
-for i = 1 : numel (x.inf)
-    if (x.inf (i) == inf || y.inf (i) == inf || x.sup (i) <= 0)
-        l (i) = inf;
-        u (i) = -inf;
-        continue
-    endif
-    
-    ## Simple case with no limit values, see Table 3.3 in
-    ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-    ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
-    ## http://exp.ln0.de/heimlich-power-2011.htm.
-    if (0 <= y.inf (i))
-        if (x.sup (i) <= 1)
-            if (x.inf (i) > 0)
-                l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i));
-            endif
-            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.inf (i));
-        elseif (x.inf (i) < 1 && 1 < x.sup (i))
-            if (x.inf > 0)
-                l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i));
-            endif
-            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i));
-        else # 1 <= x.inf (i)
-            l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.inf (i));
-            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i));
-        endif
-    elseif (y.inf (i) < 0 && 0 < y.sup (i))
-        if (x.sup (i) <= 1)
-            if (x.inf (i) > 0)
-                l (i) = mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i));
-                u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i));
-            endif
-        elseif (x.inf (i) < 1 && 1 < x.sup (i))
-            if (x.inf (i) > 0)
-                l (i) = min (...
-                    mpfr_function_d ('pow', -inf, x.inf (i), y.sup (i)), ...
-                    mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i)));
-                u (i) = max (...
-                    mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i)), ...
-                    mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i)));
-            endif
-        else # 1 <= x.inf (i)
-            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i));
-            u (i) = mpfr_function_d ('pow', +inf, x.sup (i), y.sup (i));
-        endif
-    else # y.sup (i) <= 0
-        if (x.sup (i) <= 1)
-            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.sup (i));
-            if (x.inf > 0)
-                u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i));
-            endif
-        elseif (x.inf (i) < 1 && 1 < x.sup (i))
-            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i));
-            if (x.inf (i) > 0)
-                u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.inf (i));
-            endif
-        else # 1 <= x.inf (i)
-            l (i) = mpfr_function_d ('pow', -inf, x.sup (i), y.inf (i));
-            u (i) = mpfr_function_d ('pow', +inf, x.inf (i), y.sup (i));
-        endif
-    endif
-    
-    ## Limit values for base zero
-    if (x.inf (i) <= 0)
-        if (y.inf (i) == 0 && 0 == y.sup (i))
-            l (i) = 1;
-            u (i) = 1;
-        else
-            if (0 <= y.inf (i) || (y.inf (i) < 0 && 0 < y.sup (i)))
-                l (i) = 0;
-            endif
-            if (y.sup (i) <= 0 || (y.inf (i) < 0 && 0 < y.sup (i)))
-                u (i) = inf;
-            endif
-        endif
-    endif
-endfor
+l = min (min (min (...
+         mpfr_function_d ('pow', -inf, abs (x.inf), y.inf), ...
+         mpfr_function_d ('pow', -inf, abs (x.inf), y.sup)), ...
+         mpfr_function_d ('pow', -inf, x.sup, y.inf)), ...
+         mpfr_function_d ('pow', -inf, x.sup, y.sup));
+u = max (max (max (...
+         mpfr_function_d ('pow', +inf, abs (x.inf), y.inf), ...
+         mpfr_function_d ('pow', +inf, abs (x.inf), y.sup)), ...
+         mpfr_function_d ('pow', +inf, x.sup, y.inf)), ...
+         mpfr_function_d ('pow', +inf, x.sup, y.sup));
+
+emptyresult = isempty (x) | isempty (y) | x.sup == 0;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
 result = infsup (l, u);
 

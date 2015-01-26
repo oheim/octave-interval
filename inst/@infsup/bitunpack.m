@@ -38,22 +38,27 @@
 
 function result = bitunpack (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 ## The exchange representation of [Empty] is (+inf, -inf).  The exchange
-## representation of [0, 0] is (-0, +0). Both is ensured by the infsup
+## representation of [0, 0] is (-0, +0). Both is guaranteed by the infsup
 ## constructor.
 
 l = bitunpack (x.inf);
 u = bitunpack (x.sup);
 
 ## Initialize result vector
-result = zeros (1, length (l) * 2, 'logical');
+result = zeros (1, length (l) + length (u), 'logical');
 if (not (isrow (l)))
     result = result';
 endif
 
 ## Merge 64 bit blocks from l and u (alternating) together into result.
 ## Because of increasing bit order, u comes first.
-target = reshape (1 : length (result), 64, numel (x.inf) * 2);
+target = reshape (1 : length (result), 64, numel (x.inf) + numel (x.sup));
 target (:, 2 : 2 : size (target, 2)) = [];
 result (target) = u;
 result (target + 64) = l;

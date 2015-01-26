@@ -37,6 +37,7 @@ if (nargin ~= 3)
     print_usage ();
     return
 endif
+
 if (not (isa (A, "infsupdec")))
     A = infsupdec (A);
 endif

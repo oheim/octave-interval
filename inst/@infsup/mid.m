@@ -44,6 +44,11 @@
 
 function result = mid (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 ## First divide by 2 and then add, because this will prevent overflow.
 ## The different rounding modes for division will make errors of 2^-1075
 ## with subnormal numbers cancel each other out, or will make the round

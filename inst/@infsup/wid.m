@@ -40,6 +40,11 @@
 
 function result = wid (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = mpfr_function_d ('minus', +inf, x.sup, x.inf);
 
 result (isempty (x)) = nan ();

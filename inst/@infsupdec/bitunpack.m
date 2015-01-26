@@ -38,6 +38,11 @@
 
 function result = bitunpack (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 ## The exchange representation of [NaI] is (NaN, NaN, ill).
 if (isnai (x))
     result = [bitunpack(zeros (1, 'uint8')), bitunpack(nan (1, 2))];

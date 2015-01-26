@@ -36,6 +36,11 @@
 
 function result = tan (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 l = u = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than pi. This may save computation of

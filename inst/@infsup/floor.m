@@ -38,6 +38,11 @@
 
 function result = floor (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = infsup (floor (x.inf), floor (x.sup));
 
 endfunction

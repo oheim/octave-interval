@@ -38,10 +38,11 @@
 
 function result = powrev1 (b, c, x)
 
-if (nargin < 2)
+if (nargin < 2 || nargin > 3)
     print_usage ();
     return
 endif
+
 if (nargin < 3)
     x = infsupdec (-inf, inf);
 endif

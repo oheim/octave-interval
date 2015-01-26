@@ -31,6 +31,11 @@
 
 function result = ctranspose (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = transpose (x);
 
 endfunction

@@ -38,14 +38,19 @@
 
 function result = log2 (x)
 
-l = mpfr_function_d ('log2', -inf, x.inf);
-u = mpfr_function_d ('log2', +inf, x.sup);
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
 
-l (x.inf <= 0) = -inf;
+x = x & infsup (0, inf);
 
-emptyresult = isempty (x) | x.sup <= 0;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+## log2 is monotonically increasing from (0, -inf) to (inf, inf)
+l = mpfr_function_d ('log2', -inf, x.inf); # this works for empty intervals
+u = mpfr_function_d ('log2', +inf, x.sup); # ... this does not
+
+l (x.sup == 0) = inf;
+u (isempty (x) | x.sup == 0) = -inf;
 
 result = infsup (l, u);
 

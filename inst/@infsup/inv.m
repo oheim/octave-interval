@@ -44,6 +44,11 @@
 
 function result = inv (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 n = length (x);
 if (n <= 1)
     result = 1 ./ x;

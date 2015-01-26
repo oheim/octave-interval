@@ -36,14 +36,18 @@
 
 function result = acosh (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+x = x & infsup (1, inf);
+
+## acosh is monotonically increasing from (1, 0) to (inf, inf)
 l = mpfr_function_d ('acosh', -inf, x.inf);
 u = mpfr_function_d ('acosh', +inf, x.sup);
 
-## Make the function tightest for some parameters
-l (x.inf <= 1) = 0;
-u (x.sup == 1) = 0;
-
-emptyresult = isempty (x) | x.sup < 1;
+emptyresult = isempty (x);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 

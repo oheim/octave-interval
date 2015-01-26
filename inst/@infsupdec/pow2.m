@@ -36,6 +36,11 @@
 
 function result = pow2 (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 if (isnai (x))
     result = x;
     return

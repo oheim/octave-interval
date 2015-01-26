@@ -39,6 +39,11 @@
 
 function result = sign (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 l = sign (x.inf);
 u = sign (x.sup);
 

@@ -36,6 +36,17 @@
 
 function result = pow2 (x)
 
-result = pow (2, x);
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+## pow2 is monotonically increasing from (-inf, 0) to (inf, inf)
+l = mpfr_function_d ('pow2', -inf, x.inf); # this works for empty intervals
+u = mpfr_function_d ('pow2', +inf, x.sup); # ... this does not
+
+u (isempty (x)) = -inf;
+
+result = infsup (l, u);
 
 endfunction

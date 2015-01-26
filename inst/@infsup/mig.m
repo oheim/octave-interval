@@ -39,6 +39,11 @@
 
 function result = mig (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = min (abs (x.inf), abs (x.sup));
 result (sign (x.inf) ~= sign (x.sup)) = 0;
 result (isempty (x)) = nan ();

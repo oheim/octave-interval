@@ -39,6 +39,11 @@
 
 function result = round (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = infsup (round (x.inf), round (x.sup));
 
 endfunction

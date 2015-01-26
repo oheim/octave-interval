@@ -36,15 +36,18 @@
 
 function result = asin (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+x = x & infsup (-1, 1);
+
+## asin is monotonically increasing from (-1, -pi/2) to (1, pi/2)
 l = mpfr_function_d ('asin', -inf, x.inf);
 u = mpfr_function_d ('asin', +inf, x.sup);
 
-## Make the function tightest for some parameters
-pi = infsup ("pi");
-l (x.inf <= -1) = inf (-pi) / 2;
-u (x.sup >= 1) = sup (pi) / 2;
-
-emptyresult = isempty (x) | x.inf > 1 | x.sup < -1;
+emptyresult = isempty (x);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 

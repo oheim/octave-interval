@@ -38,10 +38,11 @@
 
 function result = atan2rev1 (b, c, y)
 
-if (nargin < 2)
+if (nargin < 2 || nargin > 3)
     print_usage ();
     return
 endif
+
 if (nargin < 3)
     y = infsup (-inf, inf);
 endif

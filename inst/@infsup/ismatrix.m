@@ -31,6 +31,11 @@
 
 function result = ismatrix (A)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 ## Note: The builtin ismatrix function does not work on interval matrices.
 ## However, the builtin isvector and isscalar functions can be used on interval
 ## matrices/vectors/scalars and need not be overridden by the infsup class.

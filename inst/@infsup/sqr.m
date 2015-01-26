@@ -36,7 +36,11 @@
 
 function result = sqr (x)
 
-x = abs (x);
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 l = mpfr_function_d ('sqr', -inf, mig (x));
 u = mpfr_function_d ('sqr', +inf, mag (x));
 

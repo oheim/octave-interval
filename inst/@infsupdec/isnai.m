@@ -28,5 +28,11 @@
 
 function result = isnai (interval)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = strcmp (interval.dec, "ill");
+
 return

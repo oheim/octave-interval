@@ -36,6 +36,11 @@
 
 function s = intervaltoexact (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 s = intervaltotext (x, "exact hexadecimal");
 
 endfunction

@@ -39,6 +39,11 @@
 
 function result = mag (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = max (abs (x.inf), abs (x.sup));
 result (isempty (x)) = nan ();
 

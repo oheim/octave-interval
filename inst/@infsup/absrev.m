@@ -37,16 +37,20 @@
 
 function result = absrev (c, x)
 
-if (nargin < 2)
-    x = infsup (-inf, inf);
+if (nargin < 1 || nargin > 2)
+    print_usage ();
+    return
 endif
 if (not (isa (c, "infsup")))
     c = infsup (c);
 endif
-if (not (isa (x, "infsup")))
+if (nargin < 2)
+    x = infsup (-inf, inf);
+elseif (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
+## Compute the pre-image of abs for positive and negative x separately.
 p = c & infsup (0, inf);
 n = -p;
 

@@ -19,6 +19,11 @@
 
 function display (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 if (numel (x) < 1)
     if (length (inputname (1)) > 0)
         fprintf ("%s = ", inputname (1));

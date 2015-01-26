@@ -38,6 +38,11 @@
 
 function result = abs (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 ## This is already correct, if the interval(s) are non-negative.
 l = x.inf;
 u = x.sup;

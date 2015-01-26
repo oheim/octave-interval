@@ -40,6 +40,7 @@ if (nargin ~= 2)
     print_usage ();
     return
 endif
+
 if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif

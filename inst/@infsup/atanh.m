@@ -36,13 +36,16 @@
 
 function result = atanh (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+x = x & infsup (-1, 1);
+
+## atanh is monotonically increasing between (-1, -inf) and (1, inf)
 l = mpfr_function_d ('atanh', -inf, x.inf);
 u = mpfr_function_d ('atanh', +inf, x.sup);
-
-pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
-
-l (x.inf <= -1) = -pi.sup;
-u (x.sup >= +1) = +pi.sup;
 
 emptyresult = isempty (x) | x.sup <= -1 | x.inf >= 1;
 l (emptyresult) = inf;

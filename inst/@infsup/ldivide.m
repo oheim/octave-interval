@@ -42,12 +42,6 @@ if (nargin ~= 2)
     print_usage ();
     return
 endif
-if (not (isa (x, "infsup")))
-    x = infsup (x);
-endif
-if (not (isa (y, "infsup")))
-    y = infsup (y);
-endif
 
 result = rdivide (y, x);
 

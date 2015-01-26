@@ -36,6 +36,11 @@
 
 function result = sin (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 l = u = cossignl = cossignu = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than 2*pi. This can save the

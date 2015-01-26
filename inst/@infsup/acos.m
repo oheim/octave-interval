@@ -36,17 +36,18 @@
 
 function result = acos (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+x = x & infsup (-1, 1);
+
+## acos is monotonically decreasing from (-1, pi) to (+1, 0)
 l = mpfr_function_d ('acos', -inf, x.sup);
 u = mpfr_function_d ('acos', +inf, x.inf);
 
-## Make the function tightest for special parameters
-pi = infsup ("pi");
-l (x.sup >= 1) = 0;
-l (x.sup == -1) = inf (pi);
-u (x.inf <= -1) = sup (pi);
-u (x.inf == 1) = 0;
-
-emptyresult = isempty (x) | x.inf > 1 | x.sup < -1;
+emptyresult = isempty (x);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 

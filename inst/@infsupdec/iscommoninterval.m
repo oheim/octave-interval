@@ -38,5 +38,10 @@
 
 function result = iscommoninterval (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = strcmp (x.dec, "com");
 return

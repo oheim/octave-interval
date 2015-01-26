@@ -185,6 +185,15 @@ x.sup = zeros (size (u));
 input.inf = l;
 input.sup = u;
 for [boundaries, key] = input
+    if (isfloat (boundaries))
+        if (any (any (isnan (boundaries))))
+            error (["illegal " key " boundary: NaN not allowed"]);
+        endif
+        ## Simple case: the boundaries already are a binary floating point
+        ## number in single or double precision.
+        x.(key) = double (boundaries);
+        continue
+    endif
     for i = 1 : numel (boundaries)
         if (iscell (boundaries))
             boundary = boundaries {i};
@@ -208,7 +217,7 @@ for [boundaries, key] = input
                     error (["illegal " key " boundary: NaN not allowed"]);
                 endif
                 ## Simple case: the boundary already is a binary floating point
-                ## number is single or double precision.
+                ## number in single or double precision.
                 x.(key) (i) = double (boundary);
                 continue
             endif
@@ -386,10 +395,10 @@ for [boundaries, key] = input
                         ## approximation is right next to the desired number.
                         switch key
                             case "inf"
-                                x.inf (i) = mpfr_function_d ('minus', +inf, ...
+                                x.inf (i) = mpfr_function_d ('minus', -inf, ...
                                                 binary, pow2 (-1074));
                             case "sup"
-                                x.sup (i) = mpfr_function_d ('plus', -inf, ...
+                                x.sup (i) = mpfr_function_d ('plus', +inf, ...
                                                 binary, pow2 (-1074));
                         endswitch
                     endif
@@ -398,8 +407,8 @@ for [boundaries, key] = input
     endfor
 endfor
 
-assert (not (isnan (x.inf)));
-assert (not (isnan (x.sup)));
+assert (not (any (any (isnan (x.inf)))));
+assert (not (any (any (isnan (x.sup)))));
 
 ## normalize boundaries:
 ## representation of the set containing only zero is always [-0,+0]

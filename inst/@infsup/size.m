@@ -35,7 +35,7 @@
 
 function varargout = size (a, dim)
 
-if (nargin == 0)
+if (nargin == 0 || nargin > 2)
     print_usage ();
     return
 endif

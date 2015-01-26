@@ -30,5 +30,10 @@
 
 function result = isentire (interval)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = (interval.inf == -inf & interval.sup == inf);
 return

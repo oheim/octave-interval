@@ -36,12 +36,16 @@
 
 function result = exp (x)
 
-l = mpfr_function_d ('exp', -inf, x.inf);
-u = mpfr_function_d ('exp', +inf, x.sup);
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
 
-emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+## exp is monotonically increasing from (-inf, 0) to (inf, inf)
+l = mpfr_function_d ('exp', -inf, x.inf); # this also works for empty intervals
+u = mpfr_function_d ('exp', +inf, x.sup); # ... this does not
+
+u (isempty (x)) = -inf;
 
 result = infsup (l, u);
 

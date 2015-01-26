@@ -38,6 +38,11 @@
 
 function result = transpose (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = infsupdec (transpose (intervalpart (x)), transpose (x.dec));
 
 endfunction

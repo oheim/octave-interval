@@ -34,5 +34,10 @@
 
 function result = iscommoninterval (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = isfinite (x.inf) & isfinite (x.sup);
 return

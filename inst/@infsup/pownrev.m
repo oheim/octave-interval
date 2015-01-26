@@ -33,7 +33,7 @@
 
 function result = pownrev (c, x, p)
 
-if (nargin < 2)
+if (nargin < 2 || nargin > 3)
     print_usage ();
     return
 endif
@@ -56,7 +56,7 @@ assert (isscalar (c) && isscalar (x), "only implemented for interval scalars");
 
 switch p
     case -1
-        result = recip (c) & x;
+        result = inv (c) & x;
         return
     case 0
         if (ismember (1, c))
@@ -73,11 +73,11 @@ switch p
         return
 endswitch
 
-xp = pow (c, recip (infsup (p)));
+xp = pow (c, inv (infsup (p)));
 if (rem (p, 2) == 0)
     xn = -xp;
 else
-    xn = -pow (-c, recip (infsup (p)));
+    xn = -pow (-c, inv (infsup (p)));
 endif
 
 if (p > 0 && ismember (0, c))

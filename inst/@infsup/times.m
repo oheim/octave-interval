@@ -49,56 +49,35 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
-    x.inf = ones (size (y.inf)) .* x.inf;
-    x.sup = ones (size (y.inf)) .* x.sup;
-    y.inf = ones (size (x.inf)) .* y.inf;
-    y.sup = ones (size (x.inf)) .* y.sup;
-endif
+## At least one case of interval multiplication is complicated: when zero is an
+## inner point of both interval factors.  In all other cases it would suffice
+## to compute a single product for each product boundary.
+##
+## It is not significandly faster to do a case by case analysis in order to
+## save some calls to the times function with directed rounding. Therefore, we
+## simply compute the product for each pair of boundaries where the min/max
+## could be located.
 
-## Partitionize the function's domain
-q1 = y.sup <= 0 & x.sup <= 0;
-q2 = y.sup <= 0 & x.inf >= 0 & x.sup > 0;
-q3 = y.sup <= 0 & x.inf < 0 & x.sup > 0;
-q4 = y.inf >= 0 & y.sup > 0 & x.sup <= 0;
-q5 = y.inf >= 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
-q6 = y.inf >= 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
-q7 = y.inf < 0 & y.sup > 0 & x.sup <= 0;
-q8 = y.inf < 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
-q9 = y.inf < 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
+l = min (min (min (...
+         mpfr_function_d ('times', -inf, x.inf, y.inf), ...
+         mpfr_function_d ('times', -inf, x.inf, y.sup)), ...
+         mpfr_function_d ('times', -inf, x.sup, y.inf)), ...
+         mpfr_function_d ('times', -inf, x.sup, y.sup));
+u = max (max (max (...
+         mpfr_function_d ('times', +inf, x.inf, y.inf), ...
+         mpfr_function_d ('times', +inf, x.inf, y.sup)), ...
+         mpfr_function_d ('times', +inf, x.sup, y.inf)), ...
+         mpfr_function_d ('times', +inf, x.sup, y.sup));
 
-l = u = zeros (size (x.inf));
-l (q1) = mpfr_function_d ('times', -inf, x.sup (q1), y.sup (q1));
-l (q2) = mpfr_function_d ('times', -inf, x.sup (q2), y.inf (q2));
-l (q3) = mpfr_function_d ('times', -inf, x.sup (q3), y.inf (q3));
-l (q4) = mpfr_function_d ('times', -inf, x.inf (q4), y.sup (q4));
-l (q5) = mpfr_function_d ('times', -inf, x.inf (q5), y.inf (q5));
-l (q6) = mpfr_function_d ('times', -inf, x.inf (q6), y.sup (q6));
-l (q7) = mpfr_function_d ('times', -inf, x.inf (q7), y.sup (q7));
-l (q8) = mpfr_function_d ('times', -inf, x.sup (q8), y.inf (q8));
-l (q9) = min (...
-              mpfr_function_d ('times', -inf, x.inf (q9), y.sup (q9)), ...
-              mpfr_function_d ('times', -inf, x.sup (q9), y.inf (q9)));
-u (q1) = mpfr_function_d ('times', +inf, x.inf (q1), y.inf (q1));
-u (q2) = mpfr_function_d ('times', +inf, x.inf (q2), y.sup (q2));
-u (q3) = mpfr_function_d ('times', +inf, x.inf (q3), y.inf (q3));
-u (q4) = mpfr_function_d ('times', +inf, x.sup (q4), y.inf (q4));
-u (q5) = mpfr_function_d ('times', +inf, x.sup (q5), y.sup (q5));
-u (q6) = mpfr_function_d ('times', +inf, x.sup (q6), y.sup (q6));
-u (q7) = mpfr_function_d ('times', +inf, x.inf (q7), y.inf (q7));
-u (q8) = mpfr_function_d ('times', +inf, x.sup (q8), y.sup (q8));
-u (q9) = max (...
-              mpfr_function_d ('times', +inf, x.inf (q9), y.inf (q9)), ...
-              mpfr_function_d ('times', +inf, x.sup (q9), y.sup (q9)));
-
-entireresult = isentire (x) | isentire (y);
-l (entireresult) = -inf;
-u (entireresult) = inf;
-
-zeroresult = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
-l (zeroresult) = u (zeroresult) = 0;
-
+## [0] × anything = [0] × [0]
+## [Entire] × anything but [0] = [Entire] × [Entire]
+## This prevents the cases where 0 × inf would produce NaNs.
+entireproduct = isentire (x) | isentire (y);
+l (entireproduct) = -inf;
+u (entireproduct) = inf;
+zeroproduct = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
+l (zeroproduct) = 0;
+u (zeroproduct) = 0;
 emptyresult = isempty (x) | isempty (y);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;

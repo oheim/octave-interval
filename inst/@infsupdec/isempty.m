@@ -33,6 +33,11 @@
 
 function result = isempty (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 if (isnai (x))
     error ("interval comparison with NaI")
 endif

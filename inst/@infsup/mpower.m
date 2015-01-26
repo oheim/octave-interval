@@ -80,7 +80,7 @@ while (y ~= 0)
         y /= 2;
     else # y is odd
         result = mtimes (result, x);
-        if (min (min (isempty (result))) || min (min (isentire (result))))
+        if (all (all (isempty (result))) || all (all (isentire (result))))
             ## We can stop the computation here, this is a fixed point
             break
         endif

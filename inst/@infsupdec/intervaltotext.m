@@ -42,6 +42,11 @@
 
 function [s, isexact] = intervaltotext (x, format)
 
+if (nargin > 2)
+    print_usage ();
+    return
+endif
+
 if (nargin < 2)
     format = "decimal";
 endif

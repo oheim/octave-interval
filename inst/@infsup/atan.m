@@ -36,6 +36,12 @@
 
 function result = atan (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+## atan is monotonically increasing
 l = mpfr_function_d ('atan', -inf, x.inf);
 u = mpfr_function_d ('atan', +inf, x.sup);
 

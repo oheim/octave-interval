@@ -22,14 +22,11 @@
 DEFUN_DLD (mpfr_vector_dot_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding utf-8\n"
-  "@deftypefn  {Loadable Function} {} mpfr_vector_dot_d (@var{R}, @var{X}, @var {Y})\n"
+  "@deftypefn  {Loadable Function} {[@var{L}, @var{U}] = } mpfr_vector_dot_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
   "\n"
-  "Compute the dot product of vectors @var{X} and @var{Y} with double "
+  "Compute the upper and lower boundary of the dot product of interval "
+  "vectors [@var{XL}, @var{XU}] and [@var{YL}, @var{YU}] with double "
   "precision and correctly rounded result."
-  "\n\n"
-  "@var{R} is the rounding direction (0: towards zero, 0.5 towards nearest "
-  "and ties to even, inf towards positive infinity, -inf towards negative "
-  "infinity.  "
   "\n"
   "@seealso{dot}\n"
   "@end deftypefn"
@@ -37,52 +34,93 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
 {
   // Check call syntax
   int nargin = args.length ();
-  if (nargin != 3)
+  if (nargin != 4)
     {
       print_usage ();
       return octave_value_list ();
     }
   
   // Read parameters
-  const mpfr_rnd_t  rnd      = parse_rounding_mode (
-                               args (0).array_value ());
-  NDArray           vector1  = args (1).array_value ();
-  NDArray           vector2  = args (2).array_value ();
+  NDArray vector_xl = args (0).array_value ();
+  NDArray vector_yl = args (1).array_value ();
+  NDArray vector_xu = args (2).array_value ();
+  NDArray vector_yu = args (3).array_value ();
   if (error_state)
     return octave_value_list ();
   
-  if (vector1.numel () == 1 && vector2.numel () != 1)
-    // Broadcast vector 1
-    vector1.resize (vector2.dims (), vector1.elem (0));
-  else if (vector2.numel () == 1 && vector1.numel () != 1)
-    // Broadcase vector 2
-    vector2.resize (vector1.dims (), vector2.elem (0));
+  if (vector_xl.numel () == 1 && vector_yl.numel () != 1)
+    {
+      // Broadcast vector x
+      vector_xl.resize (vector_yl.dims (), vector_xl.elem (0));
+      vector_xu.resize (vector_yl.dims (), vector_xu.elem (0));
+    }
+  else if (vector_yl.numel () == 1 && vector_xl.numel () != 1)
+    {
+      // Broadcast vector y
+      vector_yl.resize (vector_xl.dims (), vector_yl.elem (0));
+      vector_yu.resize (vector_xl.dims (), vector_yu.elem (0));
+    }
   
   // Prepare parameters for mpfr_sum function
-  const unsigned int n = vector1.numel ();
-  mpfr_t* mp_addend = new mpfr_t [n];
-  mpfr_ptr* mp_addend_ptr = new mpfr_ptr [n];
+  const unsigned int n = vector_xl.numel ();
+  mpfr_t* mp_addend_l = new mpfr_t [n];
+  mpfr_t* mp_addend_u = new mpfr_t [n];
+  mpfr_ptr* mp_addend_l_ptr = new mpfr_ptr [n];
+  mpfr_ptr* mp_addend_u_ptr = new mpfr_ptr [n];
+  mpfr_t mp_temp; // temporary mp number for comparison of two products
+  mpfr_init2 (mp_temp, 2 * DOUBLE_PRECISION + 1);
   for (int i = 0; i < n; i++)
     {
-      mp_addend_ptr [i] = mp_addend [i];
-      // Both factors can be multiplied within 107 bits
-      mpfr_init2 (mp_addend [i], 2 * DOUBLE_PRECISION + 1);
-      mpfr_set_d (mp_addend [i], vector1.elem (i), rnd);
-      mpfr_mul_d (mp_addend [i], mp_addend [i], vector2.elem (i), rnd);
+      mp_addend_l_ptr [i] = mp_addend_l [i];
+      mp_addend_u_ptr [i] = mp_addend_u [i];
+      
+      // Both factors can be multiplied within 107 bits exactly!
+      mpfr_init2 (mp_addend_l [i], 2 * DOUBLE_PRECISION + 1);
+      mpfr_set_d (mp_addend_l [i], vector_xl.elem (i), MPFR_RNDN);
+      mpfr_mul_d (mp_addend_l [i], mp_addend_l [i],
+                                   vector_yl.elem (i), MPFR_RNDN);
+                                   
+      mpfr_init2 (mp_addend_u [i], 2 * DOUBLE_PRECISION + 1);
+      mpfr_set (mp_addend_u [i], mp_addend_l [i], MPFR_RNDN);
+      
+      // We have to compute the remaining 3 Products and determine min/max
+      mpfr_set_d (mp_temp, vector_xl.elem (i), MPFR_RNDN);
+      mpfr_mul_d (mp_temp, mp_temp, vector_yu.elem (i), MPFR_RNDN);
+      mpfr_min (mp_addend_l [i], mp_addend_l [i], mp_temp, MPFR_RNDN);
+      mpfr_max (mp_addend_u [i], mp_addend_u [i], mp_temp, MPFR_RNDN);
+      
+      mpfr_set_d (mp_temp, vector_xu.elem (i), MPFR_RNDN);
+      mpfr_mul_d (mp_temp, mp_temp, vector_yl.elem (i), MPFR_RNDN);
+      mpfr_min (mp_addend_l [i], mp_addend_l [i], mp_temp, MPFR_RNDN);
+      mpfr_max (mp_addend_u [i], mp_addend_u [i], mp_temp, MPFR_RNDN);
+      
+      mpfr_set_d (mp_temp, vector_xu.elem (i), MPFR_RNDN);
+      mpfr_mul_d (mp_temp, mp_temp, vector_yu.elem (i), MPFR_RNDN);
+      mpfr_min (mp_addend_l [i], mp_addend_l [i], mp_temp, MPFR_RNDN);
+      mpfr_max (mp_addend_u [i], mp_addend_u [i], mp_temp, MPFR_RNDN);
     }
+  mpfr_clear (mp_temp);
 
-  // Compute sum
+  // Compute sums
   mpfr_t sum;
   mpfr_init2 (sum, DOUBLE_PRECISION);
-  mpfr_sum (sum, mp_addend_ptr, n, rnd);
-  const double result = mpfr_get_d (sum, rnd);
+  mpfr_sum (sum, mp_addend_l_ptr, n, MPFR_RNDD);
+  octave_value_list result;
+  result (0) = mpfr_get_d (sum, MPFR_RNDD);
+  mpfr_sum (sum, mp_addend_u_ptr, n, MPFR_RNDU);
+  result (1) = mpfr_get_d (sum, MPFR_RNDU);
 
   // Cleanup
   mpfr_clear (sum);
   for (int i = 0; i < n; i++)
-    mpfr_clear (mp_addend [i]);
-  delete[] mp_addend_ptr;
-  delete[] mp_addend;
+    {
+      mpfr_clear (mp_addend_l [i]);
+      mpfr_clear (mp_addend_u [i]);
+    }
+  delete[] mp_addend_l_ptr;
+  delete[] mp_addend_u_ptr;
+  delete[] mp_addend_l;
+  delete[] mp_addend_u;
   
-  return octave_value (result);
+  return result;
 }

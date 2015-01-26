@@ -56,63 +56,61 @@ if (not (isa (z, "infsup")))
     z = infsup (z);
 endif
 
-assert (isscalar (x) && isscalar (y) && isscalar (z), ...
-        "only implemented for interval scalars");
-
-if (isempty (x) || isempty (y) || isempty (z))
-    result = infsup ();
-    return
+## Resize, if scalar × matrix
+if (isscalar (x.inf) ~= isscalar (y.inf))
+    x.inf = ones (size (y.inf)) .* x.inf;
+    x.sup = ones (size (y.inf)) .* x.sup;
+    y.inf = ones (size (x.inf)) .* y.inf;
+    y.sup = ones (size (x.inf)) .* y.sup;
+endif
+if (isscalar (y.inf) ~= isscalar (z.inf))
+    y.inf = ones (size (z.inf)) .* y.inf;
+    y.sup = ones (size (z.inf)) .* y.sup;
+    z.inf = ones (size (y.inf)) .* z.inf;
+    z.sup = ones (size (y.inf)) .* z.sup;
+endif
+if (isscalar (x.inf) ~= isscalar (z.inf))
+    x.inf = ones (size (z.inf)) .* x.inf;
+    x.sup = ones (size (z.inf)) .* x.sup;
+    z.inf = ones (size (x.inf)) .* z.inf;
+    z.sup = ones (size (x.inf)) .* z.sup;
 endif
 
-if ((x.inf == 0 && x.sup == 0) || ...
-    (y.inf == 0 && y.sup == 0))
-    result = infsup (z.inf, z.sup);
-    return
-endif
+## [Empty] × anything = [Empty]
+## [0] × anything = [0] × [0]
+## [Entire] × anything but [0] = [Entire] × [Entire]
+## This prevents the cases where 0 × inf would produce NaNs.
+entireproduct = isentire (x) | isentire (y);
+zeroproduct = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
+emptyresult = isempty (x) | isempty (y) | isempty (z);
+x.inf (entireproduct) = y.inf (entireproduct) = -inf;
+x.sup (entireproduct) = y.sup (entireproduct) = inf;
+x.inf (zeroproduct) = x.sup (zeroproduct) = ...
+    y.inf (zeroproduct) = y.sup (zeroproduct) = 0;
 
-if (isentire (x) || isentire (y) || isentire (z))
-    result = infsup (-inf, inf);
-    return
-endif
+## It is hard to determine, which boundaries of x and y take part in the
+## multiplication of fma.  Therefore, we simply compute the fma for each triple
+## of boundaries where the min/max could be located.
+##
+## How to construct complicated cases: a = rand, b = rand, c = rand,
+## d = a * b / c (with round towards -infinity for multiplication and towards
+## +infinity for division).  Then, it is not possible to decide in 50% of all
+## cases whether a * b would be greater or less than c * d by computing the
+## products in double-precision.
 
-if (y.sup <= 0)
-    if (x.sup <= 0)
-        l = mpfr_function_d ('fma', -inf, x.sup, y.sup, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup);
-    elseif (x.inf >= 0)
-        l = mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.inf, y.sup, z.sup);
-    else
-        l = mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup);
-    endif
-elseif (y.inf >= 0)
-    if (x.sup <= 0)
-        l = mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.sup, y.inf, z.sup);
-    elseif (x.inf >= 0)
-        l = mpfr_function_d ('fma', -inf, x.inf, y.inf, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup);
-    else
-        l = mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup);
-    endif
-else
-    if (x.sup <= 0)
-        l = mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup);
-    elseif (x.inf >= 0)
-        l = mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf);
-        u = mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup);
-    else
-        l = min (...
-            mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf), ...
-            mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf));
-        u = max (...
-            mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup), ...
-            mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup));
-    endif
-endif
+l = min (min (min (...
+         mpfr_function_d ('fma', -inf, x.inf, y.inf, z.inf), ...
+         mpfr_function_d ('fma', -inf, x.inf, y.sup, z.inf)), ...
+         mpfr_function_d ('fma', -inf, x.sup, y.inf, z.inf)), ...
+         mpfr_function_d ('fma', -inf, x.sup, y.sup, z.inf));
+u = max (max (max (...
+         mpfr_function_d ('fma', +inf, x.inf, y.inf, z.sup), ...
+         mpfr_function_d ('fma', +inf, x.inf, y.sup, z.sup)), ...
+         mpfr_function_d ('fma', +inf, x.sup, y.inf, z.sup)), ...
+         mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup));
+
+l (emptyresult) = +inf;
+u (emptyresult) = -inf;
 
 result = infsup (l, u);
 

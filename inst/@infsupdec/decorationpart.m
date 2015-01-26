@@ -31,6 +31,11 @@
 
 function dec = decorationpart (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 dec = x.dec;
 
 endfunction

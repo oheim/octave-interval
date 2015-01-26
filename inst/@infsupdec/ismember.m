@@ -37,6 +37,7 @@ if (nargin ~= 2)
     print_usage ();
     return
 endif
+
 if (not (isa (interval, "infsupdec")))
     interval = infsupdec (interval);
 endif

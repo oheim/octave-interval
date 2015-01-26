@@ -30,6 +30,11 @@
 
 function result = ndims (a)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = ndims (a.inf);
 
 endfunction

@@ -36,6 +36,11 @@
 
 function result = cos (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 l = u = sinsignl = sinsignu = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than 2*pi. This can save the
@@ -71,9 +76,6 @@ l (containsinf) = -1;
 containssup = possiblynotfullperiod & ((sinsignl == 1 & sinsignu == -1) | ...
                                        (sinsignl == sinsignu & width > 4));
 u (containssup) = 1;
-
-## cos (0) == 1
-l (x.inf == 0 & x.sup == 0) = 1;
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;

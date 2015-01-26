@@ -38,6 +38,11 @@
 
 function result = times (x, y)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 if (nargin ~= 2)
     print_usage ();
     return

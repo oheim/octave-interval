@@ -27,6 +27,11 @@
 
 function result = numel (a)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = numel (a.inf);
 
 endfunction

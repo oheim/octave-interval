@@ -38,6 +38,11 @@
 
 function result = sumabs (x, dim)
 
+if (nargin > 2)
+    print_usage ();
+    return
+endif
+
 if (nargin < 2)
     result = sum (abs (x));
 else

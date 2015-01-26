@@ -36,13 +36,14 @@
 
 function result = tanh (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+## tanh is monotonically increasing from (-inf, -1) to (inf, 1)
 l = mpfr_function_d ('tanh', -inf, x.inf);
 u = mpfr_function_d ('tanh', +inf, x.sup);
-
-nonnegative = x.inf >= 0;
-l (nonnegative) = max (0, l (nonnegative));
-nonpositive = x.sup <= 0;
-u (nonpositive) = min (0, u (nonpositive));
 
 emptyresult = isempty (x);
 l (emptyresult) = inf;

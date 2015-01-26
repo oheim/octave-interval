@@ -37,6 +37,11 @@
 
 function result = coshrev (c, x)
 
+if (nargin > 2)
+    print_usage ();
+    return
+endif
+
 if (nargin < 2)
     x = infsupdec (-inf, inf);
 endif

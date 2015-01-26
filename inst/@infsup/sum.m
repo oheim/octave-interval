@@ -40,6 +40,11 @@
 
 function result = sum (x, dim)
 
+if (nargin > 2)
+    print_usage ();
+    return
+endif
+
 if (nargin < 2)
     ## Try to find non-singleton dimension
     dim = find (size (x.inf) > 1, 1);
@@ -71,7 +76,7 @@ for n = 1 : numel (l)
         vector.x = subsref (x, idx);
     endif
     
-    if (max (isempty (vector.x)))
+    if (any (isempty (vector.x)))
         ## One of the intervals is empty
         l (n) = inf;
         u (n) = -inf;

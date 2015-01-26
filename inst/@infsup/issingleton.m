@@ -30,6 +30,11 @@
 
 function result = issingleton (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 ## This check also works for empty intervals (-inf ~= +inf)
 result = (x.inf == x.sup);
 return

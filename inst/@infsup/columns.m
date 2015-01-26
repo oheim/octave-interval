@@ -27,6 +27,11 @@
 
 function result = columns (a)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = columns (a.inf);
 
 endfunction

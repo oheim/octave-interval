@@ -45,10 +45,11 @@
 
 function result = dot (x, y, dim)
 
-if (nargin < 2)
+if (nargin < 2 || nargin > 3)
     print_usage ();
     return
 endif
+
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
@@ -72,9 +73,8 @@ if (nargin < 3)
     endif
 endif
 
-## Empty input -> empty result
+## null matrix input -> null matrix output
 if (isempty (x.inf) || isempty (y.inf))
-    isexact = true ();
     result = infsup (zeros (min (size (x.inf), size (y.inf))));
     return
 endif
@@ -111,13 +111,7 @@ for n = 1 : numel (l)
         vector.y = subsref (y, idx);
     endif
     
-    if (max (isempty (vector.x)) || max (isempty (vector.y)))
-        ## One of the intervals is empty
-        l (n) = inf;
-        u (n) = -inf;
-    else
-        [l(n), u(n)] = vectordot (vector.x, vector.y);
-    endif
+    [l(n), u(n)] = vectordot (vector.x, vector.y);
 endfor
 
 result = infsup (l, u);
@@ -125,8 +119,15 @@ result = infsup (l, u);
 endfunction
 
 ## Dot product of two interval vectors; or one vector and one scalar.
-## Accuracy is tightest. No interval must be empty.
+## Accuracy is tightest.
 function [l, u] = vectordot (x, y)
+
+if (any (isempty (x)) || any (isempty (y)))
+    ## Short-circuit: result is [Empty]
+    l = inf;
+    u = -inf;
+    return
+endif
 
 if (isscalar (x.inf) && isscalar (y.inf))
     ## Short-circuit: scalar × scalar
@@ -136,16 +137,13 @@ if (isscalar (x.inf) && isscalar (y.inf))
     return
 endif
 
-## Resize, if scalar × vector
-if (isscalar (x.inf) || isscalar (y.inf))
+## Resize, if scalar × matrix
+if (isscalar (x.inf) ~= isscalar (y.inf))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
     y.inf = ones (size (x.inf)) .* y.inf;
     y.sup = ones (size (x.inf)) .* y.sup;
 endif
-
-x = vec (x);
-y = vec (y);
 
 ## [0] × anything = [0] × [0]
 ## [Entire] × anything but [0] = [Entire] × [Entire]
@@ -157,76 +155,7 @@ x.sup (entireproduct) = y.sup (entireproduct) = inf;
 x.inf (zeroproduct) = x.sup (zeroproduct) = ...
     y.inf (zeroproduct) = y.sup (zeroproduct) = 0;
 
-## Partitionize the vectors, the interval dot product can be computed within
-## each partition using BLAS routines on the interval boundaries with directed
-## rounding.
-## (cf. the times function on intervals)
-q1 = y.sup <= 0 & x.sup <= 0;
-q2 = y.sup <= 0 & x.inf >= 0 & x.sup > 0;
-q3 = y.sup <= 0 & x.inf < 0 & x.sup > 0;
-q4 = y.inf >= 0 & y.sup > 0 & x.sup <= 0;
-q5 = y.inf >= 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
-q6 = y.inf >= 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
-q7 = y.inf < 0 & y.sup > 0 & x.sup <= 0;
-q8 = y.inf < 0 & y.sup > 0 & x.inf >= 0 & x.sup > 0;
-q9 = y.inf < 0 & y.sup > 0 & x.inf < 0 & x.sup > 0;
-a = b = zeros (size (x.inf));
-## FIXME compare product size with higher accuracy?
-a (q9) = mpfr_function_d ('times', .5, x.inf (q9), y.sup (q9));
-b (q9) = mpfr_function_d ('times', .5, x.sup (q9), y.inf (q9));
-q9_1 = q9 & (a <= b);
-q9_2 = q9 & (a > b);
-
-## Prepare Factors for dot product of lower boundary
-l1 = x.inf;
-l2 = y.inf;
-l1 (q1) = x.sup (q1);
-l2 (q1) = y.sup (q1);
-l1 (q2) = x.sup (q2);
-#l2 (q2) = y.inf (q2);
-l1 (q3) = x.sup (q3);
-#l2 (q3) = y.inf (q3);
-#l1 (q4) = x.inf (q4);
-l2 (q4) = y.sup (q4);
-#l1 (q5) = x.inf (q5);
-#l2 (q5) = y.inf (q5);
-#l1 (q6) = x.inf (q6);
-l2 (q6) = y.sup (q6);
-#l1 (q7) = x.inf (q7);
-l2 (q7) = y.sup (q7);
-l1 (q8) = x.sup (q8);
-#l2 (q8) = y.inf (q8);
-#l1 (q9_1) = x.inf (q9_1);
-l2 (q9_1) = y.sup (q9_1);
-l1 (q9_2) = x.sup (q9_2);
-#l2 (q9_2) = y.inf (q9_2);
-
-## Prepare Factors for dot product of upper boundary
-u1 = x.inf;
-u2 = y.inf;
-#u1 (q1) = x.inf (q1);
-#u2 (q1) = y.inf (q1);
-#u1 (q2) = x.inf (q2);
-u2 (q2) = y.sup (q2);
-#u1 (q3) = x.inf (q3);
-#u2 (q3) = y.inf (q3);
-u1 (q4) = x.sup (q4);
-#u2 (q4) = y.inf (q4);
-u1 (q5) = x.sup (q5);
-u2 (q5) = y.sup (q5);
-u1 (q6) = x.sup (q6);
-u2 (q6) = y.sup (q6);
-#u1 (q7) = x.inf (q7);
-#u2 (q7) = y.inf (q7);
-u1 (q8) = x.sup (q8);
-u2 (q8) = y.sup (q8);
-u1 (q9_1) = x.sup (q9_1);
-u2 (q9_1) = y.sup (q9_1);
-#u1 (q9_2) = x.inf (q9_2);
-#u2 (q9_2) = y.inf (q9_2);
-
-l = mpfr_vector_dot_d (-inf, l1, l2);
-u = mpfr_vector_dot_d (+inf, u1, u2);
+[l, u] = mpfr_vector_dot_d (x.inf, y.inf, x.sup, y.sup);
 
 endfunction
 

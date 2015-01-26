@@ -38,6 +38,11 @@
 
 function result = sumsquare (x, dim)
 
+if (nargin > 2)
+    print_usage ();
+    return
+endif
+
 x = abs (x);
 if (nargin < 2)
     result = dot (x, x);

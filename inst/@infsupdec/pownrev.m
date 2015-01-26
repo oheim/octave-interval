@@ -33,10 +33,11 @@
 
 function result = pownrev (c, x, p)
 
-if (nargin < 2)
+if (nargin < 2 || nargin > 3)
     print_usage ();
     return
 endif
+
 if (nargin < 3)
     p = x;
     x = infsupdec (-inf, inf);

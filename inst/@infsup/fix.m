@@ -39,6 +39,11 @@
 
 function result = fix (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 result = infsup (fix (x.inf), fix (x.sup));
 
 endfunction

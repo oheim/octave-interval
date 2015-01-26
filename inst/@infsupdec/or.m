@@ -36,12 +36,13 @@
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = or(a, b)
+function result = or (a, b)
 
 if (nargin ~= 2)
     print_usage ();
     return
 endif
+
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif

@@ -36,13 +36,14 @@
 
 function result = nextout (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 delta = pow2 (-1074);
 l = mpfr_function_d ('minus', -inf, x.inf, delta);
 u = mpfr_function_d ('plus',  +inf, x.sup, delta);
-
-emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
 
 result = infsup (l, u);
 

@@ -41,6 +41,11 @@
 
 function result = rad (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 m = mid (x);
 ## The midpoint is rounded to nearest and the radius must cover both boundaries
 r1 = mpfr_function_d ('minus', +inf, m, x.inf);

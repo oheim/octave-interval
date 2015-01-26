@@ -91,7 +91,6 @@ for i = 1 : n
     ## Use first possible column
     possiblecolumns = columnrating == min (columnrating);
     column = find (possiblecolumns, 1);
-    assert (not (isempty (column)));
     
     if (columnrating (column) >= 1)
         ## Greedy: Use only intervals that do not contain zero.
@@ -121,9 +120,8 @@ for i = 1 : n
         rowrating (not (possiblerows)) = inf;
         row = find (rowrating == min (rowrating), 1);
     endif
-    assert (not (isempty (row)));
     
-    assert (0 <= migU (row, column) && migU (row, column) < inf);
+    # assert (0 <= migU (row, column) && migU (row, column) < inf);
 
     P (row, column) = 1;
     

@@ -1,9 +1,20 @@
 x.y.z xxxx-xx-xx
 ================
 
+ * Increased speed of computation for large matrices
+ 
+ * Improved performance for fma and dot
+ 
+ * mpfr_vector_dot_d: Changed syntax for faster computation on intervals
+
 Bugfixes
  * nextout: Function returned wrong results
-
+ * exacttointerval: Now produces bare intervals instead of decorated intervals
+                    in conformance with IEEE 1788
+ * atanh: Function returned wrong results for +-1
+ * dot: Function returned wrong results for some inputs
+ * fma: Function returned wrong results for some inputs
+ * infsup: Function returned wrong interval boundaries for decimal numbers
 
 0.1.0 2015-01-21
 ================

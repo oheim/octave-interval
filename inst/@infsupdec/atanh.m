@@ -36,6 +36,11 @@
 
 function result = atanh (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 if (isnai (x))
     result = x;
     return
@@ -43,7 +48,7 @@ endif
 
 result = infsupdec (atanh (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
-## atanh is continuous everywhere, but defined for [-1, 1] only
-result.dec (not (subset (x, infsup (-1, 1)))) = "trv";
+## atanh is continuous everywhere, but defined for ]-1, 1[ only
+result.dec (not (interior (x, infsup (-1, 1)))) = "trv";
 
 endfunction

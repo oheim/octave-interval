@@ -28,6 +28,11 @@
 
 function bare = intervalpart (x)
 
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
 if (isnai (x))
     error ("IntvlPartOfNaI: NaI has no interval part")
 endif
