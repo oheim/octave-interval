@@ -169,7 +169,18 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "rounding direction (0: towards zero, 0.5 towards nearest and ties to even, "
   "inf towards positive infinity, -inf towards negative infinity.  "
   "Parameters 3 and (possibly) 4 and 5 are operands to the function."
-  "\n"
+  "\n\n"
+  "Evaluated on matrices, the function will be applied element-wise.  Scalar "
+  "operands do broadcast for functions with more than one operand."
+  "\n\n"
+  "@example\n"
+  "@group\n"
+  "mpfr_function_d ('plus', -inf, 1, eps / 2) == 1\n"
+  "  @result{} 1\n"
+  "mpfr_function_d ('plus', +inf, 1, eps / 2) == 1 + eps\n"
+  "  @result{} 1\n"
+  "@end group\n"
+  "@end example\n"
   "@seealso{fesetround}\n"
   "@end deftypefn"
   )
@@ -183,16 +194,16 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     }
   
   // Read parameters
-  const std::string function = args(0).string_value ();
+  const std::string function = args (0).string_value ();
   const mpfr_rnd_t  rnd      = parse_rounding_mode (
-                               args(1).array_value ());
-  NDArray           arg1     = args(2).array_value ();
+                               args (1).array_value ());
+  NDArray           arg1     = args (2).array_value ();
   NDArray           arg2;
   NDArray           arg3;
   if (nargin >= 4)
-    arg2                     = args(3).array_value ();
+    arg2                     = args (3).array_value ();
   if (nargin >= 5)
-    arg3                     = args(4).array_value ();
+    arg3                     = args (4).array_value ();
   if (error_state)
     return octave_value_list ();
   
