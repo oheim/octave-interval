@@ -103,11 +103,10 @@ if (nargin == 1)
     if (iscell (l))
         ## Parse interval literals
         c = lower (l);
-        l = cell (size (c));
         u = cell (size (c));
         
-        for i = 1 : numel (c)
-            if (ischar (c {i}) && not (isempty (c {i})) && ...
+        for i = 1 : numel (l)
+            if (ischar (l {i}) && not (isempty (c {i})) && ...
                 c {i} ([1, end]) == "[]")
                 ## Strip square brackets and whitespace
                 nobrackets = strtrim (c {i} (2 : (end-1)));
@@ -130,7 +129,7 @@ if (nargin == 1)
                                 error ("interval literal is not in inf-sup form")
                         endswitch
                 endswitch
-            elseif (ischar (c {i}) && strfind (c {i}, "?"))
+            elseif (ischar (l {i}) && strfind (c {i}, "?"))
                 ## Uncertain form: At this point we only split lower and upper
                 ## boundary and remove the ??. ULP arithmetic is performed
                 ## below when parsing the decimal number.
@@ -158,7 +157,7 @@ if (nargin == 1)
                 endif
             else
                 ## syntax infsup (x) has to be equivalent with infsup (x, x)
-                l {i} = u {i} = c {i};
+                u {i} = l {i};
             endif
         endfor
     else # not cell or char
@@ -428,3 +427,88 @@ endif
 
 x = class (x, "infsup");
 endfunction
+
+%!test "double boundaries";
+%!  assert (inf (infsup (0)), 0);
+%!  assert (sup (infsup (0)), 0);
+%!  assert (inf (infsup (2, 3)), 2);
+%!  assert (sup (infsup (2, 3)), 3);
+%!test "double matrix";
+%!  assert (inf (infsup (magic (4))), magic (4));
+%!  assert (sup (infsup (magic (4))), magic (4));
+%!  assert (inf (infsup (magic (3), magic (3) + 1)), magic (3));
+%!  assert (sup (infsup (magic (3), magic (3) + 1)), magic (3) + 1);
+%!test "decimal boundaries";
+%!  assert (inf (infsup ("0.1")), 0.1 - eps / 16);
+%!  assert (sup (infsup ("0.1")), 0.1);
+%!  assert (inf (infsup ("0.1e1")), 1);
+%!  assert (sup (infsup ("0.1e1")), 1);
+%!test "hexadecimal boundaries";
+%!  assert (inf (infsup ("0xff")), 255);
+%!  assert (sup (infsup ("0xff")), 255);
+%!  assert (inf (infsup ("0xff.1")), 255.0625);
+%!  assert (sup (infsup ("0xff.1")), 255.0625);
+%!  assert (inf (infsup ("0xff.1p-1")), 127.53125);
+%!  assert (sup (infsup ("0xff.1p-1")), 127.53125);
+%!test "named constants";
+%!  assert (inf (infsup ("pi")), pi);
+%!  assert (sup (infsup ("pi")), pi + 2 * eps);
+%!  assert (inf (infsup ("e")), e);
+%!  assert (sup (infsup ("e")), e + eps);
+%!test "uncertain form";
+%!  assert (inf (infsup ("32?")), 31.5);
+%!  assert (sup (infsup ("32?")), 32.5);
+%!  assert (inf (infsup ("32?8")), 24);
+%!  assert (sup (infsup ("32?8")), 40);
+%!  assert (inf (infsup ("32?u")), 32);
+%!  assert (sup (infsup ("32?u")), 32.5);
+%!  assert (inf (infsup ("32?d")), 31.5);
+%!  assert (sup (infsup ("32?d")), 32);
+%!  assert (inf (infsup ("32??")), -inf);
+%!  assert (sup (infsup ("32??")), +inf);
+%!  assert (inf (infsup ("32??d")), -inf);
+%!  assert (sup (infsup ("32??d")), 32);
+%!  assert (inf (infsup ("32??u")), 32);
+%!  assert (sup (infsup ("32??u")), +inf);
+%!  assert (inf (infsup ("32?e5")), 3150000);
+%!  assert (sup (infsup ("32?e5")), 3250000);
+%!test "rational form";
+%!  assert (inf (infsup ("6/9")), 2 / 3);
+%!  assert (sup (infsup ("6/9")), 2 / 3 + eps / 2);
+%!  assert (inf (infsup ("6e1/9")), 20 / 3 - eps * 2);
+%!  assert (sup (infsup ("6e1/9")), 20 / 3);
+%!  assert (inf (infsup ("6/9e1")), 2 / 30);
+%!  assert (sup (infsup ("6/9e1")), 2 / 30 + eps / 16);
+%!  assert (inf (infsup ("-6/9")), -(2 / 3 + eps / 2));
+%!  assert (sup (infsup ("-6/9")), -2 / 3);
+%!  assert (inf (infsup ("6/-9")), -(2 / 3 + eps / 2));
+%!  assert (sup (infsup ("6/-9")), -2 / 3);
+%!  assert (inf (infsup ("-6/-9")), 2 / 3);
+%!  assert (sup (infsup ("-6/-9")), 2 / 3 + eps / 2);
+%!  assert (inf (infsup ("6.6/9.9")), 2 / 3);
+%!  assert (sup (infsup ("6.6/9.9")), 2 / 3 + eps / 2);
+%!test "interval literal";
+%!  assert (inf (infsup ("[Entire]")), -inf);
+%!  assert (sup (infsup ("[Entire]")), +inf);
+%!  assert (inf (infsup ("[Empty]")), +inf);
+%!  assert (sup (infsup ("[Empty]")), -inf);
+%!  assert (inf (infsup ("[2, 3]")), 2);
+%!  assert (sup (infsup ("[2, 3]")), 3);
+%!  assert (inf (infsup ("[0.1]")), 0.1 - eps / 16);
+%!  assert (sup (infsup ("[0.1]")), 0.1);
+%!  assert (inf (infsup ("[0xff, 0xff.1]")), 255);
+%!  assert (sup (infsup ("[0xff, 0xff.1]")), 255.0625);
+%!  assert (inf (infsup ("[e, pi]")), e);
+%!  assert (sup (infsup ("[e, pi]")), pi + 2 * eps);
+%!  assert (inf (infsup ("[6/9, 6e1/9]")), 2 / 3);
+%!  assert (sup (infsup ("[6/9, 6e1/9]")), 20 / 3);
+%!test "decimal vector";
+%!  assert (inf (infsup (["0.1"; "0.2"; "0.3"])), [0.1 - eps / 16; 0.2 - eps / 8; 0.3]);
+%!  assert (sup (infsup (["0.1"; "0.2"; "0.3"])), [0.1; 0.2; 0.3 + eps / 8]);
+%!test "cell array with mixed boundaries";
+%!  assert (inf (infsup ({"0.1", 42; "e", "3.2/8"}, {"0xffp2", "42e1"; "pi", 2})), [0.1 - eps / 16, 42; e, 0.4 - eps / 4]);
+%!  assert (sup (infsup ({"0.1", 42; "e", "3.2/8"}, {"0xffp2", "42e1"; "pi", 2})), [1020, 420; pi + 2 * eps, 2]);
+%!  assert (inf (infsup ({"[2, 3]", "3/4", "[Entire]", "42?3", 1, "0xf"})), [2, 0.75, -inf, 39, 1, 15]);
+%!  assert (sup (infsup ({"[2, 3]", "3/4", "[Entire]", "42?3", 1, "0xf"})), [3, 0.75, +inf, 45, 1, 15]);
+%!error infsup (3, 2);
+%!error infsup ("Ausgeschnitzel");

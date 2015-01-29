@@ -14,7 +14,9 @@ Bugfixes
  * atanh: Function returned wrong results for +-1
  * dot: Function returned wrong results for some inputs
  * fma: Function returned wrong results for some inputs
- * infsup: Function returned wrong interval boundaries for decimal numbers
+ * infsup: Function returned wrong interval boundaries for decimal numbers,
+           function failed on mixed numerical and string boundaries in single
+           cell array parameter
 
 0.1.0 2015-01-21
 ================

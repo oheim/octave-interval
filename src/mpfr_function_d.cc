@@ -272,4 +272,5 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
 %!assert (mpfr_function_d ('plus', 0, 2, 2), 4);
 %!assert (mpfr_function_d ('plus', -inf, 1, eps / 2), 1);
 %!assert (mpfr_function_d ('plus', +inf, 1, eps / 2), 1 + eps);
+%!error mpfr_function_d ('Krauskefarben', 0, 47, 11);
 */
