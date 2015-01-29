@@ -137,3 +137,20 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
   
   return result;
 }
+
+/*
+%!test;
+%!  [l, u] = mpfr_vector_dot_d (-1, -1, 2, 3);
+%!  assert (l, -3);
+%!  assert (u, 6);
+%!test;
+%!  x = [realmax, realmax, -realmax, -realmax, 1, eps/2];
+%!  y = ones (size (x));
+%!  [l, u] = mpfr_vector_dot_d (x, y, x, y);
+%!  assert (l, 1);
+%!  assert (u, 1 + eps);
+%!test;
+%!  [l, u] = mpfr_vector_dot_d (0, 0, inf, inf);
+%!  assert (l, 0);
+%!  assert (u, inf);
+*/

@@ -267,3 +267,9 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
 
   return octave_value (arg1);
 }
+
+/*
+%!assert (mpfr_function_d ('plus', 0, 2, 2), 4);
+%!assert (mpfr_function_d ('plus', -inf, 1, eps / 2), 1);
+%!assert (mpfr_function_d ('plus', +inf, 1, eps / 2), 1 + eps);
+*/

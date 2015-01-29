@@ -21,7 +21,7 @@
 #define DOUBLE_PRECISION 53
 
 mpfr_rnd_t parse_rounding_mode (const NDArray octave_rounding_direction)
-  {
+{
   // Use rounding mode semantics from the GNU Octave fenv package
   mpfr_rnd_t mp_rnd;
   if (octave_rounding_direction.elem (0) == INFINITY)

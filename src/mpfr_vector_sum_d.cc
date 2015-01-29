@@ -84,3 +84,9 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
   
   return octave_value (result);
 }
+
+/*
+%!assert (mpfr_vector_sum_d (0, [eps, realmax, realmax, -realmax, -realmax]), eps)
+%!assert (mpfr_vector_sum_d (-inf, [eps/2, 1]), 1)
+%!assert (mpfr_vector_sum_d (+inf, [eps/2, 1]), 1 + eps)
+*/
