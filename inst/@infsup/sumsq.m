@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} sumsquare (@var{X})
-## @deftypefnx {Function File} {} sumsquare (@var{X}, @var{DIM})
+## @deftypefn {Function File} {} sumsq (@var{X})
+## @deftypefnx {Function File} {} sumsq (@var{X}, @var{DIM})
 ## 
 ## Sum of squares along dimension @var{DIM}.  If @var{DIM} is omitted,
 ## it defaults to the first non-singleton dimension.
@@ -26,7 +26,7 @@
 ##
 ## @example
 ## @group
-## sumsquare ([infsup(1), pow2(-1074), -1])
+## sumsq ([infsup(1), pow2(-1074), -1])
 ##   @result{} [2, 2.0000000000000005]
 ## @end group
 ## @end example
@@ -37,7 +37,7 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function result = sumsquare (x, dim)
+function result = sumsq (x, dim)
 
 if (nargin > 2)
     print_usage ();

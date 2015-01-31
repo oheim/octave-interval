@@ -9,6 +9,9 @@ x.y.z xxxx-xx-xx
 
  * Decorated versions of mtimes, mldivide, mpower, inv and reduction
    operations: sum, dot, subabs, subsquare
+ 
+ * Renamed function sumsquare to sumsq in accordance with GNU Octave function
+   names
 
 Bugfixes
  * nextout: Function returned wrong results

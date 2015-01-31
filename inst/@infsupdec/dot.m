@@ -37,7 +37,7 @@
 ##   @result{} [-2.2250738585072014e-308, -2.2250738585072013e-308]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/plus, @@infsupdec/sum, @@infsupdec/times, @@infsupdec/sumabs, @@infsupdec/sumsquare}
+## @seealso{@@infsupdec/plus, @@infsupdec/sum, @@infsupdec/times}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
