@@ -21,7 +21,8 @@
 ## Sum of absolute values along dimension @var{DIM}.  If @var{DIM} is omitted,
 ## it defaults to the first non-singleton dimension.
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a nearly tight enclosure (within about 1.5 ULPs of
+## the exact result).
 ##
 ## @example
 ## @group

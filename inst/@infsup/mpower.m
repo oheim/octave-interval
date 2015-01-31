@@ -26,7 +26,8 @@
 ## Warning: This function is not defined by IEEE 1788.
 ##
 ## Accuracy: The result is a valid enclosure.  The result is tightest for
-## @var{Y} in @{0, 1, 2@}.
+## @var{Y} in @{0, 1@} and nearly tightest for @var{Y} = 2 (within 1.5 ULPs of
+## the exact result).
 ##
 ## @example
 ## @group
