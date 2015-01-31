@@ -67,7 +67,7 @@ if (nargin < 3)
         y.sup = vec (y.sup, dim);
     else
         ## Try to find non-singleton dimension
-        dim = find (max (size (x.inf), size (y.inf)) > 1, 1);
+        dim = find (any (size (x.inf), size (y.inf)) > 1, 1);
         if (isempty (dim))
             dim = 1;
         endif

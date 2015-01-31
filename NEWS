@@ -7,6 +7,9 @@ x.y.z xxxx-xx-xx
  
  * mpfr_vector_dot_d: Changed syntax for faster computation on intervals
 
+ * Decorated versions of mtimes, mldivide, mpower, inv and reduction
+   operations: sum, dot, subabs, subsquare
+
 Bugfixes
  * nextout: Function returned wrong results
  * exacttointerval: Now produces bare intervals instead of decorated intervals
