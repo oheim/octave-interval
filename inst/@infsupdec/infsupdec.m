@@ -209,11 +209,11 @@ superiorto ("infsup");
 
 endfunction
 
-%!test "[NaI]s";
-%!  assert (isnai (infsupdec (3, 2)));
-%!  assert (isnai (infsupdec ("Flugeldufel")));
-%!  assert (isnai (infsupdec (-inf, inf, "com")));
-%!  assert (isnai (infsupdec (inf, -inf, "def")));
+%!# [NaI]s
+%!warning assert (isnai (infsupdec (3, 2)));
+%!warning assert (isnai (infsupdec ("Flugeldufel")));
+%!warning assert (isnai (infsupdec (-inf, inf, "com")));
+%!warning assert (isnai (infsupdec (inf, -inf, "def")));
 %!test "decorated interval literal";
 %!  assert (inf (infsupdec ("[2, 3]_def")), 2);
 %!  assert (sup (infsupdec ("[2, 3]_def")), 3);
