@@ -23,6 +23,7 @@ Bugfixes
  * infsup: Function returned wrong interval boundaries for decimal numbers,
            function failed on mixed numerical and string boundaries in single
            cell array parameter
+ * mulrevtopair: Fixed order of operands in conformance with IEEE 1788
 
 0.1.0 2015-01-21
 ================

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {[@var{U}, @var{V}] =} mulrevtopair (@var{X}, @var{Y})
+## @deftypefn {Function File} {[@var{U}, @var{V}] =} mulrevtopair (@var{Y}, @var{X})
 ## 
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.  If the 
 ## set division of the intervals would be a union of two disjoint intervals,
@@ -27,7 +27,7 @@
 ## @group
 ## x = infsup (1);
 ## y = infsup (-inf, inf);
-## [u, v] = mulrevtopair (x, y)
+## [u, v] = mulrevtopair (y, x)
 ##   @result{} [-Inf, 0]
 ##   @result{} [0, Inf]
 ## @end group
@@ -39,7 +39,7 @@
 ## Keywords: interval
 ## Created: 2014-10-19
 
-function [u, v] = mulrevtopair (x, y)
+function [u, v] = mulrevtopair (y, x)
 
 if (nargin ~= 2)
     print_usage ();
