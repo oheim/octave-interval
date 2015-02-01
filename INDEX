@@ -65,6 +65,7 @@ Interval function with tightest accuracy
  @infsup/uminus
  @infsup/uplus
 Interval matrix operation
+ sumsquare = <f>@infsup/sumsq</f>
  @infsup/dot
  @infsup/inv
  @infsup/mldivide
@@ -72,7 +73,7 @@ Interval matrix operation
  @infsup/mrdivide
  @infsup/sum
  @infsup/sumabs
- @infsup/sumsquare
+ @infsup/sumsq
 Interval comparison
  @infsup/disjoint
  @infsup/eq
@@ -126,6 +127,8 @@ Interval input and output
  @infsup/bitunpack
  @infsup/intervaltoexact
  @infsup/intervaltotext
+Interval solver
+ @infsup/fzero
 Utility function
  @infsup/columns
  @infsup/ctranspose

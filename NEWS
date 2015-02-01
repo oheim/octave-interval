@@ -1,4 +1,4 @@
-x.y.z xxxx-xx-xx
+0.1.1 2015-02-01
 ================
 
  * Increased speed of computation for large matrices
@@ -8,12 +8,12 @@ x.y.z xxxx-xx-xx
  * mpfr_vector_dot_d: Changed syntax for faster computation on intervals
 
  * Decorated versions of mtimes, mldivide, mpower, inv and reduction
-   operations: sum, dot, subabs, subsquare
+   operations sum, dot, subabs, subsquare
  
  * Renamed function sumsquare to sumsq in accordance with GNU Octave function
    names
  
- * New function: fzero for finding all zeros of an interval arithmetic function
+ * New function: fzero for finding all roots of an interval arithmetic function
 
 Bugfixes
  * nextout: Function returned wrong results
