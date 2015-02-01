@@ -27,16 +27,21 @@
 ##
 ## The function must be an interval arithmetic function.
 ##
-## Optional parameters are the function's derivative @var{DF}, and the maximum
-## recursion steps @var{MAXSTEPS} (default: 200) to use per root.  If @var{DF}
-## is given, the algorithm tries to apply the interval newton method for
-## finding the roots, otherwise pure bisection is used (which is slower).
+## Optional parameters are the function's derivative @var{DF} and the maximum
+## recursion steps @var{MAXSTEPS} (default: 200) to use.  If @var{DF} is given,
+## the algorithm tries to apply the interval newton method for finding the
+## roots; otherwise pure bisection is used (which is slower).
 ##
 ## The result is a column vector with one element for each root enclosure that
-## could be found.  Each root enclosure may contain more than one root.  Each
-## root enclosure must not contain any root.
-## However, all numbers in @var{X0} that are not covered by the result are
-## guaranteed to be no roots of the function.
+## has been be found.  Each root enclosure may contain more than one root and
+## each root enclosure must not contain any root.  However, all numbers in
+## @var{X0} that are not covered by the result are guaranteed to be no roots of
+## the function.
+##
+## Best results can be achieved when (a) the function @var{F} does not suffer
+## from the dependency problem of interval arithmetic, (b) the derivative
+## @var{DF} is given, (c) the derivative is non-zero at the function's roots,
+## and (d) the derivative is continuous.
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
@@ -53,6 +58,8 @@
 ##         [1.5707963267948965, 1.5707963267948968]
 ##         [4.7123889803846896, 4.7123889803846906]
 ##         [7.8539816339744827, 7.8539816339744837]
+## fzero ("sqr", infsup ("[Entire]"))
+##   @result{} [-2.2227587494850775e-162, +2.2227587494850775e-162]
 ## @end group
 ## @end example
 ## @end deftypefn
@@ -121,48 +128,64 @@ l = u = zeros (0, 1);
 ## Try the newton step, if derivative is known
 if (not (isempty (df)))
     m = infsup (mid (x0));
-    [u, v] = mulrevtopair (feval (df, x0), feval (f, m));
-    u = x0 & (m - u);
-    v = x0 & (m - v);
-    if (isempty (u))
-        [u, v] = deal (v, u);
+    [a, b] = mulrevtopair (feval (df, x0), feval (f, m));
+    if (isempty (a) && isempty (b))
+        ## Function evaluated outside of its domain
+        a = x0;
+    else
+        a = x0 & (m - a);
+        b = x0 & (m - b);
+        if (isempty (a))
+            [a, b] = deal (b, a);
+        endif
     endif
 else
-    u = x0;
-    v = infsup ();
+    a = x0;
+    b = infsup ();
 endif
 
 ## Switch to bisection if the newton step did not produce two intervals
-if ((eq (x0, u) || isempty (v)) && not (issingleton (u)))
-    if (interior (0, u))
+if ((eq (x0, a) || isempty (b)) && not (issingleton (a)) && not (isempty (a)))
+    if (interior (0, a))
         m = 0;
     else
         ## When the interval is very large, bisection at the midpoint would
         ## take “forever” to converge, because floating point numbers are not
         ## distributed evenly on the real number lane.
         ##
-        ## We enumerate all floating point numbers between u.inf and u.sup with
-        ## 1, 2, ... 2n and split the interval at number n.
-        s = sign (u);
+        ## We enumerate all floating point numbers within a with
+        ## 1, 2, ... 2n and split the interval at n.
+        ##
+        ## When the interval is small, this algorithm will choose
+        ## approximately mid (a).
+        s = sign (a);
         s = inf ((s & 1) | (s & -1));
-        m = s .* min (realmax (), pow2 (max (-1074, mid (log2 (abs (u))))));
-        if (not (ismember (m, u)))
+        m = s .* min (realmax (), pow2 (max (-1074, mid (log2 (abs (a))))));
+        if (not (ismember (m, a)))
             ## Fallback, if computation fails
-            m = mid (u);
+            m = mid (a);
         endif
     endif
-    v = infsup (m, sup (u));
-    u = infsup (inf (u), m);
-elseif (v < u)
+    b = infsup (m, sup (a));
+    a = infsup (inf (a), m);
+elseif (b < a)
     ## Sort the roots in ascending order
-    [u, v] = deal (v, u);
+    [a, b] = deal (b, a);
 endif
 
-for x1 = {u, v}
+for x1 = {a, b}
     x1 = x1 {1};
-    if (isempty (x1) || not (ismember (0, feval (f, x1))))
+    
+    f_x1 = feval (f, x1);
+    if  (not (ismember (0, f_x1)))
         ## The interval evaluation of f over x1 proves that there are no roots
+        ## or x1 is empty
         continue
+    endif
+    if (isentire (f_x1) || ...
+        wid (f_x1) / max (realmin (), wid (x1)) < pow2 (-20))
+        ## Slow convergence detected, cancel iteration soon
+        maxsteps = maxsteps / 1.5;
     endif
     
     if (eq (x1, x0) || stepcount >= maxsteps)
