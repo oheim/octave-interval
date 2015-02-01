@@ -52,8 +52,8 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-u = x / (y & infsup (-inf, 0));
-v = x / (y & infsup (0, inf));
+u = mulrev (y & infsup (-inf, 0), x);
+v = mulrev (y & infsup (0, inf), x);
 
 swap = (y.sup <= 0 | 0 <= y.inf) & isempty (u);
 u.inf (swap) = v.inf (swap);
