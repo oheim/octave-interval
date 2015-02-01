@@ -9,7 +9,7 @@ LDFLAGS_MPFR = -lmpfr -lgmp
 all: $(OBJ)
 
 mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
-	$(MKOCTFILE) $(CFLAGS) -o $@ $(LDFLAGS) $(LDFLAGS_MPFR)  $<
+	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
 # The following build target are not required for the package installation
 # process, but are used during development of the package.
