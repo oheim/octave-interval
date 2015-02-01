@@ -12,6 +12,8 @@ x.y.z xxxx-xx-xx
  
  * Renamed function sumsquare to sumsq in accordance with GNU Octave function
    names
+ 
+ * New function: fzero for finding all zeros of an interval arithmetic function
 
 Bugfixes
  * nextout: Function returned wrong results
