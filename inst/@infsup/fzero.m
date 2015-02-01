@@ -33,7 +33,8 @@
 ## finding the roots, otherwise pure bisection is used (which is slower).
 ##
 ## The result is a column vector with one element for each root enclosure that
-## could be found.  Each root enclosure may contain more than one root.
+## could be found.  Each root enclosure may contain more than one root.  Each
+## root enclosure must not contain any root.
 ## However, all numbers in @var{X0} that are not covered by the result are
 ## guaranteed to be no roots of the function.
 ##
@@ -123,6 +124,9 @@ if (not (isempty (df)))
     [u, v] = mulrevtopair (feval (df, x0), feval (f, m));
     u = x0 & (m - u);
     v = x0 & (m - v);
+    if (isempty (u))
+        [u, v] = deal (v, u);
+    endif
 else
     u = x0;
     v = infsup ();
