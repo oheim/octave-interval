@@ -135,6 +135,8 @@ Utility function
  @infsup/display
  @infsup/horzcat
  @infsup/ismatrix
+ @infsup/isscalar
+ @infsup/isvector
  @infsup/length
  @infsup/ndims
  @infsup/numel

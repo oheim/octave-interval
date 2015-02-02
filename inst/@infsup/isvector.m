@@ -1,4 +1,4 @@
-## Copyright 2014–2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,27 +15,26 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} ismatrix (@var{A})
+## @deftypefn {Function File} {} isvector (@var{A})
 ##
-## Return true if @var{A} is an interval matrix.
+## Return true if @var{A} is an interval vector.
 ##
-## Scalars (1x1 matrices) and vectors (1xN or Nx1 matrices) are subsets of the
-## more general N-dimensional matrix and @code{ismatrix} will return true for
-## these objects as well.
-## @seealso{@@infsup/isscalar, @@infsup/isvector}
+## Scalars (1x1 vectors) are subsets of the more general vector and
+## @code{isvector} will return true for these objects as well.
+## @seealso{@@infsup/isscalar, @@infsup/ismatrix}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-29
+## Created: 2015-02-02
 
-function result = ismatrix (A)
+function result = isvector (A)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = ismatrix (A.inf);
+result = isvector (A.inf);
 
 endfunction
