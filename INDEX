@@ -3,24 +3,10 @@ Interval constant
  empty
  entire
 Interval constructor
- newdec = <f>@infsupdec/infsupdec</f>
- numstointerval = <f>@infsup/infsup</f> or <f>@infsupdec/infsupdec</f>
- texttointerval = <f>@infsup/infsup</f> or <f>@infsupdec/infsupdec</f>
  @infsup/infsup
  @infsup/setdec
  @infsupdec/infsupdec
 Interval function with tightest accuracy
- add = <f>@infsup/plus</f>
- div = <f>@infsup/rdivide</f>
- exp10 = <f>@infsup/pow10</f>
- exp2 = <f>@infsup/pow2</f>
- mul = <f>@infsup/times</f>
- neg = <f>@infsup/uminus</f>
- recip = <f>@infsup/inv</f>
- roundtiestoaway = <f>@infsup/round</f>
- roundtiestoeven = <f>@infsup/roundb</f>
- sub = <f>@infsup/minus</f>
- trunc = <f>@infsup/fix</f>
  @infsup/abs
  @infsup/acos
  @infsup/acosh
@@ -65,7 +51,6 @@ Interval function with tightest accuracy
  @infsup/uminus
  @infsup/uplus
 Interval matrix operation
- sumsquare = <f>@infsup/sumsq</f>
  @infsup/dot
  @infsup/inv
  @infsup/mldivide
@@ -94,8 +79,6 @@ Interval comparison
  @infsup/subset
  @infsupdec/isnai
 Set operation
- intersection = <f>@infsup/and</f>
- convexhull = <f>@infsup/or</f>
  @infsup/and
  @infsup/nextout
  @infsup/or
