@@ -20,6 +20,9 @@
 ## 
 ## Compute the reverse monomial @code{x^@var{P}}.
 ##
+## That is, an enclosure of all @code{x ∈ @var{X}} where
+## @code{pown (x, @var{P}) ∈ @var{C}}.
+##
 ## Accuracy: The result is a valid enclosure.  The result is a tight
 ## enclosure for @var{P} in @{-1, 0, 1, 2@}.  The result is an accurate
 ## enclosure in cases where @code{recip (infsup (@var{P}))} is a singleton.

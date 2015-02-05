@@ -20,6 +20,9 @@
 ## 
 ## Compute the reverse absolute value function.
 ##
+## That is, an enclosure of all @code{x ∈ @var{X}} where
+## @code{abs (x) ∈ @var{C}}.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example

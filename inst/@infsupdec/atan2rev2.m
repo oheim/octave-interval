@@ -18,8 +18,10 @@
 ## @deftypefn {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C}, @var{X})
 ## @deftypefnx {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C})
 ## 
-## Compute the reverse atan2 function with
-## @code{atan2 (@var{A}, @var{X}) = @var{C}}.
+## Compute the reverse atan2 function for the second parameter.
+##
+## That is, an enclosure of all @code{x ∈ @var{X}} where
+## @code{atan2 (a, x) ∈ @var{C}} for any @code{a ∈ @var{A}}.
 ##
 ## Accuracy: The result is a valid enclosure.
 ##

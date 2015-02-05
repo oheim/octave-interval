@@ -20,6 +20,9 @@
 ## 
 ## Compute the reverse cosine function.
 ##
+## That is, an enclosure of all @code{x ∈ @var{X}} where
+## @code{cos (x) ∈ @var{C}}.
+## 
 ## Accuracy: The result is a valid enclosure.
 ##
 ## @example

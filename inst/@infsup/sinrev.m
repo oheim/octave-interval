@@ -20,6 +20,9 @@
 ## 
 ## Compute the reverse sine function.
 ##
+## That is, an enclosure of all @code{x ∈ @var{X}} where
+## @code{sin (x) ∈ @var{C}}.
+##
 ## Accuracy: The result is a valid enclosure.
 ##
 ## @example

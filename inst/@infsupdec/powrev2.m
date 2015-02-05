@@ -18,8 +18,10 @@
 ## @deftypefn {Function File} {@var{Y} =} powrev2 (@var{A}, @var{C}, @var{Y})
 ## @deftypefnx {Function File} {@var{Y} =} powrev2 (@var{A}, @var{C})
 ## 
-## Compute the reverse power function with
-## @code{pow (@var{A}, @var{Y}) = @var{C}}.
+## Compute the reverse power function for the second parameter.
+##
+## That is, an enclosure of all @code{y ∈ @var{Y}} where
+## @code{pow (a, y) ∈ @var{C}} for any @code{a ∈ @var{A}}.
 ##
 ## Accuracy: The result is a valid enclosure.
 ##

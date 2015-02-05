@@ -20,6 +20,9 @@
 ## 
 ## Compute the reverse hyperbolic cosine function.
 ##
+## That is, an enclosure of all @code{x ∈ @var{X}} where
+## @code{cosh (x) ∈ @var{C}}.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example

@@ -20,6 +20,9 @@
 ## 
 ## Compute the reverse multiplication function.
 ##
+## That is, an enclosure of all @code{x ∈ @var{X}} where
+## @code{times (x, b) ∈ @var{C}} for any @code{b ∈ @var{B}}.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @seealso{@@infsupdec/mtimes}
