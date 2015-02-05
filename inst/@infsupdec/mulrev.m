@@ -36,6 +36,10 @@
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## No one way of decorating this operations gives useful information in all
+## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
+##
 ## @example
 ## @group
 ## c = infsupdec (1);

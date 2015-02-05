@@ -25,6 +25,10 @@
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## No one way of decorating this operations gives useful information in all
+## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
+##
 ## @example
 ## @group
 ## powrev2 (infsupdec (2, 5), infsupdec (3, 6))

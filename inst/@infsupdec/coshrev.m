@@ -25,6 +25,10 @@
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## No one way of decorating this operations gives useful information in all
+## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
+##
 ## @example
 ## @group
 ## coshrev (infsupdec (-2, 1))
@@ -64,12 +68,6 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (coshrev (intervalpart (c), intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
-
-## For this restriction of x's domain, the reverse function is a continuous
-## point function
-pointfunction = inf (x) >= 0 | sup (x) <= 0;
-result.dec (not (pointfunction)) = "trv";
+result = infsupdec (coshrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction

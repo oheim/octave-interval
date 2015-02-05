@@ -27,6 +27,10 @@
 ## enclosure for @var{P} in @{-1, 0, 1, 2@}.  The result is an accurate
 ## enclosure in cases where @code{recip (infsup (@var{P}))} is a singleton.
 ##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## No one way of decorating this operations gives useful information in all
+## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
+##
 ## @seealso{@@infsupdec/pown}
 ## @end deftypefn
 
@@ -61,12 +65,6 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (pownrev (intervalpart (c), intervalpart (x), p));
-result.dec = mindec (result.dec, x.dec);
-
-## For this restriction of x's domain, the reverse function is a continuous
-## point function
-pointfunction = rem (p, 2) ~= 0 | inf (x) >= 0 | sup (x) <= 0;
-result.dec (not (pointfunction)) = "trv";
+result = infsupdec (pownrev (intervalpart (c), intervalpart (x), p), "trv");
 
 endfunction

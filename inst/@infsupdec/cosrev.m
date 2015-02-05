@@ -25,6 +25,10 @@
 ## 
 ## Accuracy: The result is a valid enclosure.
 ##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## No one way of decorating this operations gives useful information in all
+## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
+##
 ## @example
 ## @group
 ## cosrev (infsupdec (0), infsupdec (6,9))
@@ -66,12 +70,6 @@ endif
 
 pi = infsup ("pi");
 
-result = infsupdec (cosrev (intervalpart (c), intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
-
-## For this restriction of x's domain, the reverse function is a continuous
-## point function
-pointfunction = (floor (sup (sup (x) / pi)) == floor (inf (inf (x) / pi)));
-result.dec (not (pointfunction)) = "trv";
+result = infsupdec (cosrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction

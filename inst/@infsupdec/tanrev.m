@@ -25,6 +25,10 @@
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## No one way of decorating this operations gives useful information in all
+## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
+##
 ## @example
 ## @group
 ## tanrev (infsupdec (0), infsupdec (2, 4))
@@ -64,15 +68,6 @@ if (isnai (x))
     return
 endif
 
-pi = infsup ("pi");
-
-result = infsupdec (tanrev (intervalpart (c), intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
-
-## For this restriction of x's domain, the reverse function is a continuous
-## point function
-pointfunction = ceil (floor (sup (sup (x) / (pi / 2))) / 2) == ...
-                floor (ceil (inf (inf (x) / (pi / 2))) / 2);
-result.dec (not (pointfunction)) = "trv";
+result = infsupdec (tanrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction
