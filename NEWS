@@ -1,3 +1,13 @@
+0.1.2 xxxx-xx-xx
+================
+
+ * mulrev: Now allows non-scalar arguments and can compute two-output division
+           (mulrevtopair no longer available)
+
+Bugfixes
+ * Compatibility with GNU Octave 4.0 (bug #43925)
+ * Build problems with environment variables CCFLAGS, LDFLAGS
+
 0.1.1 2015-02-01
 ================
 

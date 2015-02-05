@@ -17,22 +17,42 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {@var{X} =} mulrev (@var{B}, @var{C}, @var{X})
 ## @deftypefnx {Function File} {@var{X} =} mulrev (@var{B}, @var{C})
+## @deftypefnx {Function File} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C})
+## @deftypefnx {Function File} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C}, @var{X})
 ## 
-## Compute the reverse multiplication function.
+## Compute the reverse multiplication function or the two-output division.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
-## @code{times (x, b) ∈ @var{C}} for any @code{b ∈ @var{B}}.
+## @code{x .* b ∈ @var{C}} for any @code{b ∈ @var{B}}.
+##
+## This function is similar to interval division @code{@var{C} ./ @var{B}}.
+## However, it treats the case 0/0 as “any real number” instead of “undefined”.
+##
+## Interval division, considered as a set, can have zero, one or two disjoint
+## connected components as a result.  If called with two output parameters,
+## this function returns the components separately.  @var{U} contains the
+## negative or unique component, whereas @var{V} contains the positive
+## component in cases with two components.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
-## @seealso{@@infsupdec/mtimes}
+## @example
+## @group
+## c = infsupdec (1);
+## b = infsupdec (-inf, inf);
+## [u, v] = mulrev (b, c)
+##   @result{} [-Inf, 0]_trv
+##   @result{} [0, Inf]_trv
+## @end group
+## @end example
+## @seealso{@@infsupdec/times}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-19
 
-function result = mulrev (b, c, x)
+function [u, v] = mulrev (b, c, x)
 
 if (nargin < 2 || nargin > 3)
     print_usage ();
@@ -53,24 +73,25 @@ if (not (isa (x, "infsupdec")))
 endif
 
 if (isnai (x))
-    result = x;
+    u = v = x;
     return
 endif
 if (isnai (b))
-    result = b;
+    u = v = b;
     return
 endif
 if (isnai (c))
-    result = c;
+    u = v = c;
     return
 endif
 
-result = infsupdec (...
-        mulrev (intervalpart (b), intervalpart (c), intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
-
-## inverse multiplication is continuous, but not a point function for 0
-discontinuous = ismember (0, x);
-result.dec (discontinuous) = "trv";
+if (nargout < 2)
+    u = mulrev (intervalpart (b), intervalpart (c), intervalpart (x));
+    u = infsupdec (u, "trv");
+else
+    [u, v] = mulrev (intervalpart (b), intervalpart (c), intervalpart (x));
+    u = infsupdec (u, "trv");
+    v = infsupdec (v, "trv");
+endif
 
 endfunction

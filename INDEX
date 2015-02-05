@@ -89,7 +89,6 @@ Interval reverse operation
  @infsup/coshrev
  @infsup/cosrev
  @infsup/mulrev
- @infsup/mulrevtopair
  @infsup/pownrev
  @infsup/powrev1
  @infsup/powrev2

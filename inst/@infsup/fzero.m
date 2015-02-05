@@ -128,7 +128,7 @@ l = u = zeros (0, 1);
 ## Try the newton step, if derivative is known
 if (not (isempty (df)))
     m = infsup (mid (x0));
-    [a, b] = mulrevtopair (feval (df, x0), feval (f, m));
+    [a, b] = mulrev (feval (df, x0), feval (f, m));
     if (isempty (a) && isempty (b))
         ## Function evaluated outside of its domain
         a = x0;
