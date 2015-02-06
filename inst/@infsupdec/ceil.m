@@ -52,7 +52,11 @@ result = infsupdec (ceil (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## Between two integral numbers the function is constant, thus continuous
-discontinuos = not (issingleton (result) & fix (sup (x)) ~= sup (x));
+discontinuos = not (issingleton (result));
 result.dec (discontinuos) = mindec (result.dec (discontinuos), "def");
+
+onlyrestrictioncontinuous = issingleton (result) & fix (sup (x)) == sup (x);
+result.dec (onlyrestrictioncontinuous) = ...
+    mindec (result.dec (onlyrestrictioncontinuous), "dac");
 
 endfunction

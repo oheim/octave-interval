@@ -68,8 +68,6 @@ if (isnai (x))
     return
 endif
 
-pi = infsup ("pi");
-
 result = infsupdec (sinrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction

@@ -64,7 +64,8 @@ endif
 result = infsupdec (pow (intervalpart (x), intervalpart (y)));
 result.dec = mindec (result.dec, x.dec, y.dec);
 
-## pow is continuous everywhere, but defined for x > 0 only
+## pow is continuous everywhere (where it is defined),
+## but defined for x > 0 only
 domain = interior (x, infsup (0, inf));
 if (isscalar (x) && not (isscalar (y)))
     domain = domain * ones (size (y));

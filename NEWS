@@ -5,13 +5,16 @@
            (mulrevtopair no longer available)
 
  * All reverse operations: Now return a trivial decoration information at best,
-                           in conformance with IEEE 1788
+   in conformance with IEEE 1788
 
 Bugfixes
  * Compatibility with GNU Octave 4.0 (bug #43925)
  * Build problems with environment variables CCFLAGS, LDFLAGS
  * iscommoninterval: The decorated variant must return true for common
-                     intervals without com decoration.
+   intervals without com decoration.
+ * Several decorated functions: When evaluated on a subset of the function's
+   domain, the result's decoration may be dac if the function's restriction to
+   that subset is continuous.
 
 0.1.1 2015-02-01
 ================
@@ -38,10 +41,10 @@ Bugfixes
  * dot: Function returned wrong results for some inputs
  * fma: Function returned wrong results for some inputs
  * infsup: Function returned wrong interval boundaries for decimal numbers,
-           function failed on mixed numerical and string boundaries in single
-           cell array parameter
+   function failed on mixed numerical and string boundaries in single cell
+   array parameter
  * mulrevtopair: Fixed order of operands in conformance with IEEE 1788 and
-                 wrong results when evaluated on intervals that contain zero
+   wrong results when evaluated on intervals that contain zero
 
 0.1.0 2015-01-21
 ================

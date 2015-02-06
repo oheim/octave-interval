@@ -52,10 +52,14 @@ endif
 result = infsupdec (roundb (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
-discontinuous = not (issingleton (result) & ...
+discontinuous = not (issingleton (result))
+result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
+
+onlyrestrictioncontinuous = issingleton (result) & not (...
     (rem (inf (result), 2) ~= 0 | ...
         ((fix (sup (x)) == sup (x) | fix (sup (x) * 2) / 2 ~= sup (x)) & ...
          (fix (inf (x)) == inf (x) | fix (inf (x) * 2) / 2 ~= inf (x)))));
-result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
+result.dec (onlyrestrictioncontinuous) = ...
+    mindec (result.dec (onlyrestrictioncontinuous), "dac");
 
 endfunction

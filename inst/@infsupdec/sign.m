@@ -53,7 +53,11 @@ result = infsupdec (sign (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## sign is defined everywhere and continuous for x ~= 0
-discontinuous = ismember (0, x);
+discontinuous = not (issingleton (result));
 result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
+
+onlyrestrictioncontinuous = inf (x) == 0 & sup (x) == 0;
+result.dec (onlyrestrictioncontinuous) = ...
+    mindec (result.dec (onlyrestrictioncontinuous), "dac");
 
 endfunction

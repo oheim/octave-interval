@@ -61,8 +61,13 @@ result = infsupdec (atan2 (intervalpart (y), intervalpart (x)));
 result.dec = mindec (result.dec, y.dec, x.dec);
 
 ## The function is discontinuous for x <= 0 and y == 0
-discontinuos = ismember (0, y) & inf (x) < 0;
+discontinuos = inf (y) < 0 & sup (y) >= 0 & inf (x) < 0;
 result.dec (discontinuos) = mindec (result.dec (discontinuos), "def");
+
+## For y = [0, y.sup] the function is discontinuous, but its restriction is not
+onlyrestrictioncontinuous = y.inf == 0 & inf (x) < 0;
+result.dec (onlyrestrictioncontinuous) = ...
+    mindec (result.dec (onlyrestrictioncontinuous), "dac");
 
 ## The only undefined input is <0,0>
 result.dec (ismember (0, y) & ismember (0, x)) = "trv";
