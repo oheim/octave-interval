@@ -10,6 +10,8 @@
 Bugfixes
  * Compatibility with GNU Octave 4.0 (bug #43925)
  * Build problems with environment variables CCFLAGS, LDFLAGS
+ * iscommoninterval: The decorated variant must return true for common
+                     intervals without com decoration.
 
 0.1.1 2015-02-01
 ================

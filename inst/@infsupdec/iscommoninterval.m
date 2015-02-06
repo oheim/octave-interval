@@ -26,8 +26,9 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
-## If the interval is a computation result, the evaluation must be common in 
-## all intermediate steps as well.
+## If the interval is a computation result, the evaluation need not be common 
+## for this function to return @code{true}.  E. g., [2, 3]_trv is a common
+## interval.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/isentire, @@infsupdec/isempty, @@infsupdec/issingleton}
 ## @end deftypefn
@@ -43,5 +44,15 @@ if (nargin ~= 1)
     return
 endif
 
-result = strcmp (x.dec, "com");
-return
+if (isnai (x))
+    error ("interval comparison with NaI")
+endif
+
+result = iscommoninterval (intervalpart (x));
+
+endfunction
+%!assert (iscommoninterval (infsupdec (2, 3, "com")));
+%!assert (iscommoninterval (infsupdec (2, 3, "trv")));
+%!assert (not (iscommoninterval (infsupdec (2, inf, "trv"))));
+%!assert (not (iscommoninterval (empty ())));
+%!assert (not (iscommoninterval (entire ())));
