@@ -38,7 +38,7 @@
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = eq(a, b)
+function result = eq (a, b)
 
 if (nargin ~= 2)
     print_usage ();
@@ -55,8 +55,7 @@ endif
 if (isnai (a) || isnai (b))
     result = false ();
 else
-    result = eq (intervalpart (a), intervalpart (b)) & ...
-             strcmp (a.dec, b.dec);
+    result = eq (intervalpart (a), intervalpart (b));
 endif
 
 endfunction

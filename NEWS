@@ -12,6 +12,7 @@ Bugfixes
  * Build problems with environment variables CCFLAGS, LDFLAGS
  * iscommoninterval: The decorated variant must return true for common
    intervals without com decoration.
+ * eq: The decorated variant must not consider the decation value.
  * Several decorated functions: When evaluated on a subset of the function's
    domain, the result's decoration may be dac if the function's restriction to
    that subset is continuous.
