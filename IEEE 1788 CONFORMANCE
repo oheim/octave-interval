@@ -33,10 +33,9 @@ b) Documentation of behavior
     3) Under what conditions is a constructor unable to determine whether a
        level 1 value exists that corresponds to the supplied inputs?
        
-       Exponents, if used, must be between -2^53 (exclusive) and +2^53
-       (exclusive).  Non-zero decimal numbers must be between 10^(-2^62)
-       (inclusive) and 10^(2^63 - 1) (exclusive).  Non-zero hexadecimal numbers
-       must be between 2^(-2^62) (inclusive) and 2^(2^63 - 1) (exclusive).
+       When two different string boundaries for an interval both lie between
+       the same two subsequent binary64 numbers, a PossiblyUndefined warning is
+       created.
        
     4) How are ties broken in rounding numbers if multiple numbers qualify as
        the rounded result?

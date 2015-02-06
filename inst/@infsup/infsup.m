@@ -179,6 +179,7 @@ endif
 
 ## check parameters and conversion to double precision
 isexact = true ();
+possiblyundefined = false (size (l));
 x.inf = zeros (size (l));
 x.sup = zeros (size (u));
 input.inf = l;
@@ -191,6 +192,7 @@ for [boundaries, key] = input
         ## Simple case: the boundaries already are a binary floating point
         ## number in single or double precision.
         x.(key) = double (boundaries);
+        possiblyundefined (:) = false ();
         continue
     endif
     for i = 1 : numel (boundaries)
@@ -206,6 +208,7 @@ for [boundaries, key] = input
                     x.inf (i) = -inf;
                 case "sup"
                     x.sup (i) = inf;
+                    possiblyundefined (i) = false ();
             endswitch
         elseif (isnumeric (boundary))
             if (not (isreal (boundary)))
@@ -218,13 +221,21 @@ for [boundaries, key] = input
                 ## Simple case: the boundary already is a binary floating point
                 ## number in single or double precision.
                 x.(key) (i) = double (boundary);
+                possiblyundefined (i) = false ();
                 continue
             endif
             
             ## Integer or logical, try to approximate in double precision
             x.(key) (i) = double (boundary);
             isdouble = x.(key) (i) == boundary;
-            isexact = and (isexact, isdouble);
+            if (not (isdouble))
+                isexact = false;
+                if (key == "inf")
+                    possiblyundefined (i) = true ();
+                endif
+            else
+                possiblyundefined (i) = false ();
+            end
             
             ## Check rounding direction of the approximation
             ## Mixed mode comparison works as intended
@@ -257,20 +268,38 @@ for [boundaries, key] = input
             endswitch
             
             [x.(key)(i), isdouble] = hex2double (boundary, direction);
-            isexact = and (isexact, isdouble);
+            if (not (isdouble))
+                isexact = false;
+                if (key == "inf")
+                    possiblyundefined (i) = true ();
+                endif
+            else
+                possiblyundefined (i) = false ();
+            end
         else
             ## parse string
+            if (key == "sup" && possiblyundefined (i) && iscell (l))
+                inf_boundary = l {i};
+                ## infsup ("x", "x") or infsup ("x") is not possibly undefined
+                if (strcmp (boundary, inf_boundary))
+                    possiblyundefined (i) = false;
+                endif
+            endif
+            
             switch (boundary)
                 case {"-inf", "-infinity"}
                     x.(key) (i) = -inf;
+                    possiblyundefined (i) = false ();
                 case {"inf", "+inf", "infinity", "+infinity"}
                     x.(key) (i) = inf;
+                    possiblyundefined (i) = false ();
                 case "e"
                     isexact = false ();
                     switch key
                         case "inf"
                             x.inf (i) = 0x56FC2A2 * pow2 (-25) ...
                                       + 0x628AED2 * pow2 (-52);
+                            possiblyundefined (i) = true ();
                         case "sup"
                             x.sup (i) = 0x56FC2A2 * pow2 (-25) ...
                                       + 0x628AED4 * pow2 (-52);
@@ -281,6 +310,7 @@ for [boundaries, key] = input
                         case "inf"
                             x.inf (i) = 0x6487ED5 * pow2 (-25) ...
                                       + 0x442D180 * pow2 (-55);
+                            possiblyundefined (i) = true ();
                         case "sup"
                             x.sup (i) = 0x6487ED5 * pow2 (-25) ...
                                       + 0x442D190 * pow2 (-55);
@@ -317,6 +347,9 @@ for [boundaries, key] = input
                             ## value
                             decimal.m (19, 1) = 1;
                             isexact = false ();
+                            if (key == "inf")
+                                possiblyundefined (i) = true ();
+                            endif
                         endif
                         ## Write result back into boundary for conversion to
                         ## double
@@ -366,6 +399,7 @@ for [boundaries, key] = input
                                 else # realmax ... inf
                                     x.inf (i) = realmax ();
                                 endif
+                                possiblyundefined (i) = true ();
                             case "sup"
                                 if (decimal.s) # -inf ... -realmax
                                     x.sup (i) = -realmax ();
@@ -383,7 +417,14 @@ for [boundaries, key] = input
                     ## Check approximation value
                     comparison = decimalcompare (double2decimal (binary), ...
                                                  decimal);
-                    isexact = and (isexact, comparison == 0);
+                    if (comparison ~= 0)
+                        isexact = false ();
+                        if (key == "inf")
+                            possiblyundefined (i) = true ();
+                        endif
+                    else
+                        possiblyundefined (i) = false ();
+                    endif
                     if (comparison == 0 || ... # approximation is exact
                         (comparison < 0 && key == "inf") || ... # lower bound
                         (comparison > 0 && key == "sup")) # upper bound
@@ -423,6 +464,15 @@ endif
 if (find (isfinite (x.inf (x.inf > x.sup)), 1) || ...
     find (isfinite (x.sup (x.inf > x.sup)), 1))
     error ("illegal interval boundaries: infimum greater than supremum");
+endif
+
+## check for possibly wrong boundary order
+if (any (any (max (-realmax, ...
+        mpfr_function_d ('plus',...
+                         +inf, ...
+                         x.inf (possiblyundefined), ...
+                         pow2 (-1074))) == x.sup (possiblyundefined))))
+    warning ("PossiblyUndefined: infimum may be greater than supremum");
 endif
 
 x = class (x, "infsup");
@@ -512,3 +562,4 @@ endfunction
 %!  assert (sup (infsup ({"[2, 3]", "3/4", "[Entire]", "42?3", 1, "0xf"})), [3, 0.75, +inf, 45, 1, 15]);
 %!error infsup (3, 2);
 %!error infsup ("Ausgeschnitzel");
+%!warning infsup ("1.000000000000000000002", "1.000000000000000000001");
