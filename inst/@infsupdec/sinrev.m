@@ -44,7 +44,7 @@
 
 function result = sinrev (c, x)
 
-if (nargin ~= 1)
+if (nargin > 2)
     print_usage ();
     return
 endif
