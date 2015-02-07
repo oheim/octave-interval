@@ -84,7 +84,7 @@ u.sup = v.sup = -inf (size (b.inf));
 
 emptyresult = isempty (b) | isempty (c) ...
             | (eq (0, b) & not (ismember (0, c))); # x * 0 ~= 0
-twocomponents = interior (0, b) & not (emptyresult);
+twocomponents = interior (0, b) & not (emptyresult) & not (ismember (0, c));
 onecomponent = not (twocomponents) & not (emptyresult);
 
 u.inf (twocomponents) = -inf;
@@ -99,17 +99,25 @@ u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.sup (dom), b.sup (dom));
 v.inf (dom) = mpfr_function_d ('rdivide', -inf, c.sup (dom), b.inf (dom));
 
 dom = onecomponent & (b >= 0) & (c >= 0);
+b.inf (dom) = abs (b.inf);
+c.inf (dom) = abs (c.inf);
 u.inf (dom) = mpfr_function_d ('rdivide', -inf, c.inf (dom), b.sup (dom));
 u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.sup (dom), b.inf (dom));
 dom = onecomponent & (b <= 0) & (c >= 0);
-u.inf (dom) = mpfr_function_d ('rdivide', -inf, c.sup (dom), b.inf (dom));
-u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.inf (dom), b.sup (dom));
-dom = onecomponent & (b >= 0) & (c <= 0);
-u.inf (dom) = mpfr_function_d ('rdivide', -inf, c.inf (dom), b.sup (dom));
-u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.sup (dom), b.inf (dom));
-dom = onecomponent & (b <= 0) & (c <= 0);
+b.sup (dom) = -abs (b.sup);
+c.inf (dom) = abs (c.inf);
 u.inf (dom) = mpfr_function_d ('rdivide', -inf, c.sup (dom), b.sup (dom));
 u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.inf (dom), b.inf (dom));
+dom = onecomponent & (b >= 0) & (c <= 0);
+b.inf (dom) = abs (b.inf);
+c.sup (dom) = -abs (c.sup);
+u.inf (dom) = mpfr_function_d ('rdivide', -inf, c.inf (dom), b.inf (dom));
+u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.sup (dom), b.sup (dom));
+dom = onecomponent & (b <= 0) & (c <= 0);
+b.sup (dom) = -abs (b.sup);
+c.sup (dom) = -abs (c.sup);
+u.inf (dom) = mpfr_function_d ('rdivide', -inf, c.sup (dom), b.inf (dom));
+u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.inf (dom), b.sup (dom));
 dom = onecomponent & interior (0, c) & (b > 0);
 u.inf (dom) = mpfr_function_d ('rdivide', -inf, c.inf (dom), b.inf (dom));
 u.sup (dom) = mpfr_function_d ('rdivide', +inf, c.sup (dom), b.inf (dom));
@@ -124,7 +132,8 @@ u = x & infsup (u.inf, u.sup);
 v = x & infsup (v.inf, v.sup);
 
 if (nargout < 2)
-    u (twocomponents) = u (twocomponents) | v (twocomponents);
+    u.inf (twocomponents) = min (u.inf (twocomponents), v.inf (twocomponents));
+    u.sup (twocomponents) = max (u.sup (twocomponents), v.sup (twocomponents));
 else
     ## It can happen that the twocomponents result has only one component,
     ## because x is positive for example.  Then, only one component shall be
