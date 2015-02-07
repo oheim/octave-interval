@@ -65,7 +65,7 @@ discontinuos = inf (y) < 0 & sup (y) >= 0 & inf (x) < 0;
 result.dec (discontinuos) = mindec (result.dec (discontinuos), "def");
 
 ## For y = [0, y.sup] the function is discontinuous, but its restriction is not
-onlyrestrictioncontinuous = y.inf == 0 & inf (x) < 0;
+onlyrestrictioncontinuous = inf (y) == 0 & inf (x) < 0;
 result.dec (onlyrestrictioncontinuous) = ...
     mindec (result.dec (onlyrestrictioncontinuous), "dac");
 
