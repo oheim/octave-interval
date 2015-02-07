@@ -51,6 +51,6 @@ result.dec = mindec (result.dec, x.dec);
 
 ## sqrt is continuous everywhere, but defined for x >= 0 only
 defined = subset (x, infsup (0, inf));
-result (not (defined)) = "trv";
+result.dec (not (defined)) = "trv";
 
 endfunction
