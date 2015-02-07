@@ -179,20 +179,20 @@ try
     
     ## Check decoration
     if (max (max (isempty (bare) & not (strcmp (dec, "trv")))))
-        error ("illegal decoration for empty interval")
+        error ("interval:infsupdec", "illegal decoration for empty interval")
     endif
     if (max (max (not (iscommoninterval (bare)) & strcmp (dec, "com"))))
-        error ("illegal decoration for uncommon interval")
+        error ("interval:infsupdec", "illegal decoration for uncommon interval")
     endif
     if (not (min (min ( ...
             strcmp (dec, "com") | ...
             strcmp (dec, "dac") | ...
             strcmp (dec, "def") | ...
             strcmp (dec, "trv")))))
-        error ("illegal decoration");
+        error ("interval:infsupdec", "illegal decoration");
     endif
 catch
-    warning (lasterror.message)
+    warning (lasterror.identifier, lasterror.message)
     ## NaI representation is unique.
     bare = infsup ();
     dec = {"ill"};
