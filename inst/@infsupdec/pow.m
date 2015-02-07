@@ -20,8 +20,8 @@
 ## Compute the simple power function on intervals defined by 
 ## @code{exp (@var{Y} * log (@var{X}))}.
 ##
-## The function is only defined where @var{X} is positive, cf. log function.
-## A general power function is implemented by @code{power}.
+## The function is only defined where @var{X} is positive or where @var{X} is
+## zero and @var{Y} is positive.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -65,11 +65,10 @@ result = infsupdec (pow (intervalpart (x), intervalpart (y)));
 result.dec = mindec (result.dec, x.dec, y.dec);
 
 ## pow is continuous everywhere (where it is defined),
-## but defined for x > 0 only
-domain = interior (x, infsup (0, inf));
-if (isscalar (x) && not (isscalar (y)))
-    domain = domain * ones (size (y));
-endif
+## but defined for x > 0 or (x = 0 and y > 0) only
+domain = interior (x, infsup (0, inf)) | ...
+        (subset (x, infsup (0, inf)) & interior (y, infsup (0, inf)));
+
 result.dec (not (domain)) = "trv";
 
 endfunction
