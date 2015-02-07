@@ -70,7 +70,8 @@ sinsignl (sinsignl == 0) = (-1) * sign (l (sinsignl == 0));
 sinsignu (sinsignu == 0) = sign (u (sinsignu == 0));
 
 containsinf = possiblynotfullperiod & ((sinsignl == -1 & sinsignu == 1) | ...
-                                       (sinsignl == sinsignu & width > 4));
+                                       (sinsignl == sinsignu & width > 4)) ...
+                                    & ne (0, x);
 l (containsinf) = -1;
 
 containssup = possiblynotfullperiod & ((sinsignl == 1 & sinsignu == -1) | ...
