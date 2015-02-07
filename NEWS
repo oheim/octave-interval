@@ -4,9 +4,6 @@
  * mulrev: Now allows non-scalar arguments and can compute two-output division
            (mulrevtopair no longer available)
 
- * All reverse operations: Now return a trivial decoration information at best,
-   in conformance with IEEE 1788
-
 Bugfixes
  * Compatibility with GNU Octave 4.0 (bug #43925)
  * Build problems with environment variables CCFLAGS, LDFLAGS
@@ -21,6 +18,12 @@ Bugfixes
    interval is created from two very close decimal numbers (which can not be
    separated in the floating-point context) where the lower boundary is greater
    than the upper boundary.
+ * cancelminus/cancelplus: The functions returned wrong results if the interval
+   widths could not be compared in double-precision.
+ * cos: Inaccuracy for x = [0]
+ * pow: The function is now defined for x = 0 and y > 0.
+ * All reverse operations: Now return a trivial decoration information at best,
+   in conformance with IEEE 1788 (the only exception is mulrev).
 
 0.1.1 2015-02-01
 ================

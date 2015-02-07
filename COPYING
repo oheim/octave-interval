@@ -1,7 +1,7 @@
 The majority of code of the interval package and the interval package as a
 whole are licensed under the GNU General Public License.  This code is combined
-with unit tests from the Interval Test Framework for IEEE 1788 (ITF1788), which
-is released under the Apache License.
+with unit tests from the C++ framework libieeep1788, which is released under
+the Apache License.
 
 The wording of both licenses can be found below.
 

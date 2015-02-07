@@ -23,8 +23,6 @@
 ## The function is only defined where @var{X} is positive or where @var{X} is
 ## zero and @var{Y} is positive.
 ##
-## A general power function is implemented by @code{power}.
-##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
