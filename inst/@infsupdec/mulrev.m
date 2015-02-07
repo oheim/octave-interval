@@ -94,7 +94,10 @@ if (nargout < 2)
     u = infsupdec (u, "trv");
 else
     [u, v] = mulrev (intervalpart (b), intervalpart (c), intervalpart (x));
-    u = infsupdec (u, "trv");
+    u = infsupdec (u);
+    u.dec = mindec (u.dec, b.dec, c.dec);
+    u.dec (isempty (b) | isempty (c) | ismember (0, b)) = "trv";
+    
     v = infsupdec (v, "trv");
 endif
 
