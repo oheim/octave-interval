@@ -42,7 +42,7 @@
 
 function result = fma (x, y, z)
 
-if (nargin ~= 2)
+if (nargin ~= 3)
     print_usage ();
     return
 endif
