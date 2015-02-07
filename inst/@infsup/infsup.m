@@ -198,6 +198,9 @@ for [boundaries, key] = input
     for i = 1 : numel (boundaries)
         if (iscell (boundaries))
             boundary = boundaries {i};
+            if (ischar (boundary))
+                boundary = lower (boundary);
+            endif
         else
             boundary = boundaries (i);
         endif
