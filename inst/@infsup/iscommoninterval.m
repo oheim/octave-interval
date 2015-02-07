@@ -41,3 +41,16 @@ endif
 
 result = isfinite (x.inf) & isfinite (x.sup);
 return
+
+%!assert (iscommoninterval (infsup (2, 3)));
+%!assert (not (iscommoninterval (infsup (2, inf))));
+%!assert (not (iscommoninterval (infsup ())));
+%!assert (not (iscommoninterval (infsup (-inf, inf))));
+
+%!assert (iscommoninterval (infsupdec (2, 3, "com")));
+%!assert (iscommoninterval (infsupdec (2, 3, "trv")));
+%!assert (not (iscommoninterval (infsupdec (2, inf, "trv"))));
+%!assert (not (iscommoninterval (empty ())));
+%!assert (not (iscommoninterval (entire ()))); 
+
+%!warning assert (not (iscommoninterval (infsupdec (2, 1))));

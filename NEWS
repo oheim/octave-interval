@@ -16,6 +16,7 @@ Bugfixes
  * Several decorated functions: When evaluated on a subset of the function's
    domain, the result's decoration may be dac if the function's restriction to
    that subset is continuous.
+ * Decorated boolean functions: Must return false when evaluated on NaI input.
  * Interval constructors: A PossibleUndefined warning must be issued if an
    interval is created from two very close decimal numbers (which can not be
    separated in the floating-point context) where the lower boundary is greater

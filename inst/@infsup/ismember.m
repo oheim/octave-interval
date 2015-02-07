@@ -50,4 +50,12 @@ else
     result = subset (infsup (real), interval);
 endif
 
-return
+endfunction
+
+%!assert (ismember (0, entire ()));
+%!assert (ismember (0, intervalpart (entire ())));
+
+%!assert (not (ismember (0, empty ())));
+%!assert (not (ismember (0, intervalpart (empty ()))));
+
+%!warning assert (not (ismember (0, infsupdec (2, 1))));

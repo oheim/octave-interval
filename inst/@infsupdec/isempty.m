@@ -39,9 +39,9 @@ if (nargin ~= 1)
 endif
 
 if (isnai (x))
-    error ("interval comparison with NaI")
+    result = false ();
+else
+    result = isempty (intervalpart (x));
 endif
 
-result = isempty (intervalpart (x));
-
-return
+endfunction

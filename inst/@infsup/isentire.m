@@ -36,4 +36,12 @@ if (nargin ~= 1)
 endif
 
 result = (interval.inf == -inf & interval.sup == inf);
-return
+
+endfunction
+
+%!assert (isentire (entire ()));
+%!assert (isentire (intervalpart (entire ())));
+%!assert (not (isentire (empty ())));
+%!assert (not (isentire (intervalpart (empty ()))));
+
+%!warning assert (not (isentire (infsupdec (2, 1))));

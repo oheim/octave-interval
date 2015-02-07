@@ -46,9 +46,9 @@ if (not (isa (b, "infsupdec")))
 endif
 
 if (isnai (a) || isnai (b))
-    error ("interval comparison with NaI")
+    result = false ();
+else
+    result = disjoint (intervalpart (a), intervalpart (b));
 endif
-
-result = disjoint (intervalpart (a), intervalpart (b));
 
 endfunction

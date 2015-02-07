@@ -37,4 +37,15 @@ endif
 
 ## This check also works for empty intervals (-inf ~= +inf)
 result = (x.inf == x.sup);
-return
+
+endfunction
+
+%!assert (issingleton (infsup (0)));
+%!assert (issingleton (infsupdec (0)));
+
+%!assert (not (issingleton (entire ())));
+%!assert (not (issingleton (intervalpart (entire ()))));
+%!assert (not (issingleton (empty ())));
+%!assert (not (issingleton (intervalpart (empty ()))));
+
+%!warning assert (not (issingleton (infsupdec (2, 1))));
