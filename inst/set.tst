@@ -19,8 +19,8 @@
 ##
 %!shared
 %!  ## Disable warnings when creating NaIs
-%!  warning ("off", "interval:infsupdec")
-%!test "minimal_intersect_test";
+%!  warning ("off", "interval:NaI")
+%!test "minimal_intersection_test";
 %! assert (eq (...
 %!         and (infsup (1.0, 3.0), infsup (2.1, 4.0)), ...
 %!         infsup (2.1, 3.0)))
@@ -37,7 +37,7 @@
 %!         and (infsup (1.0, 3.0), infsup (-inf, inf)), ...
 %!         infsup (1.0, 3.0)))
 
-%!test "minimal_intersect_dec_test";
+%!test "minimal_intersection_dec_test";
 %! assert (eq (...
 %!         and (infsupdec (1.0, 3.0, "com"), infsupdec (2.1, 4.0, "com")), ...
 %!         infsupdec (2.1, 3.0, "trv")))
@@ -66,7 +66,7 @@
 %!         (decorationpart (and (infsupdec (1.0, 3.0, "dac"), infsupdec (entire, "def"))) {1}), ...
 %!         (decorationpart (infsupdec (1.0, 3.0, "trv")) {1})))
 
-%!test "minimal_hull_test";
+%!test "minimal_convexHull_test";
 %! assert (eq (...
 %!         or (infsup (1.0, 3.0), infsup (2.1, 4.0)), ...
 %!         infsup (1.0, 4.0)))
@@ -83,7 +83,7 @@
 %!         or (infsup (1.0, 3.0), infsup (-inf, inf)), ...
 %!         infsup (-inf, inf)))
 
-%!test "minimal_hull_dec_test";
+%!test "minimal_convexHull_dec_test";
 %! assert (eq (...
 %!         or (infsupdec (1.0, 3.0, "trv"), infsupdec (2.1, 4.0, "trv")), ...
 %!         infsupdec (1.0, 4.0, "trv")))
@@ -113,7 +113,7 @@
 %!         infsupdec (entire, "trv")))
 %!shared
 %!  ## Re-Enable warnings when creating NaIs
-%!  warning ("on", "interval:infsupdec")
+%!  warning ("on", "interval:NaI")
 %! ## Test library imports
 %!function s = to_string (x)
 %!    if (isnumeric (x))
