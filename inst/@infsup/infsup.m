@@ -126,7 +126,8 @@ if (nargin == 1)
                                 l {i} = boundaries {1};
                                 u {i} = boundaries {2};
                             otherwise
-                                error ("interval literal is not in inf-sup form")
+                                error ("interval:NaI", ...
+                                    "interval literal is not in inf-sup form")
                         endswitch
                 endswitch
             elseif (ischar (l {i}) && strfind (c {i}, "?"))
@@ -174,7 +175,7 @@ if (ischar (u))
 endif
 
 if (not (size_equal (l, u)))
-    error ("size of upper and lower bounds must match")
+    error ("interval:NaI", "size of upper and lower bounds must match")
 endif
 
 ## check parameters and conversion to double precision
@@ -460,13 +461,15 @@ x.sup (x.sup == 0) = +0;
 
 ## check for illegal boundaries [inf,inf] and [-inf,-inf]
 if (find (not (isfinite (x.inf (x.inf == x.sup))), 1))
-    error ("illegal interval boundaries: infimum = supremum = +/- infinity");
+    error ("interval:NaI", ...
+           "illegal interval boundaries: infimum = supremum = +/- infinity");
 endif
 
 ## check boundary order
 if (find (isfinite (x.inf (x.inf > x.sup)), 1) || ...
     find (isfinite (x.sup (x.inf > x.sup)), 1))
-    error ("illegal interval boundaries: infimum greater than supremum");
+    error ("interval:NaI", ...
+           "illegal interval boundaries: infimum greater than supremum");
 endif
 
 ## check for possibly wrong boundary order
@@ -475,7 +478,8 @@ if (any (any (max (-realmax, ...
                          +inf, ...
                          x.inf (possiblyundefined), ...
                          pow2 (-1074))) == x.sup (possiblyundefined))))
-    warning ("PossiblyUndefined: infimum may be greater than supremum");
+    warning ("interval:PossiblyUndefined", ...
+             "infimum may be greater than supremum");
 endif
 
 x = class (x, "infsup");

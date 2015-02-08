@@ -192,7 +192,7 @@ try
         error ("illegal decoration");
     endif
 catch
-    warning ("interval:infsupdec", lasterror.message);
+    warning ("interval:NaI", lasterror.message);
     ## NaI representation is unique.
     bare = infsup ();
     dec = {"ill"};
