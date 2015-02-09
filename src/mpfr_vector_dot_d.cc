@@ -120,22 +120,85 @@ std::pair <double, double> interval_vector_dot (
   return result;
 }
 
+double vector_dot (
+  mpfr_rnd_t rnd,
+  Matrix vector_x, Matrix vector_y)
+{
+  if (vector_x.numel () == 1 && vector_y.numel () != 1)
+    // Broadcast vector x
+    vector_x = Matrix (vector_y.dims (), vector_x.elem (0));
+  else if (vector_y.numel () == 1 && vector_x.numel () != 1)
+    // Broadcast vector y
+    vector_y = Matrix (vector_x.dims (), vector_y.elem (0));
+  
+  const unsigned int n = vector_x.numel ();
+  // Compute sum of products in accumulator
+  // This is faster than the less accurate mpfr_sum function, because we
+  // do not have to instantiate an array of mpfr_t values.
+  mpfr_t accu;
+  mpfr_init2 (accu, BINARY64_ACCU_PRECISION);
+  mpfr_set_zero (accu, 0);
+  mpfr_t product;
+  mpfr_init2 (product, 2 * BINARY64_PRECISION + 1);
+  for (int i = 0; i < n; i++)
+    {
+      mpfr_set_d (product, vector_x.elem (i), MPFR_RNDZ);
+      mpfr_mul_d (product, product, vector_y.elem (i), MPFR_RNDZ);
+      
+      int exact = mpfr_add (accu, accu, product, MPFR_RNDZ);
+      if (exact != 0)
+        error ("mpfr_exact_vector_dot_d: Failed to compute exact dot product");
+      if (mpfr_nan_p (accu))
+        // Short-Circtuit if one addend is NAN or if -INF + INF
+        break;
+    }
+
+  double result;
+  if (mpfr_nan_p (accu) != 0)
+    result = NAN;
+  else
+    if (mpfr_cmp_d (accu, 0.0) == 0)
+      // exact zero
+      if (rnd == MPFR_RNDD)
+        result = -0.0;
+      else
+        result = +0.0;
+    else
+      result = mpfr_get_d (accu, rnd);
+      
+  mpfr_clear (accu);
+  mpfr_clear (product);
+  
+  return result;
+}
+
 DEFUN_DLD (mpfr_vector_dot_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding utf-8\n"
   "@deftypefn  {Loadable Function} {[@var{L}, @var{U}] = } mpfr_vector_dot_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_vector_dot_d (@var{R}, @var{X}, @var{Y})\n"
   "\n"
   "Compute the upper and lower boundary of the dot product of interval "
   "vectors [@var{XL}, @var{XU}] and [@var{YL}, @var{YU}] in binary64 numbers "
-  "with correctly rounded result."
+  "with tightest result."
   "\n\n"
-  "Scalar intervals do broadcast."
+  "Alternate syntax: Compute dot product of two binary64 vectors with "
+  "correctly rounded result and rounding direction @var{R} (0: towards zero, "
+  "0.5: towards nearest and ties to even, +inf towards positive infinity, "
+  "-inf towards negative infinity)."
   "\n\n"
-  "The output for empty intervals is undefined.  The output for [0] × [Entire]"
-  " is undefined, the function caller has to make sure, that this case does "
-  "not occur."
+  "Scalar intervals or values do broadcast."
   "\n\n"
-  "The result is guaranteed to be tightest."
+  "The result is guaranteed to be tightest / correctly rounded.  That is, the "
+  "function is evaluated with (virtually) infinite precision and the exact "
+  "result is approximated with a binary64 number using the desired rounding "
+  "direction."
+  "\n\n"
+  "For the non-interval syntax only: If one element of any vector is NaN or "
+  "infinities of both signs or a product of 0 and +-inf are encountered, the "
+  "result will be NaN.  An exact(!) zero is returned as +0 in all rounding "
+  "directions, except for rounding towards negative infinity, where -0 is "
+  "returned."
   "\n\n"
   "@example\n"
   "@group\n"
@@ -150,24 +213,43 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
 {
   // Check call syntax
   int nargin = args.length ();
-  if (nargin != 4)
+  if (nargin < 3 || nargin > 4)
     {
       print_usage ();
       return octave_value_list ();
     }
-  
-  // Read parameters
-  Matrix vector_xl = args (0).matrix_value ();
-  Matrix vector_yl = args (1).matrix_value ();
-  Matrix vector_xu = args (2).matrix_value ();
-  Matrix vector_yu = args (3).matrix_value ();
-  if (error_state)
-    return octave_value_list ();
-  
-  std::pair<double, double> result_d = interval_vector_dot (vector_xl, vector_yl, vector_xu, vector_yu);
+
   octave_value_list result;
-  result (0) = result_d.first;
-  result (1) = result_d.second;
+  switch (nargin)
+    {
+      case 4: // Interval version
+        {
+          Matrix vector_xl = args (0).row_vector_value ();
+          Matrix vector_yl = args (1).row_vector_value ();
+          Matrix vector_xu = args (2).row_vector_value ();
+          Matrix vector_yu = args (3).row_vector_value ();
+          if (error_state)
+            return octave_value_list ();
+      
+          std::pair <double, double> result_d = 
+            interval_vector_dot (vector_xl, vector_yl, vector_xu, vector_yu);
+          result (0) = result_d.first;
+          result (1) = result_d.second;
+          break;
+        }
+      case 3: // Non-interval version
+        {
+          const mpfr_rnd_t rnd  = parse_rounding_mode (
+                                  args (0).matrix_value ().elem (0));
+          const Matrix vector_x = args (1).row_vector_value ();
+          const Matrix vector_y = args (2).row_vector_value ();
+          if (error_state)
+            return octave_value_list ();
+            
+          result (0) = vector_dot (rnd, vector_x, vector_y);
+          break;
+        }
+    }
   
   return result;
 }

@@ -29,7 +29,7 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
   "\n\n"
   "@var{R} is the rounding direction (0: towards zero, 0.5: towards nearest "
   "and ties to even, +inf towards positive infinity, -inf towards negative "
-  "infinity."
+  "infinity)."
   "\n\n"
   "The result is guaranteed to be correctly rounded.  That is, the function "
   "is evaluated with (virtually) infinite precision and the exact result is "
@@ -68,10 +68,10 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
   if (error_state)
     return octave_value_list ();
   
+  const unsigned int n = vector.numel ();
   // Compute sum in accumulator
   // This is faster than the less accurate mpfr_sum function, because we
   // do not have to instantiate an array of mpfr_t values.
-  const unsigned int n = vector.numel ();
   mpfr_t accu;
   mpfr_init2 (accu, BINARY64_ACCU_PRECISION);
   mpfr_set_zero (accu, 0);

@@ -4,7 +4,7 @@
  * mulrev: Now allows non-scalar arguments and can compute two-output division
            (mulrevtopair no longer available)
  
- * Improved performance and accuracy of vector sums
+ * Improved performance and accuracy of vector sums and dot products
 
 Bugfixes
  * Compatibility with GNU Octave 4.0 (bug #43925)

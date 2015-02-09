@@ -178,7 +178,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "\n\n"
   "Parameter 1 is the function's name in GNU Octave, Parameter 2 is the "
   "rounding direction (0: towards zero, 0.5 towards nearest and ties to even, "
-  "+inf towards positive infinity, -inf towards negative infinity.  "
+  "+inf towards positive infinity, -inf towards negative infinity).  "
   "Parameters 3 and (possibly) 4 and 5 are operands to the function."
   "\n\n"
   "Evaluated on matrices, the function will be applied element-wise.  Scalar "

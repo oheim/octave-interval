@@ -122,13 +122,6 @@ endfunction
 ## Accuracy is tightest.
 function [l, u] = vectordot (x, y)
 
-if (any (isempty (x)) || any (isempty (y)))
-    ## Short-circuit: result is [Empty]
-    l = inf;
-    u = -inf;
-    return
-endif
-
 if (isscalar (x.inf) && isscalar (y.inf))
     ## Short-circuit: scalar × scalar
     z = x .* y;
@@ -136,24 +129,6 @@ if (isscalar (x.inf) && isscalar (y.inf))
     u = z.sup;
     return
 endif
-
-## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
-    x.inf = ones (size (y.inf)) .* x.inf;
-    x.sup = ones (size (y.inf)) .* x.sup;
-    y.inf = ones (size (x.inf)) .* y.inf;
-    y.sup = ones (size (x.inf)) .* y.sup;
-endif
-
-## [0] × anything = [0] × [0]
-## [Entire] × anything but [0] = [Entire] × [Entire]
-## This prevents the cases where 0 × inf would produce NaNs.
-entireproduct = isentire (x) | isentire (y);
-zeroproduct = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
-x.inf (entireproduct) = y.inf (entireproduct) = -inf;
-x.sup (entireproduct) = y.sup (entireproduct) = inf;
-x.inf (zeroproduct) = x.sup (zeroproduct) = ...
-    y.inf (zeroproduct) = y.sup (zeroproduct) = 0;
 
 [l, u] = mpfr_vector_dot_d (x.inf, y.inf, x.sup, y.sup);
 
