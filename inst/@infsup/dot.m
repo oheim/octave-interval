@@ -24,8 +24,7 @@
 ## first non-singleton dimension.  If the optional argument @var{DIM} is given,
 ## calculate the dot products along this dimension.
 ##
-## Accuracy: The result is a nearly tight enclosure (within about 1.5 ULPs of
-## the exact result).
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

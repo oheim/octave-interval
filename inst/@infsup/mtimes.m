@@ -20,8 +20,7 @@
 ## 
 ## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
-## Accuracy: The result is a nearly tight enclosure (within about 1.5 ULPs of
-## the exact result).
+## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group

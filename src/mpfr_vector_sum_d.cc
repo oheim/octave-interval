@@ -17,7 +17,6 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
-#include <cmath>
 #include "mpfr_commons.cc"
 
 DEFUN_DLD (mpfr_vector_sum_d, args, nargout, 
@@ -70,64 +69,35 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
     return octave_value_list ();
   
   // Compute sum in accumulator
-  // This is twice as fast as the less accurate mpfr_sum function, because we
+  // This is faster than the less accurate mpfr_sum function, because we
   // do not have to instantiate an array of mpfr_t values.
   const unsigned int n = vector.numel ();
-  bool pos_infinity = false;
-  bool neg_infinity = false;
   mpfr_t accu;
   mpfr_init2 (accu, BINARY64_ACCU_PRECISION);
+  mpfr_set_zero (accu, 0);
   for (int i = 0; i < n; i++)
     {
-      if (std::isfinite (vector.elem (i)))
-        {
-          // Short-Circuit if result can't be finite anymore
-          if (! pos_infinity && ! neg_infinity)
-            {
-              int exact = mpfr_add_d (accu, accu, vector.elem (i), rnd);
-              if (exact != 0)
-                error ("mpfr_exact_vector_sum_d: Failed to compute exact sum");
-            }
-        }
-      else if (std::isinf (vector.elem (i)))
-        {
-          if (vector.elem (i) > 0)
-            pos_infinity = true;
-          else
-            neg_infinity = true;
-          if (pos_infinity && neg_infinity)
-            // Short-Circuit if -INF + INF
-            break;
-        }
-      else if (std::isnan (vector.elem (i)))
-        {
-          // Short-Circtuit if one addend is NAN
-          pos_infinity = true;
-          neg_infinity = true;
-          break;
-        }
+      int exact = mpfr_add_d (accu, accu, vector.elem (i), rnd);
+      if (exact != 0)
+        error ("mpfr_exact_vector_sum_d: Failed to compute exact sum");
+      if (mpfr_nan_p (accu))
+        // Short-Circtuit if one addend is NAN or if -INF + INF
+        break;
     }
 
   double result;
-  if (pos_infinity)
-    if (neg_infinity)
-      result = NAN;
-    else
-      result = INFINITY;
+  if (mpfr_nan_p (accu) != 0)
+    result = NAN;
   else
-    if (neg_infinity)
-      result = -INFINITY;
+    if (mpfr_cmp_d (accu, 0.0) == 0)
+      // exact zero
+      if (rnd == MPFR_RNDD)
+        result = -0.0;
+      else
+        result = +0.0;
     else
-      {
-        if (mpfr_cmp_d (accu, 0.0) == 0)
-          // exact zero
-          if (rnd == MPFR_RNDD)
-            result = -0.0;
-          else
-            result = +0.0;
-        else
-          result = mpfr_get_d (accu, rnd);
-      }
+      result = mpfr_get_d (accu, rnd);
+      
   mpfr_clear (accu);
   
   return octave_value (result);
