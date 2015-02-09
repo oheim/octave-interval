@@ -17,6 +17,7 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
+#include <cmath>
 #include "mpfr_commons.cc"
 
 DEFUN_DLD (mpfr_vector_sum_d, args, nargout, 
@@ -24,15 +25,22 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
   "@documentencoding utf-8\n"
   "@deftypefn  {Loadable Function} {} mpfr_vector_sum_d (@var{R}, @var{X})\n"
   "\n"
-  "Compute the sum of all numbers in a binary64 vector @var{X} with quite "
-  "accurate result."
+  "Compute the sum of all numbers in a binary64 vector @var{X} with correctly "
+  "rounded result."
   "\n\n"
-  "@var{R} is the rounding direction (0: towards zero, +inf towards positive "
-  "infinity, -inf towards negative infinity."
+  "@var{R} is the rounding direction (0: towards zero, 0.5: towards nearest "
+  "and ties to even, +inf towards positive infinity, -inf towards negative "
+  "infinity."
   "\n\n"
-  "The result is not guaranteed to be exactly rounded, however the result is "
-  "smaller than or larger than the exact result in accordance with the "
-  "rounding mode.  The result's accurracy is within about 1.5 ULPs."
+  "The result is guaranteed to be correctly rounded.  That is, the function "
+  "is evaluated with (virtually) infinite precision and the exact result is "
+  "approximated with a binary64 number using the desired rounding direction."
+  "\n\n"
+  "If one element of the vector is NaN or infinities of both signs are "
+  "encountered, the result will be NaN."
+  "\n\n"
+  "An exact(!) zero is returned as +0 in all rounding directions, except for "
+  "rounding towards negative infinity, where -0 is returned."
   "\n\n"
   "@example\n"
   "@group\n"
@@ -55,35 +63,72 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
     }
   
   // Read parameters
-  const mpfr_rnd_t  rnd   = parse_rounding_mode (
+  const mpfr_rnd_t rnd    = parse_rounding_mode (
                             args (0).matrix_value ().elem (0));
   const Matrix     vector = args (1).row_vector_value ();
   if (error_state)
     return octave_value_list ();
   
-  // Prepare parameters for mpfr_sum function
+  // Compute sum in accumulator
+  // This is twice as fast as the less accurate mpfr_sum function, because we
+  // do not have to instantiate an array of mpfr_t values.
   const unsigned int n = vector.numel ();
-  mpfr_t* mp_addend = new mpfr_t [n];
-  mpfr_ptr* mp_addend_ptr = new mpfr_ptr [n];
+  bool pos_infinity = false;
+  bool neg_infinity = false;
+  mpfr_t accu;
+  mpfr_init2 (accu, BINARY64_ACCU_PRECISION);
   for (int i = 0; i < n; i++)
     {
-      mp_addend_ptr [i] = mp_addend [i];
-      mpfr_init2 (mp_addend [i], BINARY64_PRECISION);
-      mpfr_set_d (mp_addend [i], vector.elem (i), MPFR_RNDZ);
+      if (std::isfinite (vector.elem (i)))
+        {
+          // Short-Circuit if result can't be finite anymore
+          if (! pos_infinity && ! neg_infinity)
+            {
+              int exact = mpfr_add_d (accu, accu, vector.elem (i), rnd);
+              if (exact != 0)
+                error ("mpfr_exact_vector_sum_d: Failed to compute exact sum");
+            }
+        }
+      else if (std::isinf (vector.elem (i)))
+        {
+          if (vector.elem (i) > 0)
+            pos_infinity = true;
+          else
+            neg_infinity = true;
+          if (pos_infinity && neg_infinity)
+            // Short-Circuit if -INF + INF
+            break;
+        }
+      else if (std::isnan (vector.elem (i)))
+        {
+          // Short-Circtuit if one addend is NAN
+          pos_infinity = true;
+          neg_infinity = true;
+          break;
+        }
     }
 
-  // Compute sum
-  mpfr_t sum;
-  mpfr_init2 (sum, BINARY64_PRECISION);
-  mpfr_sum (sum, mp_addend_ptr, n, rnd);
-  const double result = mpfr_get_d (sum, rnd);
-
-  // Cleanup
-  mpfr_clear (sum);
-  for (int i = 0; i < n; i++)
-    mpfr_clear (mp_addend [i]);
-  delete[] mp_addend_ptr;
-  delete[] mp_addend;
+  double result;
+  if (pos_infinity)
+    if (neg_infinity)
+      result = NAN;
+    else
+      result = INFINITY;
+  else
+    if (neg_infinity)
+      result = -INFINITY;
+    else
+      {
+        if (mpfr_cmp_d (accu, 0.0) == 0)
+          // exact zero
+          if (rnd == MPFR_RNDD)
+            result = -0.0;
+          else
+            result = +0.0;
+        else
+          result = mpfr_get_d (accu, rnd);
+      }
+  mpfr_clear (accu);
   
   return octave_value (result);
 }
