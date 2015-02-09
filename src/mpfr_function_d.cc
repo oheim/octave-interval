@@ -19,57 +19,69 @@
 #include <mpfr.h>
 #include "mpfr_commons.cc"
 
-// Evaluate an unary MPFR function on a double matrix
+typedef int (*mpfr_unary_fun)
+            (mpfr_t rop, const mpfr_t op,
+                         mpfr_rnd_t rnd);
+typedef int (*mpfr_binary_fun)
+            (mpfr_t rop, const mpfr_t op1,
+                         const mpfr_t op2,
+                         mpfr_rnd_t rnd);
+typedef int (*mpfr_ternary_fun)
+            (mpfr_t rop, const mpfr_t op1,
+                         const mpfr_t op2,
+                         const mpfr_t op3,
+                         mpfr_rnd_t rnd);
+
+// Evaluate an unary MPFR function on a binary64 matrix
 void evaluate (
-  NDArray &arg1,        // Operand 1 and result
-  const mpfr_rnd_t rnd, // Rounding direction
-  int (*ptr_unary_fun)  // The MPFR function to evaluate (element-wise)
-    (mpfr_t rop, const mpfr_t op, mpfr_rnd_t rnd))
+  Matrix &arg1,           // Operand 1 and result
+  const mpfr_rnd_t rnd,   // Rounding direction
+  const mpfr_unary_fun f) // The MPFR function to evaluate (element-wise)
 {
   mpfr_t mp;
-  mpfr_init2 (mp, DOUBLE_PRECISION);
+  mpfr_init2 (mp, BINARY64_PRECISION);
   
-  const int n = arg1.numel ();
+  const unsigned int n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
-      mpfr_set_d (mp, arg1.elem (i), rnd);
-      (*ptr_unary_fun) (mp, mp, rnd);
+      mpfr_set_d (mp, arg1.elem (i), MPFR_RNDZ);
+      (*f) (mp, mp, rnd);
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
   
   mpfr_clear (mp);
 }
 
-// Evaluate a binary MPFR function on two double matrices
+// Evaluate a binary MPFR function on two binary64 matrices
 void evaluate (
-  NDArray &arg1,        // Operand 1 and result
-  const NDArray &arg2,  // Operand 2
-  const mpfr_rnd_t rnd, // Rounding direction
-  int (*ptr_binary_fun) // The MPFR function to evaluate (element-wise)
-    (mpfr_t rop, const mpfr_t op1, const mpfr_t op2, mpfr_rnd_t rnd))
+  Matrix &arg1,            // Operand 1 and result
+  const Matrix &arg2,      // Operand 2
+  const mpfr_rnd_t rnd,    // Rounding direction
+  const mpfr_binary_fun f) // The MPFR function to evaluate (element-wise)
 {
   mpfr_t mp1, mp2;
-  mpfr_init2 (mp1, DOUBLE_PRECISION);
-  mpfr_init2 (mp2, DOUBLE_PRECISION);
+  mpfr_init2 (mp1, BINARY64_PRECISION);
+  mpfr_init2 (mp2, BINARY64_PRECISION);
   
   bool scalar1 = arg1.numel () == 1;
   bool scalar2 = arg2.numel () == 1;
   
   if (scalar1 && ! scalar2)
     {
-      arg1.resize (arg2.dims (), arg1.elem (0));
+      // arg1 shall contain the result and must be resized
+      arg1 = Matrix (arg2.dims (), arg1.elem (0));
       scalar1 = false;
     }
   
-  const int n = std::max (arg1.numel (), arg2.numel ());
+  const unsigned int n = std::max (arg1.numel (), arg2.numel ());
   for (octave_idx_type i = 0; i < n; i ++)
     {
-      mpfr_set_d (mp1, arg1.elem (i), rnd);
+      mpfr_set_d (mp1, arg1.elem (i), MPFR_RNDZ);
       mpfr_set_d (mp2,
                   (scalar2) ? arg2.elem (0) // broadcast
                             : arg2.elem (i),
-                  rnd);
-      (*ptr_binary_fun) (mp1, mp1, mp2, rnd);
+                  MPFR_RNDZ);
+      (*f) (mp1, mp1, mp2, rnd);
       arg1.elem (i) = mpfr_get_d (mp1, rnd);
     }
   
@@ -77,51 +89,50 @@ void evaluate (
   mpfr_clear (mp2);
 }
 
-// Evaluate a ternary MPFR function on three double matrices
+// Evaluate a ternary MPFR function on three binary64 matrices
 void evaluate (
-  NDArray &arg1,         // Operand 1 and result
-  const NDArray &arg2,   // Operand 2
-  const NDArray &arg3,   // Operand 3
-  const mpfr_rnd_t rnd,  // Rounding direction
-  int (*ptr_ternary_fun) // The MPFR function to evaluate (element-wise)
-    (mpfr_t rop, const mpfr_t op1, const mpfr_t op2, const mpfr_t op3,
-        mpfr_rnd_t rnd))
+  Matrix &arg1,             // Operand 1 and result
+  const Matrix &arg2,       // Operand 2
+  const Matrix &arg3,       // Operand 3
+  const mpfr_rnd_t rnd,     // Rounding direction
+  const mpfr_ternary_fun f) // The MPFR function to evaluate (element-wise)
 {
   mpfr_t mp1, mp2, mp3;
-  mpfr_init2 (mp1, DOUBLE_PRECISION);
-  mpfr_init2 (mp2, DOUBLE_PRECISION);
-  mpfr_init2 (mp3, DOUBLE_PRECISION);
+  mpfr_init2 (mp1, BINARY64_PRECISION);
+  mpfr_init2 (mp2, BINARY64_PRECISION);
+  mpfr_init2 (mp3, BINARY64_PRECISION);
   
   bool scalar1 = arg1.numel () == 1;
   bool scalar2 = arg2.numel () == 1;
   bool scalar3 = arg3.numel () == 1;
   
   if (scalar1)
+    // arg1 shall contain the result and must possibly be resized
     if (!scalar2)
       {
-        arg1.resize (arg2.dims (), arg1.elem (0));
+        arg1 = Matrix (arg2.dims (), arg1.elem (0));
         scalar1 = false;
       }
     else if (!scalar3)
       {
-        arg1.resize (arg3.dims (), arg1.elem (0));
+        arg1 = Matrix (arg3.dims (), arg1.elem (0));
         scalar1 = false;
       }
 
-  const int n = std::max (std::max (arg1.numel (), arg2.numel ()),
-                          arg3.numel ());
+  const unsigned int n = std::max (std::max (arg1.numel (), arg2.numel ()),
+                                   arg3.numel ());
   for (octave_idx_type i = 0; i < n; i ++)
     {
-      mpfr_set_d (mp1, arg1.elem (i), rnd);
+      mpfr_set_d (mp1, arg1.elem (i), MPFR_RNDZ);
       mpfr_set_d (mp2,
                   (scalar2) ? arg2.elem (0) // broadcast
                             : arg2.elem (i),
-                  rnd);
+                  MPFR_RNDZ);
       mpfr_set_d (mp3,
                   (scalar3) ? arg3.elem (0) // broadcast
                             : arg3.elem (i),
-                  rnd);
-      (*ptr_ternary_fun) (mp1, mp1, mp2, mp3, rnd);
+                  MPFR_RNDZ);
+      (*f) (mp1, mp1, mp2, mp3, rnd);
       arg1.elem (i) = mpfr_get_d (mp1, rnd);
     }
   
@@ -163,15 +174,19 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('tanh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('times', @var{R}, @var{X}, @var{Y})\n"
   "\n"
-  "Evaluate a function in double precision with correctly rounded result."
+  "Evaluate a function in binary64 with correctly rounded result."
   "\n\n"
   "Parameter 1 is the function's name in GNU Octave, Parameter 2 is the "
   "rounding direction (0: towards zero, 0.5 towards nearest and ties to even, "
-  "inf towards positive infinity, -inf towards negative infinity.  "
+  "+inf towards positive infinity, -inf towards negative infinity.  "
   "Parameters 3 and (possibly) 4 and 5 are operands to the function."
   "\n\n"
   "Evaluated on matrices, the function will be applied element-wise.  Scalar "
   "operands do broadcast for functions with more than one operand."
+  "\n\n"
+  "The result is guaranteed to be correctly rounded.  That is, the function "
+  "is evaluated with (virtually) infinite precision and the exact result is "
+  "approximated with a binary64 number using the desired rounding direction."
   "\n\n"
   "@example\n"
   "@group\n"
@@ -196,74 +211,109 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   // Read parameters
   const std::string function = args (0).string_value ();
   const mpfr_rnd_t  rnd      = parse_rounding_mode (
-                               args (1).array_value ());
-  NDArray           arg1     = args (2).array_value ();
-  NDArray           arg2;
-  NDArray           arg3;
+                               args (1).matrix_value ().elem (0));
+  Matrix            arg1     = args (2).matrix_value ();
+  Matrix            arg2;
+  Matrix            arg3;
   if (nargin >= 4)
-    arg2                     = args (3).array_value ();
+    {
+      arg2                   = args (3).matrix_value ();
+      if (arg1.numel () != 1 && arg2.numel () != 1 &&
+          arg1.numel () != arg2.numel ())
+        error ("mpfr_function_d: Matrix dimensions must agree!");
+    }
   if (nargin >= 5)
-    arg3                     = args (4).array_value ();
+    {
+      arg3                   = args (4).matrix_value ();
+      if (arg3.numel () != 1 && 
+          (arg1.numel () != 1 && arg1.numel () != arg3.numel ()) ||
+          (arg2.numel () != 1 && arg2.numel () != arg3.numel ()))
+        error ("mpfr_function_d: Matrix dimensions must agree!");
+    }
   if (error_state)
     return octave_value_list ();
   
   // Choose the function to evaluate
-  if      (function.compare ("acos") == 0)
-    evaluate (arg1, rnd, &mpfr_acos);
-  else if (function.compare ("acosh") == 0)
-    evaluate (arg1, rnd, &mpfr_acosh);
-  else if (function.compare ("asin") == 0)
-    evaluate (arg1, rnd, &mpfr_asin);
-  else if (function.compare ("asinh") == 0)
-    evaluate (arg1, rnd, &mpfr_asinh);
-  else if (function.compare ("atan") == 0)
-    evaluate (arg1, rnd, &mpfr_atan);
-  else if (function.compare ("atan2") == 0)
-    evaluate (arg1, arg2, rnd, &mpfr_atan2);
-  else if (function.compare ("atanh") == 0)
-    evaluate (arg1, rnd, &mpfr_atanh);
-  else if (function.compare ("cos") == 0)
-    evaluate (arg1, rnd, &mpfr_cos);
-  else if (function.compare ("cosh") == 0)
-    evaluate (arg1, rnd, &mpfr_cosh);
-  else if (function.compare ("exp") == 0)
-    evaluate (arg1, rnd, &mpfr_exp);
-  else if (function.compare ("fma") == 0)
-    evaluate (arg1, arg2, arg3, rnd, &mpfr_fma);
-  else if (function.compare ("log") == 0)
-    evaluate (arg1, rnd, &mpfr_log);
-  else if (function.compare ("log2") == 0)
-    evaluate (arg1, rnd, &mpfr_log2);
-  else if (function.compare ("log10") == 0)
-    evaluate (arg1, rnd, &mpfr_log10);
-  else if (function.compare ("minus") == 0)
-    evaluate (arg1, arg2, rnd, &mpfr_sub);
-  else if (function.compare ("plus") == 0)
-    evaluate (arg1, arg2, rnd, &mpfr_add);
-  else if (function.compare ("pow") == 0)
-    evaluate (arg1, arg2, rnd, &mpfr_pow);
-  else if (function.compare ("pow2") == 0)
-    evaluate (arg1, rnd, &mpfr_exp2);
-  else if (function.compare ("pow10") == 0)
-    evaluate (arg1, rnd, &mpfr_exp10);
-  else if (function.compare ("rdivide") == 0)
-    evaluate (arg1, arg2, rnd, &mpfr_div);
-  else if (function.compare ("sin") == 0)
-    evaluate (arg1, rnd, &mpfr_sin);
-  else if (function.compare ("sinh") == 0)
-    evaluate (arg1, rnd, &mpfr_sinh);
-  else if (function.compare ("sqr") == 0)
-    evaluate (arg1, rnd, &mpfr_sqr);
-  else if (function.compare ("sqrt") == 0)
-    evaluate (arg1, rnd, &mpfr_sqrt);
-  else if (function.compare ("tan") == 0)
-    evaluate (arg1, rnd, &mpfr_tan);
-  else if (function.compare ("tanh") == 0)
-    evaluate (arg1, rnd, &mpfr_tanh);
-  else if (function.compare ("times") == 0)
-    evaluate (arg1, arg2, rnd, &mpfr_mul);
-  else
-    error ("mpfr_function_d: unsupported function");
+  switch (nargin - 2)
+    {
+      case 1: // unary function
+        if      (function == "acos")
+          evaluate (arg1, rnd, &mpfr_acos);
+        else if (function == "acosh")
+          evaluate (arg1, rnd, &mpfr_acosh);
+        else if (function == "asin")
+          evaluate (arg1, rnd, &mpfr_asin);
+        else if (function == "asinh")
+          evaluate (arg1, rnd, &mpfr_asinh);
+        else if (function == "atan")
+          evaluate (arg1, rnd, &mpfr_atan);
+        else if (function == "atanh")
+          evaluate (arg1, rnd, &mpfr_atanh);
+        else if (function == "cos")
+          evaluate (arg1, rnd, &mpfr_cos);
+        else if (function == "cosh")
+          evaluate (arg1, rnd, &mpfr_cosh);
+        else if (function == "exp")
+          evaluate (arg1, rnd, &mpfr_exp);
+        else if (function == "log")
+          evaluate (arg1, rnd, &mpfr_log);
+        else if (function == "log2")
+          evaluate (arg1, rnd, &mpfr_log2);
+        else if (function == "log10")
+          evaluate (arg1, rnd, &mpfr_log10);
+        else if (function == "pow2")
+          evaluate (arg1, rnd, &mpfr_exp2);
+        else if (function == "pow10")
+          evaluate (arg1, rnd, &mpfr_exp10);
+        else if (function == "sin")
+          evaluate (arg1, rnd, &mpfr_sin);
+        else if (function == "sinh")
+          evaluate (arg1, rnd, &mpfr_sinh);
+        else if (function == "sqr")
+          evaluate (arg1, rnd, &mpfr_sqr);
+        else if (function == "sqrt")
+          evaluate (arg1, rnd, &mpfr_sqrt);
+        else if (function == "tan")
+          evaluate (arg1, rnd, &mpfr_tan);
+        else if (function == "tanh")
+          evaluate (arg1, rnd, &mpfr_tanh);
+        else
+          {
+            print_usage();
+            return octave_value_list ();
+          }
+        break;
+        
+      case 2: // binary function
+        if      (function == "atan2")
+          evaluate (arg1, arg2, rnd, &mpfr_atan2);
+        else if (function == "minus")
+          evaluate (arg1, arg2, rnd, &mpfr_sub);
+        else if (function == "plus")
+          evaluate (arg1, arg2, rnd, &mpfr_add);
+        else if (function == "pow")
+          evaluate (arg1, arg2, rnd, &mpfr_pow);
+        else if (function == "rdivide")
+          evaluate (arg1, arg2, rnd, &mpfr_div);
+        else if (function == "times")
+          evaluate (arg1, arg2, rnd, &mpfr_mul);
+        else
+          {
+            print_usage();
+            return octave_value_list ();
+          }
+        break;
+        
+      case 3: // ternary function
+        if      (function == "fma")
+          evaluate (arg1, arg2, arg3, rnd, &mpfr_fma);
+        else
+          {
+            print_usage();
+            return octave_value_list ();
+          }
+        break;
+    }
 
   return octave_value (arg1);
 }

@@ -18,17 +18,18 @@
 #include <octave/oct.h>
 #include <mpfr.h>
 
-#define DOUBLE_PRECISION 53
+#define BINARY64_PRECISION 53
+#define BINARY64_ACCU_PRECISION 2134 + 2150
 
-mpfr_rnd_t parse_rounding_mode (const NDArray octave_rounding_direction)
+mpfr_rnd_t parse_rounding_mode (const double octave_rounding_direction)
 {
   // Use rounding mode semantics from the GNU Octave fenv package
   mpfr_rnd_t mp_rnd;
-  if (octave_rounding_direction.elem (0) == INFINITY)
+  if (octave_rounding_direction == INFINITY)
     mp_rnd = MPFR_RNDU;
-  else if (octave_rounding_direction.elem (0) == -INFINITY)
+  else if (octave_rounding_direction == -INFINITY)
     mp_rnd = MPFR_RNDD;
-  else if (octave_rounding_direction.elem (0) == 0)
+  else if (octave_rounding_direction == 0.0)
     mp_rnd = MPFR_RNDZ;
   else
     // default mode

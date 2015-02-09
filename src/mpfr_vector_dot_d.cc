@@ -25,8 +25,8 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
   "@deftypefn  {Loadable Function} {[@var{L}, @var{U}] = } mpfr_vector_dot_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
   "\n"
   "Compute the upper and lower boundary of the dot product of interval "
-  "vectors [@var{XL}, @var{XU}] and [@var{YL}, @var{YU}] with double "
-  "precision and quite accurate result."
+  "vectors [@var{XL}, @var{XU}] and [@var{YL}, @var{YU}] in binary64 numbers "
+  "with quite accurate result."
   "\n\n"
   "Scalar intervals do broadcast."
   "\n\n"
@@ -57,24 +57,24 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
     }
   
   // Read parameters
-  NDArray vector_xl = args (0).array_value ();
-  NDArray vector_yl = args (1).array_value ();
-  NDArray vector_xu = args (2).array_value ();
-  NDArray vector_yu = args (3).array_value ();
+  Matrix vector_xl = args (0).matrix_value ();
+  Matrix vector_yl = args (1).matrix_value ();
+  Matrix vector_xu = args (2).matrix_value ();
+  Matrix vector_yu = args (3).matrix_value ();
   if (error_state)
     return octave_value_list ();
   
   if (vector_xl.numel () == 1 && vector_yl.numel () != 1)
     {
       // Broadcast vector x
-      vector_xl.resize (vector_yl.dims (), vector_xl.elem (0));
-      vector_xu.resize (vector_yl.dims (), vector_xu.elem (0));
+      vector_xl = Matrix (vector_yl.dims (), vector_xl.elem (0));
+      vector_xu = Matrix (vector_yl.dims (), vector_xu.elem (0));
     }
   else if (vector_yl.numel () == 1 && vector_xl.numel () != 1)
     {
       // Broadcast vector y
-      vector_yl.resize (vector_xl.dims (), vector_yl.elem (0));
-      vector_yu.resize (vector_xl.dims (), vector_yu.elem (0));
+      vector_yl = Matrix (vector_xl.dims (), vector_yl.elem (0));
+      vector_yu = Matrix (vector_xl.dims (), vector_yu.elem (0));
     }
   
   // Prepare parameters for mpfr_sum function
@@ -84,19 +84,19 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
   mpfr_ptr* mp_addend_l_ptr = new mpfr_ptr [n];
   mpfr_ptr* mp_addend_u_ptr = new mpfr_ptr [n];
   mpfr_t mp_temp; // temporary mp number for comparison of two products
-  mpfr_init2 (mp_temp, 2 * DOUBLE_PRECISION + 1);
+  mpfr_init2 (mp_temp, 2 * BINARY64_PRECISION + 1);
   for (int i = 0; i < n; i++)
     {
       mp_addend_l_ptr [i] = mp_addend_l [i];
       mp_addend_u_ptr [i] = mp_addend_u [i];
       
       // Both factors can be multiplied within 107 bits exactly!
-      mpfr_init2 (mp_addend_l [i], 2 * DOUBLE_PRECISION + 1);
+      mpfr_init2 (mp_addend_l [i], 2 * BINARY64_PRECISION + 1);
       mpfr_set_d (mp_addend_l [i], vector_xl.elem (i), MPFR_RNDN);
       mpfr_mul_d (mp_addend_l [i], mp_addend_l [i],
                                    vector_yl.elem (i), MPFR_RNDN);
                                    
-      mpfr_init2 (mp_addend_u [i], 2 * DOUBLE_PRECISION + 1);
+      mpfr_init2 (mp_addend_u [i], 2 * BINARY64_PRECISION + 1);
       mpfr_set (mp_addend_u [i], mp_addend_l [i], MPFR_RNDN);
       
       // We have to compute the remaining 3 Products and determine min/max
@@ -119,7 +119,7 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
 
   // Compute sums
   mpfr_t sum;
-  mpfr_init2 (sum, DOUBLE_PRECISION);
+  mpfr_init2 (sum, BINARY64_PRECISION);
   mpfr_sum (sum, mp_addend_l_ptr, n, MPFR_RNDD);
   octave_value_list result;
   result (0) = mpfr_get_d (sum, MPFR_RNDD);
