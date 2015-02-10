@@ -106,7 +106,8 @@ std::pair <double, double> interval_vector_dot (
       // Compute sums
       if (mpfr_add (accu_l, accu_l, mp_addend_l, MPFR_RNDZ) != 0 ||
           mpfr_add (accu_u, accu_u, mp_addend_u, MPFR_RNDZ) != 0)
-        error ("mpfr_vector_dot_d: Failed to compute exact dot product");
+        error ("interval:InvalidOperand",
+               "mpfr_vector_dot_d: Failed to compute exact dot product");
     }
   std::pair <double, double> result (mpfr_get_d (accu_l, MPFR_RNDD),
                                      mpfr_get_d (accu_u, MPFR_RNDU));
@@ -147,7 +148,8 @@ double vector_dot (
       
       int exact = mpfr_add (accu, accu, product, MPFR_RNDZ);
       if (exact != 0)
-        error ("mpfr_exact_vector_dot_d: Failed to compute exact dot product");
+        error ("interval:InvalidOperand",
+               "mpfr_vector_dot_d: Failed to compute exact dot product");
       if (mpfr_nan_p (accu))
         // Short-Circtuit if one addend is NAN or if -INF + INF
         break;

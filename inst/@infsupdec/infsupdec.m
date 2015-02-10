@@ -114,7 +114,7 @@ try
             case 3
                 [bare, isexact] = infsup (varargin {1}, varargin {2});
             otherwise
-                error ("too many arguments")
+                error ("interval:InvalidOperand", "too many arguments")
         endswitch
     elseif (nargin == 1 && iscell (varargin {1}))
         ## Parse possibly decorated interval literals
@@ -127,7 +127,8 @@ try
                     varargin {1} {i} = literal {1};
                     dec {i} = literal {2};
                 elseif (length (literal) > 2)
-                       error ("illegal decorated interval literal")
+                    error ("interval:InvalidOperand", ...
+                           "illegal decorated interval literal")
                 endif
             endif
         endfor
@@ -151,7 +152,7 @@ try
             case 2
                 [bare, isexact] = infsup (varargin {1}, varargin {2});
             otherwise
-                error ("too many arguments")
+                error ("interval:InvalidOperand", "too many arguments")
         endswitch
     endif
     
@@ -168,7 +169,7 @@ try
     endif
     
     if (not (min (size (dec) == size (bare))))
-        error ("decoration size mismatch")
+        error ("interval:InvalidOperand", "decoration size mismatch")
     endif
     
     ## Add missing decoration
@@ -179,17 +180,19 @@ try
     
     ## Check decoration
     if (max (max (isempty (bare) & not (strcmp (dec, "trv")))))
-        error ("illegal decoration for empty interval")
+        error ("interval:InvalidOperand", ...
+               "illegal decoration for empty interval")
     endif
     if (max (max (not (iscommoninterval (bare)) & strcmp (dec, "com"))))
-        error ("illegal decoration for uncommon interval")
+        error ("interval:InvalidOperand", ...
+               "illegal decoration for uncommon interval")
     endif
     if (not (min (min ( ...
             strcmp (dec, "com") | ...
             strcmp (dec, "dac") | ...
             strcmp (dec, "def") | ...
             strcmp (dec, "trv")))))
-        error ("illegal decoration");
+        error ("interval:InvalidOperand", "illegal decoration");
     endif
 catch
     warning ("interval:NaI", lasterror.message);

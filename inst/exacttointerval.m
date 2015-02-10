@@ -68,7 +68,8 @@ switch (nargin)
 endswitch
 
 if (not (exactconversion))
-    error ("exacttointerval: UndefinedOperation: interval wouldn't be exact")
+    error ("interval:UndefinedOperation", ...
+           "exacttointerval: interval wouldn't be exact")
 endif
 
 endfunction

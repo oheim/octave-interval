@@ -76,12 +76,14 @@ if (isempty (decimal.e))
     decimal.e = int64(0); # 10 ^ 0 = 1
 else
     if (strfind (decimal.e, ".") || strfind (decimal.e, ","))
-        error (["invalid decimal number with rational exponent: " string]);
+        error ("interval:InvalidOperand", ...
+               ["invalid decimal number with rational exponent: " string]);
     endif
     decimal.e = str2double (decimal.e(2:end)); # remove “e” and convert
     if (isnan (decimal.e) || ... # greater than realmax or illegal format
         abs(decimal.e) >= pow2 (53)) # possibly lost precision
-        error (["invalid decimal number with big/invalid exponent: " string]);
+        error ("interval:InvalidOperand", ...
+               ["invalid decimal number with big/invalid exponent: " string]);
     endif
     decimal.e = int64 (decimal.e);
 endif
@@ -101,13 +103,15 @@ switch length(decimal.m)
     case 2
         # nothing to do
     otherwise
-        error (["invalid decimal number with multiple decimal points: " ...
+        error ("interval:InvalidOperand", ...
+               ["invalid decimal number with multiple decimal points: " ...
                 string]);
 endswitch
 
 ## Normalize mantissa string: move decimal point to the left
 if (decimal.e + length (decimal.m{1}) >= intmax (class (decimal.e)))
-    error (["exponent overflow during normalization: " string ]);
+    error ("interval:InvalidOperand", ...
+           ["exponent overflow during normalization: " string ]);
 endif
 decimal.e += length (decimal.m{1});
 decimal.m = strcat (decimal.m{1}, decimal.m{2});
@@ -120,7 +124,8 @@ firstnonzerodigit = find (decimal.m ~= 0, 1, "first");
 if (firstnonzerodigit > 1)
     decimal.m = decimal.m(firstnonzerodigit:end);
     if (decimal.e - (firstnonzerodigit - 1) <= intmin (class (decimal.e)))
-        error (["exponent overflow during normalization: " string ]);
+        error ("interval:InvalidOperand", ...
+               ["exponent overflow during normalization: " string ]);
     endif
     decimal.e -= firstnonzerodigit - 1;
 elseif (isempty (firstnonzerodigit)) # all digits are zero

@@ -52,7 +52,7 @@ if (not (isa (x, "infsup")))
 endif
 
 if (not (isnumeric (p)) || fix (p) ~= p)
-    error ("InvalidOperand: exponent is not an integer");
+    error ("interval:InvalidOperand", "pownrev: exponent is not an integer");
 endif
 
 assert (isscalar (c) && isscalar (x), "only implemented for interval scalars");

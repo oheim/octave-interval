@@ -79,7 +79,8 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
     {
       int exact = mpfr_add_d (accu, accu, vector.elem (i), rnd);
       if (exact != 0)
-        error ("mpfr_exact_vector_sum_d: Failed to compute exact sum");
+        error ("interval:InvalidOperand",
+               "mpfr_vector_sum_d: Failed to compute exact sum");
       if (mpfr_nan_p (accu))
         // Short-Circtuit if one addend is NAN or if -INF + INF
         break;

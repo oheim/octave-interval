@@ -44,7 +44,8 @@ endif
 if (strncmpi ("0x", string, 2))
     string = string (3:end);
 else
-    error (["invalid hex number does not start with 0x: " string]);
+    error ("interval:InvalidOperand", ...
+           ["invalid hex number does not start with 0x: " string]);
 endif
 
 ## Split mantissa & exponent
@@ -55,12 +56,14 @@ if (isempty (hex.e))
     hex.e = int64(0); # 2 ^ 0 = 1
 else
     if (strfind (hex.e, ".") || strfind (hex.e, ","))
-        error (["invalid hex number with rational exponent: " string]);
+        error ("interval:InvalidOperand", ..
+               ["invalid hex number with rational exponent: " string]);
     endif
     hex.e = str2double (hex.e(2:end)); # remove “p” and convert
     if (isnan (hex.e) || ... # greater than realmax or illegal format
         abs(hex.e) >= pow2 (53)) # possibly lost precision
-        error (["invalid hex number with big/invalid exponent: " string]);
+        error ("interval:InvalidOperand", ...
+               ["invalid hex number with big/invalid exponent: " string]);
     endif
     hex.e = int64 (hex.e);
 endif
@@ -75,12 +78,14 @@ switch length(hex.m)
     case 2
         # nothing to do
     otherwise
-        error (["invalid hex number with multiple points: " string]);
+        error ("interval:InvalidOperand", ...
+               ["invalid hex number with multiple points: " string]);
 endswitch
 
 ## Normalize mantissa string: move point to the right
 if (hex.e - length (hex.m{2}) * 4 <= intmin (class (hex.e)))
-    error (["exponent overflow during normalization: " string ]);
+    error ("interval:InvalidOperand", ...
+           ["exponent overflow during normalization: " string ]);
 endif
 hex.e -= length (hex.m{2}) * 4;
 hex.m = strcat (hex.m{1}, hex.m{2});
@@ -110,7 +115,8 @@ endif
 ## Move point to the left, right after the first significand binary digit
 if (length (hex.m) > 1)
     if (hex.e + (length (hex.m) - 1) >= intmax (class (hex.e)))
-        error (["exponent overflow during normalization: " string ]);
+        error ("interval:InvalidOperand", ...
+               ["exponent overflow during normalization: " string ]);
     endif
     hex.e += length (hex.m) - 1;
 endif

@@ -90,19 +90,24 @@ endif
 
 ## Check parameters
 if (not (isa (x0, "infsup")))
-    error ("fzero: Parameter X0 is no interval")
+    error ("interval:InvalidOperand", "fzero: Parameter X0 is no interval")
 elseif (not (isscalar (x0)))
-    error ("fzero: Parameter X0 must be a scalar / F must be univariate")
+    error ("interval:InvalidOperand", ...
+           "fzero: Parameter X0 must be a scalar / F must be univariate")
 elseif (isempty (x0))
-    error ("fzero: Initial interval is empty, nothing to do")
+    error ("interval:InvalidOperand", ...
+           "fzero: Initial interval is empty, nothing to do")
 elseif (not (is_function_handle (f)) && not (ischar (f)))
-    error ("fzero: Parameter F is no function handle")
+    error ("interval:InvalidOperand", ...
+           "fzero: Parameter F is no function handle")
 elseif (not (isempty (df)) && ...
         not (is_function_handle (df)) && ...
         not (ischar (df)))
-    error ("fzero: Parameter DF is not function handle")
+    error ("interval:InvalidOperand", ...
+           "fzero: Parameter DF is not function handle")
 elseif (not (isreal (maxsteps)) || maxsteps < 1)
-    error ("fzero: Parameter MAXSTEPS must be a positive real number")
+    error ("interval:InvalidOperand", ...
+           "fzero: Parameter MAXSTEPS must be a positive real number")
 endif
 
 ## Does not work on decorated intervals, strip decoration part

@@ -44,7 +44,7 @@ if (nargin ~= 2)
     return
 endif
 if (not (isnumeric (p)) || fix (p) ~= p)
-    error ("InvalidOperand: exponent is not an integer");
+    error ("interval:InvalidOperand", "pown: exponent is not an integer");
 endif
 
 if (p == 1) # x^1

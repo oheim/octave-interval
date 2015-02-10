@@ -62,11 +62,13 @@ if (isscalar (x))
 endif
 
 if (not (isreal (y)) || fix (y) ~= y)
-    error ("mpower: only integral powers can be computed");
+    error ("interval:InvalidOperand", ...
+           "mpower: only integral powers can be computed");
 endif
 
 if (size (x, 1) ~= size (x, 2))
-    error ("mpower: must be square matrix");
+    error ("interval:InvalidOperand", ...
+           "mpower: must be square matrix");
 endif
 
 ## Implements log-time algorithm A.1 in

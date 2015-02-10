@@ -47,7 +47,7 @@ if (isa (x, "infsupdec"))
     ## We cannot override this function in infsupdec, because that would create
     ## an infinite loop.
     if (isnai (x))
-        error ("NaI has no infimum")
+        error ("interval:NaI", "NaI has no infimum")
     endif
 endif
 

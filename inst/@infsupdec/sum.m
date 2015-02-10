@@ -58,7 +58,7 @@ if (dim == 1)
 elseif (dim == 2)
     resultsize = [size(x.dec, 1), 1];
 else
-    error ("sum: DIM must be a valid dimension")
+    error ("interval:InvalidOperand", "sum: DIM must be a valid dimension")
 endif
 
 result = infsupdec (sum (intervalpart (x), dim));

@@ -56,7 +56,8 @@ if (isscalar (x) || isscalar (y))
 endif
 
 if (size (x.inf, 2) ~= size (y.inf, 1))
-    error ("operator *: nonconformant arguments");
+    error ("interval:InvalidOperand", ...
+           "operator *: nonconformant arguments");
 endif
 
 ## Initialize result matrix

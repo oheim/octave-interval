@@ -126,7 +126,7 @@ if (nargin == 1)
                                 l {i} = boundaries {1};
                                 u {i} = boundaries {2};
                             otherwise
-                                error ("interval:NaI", ...
+                                error ("interval:InvalidOperand", ...
                                     "interval literal is not in inf-sup form")
                         endswitch
                 endswitch
@@ -175,7 +175,8 @@ if (ischar (u))
 endif
 
 if (not (size_equal (l, u)))
-    error ("interval:NaI", "size of upper and lower bounds must match")
+    error ("interval:InvalidOperand", ...
+           "infsup: size of upper and lower bounds must match")
 endif
 
 ## check parameters and conversion to double precision
@@ -188,7 +189,8 @@ input.sup = u;
 for [boundaries, key] = input
     if (isfloat (boundaries))
         if (any (any (isnan (boundaries))))
-            error (["illegal " key " boundary: NaN not allowed"]);
+            error ("interval:InvalidOperand", ...
+                   ["illegal " key " boundary: NaN not allowed"]);
         endif
         ## Simple case: the boundaries already are a binary floating point
         ## number in single or double precision.
@@ -216,11 +218,13 @@ for [boundaries, key] = input
             endswitch
         elseif (isnumeric (boundary))
             if (not (isreal (boundary)))
-                error (["illegal " key " boundary: must not be complex"]);
+                error ("interval:InvalidOperand", ...
+                       ["illegal " key " boundary: must not be complex"]);
             endif
             if (isfloat (boundary))
                 if (isnan (boundary))
-                    error (["illegal " key " boundary: NaN not allowed"]);
+                    error ("interval:InvalidOperand", ...
+                           ["illegal " key " boundary: NaN not allowed"]);
                 endif
                 ## Simple case: the boundary already is a binary floating point
                 ## number in single or double precision.
@@ -261,7 +265,8 @@ for [boundaries, key] = input
                 endswitch
             endif
         elseif (not (ischar (boundary)))
-            error (["illegal " key " boundary: must be numeric or string"]);
+            error ("interval:InvalidOperand", ...
+                   ["illegal " key " boundary: must be numeric or string"]);
         elseif (strfind (boundary, "0x"))
             ## Hexadecimal floating point number
             switch key
@@ -340,7 +345,8 @@ for [boundaries, key] = input
                         ## Special case: rational form
                         boundary = strsplit (boundary, "/");
                         if (length (boundary) ~= 2)
-                            error (["illegal " key " boundary: ", ...
+                            error ("interval:InvalidOperand", ...
+                                   ["illegal " key " boundary: ", ...
                                     "rational form must have single slash"]);
                         endif
                         [decimal, remainder] = decimaldivide (...
@@ -461,14 +467,14 @@ x.sup (x.sup == 0) = +0;
 
 ## check for illegal boundaries [inf,inf] and [-inf,-inf]
 if (find (not (isfinite (x.inf (x.inf == x.sup))), 1))
-    error ("interval:NaI", ...
+    error ("interval:InvalidOperand",, ...
            "illegal interval boundaries: infimum = supremum = +/- infinity");
 endif
 
 ## check boundary order
 if (find (isfinite (x.inf (x.inf > x.sup)), 1) || ...
     find (isfinite (x.sup (x.inf > x.sup)), 1))
-    error ("interval:NaI", ...
+    error ("interval:InvalidOperand",, ...
            "illegal interval boundaries: infimum greater than supremum");
 endif
 

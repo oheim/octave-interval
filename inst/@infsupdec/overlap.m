@@ -47,7 +47,7 @@ if (not (isa (b, "infsupdec")))
 endif
 
 if (isnai (a) || isnai (b))
-    error ("interval comparison with NaI")
+    error ("interval:InvalidOperand", "interval comparison with NaI")
 endif
 
 [state, bitmask] = overlap (intervalpart (a), intervalpart (b));

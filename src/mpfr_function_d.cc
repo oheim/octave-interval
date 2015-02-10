@@ -220,7 +220,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
       arg2                   = args (3).matrix_value ();
       if (arg1.numel () != 1 && arg2.numel () != 1 &&
           arg1.numel () != arg2.numel ())
-        error ("mpfr_function_d: Matrix dimensions must agree!");
+        error ("interval:InvalidOperand",
+               "mpfr_function_d: Matrix dimensions must agree!");
     }
   if (nargin >= 5)
     {
@@ -228,7 +229,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
       if (arg3.numel () != 1 && 
           (arg1.numel () != 1 && arg1.numel () != arg3.numel ()) ||
           (arg2.numel () != 1 && arg2.numel () != arg3.numel ()))
-        error ("mpfr_function_d: Matrix dimensions must agree!");
+        error ("interval:InvalidOperand",
+               "mpfr_function_d: Matrix dimensions must agree!");
     }
   if (error_state)
     return octave_value_list ();

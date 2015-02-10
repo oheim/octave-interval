@@ -34,7 +34,7 @@ if (nargin ~= 1)
 endif
 
 if (isnai (x))
-    error ("IntvlPartOfNaI: NaI has no interval part")
+    error ("interval:IntvlPartOfNaI", "intervalpart: NaI has no interval part")
 endif
 
 ## This also works for the empty interval
