@@ -38,11 +38,14 @@ if (nargin ~= 2)
     return
 endif
 
-assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
+if (not (strcmp (S.type, "()")))
+    error ("interval:InvalidOperand", ...
+           "only subscripts with parenthesis allowed");
+endif
 
-l = subsref (A.inf, S);
-u = subsref (A.sup, S);
+A.inf = subsref (A.inf, S);
+A.sup = subsref (A.sup, S);
 
-result = infsup (l, u);
+result = A;
 
 endfunction

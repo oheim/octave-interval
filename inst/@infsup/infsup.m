@@ -457,8 +457,9 @@ for [boundaries, key] = input
     endfor
 endfor
 
-assert (not (any (any (isnan (x.inf)))));
-assert (not (any (any (isnan (x.sup)))));
+if (any (any (isnan (x.inf))) || any (any (isnan (x.sup))))
+    assert (false (), "infsup: interval creation failed");
+endif
 
 ## normalize boundaries:
 ## representation of the set containing only zero is always [-0,+0]
@@ -466,20 +467,20 @@ x.inf (x.inf == 0) = -0;
 x.sup (x.sup == 0) = +0;
 
 ## check for illegal boundaries [inf,inf] and [-inf,-inf]
-if (find (not (isfinite (x.inf (x.inf == x.sup))), 1))
-    error ("interval:InvalidOperand",, ...
+if (any (any (not (isfinite (x.inf (x.inf == x.sup))), 1)))
+    error ("interval:InvalidOperand", ...
            "illegal interval boundaries: infimum = supremum = +/- infinity");
 endif
 
 ## check boundary order
-if (find (isfinite (x.inf (x.inf > x.sup)), 1) || ...
-    find (isfinite (x.sup (x.inf > x.sup)), 1))
-    error ("interval:InvalidOperand",, ...
+if (any (any (isfinite (x.inf (x.inf > x.sup)))) || ...
+    any (any (isfinite (x.sup (x.inf > x.sup)))))
+    error ("interval:InvalidOperand", ...
            "illegal interval boundaries: infimum greater than supremum");
 endif
 
 ## check for possibly wrong boundary order
-if (any (any (max (-realmax, ...
+if (any (any (possiblyundefined)) && any (any (max (-realmax, ...
         mpfr_function_d ('plus',...
                          +inf, ...
                          x.inf (possiblyundefined), ...
