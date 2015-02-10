@@ -56,7 +56,7 @@ if (isempty (hex.e))
     hex.e = int64(0); # 2 ^ 0 = 1
 else
     if (strfind (hex.e, ".") || strfind (hex.e, ","))
-        error ("interval:InvalidOperand", ..
+        error ("interval:InvalidOperand", ...
                ["invalid hex number with rational exponent: " string]);
     endif
     hex.e = str2double (hex.e(2:end)); # remove “p” and convert
