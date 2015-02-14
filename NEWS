@@ -1,33 +1,35 @@
 0.1.2 xxxx-xx-xx
 ================
 
- * mulrev: Now allows non-scalar arguments, can compute two-output division
-           (mulrevtopair no longer available), and is a little faster
+ * mulrev: Now allows non-scalar arguments and can compute two-output division
+   (mulrevtopair no longer available)
  
- * Improved performance and accuracy of vector sums and dot products
+ * overlap: Renamed one overlapping state from equal to equals
+ 
+ * Improved accuracy of vector sums and dot products
  
  * Small performance improvements
 
 Bugfixes
  * Compatibility with GNU Octave 4.0 (bug #43925)
- * Build problems with environment variables CCFLAGS, LDFLAGS
+ * Build problems during package installation with environment variables solved
  * iscommoninterval: The decorated variant must return true for common
-   intervals without com decoration.
- * eq: The decorated variant must not consider the decation value.
+   intervals without com decoration
+ * eq: The decorated variant must not consider the decation value
  * Several decorated functions: When evaluated on a subset of the function's
-   domain, the result's decoration may be dac if the function's restriction to
-   that subset is continuous.
- * Decorated boolean functions: Must return false when evaluated on NaI input.
+   domain, the result's decoration must be dac if the function's restriction
+   to that subset is continuous
+ * Decorated boolean functions: Must return false when evaluated on NaI input
  * Interval constructors: A PossibleUndefined warning must be issued if an
    interval is created from two very close decimal numbers (which can not be
    separated in the floating-point context) where the lower boundary is greater
-   than the upper boundary.
+   than the upper boundary when compared with infinite precision
  * cancelminus/cancelplus: The functions returned wrong results if the interval
-   widths could not be compared in double-precision.
- * cos: Inaccuracy for x = [0]
- * pow: The function is now defined for x = 0 and y > 0.
- * All reverse operations: Now return a trivial decoration information at best,
-   in conformance with IEEE 1788 (the only exception is mulrev).
+   widths could not be compared in double-precision
+ * cos: Accuracy for x = [0] improved
+ * pow: The function must be defined for x = 0 and y > 0
+ * All reverse operations: Must return a trivial decoration information at best
+   (the only exception is mulrev)
 
 0.1.1 2015-02-01
 ================
@@ -49,7 +51,7 @@ Bugfixes
 Bugfixes
  * nextout: Function returned wrong results
  * exacttointerval: Now produces bare intervals instead of decorated intervals
-                    in conformance with IEEE 1788
+   in conformance with IEEE 1788
  * atanh: Function returned wrong results for +-1
  * dot: Function returned wrong results for some inputs
  * fma: Function returned wrong results for some inputs
