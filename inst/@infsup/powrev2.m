@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## powrev2 (infsup (2, 5), infsup (3, 6))
-##   @result{} [.6826061944859851, 2.584962500721157]
+##   @result{} [.6826061944859851, 2.5849625007211566]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow}
@@ -57,288 +57,206 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-assert (isscalar (a) && isscalar (c) && isscalar (y), ...
-        "only implemented for interval scalars");
+a = a & infsup (0, inf);
+c = c & infsup (0, inf);
 
-if (isempty (y) || isempty (a) || isempty (c) || a.sup <= 0 || c.sup <= 0)
-    result = infsup ();
-    return
+## Broadcast parameters if necessary
+if (isscalar (y.inf))
+    if (not (isscalar (c.inf)))
+        y.inf = x.inf (ones (size (c.inf)));
+        y.sup = x.sup (ones (size (c.inf)));
+        if (isscalar (a.inf))
+            a.inf = a.inf (ones (size (c.inf)));
+            a.sup = a.sup (ones (size (c.inf)));
+        endif
+    elseif (not (isscalar (a.inf)))
+        y.inf = x.inf (ones (size (a.inf)));
+        y.sup = x.sup (ones (size (a.inf)));
+        c.inf = c.inf (ones (size (a.inf)));
+        c.sup = c.sup (ones (size (a.inf)));
+    endif
+else
+    if (isscalar (a.inf))
+        a.inf = a.inf (ones (size (y.inf)));
+        a.sup = a.sup (ones (size (y.inf)));
+    endif
+    if (isscalar (c.inf))
+        c.inf = c.inf (ones (size (y.inf)));
+        c.sup = c.sup (ones (size (y.inf)));
+    endif
 endif
+
+l = y.inf;
+u = y.sup;
+emptyresult = isempty (a) | isempty (c) ...
+    | (a.sup == 0 & (y.sup <= 0 | c.inf > 0)) ...
+    | (y.sup <= 0 & ((a.sup <= 1 & c.sup < 1) | (a.inf > 1 & c.inf > 1))) ...
+    | (y.inf >= 0 & ((a.sup <= 1 & c.inf > 1) | (a.inf > 1 & c.sup < 1))) ...
+    | (((a.inf == 1 & a.sup == 1) | (y.inf == 0 & y.sup == 0)) ...
+        & (c.sup < 1 | c.inf > 1));
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
 ## Implements Table B.2 in
 ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
 ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
 ## http://exp.ln0.de/heimlich-power-2011.htm.
 
-switch [overlap(c, infsup (0, 1)) '-' overlap(a, infsup (0, 1))]
-    case {'overlaps-overlaps', ...
-          'overlaps-starts', ...
-          'overlaps-equals', ...
-          'overlaps-finishedBy', ...
-          'starts-overlaps', ...
-          'starts-starts', ...
-          'starts-equals', ...
-          'starts-finishedBy', ...
-          'containedBy-equals', ...
-          'containedBy-finishedBy'}
-        if (y.sup <= 0)
-            result = infsup ();
-        else
-            result = y & infsup (0, inf);
-        endif
-    case {'overlaps-containedBy', ...
-          'starts-containedBy'}
-        if (y.sup <= 0)
-            result = infsup ();
-        else
-            result = y & infsup (powrev2rounded (a.inf, c.sup, -inf), inf);
-        endif
-    case {'overlaps-finishes', ...
-          'starts-finishes', ...
-          'containedBy-finishes'}
-        if (a.inf < 1 && y.sup > 0)
-            result = y & infsup (powrev2rounded (a.inf, c.sup, -inf), inf);
-        else
-            result = infsup ();
-        endif
-    case {'overlaps-contains', ...
-          'overlaps-startedBy', ...
-          'starts-contains', ...
-          'starts-startedBy', ...
-          'containedBy-contains', ...
-          'containedBy-startedBy'}
-        result = y & infsup (-inf, powrev2rounded (a.sup, c.sup, inf));
-        if (y.sup > 0)
-            result = result | (y & infsup (0, inf));
-        endif
-    case {'overlaps-overlappedBy', ...
-          'starts-overlappedBy', ...
-          'containedBy-overlappedBy'}
-        result = (y & infsup (-inf, powrev2rounded (a.sup, c.sup, inf))) | ...
-                 (y & infsup (powrev2rounded (a.inf, c.sup, -inf), inf));
-    case {'overlaps-metBy', ...
-          'overlaps-after', ...
-          'starts-metBy', ...
-          'starts-after', ...
-          'containedBy-metBy'}
-        if (y.inf >= 0)
-            result = infsup ();
-        else
-            result = y & infsup (-inf, powrev2rounded (a.sup, c.sup, inf));
-        endif
-    case {'containedBy-overlaps', ...
-          'containedBy-starts'}
-        if (y.sup <= 0)
-            result = infsup ();
-        else
-            result = y & infsup (0, powrev2rounded (a.sup, c.inf, inf));
-        endif
-    case {'containedBy-containedBy'}
-        if (y.sup <= 0)
-            result = infsup ();
-        else
-            result = y & infsup (powrev2rounded (a.inf, c.sup, -inf), ...
-                                 powrev2rounded (a.sup, c.inf, inf));
-        endif
-    case {'containedBy-after'}
-        if (y.inf >= 0)
-            result = infsup ();
-        else
-            result = y & infsup (powrev2rounded (a.inf, c.inf, -inf), ...
-                                 powrev2rounded (a.sup, c.sup, inf));
-        endif
-    case {'finishes-overlaps', ...
-          'finishes-starts', ...
-          'finishes-containedBy'}
-        result = y & infsup (0, powrev2rounded (a.sup, c.inf, inf));
-    case {'finishes-finishes', ...
-          'finishes-equals', ...
-          'finishes-finishedBy', ...
-          'finishes-contains', ...
-          'finishes-startedBy', ...
-          'finishes-overlappedBy', ...
-          'finishes-metBy', ...
-          'equals-finishes', ...
-          'equals-equals', ...
-          'equals-finishedBy', ...
-          'equals-contains', ...
-          'equals-startedBy', ...
-          'equals-overlappedBy', ...
-          'equals-metBy', ...
-          'finishedBy-finishes', ...
-          'finishedBy-equals', ...
-          'finishedBy-finishedBy', ...
-          'finishedBy-contains', ...
-          'finishedBy-startedBy', ...
-          'finishedBy-overlappedBy', ...
-          'finishedBy-metBy', ...
-          'contains-finishes', ...
-          'contains-equals', ...
-          'contains-finishedBy', ...
-          'contains-contains', ...
-          'contains-startedBy', ...
-          'contains-overlappedBy', ...
-          'contains-metBy', ...
-          'startedBy-finishes', ...
-          'startedBy-equals', ...
-          'startedBy-finishedBy', ...
-          'startedBy-contains', ...
-          'startedBy-startedBy', ...
-          'startedBy-overlappedBy', ...
-          'startedBy-metBy', ...
-          'overlappedBy-finishes', ...
-          'overlappedBy-equals', ...
-          'overlappedBy-finishedBy', ...
-          'overlappedBy-contains', ...
-          'overlappedBy-startedBy', ...
-          'overlappedBy-overlappedBy', ...
-          'overlappedBy-metBy', ...
-          'metBy-finishes', ...
-          'metBy-equals', ...
-          'metBy-finishedBy', ...
-          'metBy-contains', ...
-          'metBy-startedBy', ...
-          'metBy-overlappedBy', ...
-          'metBy-metBy'}
-        result = y;
-    case {'finishes-after'}
-        result = y & infsup (powrev2rounded (a.inf, c.inf, -inf), 0);
-    case {'equals-overlaps', ...
-          'equals-starts', ...
-          'equals-containedBy', ...
-          'finishedBy-overlaps', ...
-          'finishedBy-starts', ...
-          'finishedBy-containedBy'}
-        result = y & infsup (0, inf);
-    case {'equals-after', ...
-          'finishedBy-after'}
-        result = y & infsup (-inf, 0);
-    case {'contains-overlaps', ...
-          'contains-starts', ...
-          'contains-containedBy', ...
-          'startedBy-overlaps', ...
-          'startedBy-starts', ...
-          'startedBy-containedBy'}
-        result = y & infsup (powrev2rounded (a.sup, c.sup, -inf), inf);
-    case {'contains-after', ...
-          'startedBy-after'}
-        result = y & infsup (-inf, powrev2rounded (a.inf, c.sup, inf));
-    case {'overlappedBy-overlaps', ...
-          'overlappedBy-starts', ...
-          'overlappedBy-containedBy'}
-        result = y & infsup (powrev2rounded (a.sup, c.sup, -inf), ...
-                             powrev2rounded (a.sup, c.inf, inf));
-    case {'overlappedBy-after'}
-        result = y & infsup (powrev2rounded (a.inf, c.inf, -inf), ...
-                             powrev2rounded (a.inf, c.sup, inf));
-    case {'metBy-overlaps', ...
-          'metBy-starts', ...
-          'metBy-containedBy'}
-        result = y & infsup (powrev2rounded (a.sup, c.sup, -inf), 0);
-    case {'metBy-after'}
-        result = y & infsup (0, powrev2rounded (a.inf, c.sup, inf));
-    case {'after-overlaps', ...
-          'after-starts'}
-        if (y.inf >= 0)
-            result = infsup ();
-        else
-            result = y & infsup (powrev2rounded (a.sup, c.sup, -inf), 0);
-        endif
-    case {'after-containedBy'}
-        if (y.inf >= 0)
-            result = infsup ();
-        else
-            result = y & infsup (powrev2rounded (a.sup, c.sup, -inf), ...
-                                 powrev2rounded (a.inf, c.inf, inf));
-        endif
-    case {'after-finishes'}
-        if (a.inf < 1 && y.inf < 0)
-            result = y & infsup (-inf, powrev2rounded (x.inf, z.inf, inf));
-        else
-            result = infsup ();
-        endif
-    case {'after-equals', ...
-          'after-finishedBy'}
-        if (y.inf >= 0)
-            result = infsup ();
-        else
-            result = y & infsup (-inf, 0);
-        endif
-    case {'after-contains', ...
-          'after-startedBy'}
-        if (y.inf >= 0)
-            result = infsup ();
-        else
-            result = y & infsup (-inf, 0);
-        endif
-        if (y.sup > 0)
-            result = result | ...
-                     (y & infsup (powrev2rounded (a.sup, c.inf, -inf), inf));
-        endif
-    case {'after-overlappedBy'}
-        if (y.inf >= 0)
-            result = infsup ();
-        else
-            result = y & infsup (-inf, powrev2rounded (a.inf, c.inf, inf));
-        endif
-        if (y.sup > 0)
-            result = result | ...
-                     (y & infsup (powrev2rounded (a.sup, c.inf, -inf), inf));
-        endif
-    case {'after-metBy'}
-        if (y.sup <= 0)
-            result = infsup ();
-        else
-            result = y & infsup (powrev2rounded (a.sup, c.inf, -inf), inf);
-        endif
-    case {'after-after'}
-        if (y.sup <= 0)
-            result = infsup ();
-        else
-            result = y & infsup (powrev2rounded (a.sup, c.inf, -inf), ...
-                                 powrev2rounded (a.inf, c.sup, inf));
-        endif
-    otherwise
-        assert (false);
-endswitch
+## x overlaps/starts/containedBy [0, 1] =======================================
+x = a.sup < 1;
+
+select = a.sup == 0 & l < 0;
+l (select) = 0;
+
+z = c.sup <= 1;
+select = x & z & (a.inf == 0 | c.sup == 1) & l < 0;
+l (select) = 0;
+
+z = c.sup > 1 & c.sup < inf;
+select = x & z & l < 0;
+if (any (any (select)))
+    l (select) = max (l (select), powrev2rounded (a.sup, c.sup, -inf));
+endif
+
+z = c.inf >= 1;
+select = x & z & (a.inf == 0 | c.inf == 1) & u > 0;
+u (select) = 0;
+
+z = c.inf > 0 & c.inf < 1;
+select = x & z & u > 0;
+if (any (any (select)))
+    u (select) = min (u (select), powrev2rounded (a.sup, c.inf, +inf));
+endif
+
+## x containedBy/finishes [0, 1] ==============================================
+x = a.inf > 0 & a.inf < 1 & a.sup <= 1;
+
+z = c.sup < 1 & c.sup > 0;
+select = x & z & l < inf;
+if (any (any (select)))
+    l (select) = max (l (select), powrev2rounded (a.inf, c.sup, -inf));
+endif
+
+z = c.inf > 1 & c.sup < inf;
+select = x & z & u > -inf;
+if (any (any (select)))
+    u (select) = min (u (select), powrev2rounded (a.inf, c.inf, +inf));
+endif
+
+## ismember (1, x) ============================================================
+x = a.sup >= 1 & a.inf <= 1;
+
+z = c.inf == 0 & c.sup == 0;
+select = x & z & l < 0;
+l (select) = 0;
+
+gap.inf = -inf (size (l));
+gap.sup = +inf (size (u));
+
+z = c.sup < 1;
+select = x & z & a.inf == 0;
+gap.sup (select) = 0;
+select = x & z & a.sup > 1;
+if (any (any (select)))
+    gap.inf (select) = powrev2rounded (a.sup, c.sup, +inf);
+endif
+select = x & z & a.inf > 0 & a.inf < 1 & a.sup > 1;
+if (any (any (select)))
+    gap.sup (select) = powrev2rounded (a.inf, c.sup, -inf);
+endif
+
+z = c.inf > 1;
+select = x & z & a.inf == 0;
+gap.inf (select) = 0;
+select = x & z & a.sup > 1;
+if (any (any (select)))
+    gap.sup (select) = powrev2rounded (a.sup, c.inf, -inf);
+endif
+select = x & z & a.inf > 0 & a.inf < 1 & a.sup > 1;
+if (any (any (select)))
+    gap.inf (select) = powrev2rounded (a.inf, c.inf, +inf);
+endif
+
+z = c.sup < 1 | c.inf > 1;
+select = x & z & (l > gap.inf | gap.inf == -inf | (gap.inf == 0 & l == 0)) ...
+    & (a.inf >= 1 | a.sup > 1 | a.inf <= 0);
+l (select) = max (l (select), gap.sup (select));
+select = x & z & (u < gap.sup | gap.sup == inf | (gap.sup == 0 & u == 0)) ...
+    & (a.inf >= 1 | a.sup > 1 | a.inf <= 0);
+u (select) = min (u (select), gap.inf (select));
+
+## x after [0, 1] =============================================================
+x = a.inf > 1;
+
+z = c.sup < 1;
+select = x & z & u > -inf;
+if (any (any (select)))
+    u (select) = min (u (select), powrev2rounded (a.sup, c.sup, +inf));
+endif
+
+z = c.inf > 0 & c.inf < 1;
+select = x & z & l < 0;
+if (any (any (select)))
+    l (select) = max (l (select), powrev2rounded (a.inf, c.inf, -inf));
+endif
+
+z = c.inf == 1;
+select = x & z & l < 0;
+l (select) = 0;
+
+z = c.inf > 1;
+select = x & z & l < inf;
+if (any (any (select)))
+    l (select) = max (l (select), powrev2rounded (a.sup, c.inf, -inf));
+endif
+
+z = c.sup == 1;
+select = x & z & u > 0;
+u (select) = 0;
+
+z = c.sup > 1 & c.sup < inf;
+select = x & z & u > 0;
+if (any (any (select)))
+    u (select) = min (u (select), powrev2rounded (a.inf, c.sup, +inf));
+endif
+
+## ============================================================================
+
+emptyresult = l > u | l == inf | u == -inf;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
+
 endfunction
 
-function y = powrev2rounded(x, z, direction)
+function y = powrev2rounded (x, z, direction)
 ## Return y = log z / log x with directed rounding and limit values
-if (x == inf)
-    assert (isfinite (z));
-    y = 0;
-elseif (z == inf)
-    assert (x ~= 1 && x > 0);
-    if (x < 1)
-        y = -inf;
-    else
-        y = inf;
-    endif
-else
-    if (x == 2)
-        y = log2 (infsup (z));
-        if (direction > 0)
-            y = y.sup;
-        else
-            y = y.inf;
-        endif
-    elseif (x == 10)
-        y = log10 (infsup (z));
-        if (direction > 0)
-            y = y.sup;
-        else
-            y = y.inf;
-        endif
-    else
-        if ((direction > 0) == (sign (x - 1) == sign (z - 1)))
-            d = mpfr_function_d ('log', -inf, x);
-            n = mpfr_function_d ('log', +inf, z);
-        else
-            d = mpfr_function_d ('log', +inf, x);
-            n = mpfr_function_d ('log', -inf, z);
-        endif
-        y = mpfr_function_d ('rdivide', direction, n, d);
-    endif
+
+y = nominator = denominator = zeros (size (x));
+
+y (z == inf & x < 1) = -inf;
+y (z == inf & x > 1 & x < inf) = inf;
+
+## We do not use log here, because log2 is able to produce some results without
+## rounding errors.
+
+rnd_log_numerator_up = (direction > 0) == (sign (x - 1) == sign (z - 1));
+select = isfinite (x) & isfinite (z) & rnd_log_numerator_up;
+if (any (any (select)))
+    denominator (select) = mpfr_function_d ('log2', -inf, x (select));
+    nominator (select) = mpfr_function_d ('log2', +inf, z (select));
 endif
+select = isfinite (x) & isfinite (z) & not (rnd_log_numerator_up);
+if (any (any (select)))
+    denominator (select) = mpfr_function_d ('log2', +inf, x (select));
+    nominator (select) = mpfr_function_d ('log2', -inf, z (select));
+endif
+select = isfinite (x) & isfinite (z);
+if (any (any (select)))
+    y (select) = mpfr_function_d ('rdivide', direction, ...
+        nominator (select), ...
+        denominator (select));
+endif
+
 endfunction

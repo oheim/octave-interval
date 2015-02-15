@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## powrev2 (infsupdec (2, 5), infsupdec (3, 6))
-##   @result{} [.6826061944859851, 2.584962500721157]_trv
+##   @result{} [.6826061944859851, 2.5849625007211566]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/pow}
