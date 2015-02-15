@@ -6,6 +6,7 @@ syntax: regexp
 (^|/)octave-(core|workspace)$
 \.oct$
 \.o$
+fntests.log
 
 # The following files are created during package build
 ^interval-[^/]*\.tar\.gz
