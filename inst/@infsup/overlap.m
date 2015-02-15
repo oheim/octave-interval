@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {[@var{STATE}, @var{BITMASK}] =} overlap (@var{A}, @var{B})
+## @deftypefn {Function File} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
 ## 
 ## Extensively compare the positions of intervals @var{A} and @var{B} on the
 ## real number line.

@@ -18,12 +18,52 @@
 ## @deftypefn {Function File} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
 ## 
 ## Extensively compare the positions of intervals @var{A} and @var{B} on the
-## real number line.  Return the @var{STATE} as a string, e. g.,
-## @code{bothEmpty} or @code{before}.  Return the @var{BITMASK} of the state as
-## an uint16 number, which represents one of the 16 possible states by taking a
-## value 2^i (i = 0 .. 15).
+## real number line.
+##
+## Return the @var{STATE} as a string and the @var{BITMASK} of the state as an
+## uint16 number, which represents one of the 16 possible states by taking a
+## value 2^i (i = 0 … 15).
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
+##
+## @table
+## @item @code{bothEmpty}, 2^0
+## Both intervals are empty
+## @item @code{firstEmpty}, 2^1
+## Interval @var{A} is empty and @var{B} is not
+## @item @code{secondEmpty}, 2^2
+## Interval @var{A} is not empty, but @var{B} is
+## @item @code{before}, 2^3
+## [- - - @var{A} - - -]@ @ @ [- - - @var{B} - - -]
+## @item @code{meets}, 2^4
+## [- - - @var{A} - - -][- - - @var{B} - - -]
+## @*Interval @var{A}'s upper boundary equals interval @var{B}'s lower boundary
+## and neither consists of a single point only.
+## @item @code{overlaps}, 2^5
+## [- - - @var{A} - - - [= = =] - - - @var{B} - - -]
+## @item @code{starts}, 2^6
+## [[= = = @var{A} = = =] - - - @var{B} - - -]
+## @item @code{containedBy}, 2^7
+## [- - - @var{B} - - - [= = = @var{A} = = =] - - -]
+## @item @code{finishes}, 2^8
+## [- - - @var{B} - - - [= = = @var{A} = = =]]
+## @item @code{equals}, 2^9
+## Both intervals are equal (and not empty)
+## @item @code{finishedBy}, 2^10
+## [- - - @var{A} - - - [= = = @var{B} = = =]]
+## @item @code{contains}, 2^11
+## [- - - @var{A} - - - [= = = @var{B} = = =] - - -]
+## @item @code{startedBy}, 2^12
+## [[= = = @var{B} = = =] - - - @var{A} - - -]
+## @item @code{overlappedBy}, 2^13
+## [- - - @var{B} - - - [= = =] - - - @var{A} - - -]
+## @item @code{metBy}, 2^14
+## [- - - @var{B} - - -][- - - @var{A} - - -]
+## @*Interval @var{A}'s lower boundary equals interval @var{B}'s upper boundary
+## and neither consists of a single point only.
+## @item @code{after}, 2^15
+## [- - - @var{B} - - -]@ @ @ [- - - @var{A} - - -]
+## @end table
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}
 ## @end deftypefn
