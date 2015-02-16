@@ -141,6 +141,26 @@ void evaluate (
   mpfr_clear (mp3);
 }
 
+// Evaluate nthroot
+void nthroot (
+  Matrix &arg1,             // Operand 1 and result
+  const unsigned long arg2, // Operand 2
+  const mpfr_rnd_t rnd)
+{
+  mpfr_t mp;
+  mpfr_init2 (mp, BINARY64_PRECISION);
+  
+  const unsigned int n = arg1.numel ();
+  for (octave_idx_type i = 0; i < n; i ++)
+    {
+      mpfr_set_d (mp, arg1.elem (i), MPFR_RNDZ);
+      mpfr_root (mp, mp, arg2, rnd);
+      arg1.elem (i) = mpfr_get_d (mp, rnd);
+    }
+  
+  mpfr_clear (mp);
+}
+
 DEFUN_DLD (mpfr_function_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding utf-8\n"
@@ -159,6 +179,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log2', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log10', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('minus', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('nthroot', @var{R}, @var{X}, @var{N})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('plus', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('pow', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('pow2', @var{R}, @var{X})\n"
@@ -291,6 +312,13 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, arg2, rnd, &mpfr_atan2);
         else if (function == "minus")
           evaluate (arg1, arg2, rnd, &mpfr_sub);
+        else if (function == "nthroot")
+          {
+            const unsigned long n = args (3).uint64_array_value ().elem (0);
+            if (error_state)
+              return octave_value_list ();
+            nthroot (arg1, n, rnd);
+          }
         else if (function == "plus")
           evaluate (arg1, arg2, rnd, &mpfr_add);
         else if (function == "pow")

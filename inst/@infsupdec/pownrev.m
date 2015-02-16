@@ -24,8 +24,8 @@
 ## @code{pown (x, @var{P}) ∈ @var{C}}.
 ##
 ## Accuracy: The result is a valid enclosure.  The result is a tight
-## enclosure for @var{P} in @{-1, 0, 1, 2@}.  The result is an accurate
-## enclosure in cases where @code{recip (infsup (@var{P}))} is a singleton.
+## enclosure for @var{P} ≥ -2.  The result also is a tight enclosure if the
+## reciprocal of @var{P} can be computed exactly in double-precision.
 ##
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
 ## No one way of decorating this operations gives useful information in all

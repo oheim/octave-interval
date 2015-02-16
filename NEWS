@@ -4,11 +4,11 @@
  * mulrev: Now allows non-scalar arguments and can compute two-output division
    (mulrevtopair no longer available)
  
- * powrev1, powrev2: Now allow non-scalar arguments
+ * powrev1, powrev2, pownrev: Now allow non-scalar arguments
  
  * overlap: Renamed one overlapping state from equal to equals
  
- * Improved accuracy of vector sums and dot products
+ * Improved accuracy of vector sums, dot products, and pownrev
  
  * Small performance improvements
 
