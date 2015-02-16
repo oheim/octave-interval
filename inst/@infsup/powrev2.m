@@ -150,6 +150,10 @@ z = c.inf == 0 & c.sup == 0;
 select = x & z & l < 0;
 l (select) = 0;
 
+z = c.sup == inf & c.inf > 1;
+select = x & z & u > 0 && a.sup <= 1;
+u (select) = 0;
+
 gap.inf = -inf (size (l));
 gap.sup = +inf (size (u));
 
