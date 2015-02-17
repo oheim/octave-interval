@@ -1,7 +1,25 @@
-The GNU Octave interval package includes (apache licensed) unit tests developed
-by Marco Nehmeier <nehmeier@informatik.uni-wuerzburg.de>
-at Chair of Software Engineering
-   Department of Computer Science
-   University of Wuerzburg
-   Germany
-   http://se.informatik.uni-wuerzburg.de/
+The GNU Octave interval package is build upon great third-party software.
+
+Several unit tests are derived from libieeep1788, developed by:
+    Marco Nehmeier <nehmeier@informatik.uni-wuerzburg.de>
+    Chair of Software Engineering
+    Department of Computer Science
+    University of Würzburg
+    Germany
+    http://se.informatik.uni-wuerzburg.de/
+    https://github.com/nehmeier/libieeep1788
+
+A linear system solver is derived from a routine developed for C-XSC by:
+    Martin Zimmer
+    Chair of Scientific computing
+    University of Wuppertal
+    Germany
+    http://www2.math.uni-wuppertal.de/~xsc/
+
+Correctly rounded arithmetic operations are based on the GNU MPFR libary by:
+    Guillaume Hanrot,
+    Vincent Lefèvre,
+    Patrick Pélissier,
+    Philippe Théveny and
+    Paul Zimmermann
+    http://www.mpfr.org/
