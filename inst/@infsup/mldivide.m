@@ -283,3 +283,10 @@ function [x, verified] = verify_and_refine (x0, C, cfg)
         endfor
     endif
 endfunction
+
+%!test "unique solution";
+%!  assert (infsup ([1, 0; 0, 2]) \ [2, 0; 0, 4] == [2, 0; 0 2]);
+%!test "no solution";
+%!  assert (all (isempty (infsup ([1, 0; 2, 0]) \ [3; 0])));
+%!test "many solutions";
+%!  assert (infsup ([1, 0; 2, 0]) \ [4; 8] == infsup ([4; -inf], [4; inf]));

@@ -23,12 +23,12 @@
 ##
 ## @example
 ## @group
-## inv (infsup ([2, 1, 1;0, 1, 0; 1, 0, 0]))
+## inv (infsup ([2, 1, 1; 0, 1, 0; 1, 0, 0]))
 ##   @result{} 3×3 interval matrix
 ##      [0]    [0]    [1]
 ##      [0]    [1]    [0]
 ##      [1]   [-1]   [-2]
-## inv (infsup([1, 2, 3;4, 0, 6;0, 0, 1]))
+## inv (infsup ([1, 2, 3; 4, 0, 6; 0, 0, 1]))
 ##   @result{} 3×3 interval matrix
 ##       [0]     [.25]   [-1.5]
 ##      [.5]   [-.125]   [-.75]
@@ -58,3 +58,13 @@ endif
 result = mldivide (x, eye (n));
 
 endfunction
+
+%!test "from the wiki";
+%!  A = infsup ([1, 2, 3; 4, 0, 0; 0, 0, 1]);
+%!  A (2, 3) = "[0, 6]";
+%!  B = inv (A);
+%!  assert (inf (B) == [0, .25, -1.5; .5, -.125, -1.5; 0, 0, 1]);
+%!  assert (sup (B) == [0, .25,    0; .5, -.125, -.75; 0, 0, 1]);
+%!test "from the documentation string";
+%!  assert (inv (infsup ([2, 1, 1; 0, 1, 0; 1, 0, 0])) == [0, 0, 1; 0, 1, 0; 1, -1, -2]);
+%!  assert (inv (infsup ([1, 2, 3; 4, 0, 6; 0, 0, 1])) == [0, .25, -1.5; .5, -.125, -.75; 0, 0, 1]);
