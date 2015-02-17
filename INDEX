@@ -111,6 +111,7 @@ Interval input and output
  @infsup/intervaltotext
 Interval solver
  @infsup/fzero
+ @infsup/gauss
 Utility function
  @infsup/columns
  @infsup/ctranspose

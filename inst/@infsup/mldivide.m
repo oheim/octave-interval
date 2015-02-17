@@ -1,4 +1,14 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
+## 
+## This program is derived from FastLSS in CXSC, C++ library for eXtended
+## Scientific Computing (V 2.5.4), which is distributed under the terms of
+## LGPLv2+.
+##     Original Author     Michael Zimmer
+##     Original Copyrights
+##     1990-2000           Institut für Angewandte Mathematik,
+##                         Universität Karlsruhe, Germany
+##     2000-2014           Wissenschaftliches Rechnen/Softwaretechnologie,
+##                         Universität Wuppertal, Germany
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -29,180 +39,247 @@
 ##      [0]   [2]
 ## @end group
 ## @end example
-## @seealso{@@infsup/mtimes}
+## @seealso{@@infsup/mtimes, @@infsup/gauss}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-31
+## Created: 2015-02-17
 
-function result = mldivide (x, y)
+function result = mldivide (A, b)
 
 if (nargin ~= 2)
     print_usage ();
     return
 endif
-if (not (isa (x, "infsup")))
-    x = infsup (x);
+if (not (isa (A, "infsup")))
+    A = infsup (A);
 endif
-if (not (isa (y, "infsup")))
-    y = infsup (y);
+if (not (isa (b, "infsup")))
+    b = infsup (b);
 endif
 
-if (isscalar (x) || isscalar (y))
-    result = rdivide (y, x);
+if (not (issquare (A.inf)))
+    error ("interval:InvalidOperand", "mldivide: Matrix is not square");
+endif
+if (rows (A.inf) ~= rows (b.inf))
+    error ("interval:InvalidOperand", ["mldivide: ", ...
+        "nonconformant arguments ", ...
+        "(op1 is " num2str(rows (A.inf)) "×" num2str(columns (A.inf)) ",", ...
+        " op2 is " num2str(rows (b.inf)) "×" num2str(columns (b.inf)) ")"]);
+endif
+if (isempty (A.inf))
+    result = infsup (zeros (0, columns (b.inf)));
     return
 endif
 
-## x must be square
-assert (size (x.inf, 1) == size (x.inf, 2), ...
-        "operator \: nonconformant arguments, X is not square");
-## vertical sizes of x and y must equal
-assert (rows (x.inf) == rows (y.inf), ...
-        "operator \: nonconformant arguments, first dimension mismatch");
+## Maximum number of iterations during the verification step
+cfg.maxIterVer = 5;
+## Epsilon for the verification step
+## (used for the Epsilon inflation during verification)
+cfg.epsVer = 1e-5;
+## Maximum number of iterations during the refinement step
+cfg.maxIterRef = 5;
+## Epsilon for the refinement step (stopping criterion for refinement step)
+cfg.epsRef = 1e-5;
+## Maximum number of iterations during residual correction
+## (not available for K=1)
+cfg.maxIterResCorr = 10;
+## Epsilon for the residual correction
+cfg.epsResCorr = 1e-6;
 
-n = length (x.inf);
-m = columns (y.inf);
+## An approximate inverse R of A is computed.  Then an approximate solution
+## x1 is computed applying a conventional residual iteration.  For the final
+## verification, an interval residual iteration is performed.  An enclosure of
+## the unique solution is returned.
+##
+## If this first step fails, the solver will try to compute a verified solution
+## by using an approximate inverse of double length.  This second step takes
+## considerably longer than the first step, because all computations must be
+## performed using high precision scalar products.
 
-## We have to compute z = inv (x) * y.
-## This can be done by Gaußian elimination by solving the following equation
-## for the variable z: x * z = y
+## Compute midpoints of A and b for future reference
+Am = mid (A);
+bm = mid (b);
 
-## Step 1: Perform LUP decomposition of x into triangular matrices L, U and
-##         permutation matrix P
-##         P * x = L * U
+## Approximate inversion (non-interval computation)
+[R, cond] = inv (Am);
+if (cond == 0)
+    result = gauss (A, b);
+    return
+endif
 
-[L, U, P] = lu (x);
+## Part 1 =====================================================================
 
-## Step 2: Forward substitution 
-##         Solve L * s = inv (P) * y
+## Approximate solution x1 (non-interval computation)
+x1 = R * bm;
+x1 += R * (bm - Am * x1);
 
-s = permute (inv (P), y);
-curelement.type = prevvars.type = Lrowidx.type =  "()";
-for i = 1 : m
-    ## Special case: k == 1
-    ## s (k, i) already is correct
-    for k = 2 : n
-        curelement.subs = {k, i};
-        prevvars.subs = {1 : k, i};
-        Lrowidx.subs = {k, 1 : k};
-        
-        varcol = subsref (s, prevvars);
-        Lrow = subsref (L, Lrowidx);
-        
-        ## We have to subtract varcol (1 : (k - 1)) * Lrow (1 : (k - 1)) from
-        ## s (k, i). Since varcol (k) == s (k, i), we can simply set
-        ## Lrow (k) = -1 and the dot product will compute the difference for us
-        ## with high accurracy.
-        Lrow.inf (k) = Lrow.sup (k) = -1;
-        
-        ## Then, we only have to flip the sign afterwards.
-        s = subsasgn (s, curelement, -dot (Lrow, varcol));
+## Interval residual x
+x = R * (b - A * x1);
+
+C = eye (rows (R)) - R * A;
+
+## Verify solution x1 + x
+[x, verified] = verify_and_refine (x, C, cfg);
+if (verified)
+    result = x1 + x;
+    return
+endif
+
+## Part 2 =====================================================================
+
+## R2 = inv (R * Am), with correctly rounded dot product
+R2 = zeros (size (R));
+for i = 1 : rows (R)
+    for j = 1 : columns (R)
+        R2 (i, j) = mpfr_vector_dot_d (0.5, R (i, :), Am (:, j));
     endfor
 endfor
+[R2, cond] = inv (R2);
+if (cond == 0)
+    result = gauss (A, b);
+    return
+endif
 
-## Step 3: Backward substitution
-##         Solve U * z = s
-
-z = s;
-Urowstart.type = Urowrest.type = "()";
-for i = 1 : m
-    ## Special case: k == n
-    curelement.subs = {n, i};
-    Urowstart.subs = {n, n};
-    z = subsasgn (z, curelement, ...
-                  mulrev (subsref (U, Urowstart), subsref (z, curelement)));
-    for k = (n - 1) : -1 : 1
-        curelement.subs = {k, i};
-        Urowstart.subs = {k, k};
-        prevvars.subs = {k : n, i};
-        Urowrest.subs = {k, k : n};
-        
-        varcol = subsref (z, prevvars);
-        Urow = subsref (U, Urowrest);
-        
-        ## Use the same trick like above during forward substitution.
-        Urow.inf (1) = Urow.sup (1) = -1;
-        
-        ## Additionally we must divide the element by the current diagonal
-        ## element of U.
-        z = subsasgn (z, curelement, ...
-                      mulrev (subsref (U, Urowstart), -dot (Urow, varcol)));
+## R = R2 * R with correctly rounded dot product; error in R2
+R1_ = R2_ = zeros (size (R));
+for i = 1 : rows (R)
+    for j = 1 : columns (R)
+        [R1_(i, j), R2_(i, j)] = mpfr_vector_dot_d (0.5, R2 (i, :), R (:, j));
     endfor
 endfor
+R = R1_; R2 = R2_; clear R1_ R2_;
 
-## Now we have solved inv (P) * L * U * z = y for z.
-##
-## The current result for z is only a rough estimation in general, because
-## inv (P) * L * U is only an enclosure of the original linear interval
-## system x * z = y and the Gaußian elimination above introduces several
-## inaccuracies because of aggregated intermediate results and accumulated
-## rounding errors.
-##
-## We can further try to improve the boundaries of the result with the original
-## linear system.  This is an iterative method using the mulrev operation.  It
-## is quite accurate in each step, because it only depends on one (tightest)
-## dot operation and one (tightest) mulrev operation.  However, the convergence
-## speed is slow and each cycle is costly, so we have to cancel after one
-## iteration.
-##
-## The method used here is similar to the Gauß-Seidel-method.  Instead of
-## diagonal elements of the matrix we use an arbitrary element that does not
-## contain zero as an inner element.
-
-xrowidx.type = yidx.type = zcolidx.type = "()";
-migx = mig (x);
-migx (isnan (migx)) = 0;
-for k = 1 : m
-    zcolidx.subs = {1 : n, k};
-    zcol = subsref (z, zcolidx);
-    for j = n : -1 : 1
-        z_jk = infsup (zcol.inf (j), zcol.sup (j));
-        if (isempty (z_jk) || issingleton (z_jk))
-            ## No improvement can be achieved.
-            continue
+## Loop over all right hand sides
+C_computed = false ();
+result = infsup (zeros (size (b.inf)));
+for s = 1 : columns (b.inf)
+    s_idx.type = "()";
+    s_idx.subs = {":", s};
+    
+    ## x1 = R * bm + R2 * bm with correctly rounded dot product; error in x0
+    x1 = x0 = zeros (rows (R), 1);
+    parfor i = 1 : rows (R)
+        [x1(i), x0(i)] = mpfr_vector_dot_d (0.5, [R(i, :), R2(i, :)], ...
+                                                 [bm(:, s); bm(:, s)]);
+    endparfor
+    
+    ## Residual iteration (non-interval computation)
+    for k = 1 : cfg.maxIterResCorr
+        ## d = bm - Am * x1 - Am * x0 with correctly rounded dot product
+        d = zeros (rows (R), 1);
+        parfor i = 1 : rows (R)
+            d (i) = mpfr_vector_dot_d (0.5, ...
+                        [bm(i, s), Am(i, :), Am(i, :)], ...
+                        [1;        -x1;      -x0]);
+        endparfor
+        
+        ## y0 = x0 + R * d + R2 * d with correctly rounded dot product
+        y0 = zeros (rows (R), 1);
+        parfor i = 1 : rows (R)
+            y0 (i) = mpfr_vector_dot_d (0.5, ...
+                        [x0(i), R(i, :), R2(i, :)], ...
+                        [1;     d;       d]);
+        endparfor
+        
+        d = x1 + y0;
+        p = relative_error (d, x1 + x0);
+        
+        if (p >= cfg.epsResCorr && k < cfg.maxIterResCorr)
+            ## x0 = x1 + x0 - d with correctly rounded sum
+            parfor i = 1 : rows (R)
+                x0 (i) = mpfr_vector_sum_d (0.5, [x1(i), x0(i), -d(i)]);
+            endparfor
         endif
-        i = find (migx (:, j) == max (migx (:, j)), 1);
-        xrowidx.subs = {i, 1 : n};
-        xrow = subsref (x, xrowidx);
-        if (xrow.inf (j) < 0 && xrow.sup (j) > 0)
-            ## No improvement can be achieved.
-            continue
+            
+        x1 = d;
+        
+        if (p < cfg.epsResCorr)
+            break
         endif
-        x_ij = infsup (xrow.inf (j), xrow.sup (j));
-        yidx.subs = {i, k};
-        yelement = subsref (y, yidx);
-        
-        ## x (i, 1 : n) * z (1 : n, k) shall equal y (i, k).
-        ## 1. Solve this equation for x (i, j) * z (j, k).
-        ## 2. Compute a (possibly better) enclosure for z (j, k).
-        
-        xrow.inf (j) = yelement.inf;
-        xrow.sup (j) = yelement.sup;
-        zcol.inf (j) = zcol.sup (j) = -1;
-        z_jk = mulrev (x_ij, -dot (xrow, zcol), z_jk);
-        
-        zcol.inf (j) = z.inf (j, k) = z_jk.inf;
-        zcol.sup (j) = z.sup (j, k) = z_jk.sup;
     endfor
+    
+    ## compute enclosure y+Y1 of the residuum b-A*x1 of the approximation x1
+    ## and initialize x:= (R+R2)*(b-A*x1), C:= I-(R+R2)*A   
+    
+    ## y = mid (b - A * x1)
+    y = mid ([subsref(b, s_idx), A] * [1; -x1]);
+    
+    ## Y1 = b - A * x1 - y
+    Y1 = [subsref(b, s_idx), A, y] * [1; -x1; -1];
+    
+    ## x = R * y + R2 * y + R * Y1 + R2 * Y1
+    x = [R, R2, R, R2] * [y; y; Y1; Y1];
+    
+    ## Verifying solution x1 + x ...
+    if (all (x.inf == 0 & x.sup == 0))
+        ## exact solution! (however, not necessarily unique!)
+        subsasgn (result, s_idx, x1);
+        continue
+    endif
+    
+    if (not (C_computed))
+        ## C = I - R * A - R2 * A (lazy computation)
+        C = [eye(rows (R)), R, R2] * [ones(rows (R)); -A; -A];
+        C_computed = true ();
+    endif
+    
+    [x, verified] = verify_and_refine (x, C, cfg);
+    if (not (verified))
+        error ("Verification failed")
+    endif
+    
+    ## The exact solution lies x1 + x
+    subsasgn (result, s_idx, x1 + x);
 endfor
-
-result = z;
 
 endfunction
 
-## Apply permutation matrix P to an interval matrix: B = P * A.
-## This is much faster than a matrix product, because the matrix product would
-## use a lot of dot products.
-function B = permute (P, A)
-    ## Note: [B.inf, B.sup] = deal (P * A.inf, P * A.sup) is not possible,
-    ## because empty or unbound intervals would create NaNs during
-    ## multiplication with P.
+## Perform an epsilon inflation
+function y = blow (x, eps)
+    y = nextout ((1 + eps) .* x - eps .* x);
+endfunction
+
+## Compute component-wise the maximum relative error
+function e = relative_error (new, old)
+    nonzero = old ~= 0 & (1e6 * abs (new) >= abs (old));
+    e = max (abs ((new (nonzero) - old (nonzero)) ./ old (nonzero)));
     
-    B = A;
-    for i = 1 : rows (P)
-        targetrow = find (P (i, :) == 1, 1);
-        B.inf (targetrow, :) = A.inf (i, :);
-        B.sup (targetrow, :) = A.sup (i, :);
+    if (isempty (e))
+        e = 0;
+    endif
+endfunction
+
+## Interval iteration until inclusion is obtained (or max. iteration count)
+function [x, verified] = verify_and_refine (x0, C, cfg)
+    verified = false ();
+    x = x0;
+    for p = 1 : cfg.maxIterVer
+        y = blow (x, cfg.epsVer); # epsilon inflation
+        x = x0 + C * y; # new iterate
+        
+        verified = all (all (subset (x, y)));
+        if (verified)
+            break
+        endif
     endfor
+    
+    if (verified)
+        ## Iterative refinement
+        for p = 1 : cfg.maxIterRef
+            y = x;
+            x = (x0 + C * x) & x;
+            
+            if (p == cfg.maxIterRef)
+                break
+            endif
+            
+            distance = max (abs (x.inf - y.inf), ...
+                            abs (x.sup - y.sup));
+            if (max (max (distance)) <= cfg.epsRef)
+                break
+            endif
+        endfor
+    endif
 endfunction
