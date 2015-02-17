@@ -121,9 +121,10 @@ std::pair <double, double> interval_vector_dot (
   return result;
 }
 
-double vector_dot (
+std::pair <double, double> vector_dot (
   mpfr_rnd_t rnd,
-  Matrix vector_x, Matrix vector_y)
+  Matrix vector_x, Matrix vector_y,
+  const bool compute_error)
 {
   if (vector_x.numel () == 1 && vector_y.numel () != 1)
     // Broadcast vector x
@@ -156,8 +157,12 @@ double vector_dot (
     }
 
   double result;
+  double error;
   if (mpfr_nan_p (accu) != 0)
-    result = NAN;
+    {
+      result = NAN;
+      error = NAN;
+    }
   else
     if (mpfr_cmp_d (accu, 0.0) == 0)
       // exact zero
@@ -166,28 +171,36 @@ double vector_dot (
       else
         result = +0.0;
     else
-      result = mpfr_get_d (accu, rnd);
+      {
+        result = mpfr_get_d (accu, rnd);
+        if (compute_error)
+          {
+            mpfr_sub_d (accu, accu, result, MPFR_RNDA);
+            error = mpfr_get_d (accu, MPFR_RNDA);
+          }
+      }
       
   mpfr_clear (accu);
   mpfr_clear (product);
   
-  return result;
+  return std::pair <double, double> (result, error);
 }
 
 DEFUN_DLD (mpfr_vector_dot_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding utf-8\n"
   "@deftypefn  {Loadable Function} {[@var{L}, @var{U}] = } mpfr_vector_dot_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
-  "@deftypefnx {Loadable Function} {} mpfr_vector_dot_d (@var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Loadable Function} {[@var{D}, @var{E}] = } mpfr_vector_dot_d (@var{R}, @var{X}, @var{Y})\n"
   "\n"
   "Compute the upper and lower boundary of the dot product of interval "
   "vectors [@var{XL}, @var{XU}] and [@var{YL}, @var{YU}] in binary64 numbers "
   "with tightest result."
   "\n\n"
-  "Alternate syntax: Compute dot product of two binary64 vectors with "
+  "Alternate syntax: Compute dot product @var{D} of two binary64 vectors with "
   "correctly rounded result and rounding direction @var{R} (0: towards zero, "
   "0.5: towards nearest and ties to even, +inf towards positive infinity, "
-  "-inf towards negative infinity)."
+  "-inf towards negative infinity).  A second output parameter @var{E} yields "
+  "an approximation of the error."
   "\n\n"
   "Scalar intervals or values do broadcast."
   "\n\n"
@@ -248,7 +261,10 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
           if (error_state)
             return octave_value_list ();
             
-          result (0) = vector_dot (rnd, vector_x, vector_y);
+          std::pair <double, double> result_and_error
+            = vector_dot (rnd, vector_x, vector_y, nargout >= 2);
+          result (0) = result_and_error.first;
+          result (1) = result_and_error.second;
           break;
         }
     }

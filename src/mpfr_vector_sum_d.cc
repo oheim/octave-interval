@@ -22,10 +22,10 @@
 DEFUN_DLD (mpfr_vector_sum_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding utf-8\n"
-  "@deftypefn  {Loadable Function} {} mpfr_vector_sum_d (@var{R}, @var{X})\n"
+  "@deftypefn  {Loadable Function} {[@var{S}, @var{E}] = } mpfr_vector_sum_d (@var{R}, @var{X})\n"
   "\n"
-  "Compute the sum of all numbers in a binary64 vector @var{X} with correctly "
-  "rounded result."
+  "Compute the sum @var{S} of all numbers in a binary64 vector @var{X} with "
+  "correctly rounded result."
   "\n\n"
   "@var{R} is the rounding direction (0: towards zero, 0.5: towards nearest "
   "and ties to even, +inf towards positive infinity, -inf towards negative "
@@ -40,6 +40,8 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
   "\n\n"
   "An exact(!) zero is returned as +0 in all rounding directions, except for "
   "rounding towards negative infinity, where -0 is returned."
+  "\n\n"
+  "A second output parameter @var{E} yields an approximation of the error."
   "\n\n"
   "@example\n"
   "@group\n"
@@ -86,22 +88,37 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
         break;
     }
 
-  double result;
+  octave_value_list result;
   if (mpfr_nan_p (accu) != 0)
-    result = NAN;
+    {
+      result (0) = NAN;
+      result (1) = NAN;
+    }
   else
     if (mpfr_cmp_d (accu, 0.0) == 0)
-      // exact zero
-      if (rnd == MPFR_RNDD)
-        result = -0.0;
-      else
-        result = +0.0;
+      {
+        // exact zero
+        if (rnd == MPFR_RNDD)
+          result (0) = -0.0;
+        else
+          result (0) = +0.0;
+        result (1) = 0.0;
+      }
     else
-      result = mpfr_get_d (accu, rnd);
+      {
+        const double sum = mpfr_get_d (accu, rnd);
+        result (0) = sum;
+        if (nargout >= 2)
+          {
+            mpfr_sub_d (accu, accu, sum, MPFR_RNDA);
+            const double error = mpfr_get_d (accu, MPFR_RNDA);
+            result (1) = error;
+          }
+      }
       
   mpfr_clear (accu);
   
-  return octave_value (result);
+  return result;
 }
 
 /*
