@@ -16,7 +16,7 @@ A linear system solver is derived from a routine developed for C-XSC by:
     Germany
     http://www2.math.uni-wuppertal.de/~xsc/
 
-Correctly rounded arithmetic operations are based on the GNU MPFR libary by:
+Correctly rounded arithmetic operations are based on the GNU MPFR library by:
     Guillaume Hanrot,
     Vincent Lefèvre,
     Patrick Pélissier,
