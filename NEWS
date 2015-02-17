@@ -1,14 +1,14 @@
 0.1.2 xxxx-xx-xx
 ================
 
- * mulrev: Now allows non-scalar arguments and can compute two-output division
-   (mulrevtopair no longer available)
- 
- * powrev1, powrev2, pownrev: Now allow non-scalar arguments
+ * powrev1, powrev2, pownrev, mulrev: Now allow non-scalar arguments
+
+ * mulrevtopair: No longer available, use mulrev with two output parameters for
+   two-output division
  
  * overlap: Renamed one overlapping state from equal to equals
  
- * Improved accuracy of vector sums, dot products, and pownrev
+ * Improved accuracy of vector sums, dot products, pownrev, and powrev2
  
  * Small performance improvements
 
