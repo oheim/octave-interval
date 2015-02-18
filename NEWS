@@ -2,11 +2,16 @@
 ================
 
  * powrev1, powrev2, pownrev, mulrev: Now allow non-scalar arguments
-
+ 
+ * lu: New operation for LU(P) decomposition of interval matrices
+ 
  * mulrevtopair: No longer available, use mulrev with two output parameters for
    two-output division
  
  * overlap: Renamed one overlapping state from equal to equals
+ 
+ * mldivide, mrdivide, inv: Greatly improved accuracy and performance of the
+   linear solver
  
  * Improved accuracy of vector sums, dot products, pownrev, and powrev2
  
