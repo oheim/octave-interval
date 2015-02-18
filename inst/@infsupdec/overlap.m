@@ -26,7 +26,7 @@
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
-## @table
+## @table @asis
 ## @item @code{bothEmpty}, 2^0
 ## Both intervals are empty
 ## @item @code{firstEmpty}, 2^1
