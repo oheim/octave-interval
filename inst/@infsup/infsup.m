@@ -117,6 +117,9 @@ if (nargin == 1)
                     case {"empty", ""}
                         l {i} = inf;
                         u {i} = -inf;
+                    case "nai"
+                        error ("interval:NaI", ...
+                               "Interval literal [NaI] occured")
                     otherwise
                         boundaries = strtrim (strsplit (nobrackets, ","));
                         switch (numel (boundaries))
@@ -576,6 +579,8 @@ endfunction
 %!  assert (sup (infsup ({"0.1", 42; "e", "3.2/8"}, {"0xffp2", "42e1"; "pi", 2})), [1020, 420; pi + 2 * eps, 2]);
 %!  assert (inf (infsup ({"[2, 3]", "3/4", "[Entire]", "42?3", 1, "0xf"})), [2, 0.75, -inf, 39, 1, 15]);
 %!  assert (sup (infsup ({"[2, 3]", "3/4", "[Entire]", "42?3", 1, "0xf"})), [3, 0.75, +inf, 45, 1, 15]);
+%!error infsup ("[nai]");
+%!error infsup ({42, "[nai]"});
 %!error infsup (3, 2);
 %!error infsup ("Ausgeschnitzel");
 %!warning infsup ("1.000000000000000000002", "1.000000000000000000001");

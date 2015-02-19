@@ -114,7 +114,8 @@ try
             case 3
                 [bare, isexact] = infsup (varargin {1}, varargin {2});
             otherwise
-                error ("interval:InvalidOperand", "too many arguments")
+                print_usage ();
+                return
         endswitch
     elseif (nargin == 1 && iscell (varargin {1}))
         ## Parse possibly decorated interval literals
@@ -195,7 +196,12 @@ try
         error ("interval:InvalidOperand", "illegal decoration");
     endif
 catch
-    warning ("interval:NaI", lasterror.message);
+    if (not (strcmp ("interval:NaI", lasterror.identifier)))
+        ## The bare inverval:NaI error can only occur, if the interval literal
+        ## [NaI] is observed. In that particular case, we must not issue a
+        ## warning.
+        warning ("interval:NaI", lasterror.message);
+    endif
     ## NaI representation is unique.
     bare = infsup ();
     dec = {"ill"};
@@ -214,6 +220,7 @@ superiorto ("infsup");
 endfunction
 
 %!# [NaI]s
+%!  assert (isnai (infsupdec ("[nai]"))); # quiet [NaI]
 %!warning assert (isnai (infsupdec (3, 2)));
 %!warning assert (isnai (infsupdec ("Flugeldufel")));
 %!warning assert (isnai (infsupdec (-inf, inf, "com")));
