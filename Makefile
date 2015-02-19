@@ -3,7 +3,7 @@ SHELL   = /bin/sh
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 
-.PHONY = dist all html install clean md5
+.PHONY = dist all html info run install clean md5
 
 dist: $(PACKAGE)-$(VERSION).tar.gz
 
@@ -31,3 +31,10 @@ $(PACKAGE)-html/$(PACKAGE)/index.html: ~/octave/$(PACKAGE)-$(VERSION)/packinfo/D
 
 $(PACKAGE)-html.tar.gz: $(PACKAGE)-html/$(PACKAGE)/index.html
 	tar czf $@ $(PACKAGE)-html
+
+info:
+	bash syncDocStrings.sh
+
+run:
+	# Run GNU Octave with the development version of the package
+	(cd src; make install) && (cd inst; octave --silent)
