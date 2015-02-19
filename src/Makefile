@@ -10,6 +10,8 @@ ifndef MKOCTFILE
 MKOCTFILE    = mkoctfile
 endif
 
+.PHONY: all clean install uninstall
+
 ## Default target
 all: $(OBJ)
 
@@ -22,16 +24,18 @@ mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
 	( echo "## DO NOT EDIT!  Generated automatically from $(<F) by Make."; grep '^%!' $< ) > $@-t
 	mv $@-t $@
 
-# The following build target are not required for the package installation
+# The following build targets are not required for the package installation
 # process, but are used during development of the package.
 
-.PHONY: clean uninstall
+DEV_OBJ=$(OBJ:%=../inst/%)
 
-install: all
-	ln -srf $(OBJ) ../inst/
+../inst/%: %
+	ln -srf $< $@
+
+install: $(DEV_OBJ)
 
 uninstall:
-	(cd ../inst/; rm -f $(OBJ))
+	rm -f $(DEV_OBJ)
 
 clean:
 	rm -f $(OBJ) $(OBJ:%.oct=%.o)
