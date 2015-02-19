@@ -61,8 +61,8 @@
 ## magnitude (> 2^53) can also be affected from precision loss.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
-## however it implements the IEEE 1788 functions newDec, numsToInterval, and
-## textToInterval.
+## however it implements the IEEE 1788 functions newDec, setDec, 
+## numsToInterval, and textToInterval.
 ## 
 ## @example
 ## @group
@@ -169,7 +169,7 @@ try
         dec (:) = {decvalue};
     endif
     
-    if (not (min (size (dec) == size (bare))))
+    if (not (all (size (dec) == size (bare))))
         error ("interval:InvalidOperand", "decoration size mismatch")
     endif
     
@@ -180,15 +180,20 @@ try
     dec (missingdecoration & iscommoninterval (bare)) = "com";
     
     ## Check decoration
-    if (max (max (isempty (bare) & not (strcmp (dec, "trv")))))
-        error ("interval:InvalidOperand", ...
-               "illegal decoration for empty interval")
+    empty_not_trv = isempty (bare) & not (strcmp (dec, "trv"));
+    if (any (any (empty_not_trv)))
+        empty_not_trv = isempty (bare) & (strcmp (dec, "com") ...
+                                        | strcmp (dec, "dac") ...
+                                        | strcmp (dec, "def"));
+        isexact = false ();
+        dec (empty_not_trv) = "trv";
     endif
-    if (max (max (not (iscommoninterval (bare)) & strcmp (dec, "com"))))
-        error ("interval:InvalidOperand", ...
-               "illegal decoration for uncommon interval")
+    uncommon_com = not (iscommoninterval (bare)) & strcmp (dec, "com");
+    if (any (any (uncommon_com)))
+        isexact = false ();
+        dec (uncommon_com) = "dac";
     endif
-    if (not (min (min ( ...
+    if (not (all (all ( ...
             strcmp (dec, "com") | ...
             strcmp (dec, "dac") | ...
             strcmp (dec, "def") | ...
@@ -223,8 +228,16 @@ endfunction
 %!  assert (isnai (infsupdec ("[nai]"))); # quiet [NaI]
 %!warning assert (isnai (infsupdec (3, 2)));
 %!warning assert (isnai (infsupdec ("Flugeldufel")));
-%!warning assert (isnai (infsupdec (-inf, inf, "com")));
-%!warning assert (isnai (infsupdec (inf, -inf, "def")));
+%!test "decoration adjustments";
+%!  assert (inf (infsupdec (42, inf, "com")), 42);
+%!  assert (sup (infsupdec (42, inf, "com")), inf);
+%!  assert (strcmp (decorationpart (infsupdec (42, inf, "com")), "dac"));
+%!  assert (inf (infsupdec (-inf, inf, "com")), -inf);
+%!  assert (sup (infsupdec (-inf, inf, "com")), inf);
+%!  assert (strcmp (decorationpart (infsupdec (-inf, inf, "com")), "dac"));
+%!  assert (inf (infsupdec (inf, -inf, "def")), inf);
+%!  assert (sup (infsupdec (inf, -inf, "def")), -inf);
+%!  assert (strcmp (decorationpart (infsupdec (inf, -inf, "def")), "trv"));
 %!test "decorated interval literal";
 %!  assert (inf (infsupdec ("[2, 3]_def")), 2);
 %!  assert (sup (infsupdec ("[2, 3]_def")), 3);
