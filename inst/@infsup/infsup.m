@@ -188,10 +188,6 @@ input.inf = l;
 input.sup = u;
 for [boundaries, key] = input
     if (isfloat (boundaries))
-        if (any (any (isnan (boundaries))))
-            error ("interval:InvalidOperand", ...
-                   ["illegal " key " boundary: NaN not allowed"]);
-        endif
         ## Simple case: the boundaries already are a binary floating point
         ## number in single or double precision.
         x.(key) = double (boundaries);
@@ -222,10 +218,6 @@ for [boundaries, key] = input
                        ["illegal " key " boundary: must not be complex"]);
             endif
             if (isfloat (boundary))
-                if (isnan (boundary))
-                    error ("interval:InvalidOperand", ...
-                           ["illegal " key " boundary: NaN not allowed"]);
-                endif
                 ## Simple case: the boundary already is a binary floating point
                 ## number in single or double precision.
                 x.(key) (i) = double (boundary);
@@ -457,9 +449,11 @@ for [boundaries, key] = input
     endfor
 endfor
 
-if (any (any (isnan (x.inf))) || any (any (isnan (x.sup))))
-    assert (false (), "infsup: interval creation failed");
-endif
+## NaNs produce empty intervals
+nanvalue = isnan (x.inf) | isnan (x.sup);
+x.inf (nanvalue) = inf;
+x.sup (nanvalue) = -inf;
+possiblyundefined (nanvalue) = false;
 
 ## normalize boundaries:
 ## representation of the set containing only zero is always [-0,+0]
@@ -497,11 +491,19 @@ endfunction
 %!  assert (sup (infsup (0)), 0);
 %!  assert (inf (infsup (2, 3)), 2);
 %!  assert (sup (infsup (2, 3)), 3);
+%!  assert (inf (infsup (nan)), +inf);
+%!  assert (sup (infsup (nan)), -inf);
+%!  assert (inf (infsup (nan, 2)), +inf);
+%!  assert (sup (infsup (nan, 2)), -inf);
+%!  assert (inf (infsup (3, nan)), +inf);
+%!  assert (sup (infsup (3, nan)), -inf);
 %!test "double matrix";
 %!  assert (inf (infsup (magic (4))), magic (4));
 %!  assert (sup (infsup (magic (4))), magic (4));
 %!  assert (inf (infsup (magic (3), magic (3) + 1)), magic (3));
 %!  assert (sup (infsup (magic (3), magic (3) + 1)), magic (3) + 1);
+%!  assert (inf (infsup (nan (3))), +inf (3));
+%!  assert (sup (infsup (nan (3))), -inf (3));
 %!test "decimal boundaries";
 %!  assert (inf (infsup ("0.1")), 0.1 - eps / 16);
 %!  assert (sup (infsup ("0.1")), 0.1);
