@@ -25,6 +25,7 @@ Interval function with (mostly tightest) accuracy
  @infsup/fix
  @infsup/floor
  @infsup/fma
+ @infsup/hypot
  @infsup/ldivide
  @infsup/log
  @infsup/log10

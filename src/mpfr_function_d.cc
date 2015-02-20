@@ -176,6 +176,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('exp', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('expm1', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('fma', @var{R}, @var{X}, @var{Y}, @var{Z})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('hypot', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log2', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log10', @var{R}, @var{X})\n"
@@ -316,6 +317,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
       case 2: // binary function
         if      (function == "atan2")
           evaluate (arg1, arg2, rnd, &mpfr_atan2);
+        else if (function == "hypot")
+          evaluate (arg1, arg2, rnd, &mpfr_hypot);
         else if (function == "minus")
           evaluate (arg1, arg2, rnd, &mpfr_sub);
         else if (function == "nthroot")

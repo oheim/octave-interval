@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} {} @var{X} + @var{Y}
+## @deftypefn {Function File} {} {} hypot (@var{X}, @var{Y})
 ## 
-## Add all numbers of interval @var{X} to all numbers of @var{Y}.
+## Compute the euclidean norm.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -25,18 +25,17 @@
 ## @group
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
-## x + y
-##   @result{} [3, 5]_com
+## hypot (x, y)
+##   @result{} [2.2360679774997893, 3.6055512754639896]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/minus}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2015-02-20
 
-function result = plus (x, y)
+function result = hypot (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -59,11 +58,11 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (plus (intervalpart (x), intervalpart (y)));
-## plus is continuous and defined everywhere
+result = infsupdec (hypot (intervalpart (x), intervalpart (y)));
+## hypot is continuous and defined everywhere
 result.dec = mindec (result.dec, x.dec, y.dec);
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (infsupdec (2, 3) + infsupdec (1, 2), infsupdec (3, 5)));
+%! assert (isequal (hypot (infsupdec (2, 3), infsupdec (1, 2)), infsupdec ("[0x1.1E3779B97F4A7p1, 0x1.CD82B446159F4p1]")));

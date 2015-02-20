@@ -15,7 +15,7 @@
  * mldivide, mrdivide, inv: Greatly improved accuracy and performance of the
    linear solver
  
- * New interval arithmetic functions: nthroot, log1p, expm1
+ * New interval arithmetic functions: nthroot, hypot, log1p, expm1
  
  * Improved accuracy of vector sums, dot products, pownrev, and powrev2
  
