@@ -6,7 +6,7 @@ Interval constructor
  @infsup/infsup
  @infsup/setdec
  @infsupdec/infsupdec
-Interval function with tightest accuracy
+Interval function with (mostly tightest) accuracy
  @infsup/abs
  @infsup/acos
  @infsup/acosh
@@ -31,6 +31,7 @@ Interval function with tightest accuracy
  @infsup/max
  @infsup/min
  @infsup/minus
+ @infsup/nthroot
  @infsup/plus
  @infsup/pow
  @infsup/pow10
