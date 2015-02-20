@@ -89,25 +89,27 @@ std::pair <double, double> interval_vector_dot (
       mpfr_mul_d (mp_addend_l, mp_addend_l, yl, MPFR_RNDZ);
       mpfr_set (mp_addend_u, mp_addend_l, MPFR_RNDZ);
       
-      // We have to compute the remaining 3 Products and determine min/max
-      mpfr_set_d (mp_temp, xl, MPFR_RNDZ);
-      mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
-      mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
-      mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
-      mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
-      mpfr_mul_d (mp_temp, mp_temp, yl, MPFR_RNDZ);
-      mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
-      mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
-      mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
-      mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
-      mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
-      mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+      if (xl != xu || yl != yu)
+        {
+          // We have to compute the remaining 3 Products and determine min/max
+          mpfr_set_d (mp_temp, xl, MPFR_RNDZ);
+          mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
+          mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
+          mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+          mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
+          mpfr_mul_d (mp_temp, mp_temp, yl, MPFR_RNDZ);
+          mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
+          mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+          mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
+          mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
+          mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
+          mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+        }
       
       // Compute sums
       if (mpfr_add (accu_l, accu_l, mp_addend_l, MPFR_RNDZ) != 0 ||
           mpfr_add (accu_u, accu_u, mp_addend_u, MPFR_RNDZ) != 0)
-        error ("interval:InvalidOperand",
-               "mpfr_vector_dot_d: Failed to compute exact dot product");
+        error ("mpfr_vector_dot_d: Failed to compute exact dot product");
     }
   std::pair <double, double> result (mpfr_get_d (accu_l, MPFR_RNDD),
                                      mpfr_get_d (accu_u, MPFR_RNDU));
@@ -149,8 +151,7 @@ std::pair <double, double> vector_dot (
       
       int exact = mpfr_add (accu, accu, product, MPFR_RNDZ);
       if (exact != 0)
-        error ("interval:InvalidOperand",
-               "mpfr_vector_dot_d: Failed to compute exact dot product");
+        error ("mpfr_vector_dot_d: Failed to compute exact dot product");
       if (mpfr_nan_p (accu))
         // Short-Circtuit if one addend is NAN or if -INF + INF
         break;

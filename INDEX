@@ -138,5 +138,6 @@ Utility function
  @infsupdec/intervalpart
 API functions to the MPFR library
  mpfr_function_d
+ mpfr_matrix_mul_d
  mpfr_vector_sum_d
  mpfr_vector_dot_d

@@ -18,16 +18,18 @@
 ## @deftypefn {Function File} {} {} @var{X} * @var{Y}
 ## @deftypefnx {Function File} {} mtimes (@var{X}, @var{Y})
 ## 
-## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
+## Compute the interval matrix multiplication.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## x = infsup (2, 3);
-## y = infsup (1, 2);
+## x = infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]);
+## y = infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]);
 ## x * y
-##   @result{} [2, 6]
+##   @result{} 2×2 interval matrix
+##          [3, 6]      [5, 10.5]
+##      [21, 22.5]   [36, 54.375]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mrdivide}
@@ -60,28 +62,15 @@ if (size (x.inf, 2) ~= size (y.inf, 1))
            "operator *: nonconformant arguments");
 endif
 
-## Initialize result matrix
-result = infsup (inf (size (x.inf, 1), size (y.inf, 2)), ...
-                -inf (size (x.inf, 1), size (y.inf, 2)));
+## mtimes could also be computed with a for loop and the dot operation.
+## However, that would take significantly longer (loop + missing JIT-compiler,
+## several OCT-file calls), so we use an optimized
+## OCT-file for that particular operation.
 
-## Minimize the number of dot calls: Compute the result row-wise or column-wise
-idx.type = "()";
-idx.subs = {":", ":"};
-if (size (x.inf, 1) >= size (y.inf, 2))
-    for i = 1 : size (x.inf, 1)
-        idx.subs {1} = i;
-        result = subsasgn (result, idx, ...
-                           dot (subsref (x, idx)', y, 1));
-    endfor
-else
-    for j = 1 : size (y.inf, 2)
-        idx.subs {2} = j;
-        result = subsasgn (result, idx, ...
-                           dot (x, subsref (y, idx)', 2));
-    endfor
-endif
+[l, u] = mpfr_matrix_mul_d (x.inf, y.inf, x.sup, y.sup);
+result = infsup (l, u);
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (infsup (2, 3) * infsup (1, 2) == infsup (2, 6));
+%! assert (infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]) * infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]) == infsup ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375]));
