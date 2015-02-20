@@ -20,12 +20,12 @@
 #include "mpfr_commons.cc"
 
 std::pair <Matrix, Matrix> interval_matrix_mul (
-  Matrix matrix_xl, Matrix matrix_yl,
-  Matrix matrix_xu, Matrix matrix_yu)
+  const Matrix matrix_xl, const Matrix matrix_yl,
+  const Matrix matrix_xu, const Matrix matrix_yu)
 {
-  const unsigned int n = matrix_xl.rows ();
-  const unsigned int m = matrix_yl.columns ();
-  const unsigned int l = matrix_xl.columns ();
+  const unsigned int n = matrix_xl.rows (),
+                     m = matrix_yl.columns (),
+                     l = matrix_xl.columns ();
   if (l != matrix_yl.rows () ||
       n != matrix_xu.rows () ||
       m != matrix_yl.columns () ||
@@ -33,6 +33,7 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
       l != matrix_yu.rows ())
     error ("mpfr_matrix_mul_d: "
            "Matrix dimensions must agree");
+  
   Matrix result_l (dim_vector (n, m));
   Matrix result_u (dim_vector (n, m));
   #pragma omp parallel for
@@ -97,18 +98,24 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
               mpfr_mul_d (mp_addend_l, mp_addend_l, yl, MPFR_RNDZ);
               mpfr_set (mp_addend_u, mp_addend_l, MPFR_RNDZ);
               
-              if (xl != xu || yl != yu)
+              // We have to compute the remaining 3 Products and
+              // determine min/max
+              if (yl != yu)
                 {
-                  // We have to compute the remaining 3 Products and
-                  // determine min/max
                   mpfr_set_d (mp_temp, xl, MPFR_RNDZ);
                   mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
                   mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
                   mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+                }
+              if (xl != xu)
+                {
                   mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
                   mpfr_mul_d (mp_temp, mp_temp, yl, MPFR_RNDZ);
                   mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
                   mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+                }
+              if (xl != xu || yl != yu)
+                {
                   mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
                   mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
                   mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
@@ -118,8 +125,11 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
               // Compute sums
               if (mpfr_add (accu_l, accu_l, mp_addend_l, MPFR_RNDZ) != 0 ||
                   mpfr_add (accu_u, accu_u, mp_addend_u, MPFR_RNDZ) != 0)
-                error ("mpfr_matrix_mul_d: "
-                       "Failed to compute exact matrix multiplication");
+                {
+                  #pragma omp critical
+                  error ("mpfr_matrix_mul_d: "
+                         "Failed to compute exact matrix multiplication");
+                }
             }
           const double accu_l_d = mpfr_get_d (accu_l, MPFR_RNDD);
           const double accu_u_d = mpfr_get_d (accu_u, MPFR_RNDU);
@@ -136,6 +146,7 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
       mpfr_clear (accu_l);
       mpfr_clear (accu_u);
     }
+    
   std::pair <Matrix, Matrix> result (result_l, result_u);
 
   return result;
@@ -187,7 +198,7 @@ DEFUN_DLD (mpfr_matrix_mul_d, args, nargout,
   Matrix matrix_yu = args (3).matrix_value ();
   if (error_state)
     return octave_value_list ();
-
+  
   std::pair <Matrix, Matrix> result_d = 
     interval_matrix_mul (matrix_xl, matrix_yl, matrix_xu, matrix_yu);
   octave_value_list result;

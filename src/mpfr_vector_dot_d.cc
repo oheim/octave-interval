@@ -89,17 +89,23 @@ std::pair <double, double> interval_vector_dot (
       mpfr_mul_d (mp_addend_l, mp_addend_l, yl, MPFR_RNDZ);
       mpfr_set (mp_addend_u, mp_addend_l, MPFR_RNDZ);
       
-      if (xl != xu || yl != yu)
+      // We have to compute the remaining 3 Products and determine min/max
+      if (yl != yu)
         {
-          // We have to compute the remaining 3 Products and determine min/max
           mpfr_set_d (mp_temp, xl, MPFR_RNDZ);
           mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
           mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
           mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+        }
+      if (xl != xu)
+        {
           mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
           mpfr_mul_d (mp_temp, mp_temp, yl, MPFR_RNDZ);
           mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
           mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+        }
+      if (xl != xu || yl != yu)
+        {
           mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
           mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
           mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
