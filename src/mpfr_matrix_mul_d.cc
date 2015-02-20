@@ -35,96 +35,109 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
            "Matrix dimensions must agree");
   Matrix result_l (dim_vector (n, m));
   Matrix result_u (dim_vector (n, m));
-  // Using accumulators instead of the (less accurate) mpfr_sum function saves
-  // us some computation time, because we do not have to instantiate so many
-  // mpfr_t values.
-  mpfr_t accu_l, accu_u;
-  mpfr_init2 (accu_l, BINARY64_ACCU_PRECISION);
-  mpfr_init2 (accu_u, BINARY64_ACCU_PRECISION);
-  mpfr_t mp_addend_l, mp_addend_u, mp_temp;
-  mpfr_init2 (mp_addend_l, 2 * BINARY64_PRECISION + 1);
-  mpfr_init2 (mp_addend_u, 2 * BINARY64_PRECISION + 1);
-  mpfr_init2 (mp_temp,     2 * BINARY64_PRECISION + 1);
+  #pragma omp parallel for
   for (int i = 0; i < n; i++)
-    for (int j = 0; j < m; j++)
-      {
-        mpfr_set_zero (accu_l, 0);
-        mpfr_set_zero (accu_u, 0);
-        for (int k = 0; k < l; k++)
-          {
-            const double xl = matrix_xl.elem (i, k);
-            const double xu = matrix_xu.elem (i, k);
-            const double yl = matrix_yl.elem (k, j);
-            const double yu = matrix_yu.elem (k, j);
-          
-            if ((xl == INFINITY && xu == -INFINITY)
-                ||
-                (yl == INFINITY && yu == -INFINITY))
+    {
+      // Using accumulators instead of the (less accurate) mpfr_sum function
+      // saves us some computation time, because we do not have to instantiate
+      // so many mpfr_t values.
+      mpfr_t accu_l, accu_u;
+      mpfr_init2 (accu_l, BINARY64_ACCU_PRECISION);
+      mpfr_init2 (accu_u, BINARY64_ACCU_PRECISION);
+      mpfr_t mp_addend_l, mp_addend_u, mp_temp;
+      mpfr_init2 (mp_addend_l, 2 * BINARY64_PRECISION + 1);
+      mpfr_init2 (mp_addend_u, 2 * BINARY64_PRECISION + 1);
+      mpfr_init2 (mp_temp,     2 * BINARY64_PRECISION + 1);
+      for (int j = 0; j < m; j++)
+        {
+          mpfr_set_zero (accu_l, 0);
+          mpfr_set_zero (accu_u, 0);
+          for (int k = 0; k < l; k++)
+            {
+              double xl, xu, yl, yu;
+              #pragma omp critical
               {
-                // [Empty] × Anything = [Empty]
-                // [Empty] + Anything = [Empty]
-                mpfr_set_inf (accu_l, +1);
-                mpfr_set_inf (accu_u, -1);
-                break;
+                // Access to shared memory is critical
+                xl = matrix_xl.elem (i, k);
+                xu = matrix_xu.elem (i, k);
+                yl = matrix_yl.elem (k, j);
+                yu = matrix_yu.elem (k, j);
               }
-            if (mpfr_inf_p (accu_l) != 0 && mpfr_inf_p (accu_u) != 0)
-              // [Entire] + Anything = [Entire]
-              continue;
-            if ((xl == 0.0 && xu == 0.0)
-                ||
-                (yl == 0.0 && yu == 0.0))
-              // [0] × Anything = [0]
-              continue;
-            if ((xl == -INFINITY && xu == INFINITY)
-                ||
-                (yl == -INFINITY && yu == INFINITY))
-              {
-                // [Entire] × Anything = [Entire]
-                mpfr_set_inf (accu_l, -1);
-                mpfr_set_inf (accu_u, +1);
+            
+              if ((xl == INFINITY && xu == -INFINITY)
+                  ||
+                  (yl == INFINITY && yu == -INFINITY))
+                {
+                  // [Empty] × Anything = [Empty]
+                  // [Empty] + Anything = [Empty]
+                  mpfr_set_inf (accu_l, +1);
+                  mpfr_set_inf (accu_u, -1);
+                  break;
+                }
+              if (mpfr_inf_p (accu_l) != 0 && mpfr_inf_p (accu_u) != 0)
+                // [Entire] + Anything = [Entire]
                 continue;
-              }
-            
-            // Both factors can be multiplied within 107 bits exactly!
-            mpfr_set_d (mp_addend_l, xl, MPFR_RNDZ);
-            mpfr_mul_d (mp_addend_l, mp_addend_l, yl, MPFR_RNDZ);
-            mpfr_set (mp_addend_u, mp_addend_l, MPFR_RNDZ);
-            
-            if (xl != xu || yl != yu)
-              {
-                // We have to compute the remaining 3 Products and
-                // determine min/max
-                mpfr_set_d (mp_temp, xl, MPFR_RNDZ);
-                mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
-                mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
-                mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
-                mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
-                mpfr_mul_d (mp_temp, mp_temp, yl, MPFR_RNDZ);
-                mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
-                mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
-                mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
-                mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
-                mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
-                mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
-              }
-            
-            // Compute sums
-            if (mpfr_add (accu_l, accu_l, mp_addend_l, MPFR_RNDZ) != 0 ||
-                mpfr_add (accu_u, accu_u, mp_addend_u, MPFR_RNDZ) != 0)
-              error ("mpfr_matrix_mul_d: "
-                     "Failed to compute exact matrix multiplication");
+              if ((xl == 0.0 && xu == 0.0)
+                  ||
+                  (yl == 0.0 && yu == 0.0))
+                // [0] × Anything = [0]
+                continue;
+              if ((xl == -INFINITY && xu == INFINITY)
+                  ||
+                  (yl == -INFINITY && yu == INFINITY))
+                {
+                  // [Entire] × Anything = [Entire]
+                  mpfr_set_inf (accu_l, -1);
+                  mpfr_set_inf (accu_u, +1);
+                  continue;
+                }
+              
+              // Both factors can be multiplied within 107 bits exactly!
+              mpfr_set_d (mp_addend_l, xl, MPFR_RNDZ);
+              mpfr_mul_d (mp_addend_l, mp_addend_l, yl, MPFR_RNDZ);
+              mpfr_set (mp_addend_u, mp_addend_l, MPFR_RNDZ);
+              
+              if (xl != xu || yl != yu)
+                {
+                  // We have to compute the remaining 3 Products and
+                  // determine min/max
+                  mpfr_set_d (mp_temp, xl, MPFR_RNDZ);
+                  mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
+                  mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
+                  mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+                  mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
+                  mpfr_mul_d (mp_temp, mp_temp, yl, MPFR_RNDZ);
+                  mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
+                  mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+                  mpfr_set_d (mp_temp, xu, MPFR_RNDZ);
+                  mpfr_mul_d (mp_temp, mp_temp, yu, MPFR_RNDZ);
+                  mpfr_min (mp_addend_l, mp_addend_l, mp_temp, MPFR_RNDZ);
+                  mpfr_max (mp_addend_u, mp_addend_u, mp_temp, MPFR_RNDZ);
+                }
+              
+              // Compute sums
+              if (mpfr_add (accu_l, accu_l, mp_addend_l, MPFR_RNDZ) != 0 ||
+                  mpfr_add (accu_u, accu_u, mp_addend_u, MPFR_RNDZ) != 0)
+                error ("mpfr_matrix_mul_d: "
+                       "Failed to compute exact matrix multiplication");
+            }
+          const double accu_l_d = mpfr_get_d (accu_l, MPFR_RNDD);
+          const double accu_u_d = mpfr_get_d (accu_u, MPFR_RNDU);
+          #pragma omp critical
+          {
+            // Access to shared memory is critical
+            result_l.elem (i, j) = accu_l_d;
+            result_u.elem (i, j) = accu_u_d;
           }
-        result_l.elem (i, j) = mpfr_get_d (accu_l, MPFR_RNDD);
-        result_u.elem (i, j) = mpfr_get_d (accu_u, MPFR_RNDU);
-      }
+        }
+      mpfr_clear (mp_addend_l);
+      mpfr_clear (mp_addend_u);
+      mpfr_clear (mp_temp);
+      mpfr_clear (accu_l);
+      mpfr_clear (accu_u);
+    }
   std::pair <Matrix, Matrix> result (result_l, result_u);
 
-  mpfr_clear (mp_addend_l);
-  mpfr_clear (mp_addend_u);
-  mpfr_clear (mp_temp);
-  mpfr_clear (accu_l);
-  mpfr_clear (accu_u);
-  
   return result;
 }
 
