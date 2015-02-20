@@ -178,6 +178,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log2', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log10', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('log1p', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('minus', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('nthroot', @var{R}, @var{X}, @var{N})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('plus', @var{R}, @var{X}, @var{Y})\n"
@@ -284,6 +285,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_log2);
         else if (function == "log10")
           evaluate (arg1, rnd, &mpfr_log10);
+        else if (function == "log1p")
+          evaluate (arg1, rnd, &mpfr_log1p);
         else if (function == "pow2")
           evaluate (arg1, rnd, &mpfr_exp2);
         else if (function == "pow10")
