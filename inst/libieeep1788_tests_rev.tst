@@ -17,9 +17,6 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 ##
-%!shared
-%!  ## Disable warnings when creating NaIs
-%!  warning ("off", "interval:NaI")
 %! ## Test library imports
 %!function s = to_string (x)
 %!    if (isnumeric (x))
@@ -3650,6 +3647,3 @@
 %! assert (all (eq (...
 %!    decorationpart (mulrev (infsupdec (-2.0, 1.1, "def"), infsupdec (0.04, inf, "dac"), infsupdec (0.04, inf, "dac"))) {1}, ...
 %!    decorationpart (infsupdec (0.04, inf, "trv")) {1})))
-%!shared
-%!  ## Re-Enable warnings when creating NaIs
-%!  warning ("on", "interval:NaI")

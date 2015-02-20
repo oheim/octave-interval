@@ -14,9 +14,6 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 ##
-%!shared
-%!  ## Disable warnings when creating NaIs
-%!  warning ("off", "interval:NaI")
 %! ## Test library imports
 %!function s = to_string (x)
 %!    if (isnumeric (x))
@@ -106,6 +103,3 @@
 %! assert (all (eq (...
 %!    absrev (infsup (-inf, 1.0), infsup (-inf, inf)), ...
 %!    infsup (-1.0, 1.0))))
-%!shared
-%!  ## Re-Enable warnings when creating NaIs
-%!  warning ("on", "interval:NaI")

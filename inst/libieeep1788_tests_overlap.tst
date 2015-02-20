@@ -17,9 +17,6 @@
 ## See the License for the specific language governing permissions and
 ## limitations under the License.
 ##
-%!shared
-%!  ## Disable warnings when creating NaIs
-%!  warning ("off", "interval:NaI")
 %! ## Test library imports
 %!function s = to_string (x)
 %!    if (isnumeric (x))
@@ -270,6 +267,3 @@
 %! assert (all (eq (...
 %!    overlap (infsupdec (0.0, 2.0, "dac"), infsupdec (2.0, 2.0, "def")), ...
 %!    "finishedBy")))
-%!shared
-%!  ## Re-Enable warnings when creating NaIs
-%!  warning ("on", "interval:NaI")

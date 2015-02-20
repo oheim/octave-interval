@@ -14,9 +14,6 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 ##
-%!shared
-%!  ## Disable warnings when creating NaIs
-%!  warning ("off", "interval:NaI")
 %! ## Test library imports
 %!function s = to_string (x)
 %!    if (isnumeric (x))
@@ -148,6 +145,3 @@
 %! assert (all (eq (...
 %!    atan2 (infsup (-5.0, 0.0), infsup (0.0, 5.0)), ...
 %!    infsup ("-0x1.921FB54442D19p0", "0x0p0"))))
-%!shared
-%!  ## Re-Enable warnings when creating NaIs
-%!  warning ("on", "interval:NaI")
