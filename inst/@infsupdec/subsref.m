@@ -44,3 +44,5 @@ dx = subsref (A.dec, S);
 result = infsupdec (x, dx);
 
 endfunction
+
+%!assert (isequal (infsupdec (magic (3)) ([1, 2, 3]), infsupdec (magic (3) ([1, 2, 3]))));

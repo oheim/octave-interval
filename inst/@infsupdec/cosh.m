@@ -51,3 +51,6 @@ result = infsupdec (cosh (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (cosh (infsupdec (1)), infsupdec ("[0x1.8B07551D9F55, 0x1.8B07551D9F551]")));

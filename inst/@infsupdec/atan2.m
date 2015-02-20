@@ -73,3 +73,6 @@ result.dec (onlyrestrictioncontinuous) = ...
 result.dec (ismember (0, y) & ismember (0, x)) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (atan2 (infsupdec (1), infsupdec (-1)), infsupdec ("[0x1.2D97C7F3321D2p1, 0x1.2D97C7F3321D3p1]")));

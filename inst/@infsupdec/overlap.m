@@ -93,3 +93,5 @@ endif
 [state, bitmask] = overlap (intervalpart (a), intervalpart (b));
 
 endfunction
+
+%!assert (overlap (infsupdec (1, 2), infsupdec (3, 4)), "before");

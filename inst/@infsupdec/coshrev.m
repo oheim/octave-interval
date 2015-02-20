@@ -71,3 +71,6 @@ endif
 result = infsupdec (coshrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (coshrev (infsupdec (-2, 1)), infsupdec (0, "trv")));

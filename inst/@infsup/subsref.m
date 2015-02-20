@@ -49,3 +49,5 @@ A.sup = subsref (A.sup, S);
 result = A;
 
 endfunction
+
+%!assert (infsup (magic (3)) ([1, 2, 3]) == magic (3) ([1, 2, 3]));

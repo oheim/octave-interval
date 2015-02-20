@@ -48,3 +48,5 @@ endif
 result = (a.inf <= b.inf & a.sup <= b.sup);
 
 endfunction
+
+%!assert (le (infsup (1, 3), infsup (3)));

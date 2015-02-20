@@ -85,3 +85,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (cos (infsup (1)) == "[0x1.14A280FB5068Bp-1, 0x1.14A280FB5068Cp-1]");

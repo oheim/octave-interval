@@ -56,3 +56,6 @@ u = max (a.sup, b.sup);
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert ((infsup (1, 3) | infsup (2, 4)) == infsup (1, 4));

@@ -43,3 +43,6 @@ if (nargin ~= 1)
 endif
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (+infsup (2, 3) == infsup (2, 3));

@@ -38,3 +38,6 @@ endif
 result = lt (b, a);
 
 endfunction
+
+%!assert (not (gt (infsup (2, 3), infsup (1, 3))));
+%!assert (gt (infsup (2, 3.1), infsup (1, 3)));

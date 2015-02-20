@@ -71,3 +71,6 @@ endif
 result = infsupdec (tanrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (tanrev (infsupdec (0), infsupdec (2, 4)), infsupdec ("pi", "trv")));

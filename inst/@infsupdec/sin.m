@@ -51,3 +51,6 @@ result = infsupdec (sin (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (sin (infsupdec (1)), infsupdec ("[0x1.AED548F090CEEp-1, 0x1.AED548F090CEFp-1]")));

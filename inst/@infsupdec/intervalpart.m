@@ -41,3 +41,5 @@ endif
 bare = infsup (inf (x), sup (x));
 
 endfunction
+
+%!assert (intervalpart (infsupdec (2, 3)) == infsup (2, 3));

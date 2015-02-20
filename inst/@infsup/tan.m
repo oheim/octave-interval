@@ -72,3 +72,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (tan (infsup (1)) == "[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]");

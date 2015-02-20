@@ -49,3 +49,6 @@ result = (a.sup < b.inf | b.sup < a.inf);
 result (isempty (a) | isempty (b)) = true ();
 
 endfunction
+
+%!assert (disjoint (infsup (3, 4), infsup (5, 6)));
+%!assert (not (disjoint (infsup (3, 4), infsup (4, 5))));

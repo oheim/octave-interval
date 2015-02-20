@@ -62,4 +62,8 @@ result (x.sup == inf) = realmax ();
 result (isentire (x)) = 0;
 result (isempty (x)) = nan ();
 
-return
+endfunction
+
+%!assert (mid (infsup (-inf, inf)), 0);
+%!test "from the documentation string";
+%! assert (mid (infsup (2.5, 3.5)), 3);

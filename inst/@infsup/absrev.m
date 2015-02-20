@@ -60,6 +60,7 @@ n = -p;
 result = (p & x) | (n & x);
 
 endfunction
+
 %!test "Empty interval";
 %! assert (absrev (infsup ()) == infsup ());
 %! assert (absrev (infsup (0, 1), infsup ()) == infsup ());
@@ -88,3 +89,5 @@ endfunction
 %! assert (absrev (infsup (-1, inf)) == infsup (-inf, inf));
 %! assert (absrev (infsup (-inf, -1)) == infsup ());
 %! assert (absrev (infsup (-inf, 1)) == infsup (-1, 1));
+%!test "from the documentation string";
+%! assert (absrev (infsup (-2, 1)) == infsup (-1, 1));

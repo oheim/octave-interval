@@ -80,3 +80,6 @@ result = powrev2 (intervalpart (a), intervalpart (c), intervalpart (y));
 result = infsupdec (result, "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (powrev2 (infsupdec (2, 5), infsupdec (3, 6)), infsupdec ("[0x1.5D7E8F22BA886p-1, 0x1.4AE00D1CFDEB5p1]_trv")));

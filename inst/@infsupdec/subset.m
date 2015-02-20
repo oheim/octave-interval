@@ -52,3 +52,5 @@ else
 endif
 
 endfunction
+
+%!assert (subset (infsupdec (1, 2), infsupdec (1, 3)));

@@ -38,3 +38,9 @@ endif
 result = isvector (A.inf);
 
 endfunction
+
+%!assert (not (isvector (infsup ([]))));
+%!assert (isvector (infsup (0)));
+%!assert (isvector (infsup (zeros (1, 2))));
+%!assert (isvector (infsup (zeros (2, 1))));
+%!assert (not (isvector (infsup (zeros (5)))));

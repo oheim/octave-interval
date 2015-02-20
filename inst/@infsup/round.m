@@ -47,6 +47,7 @@ endif
 result = infsup (round (x.inf), round (x.sup));
 
 endfunction
+
 %!test "Empty interval";
 %! assert (round (infsup ()) == infsup ());
 %!test "Singleton intervals";

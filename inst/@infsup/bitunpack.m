@@ -64,3 +64,8 @@ result (target) = u;
 result (target + 64) = l;
 
 endfunction
+
+%!test;
+%!  b = zeros (1, 128);
+%!  b ([53, 63, 116, 127]) = 1;
+%!  assert (bitunpack (infsup (3, 4)), logical (b));

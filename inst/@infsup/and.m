@@ -61,6 +61,7 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
 %!test "Empty interval";
 %! assert (and (infsup (), infsup ()) == infsup ());
 %! assert (and (infsup (), infsup (1)) == infsup ());
@@ -82,3 +83,5 @@ endfunction
 %! assert (and (infsup (42), infsup (-inf, inf)) == infsup (42));
 %! assert (and (infsup (-inf, 0), infsup (-inf, inf)) == infsup (-inf, 0));
 %! assert (and (infsup (-inf, inf), infsup (-inf, inf)) == infsup (-inf, inf));
+%!test "from the documentation string";
+%! assert (and (infsup (1, 3), infsup (2, 4)) == infsup (2, 3));

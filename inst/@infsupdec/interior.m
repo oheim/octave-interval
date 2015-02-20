@@ -53,3 +53,5 @@ else
 endif
 
 endfunction
+
+%!assert (interior (infsupdec (1, 2), infsupdec (0, 3)));

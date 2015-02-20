@@ -25,7 +25,7 @@
 ## @group
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
-## x * y
+## x .* y
 ##   @result{} [2, 6]
 ## @end group
 ## @end example
@@ -85,3 +85,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (infsup (2, 3) .* infsup (1, 2) == infsup (2, 6));

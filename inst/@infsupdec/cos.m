@@ -51,3 +51,6 @@ result = infsupdec (cos (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (cos (infsupdec (1)), infsupdec ("[0x1.14A280FB5068Bp-1, 0x1.14A280FB5068Cp-1]")));

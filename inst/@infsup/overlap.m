@@ -124,3 +124,5 @@ if (numel (state) == 1)
 endif
 
 endfunction
+
+%!assert (overlap (infsup (1, 2), infsup (3, 4)), "before");

@@ -25,6 +25,13 @@
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
 ## No one way of decorating this operations gives useful information in all
 ## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
+##
+## @example
+## @group
+## cancelminus (infsupdec (2, 3), infsupdec (1, 1.5))
+##   @result{} [1, 1.5]_trv
+## @end group
+## @end example
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -59,3 +66,6 @@ result = cancelminus (intervalpart (x), intervalpart (y));
 result = infsupdec (result, "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (cancelminus (infsupdec (2, 3), infsupdec (1, 1.5)), infsupdec (1, 1.5, "trv")));

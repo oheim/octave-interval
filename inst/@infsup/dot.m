@@ -156,3 +156,6 @@ endfunction
 %! assert (dot (infsup ([1; 2; 3]), 42) == 252);
 %! assert (dot (infsup ([1; 2; 3]), 42, 1) == 252);
 %! assert (dot (infsup ([1; 2; 3]), 42, 2) == [42; 84; 126]);
+%!test "from the documentation string";
+%! assert (dot ([infsup(1), 2, 3], [infsup(2), 3, 4]) == 20);
+%! assert (dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1) == -realmin);

@@ -85,3 +85,6 @@ if (p >= 0)
 endif
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (pown (infsup (5, 6), 2) == infsup (25, 36));

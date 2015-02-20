@@ -61,3 +61,6 @@ n = - p;
 result = (p & x) | (n & x);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (coshrev (infsup (-2, 1)) == 0);

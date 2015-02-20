@@ -72,3 +72,6 @@ domain = interior (x, infsup (0, inf)) | ...
 result.dec (not (domain)) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (pow (infsupdec (5, 6), infsupdec (2, 3)), infsupdec (25, 216)));

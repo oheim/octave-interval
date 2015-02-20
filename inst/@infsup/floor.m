@@ -46,6 +46,7 @@ endif
 result = infsup (floor (x.inf), floor (x.sup));
 
 endfunction
+
 %!test "Empty interval";
 %! assert (floor (infsup ()) == infsup ());
 %!test "Singleton intervals";
@@ -66,3 +67,6 @@ endfunction
 %! assert (floor (infsup (-inf, realmin)) == infsup (-inf, 0));
 %! assert (floor (infsup (-inf, realmax)) == infsup (-inf, realmax));
 %! assert (floor (infsup (-inf, inf)) == infsup (-inf, inf));
+%!test "from the documentation string";
+%! assert (floor (infsup (2.5, 3.5)) == infsup (2, 3));
+%! assert (floor (infsup (-0.5, 5)) == infsup (-1, 5));

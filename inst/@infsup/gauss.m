@@ -214,3 +214,6 @@ function B = permute (P, A)
         B.sup (targetrow, :) = A.sup (i, :);
     endfor
 endfunction
+
+%!test "from the documentation string";
+%! assert (gauss (infsup ([1, 0; 0, 2]), [2, 0; 0, 4]) == [2, 0; 0, 2]);

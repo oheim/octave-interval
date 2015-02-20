@@ -51,3 +51,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (sinh (infsup (1)) == "[0x1.2CD9FC44EB982, 0x1.2CD9FC44EB983]");

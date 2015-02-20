@@ -54,6 +54,7 @@ endif
 result = (a.inf == b.inf & a.sup == b.sup);
 
 endfunction
+
 %!test "Empty interval";
 %! assert (eq (infsup (), infsup ()) == true);
 %! assert (eq (infsup (), infsup (1)) == false);

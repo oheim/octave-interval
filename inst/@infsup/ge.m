@@ -38,3 +38,5 @@ endif
 result = le (b, a);
 
 endfunction
+
+%!assert (ge (infsup (2, 3), infsup (1, 3)));

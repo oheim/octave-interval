@@ -34,3 +34,9 @@ function result = length (a)
 result = length (a.inf);
 
 endfunction
+
+%!assert (length (infsup ([])), 0);
+%!assert (length (infsup (0)), 1);
+%!assert (length (infsup (zeros (3, 1))), 3);
+%!assert (length (infsup (zeros (1, 4))), 4);
+%!assert (length (infsup (zeros (3, 4))), 4);

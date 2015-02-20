@@ -35,3 +35,6 @@ endif
 result = rows (a.inf);
 
 endfunction
+
+%!test;
+%! assert (rows (infsup (zeros (3, 4))), 3);

@@ -64,3 +64,6 @@ result = or (intervalpart (a), intervalpart (b));
 result = infsupdec (result, "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal ((infsupdec (1, 3) | infsupdec (2, 4)), infsupdec (1, 4, "trv")));

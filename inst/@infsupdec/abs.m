@@ -53,3 +53,31 @@ result = infsupdec (abs (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 endfunction
+
+%!test "Empty interval";
+%! assert (isequal (abs (infsupdec ()), infsupdec ()));
+%!test "Singleton intervals";
+%! assert (isequal (abs (infsupdec (1)), infsupdec (1)));
+%! assert (isequal (abs (infsupdec (0)), infsupdec (0)));
+%! assert (isequal (abs (infsupdec (-1)), infsupdec (1)));
+%! assert (isequal (abs (infsupdec (realmax)), infsupdec (realmax)));
+%! assert (isequal (abs (infsupdec (realmin)), infsupdec (realmin)));
+%! assert (isequal (abs (infsupdec (-realmin)), infsupdec (realmin)));
+%! assert (isequal (abs (infsupdec (-realmax)), infsupdec (realmax)));
+%!test "Bounded intervals";
+%! assert (isequal (abs (infsupdec (1, 2)), infsupdec (1, 2)));
+%! assert (isequal (abs (infsupdec (0, 1)), infsupdec (0, 1)));
+%! assert (isequal (abs (infsupdec (-1, 1)), infsupdec (0, 1)));
+%! assert (isequal (abs (infsupdec (-1, 0)), infsupdec (0, 1)));
+%! assert (isequal (abs (infsupdec (-2, -1)), infsupdec (1, 2)));
+%!test "Unbounded intervals";
+%! assert (isequal (abs (infsupdec (0, inf)), infsupdec (0, inf)));
+%! assert (isequal (abs (infsupdec (-inf, inf)), infsupdec (0, inf)));
+%! assert (isequal (abs (infsupdec (-inf, 0)), infsupdec (0, inf)));
+%! assert (isequal (abs (infsupdec (1, inf)), infsupdec (1, inf)));
+%! assert (isequal (abs (infsupdec (-1, inf)), infsupdec (0, inf)));
+%! assert (isequal (abs (infsupdec (-inf, -1)), infsupdec (1, inf)));
+%! assert (isequal (abs (infsupdec (-inf, 1)), infsupdec (0, inf)));
+%!test "from the documentation string";
+%! assert (isequal (abs (infsupdec (2.5, 3.5)), infsupdec (2.5, 3.5)));
+%! assert (isequal (abs (infsupdec (-0.5, 5.5)), infsupdec (0, 5.5)));

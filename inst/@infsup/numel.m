@@ -35,3 +35,9 @@ endif
 result = numel (a.inf);
 
 endfunction
+
+%!assert (numel (infsup ([])), 0);
+%!assert (numel (infsup (0)), 1);
+%!assert (numel (infsup (zeros (3, 1))), 3);
+%!assert (numel (infsup (zeros (1, 4))), 4);
+%!assert (numel (infsup (zeros (3, 4))), 12);

@@ -50,3 +50,6 @@ endif
 result = infsupdec (uminus (intervalpart (x)), x.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (-infsupdec (2, 3), infsupdec (-3, -2)));

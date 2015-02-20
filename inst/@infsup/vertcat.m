@@ -56,3 +56,8 @@ u = cell2mat (u);
 result = infsup (l, u);
 
 endfunction
+
+%!assert (vertcat (infsup (1), infsup (2)) == infsup (vertcat (1, 2)));
+%!test "from the documentation string";
+%! a = infsup (2, 5);
+%! assert (vertcat (a, a, a) == infsup ([2; 2; 2], [5; 5; 5]));

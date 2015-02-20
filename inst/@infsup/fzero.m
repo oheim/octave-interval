@@ -216,3 +216,13 @@ for x1 = {a, b}
 endfor
 
 endfunction
+
+%!test "from the documentation string";
+%! f = @(x) cos (x);
+%! df = @(x) -sin (x);
+%! zeros = fzero (f, infsup ("[-10, 10]"), df);
+%! assert (all (subset (pi * (-2.5:1:2.5)', zeros)));
+%! assert (max (rad (zeros)) < 8 * eps);
+%! zeros = fzero ("sqr", infsup ("[Entire]"));
+%! assert (all (subset (0, zeros)));
+%! assert (max (rad (zeros)) < eps);

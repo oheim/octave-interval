@@ -59,3 +59,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (infsup (2, 3) - infsup (1, 2) == infsup (0, 2));

@@ -55,3 +55,6 @@ domain = not (isentire (result));
 result.dec (not (domain)) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (tan (infsupdec (1)), infsupdec ("[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]")));

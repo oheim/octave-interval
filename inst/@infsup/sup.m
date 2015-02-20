@@ -52,4 +52,7 @@ if (isa (x, "infsupdec"))
 endif
 
 result = x.sup;
-return
+endfunction
+
+%!test "from the documentation string";
+%! assert (sup (infsup (2.5, 3.5)), 3.5);

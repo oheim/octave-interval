@@ -166,3 +166,16 @@ function B = permute (P, A)
         B.sup (targetrow, :) = A.sup (i, :);
     endfor
 endfunction
+
+%!test
+%! [l, u] = lu (infsup (magic (3)));
+%! assert (l == infsup ({1, 0, 0; .375, 1, 0; .5, "68/37", 1}));, ...
+%! assert (subset (u, infsup ({8, 1, 6; 0, 4.625, 4.75; 0, 0, "-0x1.3759F2298375Bp3"}, ...
+%!                            {8, 1, 6; 0, 4.625, 4.75; 0, 0, "-0x1.3759F22983759p3"})));
+%! A = magic (3);
+%! A ([1, 5, 9]) = 0;
+%! [l, u, p] = lu (infsup (A));
+%! assert (p, [0, 0, 1; 1, 0, 0; 0, 1, 0]);
+%! assert (l == infsup ({1, 0, 0; "4/3", 1, 0; 0, "1/9", 1}));
+%! assert (subset (u, infsup ({3, 0, 7; 0, 9, "-0x1.2AAAAAAAAAAACp3"; 0, 0, "0x1.C25ED097B425Ep2"}, ...
+%!                            {3, 0, 7; 0, 9, "-0x1.2AAAAAAAAAAAAp3"; 0, 0, "0x1.C25ED097B426p2"})));

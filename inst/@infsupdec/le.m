@@ -53,3 +53,5 @@ else
 endif
 
 endfunction
+
+%!assert (le (infsupdec (1, 3), infsupdec (3)));

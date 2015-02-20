@@ -39,3 +39,7 @@ endif
 dec = x.dec;
 
 endfunction
+
+%!assert (decorationpart (infsupdec (3, 4)), {"com"});
+%!assert (decorationpart (infsupdec (3, inf)), {"dac"});
+%!assert (decorationpart (infsupdec ()), {"trv"});

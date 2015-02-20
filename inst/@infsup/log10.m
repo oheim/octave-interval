@@ -55,3 +55,6 @@ u (isempty (x) | x.sup == 0) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (log10 (infsup (2)) == "[0x1.34413509F79FEp-2, 0x1.34413509F79FFp-2]");

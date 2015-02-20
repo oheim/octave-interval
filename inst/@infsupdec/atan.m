@@ -51,3 +51,6 @@ result = infsupdec (atan (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (atan (infsupdec (1)), infsupdec ("[0x1.921FB54442D18p-1, 0x1.921FB54442D19p-1]")));

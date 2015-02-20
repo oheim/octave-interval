@@ -163,3 +163,6 @@ else
     result = result | (y & infsup (l, u));
 endif
 endfunction
+
+%!test "from the documentation string";
+%! assert (atan2rev1 (infsup (1, 2), infsup ("pi") / 4) == "[0x1.FFFFFFFFFFFFFp-1, 0x1.0000000000001p1]");

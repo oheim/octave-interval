@@ -54,3 +54,8 @@ u = cell2mat (u);
 result = infsup (l, u);
 
 endfunction
+
+%!assert (horzcat (infsup (1), infsup (2)) == infsup (horzcat (1, 2)));
+%!test "from the documentation string";
+%! a = infsup (2, 5);
+%! assert (horzcat (a, a, a) == infsup ([2, 2, 2], [5, 5, 5]));

@@ -48,3 +48,6 @@ result = (a.sup < b.inf);
 result (isempty (a) | isempty (b)) = true ();
 
 endfunction
+
+%!assert (strictprecedes (infsup (1, 1.9), infsup (2.1, 3)));
+%!assert (not (strictprecedes (infsup (1, 2), infsup (2, 3))));

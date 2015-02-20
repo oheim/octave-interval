@@ -52,3 +52,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (cosh (infsup (1)) == "[0x1.8B07551D9F55, 0x1.8B07551D9F551]");

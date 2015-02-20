@@ -106,3 +106,6 @@ else
 endif
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (tanrev (infsup (0), infsup (2, 4)) == infsup ("pi"));

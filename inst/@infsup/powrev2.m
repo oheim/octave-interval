@@ -264,3 +264,6 @@ if (any (any (select)))
 endif
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (powrev2 (infsup (2, 5), infsup (3, 6)) == "[0x1.5D7E8F22BA886p-1, 0x1.4AE00D1CFDEB5p1]");

@@ -51,3 +51,5 @@ result = ((b.inf < a.inf | (b.inf == -inf & a.inf == -inf)) & ...
 result (isempty (a) & isempty (b)) = true ();
 
 endfunction
+
+%!assert (interior (infsup (1, 2), infsup (0, 3)));

@@ -50,3 +50,6 @@ else
     result = dot (x, x, dim);
 endif
 endfunction
+
+%!test "from the documentation string";
+%! assert (sumsq ([infsup(1), pow2(-1074), -1]) == infsup (2, 2+eps*2));

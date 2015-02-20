@@ -89,3 +89,6 @@ endfor
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (sum ([infsup(1), pow2(-1074), -1]) == infsup (pow2 (-1074)));

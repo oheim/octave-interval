@@ -64,3 +64,6 @@ result = infsupdec (minus (intervalpart (x), intervalpart (y)));
 result.dec = mindec (result.dec, x.dec, y.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (infsupdec (2, 3) - infsupdec (1, 2), infsupdec (0, 2)));

@@ -68,3 +68,5 @@ endif
 result = infsupdec (pownrev (intervalpart (c), intervalpart (x), p), "trv");
 
 endfunction
+
+%!assert (isequal (pownrev (infsupdec (25, 36), infsupdec (0, inf), 2), infsupdec (5, 6, "trv")));

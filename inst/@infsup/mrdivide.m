@@ -57,3 +57,6 @@ endif
 result = mldivide (y', x')';
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (infsup ([1, 2; 3, 4]) / [3, 4; 1, 2] == infsup ([0, 1; 1, 0]));

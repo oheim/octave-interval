@@ -61,3 +61,9 @@ result.dec (onlyrestrictioncontinuous) = ...
     mindec (result.dec (onlyrestrictioncontinuous), "dac");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (sign (infsupdec (2, 3)), infsupdec (1)));
+%! assert (isequal (sign (infsupdec (0)), infsupdec (0, "dac")));
+%! assert (isequal (sign (infsupdec (0, 5)), infsupdec (0, 1, "def")));
+%! assert (isequal (sign (infsupdec (-17)), infsupdec (-1)));

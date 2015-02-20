@@ -39,3 +39,6 @@ endif
 result = numel (interval.dec) == 1 && strcmp (interval.dec, "ill");
 
 endfunction
+
+%!assert (isnai (infsupdec ("[nai]")));
+%!assert (not (isnai (infsupdec (2, 3))));

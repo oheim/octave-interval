@@ -52,3 +52,6 @@ else
 endif
 
 endfunction
+
+%!assert (disjoint (infsupdec (3, 4), infsupdec (5, 6)));
+%!assert (not (disjoint (infsupdec (3, 4), infsupdec (4, 5))));

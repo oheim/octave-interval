@@ -51,3 +51,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (sqr (infsup (-2, 1)) == infsup (0, 4));

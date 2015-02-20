@@ -53,3 +53,6 @@ endif
 
 result = x.inf;
 endfunction
+
+%!test "from the documentation string";
+%! assert (inf (infsup (2.5, 3.5)), 2.5);

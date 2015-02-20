@@ -51,3 +51,6 @@ else
 endif
 
 endfunction
+
+%!assert (precedes (infsupdec (1, 2), infsupdec (2, 3)));
+%!assert (not (precedes (infsupdec (1, 2.1), infsupdec (1.9, 3))));

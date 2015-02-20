@@ -52,3 +52,6 @@ result.dec = mindec (result.dec, x.dec);
 result.dec (not (subset (x, infsup (-1, 1)))) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (asin (infsupdec (.5)), infsupdec ("[0x1.0C152382D7365p-1, 0x1.0C152382D7366p-1]")));

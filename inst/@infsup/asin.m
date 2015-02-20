@@ -54,5 +54,8 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
 %!test "Empty interval";
 %! assert (asin (infsup ()) == infsup ());
+%!test "from the documentation string";
+%! assert (asin (infsup (.5)) == "[0x1.0C152382D7365p-1, 0x1.0C152382D7366p-1]");

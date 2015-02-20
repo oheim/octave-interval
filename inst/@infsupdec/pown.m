@@ -57,3 +57,6 @@ domain = p >= 0 | not (ismember (0, x));
 result.dec (not (domain)) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (pown (infsupdec (5, 6), 2), infsupdec (25, 36)));

@@ -50,3 +50,6 @@ u (isempty (x)) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (pow10 (infsup (5)) == infsup (100000));

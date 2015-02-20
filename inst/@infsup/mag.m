@@ -48,3 +48,6 @@ result = max (abs (x.inf), abs (x.sup));
 result (isempty (x)) = nan ();
 
 endfunction
+
+%!assert (mag (infsup (-3, 4)), 4);
+%!assert (mag (infsup (-4, 3)), 4);

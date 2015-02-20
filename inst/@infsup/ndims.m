@@ -38,3 +38,7 @@ endif
 result = ndims (a.inf);
 
 endfunction
+
+%!assert (ndims (infsup ([])), 2);
+%!assert (ndims (infsup (0)), 2);
+%!assert (ndims (infsup (magic (3))), 2);

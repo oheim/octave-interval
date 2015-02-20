@@ -71,3 +71,8 @@ result (target_bare) = bare;
 result (target_d) = d;
 
 endfunction
+
+%!test;
+%!  b = zeros (1, 136);
+%!  b ([5, 61, 71, 124, 135]) = 1;
+%!  assert (bitunpack (infsupdec (3, 4)), logical (b));

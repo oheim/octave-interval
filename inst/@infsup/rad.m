@@ -54,4 +54,7 @@ result = max (r1, r2);
 
 result (isempty (x)) = nan ();
 
-return
+endfunction
+
+%!test "from the documentation string";
+%! assert (rad (infsup (2.5, 3.5)), .5);

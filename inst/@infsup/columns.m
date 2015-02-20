@@ -35,3 +35,6 @@ endif
 result = columns (a.inf);
 
 endfunction
+
+%!test;
+%! assert (columns (infsup (zeros (3, 4))), 4);

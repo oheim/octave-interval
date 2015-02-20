@@ -71,3 +71,6 @@ endif
 result = infsupdec (sinrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (sinrev (infsupdec (-1), infsupdec (0, 6)), infsupdec ("[0x1.2D97C7F3321D2p2, 0x1.2D97C7F3321D3p2]_trv")));

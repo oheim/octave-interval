@@ -59,6 +59,7 @@ u (zerointerior) = max (-x.inf (zerointerior), x.sup (zerointerior));
 result = infsup (l, u);
 
 endfunction
+
 %!test "Empty interval";
 %! assert (abs (infsup ()) == infsup ());
 %!test "Singleton intervals";
@@ -83,3 +84,6 @@ endfunction
 %! assert (abs (infsup (-1, inf)) == infsup (0, inf));
 %! assert (abs (infsup (-inf, -1)) == infsup (1, inf));
 %! assert (abs (infsup (-inf, 1)) == infsup (0, inf));
+%!test "from the documentation string";
+%! assert (abs (infsup (2.5, 3.5)) == infsup (2.5, 3.5));
+%! assert (abs (infsup (-0.5, 5.5)) == infsup (0, 5.5));

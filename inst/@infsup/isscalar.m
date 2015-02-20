@@ -39,3 +39,9 @@ endif
 result = isscalar (A.inf);
 
 endfunction
+
+%!assert (not (isscalar (infsup ([]))));
+%!assert (isscalar (infsup (0)));
+%!assert (not (isscalar (infsup (zeros (1, 2)))));
+%!assert (not (isscalar (infsup (zeros (2, 1)))));
+%!assert (not (isscalar (infsup (zeros (5)))));

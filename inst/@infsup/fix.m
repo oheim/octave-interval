@@ -47,6 +47,7 @@ endif
 result = infsup (fix (x.inf), fix (x.sup));
 
 endfunction
+
 %!test "Empty interval";
 %! assert (fix (infsup ()) == infsup ());
 %!test "Singleton intervals";
@@ -70,3 +71,6 @@ endfunction
 %! assert (fix (infsup (-inf, realmin)) == infsup (-inf, 0));
 %! assert (fix (infsup (-inf, realmax)) == infsup (-inf, realmax));
 %! assert (fix (infsup (-inf, inf)) == infsup (-inf, inf));
+%!test "from the documentation string";
+%! assert (fix (infsup (2.5, 3.5)) == infsup (2, 3));
+%! assert (fix (infsup (-0.5, 5)) == infsup (0, 5));

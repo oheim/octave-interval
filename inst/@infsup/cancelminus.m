@@ -22,6 +22,12 @@
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
+## @example
+## @group
+## cancelminus (infsup (2, 3), infsup (1, 1.5))
+##   @result{} [1, 1.5]
+## @end group
+## @end example
 ## @seealso{@@infsup/cancelplus}
 ## @end deftypefn
 
@@ -70,3 +76,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (cancelminus (infsup (2, 3), infsup (1, 1.5)) == infsup (1, 1.5));

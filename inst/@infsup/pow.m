@@ -98,3 +98,6 @@ u (x.sup == 0 && u == 1) = 0;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (pow (infsup (5, 6), infsup (2, 3)) == infsup (25, 216));

@@ -47,3 +47,5 @@ endif
 result = (b.inf <= a.inf & a.sup <= b.sup);
 
 endfunction
+
+%!assert (subset (infsup (1, 2), infsup (1, 3)));

@@ -71,3 +71,6 @@ endif
 result = infsupdec (sqrrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (sqrrev (infsupdec (-2, 1)), infsupdec (-1, 1, "trv")));

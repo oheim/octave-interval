@@ -39,3 +39,9 @@ endif
 result = ismatrix (A.inf);
 
 endfunction
+
+%!assert (ismatrix (infsup ([])));
+%!assert (ismatrix (infsup (0)));
+%!assert (ismatrix (infsup (zeros (3, 1))));
+%!assert (ismatrix (infsup (zeros (1, 4))));
+%!assert (ismatrix (infsup (zeros (3, 4))));

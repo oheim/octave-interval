@@ -209,3 +209,5 @@ else
 endif
 
 endfunction
+
+%!assert (pownrev (infsup (25, 36), infsup (0, inf), 2) == infsup (5, 6));

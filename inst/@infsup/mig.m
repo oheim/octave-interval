@@ -49,3 +49,6 @@ result (sign (x.inf) ~= sign (x.sup)) = 0;
 result (isempty (x)) = nan ();
 
 endfunction
+
+%!assert (mig (infsup (-1, 2)), 0);
+%!assert (mig (infsup (-42, -23)), 23);

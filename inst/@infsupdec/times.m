@@ -25,7 +25,7 @@
 ## @group
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
-## x * y
+## x .* y
 ##   @result{} [2, 6]_com
 ## @end group
 ## @end example
@@ -63,3 +63,6 @@ result = infsupdec (times (intervalpart (x), intervalpart (y)));
 result.dec = mindec (result.dec, x.dec, y.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (infsupdec (2, 3) .* infsupdec (1, 2), infsupdec (2, 6)));

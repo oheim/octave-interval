@@ -92,3 +92,7 @@ result.dec = mindec (result.dec, ...
                      reducedec (y.dec, dim));
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (dot ([infsupdec(1), 2, 3], [infsupdec(2), 3, 4]), infsupdec (20)));
+%! assert (isequal (dot (infsupdec ([realmax; realmin; realmax]), [1; -1; -1], 1), infsupdec (-realmin)));

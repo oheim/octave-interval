@@ -76,3 +76,6 @@ result = infsupdec (...
 result.dec = mindec (result.dec, x.dec, y.dec, z.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (fma (infsupdec (1+eps), infsupdec (7), infsupdec ("0.1")), infsupdec ("[0x1.C666666666668p2, 0x1.C666666666669p2]")));

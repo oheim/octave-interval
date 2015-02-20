@@ -53,3 +53,6 @@ else
 endif
 
 endfunction
+
+%!assert (not (lt (infsupdec (1, 3), infsupdec (3))));
+%!assert (lt (infsupdec (1, 3), infsupdec (3.1)));

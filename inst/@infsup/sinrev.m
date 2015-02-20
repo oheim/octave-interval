@@ -122,3 +122,6 @@ else
 endif
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (sinrev (infsup (-1), infsup (0, 6)) == "[0x1.2D97C7F3321D2p2, 0x1.2D97C7F3321D3p2]");

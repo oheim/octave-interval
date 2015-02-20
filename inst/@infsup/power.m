@@ -33,7 +33,7 @@
 ##
 ## @example
 ## @group
-## infsup (-5, 6) ^ infsup (2, 3)
+## infsup (-5, 6) .^ infsup (2, 3)
 ##   @result{} [-125, +216]
 ## @end group
 ## @end example
@@ -284,3 +284,6 @@ else
     endif
 endif
 endfunction
+
+%!test "from the documentation string";
+%! assert (infsup (-5, 6) .^ infsup (2, 3) == infsup (-125, 216));

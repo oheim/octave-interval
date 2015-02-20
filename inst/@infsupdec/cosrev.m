@@ -31,7 +31,7 @@
 ##
 ## @example
 ## @group
-## cosrev (infsupdec (0), infsupdec (6,9))
+## cosrev (infsupdec (0), infsupdec (6, 9))
 ##   @result {} [7.8539816339744827, 7.8539816339744846]_trv
 ## @end group
 ## @end example
@@ -71,3 +71,6 @@ endif
 result = infsupdec (cosrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (cosrev (0, infsupdec (6, 9)), infsupdec ("[0x1.F6A7A2955385Ep2, 0x1.F6A7A2955386p2]_trv")));

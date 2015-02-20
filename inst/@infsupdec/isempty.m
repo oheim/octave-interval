@@ -45,3 +45,6 @@ else
 endif
 
 endfunction
+
+%!assert (isempty (infsupdec (inf, -inf)));
+%!assert (not (isempty (infsupdec (1, 2))));

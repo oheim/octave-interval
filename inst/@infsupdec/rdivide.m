@@ -25,7 +25,7 @@
 ## @group
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
-## x / y
+## x ./ y
 ##   @result{} [1, 3]_com
 ## @end group
 ## @end example
@@ -69,3 +69,6 @@ endif
 result.dec (divisionbyzero) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (infsupdec (2, 3) ./ infsupdec (1, 2), infsupdec (1, 3)));

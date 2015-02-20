@@ -54,6 +54,7 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
 %!test "Empty interval";
 %! assert (acosh (infsup ()) == infsup ());
 %!test "Singleton intervals";
@@ -69,3 +70,5 @@ endfunction
 %! assert (acosh (infsup (0, inf)) == infsup (0, inf));
 %! assert (acosh (infsup (1, inf)) == infsup (0, inf));
 %! assert (subset (acosh (infsup (2, inf)), infsup (1, inf)));
+%!test "from the documentation string";
+%! assert (acosh (infsup (2)) == "[0x1.5124271980434, 0x1.5124271980435]");

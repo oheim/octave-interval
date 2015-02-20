@@ -51,3 +51,6 @@ result = infsupdec (exp (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (exp (infsupdec (1)), infsupdec ("e")));

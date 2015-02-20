@@ -50,3 +50,6 @@ u (isempty (x)) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (exp (infsup (1)) == infsup ("e"));

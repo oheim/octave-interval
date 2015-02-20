@@ -60,3 +60,6 @@ l (isempty (x) | isempty (y)) = inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (min (infsup (2, 3), infsup (1, 2)) == infsup (1, 2));

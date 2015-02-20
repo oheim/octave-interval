@@ -117,3 +117,6 @@ u (select) = mpfr_function_d ('atan2', +inf, y4.inf (select), x4.sup (select));
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (atan2 (infsup (1), infsup (-1)) == "[0x1.2D97C7F3321D2p1, 0x1.2D97C7F3321D3p1]");

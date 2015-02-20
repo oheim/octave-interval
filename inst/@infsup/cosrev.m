@@ -27,7 +27,7 @@
 ##
 ## @example
 ## @group
-## cosrev (infsup (0), infsup (6,9))
+## cosrev (infsup (0), infsup (6, 9))
 ##   @result {} [7.8539816339744827, 7.8539816339744846]
 ## @end group
 ## @end example
@@ -124,3 +124,6 @@ else
 endif
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (cosrev (0, infsup (6, 9)) == "[0x1.F6A7A2955385Ep2, 0x1.F6A7A2955386p2]");

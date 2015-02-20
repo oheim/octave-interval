@@ -54,6 +54,7 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
 %!test "Empty interval";
 %! assert (acos (infsup ()) == infsup ());
 %!test "Singleton intervals";
@@ -71,3 +72,5 @@ endfunction
 %! assert (acos (infsup (0, inf)) == ((infsup ("pi") / 2) | infsup (0)));
 %! assert (acos (infsup (-inf, 0)) == ((infsup ("pi") / 2) | infsup ("pi")));
 %! assert (acos (infsup (-inf, inf)) == infsup (0, "pi"));
+%!test "from the documentation string";
+%! assert (acos (infsup (.5)) == "[0x1.0C152382D7365, 0x1.0C152382D7366]");

@@ -51,3 +51,6 @@ result = infsupdec (sqr (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (sqr (infsupdec (-2, 1)), infsupdec (0, 4)));

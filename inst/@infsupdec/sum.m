@@ -65,3 +65,6 @@ result = infsupdec (sum (intervalpart (x), dim));
 result.dec = mindec (result.dec, reducedec (x.dec, dim));
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (sum ([infsupdec(1), pow2(-1074), -1]), infsupdec (pow2 (-1074))));

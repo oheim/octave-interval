@@ -49,3 +49,7 @@ u = transpose (x.sup);
 result = infsup (l, u);
 
 endfunction
+
+%!assert (transpose (infsup (magic (3))) == infsup (magic (3).'));
+%!test "from the documentation string";
+%! assert (transpose (infsup (zeros (1, 3), ones (1, 3))) == infsup (zeros (3, 1), ones (3, 1)));

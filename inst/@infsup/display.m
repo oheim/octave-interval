@@ -114,3 +114,6 @@ while (cstart <= columns (x))
 endwhile
 
 endfunction
+
+%!## Can't test the display function. Would have to capture console output
+%!assert (1);

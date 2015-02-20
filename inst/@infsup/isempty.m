@@ -40,3 +40,6 @@ endif
 
 result = (interval.inf > interval.sup);
 return
+
+%!assert (isempty (infsup (inf, -inf)));
+%!assert (not (isempty (infsup (1, 2))));

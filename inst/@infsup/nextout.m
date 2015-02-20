@@ -48,3 +48,8 @@ u = mpfr_function_d ('plus',  +inf, x.sup, delta);
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! x = nextout (infsup (1));
+%! assert (inf (x), 1 - eps / 2);
+%! assert (sup (x), 1 + eps);

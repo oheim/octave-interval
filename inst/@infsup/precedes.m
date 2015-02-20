@@ -48,3 +48,6 @@ endif
 result = (a.sup <= b.inf);
 
 endfunction
+
+%!assert (precedes (infsup (1, 2), infsup (2, 3)));
+%!assert (not (precedes (infsup (1, 2.1), infsup (1.9, 3))));

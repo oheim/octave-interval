@@ -59,3 +59,24 @@ else
 endif
 
 endfunction
+
+%!test "Empty interval";
+%! assert (eq (infsupdec (), infsupdec ()) == true);
+%! assert (eq (infsupdec (), infsupdec (1)) == false);
+%! assert (eq (infsupdec (0), infsupdec ()) == false);
+%! assert (eq (infsupdec (-inf, inf), infsupdec ()) == false);
+%!test "Singleton intervals";
+%! assert (eq (infsupdec (0), infsupdec (1)) == false);
+%! assert (eq (infsupdec (0), infsupdec (0)) == true);
+%!test "Bounded intervals";
+%! assert (eq (infsupdec (1, 2), infsupdec (3, 4)) == false);
+%! assert (eq (infsupdec (1, 2), infsupdec (2, 3)) == false);
+%! assert (eq (infsupdec (1, 2), infsupdec (1.5, 2.5)) == false);
+%! assert (eq (infsupdec (1, 2), infsupdec (1, 2)) == true);
+%!test "Unbounded intervals";
+%! assert (eq (infsupdec (0, inf), infsupdec (-inf, 0)) == false);
+%! assert (eq (infsupdec (0, inf), infsupdec (0, inf)) == true);
+%! assert (eq (infsupdec (-inf, 0), infsupdec (-inf, 0)) == true);
+%! assert (eq (infsupdec (-inf, inf), infsupdec (42)) == false);
+%! assert (eq (infsupdec (-inf, 0), infsupdec (-inf, inf)) == false);
+%! assert (eq (infsupdec (-inf, inf), infsupdec (-inf, inf)) == true);

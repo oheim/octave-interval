@@ -33,7 +33,7 @@
 ##
 ## @example
 ## @group
-## infsupdec (-5, 6) ^ infsupdec (2, 3)
+## infsupdec (-5, 6) .^ infsupdec (2, 3)
 ##   @result{} [-125, +216]_trv
 ## @end group
 ## @end example
@@ -80,3 +80,6 @@ domain = not (isempty (result)) & (...
 result.dec (not (domain)) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (infsupdec (-5, 6) .^ infsupdec (2, 3), infsupdec (-125, 216, "trv")));

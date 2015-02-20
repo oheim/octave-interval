@@ -49,4 +49,7 @@ result = mpfr_function_d ('minus', +inf, x.sup, x.inf);
 
 result (isempty (x)) = nan ();
 
-return
+endfunction
+
+%!test "from the documentation string";
+%! assert (wid (infsup (2.5, 3.5)), 1);

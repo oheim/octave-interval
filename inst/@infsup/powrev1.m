@@ -233,3 +233,6 @@ select = isfinite (y) & z > 0 & z ~= 1 & z < inf;
 x (select) = mpfr_function_d ('pow', direction, z (select), y (select));
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (powrev1 (infsup (2, 5), infsup (3, 6)) == "[0x1.3EE8390D43955, 0x1.3988E1409212Fp1]");

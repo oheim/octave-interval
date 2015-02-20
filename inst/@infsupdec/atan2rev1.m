@@ -80,3 +80,6 @@ result = atan2rev1 (intervalpart (b), intervalpart (c), intervalpart (y));
 result = infsupdec (result, "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (atan2rev1 (infsupdec (1, 2), infsupdec ("pi") / 4), infsupdec ("[0x1.FFFFFFFFFFFFFp-1, 0x1.0000000000001p1]_trv")));

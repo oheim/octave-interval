@@ -71,3 +71,34 @@ endif
 result = infsupdec (absrev (intervalpart (c), intervalpart (x)), "trv");
 
 endfunction
+
+%!test "Empty interval";
+%! assert (isequal (absrev (infsupdec ()), infsupdec ()));
+%! assert (isequal (absrev (infsupdec (0, 1), infsupdec ()), infsupdec ()));
+%! assert (isequal (absrev (infsupdec (0, 1), infsupdec (7, 9)), infsupdec ()));
+%! assert (isequal (absrev (infsupdec (), infsupdec (0, 1)), infsupdec ()));
+%! assert (isequal (absrev (infsupdec (-2, -1)), infsupdec ()));
+%!test "Singleton intervals";
+%! assert (isequal (absrev (infsupdec (1)), infsupdec (-1, 1, "trv")));
+%! assert (isequal (absrev (infsupdec (0)), infsupdec (0, "trv")));
+%! assert (isequal (absrev (infsupdec (-1)), infsupdec ()));
+%! assert (isequal (absrev (infsupdec (realmax)), infsupdec (-realmax, realmax, "trv")));
+%! assert (isequal (absrev (infsupdec (realmin)), infsupdec (-realmin, realmin, "trv")));
+%! assert (isequal (absrev (infsupdec (-realmin)), infsupdec ()));
+%! assert (isequal (absrev (infsupdec (-realmax)), infsupdec ()));
+%!test "Bound intervals";
+%! assert (isequal (absrev (infsupdec (1, 2)), infsupdec (-2, 2, "trv")));
+%! assert (isequal (absrev (infsupdec (1, 2), infsupdec (0, 2)), infsupdec (1, 2, "trv")));
+%! assert (isequal (absrev (infsupdec (0, 1), infsupdec (-0.5, 2)), infsupdec (-0.5, 1, "trv")));
+%! assert (isequal (absrev (infsupdec (-1, 1)), infsupdec (-1, 1, "trv")));
+%! assert (isequal (absrev (infsupdec (-1, 0)), infsupdec (0, "trv")));
+%!test "Unbound intervals";
+%! assert (isequal (absrev (infsupdec (0, inf)), infsupdec (-inf, inf, "trv")));
+%! assert (isequal (absrev (infsupdec (-inf, inf)), infsupdec (-inf, inf, "trv")));
+%! assert (isequal (absrev (infsupdec (-inf, 0)), infsupdec (0, "trv")));
+%! assert (isequal (absrev (infsupdec (1, inf), infsupdec (-inf, 0)), infsupdec (-inf, -1, "trv")));
+%! assert (isequal (absrev (infsupdec (-1, inf)), infsupdec (-inf, inf, "trv")));
+%! assert (isequal (absrev (infsupdec (-inf, -1)), infsupdec ()));
+%! assert (isequal (absrev (infsupdec (-inf, 1)), infsupdec (-1, 1, "trv")));
+%!test "from the documentation string";
+%! assert (isequal (absrev (infsupdec (-2, 1)), infsupdec (-1, 1, "trv")));

@@ -102,3 +102,17 @@ else
 endif
 
 endfunction
+
+%!test "IEEE 1788 mulRevToPair examples";
+%!  [u, v] = mulrev (infsupdec (0), infsupdec (1, 2));
+%!  assert (isempty (u) & isempty (v));
+%!  [u, v] = mulrev (infsupdec (0), infsupdec (0, 1));
+%!  assert (isentire (u) & isempty (v));
+%!  [u, v] = mulrev (infsupdec (1), infsupdec (1, 2));
+%!  assert (isequal (u, infsupdec (1, 2)) & isempty (v));
+%!  [u, v] = mulrev (infsupdec (1, inf), infsupdec (1));
+%!  assert (isequal (u, infsupdec (0, 1, "dac")) & isempty (v));
+%!  [u, v] = mulrev (infsupdec (-1, 1), infsupdec (1, 2));
+%!  assert (isequal (u, infsupdec (-inf, -1, "trv")) & isequal (v, infsupdec (1, inf, "trv")));
+%!  [u, v] = mulrev (infsupdec (-inf, inf), infsupdec (1));
+%!  assert (isequal (u, infsupdec (-inf, 0, "trv")) & isequal (v, infsupdec (0, inf, "trv")));

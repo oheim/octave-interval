@@ -41,3 +41,5 @@ endif
 result = not (eq (a, b));
 
 endfunction
+
+%!assert (ne (infsup (1, 2), infsup (1, 3)));

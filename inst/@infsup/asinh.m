@@ -49,3 +49,6 @@ u = mpfr_function_d ('asinh', +inf, x.sup);
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (asinh (infsup (1)) == "[0x1.C34366179D426p-1, 0x1.C34366179D427p-1]");

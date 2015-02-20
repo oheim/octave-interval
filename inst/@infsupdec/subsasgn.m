@@ -65,3 +65,10 @@ dx (isempty (x)) = "trv";
 result = infsupdec (x, dx);
  
 endfunction
+
+%!test
+%! A = infsupdec (magic (3));
+%! A (4, 4) = 42;
+%! assert (inf (A), [magic(3),[inf;inf;inf];inf,inf,inf,42]);
+%! assert (sup (A), [magic(3),[-inf;-inf;-inf];-inf,-inf,-inf,42]);
+%! assert (decorationpart (A), {"com", "com", "com", "trv"; "com", "com", "com", "trv"; "com", "com", "com", "trv"; "trv", "trv", "trv", "com"});

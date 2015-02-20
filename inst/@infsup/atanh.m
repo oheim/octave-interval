@@ -54,3 +54,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (atanh (infsup (.5)) == "[0x1.193EA7AAD030Ap-1, 0x1.193EA7AAD030Bp-1]");

@@ -54,3 +54,6 @@ defined = subset (x, infsup (0, inf));
 result.dec (not (defined)) = "trv";
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (sqrt (infsupdec (-6, 4)), infsupdec (0, 2, "trv")));

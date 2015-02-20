@@ -62,3 +62,9 @@ u (newelements) = -inf;
 result = infsup (l, u);
  
 endfunction
+
+%!test
+%! A = infsup (magic (3));
+%! A (4, 4) = 42;
+%! assert (inf (A), [magic(3),[inf;inf;inf];inf,inf,inf,42]);
+%! assert (sup (A), [magic(3),[-inf;-inf;-inf];-inf,-inf,-inf,42]);

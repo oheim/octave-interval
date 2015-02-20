@@ -62,3 +62,6 @@ endif
 result = infsupdec (and (intervalpart (a), intervalpart (b)), "trv");
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (and (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (2, 3, "trv")));

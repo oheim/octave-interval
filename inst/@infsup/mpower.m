@@ -102,3 +102,6 @@ while (y ~= 0)
 endwhile
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (infsup (magic (3)) ^ 2 == infsup (magic (3) ^ 2));

@@ -51,3 +51,6 @@ else
 endif
 
 endfunction
+
+%!test;
+%! assert (size (infsup (zeros (3, 4))), [3 4]);

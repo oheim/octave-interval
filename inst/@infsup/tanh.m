@@ -52,3 +52,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (tanh (infsup (1)) == "[0x1.85EFAB514F394p-1, 0x1.85EFAB514F395p-1]");

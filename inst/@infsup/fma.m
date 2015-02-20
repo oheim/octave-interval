@@ -115,3 +115,6 @@ u (emptyresult) = -inf;
 result = infsup (l, u);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (fma (infsup (1+eps), infsup (7), infsup ("0.1")) == "[0x1.C666666666668p2, 0x1.C666666666669p2]");
