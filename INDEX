@@ -21,12 +21,14 @@ Interval function with (mostly tightest) accuracy
  @infsup/cos
  @infsup/cosh
  @infsup/exp
+ @infsup/expm1
  @infsup/fix
  @infsup/floor
  @infsup/fma
  @infsup/ldivide
  @infsup/log
  @infsup/log10
+ @infsup/log1p
  @infsup/log2
  @infsup/max
  @infsup/min
