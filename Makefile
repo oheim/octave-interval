@@ -30,6 +30,7 @@ dist: $(PACKAGE)-$(VERSION).tar.gz
 
 release: dist html md5
 	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
+	@echo "Execute: hg tag \"release-$(VERSION)\""
 
 html: $(PACKAGE)-html.tar.gz
 
