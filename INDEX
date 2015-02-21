@@ -4,7 +4,6 @@ Interval constant
  entire
 Interval constructor
  @infsup/infsup
- @infsup/setdec
  @infsupdec/infsupdec
 Interval function with (mostly tightest) accuracy
  @infsup/abs
