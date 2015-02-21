@@ -20,7 +20,7 @@ clean:
 md5: $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-html.tar.gz
 	@md5sum $^
 
-$(PACKAGE)-$(VERSION).tar.gz: .hg/undo.desc
+$(PACKAGE)-$(VERSION).tar.gz: .hg/dirstate
 	hg archive --exclude ".hg*" --exclude "*.sh" --exclude "Makefile" $@
 
 ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION: $(PACKAGE)-$(VERSION).tar.gz
