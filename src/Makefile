@@ -5,33 +5,8 @@ OBJ          = mpfr_function_d.oct \
                mpfr_vector_dot_d.oct
 LDFLAGS_MPFR = -lmpfr -lgmp
 
-# The MKOCTFILE environment variable will be set by the package installation
-# process of GNU Octave.
-ifndef MKOCTFILE
-MKOCTFILE    = mkoctfile
-endif
-
-.PHONY: all clean install uninstall
-
-## Default target
 all: $(OBJ)
 
 ## Compile MPFR api oct-files
 mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
-
-# The following build targets are not required for the package installation
-# process, but are used during development of the package.
-
-DEV_OBJ=$(OBJ:%=../inst/%)
-
-../inst/%: %
-	ln -srf $< $@
-
-install: $(DEV_OBJ)
-
-uninstall:
-	rm -f $(DEV_OBJ)
-
-clean:
-	rm -f $(OBJ) $(OBJ:%.oct=%.o)
