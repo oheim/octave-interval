@@ -47,6 +47,6 @@ result = infsupdec (transpose (intervalpart (x)), transpose (x.dec));
 
 endfunction
 
-%!assert (isequal (transpose (infsupdec (magic (3))), infsupdec (magic (3).')));
-%!test "from the documentation string";
+%!xtest assert (isequal (transpose (infsupdec (magic (3))), infsupdec (magic (3).')));
+%!xtest "from the documentation string";
 %! assert (isequal (transpose (infsupdec (zeros (1, 3), ones (1, 3))), infsupdec (zeros (3, 1), ones (3, 1))));

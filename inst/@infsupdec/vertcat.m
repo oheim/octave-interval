@@ -59,7 +59,7 @@ result = infsupdec (l, u, dx);
 
 endfunction
 
-%!assert (isequal (vertcat (infsupdec (1), infsupdec (2)), infsupdec (vertcat (1, 2))));
-%!test "from the documentation string";
+%!xtest assert (isequal (vertcat (infsupdec (1), infsupdec (2)), infsupdec (vertcat (1, 2))));
+%!xtest "from the documentation string";
 %! a = infsupdec (2, 5);
 %! assert (isequal (vertcat (a, a, a), infsupdec ([2; 2; 2], [5; 5; 5])));

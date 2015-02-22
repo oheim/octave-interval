@@ -64,9 +64,9 @@ result.dec (:) = "trv";
 
 endfunction
 
-%!test "unique solution";
+%!xtest "unique solution";
 %!  assert (isequal (infsupdec ([1, 0; 0, 2]) \ [2, 0; 0, 4], infsupdec ([2, 0; 0 2], "trv")));
 %!test "no solution";
 %!  assert (all (isempty (infsupdec ([1, 0; 2, 0]) \ [3; 0])));
-%!test "many solutions";
+%!xtest "many solutions";
 %!  assert (isequal (infsupdec ([1, 0; 2, 0]) \ [4; 8], infsupdec ([4; -inf], [4; inf], "trv")));
