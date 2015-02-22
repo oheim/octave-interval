@@ -2,10 +2,11 @@ interval >> Real-valued interval arithmetic
 Interval constant
  empty
  entire
+ nai
 Interval constructor
  @infsup/infsup
  @infsupdec/infsupdec
-Interval function with (mostly tightest) accuracy
+Interval function (most with tightest accuracy)
  @infsup/abs
  @infsup/acos
  @infsup/acosh

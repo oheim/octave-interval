@@ -1,23 +1,25 @@
 0.1.2 xxxx-xx-xx
 ================
 
+ * New interval arithmetic functions: nthroot, hypot, log1p, expm1
+
+ * lu: New operation for LU(P) decomposition of interval matrices
+ 
+ * nai: New decorated interval constant
+
+ * Improved accuracy of vector sums, dot products, pownrev, and powrev2
+
  * powrev1, powrev2, pownrev, mulrev: Now allow non-scalar arguments
  
- * lu: New operation for LU(P) decomposition of interval matrices
+ * overlap: Renamed one overlapping state from equal to equals
  
  * mulrevtopair: No longer available, use mulrev with two output parameters for
    two-output division
  
  * setdec: No longer available, use infsupdec instead
  
- * overlap: Renamed one overlapping state from equal to equals
- 
  * mldivide, mrdivide, inv: Greatly improved accuracy and performance of the
    linear solver
- 
- * New interval arithmetic functions: nthroot, hypot, log1p, expm1
- 
- * Improved accuracy of vector sums, dot products, pownrev, and powrev2
  
  * Small performance improvements
 
