@@ -39,8 +39,8 @@ install: ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
 clean:
 	rm -rf $(PACKAGE)-html
 	rm -f $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-html.tar.gz 
-	rm -f inst/*.oct src/*.oct src/*.o
-	rm -f inst/fntests.log
+	rm -f src/*.oct src/*.o
+	rm -f fntests.log
 
 md5: $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-html.tar.gz
 	@md5sum $^
@@ -57,19 +57,17 @@ $(PACKAGE)-html/$(PACKAGE)/index.html: ~/octave/$(PACKAGE)-$(VERSION)/packinfo/D
 $(PACKAGE)-html.tar.gz: $(PACKAGE)-html/$(PACKAGE)/index.html
 	tar czf $@ $(PACKAGE)-html
 
-OCT_SOURCES  = $(shell grep -l DEFUN_DLD src/*.cc | xargs echo)
-OCT_FILES    = $(OCT_SOURCES:%.cc=%.oct)
-OCT_SYMLINKS = $(OCT_FILES:src/%=inst/%)
+OCT_SOURCES = $(shell grep -l DEFUN_DLD src/*.cc | xargs echo)
+OCT_FILES   = $(OCT_SOURCES:%.cc=%.oct)
 
-src/%.oct: src/*.cc
+src/%.oct: src/*.cc src/Makefile
 	(cd src; MKOCTFILE=$(MKOCTFILE) make)
 
-inst/%.oct: src/%.oct
-	ln -srf $< $@
-
-run: $(OCT_FILES) $(OCT_SYMLINKS)
+run: $(OCT_FILES)
 	# Run GNU Octave with the development version of the package
-	(cd inst; $(OCTAVE) --silent)
+	$(OCTAVE) --silent --path "inst/" --path "src/"
+	@echo
 
-check: $(OCT_FILES) $(OCT_SYMLINKS)
-	(cd inst; $(OCTAVE) --silent --eval "__run_test_suite__ ({'.'}, {})")
+check: $(OCT_FILES)
+	$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
+	@echo
