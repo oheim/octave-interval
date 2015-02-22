@@ -1,6 +1,6 @@
 Name: interval
-Version: 0.1.1
-Date: 2015-02-01
+Version: 0.1.2
+Date: 2015-02-22
 Author: Oliver Heimlich <oheim@posteo.de>
 Maintainer: Oliver Heimlich <oheim@posteo.de>
 Title: Real-valued interval arithmetic
@@ -10,7 +10,7 @@ Description: The package provides data types for verified computing.
  IEEE 1788.
 Problems: IEEE 1788 is no official standard yet
 Url: http://wiki.octave.org/Interval_package
-Depends: Octave (>= 3.8.0)
+Depends: Octave (>= 3.8.2)
 SystemRequirements: mpfr (>= 3.1.2) [Debian] libmpfr4 (>= 3.1.2)
 BuildRequires: mpfr (>= 3.1.2) [Debian] libmpfr-dev (>= 3.1.2)
 License: GPLv3+, ALv2

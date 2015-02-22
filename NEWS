@@ -1,4 +1,4 @@
-0.1.2 xxxx-xx-xx
+0.1.2 2015-02-22
 ================
 
  * New interval arithmetic functions: nthroot, hypot, log1p, expm1
@@ -7,6 +7,9 @@
  
  * nai: New decorated interval constant
 
+ * mldivide, mrdivide, inv: Greatly improved accuracy and performance of the
+   linear solver
+ 
  * Improved accuracy of vector sums, dot products, pownrev, and powrev2
 
  * powrev1, powrev2, pownrev, mulrev: Now allow non-scalar arguments
@@ -18,14 +21,11 @@
  
  * setdec: No longer available, use infsupdec instead
  
- * mldivide, mrdivide, inv: Greatly improved accuracy and performance of the
-   linear solver
- 
  * Small performance improvements
 
 Bugfixes
  * Compatibility with GNU Octave 4.0 (bug #43925)
- * Build problems during package installation with environment variables solved
+ * Build problems during package installation with environment variables
  * iscommoninterval: The decorated variant must return true for common
    intervals without com decoration
  * eq: The decorated variant must not consider the decoration value
