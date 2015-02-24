@@ -144,7 +144,7 @@ void evaluate (
 // Evaluate nthroot
 void nthroot (
   Matrix &arg1,             // Operand 1 and result
-  const unsigned long arg2, // Operand 2
+  const uint64_t arg2, // Operand 2
   const mpfr_rnd_t rnd)
 {
   mpfr_t mp;
@@ -249,9 +249,9 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   if (nargin >= 5)
     {
       arg3                   = args (4).matrix_value ();
-      if (arg3.numel () != 1 && 
+      if (arg3.numel () != 1 && (
           (arg1.numel () != 1 && arg1.numel () != arg3.numel ()) ||
-          (arg2.numel () != 1 && arg2.numel () != arg3.numel ()))
+          (arg2.numel () != 1 && arg2.numel () != arg3.numel ())))
         error ("mpfr_function_d: Matrix dimensions must agree!");
     }
   if (error_state)
@@ -321,7 +321,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, arg2, rnd, &mpfr_sub);
         else if (function == "nthroot")
           {
-            const unsigned long n = args (3).uint64_array_value ().elem (0);
+            const uint64_t n = args (3).uint64_array_value ().elem (0);
             if (error_state)
               return octave_value_list ();
             nthroot (arg1, n, rnd);
