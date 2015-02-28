@@ -178,6 +178,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('exp', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('expm1', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('fma', @var{R}, @var{X}, @var{Y}, @var{Z})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('gammaln', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('hypot', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('log2', @var{R}, @var{X})\n"
@@ -287,6 +288,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_exp);
         else if (function == "expm1")
           evaluate (arg1, rnd, &mpfr_expm1);
+        else if (function == "gammaln")
+          evaluate (arg1, rnd, &mpfr_lngamma);
         else if (function == "log")
           evaluate (arg1, rnd, &mpfr_log);
         else if (function == "log2")
