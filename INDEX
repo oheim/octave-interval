@@ -44,6 +44,7 @@ Interval function (most with tightest accuracy)
  @infsup/pow2
  @infsup/power
  @infsup/pown
+ @infsup/psi
  @infsup/rdivide
  @infsup/round
  @infsup/roundb

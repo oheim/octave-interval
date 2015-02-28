@@ -190,6 +190,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('pow', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('pow2', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('pow10', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('psi', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('rdivide', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sin', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
@@ -302,6 +303,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_exp2);
         else if (function == "pow10")
           evaluate (arg1, rnd, &mpfr_exp10);
+        else if (function == "psi")
+          evaluate (arg1, rnd, &mpfr_digamma);
         else if (function == "sin")
           evaluate (arg1, rnd, &mpfr_sin);
         else if (function == "sinh")
