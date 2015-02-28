@@ -15,15 +15,35 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} subsref (@var{A}, @var{IDX})
+## @deftypefn {Function File} {} {} @var{A} (@var{I})
+## @deftypefnx {Function File} {} {} @var{A} (@var{I1}, @var{I2})
+## @deftypefnx {Function File} {} {} @var{A}.@var{P}
 ##
-## Perform the subscripted element selection operation according to the
-## subscript specified by @var{IDX}.
+## Select property @var{P} or elements @var{I} from interval matrix @var{A}.
 ##
-## The subscript @var{IDX} is expected to be a structure array with fields
-## @code{type} and @code{subs}.  Only valid value for @var{type} is
-## @code{"()"}.  The @code{subs} field may be either @code{":"} or a cell array
-## of index values.
+## The index @var{I} may be either @code{:} or an index matrix.
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## The property @var{P} may correspond to any unary method of the interval's
+## class, but usually is either @code{inf}, @code{sup} or
+## @code{decorationpart}.
+##
+## @example
+## @group
+## x = infsupdec (magic (3), magic (3) + 1);
+## x (1)
+##   @result{} [8, 9]_com
+## x (:, 2)
+##   @result{} 3×1 interval vector
+##       [1, 2]_com
+##       [5, 6]_com
+##      [9, 10]_com
+## x.inf
+##   @result{}
+##      8   1   6
+##      3   5   7
+##      4   9   2
+## @end group
+## @end example
 ## @seealso{@@infsupdec/subsasgn}
 ## @end deftypefn
 
@@ -38,11 +58,38 @@ if (nargin ~= 2)
     return
 endif
 
-x = subsref (intervalpart (A), S);
-dx = subsref (A.dec, S);
+switch (S (1).type)
+    case "()"
+        x = subsref (intervalpart (A), S (1));
+        dx = subsref (A.dec, S (1));
+        result = infsupdec (x, dx);
+    case "{}"
+        error ("interval cannot be indexed with {}")
+    case "."
+        if (any (strcmp (S(1).subs, methods ("infsupdec"))))
+            functionname = ["@infsupdec/", S(1).subs];
+        elseif (any (strcmp (S(1).subs, methods ("infsup"))))
+            functionname = ["@infsup/", S(1).subs];
+        else
+            error (["interval property ‘", S(1).subs, "’ is unknown"])
+        endif
+        if (nargin (functionname) ~= 1)
+            error (["‘", S(1).subs, "’ is not a valid interval property"])
+        endif
+        result = feval (S (1).subs, A);
+    otherwise
+        error ("invalid subscript type")
+endswitch
 
-result = infsupdec (x, dx);
+if (numel (S) > 1)
+    result = subsref (result, S (2:end));
+endif
 
 endfunction
 
 %!xtest assert (isequal (infsupdec (magic (3)) ([1, 2, 3]), infsupdec (magic (3) ([1, 2, 3]))));
+%!test "from the documentation string";
+%! x = infsupdec (magic (3), magic (3) + 1);
+%! assert (x (1) == infsupdec (8, 9)); 
+%! assert (x (:, 2) == infsupdec ([1; 5; 9], [2; 6; 10]));
+%! assert (x.inf, magic (3));
