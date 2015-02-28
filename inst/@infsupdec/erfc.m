@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} erf (@var{X})
+## @deftypefn {Function File} {} erfc (@var{X})
 ## 
 ## Compute the complementary error function.
 ##
