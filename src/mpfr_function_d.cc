@@ -173,6 +173,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('atanh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('cos', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('cosh', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('ei', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('erf', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('erfc', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('exp', @var{R}, @var{X})\n"
@@ -281,6 +282,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_cos);
         else if (function == "cosh")
           evaluate (arg1, rnd, &mpfr_cosh);
+        else if (function == "ei")
+          evaluate (arg1, rnd, &mpfr_eint);
         else if (function == "erf")
           evaluate (arg1, rnd, &mpfr_erf);
         else if (function == "erfc")

@@ -20,6 +20,7 @@ Interval function (most with tightest accuracy)
  @infsup/ceil
  @infsup/cos
  @infsup/cosh
+ @infsup/ei
  @infsup/erf
  @infsup/erfc
  @infsup/exp
