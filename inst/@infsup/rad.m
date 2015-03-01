@@ -15,16 +15,19 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} rad (@var{X})
+## @deftypefn {Function File} {@var{R} =} rad (@var{X})
+## @deftypefnx {Function File} {[@var{M}, @var{R}] =} rad (@var{X})
 ## 
-## Get the radius of interval @var{X}.
+## Get the radius (and midpoint) of interval @var{X}.
 ##
 ## If @var{X} is empty, @code{rad (@var{X})} is NaN.
 ## If @var{X} is unbounded in one or both directions, @code{rad (@var{X})} is 
 ## positive infinity.
 ##
-## Accuracy: The result will make a tight enclosure of the interval together
-## with @code{mid (@var{X})}.
+## With two output parameters the midpoint and radius are computed.
+##
+## Accuracy: The radius @var{R} will make a tight enclosure of the interval
+## together with midpoint @var{M}.
 ##
 ## @example
 ## @group
@@ -39,7 +42,7 @@
 ## Keywords: interval
 ## Created: 2014-10-05
 
-function result = rad (x)
+function [out1, out2] = rad (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -50,11 +53,22 @@ m = mid (x);
 ## The midpoint is rounded to nearest and the radius must cover both boundaries
 r1 = mpfr_function_d ('minus', +inf, m, x.inf);
 r2 = mpfr_function_d ('minus', +inf, x.sup, m);
-result = max (r1, r2);
+r = max (r1, r2);
 
-result (isempty (x)) = nan ();
+r (isempty (x)) = nan ();
+
+if (nargout >= 2)
+    out1 = m;
+    out2 = r;
+else
+    out1 = r;
+endif
 
 endfunction
 
+%!test;
+%! [m, r] = rad (infsup (2.5, 3.5));
+%! assert (m, 3);
+%! assert (r, .5);
 %!test "from the documentation string";
 %! assert (rad (infsup (2.5, 3.5)), .5);
