@@ -252,12 +252,12 @@ function e = relative_error (new, old)
 endfunction
 
 ## Interval iteration until inclusion is obtained (or max. iteration count)
-function [x, verified] = verify_and_refine (x0, C, cfg, ver_accuracy)
+function [x, verified] = verify_and_refine (x0, C, cfg, accuracy)
     verified = false ();
     x = x0;
     for p = 1 : cfg.maxIterVer
         y = blow (x, cfg.epsVer); # epsilon inflation
-        x = x0 + mtimes (C, y, ver_accuracy); # new iterate
+        x = x0 + mtimes (C, y, accuracy); # new iterate
         
         verified = all (all (subset (x, y)));
         if (verified)
@@ -269,7 +269,7 @@ function [x, verified] = verify_and_refine (x0, C, cfg, ver_accuracy)
         ## Iterative refinement
         for p = 1 : cfg.maxIterRef
             y = x;
-            x = (x0 + C * x) & x;
+            x = (x0 + mtimes (C, x, accuracy)) & x;
             
             if (p == cfg.maxIterRef)
                 break
