@@ -17,8 +17,15 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} {} @var{X} * @var{Y}
 ## @deftypefnx {Function File} {} mtimes (@var{X}, @var{Y})
+## @deftypefnx {Function File} {} mtimes (@var{X}, @var{Y}, @var{ACCURACY})
 ##
 ## Compute the interval matrix multiplication.
+##
+## The @var{ACCURACY} can be set to @code{tight} (default) or @code{valid}.
+## With @code{valid} accuracy an algorithm for fast matrix multiplication based
+## on BLAS routines is used. The latter is published by
+## Siegried M. Rump (2012), “Fast interval matrix multiplication,”
+## Numerical Algorithms 61(1), 1-34.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -39,9 +46,9 @@
 ## Keywords: interval
 ## Created: 2014-10-31
 
-function result = mtimes (x, y)
+function result = mtimes (x, y, accuracy)
 
-if (nargin < 2)
+if (nargin < 2 || nargin > 3 || (nargin == 3 && not (ischar (accuracy))))
     print_usage ();
     return
 endif
@@ -62,6 +69,19 @@ if (size (x.inf, 2) ~= size (y.inf, 1))
            "operator *: nonconformant arguments");
 endif
 
+if (nargin == 3)
+    switch (accuracy)
+        case "valid"
+            result = fast_mtimes (x, y);
+            return
+        case "tight"
+            ## Default mode
+        otherwise
+            print_usage();
+            return
+    endswitch
+endif
+
 ## mtimes could also be computed with a for loop and the dot operation.
 ## However, that would take significantly longer (loop + missing JIT-compiler,
 ## several OCT-file calls), so we use an optimized
@@ -69,6 +89,31 @@ endif
 
 [l, u] = mpfr_matrix_mul_d (x.inf, y.inf, x.sup, y.sup);
 result = infsup (l, u);
+
+endfunction
+
+function C = fast_mtimes (A, B)
+## Implements Algorithm 4.8
+## IImul7: interval interval multiplication with 7 point matrix multiplications
+## Rump, Siegried M. 2012. “Fast interval matrix multiplication.”
+## Numerical Algorithms 61(1), 1-34.
+## http://www.ti3.tu-harburg.de/paper/rump/Ru11a.pdf.
+##
+## Although this is the slowest of the published fast algorithms, it is the
+## most accurate.
+
+[mA, rA] = rad (A);
+[mB, rB] = rad (B);
+rhoA = sign (mA) .* min (abs (mA), rA);
+rhoB = sign (mB) .* min (abs (mB), rB);
+__setround__ (+1); # rounding towards +inf
+rC = abs (mA) * rB + rA * (abs (mB) + rB) + (-abs (rhoA)) * abs (rhoB);
+u = mA * mB + rhoA * rhoB + rC;
+__setround__ (-1); # rounding towards -inf
+l = mA * mB + rhoA * rhoB - rC;
+__setround__ (0); # restore default rounding mode (to nearest)
+
+C = infsup (l, u);
 
 endfunction
 

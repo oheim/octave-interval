@@ -17,8 +17,15 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} {} @var{X} * @var{Y}
 ## @deftypefnx {Function File} {} mtimes (@var{X}, @var{Y})
+## @deftypefnx {Function File} {} mtimes (@var{X}, @var{Y}, @var{ACCURACY})
 ##
 ## Compute the interval matrix multiplication.
+##
+## The @var{ACCURACY} can be set to @code{tight} (default) or @code{valid}.
+## With @code{valid} accuracy an algorithm for fast matrix multiplication based
+## on BLAS routines is used. The latter is published by
+## Siegried M. Rump (2012), “Fast interval matrix multiplication,”
+## Numerical Algorithms 61(1), 1-34.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -39,9 +46,9 @@
 ## Keywords: interval
 ## Created: 2015-02-21
 
-function result = mtimes (x, y)
+function result = mtimes (x, y, accuracy)
 
-if (nargin ~= 2)
+if (nargin < 2 || nargin > 3 || (nargin == 3 && not (ischar (accuracy))))
     print_usage ();
     return
 endif
@@ -59,7 +66,11 @@ if (isempty (x.dec) || isempty (y.dec))
     return
 endif
 
-result = infsupdec (mtimes (intervalpart (x), intervalpart (y)));
+if (nargin == 2)
+    result = infsupdec (mtimes (intervalpart (x), intervalpart (y)));
+else
+    result = infsupdec (mtimes (intervalpart (x), intervalpart (y), accuracy));
+endif
 
 dec_x = reducedec (x.dec, 2);
 dec_y = reducedec (y.dec, 1);
