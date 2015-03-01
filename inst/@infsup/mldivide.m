@@ -116,12 +116,12 @@ x1 = R * bm;
 x1 += R * (bm - Am * x1);
 
 ## Interval residual x
-x = R * (b - A * x1);
+x = mtimes (R, b - mtimes (A, x1, "valid"), "valid");
 
-C = eye (rows (R)) - R * A;
+C = eye (rows (R)) - mtimes (R, A, "valid");
 
 ## Verify solution x1 + x
-[x, verified] = verify_and_refine (x, C, cfg);
+[x, verified] = verify_and_refine (x, C, cfg, "valid");
 if (verified)
     result = x1 + x;
     return
@@ -225,7 +225,7 @@ for s = 1 : columns (b.inf)
         C_computed = true ();
     endif
     
-    [x, verified] = verify_and_refine (x, C, cfg);
+    [x, verified] = verify_and_refine (x, C, cfg, "tight");
     if (not (verified))
         error ("Verification failed")
     endif
@@ -252,12 +252,12 @@ function e = relative_error (new, old)
 endfunction
 
 ## Interval iteration until inclusion is obtained (or max. iteration count)
-function [x, verified] = verify_and_refine (x0, C, cfg)
+function [x, verified] = verify_and_refine (x0, C, cfg, ver_accuracy)
     verified = false ();
     x = x0;
     for p = 1 : cfg.maxIterVer
         y = blow (x, cfg.epsVer); # epsilon inflation
-        x = x0 + C * y; # new iterate
+        x = x0 + mtimes (C, y, ver_accuracy); # new iterate
         
         verified = all (all (subset (x, y)));
         if (verified)
