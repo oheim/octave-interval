@@ -29,6 +29,7 @@ Interval function (most with tightest accuracy)
  @infsup/fix
  @infsup/floor
  @infsup/fma
+ @infsup/gamma
  @infsup/gammaln
  @infsup/hypot
  @infsup/ldivide

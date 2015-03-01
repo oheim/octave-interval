@@ -44,6 +44,7 @@
 ##   @result{} [-.12078223763524524, -.12078223763524521]
 ## @end group
 ## @end example
+## @seealso{@@infsup/psi, @@infsup/gamma}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

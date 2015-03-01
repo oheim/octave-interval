@@ -72,7 +72,7 @@ if (any (any (nosingularity)))
         mpfr_function_d ('psi', +inf, x.sup (nosingularity));
 endif
 
-emptyresult = x.inf == x.sup & fix (x.inf) == x.inf && x.inf <= 0;
+emptyresult = x.inf == x.sup & fix (x.inf) == x.inf & x.inf <= 0;
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 

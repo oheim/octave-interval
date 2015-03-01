@@ -15,43 +15,44 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} gammaln (@var{X})
+## @deftypefn {Function File} {} gamma (@var{X})
 ## 
-## Compute the logarithm of the gamma function for positive arguments.
+## Compute the gamma function.
 ##
 ## @tex
 ## $$
-##  {\rm gammaln} (x) = \log \int_0^\infty t^{x-1} \exp (-t) dt
+##  {\rm gamma} (x) = \int_0^\infty t^(x-1) \exp (-t) dt
 ## $$
 ## @end tex
 ## @ifnottex
 ## @example
 ## @group
-##                    ∞
-##                   /
-## gammaln (x) = log | t^(x-1) exp (-t) dt
-##                   /
-##                  0
+##              ∞
+##             /  
+## gamma (x) = | t^(x - 1) * exp (-t) dt
+##             /
+##            0
 ## @end group
 ## @end example
 ## @end ifnottex
 ##
-## Accuracy: The result is a tight enclosure.
+## Accuracy: The result is a valid enclosure.  The result is tightest for
+## @var{X} >= -10. 
 ##
 ## @example
 ## @group
-## gammaln (infsupdec (1.5))
-##   @result{} [-.12078223763524524, -.12078223763524521]_com
+## gamma (infsupdec (1.5))
+##   @result{} [.8862269254527579, .8862269254527581]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/psi, @@infsupdec/gamma}
+## @seealso{@@infsupdec/psi, @@infsupdec/gammaln}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2015-02-28
+## Created: 2015-03-01
 
-function result = gammaln (x)
+function result = gamma (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -63,14 +64,16 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (gammaln (intervalpart (x)));
+result = infsupdec (gamma (intervalpart (x)));
+## gamma is continuous where it is defined
 result.dec = mindec (result.dec, x.dec);
 
-## gammaln is continuous everywhere, but defined for x > 0 only
-result.dec (not (interior (x, infsup(0, inf)))) = "trv";
+undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
+            (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
+            (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
+result.dec (undefined) = mindec (result.dec (undefined), "trv");
 
 endfunction
 
-%!assert (isequal (gammaln (infsupdec (-inf, inf)), infsupdec ("[-0x1.F19B9BCC38A42p-4, +Inf]_trv")));
 %!test "from the documentation string";
-%! assert (isequal (gammaln (infsupdec (1.5)), infsupdec ("[-0x1.EEB95B094C192p-4, -0x1.EEB95B094C191p-4]_com")));
+%! assert (isequal (gamma (infsupdec (1.5)), infsupdec ("[0x1.C5BF891B4EF6Ap-1, 0x1.C5BF891B4EF6Bp-1]_com")));
