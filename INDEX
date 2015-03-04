@@ -4,6 +4,7 @@ Interval constant
  entire
  nai
 Interval constructor
+ hull
  @infsup/infsup
  @infsupdec/infsupdec
 Interval function (most with tightest accuracy)
