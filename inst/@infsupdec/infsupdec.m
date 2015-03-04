@@ -144,8 +144,12 @@ try
             case 0
                 [bare, isexact] = infsup ();
             case 1
-                if (isa (varargin {1}, "infsup"))
-                    bare = infsup (inf (varargin {1}), sup (varargin {1}));
+                if (isa (varargin {1}, "infsupdec"))
+                    x = varargin {1};
+                    isexact = true ();
+                    return
+                elseif (isa (varargin {1}, "infsup"))
+                    bare = varargin {1};
                     isexact = true ();
                 else
                     [bare, isexact] = infsup (varargin {1});

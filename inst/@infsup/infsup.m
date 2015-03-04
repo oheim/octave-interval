@@ -97,6 +97,12 @@ if (nargin == 0)
 endif
 
 if (nargin == 1)
+    if (isa (l, "infsup"))
+        ## Nothing to be done
+        x = l;
+        isexact = true ();
+        return
+    endif
     if (ischar (l))
         l = cellstr (l);
     endif
