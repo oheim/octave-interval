@@ -1,0 +1,2 @@
+## Add a function alias for compatibility with INTLAB
+intval = @infsup;
