@@ -2,13 +2,20 @@ SHELL   = /bin/sh
 
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
+M_SOURCES = $(wildcard inst/*.m) $(wildcard inst/*/*.m)
+CC_SOURCES = $(wildcard src/*.cc)
+BUILD_DIR = build
+RELEASE_DIR = $(BUILD_DIR)/$(PACKAGE)-$(VERSION)
+RELEASE_TARBALL = $(RELEASE_DIR).tar
+RELEASE_TARBALL_COMPRESSED = $(RELEASE_TARBALL).gz
+HTML_DIR = $(BUILD_DIR)/$(PACKAGE)-html
+HTML_TARBALL_COMPRESSED = $(HTML_DIR).tar.gz
+INSTALLED_PACKAGE = ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
+GENERATED_HTML = $(HTML_DIR)/$(PACKAGE)/index.html
+OCT_COMPILED = $(BUILD_DIR)/.oct
 
-ifndef OCTAVE
-OCTAVE    = octave
-endif
-ifndef MKOCTFILE
-MKOCTFILE = mkoctfile
-endif
+OCTAVE ?= octave
+MKOCTFILE ?= mkoctfile
 
 .PHONY: help dist release html run check install clean md5
 
@@ -26,95 +33,87 @@ help:
 	@echo "   make clean    Cleanup"
 	@echo
 
-dist: $(PACKAGE)-$(VERSION).tar.gz
+dist: $(RELEASE_TARBALL_COMPRESSED)
+html: $(HTML_TARBALL_COMPRESSED)
+md5:  $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED)
+	@md5sum $^
 
-release: dist html md5
+release: $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED) md5
 	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
 	@echo "Execute: hg tag \"release-$(VERSION)\""
 
-html: $(PACKAGE)-html.tar.gz
-
-install: ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
+install: $(INSTALLED_PACKAGE)
 
 clean:
-	rm -rf $(PACKAGE)-html
-	rm -f $(PACKAGE)-$(VERSION).tar $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-html.tar.gz 
+	rm -rf "$(BUILD_DIR)"
 	rm -f src/*.oct src/*.o
 	rm -f fntests.log
 
-md5: $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-html.tar.gz
-	@md5sum $^
-
-$(PACKAGE)-$(VERSION).tar: .hg/dirstate
+$(RELEASE_TARBALL): .hg/dirstate
 	@echo "Creating package release ..."
+	@mkdir -p "$(BUILD_DIR)"
 	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" --exclude "src/*.itl" "$@"
 
-$(PACKAGE)-$(VERSION).tar.gz: $(PACKAGE)-$(VERSION).tar
-	@gzip -f -k "$<"
+$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
+	@(cd "$(BUILD_DIR)" && gzip -f -k "../$<")
 
-~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION: $(PACKAGE)-$(VERSION).tar.gz
+$(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 	@echo "Installing package in GNU Octave ..."
 	@$(OCTAVE) --silent --eval "pkg install $<"
 
-$(PACKAGE)-html/$(PACKAGE)/index.html: ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
+$(GENERATED_HTML): $(INSTALLED_PACKAGE)
 	@echo "Generating HTML documentation for the package. This may take a while ..."
-	@$(OCTAVE) --silent --eval "pkg load generate_html; generate_package_html ('$(PACKAGE)', '$(PACKAGE)-html', 'octave-forge')"
+	@$(OCTAVE) --silent --eval "pkg load generate_html; generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', 'octave-forge')"
 
-$(PACKAGE)-html.tar.gz: $(PACKAGE)-html/$(PACKAGE)/index.html
-	@tar czf $@ $(PACKAGE)-html
+$(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
+	@tar --create --auto-compress --file "$@" "$(HTML_DIR)"
 
-OCT_SOURCES = $(shell grep -l DEFUN_DLD src/*.cc | xargs echo)
-OCT_FILES   = $(OCT_SOURCES:%.cc=%.oct)
-
-src/%.oct: src/*.cc src/Makefile
+$(OCT_COMPILED): $(CC_SOURCES) src/Makefile
 	@echo "Compiling OCT-files ..."
 	@(cd src; MKOCTFILE=$(MKOCTFILE) make)
-	@touch --no-create $@
+	@touch "$@"
 
-run: $(OCT_FILES)
+PKG_ADD = $(shell grep -Pho '(?<=[/\#]{2} PKG_ADD: ).*' inst/*.m inst/*/*.m src/*.cc)
+
+run: $(OCT_COMPILED)
 	@echo "Run GNU Octave with the development version of the package"
-	@$(OCTAVE) --silent --path "inst/" --path "src/"
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --persist --eval "${PKG_ADD}"
 	@echo
 
-check: $(OCT_FILES)
+check: $(OCT_COMPILED)
 	@echo "Testing package in GNU Octave ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "${PKG_ADD}" --eval "__run_test_suite__ ({'.'}, {})"
 	@echo
 
 ###################################################################
 ## The following rules are required for generation of test files ##
 ###################################################################
 
-TST_SOURCES  = $(shell ls -1 src/ | grep ".itl" | xargs echo)
-TST_FILES    = $(TST_SOURCES:%.itl=inst/tests/%.tst)
-PWD          = $(shell pwd)
+TST_SOURCES = $(wildcard src/*.itl)
+TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/P1788
+TST_GENERATED = $(TST_SOURCES:src/%.itl=$(TST_GENERATED_DIR)/%.tst)
+PWD = $(shell pwd)
 
 .PHONY: tests
-tests: $(TST_FILES)
+tests: $(TST_GENERATED)
 
-inst/tests/%.tst: src/%.itl
-	@echo "Compiling $@ ..."
-	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, P1788)" -o "$(PWD)/.build.tst" -s "$(PWD)/src")
-	@mkdir -p "$(shell dirname $@)" && mv ".build.tst/octave/native/P1788/$(shell basename $@)" $@
-	@rm -rf .build.tst/
+$(TST_GENERATED_DIR)/%.tst: src/%.itl
+	@echo "Compiling $< ..."
+	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, P1788)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/src")
 
 ifdef ITF1788_HOME
 
-clean: clean-tests
-.PHONY: clean-tests
-clean-tests:
-	rm -rf inst/tests/
-
-$(PACKAGE)-$(VERSION).tar.gz: patch-tests
+$(RELEASE_TARBALL_COMPRESSED): patch-tests
 .INTERMEDIATE: patch-tests
-patch-tests: $(PACKAGE)-$(VERSION).tar $(TST_FILES) 
-	@tar --append --file "$<" --transform="s!^inst/!$(PACKAGE)-$(VERSION)/inst/!" inst/tests/*
+patch-tests: $(RELEASE_TARBALL) $(TST_GENERATED) 
+	@echo "Patching generated tests into release tarball ..."
+	@tar --append --file "$<" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/!" $(TST_GENERATED_DIR)/*
 
-check: $(TST_FILES)
+check: $(TST_GENERATED)
 
 else
 
-$(PACKAGE)-$(VERSION).tar.gz: ITF1788WARNING
+$(RELEASE_TARBALL_COMPRESSED): ITF1788WARNING
 .PHONY: ITF1788WARNING
 ITF1788WARNING:
 	@echo

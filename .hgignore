@@ -9,7 +9,5 @@ syntax: regexp
 fntests.log
 
 # The following files are created during package build
-^interval-[^/]*\.tar\.gz
-^interval-[^/]*\.tar
-^interval-html/
-^inst/tests/
+^build/
+
