@@ -89,6 +89,9 @@
 ## Created: 2014-09-27
 
 function [x, isexact] = infsup (l, u)
+## Add a function alias for compatibility with INTLAB
+## PKG_ADD: intval = @infsup;
+## PKG_DEL: clear -variables intval;
 
 if (nargin == 0)
     ## representation of the empty interval is always [inf,-inf]
