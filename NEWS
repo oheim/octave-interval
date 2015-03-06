@@ -1,6 +1,8 @@
 0.1.4 xxxx-xx-xx
 ================
 
+ * New interval constructors: hull, midrad
+
  * New interval arithmetic functions: dilog, ei, erf, erfc, gamma, gammaln, psi
  
  * rad: May compute mid and rad simultaneously

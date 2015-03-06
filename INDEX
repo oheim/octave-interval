@@ -5,6 +5,7 @@ Interval constant
  nai
 Interval constructor
  hull
+ midrad
  @infsup/infsup
  @infsupdec/infsupdec
 Interval function (most with tightest accuracy)
