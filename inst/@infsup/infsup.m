@@ -593,6 +593,11 @@ endfunction
 %!  assert (sup (infsup ({"0.1", 42; "e", "3.2/8"}, {"0xffp2", "42e1"; "pi", 2})), [1020, 420; pi + 2 * eps, 2]);
 %!  assert (inf (infsup ({"[2, 3]", "3/4", "[Entire]", "42?3", 1, "0xf"})), [2, 0.75, -inf, 39, 1, 15]);
 %!  assert (sup (infsup ({"[2, 3]", "3/4", "[Entire]", "42?3", 1, "0xf"})), [3, 0.75, +inf, 45, 1, 15]);
+%!test "broadcasting";
+%!  assert (inf (infsup (magic (3), 10)), magic (3));
+%!  assert (sup (infsup (magic (3), 10)), 10 * ones (3));
+%!  assert (inf (infsup (1, magic (3))), ones (3));
+%!  assert (sup (infsup (1, magic (3))), magic (3));
 %!error infsup ("[nai]");
 %!error infsup ({42, "[nai]"});
 %!error infsup (3, 2);
