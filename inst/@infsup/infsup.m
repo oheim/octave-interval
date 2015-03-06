@@ -184,8 +184,16 @@ if (ischar (u))
 endif
 
 if (not (size_equal (l, u)))
-    error ("interval:InvalidOperand", ...
-           "infsup: size of upper and lower bounds must match")
+    if (isscalar (l))
+        ## Broadcast l
+        l = l (ones (size (u)));
+    elseif (isscalar (u))
+        ## Broadcast u
+        u = u (ones (size (l)));
+    else
+        error ("interval:InvalidOperand", ...
+               "infsup: size of upper and lower bounds must match")
+    endif
 endif
 
 ## check parameters and conversion to double precision
