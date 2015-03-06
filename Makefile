@@ -2,7 +2,6 @@ SHELL   = /bin/sh
 
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
-M_SOURCES = $(wildcard inst/*.m) $(wildcard inst/*/*.m)
 CC_SOURCES = $(wildcard src/*.cc)
 BUILD_DIR = build
 RELEASE_DIR = $(BUILD_DIR)/$(PACKAGE)-$(VERSION)
@@ -73,16 +72,14 @@ $(OCT_COMPILED): $(CC_SOURCES) src/Makefile
 	@(cd src; MKOCTFILE=$(MKOCTFILE) make)
 	@touch "$@"
 
-PKG_ADD = $(shell grep -Pho '(?<=[/\#]{2} PKG_ADD: ).*' inst/*.m inst/*/*.m src/*.cc)
-
 run: $(OCT_COMPILED)
 	@echo "Run GNU Octave with the development version of the package"
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --persist --eval "${PKG_ADD}"
+	@$(OCTAVE) --silent --path "inst/" --path "src/"
 	@echo
 
 check: $(OCT_COMPILED)
 	@echo "Testing package in GNU Octave ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "${PKG_ADD}" --eval "__run_test_suite__ ({'.'}, {})"
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
 	@echo
 
 ###################################################################
