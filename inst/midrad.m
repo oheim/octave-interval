@@ -50,11 +50,11 @@ switch nargin
         if (isfloat (m) && isreal (m) && ...
             isfloat (r) && isreal (r))
             ## Simple case: m and r are binary64 numbers
-            if (not (all (all (r >= 0))))
-                error ("midrad: radius must be non-negative")
-            endif
             l = mpfr_function_d ('minus', -inf, m, r);
             u = mpfr_function_d ('plus', +inf, m, r);
+            emptyresult = r < 0 & true (size (m));
+            l (emptyresult) = inf;
+            u (emptyresult) = -inf;
             result = infsupdec (l, u);
         else
             ## Complicated case: m and r are strings or other types
@@ -63,19 +63,32 @@ switch nargin
                 result = m;
                 return
             endif
-            if (not (isa (r, "infsupdec")))
-                if (isa (r, "infsup"))
-                    r = infsupdec (r);
-                else
-                    r = infsupdec (0, r);
+            if (not (isa (r, "infsup")))
+                ## [-inf, r] should make a valid interval, unless r == -inf
+                ## Intersection with non-negative numbers ensures that we
+                ## return [Empty] if r < 0.
+                if (isfloat (r))
+                    r (r == -inf) = nan;
+                endif
+                r = infsupdec (-inf, r) & infsup (0, inf);
+                if (not (isnai (r)))
+                    ## Fix decoration
+                    r = infsupdec (intervalpart (r));
                 endif
             endif
-            if (isnai (r))
-                result = r;
-                return
+            if (isa (r, "infsupdec"))
+                if (isnai (r))
+                    result = r;
+                    return
+                endif
+                dec_r = decorationpart (r);
+            else
+                dec_r = "com";
             endif
             sup_r = sup (r);
-            r = infsupdec (-sup_r, sup_r, decorationpart (r));
+            sup_r (sup_r < 0) = -inf;
+            r = infsupdec (-sup_r, sup_r, dec_r);
+            
             result = m + r;
         endif
         
@@ -86,6 +99,10 @@ endswitch
 endfunction
 
 %!assert (isempty (midrad ()));
+%!assert (isempty (midrad (0, -inf)));
+%!assert (isempty (midrad (0, -.1)));
+%!assert (isempty (midrad (0, "-.1")));
+%!assert (isempty (midrad (0, infsup("-.1"))));
 %!assert (isequal (midrad ("pi"), infsupdec ("pi")));
 %!assert (isequal (midrad (infsup (2), 2), infsupdec (0, 4)));
 %!assert (isequal (midrad (2, infsup (2)), infsupdec (0, 4)));
