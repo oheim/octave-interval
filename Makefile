@@ -70,6 +70,7 @@ $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 $(OCT_COMPILED): $(CC_SOURCES) src/Makefile
 	@echo "Compiling OCT-files ..."
 	@(cd src; MKOCTFILE=$(MKOCTFILE) make)
+	@mkdir -p "$(BUILD_DIR)"
 	@touch "$@"
 
 run: $(OCT_COMPILED)
