@@ -82,3 +82,19 @@ Returns @var{r} = 0 on success.\n\
     return retval;
 }
 
+/*
+%!test 
+%!  __setround__ (1);
+%!  assert (1 + realmin > 1, true);
+%!  __setround__ (0);
+%!test 
+%!  __setround__ (0);
+%!  assert (1 + realmin > 1, false); 
+%!test 
+%!  __setround__ (2);
+%!  assert (1 + realmin > 1, false); 
+%!  assert (-1 + realmin > -1, true); 
+%!  __setround__ (0);
+%!shared
+%!  __setround__ (0);
+*/
