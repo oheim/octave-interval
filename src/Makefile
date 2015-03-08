@@ -6,7 +6,7 @@ OBJ            = mpfr_function_d.oct \
                  __setround__.oct
 LDFLAGS_MPFR   =-lmpfr -lgmp
 STD_CXXFLAGS   =$(shell $(MKOCTFILE) -p CXXFLAGS)
-CPP11_CXXFLAGS =$(STD_CXXFLAGS) -std=gnu++11
+CPP11_CXXFLAGS =$(STD_CXXFLAGS) -std=c++11
 
 all: $(OBJ)
 
