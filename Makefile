@@ -67,7 +67,10 @@ $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 	@tar --create --auto-compress --file "$@" "$(HTML_DIR)"
 
-$(OCT_COMPILED): $(CC_SOURCES) src/Makefile
+$(CC_SOURCES): src/Makefile
+	@touch --no-create "$@"
+
+$(OCT_COMPILED): $(CC_SOURCES)
 	@echo "Compiling OCT-files ..."
 	@(cd src; MKOCTFILE=$(MKOCTFILE) make)
 	@mkdir -p "$(BUILD_DIR)"
