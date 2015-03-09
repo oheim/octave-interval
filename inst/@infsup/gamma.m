@@ -150,13 +150,11 @@ if (any (any (nosingularity)))
     
     select = encloses_extremum & negative_value;
     if (any (any (select)))
-        u (select) = find_extremum (x.inf (select), x.sup (select), ...
-                                    psil (select), psiu (select));
+        u (select) = find_extremum (x.inf (select), x.sup (select));
     endif
     select = encloses_extremum & positive_value;
     if (any (any (select)))
-        l (select) = find_extremum (x.inf (select), x.sup (select), ...
-                                    psil (select), psiu (select));
+        l (select) = find_extremum (x.inf (select), x.sup (select));
     endif
 endif
 
@@ -172,27 +170,43 @@ result = pos | neg;
 
 endfunction
 
-function y = find_extremum (l, u, psil, psiu)
+function y = find_extremum (l, u)
 ## Compute the extremum's value of gamma between l and u.  l and u are negative
 ## and lie between two subsequent integral numbers.
 
-y = zeros (size (l)); # inaccurate, but correct
+y = zeros (size (l)); # inaccurate, but already correct
 
 ## Tightest values for l >= -10
-n = ceil (u);
-y (n == 0) = -3.544643611155005;
-y (n == -1) = 2.3024072583396799;
-y (n == -2) = -.8881363584012418;
-y (n == -3) = .24512753983436624;
-y (n == -4) = -.052779639587319397;
-y (n == -5) = .009324594482614849;
-y (n == -6) = -.001397396608949767;
-y (n == -7) = 1.8187844490940416e-4;
-y (n == -8) = -2.0925290446526666e-5;
-y (n == -9) = 2.1574161045228504e-6;
+n = floor (l);
+y (n == -1) = -3.544643611155005;
+y (n == -2) = 2.3024072583396799;
+y (n == -3) = -.8881363584012418;
+y (n == -4) = .24512753983436624;
+y (n == -5) = -.052779639587319397;
+y (n == -6) = .009324594482614849;
+y (n == -7) = -.001397396608949767;
+y (n == -8) = 1.8187844490940416e-4;
+y (n == -9) = -2.0925290446526666e-5;
+y (n == -10) = 2.1574161045228504e-6;
 
-## FIXME Find better values for n <= -10. Possibly with a modified newton
-## iteration based on the values of psi.
+## From Euler's reflection formula it follows:
+## gamma (-x) = pi / ( sin (pi * (x + 1)) * gamma (x + 1) )
+##
+## The extremum is located at -x = n + epsilon,
+## where epsilon < 0.3 for n <= -10. Thus, we can estimate
+## abs (pi / sin (pi * (x + 1))) >= 3.88 for n <= -10.
+## Also it holds gamma (x + 1) = gamma (-n - epsilon + 1) <= gamma  (-n + 1).
+##
+## Now, altogether we can estimate: abs (gamma (-x)) >= 3.88 / gamma (-n + 1)
+## for n <= -10
+
+remaining_estimates = n < -10;
+if (any (any (remaining_estimates)))
+    y (remaining_estimates) = ...
+        (-1) .^ (rem (n (remaining_estimates), 2) == -1) * ...
+        mpfr_function_d ('rdivide', -inf, 3.88, ...
+            mpfr_function_d ('gamma', +inf, -n (remaining_estimates) + 1));
+endif
 
 endfunction
 
