@@ -28,6 +28,7 @@
 ## Keywords: interval
 ## Created: 2015-02-02
 
+## FIXME This function is only required, because of regression #44498
 function result = isvector (A)
 
 if (nargin ~= 1)

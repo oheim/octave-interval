@@ -29,6 +29,8 @@
 ## Keywords: interval
 ## Created: 2014-10-29
 
+## FIXME: One happy day this function can be removed, because bug #42422 has
+## been solved with GNU Octave 4.0.
 function result = ismatrix (A)
 
 if (nargin ~= 1)

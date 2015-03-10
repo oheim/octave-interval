@@ -29,6 +29,7 @@
 ## Keywords: interval
 ## Created: 2015-02-02
 
+## FIXME This function is only required, because of regression #43925
 function result = isscalar (A)
 
 if (nargin ~= 1)
