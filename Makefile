@@ -91,7 +91,7 @@ check: $(OCT_COMPILED)
 ###################################################################
 
 TST_SOURCES = $(wildcard src/*.itl)
-TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/P1788
+TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/interval
 TST_GENERATED = $(TST_SOURCES:src/%.itl=$(TST_GENERATED_DIR)/%.tst)
 PWD = $(shell pwd)
 
@@ -100,7 +100,7 @@ tests: $(TST_GENERATED)
 
 $(TST_GENERATED_DIR)/%.tst: src/%.itl
 	@echo "Compiling $< ..."
-	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, P1788)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/src")
+	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/src")
 	@(echo "## DO NOT EDIT -- This file has been generated with the Interval Testing"; \
           echo "## Framework, which is available at: https://github.com/nehmeier/ITF1788"; \
           echo "## "; \
