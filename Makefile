@@ -101,6 +101,15 @@ tests: $(TST_GENERATED)
 $(TST_GENERATED_DIR)/%.tst: src/%.itl
 	@echo "Compiling $< ..."
 	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, P1788)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/src")
+	@(echo "## DO NOT EDIT -- This file has been generated with the Interval Testing"; \
+          echo "## Framework, which is available at: https://github.com/nehmeier/ITF1788"; \
+          echo "## "; \
+          echo "## The source code for this particular file is publicly available at:"; \
+          echo -n "## https://sourceforge.net/p/octave/interval/ci/"; \
+          echo -n $(shell hg log --limit 1 "$<" | head -1 | cut -f3 -d":"); \
+          echo "/tree/$<"; \
+          cat "$@") > "$@_"
+	@mv "$@_" "$@"
 
 ifdef ITF1788_HOME
 
