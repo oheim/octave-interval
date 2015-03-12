@@ -51,10 +51,10 @@ clean:
 $(RELEASE_TARBALL): .hg/dirstate
 	@echo "Creating package release ..."
 	@mkdir -p "$(BUILD_DIR)"
-	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" --exclude "src/*.itl" "$@"
+	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
 
 $(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
-	@(cd "$(BUILD_DIR)" && gzip -f -k "../$<")
+	@(cd "$(BUILD_DIR)" && gzip --best -f -k "../$<")
 
 $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 	@echo "Installing package in GNU Octave ..."
@@ -101,14 +101,11 @@ tests: $(TST_GENERATED)
 $(TST_GENERATED_DIR)/%.tst: src/%.itl
 	@echo "Compiling $< ..."
 	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/src")
-	@(echo "## DO NOT EDIT -- This file has been generated with the Interval Testing"; \
-          echo "## Framework, which is available at: https://github.com/nehmeier/ITF1788"; \
-          echo "## "; \
-          echo "## The source code for this particular file is publicly available at:"; \
-          echo -n "## https://sourceforge.net/p/octave/interval/ci/"; \
-          echo -n $(shell hg log --limit 1 "$<" | head -1 | cut -f3 -d":"); \
-          echo "/tree/$<"; \
-          cat "$@") > "$@_"
+	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
+		echo "## by the Interval Testing Framework for IEEE 1788."; \
+		echo -n "## https://github.com/nehmeier/ITF1788/tree/"; \
+		echo $(shell cd "$(ITF1788_HOME)" && git log --max-count=1 | head -1 | cut -f2 -d" "); \
+		cat "$@") > "$@_"
 	@mv "$@_" "$@"
 
 ifdef ITF1788_HOME
