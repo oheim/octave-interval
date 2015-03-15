@@ -27,7 +27,7 @@
 ##   @result{} [0, 2]
 ## @end group
 ## @end example
-## @seealso{@@infsup/sqr, @@infsup/pow, @@infsup/cbrt, @@infsup/nthroot}
+## @seealso{@@infsup/sqr, @@infsup/rsqrt, @@infsup/pow, @@infsup/cbrt, @@infsup/nthroot}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

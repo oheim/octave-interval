@@ -201,6 +201,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('psi', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('rdivide', @var{R}, @var{X}, @var{Y})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('realsqrt', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('rsqrt', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sec', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sech', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sin', @var{R}, @var{X})\n"
@@ -333,6 +334,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_digamma);
         else if (function == "realsqrt")
           evaluate (arg1, rnd, &mpfr_sqrt);
+        else if (function == "rsqrt")
+          evaluate (arg1, rnd, &mpfr_rec_sqrt);
         else if (function == "sec")
           evaluate (arg1, rnd, &mpfr_sec);
         else if (function == "sech")
