@@ -3,7 +3,8 @@
 
  * New interval constructors: hull, midrad
 
- * New interval arithmetic functions: dilog, ei, erf, erfc, gamma, gammaln, psi
+ * New interval arithmetic functions: cbrt, cot, coth, csc, csch, dilog, ei, 
+   erf, erfc, gamma, gammaln, psi, rsqrt, sec, sech
  
  * mtimes: Support for fast, less accurate evaluation using BLAS routines
  

@@ -19,9 +19,14 @@ Interval function (most with tightest accuracy)
  @infsup/atanh
  @infsup/cancelminus
  @infsup/cancelplus
+ @infsup/cbrt
  @infsup/ceil
  @infsup/cos
  @infsup/cosh
+ @infsup/cot
+ @infsup/coth
+ @infsup/csc
+ @infsup/csch
  @infsup/dilog
  @infsup/ei
  @infsup/erf
@@ -51,13 +56,16 @@ Interval function (most with tightest accuracy)
  @infsup/pown
  @infsup/psi
  @infsup/rdivide
+ @infsup/realsqrt
  @infsup/round
  @infsup/roundb
+ @infsup/rsqrt
+ @infsup/sec
+ @infsup/sech
  @infsup/sign
  @infsup/sin
  @infsup/sinh
  @infsup/sqr
- @infsup/sqrt
  @infsup/tan
  @infsup/tanh
  @infsup/times
