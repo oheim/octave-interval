@@ -27,7 +27,7 @@
 ##   @result{} [.5403023058681396, .5403023058681398]
 ## @end group
 ## @end example
-## @seealso{@@infsup/acos, @@infsup/cosh}
+## @seealso{@@infsup/acos, @@infsup/sec, @@infsup/cosh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -41,7 +41,7 @@ if (nargin ~= 1)
     return
 endif
 
-l = u = sinsignl = sinsignu = zeros (size (x));
+l = u = sinsignl = sinsignu = zeros (size (x.inf));
 
 ## Check, if wid (x) is certainly greater than 2*pi. This can save the
 ## computation if some cosine values.

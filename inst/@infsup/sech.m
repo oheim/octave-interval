@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,42 +15,42 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} tanh (@var{X})
+## @deftypefn {Function File} {} sech (@var{X})
 ## 
-## Compute the hyperbolic tangent.
+## Compute the hyperbolic secant, that is the reciprocal hyperbolic cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## tanh (infsupdec (1))
-##   @result{} [.7615941559557648, .761594155955765]_com
+## sech (infsup (1))
+##   @result{} [.6480542736638853, .6480542736638855]
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/atanh, @@infsupdec/coth, @@infsupdec/sinh, @@infsupdec/cosh}
+## @seealso{@@infsup/cosh, @@infsup/csch, @@infsup/coth}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2015-03-15
 
-function result = tanh (x)
+function result = sech (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
+l = mpfr_function_d ('sech', -inf, mag (x));
+u = mpfr_function_d ('sech', +inf, mig (x));
 
-result = infsupdec (tanh (intervalpart (x)));
-## tanh is defined and continuous everywhere
-result.dec = mindec (result.dec, x.dec);
+emptyresult = isempty (x);
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
+
+result = infsup (l, u);
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (tanh (infsupdec (1)), infsupdec ("[0x1.85EFAB514F394p-1, 0x1.85EFAB514F395p-1]")));
+%! assert (sech (infsup (1)) == "[0x1.4BCDC50ED6BE7p-1, 0x1.4BCDC50ED6BE8p-1]");

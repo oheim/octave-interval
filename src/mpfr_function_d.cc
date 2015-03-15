@@ -173,6 +173,10 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('atanh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('cos', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('cosh', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('cot', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('coth', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('csc', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('csch', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('dilog', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('ei', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('erf', @var{R}, @var{X})\n"
@@ -195,6 +199,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('pow10', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('psi', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('rdivide', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('sec', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('sech', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sin', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
@@ -284,6 +290,14 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_cos);
         else if (function == "cosh")
           evaluate (arg1, rnd, &mpfr_cosh);
+        else if (function == "cot")
+          evaluate (arg1, rnd, &mpfr_cot);
+        else if (function == "coth")
+          evaluate (arg1, rnd, &mpfr_coth);
+        else if (function == "csc")
+          evaluate (arg1, rnd, &mpfr_csc);
+        else if (function == "csch")
+          evaluate (arg1, rnd, &mpfr_csch);
         else if (function == "dilog")
           evaluate (arg1, rnd, &mpfr_li2);
         else if (function == "ei")
@@ -314,6 +328,10 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_exp10);
         else if (function == "psi")
           evaluate (arg1, rnd, &mpfr_digamma);
+        else if (function == "sec")
+          evaluate (arg1, rnd, &mpfr_sec);
+        else if (function == "sech")
+          evaluate (arg1, rnd, &mpfr_sech);
         else if (function == "sin")
           evaluate (arg1, rnd, &mpfr_sin);
         else if (function == "sinh")

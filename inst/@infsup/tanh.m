@@ -27,7 +27,7 @@
 ##   @result{} [.7615941559557648, .761594155955765]
 ## @end group
 ## @end example
-## @seealso{@@infsup/atanh, @@infsup/sinh, @@infsup/cosh}
+## @seealso{@@infsup/atanh, @@infsup/coth, @@infsup/sinh, @@infsup/cosh}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} tan (@var{X})
 ## 
-## Compute the tangent for each number in interval @var{X} in radians.
+## Compute the tangent in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

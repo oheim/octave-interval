@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,26 +15,26 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} tan (@var{X})
+## @deftypefn {Function File} {} cot (@var{X})
 ## 
-## Compute the tangent in radians.
+## Compute the cotangent in radians, that is the reciprocal tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## tan (infsup (1))
-##   @result{} [1.557407724654902, 1.5574077246549023]
+## cot (infsup (1))
+##   @result{} [.6420926159343306, .6420926159343308]
 ## @end group
 ## @end example
-## @seealso{@@infsup/atan, @@infsup/tanh}
+## @seealso{@@infsup/tan, @@infsup/csc, @@infsup/sec}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-06
+## Created: 2015-03-15
 
-function result = tan (x)
+function result = cot (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -44,14 +44,14 @@ endif
 l = u = zeros (size (x));
 
 ## Check, if wid (x) is certainly greater than pi. This may save computation of
-## some tangent values.
+## some cotangent values.
 width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
 pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
 certainlyfullperiod = width >= pi.sup;
 
 possiblynotfullperiod = not (certainlyfullperiod);
-l (possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf (possiblynotfullperiod));
-u (possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup (possiblynotfullperiod));
+l (possiblynotfullperiod) = mpfr_function_d ('cot', -inf, x.sup (possiblynotfullperiod));
+u (possiblynotfullperiod) = mpfr_function_d ('cot', inf, x.inf (possiblynotfullperiod));
 
 singularity = certainlyfullperiod | ...
               l > u | (...
@@ -62,7 +62,7 @@ singularity = certainlyfullperiod | ...
 l (singularity) = -inf;
 u (singularity) = inf;
 
-emptyresult = isempty (x);
+emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
@@ -71,4 +71,4 @@ result = infsup (l, u);
 endfunction
 
 %!test "from the documentation string";
-%! assert (tan (infsup (1)) == "[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]");
+%! assert (cot (infsup (1)) == "[0x1.48C05D04E1CFDp-1, 0x1.48C05D04E1CFEp-1]");

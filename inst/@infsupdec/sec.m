@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,26 +15,26 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} tanh (@var{X})
+## @deftypefn {Function File} {} sec (@var{X})
 ## 
-## Compute the hyperbolic tangent.
+## Compute the secant in radians, that is the reciprocal cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## tanh (infsupdec (1))
-##   @result{} [.7615941559557648, .761594155955765]_com
+## sec (infsupdec (1))
+##   @result{} [1.8508157176809254, 1.8508157176809257]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/atanh, @@infsupdec/coth, @@infsupdec/sinh, @@infsupdec/cosh}
+## @seealso{@@infsupdec/cos, @@infsupdec/csc, @@infsupdec/cot}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2015-03-15
 
-function result = tanh (x)
+function result = sec (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -46,11 +46,15 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (tanh (intervalpart (x)));
-## tanh is defined and continuous everywhere
+result = infsupdec (sec (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
+
+## Because sec (nextdown (pi/2)) < realmax, we can simple check for
+## a singularity by comparing the result with entire.
+domain = not (isentire (result));
+result.dec (not (domain)) = "trv";
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (tanh (infsupdec (1)), infsupdec ("[0x1.85EFAB514F394p-1, 0x1.85EFAB514F395p-1]")));
+%! assert (isequal (sec (infsupdec (1)), infsupdec ("[0x1.D9CF0F125CC29, 0x1.D9CF0F125CC2A]_com")));

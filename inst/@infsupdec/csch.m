@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,26 +15,26 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} tanh (@var{X})
+## @deftypefn {Function File} {} csch (@var{X})
 ## 
-## Compute the hyperbolic tangent.
+## Compute the hyperbolic cosecant, that is the reciprocal hyperbolic sine.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## tanh (infsupdec (1))
-##   @result{} [.7615941559557648, .761594155955765]_com
+## csch (infsupdec (1))
+##   @result{} [.8509181282393214, .8509181282393216]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/atanh, @@infsupdec/coth, @@infsupdec/sinh, @@infsupdec/cosh}
+## @seealso{@@infsupdec/sinh, @@infsupdec/sech, @@infsupdec/coth}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2015-03-15
 
-function result = tanh (x)
+function result = csch (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -46,11 +46,12 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (tanh (intervalpart (x)));
-## tanh is defined and continuous everywhere
+result = infsupdec (csch (intervalpart (x)));
+## csch is defined and continuous for x ~= 0
 result.dec = mindec (result.dec, x.dec);
+result.dec (inf (x) <= 0 & sup (x) >= 0) = "trv";
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (tanh (infsupdec (1)), infsupdec ("[0x1.85EFAB514F394p-1, 0x1.85EFAB514F395p-1]")));
+%! assert (isequal (csch (infsupdec (1)), infsupdec ("[0x1.B3AB8A78B90Cp-1, 0x1.B3AB8A78B90C1p-1]_com")));
