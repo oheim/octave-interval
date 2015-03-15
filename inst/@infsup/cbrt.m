@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,45 +15,37 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} realsqrt (@var{X})
+## @deftypefn {Function File} {} cbrt (@var{X})
 ## 
-## Compute the square root (for all non-negative numbers).
+## Compute the cube root (for all non-negative numbers).
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## realsqrt (infsupdec (-6, 4))
-##   @result{} [0, 2]_trv
+## cbrt (infsup (-6, 27))
+##   @result{} [0, 9]
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/sqr, @@infsupdec/pow, @@infsupdec/cbrt, @@infsupdec/nthroot}
+## @seealso{@@infsup/realsqrt, @@infsup/nthroot}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2015-03-15
 
-function result = realsqrt (x)
+function result = cbrt (x)
 
-if (nargin ~= 1)
-    print_usage ();
-    return
-endif
+l = mpfr_function_d ('cbrt', -inf, max (0, x.inf));
+u = mpfr_function_d ('cbrt', +inf, max (0, x.sup));
 
-if (isnai (x))
-    result = x;
-    return
-endif
+emptyresult = isempty (x) | x.sup < 0;
+l (emptyresult) = inf;
+u (emptyresult) = -inf;
 
-result = infsupdec (realsqrt (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
-
-## realsqrt is continuous everywhere, but defined for x >= 0 only
-defined = subset (x, infsup (0, inf));
-result.dec (not (defined)) = "trv";
+result = infsup (l, u);
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (realsqrt (infsupdec (-6, 4)), infsupdec (0, 2, "trv")));
+%! assert (cbrt (infsup (-6, 27)) == infsup (0, 3));

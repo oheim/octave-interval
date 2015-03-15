@@ -171,6 +171,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('atan', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('atan2', @var{R}, @var{Y}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('atanh', @var{R}, @var{X})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('cbrt', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('cos', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('cosh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('cot', @var{R}, @var{X})\n"
@@ -199,6 +200,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('pow10', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('psi', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('rdivide', @var{R}, @var{X}, @var{Y})\n"
+  "@deftypefnx {Loadable Function} {} mpfr_function_d ('realsqrt', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sec', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sech', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sin', @var{R}, @var{X})\n"
@@ -206,7 +208,6 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sinh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('sqr', @var{R}, @var{X})\n"
-  "@deftypefnx {Loadable Function} {} mpfr_function_d ('sqrt', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('tan', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('tanh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('times', @var{R}, @var{X}, @var{Y})\n"
@@ -286,6 +287,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_atan);
         else if (function == "atanh")
           evaluate (arg1, rnd, &mpfr_atanh);
+        else if (function == "cbrt")
+          evaluate (arg1, rnd, &mpfr_cbrt);
         else if (function == "cos")
           evaluate (arg1, rnd, &mpfr_cos);
         else if (function == "cosh")

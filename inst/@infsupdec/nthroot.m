@@ -22,7 +22,7 @@
 ## Accuracy: The result is a valid enclosure.  The result is a tight
 ## enclosure for @var{n} ≥ -2.  The result also is a tight enclosure if the
 ## reciprocal of @var{n} can be computed exactly in double-precision.
-## @seealso{@@infsupdec/pown, @@infsupdec/pownrev}
+## @seealso{@@infsupdec/pown, @@infsupdec/pownrev, @@infsupdec/realsqrt, @@infsupdec/cbrt}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
