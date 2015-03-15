@@ -19,6 +19,9 @@
 ## 
 ## Compute the square root (for all non-negative numbers).
 ##
+## Since intervals are only defined for real numbers, this function and
+## @code{realsqrt} are equivalent.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
@@ -27,7 +30,7 @@
 ##   @result{} [0, 2]
 ## @end group
 ## @end example
-## @seealso{@@infsup/sqr, @@infsup/pow}
+## @seealso{@@infsup/sqr, @@infsup/pow, @@infsup/nthroot, @@infsup/cbrt}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

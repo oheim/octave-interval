@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## cbrt (infsup (-6, 27))
-##   @result{} [0, 9]
+##   @result{} [0, 3]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/realsqrt, @@infsup/nthroot}
