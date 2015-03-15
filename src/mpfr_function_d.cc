@@ -328,6 +328,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_exp10);
         else if (function == "psi")
           evaluate (arg1, rnd, &mpfr_digamma);
+        else if (function == "realsqrt")
+          evaluate (arg1, rnd, &mpfr_sqrt);
         else if (function == "sec")
           evaluate (arg1, rnd, &mpfr_sec);
         else if (function == "sech")
@@ -338,8 +340,6 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_sinh);
         else if (function == "sqr")
           evaluate (arg1, rnd, &mpfr_sqr);
-        else if (function == "sqrt")
-          evaluate (arg1, rnd, &mpfr_sqrt);
         else if (function == "tan")
           evaluate (arg1, rnd, &mpfr_tan);
         else if (function == "tanh")

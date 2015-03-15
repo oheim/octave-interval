@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} sqrt (@var{X})
+## @deftypefn {Function File} {} realsqrt (@var{X})
 ## 
 ## Compute the square root (for all non-negative numbers).
 ##
@@ -23,29 +23,37 @@
 ##
 ## @example
 ## @group
-## sqrt (infsup (-6, 4))
-##   @result{} [0, 2]
+## realsqrt (infsupdec (-6, 4))
+##   @result{} [0, 2]_trv
 ## @end group
 ## @end example
-## @seealso{@@infsup/sqr, @@infsup/pow}
+## @seealso{@@infsupdec/sqr, @@infsupdec/pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-01
+## Created: 2014-10-13
 
-function result = sqrt (x)
+function result = realsqrt (x)
 
-l = mpfr_function_d ('sqrt', -inf, max (0, x.inf));
-u = mpfr_function_d ('sqrt', +inf, max (0, x.sup));
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
 
-emptyresult = isempty (x) | x.sup < 0;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+if (isnai (x))
+    result = x;
+    return
+endif
 
-result = infsup (l, u);
+result = infsupdec (realsqrt (intervalpart (x)));
+result.dec = mindec (result.dec, x.dec);
+
+## realsqrt is continuous everywhere, but defined for x >= 0 only
+defined = subset (x, infsup (0, inf));
+result.dec (not (defined)) = "trv";
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (sqrt (infsup (-6, 4)) == infsup (0, 2));
+%! assert (isequal (realsqrt (infsupdec (-6, 4)), infsupdec (0, 2, "trv")));

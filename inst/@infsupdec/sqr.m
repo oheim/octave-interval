@@ -27,7 +27,7 @@
 ##   @result{} [0, 4]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/sqrt, @@infsupdec/pown, @@infsupdec/pow}
+## @seealso{@@infsupdec/realsqrt, @@infsupdec/pown, @@infsupdec/pow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
