@@ -65,7 +65,7 @@ $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 	@$(OCTAVE) --silent --eval "pkg load generate_html; generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', 'octave-forge')"
 
 $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
-	@tar --create --auto-compress --file "$@" "$(HTML_DIR)"
+	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
 
 $(CC_SOURCES): src/Makefile
 	@touch --no-create "$@"
