@@ -1,3 +1,9 @@
+0.1.5 xxxx-xx-xx
+================
+
+Bugfixes
+ * mtimes on decorated intervals supports broadcasting of scalar factors
+
 0.1.4 2015-03-15
 ================
 

@@ -66,6 +66,11 @@ if (isempty (x.dec) || isempty (y.dec))
     return
 endif
 
+if (isscalar (x) || isscalar (y))
+    result = times (x, y);
+    return
+endif
+
 if (nargin == 2)
     result = infsupdec (mtimes (intervalpart (x), intervalpart (y)));
 else
