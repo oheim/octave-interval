@@ -47,6 +47,10 @@ if (not (isa (x, "infsup")))
 endif
 if (not (isa (y, "infsup")))
     y = infsup (y);
+elseif (isa (y, "infsupdec"))
+    ## Workaround for bug #42735
+    result = mrdivide (x, y);
+    return
 endif
 
 if (isscalar (x) || isscalar (y))

@@ -47,6 +47,10 @@ if (not (isa (x, "infsup")))
 endif
 if (not (isa (y, "infsup")))
     y = infsup (y);
+elseif (isa (y, "infsupdec"))
+    ## Workaround for bug #42735
+    result = minus (x, y);
+    return
 endif
 
 l = mpfr_function_d ('minus', -inf, x.inf, y.sup);

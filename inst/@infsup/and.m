@@ -47,6 +47,10 @@ if (not (isa (a, "infsup")))
 endif
 if (not (isa (b, "infsup")))
     b = infsup (b);
+elseif (isa (b, "infsupdec"))
+    ## Workaround for bug #42735
+    result = and (a, b);
+    return
 endif
 
 ## This also works for unbound intervals and empty intervals

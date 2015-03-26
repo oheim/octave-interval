@@ -239,9 +239,18 @@ x.dec = dec;
 
 x = class (x, "infsupdec", bare);
 
-## Enable all mixed mode functions to use decorated variants
-## FIXME This does not work for operators atm,
-## see http://savannah.gnu.org/bugs/?42735
+## Enable all mixed mode functions to use decorated variants with implicit
+## conversion from bare to decorated intervals.
+##
+## There is bug #42735 in GNU Octave core, which makes this a little
+## complicated: When [infsup] [operator] [infsupdec] syntax is used, the
+## decoration from the second argument would be lost, because the bare
+## implementation for the operator is evaluated. However, sufficient runtime
+## checks have been placed in the overloaded class operator implementations of
+## the infsup class as a workaround.
+##
+## The workaround is necessary, because otherwise this could lead to wrong
+## results, which is catastrophic for a verified computation package.
 superiorto ("infsup");
 
 endfunction

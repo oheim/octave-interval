@@ -43,6 +43,10 @@ if (not (isa (a, "infsup")))
 endif
 if (not (isa (b, "infsup")))
     b = infsup (b);
+elseif (isa (b, "infsupdec"))
+    ## Workaround for bug #42735
+    result = lt (a, b);
+    return
 endif
 
 result = ((a.inf < b.inf | (a.inf == -inf & b.inf == -inf)) & ...

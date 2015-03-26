@@ -57,6 +57,10 @@ if (not (isa (A, "infsup")))
 endif
 if (not (isa (b, "infsup")))
     b = infsup (b);
+elseif (isa (b, "infsupdec"))
+    ## Workaround for bug #42735
+    result = mldivide (A, b);
+    return
 endif
 
 if (not (issquare (A.inf)))
