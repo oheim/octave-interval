@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (exp (intervalpart (x)));
+result = newdec (exp (intervalpart (x)));
 ## exp is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

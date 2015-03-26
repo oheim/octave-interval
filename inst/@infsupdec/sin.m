@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (sin (intervalpart (x)));
+result = newdec (sin (intervalpart (x)));
 ## sin is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

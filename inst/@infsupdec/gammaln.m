@@ -63,7 +63,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (gammaln (intervalpart (x)));
+result = newdec (gammaln (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## gammaln is continuous everywhere, but defined for x > 0 only

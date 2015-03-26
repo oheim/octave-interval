@@ -43,7 +43,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (nthroot (intervalpart (x), n));
+result = newdec (nthroot (intervalpart (x), n));
 result.dec = mindec (result.dec, x.dec);
 
 ## nthroot is continuous everywhere, but not defined everywhere

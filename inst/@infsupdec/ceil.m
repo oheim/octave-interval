@@ -48,7 +48,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (ceil (intervalpart (x)));
+result = newdec (ceil (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## Between two integral numbers the function is constant, thus continuous

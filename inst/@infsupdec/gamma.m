@@ -64,7 +64,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (gamma (intervalpart (x)));
+result = newdec (gamma (intervalpart (x)));
 ## gamma is continuous where it is defined
 result.dec = mindec (result.dec, x.dec);
 

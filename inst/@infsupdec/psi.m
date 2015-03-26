@@ -62,7 +62,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (psi (intervalpart (x)));
+result = newdec (psi (intervalpart (x)));
 ## psi is continuous where it is defined
 result.dec = mindec (result.dec, x.dec);
 

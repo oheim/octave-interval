@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (csch (intervalpart (x)));
+result = newdec (csch (intervalpart (x)));
 ## csch is defined and continuous for x ~= 0
 result.dec = mindec (result.dec, x.dec);
 result.dec (inf (x) <= 0 & sup (x) >= 0) = "trv";

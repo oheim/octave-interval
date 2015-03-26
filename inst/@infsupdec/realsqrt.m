@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (realsqrt (intervalpart (x)));
+result = newdec (realsqrt (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## realsqrt is continuous everywhere, but defined for x >= 0 only

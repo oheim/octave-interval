@@ -49,7 +49,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (roundb (intervalpart (x)));
+result = newdec (roundb (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 discontinuous = not (issingleton (result));

@@ -67,7 +67,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (power (intervalpart (x), intervalpart (y)));
+result = newdec (power (intervalpart (x), intervalpart (y)));
 result.dec = mindec (result.dec, x.dec, y.dec);
 
 ## The general power function is continuous where it is defined

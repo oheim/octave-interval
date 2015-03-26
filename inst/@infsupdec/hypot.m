@@ -58,7 +58,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (hypot (intervalpart (x), intervalpart (y)));
+result = newdec (hypot (intervalpart (x), intervalpart (y)));
 ## hypot is continuous and defined everywhere
 result.dec = mindec (result.dec, x.dec, y.dec);
 

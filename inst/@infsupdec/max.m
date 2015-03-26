@@ -62,7 +62,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (max (intervalpart (x), intervalpart (y)));
+result = newdec (max (intervalpart (x), intervalpart (y)));
 ## max is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec, y.dec);
 

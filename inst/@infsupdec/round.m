@@ -49,7 +49,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (round (intervalpart (x)));
+result = newdec (round (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## Round is like a scaled fix function

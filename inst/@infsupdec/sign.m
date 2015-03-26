@@ -49,7 +49,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (sign (intervalpart (x)));
+result = newdec (sign (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## sign is defined everywhere and continuous for x ~= 0

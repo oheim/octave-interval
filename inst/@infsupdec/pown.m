@@ -49,7 +49,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (pown (intervalpart (x), p));
+result = newdec (pown (intervalpart (x), p));
 result.dec = mindec (result.dec, x.dec);
 
 ## x^P is undefined for x == 0 and P < 0

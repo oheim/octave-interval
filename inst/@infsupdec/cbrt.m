@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (cbrt (intervalpart (x)));
+result = newdec (cbrt (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## cbrt is continuous everywhere, but defined for x >= 0 only

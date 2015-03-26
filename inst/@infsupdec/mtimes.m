@@ -72,9 +72,9 @@ if (isscalar (x) || isscalar (y))
 endif
 
 if (nargin == 2)
-    result = infsupdec (mtimes (intervalpart (x), intervalpart (y)));
+    result = newdec (mtimes (intervalpart (x), intervalpart (y)));
 else
-    result = infsupdec (mtimes (intervalpart (x), intervalpart (y), accuracy));
+    result = newdec (mtimes (intervalpart (x), intervalpart (y), accuracy));
 endif
 
 dec_x = reducedec (x.dec, 2);

@@ -58,7 +58,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (times (intervalpart (x), intervalpart (y)));
+result = newdec (times (intervalpart (x), intervalpart (y)));
 ## times is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec, y.dec);
 

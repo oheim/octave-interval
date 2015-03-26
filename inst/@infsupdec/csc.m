@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (csc (intervalpart (x)));
+result = newdec (csc (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## Because csc (nextdown (pi)) < realmax, we can simple check for

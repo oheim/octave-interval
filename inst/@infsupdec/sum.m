@@ -61,7 +61,7 @@ else
     error ("interval:InvalidOperand", "sum: DIM must be a valid dimension")
 endif
 
-result = infsupdec (sum (intervalpart (x), dim));
+result = newdec (sum (intervalpart (x), dim));
 result.dec = mindec (result.dec, reducedec (x.dec, dim));
 
 endfunction

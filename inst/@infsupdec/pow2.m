@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (pow2 (intervalpart (x)));
+result = newdec (pow2 (intervalpart (x)));
 ## pow2 is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

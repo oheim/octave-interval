@@ -58,9 +58,8 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (mldivide (intervalpart (x), intervalpart (y)));
 ## Reverse operations should not carry decoration
-result.dec (:) = "trv";
+result = infsupdec (mldivide (intervalpart (x), intervalpart (y)), "trv");
 
 endfunction
 

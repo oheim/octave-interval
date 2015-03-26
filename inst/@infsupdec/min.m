@@ -62,7 +62,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (min (intervalpart (x), intervalpart (y)));
+result = newdec (min (intervalpart (x), intervalpart (y)));
 ## min is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec, y.dec);
 

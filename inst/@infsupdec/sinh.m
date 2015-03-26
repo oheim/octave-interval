@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (sinh (intervalpart (x)));
+result = newdec (sinh (intervalpart (x)));
 ## sinh is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

@@ -57,7 +57,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (atan2 (intervalpart (y), intervalpart (x)));
+result = newdec (atan2 (intervalpart (y), intervalpart (x)));
 result.dec = mindec (result.dec, y.dec, x.dec);
 
 ## The function is discontinuous for x <= 0 and y == 0

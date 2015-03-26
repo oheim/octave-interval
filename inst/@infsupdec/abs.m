@@ -48,7 +48,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (abs (intervalpart (x)));
+result = newdec (abs (intervalpart (x)));
 ## abs is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

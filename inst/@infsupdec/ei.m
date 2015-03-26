@@ -62,7 +62,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (ei (intervalpart (x)));
+result = newdec (ei (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## ei is continuous everywhere, but defined for x > 0 only

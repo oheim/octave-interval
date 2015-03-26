@@ -59,7 +59,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (plus (intervalpart (x), intervalpart (y)));
+result = newdec (plus (intervalpart (x), intervalpart (y)));
 ## plus is continuous and defined everywhere
 result.dec = mindec (result.dec, x.dec, y.dec);
 

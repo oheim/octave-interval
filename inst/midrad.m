@@ -73,7 +73,7 @@ switch nargin
                 r = infsupdec (-inf, r) & infsup (0, inf);
                 if (not (isnai (r)))
                     ## Fix decoration
-                    r = infsupdec (intervalpart (r));
+                    r = newdec (intervalpart (r));
                 endif
             endif
             if (isa (r, "infsupdec"))

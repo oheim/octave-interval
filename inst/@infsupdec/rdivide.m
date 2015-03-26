@@ -59,7 +59,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (rdivide (intervalpart (x), intervalpart (y)));
+result = newdec (rdivide (intervalpart (x), intervalpart (y)));
 result.dec = mindec (result.dec, x.dec, y.dec);
 
 divisionbyzero = ismember (0, y);

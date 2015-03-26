@@ -48,7 +48,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (log2 (intervalpart (x)));
+result = newdec (log2 (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## log2 is continuous everywhere, but defined for x > 0 only

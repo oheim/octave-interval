@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (tan (intervalpart (x)));
+result = newdec (tan (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## Because tan (nextdown (pi / 2)) < realmax, we can simple check for

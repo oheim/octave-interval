@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (acos (intervalpart (x)));
+result = newdec (acos (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 ## acos is continuous everywhere, but defined for [-1, 1] only
 result.dec (not (subset (x, infsup (-1, 1)))) = "trv";

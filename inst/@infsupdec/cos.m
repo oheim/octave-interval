@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (cos (intervalpart (x)));
+result = newdec (cos (intervalpart (x)));
 ## cos is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

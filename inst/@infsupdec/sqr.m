@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (sqr (intervalpart (x)));
+result = newdec (sqr (intervalpart (x)));
 ## sqr is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

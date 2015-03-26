@@ -70,7 +70,7 @@ if (isnai (z))
     return
 endif
 
-result = infsupdec (...
+result = newdec (...
         fma (intervalpart (x), intervalpart (y), intervalpart (z)));
 ## fma is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec, y.dec, z.dec);

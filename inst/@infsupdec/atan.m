@@ -46,7 +46,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (atan (intervalpart (x)));
+result = newdec (atan (intervalpart (x)));
 ## atan is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

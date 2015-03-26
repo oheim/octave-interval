@@ -63,7 +63,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (erf (intervalpart (x)));
+result = newdec (erf (intervalpart (x)));
 ## erf is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

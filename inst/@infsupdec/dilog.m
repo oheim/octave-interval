@@ -62,7 +62,7 @@ if (isnai (x))
     return
 endif
 
-result = infsupdec (dilog (intervalpart (x)));
+result = newdec (dilog (intervalpart (x)));
 ## dilog is defined and continuous everywhere
 result.dec = mindec (result.dec, x.dec);
 

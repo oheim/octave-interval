@@ -61,7 +61,7 @@ if (isnai (y))
     return
 endif
 
-result = infsupdec (pow (intervalpart (x), intervalpart (y)));
+result = newdec (pow (intervalpart (x), intervalpart (y)));
 result.dec = mindec (result.dec, x.dec, y.dec);
 
 ## pow is continuous everywhere (where it is defined),
