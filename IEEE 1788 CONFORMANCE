@@ -115,16 +115,15 @@ c) Implementation-defined behavior
        
        Any non-interval input to level 3 operations is implicitly converted
        into an interval and the operation silently continues on interval
-       inputs.  If at least one input is a decorated interval, bare interval
-       inputs are implicitly decorated as described by newDec in the standard
-       document.
+       inputs.
+       
+       If at least one input is a decorated interval, bare interval inputs are
+       implicitly decorated as described by newDec in the standard document.
+       Implicit promotion from a bare interval to a decorated interval is
+       signaled with GNU Octave's warning mechanism.
        
        If implicit conversion fails, bare interval operations raise an error,
        whereas the decorated interval operations continue on NaI inputs.
-       
-       Some level 3 operations (especially interval comparison operations) are
-       not allowed for NaI inputs and raise an error if evaluated for invalid
-       inputs.
        
    13) [Question does not apply to IEEE 754 conforming types.]
        

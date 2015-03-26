@@ -151,13 +151,18 @@ try
                 elseif (isa (varargin {1}, "infsup"))
                     bare = varargin {1};
                     isexact = true ();
+                    if (not (all (all (isempty (bare)))))
+                        warning ("interval:ImplicitPromote", ...
+                                ["Implicitly decorated bare interval; ", ...
+                                 "resulting decoration may be wrong"]);
+                    endif
                 else
                     [bare, isexact] = infsup (varargin {1});
                 endif
             case 2
                 [bare, isexact] = infsup (varargin {1}, varargin {2});
             otherwise
-                error ("interval:InvalidOperand", "too many arguments")
+                print_usage ();
         endswitch
     endif
     
@@ -191,11 +196,15 @@ try
                                         | strcmp (dec, "def"));
         isexact = false ();
         dec (empty_not_trv) = "trv";
+        warning ("interval:FixedDecoration", ...
+                 "Decoration of empty interval has been reduced to trv");
     endif
     uncommon_com = not (iscommoninterval (bare)) & strcmp (dec, "com");
     if (any (any (uncommon_com)))
         isexact = false ();
         dec (uncommon_com) = "dac";
+        warning ("interval:FixedDecoration", ...
+                 "Decoration of uncommon interval has been reduced to dac");
     endif
     if (not (all (all ( ...
             strcmp (dec, "com") | ...
@@ -205,12 +214,21 @@ try
         error ("interval:InvalidOperand", "illegal decoration");
     endif
 catch
-    if (not (strcmp ("interval:NaI", lasterror.identifier)))
-        ## The bare inverval:NaI error can only occur, if the interval literal
-        ## [NaI] is observed. In that particular case, we must not issue a
-        ## warning.
-        warning ("interval:NaI", lasterror.message);
-    endif
+    switch lasterror.identifier
+        case "Octave:invalid-fun-call"
+            print_usage ();
+        case "interval:NaI"
+            ## The bare inverval:NaI error can only occur, if the interval
+            ## literal [NaI] is observed. In that particular case, we must not
+            ## issue a warning.
+        case {"interval:PossiblyUndefined", ...
+              "interval:ImplicitPromote", ...
+              "interval:FixedDecoration"}
+            ## The user has set these warnings to error, which we must respect
+            rethrow (lasterror)
+        otherwise
+            warning ("interval:NaI", lasterror.message);
+    endswitch
     ## NaI representation is unique.
     bare = infsup ();
     dec = {"ill"};
@@ -232,7 +250,7 @@ endfunction
 %!  assert (isnai (infsupdec ("[nai]"))); # quiet [NaI]
 %!warning assert (isnai (infsupdec (3, 2)));
 %!warning assert (isnai (infsupdec ("Flugeldufel")));
-%!test "decoration adjustments";
+%!warning "decoration adjustments";
 %!  assert (inf (infsupdec (42, inf, "com")), 42);
 %!  assert (sup (infsupdec (42, inf, "com")), inf);
 %!  assert (strcmp (decorationpart (infsupdec (42, inf, "com")), "dac"));
