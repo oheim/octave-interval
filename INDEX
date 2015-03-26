@@ -7,6 +7,7 @@ Interval constructor
  hull
  midrad
  @infsup/infsup
+ @infsup/newdec
  @infsupdec/infsupdec
 Interval function (most with tightest accuracy)
  @infsup/abs
