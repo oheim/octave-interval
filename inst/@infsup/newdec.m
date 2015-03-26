@@ -1,4 +1,4 @@
-## Copyright 2014 Oliver Heimlich
+## Copyright 2014-2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,9 +15,10 @@
 
 ## -*- texinfo -*-
 ## @deftypefn {Interval Constructor} {} newdec (@var{X})
-## @cindex IEEE1788 newDec
 ## 
 ## Create a decorated interval from a bare interval.
+##
+## If @var{X} already is decorated, nothing happens.
 ##
 ## @example
 ## @group
@@ -25,7 +26,7 @@
 ##   @result{} [2, 3]_com
 ## @end group
 ## @end example
-## @seealso{setdec}
+## @seealso{@@infsupdec/infsupdec}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -34,6 +35,16 @@
 
 function xd = newdec (x)
 
-xd = infsupdec (x.inf, x.sup);
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
+
+warning ("off", "interval:ImplicitPromote", "local");
+xd = infsupdec (x);
 
 endfunction
+
+%!test "from the documentation string";
+%! assert (isequal (newdec (infsup (2, 3)), infsupdec (2, 3)));
+%!assert (isequal (newdec (infsupdec (2, 3)), infsupdec (2, 3)));

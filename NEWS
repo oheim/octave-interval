@@ -1,6 +1,13 @@
 0.1.5 xxxx-xx-xx
 ================
 
+ * Implicit decoration of bare intervals triggers a warning now and can be
+   allowed or forbidden by the user.  Implicit decoration of bare interval
+   literals is not affected.
+
+ * newdec: New operation for explicit promotion of bare intervals into
+   decorated intervals (without warning).
+
 Bugfixes
  * mtimes on decorated intervals supports broadcasting of scalar factors
 
