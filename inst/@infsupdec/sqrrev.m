@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## sqrrev (infsupdec (-2, 1))
-##   @result{} [-1, 1]_trv
+##   @result{} [-1, +1]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sqr}

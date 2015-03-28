@@ -43,7 +43,7 @@
 ## y = exacttointerval ("[,]")
 ##   @result{} [Entire]
 ## z = exacttointerval ("[21e-1]")
-##   @result{} error: interval wouldn't be exact
+##   @result{} ??? exacttointerval: interval wouldn't be exact
 ## @end group
 ## @end example
 ## @seealso{@@infsup/intervaltoexact, @@infsup/infsup}

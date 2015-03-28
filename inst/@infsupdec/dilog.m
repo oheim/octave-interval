@@ -25,15 +25,15 @@
 ## $$
 ## @end tex
 ## @ifnottex
-## @example
 ## @group
+## @verbatim
 ##                   x
 ##                  /  log (1 - t)
 ## dilog (x) = - Re | ------------- dt
 ##                  /       t
 ##                 0
+## @end verbatim
 ## @end group
-## @end example
 ## @end ifnottex
 ##
 ## Accuracy: The result is a tight enclosure.

@@ -226,7 +226,7 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
   "@group\n"
   "[l, u] = mpfr_vector_dot_d (-1, -1, 2, 3)\n"
   "  @result{} l = -3\n"
-  "  @result{} u = 6\n"
+  "    u = 6\n"
   "@end group\n"
   "@end example\n"
   "@seealso{dot}\n"

@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## sqrrev (infsup (-2, 1))
-##   @result{} [-1, 1]
+##   @result{} [-1, +1]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sqr}

@@ -25,7 +25,7 @@
 ## @group
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
-## x \ y
+## x .\ y
 ##   @result{} [.33333333333333331, 1]
 ## @end group
 ## @end example

@@ -25,15 +25,15 @@
 ## $$
 ## @end tex
 ## @ifnottex
-## @example
 ## @group
+## @verbatim
 ##                    ∞
 ##                   /
 ## gammaln (x) = log | t^(x-1) exp (-t) dt
 ##                   /
 ##                  0
+## @end verbatim
 ## @end group
-## @end example
 ## @end ifnottex
 ##
 ## Accuracy: The result is a tight enclosure.

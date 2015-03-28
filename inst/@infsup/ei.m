@@ -25,15 +25,15 @@
 ## $$
 ## @end tex
 ## @ifnottex
-## @example
 ## @group
+## @verbatim
 ##           x
 ##          /  exp (t)
 ## ei (x) = | --------- dt
 ##          /     t
 ##        -∞
+## @end verbatim
 ## @end group
-## @end example
 ## @end ifnottex
 ##
 ## Accuracy: The result is a tight enclosure.

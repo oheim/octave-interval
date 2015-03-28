@@ -174,7 +174,7 @@ DEFUN_DLD (mpfr_matrix_mul_d, args, nargout,
   "     101    71    53\n"
   "      71    83    71\n"
   "      53    71   101\n"
-  "  @result{} u = \n"
+  "    u = \n"
   "     134   104    86\n"
   "     104   116   104\n"
   "      86   104   134\n"

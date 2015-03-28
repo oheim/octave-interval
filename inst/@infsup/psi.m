@@ -25,15 +25,15 @@
 ## $$
 ## @end tex
 ## @ifnottex
-## @example
 ## @group
+## @verbatim
 ##            ∞
 ##           /  exp (-t)         exp (-xt)
 ## psi (x) = | ----------  -  -------------- dt
 ##           /     t           1 - exp (-t)
 ##          0
+## @end verbatim
 ## @end group
-## @end example
 ## @end ifnottex
 ##
 ## Accuracy: The result is a tight enclosure.

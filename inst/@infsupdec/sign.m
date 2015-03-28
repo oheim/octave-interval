@@ -27,7 +27,7 @@
 ##   @result{} [1]_com
 ## sign (infsupdec (0, 5))
 ##   @result{} [0, 1]_def
-## sign (infsup (-17))
+## sign (infsupdec (-17))
 ##   @result{} [-1]_com
 ## @end group
 ## @end example

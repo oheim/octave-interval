@@ -26,7 +26,7 @@
 ## floor (infsup (2.5, 3.5))
 ##   @result{} [2, 3]
 ## floor (infsup (-0.5, 5))
-##   @result{} [-1, 5]
+##   @result{} [-1, +5]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/ceil, @@infsup/round, @@infsup/roundb, @@infsup/fix}

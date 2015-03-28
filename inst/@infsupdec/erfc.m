@@ -25,15 +25,15 @@
 ## $$
 ## @end tex
 ## @ifnottex
-## @example
 ## @group
+## @verbatim
 ##                   ∞
 ##              2   /
 ## erfc (x) = ----- | exp (-t²) dt
 ##             √π   /
 ##                 x
+## @end verbatim
 ## @end group
-## @end example
 ## @end ifnottex
 ##
 ## Accuracy: The result is a tight enclosure.

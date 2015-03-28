@@ -25,7 +25,7 @@
 ## @group
 ## x = infsup (1);
 ## nextout (x) == infsup (1 - eps / 2, 1 + eps)
-##   @result{} True
+##   @result{} 1
 ## @end group
 ## @end example
 ## @end deftypefn
