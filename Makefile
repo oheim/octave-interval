@@ -86,6 +86,35 @@ check: $(OCT_COMPILED)
 	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
 	@echo
 
+####################################################################
+## The following rule checks for errors in @example blocks within ##
+## the functions' documentation strings                           ##
+####################################################################
+
+ifdef DOCTEST_HOME
+
+check: doctest
+.PHONY: doctest
+doctest: $(OCT_COMPILED)
+	@echo "Testing documentation strings ..."
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --path "$(DOCTEST_HOME)" --eval "doctest $(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.)"
+	@echo
+
+else
+
+check: DOCTESTWARNING
+.PHONY: DOCTESTWARNING
+DOCTESTWARNING:
+	@echo
+	@echo "WARNING: doctest-for-matlab not installed properly."
+	@echo "Documentation strings will not be checked."
+	@echo
+	@echo "Download doctest-for-matlab from https://github.com/catch22/doctest-for-matlab"
+	@echo "and set the environment variable DOCTEST_HOME accordingly."
+	@echo
+
+endif
+
 ###################################################################
 ## The following rules are required for generation of test files ##
 ###################################################################
