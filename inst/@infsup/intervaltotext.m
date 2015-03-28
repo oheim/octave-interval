@@ -38,20 +38,12 @@
 ## @example
 ## @group
 ## x = infsup (1 + eps);
+## y = nextout (x);
+## z = infsup (1);
 ## intervaltotext (x)
 ##   @result{} [1.0000000000000002, 1.0000000000000003]
-## @end group
-## @end example
-## @example
-## @group
-## y = nextout (x);
 ## intervaltotext (y)
 ##   @result{} [1, 1.0000000000000005]
-## @end group
-## @end example
-## @example
-## @group
-## z = infsup (1);
 ## intervaltotext (z)
 ##   @result{} [1]
 ## @end group
