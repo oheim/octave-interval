@@ -49,7 +49,7 @@ endif
 result = newdec (asin (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 ## asin is continuous everywhere, but defined for [-1, 1] only
-result.dec (not (subset (x, infsup (-1, 1)))) = "trv";
+result.dec (not (subset (x, infsupdec (-1, 1)))) = "trv";
 
 endfunction
 

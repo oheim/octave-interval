@@ -42,15 +42,19 @@ if (nargin ~= 2)
     print_usage ();
     return
 endif
-if (not (isa (x, "infsup")))
+if (isa (y, "infsupdec"))
+    if (not (isa (x, "infsupdec")))
+        x = infsupdec (x);
+    endif
+elseif (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-if (not (isa (y, "infsup")))
+if (isa (x, "infsupdec"))
+    if (not (isa (y, "infsupdec")))
+        y = infsupdec (y);
+    endif
+elseif (not (isa (y, "infsup")))
     y = infsup (y);
-elseif (isa (y, "infsupdec"))
-    ## Workaround for bug #42735
-    result = mrdivide (x, y);
-    return
 endif
 
 if (isscalar (x) || isscalar (y))

@@ -66,7 +66,7 @@ result = newdec (ei (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## ei is continuous everywhere, but defined for x > 0 only
-result.dec (not (interior (x, infsup(0, inf)))) = "trv";
+result.dec (not (interior (x, infsupdec (0, inf)))) = "trv";
 
 endfunction
 

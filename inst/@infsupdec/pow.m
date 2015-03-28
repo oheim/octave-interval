@@ -66,8 +66,9 @@ result.dec = mindec (result.dec, x.dec, y.dec);
 
 ## pow is continuous everywhere (where it is defined),
 ## but defined for x > 0 or (x = 0 and y > 0) only
-domain = interior (x, infsup (0, inf)) | ...
-        (subset (x, infsup (0, inf)) & interior (y, infsup (0, inf)));
+nonnegative = infsupdec (0, inf);
+domain = interior (x, nonnegative) | ...
+        (subset (x, nonnegative) & interior (y, nonnegative));
 
 result.dec (not (domain)) = "trv";
 

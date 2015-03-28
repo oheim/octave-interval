@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2015-02-20
 
-function result = exp (x)
+function result = expm1 (x)
 
 if (nargin ~= 1)
     print_usage ();

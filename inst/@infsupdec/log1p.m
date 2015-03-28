@@ -52,7 +52,7 @@ result = newdec (log1p (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## log1p is continuous everywhere, but defined for x > -1 only
-result.dec (not (interior (x, infsup(-1, inf)))) = "trv";
+result.dec (not (interior (x, infsupdec (-1, inf)))) = "trv";
 
 endfunction
 

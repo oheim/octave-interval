@@ -56,7 +56,7 @@ if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
 if (not (isa (c, "infsupdec")))
-    c = infsup (c);
+    c = infsupdec (c);
 endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);

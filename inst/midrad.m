@@ -70,7 +70,7 @@ switch nargin
                 if (isfloat (r))
                     r (r == -inf) = nan;
                 endif
-                r = infsupdec (-inf, r) & infsup (0, inf);
+                r = infsupdec (-inf, r) & infsupdec (0, inf);
                 if (not (isnai (r)))
                     ## Fix decoration
                     r = newdec (intervalpart (r));

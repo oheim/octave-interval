@@ -36,7 +36,7 @@ if (nargin ~= 2)
     return
 endif
 if (not (isa (x, "infsupdec")))
-    x = infsup (x);
+    x = infsupdec (x);
 endif
 if (isnai (x))
     result = x;

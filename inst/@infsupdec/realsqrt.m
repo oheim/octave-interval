@@ -50,7 +50,7 @@ result = newdec (realsqrt (intervalpart (x)));
 result.dec = mindec (result.dec, x.dec);
 
 ## realsqrt is continuous everywhere, but defined for x >= 0 only
-defined = subset (x, infsup (0, inf));
+defined = subset (x, infsupdec (0, inf));
 result.dec (not (defined)) = "trv";
 
 endfunction
