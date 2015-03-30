@@ -8,6 +8,10 @@
  * newdec: New operation for explicit promotion of bare intervals into
    decorated intervals (without warning).
 
+ * hull: In contrast to function or (|), the interval constructor is no longer
+   considered a set operation and can create intervals with a non-trivial
+   decoration.
+
 Bugfixes
  * mtimes on decorated intervals supports broadcasting of scalar factors
  * An error in GNU Octave core, which could lead to lost or wrong interval

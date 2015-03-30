@@ -29,7 +29,7 @@
 ##   @result{} [1, 4]_trv
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/and}
+## @seealso{@@infsupdec/and, hull}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

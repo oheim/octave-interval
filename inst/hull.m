@@ -27,18 +27,20 @@
 ##
 ## The result is equivalent to 
 ## @code{infsupdec (@var{X1}) | infsupdec (@var{X2}) | …}, but computed in a
-## more efficient way.
+## more efficient way and may carry a decoration other than @code{trv}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
 ## hull (1, 4, 3, 2)
-##   @result{} [1, 4]_trv
+##   @result{} [1, 4]_com
 ## hull (empty, entire)
 ##   @result{} [Entire]_trv
 ## hull ("0.1", "pi", "e")
-##   @result{} [.09999999999999999, 3.1415926535897936]_trv
+##   @result{} [.09999999999999999, 3.1415926535897936]_com
+## hull ("[0, 3]", "[4, 7]")
+##   @result{} [0, 7]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsup/or}
@@ -58,13 +60,13 @@ l (floats) = u (floats) = varargin (floats);
 
 ## Convert everything else to interval, if necessary
 decoratedintervals = cellfun ("isclass", varargin, "infsupdec");
-bareintervals = cellfun ("isclass", varargin, "infsup");
-toconvert = not (bareintervals | decoratedintervals | floats);
+to_convert = not (decoratedintervals | floats);
 ## Use infsupdec constructor for conversion, because it can handle decorated
-## interval literals.
-varargin (toconvert) = cellfun (@infsupdec, varargin (toconvert), ...
-                                "UniformOutput", false ());
-decoratedintervals = decoratedintervals | toconvert;
+## interval literals.  Also, it will trigger an interval:ImplicitPromote
+## warning if necessary.
+varargin (to_convert) = cellfun (@infsupdec, varargin (to_convert), ...
+                                 "UniformOutput", false ());
+decoratedintervals = not (floats);
 
 nais = cellfun (@isnai, varargin (decoratedintervals));
 if (any (nais))
@@ -74,14 +76,14 @@ if (any (nais))
 endif
 
 ## Extract inf and sup matrices for remaining elements of l and u.
-l (not (floats)) = cellfun (@inf, varargin (not (floats)), ...
-                            "UniformOutput", false ());
-u (not (floats)) = cellfun (@sup, varargin (not (floats)), ...
-                            "UniformOutput", false ());
+l (decoratedintervals) = cellfun (@inf, varargin (decoratedintervals), ...
+                                  "UniformOutput", false ());
+u (decoratedintervals) = cellfun (@sup, varargin (decoratedintervals), ...
+                                  "UniformOutput", false ());
 
 ## Broadcast nonsingleton dimensions (otherwise cat would throw an error below)
-sizes1 = cellfun("size", l, 1);
-sizes2 = cellfun("size", l, 2);
+sizes1 = cellfun ("size", l, 1);
+sizes2 = cellfun ("size", l, 2);
 targetsize = [max(sizes1) max(sizes2)];
 if ((targetsize (1) ~= 1 && min (sizes1 (sizes1 ~= 1)) ~= targetsize (1))
     || (targetsize (2) ~= 1 && min (sizes2 (sizes2 ~= 1)) ~= targetsize (2)))
@@ -106,22 +108,70 @@ if (any (targetsize ~= [1 1]))
     endif
 endif
 
-## Compute min and max of inf and sup matrices, NaNs are ignored
-l = min (cat (3, l {:}), [], 3);
-u = max (cat (3, u {:}), [], 3);
+## Compute min and max of inf and sup matrices, NaNs would be ignored and must
+## be considered
+nans = false (targetsize);
+l = cat (3, l {:});
+nans (any (isnan (l), 3)) = true;
+l = min (l, [], 3);
+u = cat (3, u {:});
+nans (any (isnan (u), 3)) = true;
+u = max (u, [], 3);
 
-## This is a set operation and may therefore not carry any other useful
-## decoration than trv.
-result = infsupdec (l, u, "trv");
+## Compute best possible decoration
+dec = cell (targetsize);
+dec (:) = "com";
+dec (not (isfinite (l) & isfinite (u))) = "dac";
+dec (nans) = "trv";
+
+## Consider input decorations
+if (any (decoratedintervals))
+    dec = mindec (dec, cellfun (@decorationpart, ...
+                                varargin (decoratedintervals), ...
+                                "UniformOutput", false ()));
+endif
+
+result = infsupdec (l, u, dec);
+
+endfunction
+
+function decoration = mindec (decoration, decorations)
+
+## Determine and apply the minimum decoration
+for i = 1 : length (decorations)
+    if (iscell (decorations {i}) && not (isempty (decorations {i})))
+        otherdecoration = decorations {i} {1};
+    else
+        otherdecoration = decorations {i};
+    endif
+
+    ## Only check distinct elements
+    for n = find (not (strcmp (decoration, decorations {i}))) (:)'
+        if (iscell (decorations {i}) && not (isscalar (decorations {i})))
+            otherdecoration = decorations {i} {n};
+        else
+            ## Scalars broadcast into the whole cell array. The value is set
+            ## once before the inner for loop.
+        endif
+
+        ## Because of the simple propagation order com > dac > def > trv, we
+        ## can use string comparison order.
+        if (sign ((decoration {n}) - otherdecoration) * [4; 2; 1] < 0)
+            decoration {n} = otherdecoration;
+        endif
+    endfor
+endfor
 
 endfunction
 
 %!assert (isnai (hull (nai)));
 %!assert (isempty (hull (nan)));
 %!assert (isequal (hull (2, nan, 3, 5), infsupdec (2, 5, "trv")));
-%!xtest assert (isequal (hull ([1, 2, 3], [5; 0; 2]), infsupdec ([1, 2, 3; 0, 0, 0; 1, 2, 2], [5, 5, 5; 1, 2, 3; 2, 2, 3], "trv")));
-%!xtest assert (isequal (hull (magic (3), 10), infsupdec (magic (3), 10 (ones (3)), "trv")));
+%!xtest assert (isequal (hull ([1, 2, 3], [5; 0; 2]), infsupdec ([1, 2, 3; 0, 0, 0; 1, 2, 2], [5, 5, 5; 1, 2, 3; 2, 2, 3], "com")));
+%!xtest assert (isequal (hull (magic (3), 10), infsupdec (magic (3), 10 (ones (3)), "com")));
+%!xtest assert (isequal (hull (2, magic (3), [nan, 2, 3; nan, 1, 1; 99, 100, nan]), infsupdec ([2, 1, 2; 2, 1, 1; 2, 2, 2], [8, 2, 6; 3, 5, 7; 99, 100, 2], {"trv", "com", "com"; "trv", "com", "com"; "com", "com", "trv"})));
 %!test "from the documentation string";
-%! assert (isequal (hull (1, 2, 3, 4), infsupdec (1, 4, "trv")));
+%! assert (isequal (hull (1, 2, 3, 4), infsupdec (1, 4, "com")));
 %! assert (isequal (hull (empty, entire), infsupdec (-inf, inf, "trv")));
-%! assert (isequal (hull ("0.1", "pi", "e"), infsupdec (0.1 - eps / 16, pi + eps * 2, "trv")));
+%! assert (isequal (hull ("0.1", "pi", "e"), infsupdec (0.1 - eps / 16, pi + eps * 2, "com")));
+%! assert (isequal (hull ("[0, 3]", "[4, 7]"), infsupdec ("[0, 7]_com")));
