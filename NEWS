@@ -10,6 +10,10 @@
 
 Bugfixes
  * mtimes on decorated intervals supports broadcasting of scalar factors
+ * An error in GNU Octave core, which could lead to lost or wrong interval
+   decorations, no longer affects decorated intervals (bug #42735)
+ * Some errors in the function documentation have been fixed (thanks to
+   doctest-for-matlab and Colin's texinfo compatibility patches)
 
 0.1.4 2015-03-15
 ================
