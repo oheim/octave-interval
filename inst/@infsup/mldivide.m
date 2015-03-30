@@ -63,16 +63,17 @@ elseif (isa (b, "infsupdec"))
     return
 endif
 
-if (not (issquare (A.inf)))
+if (isscalar (A.inf))
+    result = ldivide (A, b);
+    return
+elseif (not (issquare (A.inf)))
     error ("interval:InvalidOperand", "mldivide: Matrix is not square");
-endif
-if (rows (A.inf) ~= rows (b.inf))
+elseif (rows (A.inf) ~= rows (b.inf))
     error ("interval:InvalidOperand", ["mldivide: ", ...
         "nonconformant arguments ", ...
         "(op1 is " num2str(rows (A.inf)) "×" num2str(columns (A.inf)) ",", ...
         " op2 is " num2str(rows (b.inf)) "×" num2str(columns (b.inf)) ")"]);
-endif
-if (isempty (A.inf))
+elseif (isempty (A.inf))
     result = infsup (zeros (0, columns (b.inf)));
     return
 endif

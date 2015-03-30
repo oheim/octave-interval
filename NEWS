@@ -13,7 +13,7 @@
    decoration.
 
 Bugfixes
- * mtimes on decorated intervals supports broadcasting of scalar factors
+ * mtimes, mldivide: Support for broadcasting of scalar parameters
  * An error in GNU Octave core, which could lead to lost or wrong interval
    decorations, no longer affects decorated intervals (bug #42735)
  * Some errors in the function documentation have been fixed (thanks to
