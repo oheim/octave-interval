@@ -37,6 +37,7 @@ for SUBCLASS_FILE in $SUBCLASS_FUNCTIONS
     HEAD_OF_BASE=`head --lines=$START_OF_SYNC_BASE "$BASECLASS_FILE"`
     TAIL_OF_BASE=`tail --lines=+$END_OF_SYNC_BASE "$BASECLASS_FILE"`
     DOC_OF_SUB=`head --lines=$END_OF_SYNC_SUB "$SUBCLASS_FILE" | head --lines=-1 | tail --lines=+$START_OF_SYNC_SUB | tail --lines=+2`
+    DOC_OF_SUB=${DOC_OF_SUB//infsupdec/infsup}
     
     ## Merge everything into the base class file
     (echo "$HEAD_OF_BASE"; echo "$DOC_OF_SUB"; echo "$TAIL_OF_BASE") > "$BASECLASS_FILE"

@@ -45,4 +45,4 @@ s = intervaltotext (x, "exact hexadecimal");
 
 endfunction
 
-%!assert (intervaltoexact (infsup (1+eps)), "[0x1.0000000000001]");
+%!assert (intervaltoexact (infsup (1 + eps)), "[0X1.0000000000001P+0]");

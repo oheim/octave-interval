@@ -19,19 +19,21 @@
 ## @deftypefnx {Function File} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
 ## 
 ## Build an approximate representation of the interval @var{X}.
+##
+## Output @var{S} is a simple string for scalar intervals, and a cell array of
+## strings for interval matrices.
 ## 
 ## The interval boundaries are stored in binary floating point format and are
 ## converted to decimal or hexadecimal format with possible precision loss.  If
 ## output is not exact, the boundaries are rounded accordingly (e. g. the upper
 ## boundary is rounded towards infinite for output representation).
 ## 
-## Enough digits are used to ensure separation of subsequent floting point
+## Enough digits are used to ensure separation of subsequent floating point
 ## numbers.  The exact decimal format may produce a lot of digits.
 ##
 ## Possible values for @var{FORMAT} are: @code{decimal} (default),
 ## @code{exact decimal}, @code{exact hexadecimal}
 ## 
-## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
 ## Accuracy: For all intervals @var{X} is an accurate subset of
 ## @code{infsupdec (intervaltotext (@var{X}))}.
 ## @end deftypefn
@@ -46,7 +48,6 @@ if (nargin > 2)
     print_usage ();
     return
 endif
-
 if (nargin < 2)
     format = "decimal";
 endif
@@ -54,17 +55,18 @@ endif
 if (isnai (x))
     s = "[NaI]";
     isexact = true ();
-else
-    ## Using intervalpart we can call the superclass' method.
-    ## In later GNU Octave versions it is also possible to call
-    ## intervaltotext@infsup (x, format);
-    [s, isexact] = intervaltotext (intervalpart (x), format);
-    s = strcat (s, "_", x.dec {1});
+    return
+endif
+
+[s, isexact] = intervaltotext (intervalpart (x), format);
+s = strcat (s, "_", x.dec);
+if (isscalar (s))
+    s = s {1};
 endif
 
 endfunction
 
 %!assert (intervaltotext (infsupdec (1 + eps), "exact decimal"), "[1.0000000000000002220446049250313080847263336181640625]_com");
-%!assert (intervaltotext (infsupdec (1 + eps), "exact hexadecimal"), "[0x1.0000000000001]_com");
+%!assert (intervaltotext (infsupdec (1 + eps), "exact hexadecimal"), "[0X1.0000000000001P+0]_com");
 %!assert (intervaltotext (infsupdec (1 + eps)), "[1.0000000000000002, 1.0000000000000003]_com");
 %!assert (intervaltotext (infsupdec (1)), "[1]_com");
