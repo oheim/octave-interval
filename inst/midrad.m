@@ -87,12 +87,13 @@ switch nargin
             endif
             sup_r = sup (r);
             sup_r (sup_r < 0) = -inf;
+            warning ("off", "interval:FixedDecoration", "local")
             r = infsupdec (-sup_r, sup_r, dec_r);
             
             result = m + r;
         endif
         
-    otherwise 
+    otherwise
         print_usage ();
 endswitch
 
