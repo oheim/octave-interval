@@ -24,63 +24,22 @@ if (nargin ~= 1)
     return
 endif
 
-if (numel (x) < 1)
-    if (length (inputname (1)) > 0)
-        fprintf ("%s = ", inputname (1));
-    endif
-    fprintf ("%d×%d interval matrix\n", size (x, 1), size (x, 2));
-    return
-endif
-
-if (numel (x) == 1)
-    [s, isexact] = intervaltotext (x);
-    if (length (inputname (1)) > 0)
-        fprintf ("%s ", inputname (1));
-        if (isexact)
-            fprintf ("= ");
-        else
-            fprintf ("⊂ ");
-        endif
-    endif
-    fprintf (s);
-    fprintf ("\n");
-    return
-endif
-
-string = cell (1, columns (x));
-columnwidth = zeros (columns (x), 1, "uint8");
-isexact = true ();
-idx.type = "()"; # subsref with operator syntax doesn't work below
-## Build text representation for each column
-for column = 1 : columns (x)
-    columnstring = cell (rows (x), 1);
-    for row = 1 : rows (x)
-        idx.subs = {row, column};
-        interval = subsref (x, idx);
-        [columnstring{row}, elementisexact] = ...
-            intervaltotext (interval);
-        isexact = and (isexact, elementisexact);
-        columnwidth (column) = max (columnwidth (column), ...
-                                    length (columnstring {row}));
-    endfor
-    ## Right align elements within their column
-    columnwidth (column) += 3; # add 3 spaces between columns
-    for row = 1 : rows (x)
-        columnstring {row} = prepad (columnstring {row}, ...
-                                     columnwidth (column), " ");
-    endfor
-    string {column} = columnstring;
-endfor
-
-## Print variable name and header
+[s, isexact] = intervaltotext (x);
 if (length (inputname (1)) > 0)
     fprintf ("%s ", inputname (1));
     if (isexact)
-        fprintf ("=");
+        fprintf ("= ");
     else
-        fprintf ("⊂");
+        fprintf ("⊂ ");
     endif
-    fprintf (" %d×%d interval ", size (x, 1), size (x, 2));
+endif
+
+if (not (iscell (s)))
+    fprintf (s);
+    fprintf ("\n");
+    return
+else
+    fprintf ("%d×%d interval ", size (x, 1), size (x, 2));
     if (isvector (x))
         fprintf ("vector");
     else
@@ -89,18 +48,25 @@ if (length (inputname (1)) > 0)
     fprintf ("\n\n");
 endif
 
+columnwidth = max (cellfun ("length", s), [], 1);
+columnwidth += 3; # add 3 spaces between columns
+
 ## Print all columns
 maxwidth = terminal_size () (2);
 cstart = uint32 (1);
+cend = cstart - 1;
 while (cstart <= columns (x))
     ## Determine number of columns to print, print at least one column
-    cend = cstart;
-    usedwidth = columnwidth (cend);
-    while (cend < columns (x) && ...
-           usedwidth + columnwidth (cend + 1) <= maxwidth)
+    usedwidth = 0;
+    submatrix = "";
+    do
         cend ++;
+        submatrix = strcat (submatrix, ...
+            prepad (strjust (char (s (:, cend))), columnwidth (cend), " ", 2));
         usedwidth += columnwidth (cend);
-    endwhile
+    until (cend == columns (x) || ...
+           (split_long_rows () && ...
+             usedwidth + columnwidth (cend + 1) > maxwidth))
     if (cstart > 1 || cend < columns (x))
         if (cend > cstart)
             fprintf (" Columns %d through %d:\n\n", cstart, cend);
@@ -108,8 +74,8 @@ while (cstart <= columns (x))
             fprintf (" Column %d:\n\n", cstart);
         endif
     endif
-    fprintf (strjoin (strcat (string {cstart : cend}), "\n"));
-    fprintf ("\n\n");
+    disp (submatrix);
+    fprintf ("\n");
     cstart = cend + 1;
 endwhile
 
