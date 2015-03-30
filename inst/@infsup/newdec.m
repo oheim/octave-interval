@@ -14,11 +14,16 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @deftypefn {Interval Constructor} {} newdec (@var{X})
+## @deftypefn {Function File} {} newdec (@var{X})
 ## 
 ## Create a decorated interval from a bare interval.
 ##
-## If @var{X} already is decorated, nothing happens.
+## The decorated interval will carry the best possible decoration, i. e.,
+## @code{trv} for empty intervals, @code{dac} for unbound intervals, and
+## @code{com} for common intervals.
+##
+## If @var{X} already is decorated, nothing happens.  In particular, the
+## decoration will not be changed in order to not lose any information.
 ##
 ## @example
 ## @group
@@ -48,3 +53,4 @@ endfunction
 %!test "from the documentation string";
 %! assert (isequal (newdec (infsup (2, 3)), infsupdec (2, 3)));
 %!assert (isequal (newdec (infsupdec (2, 3)), infsupdec (2, 3)));
+%!assert (isequal (newdec (infsupdec (1, "trv")), infsupdec (1, "trv")));
