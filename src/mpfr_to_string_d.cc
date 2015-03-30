@@ -63,7 +63,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   const mpfr_rnd_t rnd     = parse_rounding_mode (
                              args (0).matrix_value ().elem (0));
   const std::string format = args (1).string_value ();
-  const char* str_template = (format == "decimal") ? "%.17R*G" :
+  const char* str_template = (format == "decimal") ? "%.16R*G" :
                              (format == "exact decimal") ? "%.751R*G" : 
                              (format == "exact hexadecimal") ? "%.13R*A" :
                              "";
@@ -78,11 +78,13 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   
   char buf [768];
   mpfr_t mp;
+  mpfr_t zero;
   mpfr_init2 (mp, BINARY64_PRECISION);
+  mpfr_init2 (zero, BINARY64_PRECISION);
+  mpfr_set_zero (zero, 0);
   
   Cell str (dim_vector (x.rows (), x.cols ()));
   bool isexact = true;
-  bool check_exactness = (format == "decimal" && nargout >= 2);
   const mpfr_rnd_t complementary_rnd = (rnd == MPFR_RNDD) ? MPFR_RNDU :
                                        (rnd == MPFR_RNDU) ? MPFR_RNDD :
                                        (rnd == MPFR_RNDZ) ? MPFR_RNDA :
@@ -95,18 +97,34 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
       mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
       mpfr_sprintf (buf, str_template, rnd, mp);
       str.elem (i) = buf;
-      if (check_exactness)
+      if (format == "decimal")
         {
-          mpfr_sprintf (buf, str_template, complementary_rnd, mp);
-          if (str.elem (i).string_value () != buf)
+          if (x.elem (i) != 0.0)
             {
-              isexact = false;
-              check_exactness = false;
+              // Precision 16 might not be enough
+              mpfr_nexttoward (mp, zero);
+              mpfr_sprintf (buf, str_template, rnd, mp);
+              mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
+              if (str.elem (i).string_value () == buf)
+                {
+                  // Increase precision to 17
+                  mpfr_sprintf (buf, "%.17R*G", rnd, mp);
+                  str.elem (i) = buf;
+                }
+            }
+          
+          
+          if (isexact && nargout >=2)
+            {
+              mpfr_sprintf (buf, str_template, complementary_rnd, mp);
+              if (str.elem (i).string_value () != buf)
+                isexact = false;
             }
         }
     }
   
   mpfr_clear (mp);
+  mpfr_clear (zero);
   octave_value_list result;
   result (0) = str;
   result (1) = isexact;

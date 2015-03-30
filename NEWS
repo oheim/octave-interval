@@ -12,7 +12,8 @@
    considered a set operation and can create intervals with a non-trivial
    decoration.
  
- * Improved performance of console output, intervaltotext and intervaltoexact.
+ * Improved accuracy and performance of console output, intervaltotext and
+   intervaltoexact.
 
 Bugfixes
  * mtimes, mldivide: Support for broadcasting of scalar parameters
