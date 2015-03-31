@@ -117,6 +117,6 @@ endfunction
 %!assert (intervaltotext (infsup (1 + eps), "exact decimal"), "[1.0000000000000002220446049250313080847263336181640625]");
 %!assert (intervaltotext (infsup (1 + eps), "exact hexadecimal"), "[0X1.0000000000001P+0]");
 %!test "from the documentation string";
-%! assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.0000000000000003]");
+%! assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.000000000000001]");
 %! assert (intervaltotext (nextout (infsup (1 + eps))), "[1, 1.0000000000000005]");
 %! assert (intervaltotext (infsup (1)), "[1]");
