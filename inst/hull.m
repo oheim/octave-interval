@@ -38,7 +38,7 @@
 ## hull (empty, entire)
 ##   @result{} [Entire]_trv
 ## hull ("0.1", "pi", "e")
-##   @result{} [.09999999999999999, 3.1415926535897936]_com
+##   @result{} [0.09999999999999999, 3.1415926535897936]_com
 ## hull ("[0, 3]", "[4, 7]")
 ##   @result{} [0, 7]_com
 ## @end group

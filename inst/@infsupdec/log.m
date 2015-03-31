@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## log (infsupdec (2))
-##   @result{} [.6931471805599452, .6931471805599454]_com
+##   @result{} [0.6931471805599452, 0.6931471805599454]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/exp, @@infsupdec/log2, @@infsupdec/log10}

@@ -26,7 +26,7 @@
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
 ## x .\ y
-##   @result{} [.33333333333333331, 1]
+##   @result{} [0.3333333333333333, 1]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/times}

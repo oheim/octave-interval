@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## asin (infsupdec (.5))
-##   @result{} [.5235987755982988, .523598775598299]_com
+##   @result{} [0.5235987755982988, 0.523598775598299]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sin}

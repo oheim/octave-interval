@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## cosrev (infsupdec (0), infsupdec (6, 9))
-##   @result {} [7.8539816339744827, 7.8539816339744846]_trv
+##   @result {} [7.853981633974482, 7.853981633974485]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cos}

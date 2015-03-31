@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## gammaln (infsup (1.5))
-##   @result{} [-.12078223763524524, -.12078223763524521]
+##   @result{} [-0.12078223763524524, -0.12078223763524521]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/psi, @@infsup/gamma}

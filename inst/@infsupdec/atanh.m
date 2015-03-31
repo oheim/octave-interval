@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## atanh (infsupdec (.5))
-##   @result{} [.5493061443340547, .5493061443340549]_com
+##   @result{} [0.5493061443340547, 0.5493061443340549]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/tanh}

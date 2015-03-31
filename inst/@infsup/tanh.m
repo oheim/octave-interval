@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## tanh (infsup (1))
-##   @result{} [.7615941559557648, .761594155955765]
+##   @result{} [0.7615941559557648, 0.761594155955765]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/atanh, @@infsup/coth, @@infsup/sinh, @@infsup/cosh}

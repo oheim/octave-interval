@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## sinrev (infsup (-1), infsup (0, 6))
-##   @result{} [4.7123889803846896, 4.7123889803846906]
+##   @result{} [4.712388980384689, 4.712388980384691]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sin}

@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## tanrev (infsup (0), infsup (2, 4))
-##   @result{} [3.1415926535897931, 3.1415926535897936]
+##   @result{} [3.141592653589793, 3.1415926535897936]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/tan}

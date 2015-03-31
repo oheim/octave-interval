@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## rsqrt (infsup (-6, 4))
-##   @result{} [.5, Inf]
+##   @result{} [0.5, Inf]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/realsqrt}

@@ -63,8 +63,8 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   const mpfr_rnd_t rnd     = parse_rounding_mode (
                              args (0).matrix_value ().elem (0));
   const std::string format = args (1).string_value ();
-  const char* str_template = (format == "decimal") ? "%.16R*G" :
-                             (format == "exact decimal") ? "%.751R*G" : 
+  const char* str_template = (format == "decimal") ? "%.16R*g" :
+                             (format == "exact decimal") ? "%.751R*g" :
                              (format == "exact hexadecimal") ? "%.13R*A" :
                              "";
   const Matrix x           = args (2).matrix_value ();
@@ -108,7 +108,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
               if (str.elem (i).string_value () == buf)
                 {
                   // Increase precision to 17
-                  mpfr_sprintf (buf, "%.17R*G", rnd, mp);
+                  mpfr_sprintf (buf, "%.17R*g", rnd, mp);
                   str.elem (i) = buf;
                 }
             }

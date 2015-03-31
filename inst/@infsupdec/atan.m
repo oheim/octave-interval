@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## atan (infsupdec (1))
-##   @result{} [.7853981633974482, .7853981633974484]_com
+##   @result{} [0.7853981633974482, 0.7853981633974484]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/tan, @@infsupdec/atan2}

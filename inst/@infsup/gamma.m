@@ -42,7 +42,7 @@
 ## @example
 ## @group
 ## gamma (infsup (1.5))
-##   @result{} [.8862269254527579, .8862269254527581]
+##   @result{} [0.8862269254527579, 0.8862269254527581]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/psi, @@infsup/gammaln}

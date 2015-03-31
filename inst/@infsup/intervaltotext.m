@@ -40,7 +40,7 @@
 ## @group
 ## x = infsup (1 + eps);
 ## intervaltotext (x)
-##   @result{} [1.0000000000000002, 1.0000000000000003]
+##   @result{} [1.0000000000000002, 1.000000000000001]
 ## @end group
 ## @end example
 ## @example

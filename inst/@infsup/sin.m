@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sin (infsup (1))
-##   @result{} [.8414709848078965, .8414709848078967]
+##   @result{} [0.8414709848078965, 0.8414709848078967]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/asin, @@infsup/csc, @@infsup/sinh}

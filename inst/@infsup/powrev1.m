@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## powrev1 (infsup (2, 5), infsup (3, 6))
-##   @result{} [1.2457309396155171, 2.4494897427831784]
+##   @result{} [1.245730939615517, 2.449489742783179]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow}

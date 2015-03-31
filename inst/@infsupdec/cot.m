@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## cot (infsupdec (1))
-##   @result{} [.6420926159343306, .6420926159343308]_com
+##   @result{} [0.6420926159343306, 0.6420926159343308]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/tan, @@infsupdec/csc, @@infsupdec/sec}

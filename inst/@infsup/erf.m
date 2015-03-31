@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## erf (infsup (1))
-##   @result{} [.8427007929497147, .8427007929497149]
+##   @result{} [0.8427007929497147, 0.8427007929497149]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/erfc}

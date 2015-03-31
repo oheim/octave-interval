@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## sumabs ([infsup(1), pow2(-1074), -1])
-##   @result{} [2, 2.0000000000000005]
+##   @result{} [2, 2.000000000000001]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sum, @@infsup/plus, @@infsup/abs}

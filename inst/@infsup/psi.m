@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## psi (infsup (1))
-##   @result{} [-.5772156649015329, -.5772156649015327]
+##   @result{} [-0.5772156649015329, -0.5772156649015327]
 ## @end group
 ## @end example
 ## @end deftypefn

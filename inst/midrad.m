@@ -29,7 +29,7 @@
 ## midrad (0, inf)
 ##   @result{} [Entire]_dac
 ## midrad ("1.1", "0.1")
-##   @result{} [.9999999999999997, 1.2000000000000002]_com
+##   @result{} [0.9999999999999997, 1.200000000000001]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsup/infsup, hull}

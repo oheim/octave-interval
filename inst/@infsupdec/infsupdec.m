@@ -73,9 +73,9 @@
 ## x = infsupdec (2, 3)
 ##   @result{} [2, 3]_com
 ## y = infsupdec ("0.1")
-##   @result{} [.09999999999999999, .10000000000000001]_com
+##   @result{} [0.09999999999999999, 0.1000000000000001]_com
 ## z = infsupdec ("0.1", "0.2")
-##   @result{} [.09999999999999999, .20000000000000002]_com
+##   @result{} [0.09999999999999999, 0.2000000000000001]_com
 ## @end group
 ## @end example
 ## @seealso{exacttointerval}

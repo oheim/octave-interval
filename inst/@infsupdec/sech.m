@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sech (infsupdec (1))
-##   @result{} [.6480542736638853, .6480542736638855]_com
+##   @result{} [0.6480542736638853, 0.6480542736638855]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cosh, @@infsupdec/csch, @@infsupdec/coth}
