@@ -21,6 +21,10 @@
 ##
 ## Accuracy: The result is exact.
 ##
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
+## The function is a set operation and the result carries the @code{trv}
+## decoration at best.
+##
 ## @example
 ## @group
 ## x = infsupdec (1, 3);
