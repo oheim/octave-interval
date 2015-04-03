@@ -105,6 +105,8 @@ Set operation
  @infsup/and
  @infsup/nextout
  @infsup/or
+ @infsup/setdiff
+ @infsup/setxor
 Interval reverse operation
  @infsup/absrev
  @infsup/atan2rev1
