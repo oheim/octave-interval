@@ -62,10 +62,10 @@ endif
 ##   ------0------>
 ##     p4  |  p3   x
 ##
-x1 = x4 = x & infsup (-inf, 0);
-y1 = y2 = y & infsup (0, inf);
-x2 = x3 = x & infsup (0, inf);
-y3 = y4 = y & infsup (-inf, 0);
+x1 = x4 = intersect (x, infsup (-inf, 0));
+y1 = y2 = intersect (y, infsup (0, inf));
+x2 = x3 = intersect (x, infsup (0, inf));
+y3 = y4 = intersect (y, infsup (-inf, 0));
 
 ## Intersect each partition with atan2's domain
 p1 = not (isempty (x1) | isempty (y1)) & (x1.inf < 0 | y1.sup > 0);

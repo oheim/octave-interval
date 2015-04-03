@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} {} @var{A} & @var{B}
+## @deftypefn {Function File} {} {} intersect (@var{A}, @var{B})
 ## 
 ## Intersect two intervals.
 ##
@@ -25,18 +25,18 @@
 ## @group
 ## x = infsup (1, 3);
 ## y = infsup (2, 4);
-## x & y
+## intersect (x, y)
 ##   @result{} [2, 3]
 ## @end group
 ## @end example
-## @seealso{@@infsup/or}
+## @seealso{@@infsup/union, @@infsup/setdiff, @@infsup/setxor}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-02
 
-function result = and (a, b)
+function result = intersect (a, b)
 
 if (nargin ~= 2)
     print_usage ();
@@ -47,10 +47,6 @@ if (not (isa (a, "infsup")))
 endif
 if (not (isa (b, "infsup")))
     b = infsup (b);
-elseif (isa (b, "infsupdec"))
-    ## Workaround for bug #42735
-    result = and (a, b);
-    return
 endif
 
 ## This also works for unbound intervals and empty intervals
@@ -67,25 +63,25 @@ result = infsup (l, u);
 endfunction
 
 %!test "Empty interval";
-%! assert (and (infsup (), infsup ()) == infsup ());
-%! assert (and (infsup (), infsup (1)) == infsup ());
-%! assert (and (infsup (0), infsup ()) == infsup ());
-%! assert (and (infsup (-inf, inf), infsup ()) == infsup ());
+%! assert (intersect (infsup (), infsup ()) == infsup ());
+%! assert (intersect (infsup (), infsup (1)) == infsup ());
+%! assert (intersect (infsup (0), infsup ()) == infsup ());
+%! assert (intersect (infsup (-inf, inf), infsup ()) == infsup ());
 %!test "Singleton intervals";
-%! assert (and (infsup (0), infsup (1)) == infsup ());
-%! assert (and (infsup (0), infsup (0)) == infsup (0));
+%! assert (intersect (infsup (0), infsup (1)) == infsup ());
+%! assert (intersect (infsup (0), infsup (0)) == infsup (0));
 %!test "Bounded intervals";
-%! assert (and (infsup (1, 2), infsup (3, 4)) == infsup ());
-%! assert (and (infsup (1, 2), infsup (2, 3)) == infsup (2));
-%! assert (and (infsup (1, 2), infsup (1.5, 2.5)) == infsup (1.5, 2));
-%! assert (and (infsup (1, 2), infsup (1, 2)) == infsup (1, 2));
+%! assert (intersect (infsup (1, 2), infsup (3, 4)) == infsup ());
+%! assert (intersect (infsup (1, 2), infsup (2, 3)) == infsup (2));
+%! assert (intersect (infsup (1, 2), infsup (1.5, 2.5)) == infsup (1.5, 2));
+%! assert (intersect (infsup (1, 2), infsup (1, 2)) == infsup (1, 2));
 %!test "Unbounded intervals";
-%! assert (and (infsup (0, inf), infsup (-inf, 0)) == infsup (0));
-%! assert (and (infsup (1, inf), infsup (-inf, -1)) == infsup ());
-%! assert (and (infsup (-1, inf), infsup (-inf, 1)) == infsup (-1, 1));
-%! assert (and (infsup (-inf, inf), infsup (42)) == infsup (42));
-%! assert (and (infsup (42), infsup (-inf, inf)) == infsup (42));
-%! assert (and (infsup (-inf, 0), infsup (-inf, inf)) == infsup (-inf, 0));
-%! assert (and (infsup (-inf, inf), infsup (-inf, inf)) == infsup (-inf, inf));
+%! assert (intersect (infsup (0, inf), infsup (-inf, 0)) == infsup (0));
+%! assert (intersect (infsup (1, inf), infsup (-inf, -1)) == infsup ());
+%! assert (intersect (infsup (-1, inf), infsup (-inf, 1)) == infsup (-1, 1));
+%! assert (intersect (infsup (-inf, inf), infsup (42)) == infsup (42));
+%! assert (intersect (infsup (42), infsup (-inf, inf)) == infsup (42));
+%! assert (intersect (infsup (-inf, 0), infsup (-inf, inf)) == infsup (-inf, 0));
+%! assert (intersect (infsup (-inf, inf), infsup (-inf, inf)) == infsup (-inf, inf));
 %!test "from the documentation string";
-%! assert (and (infsup (1, 3), infsup (2, 4)) == infsup (2, 3));
+%! assert (intersect (infsup (1, 3), infsup (2, 4)) == infsup (2, 3));

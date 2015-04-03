@@ -99,14 +99,16 @@ for i = 1 : numel (x.inf)
         zMinus = infsup ();
     elseif (isfinite (y.inf (i)) && isfinite (y.sup (i)) && ceil (y.inf (i)) == floor (y.sup (i)))
         ## y contains a single integer
-        xMinus = infsup (x.inf (i), x.sup (i)) & infsup (-inf, 0); # speed up computation of pown
+        xMinus = intersect (...
+                     infsup (x.inf (i), x.sup (i)), ...
+                     infsup (-inf, 0)); # speed up computation of pown
         zMinus = pown (xMinus, ceil (y.inf (i)));
     else
         ## y contains several integers
         zMinus = multipleintegers (infsup (x.inf (i), x.sup (i)), infsup (y.inf (i), y.sup (i)));
     endif
     
-    z = zMinus | zZero | infsup (zPlus.inf (i), zPlus.sup (i));
+    z = union (union (zMinus, zZero), infsup (zPlus.inf (i), zPlus.sup (i)));
     l (i) = z.inf;
     u (i) = z.sup;
 endfor
@@ -118,8 +120,8 @@ endfunction
 function z = multipleintegers (x, y)
 ## Value of power on NEGATIVE base and multiple integral exponents
 
-x = x & infsup (-inf, 0);
-y = ceil (y) & floor (y);
+x = intersect (x, infsup (-inf, 0));
+y = intersect (ceil (y), floor (y));
 assert (y.inf < y.sup);
 assert (not (isempty (x)));
 assert (x.inf < 0);
@@ -141,7 +143,7 @@ else
     endif
     if (((x.inf < -1 && -1 < x.sup) || -1 <= x.inf) && ...
         ((y.inf <= -1 && 1 <= y.sup) || y.sup <= 0))
-        z = z | twointegers (x.sup, loe (y), lee (y));
+        z = union (z, twointegers (x.sup, loe (y), lee (y)));
     endif
 endif
 endfunction

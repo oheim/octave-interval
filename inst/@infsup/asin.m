@@ -41,7 +41,7 @@ if (nargin ~= 1)
     return
 endif
 
-x = x & infsup (-1, 1);
+x = intersect (x, infsup (-1, 1));
 
 ## asin is monotonically increasing from (-1, -pi/2) to (1, pi/2)
 l = mpfr_function_d ('asin', -inf, x.inf);

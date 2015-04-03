@@ -77,7 +77,7 @@ else
     ## Find n, such that x.sup is within a distance of pi/2 around n * pi.
     n = ceil (floor (sup (x.sup / (pi / 2))) / 2);
     arctangentshifted = arctangent + n * pi;
-    if (not (isempty (x & arctangentshifted)))
+    if (not (isempty (intersect (x, arctangentshifted))))
         u = min (x.sup, arctangentshifted.sup);
     else
         m = mpfr_function_d ('minus', +inf, n, 1);
@@ -91,7 +91,7 @@ else
     ## Find n, such that x.inf is within a distance of pi/2 around n * pi.
     n = floor (ceil (inf (x.inf / (pi / 2))) / 2);
     arctangentshifted = arctangent + n * pi;
-    if (not (isempty (x & arctangentshifted)))
+    if (not (isempty (intersect (x, arctangentshifted))))
         l = max (x.inf, arctangentshifted.inf);
     else
         m = mpfr_function_d ('plus', -inf, n, 1);
@@ -102,7 +102,7 @@ endif
 if (l > u)
     result = infsup ();
 else
-    result = x & infsup (l, u);
+    result = intersect (x, infsup (l, u));
 endif
 
 endfunction

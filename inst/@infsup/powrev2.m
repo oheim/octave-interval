@@ -57,8 +57,8 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-a = a & infsup (0, inf);
-c = c & infsup (0, inf);
+a = intersect (a, infsup (0, inf));
+c = intersect (c, infsup (0, inf));
 
 ## Broadcast parameters if necessary
 if (isscalar (y.inf))

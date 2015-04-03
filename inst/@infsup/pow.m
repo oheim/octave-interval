@@ -60,7 +60,7 @@ if (isscalar (x.inf) ~= isscalar (y.inf))
 endif
 
 ## Intersect with domain
-x = x & infsup (0, inf);
+x = intersect (x, infsup (0, inf));
 y.inf (x.sup == 0) = max (0, y.inf (x.sup == 0));
 y.sup (y.inf > y.sup) = -inf;
 y.inf (y.inf > y.sup) = inf;

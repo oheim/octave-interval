@@ -45,7 +45,7 @@ endif
 
 even = mod (n, 2) == 0;
 if (even)
-    x = x & infsup (0, inf);
+    x = intersect (x, infsup (0, inf));
 endif
 
 switch sign (n)

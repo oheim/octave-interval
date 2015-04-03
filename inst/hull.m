@@ -26,8 +26,9 @@
 ## NaNs represent missing values and are treated like empty intervals.
 ##
 ## The result is equivalent to 
-## @code{infsupdec (@var{X1}) | infsupdec (@var{X2}) | …}, but computed in a
-## more efficient way and may carry a decoration other than @code{trv}.
+## @code{union (infsupdec (@var{X1}), union (infsupdec (@var{X2}), …))}, but
+## computed in a more efficient way and may carry a decoration other than
+## @code{trv}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -43,7 +44,7 @@
 ##   @result{} [0, 7]_com
 ## @end group
 ## @end example
-## @seealso{@@infsup/or}
+## @seealso{@@infsupdec/union}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -33,7 +33,7 @@
 ##   @result{} [1, 2]_trv
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/and, @@infsupdec/or, @@infsupdec/setxor}
+## @seealso{@@infsupdec/intersect, @@infsupdec/union, @@infsupdec/setxor}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

@@ -51,10 +51,10 @@ endif
 l = mpfr_function_d ('minus', -inf, x.inf, y.inf);
 u = mpfr_function_d ('minus', +inf, x.sup, y.sup);
 
-wid_x1 = wid (x & infsup (-inf, 0));
-wid_x2 = wid (x & infsup (0, inf));
-wid_y1 = wid (y & infsup (-inf, 0));
-wid_y2 = wid (y & infsup (0, inf));
+wid_x1 = wid (intersect (x, infsup (-inf, 0)));
+wid_x2 = wid (intersect (x, infsup (0, inf)));
+wid_y1 = wid (intersect (y, infsup (-inf, 0)));
+wid_y2 = wid (intersect (y, infsup (0, inf)));
 [wid_x1, wid_x2] = deal (max (wid_x1, wid_x2), min (wid_x1, wid_x2));
 [wid_y1, wid_y2] = deal (max (wid_y1, wid_y2), min (wid_y1, wid_y2));
 

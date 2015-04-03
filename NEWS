@@ -8,12 +8,15 @@
  * newdec: New operation for explicit promotion of bare intervals into
    decorated intervals (without warning).
 
- * hull: In contrast to function or (|), the interval constructor is no longer
-   considered a set operation and can create intervals with a non-trivial
-   decoration.
- 
- * setdiff, setxor: Implemented new set operations
- 
+ * hull: In contrast to the union function, the interval constructor is no
+   longer considered a set operation and can create intervals with a
+   non-trivial decoration.
+
+ * setdiff, setxor: New set operations
+
+ * intersect, union: Renamed set operations; the old function names (and, or)
+   are hereby deprecated and are going to be removed in the next release.
+
  * Improved accuracy and performance of console output, intervaltotext and
    intervaltoexact.
 

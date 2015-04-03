@@ -102,11 +102,11 @@ Interval comparison
  @infsup/subset
  @infsupdec/isnai
 Set operation
- @infsup/and
+ @infsup/intersect
  @infsup/nextout
- @infsup/or
  @infsup/setdiff
  @infsup/setxor
+ @infsup/union
 Interval reverse operation
  @infsup/absrev
  @infsup/atan2rev1

@@ -40,7 +40,7 @@
 ##     z2 = [3, 4]_trv
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/and, @@infsupdec/or, @@infsupdec/setdiff}
+## @seealso{@@infsupdec/intersect, @@infsupdec/union, @@infsupdec/setdiff}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

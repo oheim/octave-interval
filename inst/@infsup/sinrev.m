@@ -81,7 +81,7 @@ else
     else
         arcsineshifted = n * pi - arcsine;
     endif
-    if (not (isempty (x & arcsineshifted)))
+    if (not (isempty (intersect (x, arcsineshifted))))
         u = min (x.sup, arcsineshifted.sup);
     else
         m = mpfr_function_d ('minus', +inf, n, 1);
@@ -103,7 +103,7 @@ else
     else
         arcsineshifted = n * pi - arcsine;
     endif
-    if (not (isempty (x & arcsineshifted)))
+    if (not (isempty (intersect (x, arcsineshifted))))
         l = max (x.inf, arcsineshifted.inf);
     else
         m = mpfr_function_d ('plus', -inf, n, 1);
@@ -118,7 +118,7 @@ endif
 if (l > u)
     result = infsup ();
 else
-    result = x & infsup (l, u);
+    result = intersect (x, infsup (l, u));
 endif
 
 endfunction

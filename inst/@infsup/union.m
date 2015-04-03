@@ -15,59 +15,47 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} {} @var{A} | @var{B}
+## @deftypefn {Function File} {} {} union (@var{A}, @var{B})
 ## 
 ## Build the interval hull of the union of two intervals.
 ##
 ## Accuracy: The result is exact.
 ##
-## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
-## The function is a set operation and the result carries the @code{trv}
-## decoration at best.
-##
 ## @example
 ## @group
-## x = infsupdec (1, 3);
-## y = infsupdec (2, 4);
-## x | y
-##   @result{} [1, 4]_trv
+## x = infsup (1, 3);
+## y = infsup (2, 4);
+## union (x, y)
+##   @result{} [1, 4]
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/and, hull}
+## @seealso{@@infsup/intersect, @@infsup/setdiff, @@infsup/setxor}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2014-10-02
 
-function result = or (a, b)
+function result = union (a, b)
 
 if (nargin ~= 2)
     print_usage ();
     return
 endif
-
-if (not (isa (a, "infsupdec")))
-    a = infsupdec (a);
+if (not (isa (a, "infsup")))
+    a = infsup (a);
 endif
-if (not (isa (b, "infsupdec")))
-    b = infsupdec (b);
-endif
-
-if (isnai (a))
-    result = a;
-    return
-endif
-if (isnai (b))
-    result = b;
-    return
+if (not (isa (b, "infsup")))
+    b = infsup (b);
 endif
 
-result = or (intervalpart (a), intervalpart (b));
-## convexHull must not retain any useful decoration
-result = infsupdec (result, "trv");
+## This also works for unbound intervals and empty intervals
+l = min (a.inf, b.inf);
+u = max (a.sup, b.sup);
+
+result = infsup (l, u);
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal ((infsupdec (1, 3) | infsupdec (2, 4)), infsupdec (1, 4, "trv")));
+%! assert (union (infsup (1, 3), infsup (2, 4)) == infsup (1, 4));

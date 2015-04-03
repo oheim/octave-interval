@@ -54,10 +54,10 @@ elseif (not (isa (x, "infsup")))
 endif
 
 ## Compute the pre-image of abs for positive and negative x separately.
-p = c & infsup (0, inf);
+p = intersect (c, infsup (0, inf));
 n = -p;
 
-result = (p & x) | (n & x);
+result = union (intersect (p, x), intersect (n, x));
 
 endfunction
 

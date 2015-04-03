@@ -74,7 +74,7 @@ l = inf (size (x.inf));
 u = -l;
 
 ## Monotonically decreasing for x1
-x1 = x & infsup (0, x_min_sup);
+x1 = intersect (x, infsup (0, x_min_sup));
 select = not (isempty (x1)) & x1.sup > 0;
 if (any (any (select)))
     x1.inf (x1.inf == 0) = 0; # fix negative zero
@@ -83,7 +83,7 @@ if (any (any (select)))
 endif
 
 ## Monotonically increasing for x2
-x2 = x & infsup (x_min_inf, inf);
+x2 = intersect (x, infsup (x_min_inf, inf));
 select = not (isempty (x2));
 if (any (any (select)))
     l (select) = mpfr_function_d ('gammaln', -inf, x2.inf (select));

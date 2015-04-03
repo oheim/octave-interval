@@ -70,7 +70,7 @@ if (isempty (y) || isempty (b) || isempty (c) || ...
 endif
 
 ## c1 is the part of c where y >= 0 and x <= 0
-c1 = c & infsup (inf (pi) / 2, sup (pi));
+c1 = intersect (c, infsup (inf (pi) / 2, sup (pi)));
 if (isempty (c1) || b.inf > 0 || y.sup < 0 || c1.sup == inf (pi) / 2 || ...
     (b.inf >= 0 && y.sup <= 0) || (b.inf >= 0 && c1.inf > inf (pi) / 2))
     result = infsup ();
@@ -88,11 +88,11 @@ else
     else
         u = sup (b.inf .* tan (infsup (c1.inf)));
     endif
-    result = y & infsup (l, u);
+    result = intersect (y, infsup (l, u));
 endif
 
 ## c2 is the part of c where y >= 0 and x >= 0
-c2 = c & infsup (0, sup (pi) / 2);
+c2 = intersect (c, infsup (0, sup (pi) / 2));
 if (isempty (c2) || b.sup < 0 || y.sup < 0 || c2.inf == sup (pi) / 2 || ...
     (b.sup <= 0 && y.sup <= 0) || (b.sup <= 0 && c2.sup < sup (pi) / 2))
     ## nothing to do
@@ -112,11 +112,11 @@ else
     else
         u = sup (b.sup .* tan (infsup (c2.sup)));
     endif
-    result = result | (y & infsup (l, u));
+    result = union (result, intersect (y, infsup (l, u)));
 endif
 
 ## c3 is the part of c where y <= 0 and x >= 0
-c3 = c & infsup (inf (-pi) / 2, 0);
+c3 = intersect (c, infsup (inf (-pi) / 2, 0));
 if (isempty (c3) || b.sup < 0 || y.inf > 0 || ...
     c3.sup == inf (-pi) / 2 || (b.sup <= 0 && y.inf >= 0) || ...
     (b.sup <= 0 && c2.inf > inf (-pi) / 2))
@@ -137,11 +137,11 @@ else
     else
         u = sup (b.inf .* tan (infsup (c3.sup)));
     endif
-    result = result | (y & infsup (l, u));
+    result = union (result, intersect (y, infsup (l, u)));
 endif
 
 ## c4 is the part of c where y <= 0 and x <= 0
-c4 = c & infsup (inf (-pi), sup (-pi) / 2);
+c4 = intersect (c, infsup (inf (-pi), sup (-pi) / 2));
 if (isempty (c4) || b.inf > 0 || y.inf > 0 || ...
     c4.inf == sup (-pi) / 2 || (b.inf >= 0 && y.inf >= 0) || ...
     (b.inf >= 0 && c4.sup < sup (-pi) / 2))
@@ -160,7 +160,7 @@ else
     else
         u = min (0, sup (b.sup .* tan (infsup (c4.sup))));
     endif
-    result = result | (y & infsup (l, u));
+    result = union (result, intersect (y, infsup (l, u)));
 endif
 endfunction
 

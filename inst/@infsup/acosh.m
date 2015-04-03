@@ -41,7 +41,7 @@ if (nargin ~= 1)
     return
 endif
 
-x = x & infsup (1, inf);
+x = intersect (x, infsup (1, inf));
 
 ## acosh is monotonically increasing from (1, 0) to (inf, inf)
 l = mpfr_function_d ('acosh', -inf, x.inf);

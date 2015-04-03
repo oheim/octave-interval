@@ -138,8 +138,8 @@ if (not (isempty (df)))
         ## Function evaluated outside of its domain
         a = x0;
     else
-        a = x0 & (m - a);
-        b = x0 & (m - b);
+        a = intersect (x0, m - a);
+        b = intersect (x0, m - b);
         if (isempty (a))
             [a, b] = deal (b, a);
         endif
@@ -164,7 +164,7 @@ if ((eq (x0, a) || isempty (b)) && not (issingleton (a)) && not (isempty (a)))
         ## When the interval is small, this algorithm will choose
         ## approximately mid (a).
         s = sign (a);
-        s = inf ((s & 1) | (s & -1));
+        s = inf (union (intersect (s, 1), intersect (s, -1)));
         m = s .* min (realmax (), pow2 (max (-1074, mid (log2 (abs (a))))));
         if (not (ismember (m, a)))
             ## Fallback, if computation fails

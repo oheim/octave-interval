@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} {} @var{A} & @var{B}
+## @deftypefn {Function File} {} {} intersect (@var{A}, @var{B})
 ## 
 ## Intersect two intervals.
 ##
@@ -29,18 +29,18 @@
 ## @group
 ## x = infsupdec (1, 3);
 ## y = infsupdec (2, 4);
-## x & y
+## intersect (x, y)
 ##   @result{} [2, 3]_trv
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/or}
+## @seealso{@@infsupdec/union, @@infsupdec/setdiff, @@infsupdec/setxor}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = and(a, b)
+function result = intersect (a, b)
 
 if (nargin ~= 2)
     print_usage ();
@@ -63,9 +63,9 @@ if (isnai (b))
 endif
 
 ## intersection must not retain any useful decoration
-result = infsupdec (and (intervalpart (a), intervalpart (b)), "trv");
+result = infsupdec (intersect (intervalpart (a), intervalpart (b)), "trv");
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (and (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (2, 3, "trv")));
+%! assert (isequal (intersect (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (2, 3, "trv")));

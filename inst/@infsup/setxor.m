@@ -36,7 +36,7 @@
 ##     z2 = [3, 4]
 ## @end group
 ## @end example
-## @seealso{@@infsup/and, @@infsup/or, @@infsup/setdiff}
+## @seealso{@@infsup/intersect, @@infsup/union, @@infsup/setdiff}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

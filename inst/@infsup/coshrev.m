@@ -58,7 +58,7 @@ endif
 p = acosh (c);
 n = - p;
 
-result = (p & x) | (n & x);
+result = union (intersect (p, x), intersect (n, x));
 
 endfunction
 

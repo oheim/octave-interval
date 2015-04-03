@@ -41,7 +41,7 @@ if (nargin ~= 1)
     return
 endif
 
-x = x & infsup (-1, 1);
+x = intersect (x, infsup (-1, 1));
 
 ## atanh is monotonically increasing between (-1, -inf) and (1, inf)
 l = mpfr_function_d ('atanh', -inf, x.inf);

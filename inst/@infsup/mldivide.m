@@ -274,7 +274,7 @@ function [x, verified] = verify_and_refine (x0, C, cfg, accuracy)
         ## Iterative refinement
         for p = 1 : cfg.maxIterRef
             y = x;
-            x = (x0 + mtimes (C, x, accuracy)) & x;
+            x = intersect (x0 + mtimes (C, x, accuracy), x);
             
             if (p == cfg.maxIterRef)
                 break

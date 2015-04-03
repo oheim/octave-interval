@@ -43,7 +43,7 @@ if (nargin ~= 1)
     return
 endif
 
-x = x & infsup (0, inf);
+x = intersect (x, infsup (0, inf));
 
 ## log2 is monotonically increasing from (0, -inf) to (inf, inf)
 l = mpfr_function_d ('log2', -inf, x.inf); # this works for empty intervals

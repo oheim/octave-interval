@@ -29,7 +29,7 @@
 ##   @result{} [1, 2]
 ## @end group
 ## @end example
-## @seealso{@@infsup/and, @@infsup/or, @@infsup/setxor}
+## @seealso{@@infsup/intersect, @@infsup/union, @@infsup/setxor}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

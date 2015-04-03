@@ -73,8 +73,8 @@ if (rem (p, 2) == 0) # p even
     x.sup (isnan (x.sup)) = -inf;
     result = pow (x, p);
 else # p odd
-    result = pow (x, infsup (p)) | ...
-             -pow (-x, infsup (p));
+    result = union (pow (x, infsup (p)), ...
+                    -pow (-x, infsup (p)));
 endif
 
 ## Special case: x = [0]. The pow function used above would be undefined.
