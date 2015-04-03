@@ -12,7 +12,7 @@
    considered a set operation and can create intervals with a non-trivial
    decoration.
  
- * setdiff: Implemented new set operations
+ * setdiff, setxor: Implemented new set operations
  
  * Improved accuracy and performance of console output, intervaltotext and
    intervaltoexact.
