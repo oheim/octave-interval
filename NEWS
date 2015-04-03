@@ -12,11 +12,14 @@
    considered a set operation and can create intervals with a non-trivial
    decoration.
  
+ * setdiff: Implemented new set operations
+ 
  * Improved accuracy and performance of console output, intervaltotext and
    intervaltoexact.
 
 Bugfixes
  * mtimes, mldivide: Support for broadcasting of scalar parameters
+ * nextout: Support for decorated intervals
  * An error in GNU Octave core, which could lead to lost or wrong interval
    decorations, no longer affects decorated intervals (bug #42735)
  * Some errors in the function documentation have been fixed (thanks to
