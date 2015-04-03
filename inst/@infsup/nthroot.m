@@ -115,7 +115,7 @@ switch sign (n)
             l (emptyresult | notnegative) = inf;
             u (emptyresult | notnegative) = -inf;
             
-            result = result | infsup (-u, -l);
+            result = union (result, infsup (-u, -l));
         endif
     
     otherwise
