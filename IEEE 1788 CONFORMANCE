@@ -31,7 +31,7 @@ b) Documentation of behavior
        documentation string and can be displayed with the help command.
        
     3) Under what conditions is a constructor unable to determine whether a
-       level 1 value exists that corresponds to the supplied inputs?
+       Level 1 value exists that corresponds to the supplied inputs?
        
        When two different string boundaries for an interval both lie between
        the same two subsequent binary64 numbers, a PossiblyUndefined warning is
@@ -108,12 +108,12 @@ c) Implementation-defined behavior
        decimal infsup form which has no more digits than are necessary to
        separate two binary64 numbers.
        
-   12) What is the result of level 3 operations for invalid inputs?
+   12) What is the result of Level 3 operations for invalid inputs?
        
-       Interval constructors prevent the creation of invalid level 3 interval
+       Interval constructors prevent the creation of invalid Level 3 interval
        datums.
        
-       Any non-interval input to level 3 operations is implicitly converted
+       Any non-interval input to Level 3 operations is implicitly converted
        into an interval and the operation silently continues on interval
        inputs.
        
