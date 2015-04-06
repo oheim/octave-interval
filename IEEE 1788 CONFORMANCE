@@ -1,7 +1,7 @@
 CONFORMANCE CLAIM
 
-The inverval package version 0.1.0 for GNU Octave is conforming to the
-P1788 Standard for Interval Arithmetic, version D9.5 (October 2014).  It is
+The inverval package version 0.1.5 for GNU Octave is conforming to the
+P1788 Standard for Interval Arithmetic, version D9.6 (March 2015).  It is
 conforming to the set-based flavor with IEEE 754 conformance for the infsup
 binary64 interval type and without compressed arithmetic.  Additionally it
 provides no further flavors.
@@ -26,9 +26,10 @@ b) Documentation of behavior
        of the implementation’s interval operations?
        
        The accuracy requirements of IEEE 1788 are fulfilled.  Most operations
-       achieve tightest accuracy, some reverse operations do not.  The
-       tightness of each operation is documented in the function's
-       documentation string and can be displayed with the help command.
+       achieve tightest accuracy, some operations (especially reverse
+       operations) do not.  The tightness of each operation is documented in
+       the function's documentation string and can be displayed with the help
+       command.
        
     3) Under what conditions is a constructor unable to determine whether a
        Level 1 value exists that corresponds to the supplied inputs?
@@ -46,7 +47,8 @@ b) Documentation of behavior
        
        The binary64 boundaries are converted into hexadecimal-significand form
        as required by the standard.  It is also possible to convert interval
-       datums to exact interval literals in decimal form.
+       datums to exact interval literals in decimal form, see optional
+       arguments of function intervaltotext for that purpose.
        
 c) Implementation-defined behavior
     1) Does the implementation include the interval overlapping function?  If
@@ -82,7 +84,9 @@ c) Implementation-defined behavior
     7) Does the implementation include different versions of the same operation
        for a given type and how are these provided to the user?
        
-       The implementation does not include different versions of any operation.
+       The interval matrix multiplication (mtimes) offers two implementations,
+       with either tightest or valid accuracy.  The user may chose the desired
+       version with an optional argument during the function call.
        
     8) What combinations of formats are supported in interval constructors?
        
@@ -122,8 +126,9 @@ c) Implementation-defined behavior
        Implicit promotion from a bare interval to a decorated interval is
        signaled with GNU Octave's warning mechanism.
        
-       If implicit conversion fails, bare interval operations raise an error,
-       whereas the decorated interval operations continue on NaI inputs.
+       If implicit conversion fails (e.g., illegal interval literals), bare
+       interval operations raise an error, whereas the decorated interval
+       operations continue on NaI inputs.
        
    13) [Question does not apply to IEEE 754 conforming types.]
        
