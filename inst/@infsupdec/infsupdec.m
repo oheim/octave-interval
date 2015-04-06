@@ -214,15 +214,11 @@ try
                                         | strcmp (dec, "def"));
         isexact = false ();
         dec (empty_not_trv) = "trv";
-        warning ("interval:FixedDecoration", ...
-                 "Decoration of empty interval has been reduced to trv");
     endif
     uncommon_com = not (iscommoninterval (bare)) & strcmp (dec, "com");
     if (any (any (uncommon_com)))
         isexact = false ();
         dec (uncommon_com) = "dac";
-        warning ("interval:FixedDecoration", ...
-                 "Decoration of uncommon interval has been reduced to dac");
     endif
     if (not (all (all ( ...
             strcmp (dec, "com") | ...
@@ -240,8 +236,7 @@ catch
             ## literal [NaI] is observed. In that particular case, we must not
             ## issue a warning.
         case {"interval:PossiblyUndefined", ...
-              "interval:ImplicitPromote", ...
-              "interval:FixedDecoration"}
+              "interval:ImplicitPromote"}
             ## The user has set these warnings to error, which we must respect
             rethrow (lasterror)
         otherwise
@@ -279,7 +274,7 @@ endfunction
 %!warning assert (isnai (infsupdec ("Flugeldufel")));
 %!warning assert (isnai (infsupdec ("[1, Inf]_com")));
 %!warning assert (isnai (infsupdec ("[Empty]_def")));
-%!warning "decoration adjustments";
+%!test "decoration adjustments, setDec function";
 %!  assert (inf (infsupdec (42, inf, "com")), 42);
 %!  assert (sup (infsupdec (42, inf, "com")), inf);
 %!  assert (strcmp (decorationpart (infsupdec (42, inf, "com")), "dac"));

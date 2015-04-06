@@ -10,9 +10,6 @@
 
  * Illegal decorated interval literals are no longer allowed and produce NaIs.
 
- * setdec: New operation for explicit assembling of decorated intervals
-   (the function implicitly fixes forbidden decorations without warning).
-
  * hull: In contrast to the union function, the interval constructor is no
    longer considered a set operation and can create intervals with a
    non-trivial decoration.
