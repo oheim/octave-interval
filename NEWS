@@ -8,6 +8,8 @@
  * newdec: New operation for explicit promotion of bare intervals into
    decorated intervals (without warning).
 
+ * Illegal decorated interval literals are no longer allowed and produce NaIs.
+
  * setdec: New operation for explicit assembling of decorated intervals
    (the function implicitly fixes forbidden decorations without warning).
 

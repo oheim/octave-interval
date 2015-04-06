@@ -61,8 +61,8 @@
 ## magnitude (> 2^53) can also be affected from precision loss.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
-## however it implements the IEEE 1788 functions newDec, setDec, 
-## numsToInterval, and textToInterval.
+## however it implements the IEEE 1788 functions setDec, numsToInterval, and
+## textToInterval.
 ## 
 ## @example
 ## @group
@@ -141,7 +141,20 @@ try
         
         ## Note: The representation of NaI, will trigger an error in the infsup
         ## constructor
-        [bare, isexact] = infsup (varargin {1});
+        [bare, isexact, overflow] = infsup (varargin {1});
+        
+        ## Silently fix decorated interval literals when overflow occurred
+        dec (overflow & strcmpi (dec, "com")) = "dac";
+        
+        ## Validate decorations of interval literals
+        if (any (any (...
+            ## Unbound common intervals are illegal
+            (strcmpi (dec, "com") & not (iscommoninterval (bare))) | ...
+            ## Empty intervals must carry trv
+            (not (strcmpi (dec, "trv") | strcmp (dec, "")) & isempty (bare)))))
+            error ("interval:InvalidOperand", ...
+                   "illegal decorated interval literal")
+        endif
     else
         ## Undecorated interval boundaries
         dec = {""};
@@ -264,6 +277,8 @@ endfunction
 %!  assert (isnai (infsupdec ("[nai]"))); # quiet [NaI]
 %!warning assert (isnai (infsupdec (3, 2)));
 %!warning assert (isnai (infsupdec ("Flugeldufel")));
+%!warning assert (isnai (infsupdec ("[1, Inf]_com")));
+%!warning assert (isnai (infsupdec ("[Empty]_def")));
 %!warning "decoration adjustments";
 %!  assert (inf (infsupdec (42, inf, "com")), 42);
 %!  assert (sup (infsupdec (42, inf, "com")), inf);
@@ -274,6 +289,10 @@ endfunction
 %!  assert (inf (infsupdec (inf, -inf, "def")), inf);
 %!  assert (sup (infsupdec (inf, -inf, "def")), -inf);
 %!  assert (strcmp (decorationpart (infsupdec (inf, -inf, "def")), "trv"));
+%!test "overflow";
+%!  assert (inf (infsupdec ("[1, 1e999]_com")), 1);
+%!  assert (sup (infsupdec ("[1, 1e999]_com")), inf);
+%!  assert (strcmp (decorationpart (infsupdec ("[1, 1e999]_com")), "dac"));
 %!test "decorated interval literal";
 %!  assert (inf (infsupdec ("[2, 3]_def")), 2);
 %!  assert (sup (infsupdec ("[2, 3]_def")), 3);

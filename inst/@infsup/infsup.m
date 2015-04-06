@@ -88,7 +88,7 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function [x, isexact] = infsup (l, u)
+function [x, isexact, overflow] = infsup (l, u)
 
 if (nargin == 0)
     ## representation of the empty interval is always [inf,-inf]
@@ -199,6 +199,7 @@ endif
 ## check parameters and conversion to double precision
 isexact = true ();
 possiblyundefined = false (size (l));
+overflow = true (size (l));
 x.inf = zeros (size (l));
 x.sup = zeros (size (u));
 input.inf = l;
@@ -308,9 +309,11 @@ for [boundaries, key] = input
                 case {"-inf", "-infinity"}
                     x.(key) (i) = -inf;
                     possiblyundefined (i) = false ();
+                    overflow (i) = false;
                 case {"inf", "+inf", "infinity", "+infinity"}
                     x.(key) (i) = inf;
                     possiblyundefined (i) = false ();
+                    overflow (i) = false;
                 case "e"
                     isexact = false ();
                     switch key
@@ -481,6 +484,10 @@ x.sup (x.sup == 0) = +0;
 if (any (any (not (isfinite (x.inf (x.inf == x.sup))), 1)))
     error ("interval:InvalidOperand", ...
            "illegal interval boundaries: infimum = supremum = +/- infinity");
+endif
+
+if (nargout >= 3)
+    overflow (x.inf > -inf & x.sup < inf) = false;
 endif
 
 ## check boundary order
