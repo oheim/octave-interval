@@ -119,20 +119,25 @@ try
         endswitch
     elseif (nargin == 1 && iscell (varargin {1}))
         ## Parse possibly decorated interval literals
+        chars = cellfun ("ischar", varargin {1});
+        varargin {1} (chars) = cellfun (@strsplit, ...
+                                        varargin {1} (chars), ...
+                                        {"_"}, ...
+                                        "UniformOutput", false);
+        if (any (any (cellfun ("size", varargin {1} (chars), 2) > 2)))
+            ## More than 2 underscores in any literal
+            error ("interval:InvalidOperand", ...
+                   "illegal decorated interval literal")
+        endif
+        ## Extract decoration
         dec = cell (size (varargin {1}));
         dec (:) = {""};
-        for i = 1 : numel (varargin {1})
-            if (ischar (varargin {1} {i}))
-                literal = strsplit (varargin {1} {i}, "_");
-                if (length (literal) == 2) # decorated interval literal
-                    varargin {1} {i} = literal {1};
-                    dec {i} = literal {2};
-                elseif (length (literal) > 2)
-                    error ("interval:InvalidOperand", ...
-                           "illegal decorated interval literal")
-                endif
-            endif
-        endfor
+        hasdec = false (size (varargin {1}));
+        hasdec (chars) = cellfun ("size", varargin {1} (chars), 2) == 2;
+        dec (hasdec) = cellfun (@(x) x {2}, varargin {1} (hasdec), ...
+                                "UniformOutput", false);
+        varargin {1} (chars) = cellfun (@(x) x {1}, varargin {1} (chars), ...
+                                        "UniformOutput", false);
         
         ## Note: The representation of NaI, will trigger an error in the infsup
         ## constructor
