@@ -21,6 +21,7 @@
 ## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
 ## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
 ## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
+## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{I}, @var{D})
 ## 
 ## Create a decorated interval from boundaries.  Convert boundaries to double
 ## precision.
@@ -32,14 +33,18 @@
 ## @code{infsupdec (@var{M}, @var{M}, @var{D})}.  The syntax
 ## @code{infsupdec (@var{S})} parses a possibly decorated interval literal in
 ## inf-sup form or as a special value, where @code{infsupdec ("[S1, S2]")} is
-## equivalent to @code{infsupdec ("S1", "S2")} and
+## equivalent to @code{infsupdec ("S1", "S2")} and, if [S1, S2]_D is a valid
+## interval literal,
 ## @code{infsupdec ("[S1, S2]_D")} is equivalent to
-## @code{infsupdec ("S1", "S2", "D")}.  A second, logical output @var{ISEXACT}
-## indicates if @var{X}'s boundaries both have been converted without precision
-## loss.
+## @code{infsupdec ("S1", "S2", "D")}.  The syntax 
+## @code{infsupdec (@var{I}, @var{D})} overrides an interval @var{I}'s
+## decoration with a new decoration @var{D}.  A second, logical output
+## @var{ISEXACT} indicates if @var{X}'s boundaries both have been converted
+## without precision loss and without changes to the optional, desired
+## decoration.
 ##
-## If construction fails, the special value [NaI], “not an interval,” will be
-## returned and a warning message will be raised.  [NaI] is equivalent to
+## If construction fails, the special value NaI, “not an interval,” will be
+## returned and a warning message will be raised.  NaI is equivalent to
 ## [Empty] together with an ill-formed decoration.
 ##
 ## Each boundary can be provided in the following formats: literal constants
@@ -59,6 +64,15 @@
 ## If decimal or hexadecimal numbers are no binary64 floating point numbers, a
 ## tight enclosure will be computed.  int64 and uint64 numbers of high
 ## magnitude (> 2^53) can also be affected from precision loss.
+##
+## The decoration @var{D} must be any of @code{com}, @code{dac}, @code{def},
+## @code{trv}, or @code{ill}.  Illegal decorations within interval literals
+## will produce NaIs, whereas illegal decorations provided as an additional
+## function parameter will be automatically adjusted.
+##
+## For the creation of interval matrices, arguments may be provided as (1) cell 
+## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) string
+## column vectors.  Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
 ## however it implements the IEEE 1788 functions setDec, numsToInterval, and

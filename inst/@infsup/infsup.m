@@ -49,6 +49,10 @@
 ## tight enclosure will be computed.  int64 and uint64 numbers of high
 ## magnitude (> 2^53) can also be affected from precision loss.
 ##
+## For the creation of interval matrices, arguments may be provided as (1) cell 
+## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) string
+## column vectors.  Scalar values do broadcast.
+##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
 ## however it implements both IEEE 1788 functions numsToInterval and
 ## textToInterval.
