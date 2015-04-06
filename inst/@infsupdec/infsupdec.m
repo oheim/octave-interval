@@ -78,7 +78,7 @@
 ##   @result{} [0.09999999999999999, 0.2000000000000001]_com
 ## @end group
 ## @end example
-## @seealso{exacttointerval}
+## @seealso{exacttointerval, hull, midrad, @@infsup/newdec}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
