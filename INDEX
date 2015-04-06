@@ -8,6 +8,7 @@ Interval constructor
  midrad
  @infsup/infsup
  @infsup/newdec
+ @infsup/setdec
  @infsupdec/infsupdec
 Interval function (most with tightest accuracy)
  @infsup/abs
