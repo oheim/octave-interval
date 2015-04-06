@@ -68,7 +68,7 @@ switch (S (1).type)
         if (not (any (strcmp (S(1).subs, methods (A)))))
             error (["interval property ‘", S(1).subs, "’ is unknown"])
         endif
-        functionname = ["@infsup/", S(1).subs];
+        functionname = ["@infsup", filesep(), S(1).subs];
         if (nargin (functionname) ~= 1)
             error (["‘", S(1).subs, "’ is not a valid interval property"])
         endif

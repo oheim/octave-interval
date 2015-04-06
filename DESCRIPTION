@@ -12,7 +12,7 @@ Description: The interval package provides data types and operations for
  implementation of intervals in inf-sup format is based on interval boundaries
  represented by binary64 numbers and is standard conforming to IEEE 1788.
 Problems: IEEE 1788 is no official standard yet.  Comparison with isequal fails
- for interval matrices in Octave 4.0.0-rc1 (bug #44334).
+ for interval matrices in Octave 4.0.0-rc2 (bug #44334).
 Url: http://wiki.octave.org/Interval_package
 Depends: Octave (>= 3.8.2)
 SystemRequirements: mpfr (>= 3.1.0) [Debian] libmpfr4 (>= 3.1.0)

@@ -8,7 +8,8 @@
  * newdec: New operation for explicit promotion of bare intervals into
    decorated intervals (without warning).
 
- * Illegal decorated interval literals are no longer allowed and produce NaIs.
+ * Decorated interval literals with illegal decoration are no longer allowed
+   and produce NaIs.
 
  * hull: In contrast to the union function, the interval constructor is no
    longer considered a set operation and can create intervals with a
@@ -19,8 +20,12 @@
  * intersect, union: Renamed set operations; the old function names (and, or)
    are hereby deprecated and are going to be removed in the next release.
 
- * Improved accuracy and performance of console output, intervaltotext and
-   intervaltoexact.
+ * intervaltotext, intervaltoexact: Decimal fractions no longer omit zero
+   before the point, and unnecessary trailing decimal places can be omitted
+   more consistently and in more cases than before (also affects console
+   output).  Improved accuracy and performance with support for interval
+   matrices.
+   
 
 Bugfixes
  * mtimes, mldivide: Support for broadcasting of scalar parameters
@@ -29,6 +34,7 @@ Bugfixes
    decorations, no longer affects decorated intervals (bug #42735)
  * Some errors in the function documentation have been fixed (thanks to
    doctest-for-matlab and Colin's texinfo compatibility patches)
+ * Fixed interval field access on Windows
 
 0.1.4 2015-03-15
 ================
