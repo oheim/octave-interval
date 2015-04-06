@@ -1,6 +1,6 @@
 Name: interval
-Version: 0.1.4
-Date: 2015-03-15
+Version: 0.1.5
+Date: 2015-04-06
 Author: Oliver Heimlich <oheim@posteo.de>
 Maintainer: Oliver Heimlich <oheim@posteo.de>
 Title: Real-valued interval arithmetic

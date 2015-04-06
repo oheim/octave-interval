@@ -1,4 +1,4 @@
-0.1.5 xxxx-xx-xx
+0.1.5 2015-04-06
 ================
 
  * Implicit decoration of bare intervals triggers a warning now and can be
