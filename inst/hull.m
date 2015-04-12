@@ -17,18 +17,25 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} hull (@var{X1}, @var{X2}, …)
 ## 
-## Return an interval enclosure for a list of parameters.
+## Create an interval enclosure for a list of parameters.
 ##
 ## Parameters can be simple numbers, intervals or interval literals as strings.
 ## Scalar values or scalar intervals do broadcast if combined with matrices or
 ## interval matrices.
 ##
-## NaNs represent missing values and are treated like empty intervals.
+## NaNs represent missing values and are treated like empty intervals.  Inf and
+## -Inf can be used to create unbound intervals, but note that these values
+## will not be members of the interval.  In particular, it is not possible to
+## create an interval with @code{hull (inf)}.
 ##
 ## The result is equivalent to 
 ## @code{union (infsupdec (@var{X1}), union (infsupdec (@var{X2}), …))}, but
-## computed in a more efficient way and may carry a decoration other than
-## @code{trv}.
+## computed in a more efficient way.  In contrast to the union function, this
+## function is not considered a set operation and the result carries the best
+## possible decoration, which is allowed by the input parameters.
+##
+## Warning: This function is not defined by IEEE 1788 and shall not be confused
+## with the standard's convexHull function, which is implemented by union.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -52,6 +59,11 @@
 ## Created: 2015-03-02
 
 function result = hull (varargin)
+
+if (isempty (varargin))
+    result = infsupdec ();
+    return
+endif
 
 l = u = cell (size (varargin));
 

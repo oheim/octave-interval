@@ -21,9 +21,16 @@
 ## 
 ## Return the empty interval.
 ##
-## The empty interval contains no real numbers.  All interval functions return
-## an empty result if the input is either empty or outside of the function's
-## domain.
+## With additional parameters, create an interval vector/matrix, which
+## comprises empty interval entries.
+##
+## The empty interval [Empty] contains no real numbers.  All interval functions
+## return an empty result if the input is either empty or outside of the
+## function's domain.
+##
+## The empty interval carries the trivial @code{trv} decoration, which denotes
+## that the empty interval cannot be the result of a function evaluation for
+## a nonempty subset of its domain.
 ##
 ## Accuracy: The representation of the empty interval is exact.
 ##

@@ -21,10 +21,20 @@
 ## 
 ## Return the entire set of real numbers.
 ##
-## The entire set of real numbers is a closed interval.  If used as boundaries
-## for a certain value, it represents a state of minimum constraints.  An
-## interval function which evaluates to [Entire] yields no information at all
-## if no interval decoration is present.
+## With additional parameters, create an interval vector/matrix, which
+## comprises entire interval entries.
+##
+## The entire set of real numbers [Entire] is a closed interval.  If used as
+## an enclosure for a certain value, it represents a state of minimum
+## constraints.  An interval function which evaluates to [Entire] yields no
+## information at all if no interval decoration is present.
+##
+## The special floating-point values -Inf and Inf represent boundaries of the
+## entire set of real numbers.  However, they are not members of the interval.
+##
+## The result of this function carries the defined and continuous @code{dac}
+## decoration, which denotes that the interval is not bounded and therefore is
+## no common interval.
 ##
 ## Accuracy: The representation of the entire set of real numbers is exact.
 ##

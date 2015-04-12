@@ -16,11 +16,25 @@
 ## -*- texinfo -*-
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} midrad (@var{M}, @var{R})
+## @deftypefnx {Function File} {} midrad (@var{M})
+## @deftypefn {Function File} {} midrad ()
 ## 
-## Return an interval enclosure for [@var{M}-@var{R}, @var{M}+@var{R}].
+## Create an interval enclosure for [@var{M}-@var{R}, @var{M}+@var{R}].
+##
+## Without input parameters, return the empty interval.  With only one input
+## parameter, the radius @var{R} defaults to zero.
+##
+## Parameters can be simple numbers, intervals or interval literals as strings.
+## Scalar values or scalar intervals do broadcast if combined with matrices or
+## interval matrices.
+##
+## The result is not guaranteed to be tightest if parameters are given as
+## strings.  This is due to intermediate results.  The infsupdec constructor
+## with interval literals in uncertain form @code{m?ruE} can instead be used to
+## create tight enclosures of decimal numbers with a radius.
 ##
 ## Accuracy: The result is an accurate enclosure.  The result is tightest if
-## @var{M} and @var{R} are floating-point numbers.
+## @var{M} and @var{R} are floating-point numbers or intervals.
 ##
 ## @example
 ## @group
@@ -30,9 +44,11 @@
 ##   @result{} [Entire]_dac
 ## midrad ("1.1", "0.1")
 ##   @result{} [0.9999999999999997, 1.200000000000001]_com
+## midrad ("25", "3/7")
+##   @result{} [24.571428571428569, 25.42857142857144]_com
 ## @end group
 ## @end example
-## @seealso{@@infsup/infsup, hull}
+## @seealso{@@infsupdec/infsupdec, hull, @@infsupdec/mid, @@infsupdec/rad}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

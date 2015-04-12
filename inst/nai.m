@@ -28,7 +28,7 @@
 ## The interval part of NaI is undefined.  The decoration part of NaI is
 ## @code{ill}.  The size of NaI is one in each dimension.
 ##
-## The @code{infsup} constructor will not produce NaIs, but an error instead.
+## The infsup constructor will not produce NaIs, but an error instead.
 ##
 ## @example
 ## @group
