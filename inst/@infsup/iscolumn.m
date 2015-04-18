@@ -15,34 +15,31 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} isscalar (@var{A})
+## @deftypefn {Function File} {} iscolumn (@var{A})
 ##
-## Return true if @var{A} is an interval scalar.
+## Return true if @var{A} is an interval column vector.
 ##
-## Scalars (1x1 matrices) are subsets of the more general vector or matrix and
-## @code{isvector} and @code{ismatrix} will return true for these objects as
-## well.
-## @seealso{@@infsup/isvector, @@infsup/ismatrix}
+## @seealso{@@infsup/isvector, @@infsup/isrow}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2015-02-02
+## Created: 2015-04-18
 
-## FIXME This function is only required, because of bug #43925
-function result = isscalar (A)
+## FIXME This function is only required, because of a regression in octave 4.0
+function result = iscolumn (A)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = isscalar (A.inf);
+result = iscolumn (A.inf);
 
 endfunction
 
-%!assert (not (isscalar (infsup ([]))));
-%!assert (isscalar (infsup (0)));
-%!assert (not (isscalar (infsup (zeros (1, 2)))));
-%!assert (not (isscalar (infsup (zeros (2, 1)))));
-%!assert (not (isscalar (infsup (zeros (5)))));
+%!assert (not (iscolumn (infsup ([]))));
+%!assert (iscolumn (infsup (0)));
+%!assert (not (iscolumn (infsup (zeros (1, 2)))));
+%!assert (iscolumn (infsup (zeros (2, 1))));
+%!assert (not (iscolumn (infsup (zeros (5)))));

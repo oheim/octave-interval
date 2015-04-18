@@ -15,34 +15,31 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} isscalar (@var{A})
+## @deftypefn {Function File} {} issquare (@var{A})
 ##
-## Return true if @var{A} is an interval scalar.
+## Return true if @var{A} is a square interval matrix.
 ##
-## Scalars (1x1 matrices) are subsets of the more general vector or matrix and
-## @code{isvector} and @code{ismatrix} will return true for these objects as
-## well.
-## @seealso{@@infsup/isvector, @@infsup/ismatrix}
+## @seealso{@@infsup/isvector, @@infsup/ismatrix, @@infsup/isscalar}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2015-02-02
+## Created: 2015-04-18
 
-## FIXME This function is only required, because of bug #43925
-function result = isscalar (A)
+## FIXME This function is only required, because of a regression in octave 4.0
+function result = issquare (A)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = isscalar (A.inf);
+result = issquare (A.inf);
 
 endfunction
 
-%!assert (not (isscalar (infsup ([]))));
-%!assert (isscalar (infsup (0)));
-%!assert (not (isscalar (infsup (zeros (1, 2)))));
-%!assert (not (isscalar (infsup (zeros (2, 1)))));
-%!assert (not (isscalar (infsup (zeros (5)))));
+%!assert (issquare (infsup ([])));
+%!assert (issquare (infsup (0)));
+%!assert (not (issquare (infsup (zeros (1, 2)))));
+%!assert (not (issquare (infsup (zeros (2, 1)))));
+%!assert (issquare (infsup (zeros (5))));

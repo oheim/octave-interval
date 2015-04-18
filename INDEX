@@ -142,8 +142,11 @@ Utility function
  @infsup/ctranspose
  @infsup/display
  @infsup/horzcat
+ @infsup/iscolumn
  @infsup/ismatrix
+ @infsup/isrow
  @infsup/isscalar
+ @infsup/issquare
  @infsup/isvector
  @infsup/length
  @infsup/ndims
