@@ -36,7 +36,15 @@ if (nargin ~= 1)
     return
 endif
 
-dec = x.dec;
+persistent dec_translation = {...
+    "ill", [], [], [], ...
+    "trv", [], [], [], ...
+    "def", [], [], [], ...
+    "dac", [], [], [], ...
+    "com"};
+
+dec = cell (size (x.dec));
+dec (:) = dec_translation (x.dec (:) + 1);
 
 endfunction
 

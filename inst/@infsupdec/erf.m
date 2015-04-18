@@ -65,7 +65,7 @@ endif
 
 result = newdec (erf (intervalpart (x)));
 ## erf is defined and continuous everywhere
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 endfunction
 

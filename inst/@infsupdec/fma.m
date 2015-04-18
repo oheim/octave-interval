@@ -73,7 +73,7 @@ endif
 result = newdec (...
         fma (intervalpart (x), intervalpart (y), intervalpart (z)));
 ## fma is defined and continuous everywhere
-result.dec = mindec (result.dec, x.dec, y.dec, z.dec);
+result.dec = min (result.dec, min (x.dec, min (y.dec, z.dec)));
 
 endfunction
 

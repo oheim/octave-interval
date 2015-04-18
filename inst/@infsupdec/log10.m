@@ -49,10 +49,10 @@ if (isnai (x))
 endif
 
 result = newdec (log10 (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## log10 is continuous everywhere, but defined for x > 0 only
-result.dec (not (interior (x, infsupdec (0, inf)))) = "trv";
+result.dec (not (interior (x, infsupdec (0, inf)))) = _trv ();
 
 endfunction
 

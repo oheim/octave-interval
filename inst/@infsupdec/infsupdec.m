@@ -107,14 +107,17 @@ try
     if (nargin >= 1 && ischar (varargin {end}))
         varargin {end} = cellstr (varargin {end});
     endif
-        
+    
+    ## The setDec function, as described by IEEE 1788, may fix decorations
+    fix_illegal_decorations = true ();
+    
     if (nargin >= 1 && ...
         iscellstr (varargin {end}) && ...
         not (isempty (varargin {end})) && ...
-        max (strcmpi (varargin {end} {1}, ...
+        any (strcmpi (varargin {end} {1}, ...
                       {"com", "dac", "def", "trv", "ill"})))
         ## The decoration information has been passed as the last parameter
-        dec = varargin {end};
+        decstr = varargin {end};
         switch nargin
             case 1
                 [bare, isexact] = infsup ();
@@ -144,12 +147,11 @@ try
                    "illegal decorated interval literal")
         endif
         ## Extract decoration
-        dec = cell (size (varargin {1}));
-        dec (:) = {""};
+        decstr = cell (size (varargin {1}));
         hasdec = false (size (varargin {1}));
         hasdec (chars) = cellfun ("size", varargin {1} (chars), 2) == 2;
-        dec (hasdec) = cellfun (@(x) x {2}, varargin {1} (hasdec), ...
-                                "UniformOutput", false);
+        decstr (hasdec) = cellfun (@(x) x {2}, varargin {1} (hasdec), ...
+                                   "UniformOutput", false);
         varargin {1} (chars) = cellfun (@(x) x {1}, varargin {1} (chars), ...
                                         "UniformOutput", false);
         
@@ -158,20 +160,13 @@ try
         [bare, isexact, overflow] = infsup (varargin {1});
         
         ## Silently fix decorated interval literals when overflow occurred
-        dec (overflow & strcmpi (dec, "com")) = "dac";
+        decstr (overflow & strcmpi (decstr, "com")) = "dac";
         
-        ## Validate decorations of interval literals
-        if (any (any (...
-            ## Unbound common intervals are illegal
-            (strcmpi (dec, "com") & not (iscommoninterval (bare))) | ...
-            ## Empty intervals must carry trv
-            (not (strcmpi (dec, "trv") | strcmp (dec, "")) & isempty (bare)))))
-            error ("interval:InvalidOperand", ...
-                   "illegal decorated interval literal")
-        endif
+        ## Interval literals must not carry illegal decorations
+        fix_illegal_decorations = false ();
     else
         ## Undecorated interval boundaries
-        dec = {""};
+        decstr = {""};
         switch nargin
             case 0
                 [bare, isexact] = infsup ();
@@ -199,47 +194,57 @@ try
     endif
     
     assert (isa (bare, "infsup"));
-    assert (iscellstr (dec));
+    assert (iscell (decstr));
 
-    dec = lower (dec);
+    ## Convert decoration strings into decoration matrix.
+    ## Initialize the matrix with the ill decoration, which is not allowed to
+    ## be used explicitly as a parameter to this function.
+    dec = _ill () (ones (size (decstr)));
     
+    ## Missing decorations will later be assigned their final value
+    missingdecoration_value = uint8 (1); # magic value, not used otherwise
+    dec (cellfun ("isempty", decstr)) = missingdecoration_value;
+    
+    dec (strcmpi (decstr, "com")) = _com ();
+    dec (strcmpi (decstr, "dac")) = _dac ();
+    dec (strcmpi (decstr, "def")) = _def ();
+    dec (strcmpi (decstr, "trv")) = _trv ();
+
+    if (any (any (dec == _ill ())))
+        error ("interval:InvalidOperand", "illegal decoration");
+    endif
+
     ## Broadcast decoration
     if (isscalar (dec) && not (isscalar (bare)))
-        decvalue = dec {1};
-        dec = cell (size (bare));
-        dec (:) = {decvalue};
-    endif
-    
-    if (not (all (size (dec) == size (bare))))
+        dec = dec (ones (size (bare)));
+    elseif (not (all (size (dec) == size (bare))))
         error ("interval:InvalidOperand", "decoration size mismatch")
     endif
-    
+
     ## Add missing decoration
-    missingdecoration = strcmp (dec, "");
-    dec (missingdecoration) = "dac";
-    dec (missingdecoration & isempty (bare)) = "trv";
-    dec (missingdecoration & iscommoninterval (bare)) = "com";
+    missingdecoration = dec == missingdecoration_value;
+    dec (missingdecoration) = _dac ();
+    dec (missingdecoration & isempty (bare)) = _trv ();
+    dec (missingdecoration & iscommoninterval (bare)) = _com ();
     
     ## Check decoration
-    empty_not_trv = isempty (bare) & not (strcmp (dec, "trv"));
+    empty_not_trv = isempty (bare) & dec ~= _trv ();
     if (any (any (empty_not_trv)))
-        empty_not_trv = isempty (bare) & (strcmp (dec, "com") ...
-                                        | strcmp (dec, "dac") ...
-                                        | strcmp (dec, "def"));
+        if (not (fix_illegal_decorations))
+            error ("interval:InvalidOperand", ...
+                   "illegal decorated interval literal")
+        endif
         isexact = false ();
-        dec (empty_not_trv) = "trv";
+        dec (empty_not_trv) = _trv ();
     endif
-    uncommon_com = not (iscommoninterval (bare)) & strcmp (dec, "com");
+    uncommon_com = not (iscommoninterval (bare)) & dec == _com ();
     if (any (any (uncommon_com)))
+        if (not (fix_illegal_decorations))
+            error ("interval:InvalidOperand", ...
+                   "illegal decorated interval literal")
+        endif
         isexact = false ();
-        dec (uncommon_com) = "dac";
-    endif
-    if (not (all (all ( ...
-            strcmp (dec, "com") | ...
-            strcmp (dec, "dac") | ...
-            strcmp (dec, "def") | ...
-            strcmp (dec, "trv")))))
-        error ("interval:InvalidOperand", "illegal decoration");
+        dec (uncommon_com) = _dac ();
     endif
 catch
     switch lasterror.identifier
@@ -258,7 +263,7 @@ catch
     endswitch
     ## NaI representation is unique.
     bare = infsup ();
-    dec = {"ill"};
+    dec = _ill ();
     isexact = false ();
 end_try_catch
 

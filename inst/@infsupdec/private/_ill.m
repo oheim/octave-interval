@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,42 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} - @var{X}
-## 
-## Negate all numbers in the interval.
-##
-## Accuracy: The result is exact.
-##
-## @example
-## @group
-## x = infsupdec (2, 3);
-## - x
-##   @result{} [-3, -2]_com
-## @end group
-## @end example
+## @deftypefn {Function File} {} _ill ()
+## Return numeric representation of the ill-formed decoration
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2015-04-18
 
-function result = uminus (x)
-
-if (nargin ~= 1)
-    print_usage ();
-    return
-endif
-
-if (isnai (x))
-    result = x;
-    return
-endif
-
-## uminus is defined and continuous everywhere
-result = newdec (uminus (intervalpart (x)));
-result.dec = x.dec;
-
+function d = _ill ()
+## See IEEE 1788 14.4 Interchange representations and encodings
+persistent d = uint8 (0);
 endfunction
-
-%!test "from the documentation string";
-%! assert (isequal (-infsupdec (2, 3), infsupdec (-3, -2)));

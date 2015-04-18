@@ -49,15 +49,15 @@ if (isnai (x))
 endif
 
 result = newdec (ceil (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## Between two integral numbers the function is constant, thus continuous
 discontinuos = not (issingleton (result));
-result.dec (discontinuos) = mindec (result.dec (discontinuos), "def");
+result.dec (discontinuos) = min (result.dec (discontinuos), _def ());
 
 onlyrestrictioncontinuous = issingleton (result) & fix (sup (x)) == sup (x);
 result.dec (onlyrestrictioncontinuous) = ...
-    mindec (result.dec (onlyrestrictioncontinuous), "dac");
+    min (result.dec (onlyrestrictioncontinuous), _dac ());
 
 endfunction
 

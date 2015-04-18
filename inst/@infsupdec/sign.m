@@ -50,15 +50,15 @@ if (isnai (x))
 endif
 
 result = newdec (sign (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## sign is defined everywhere and continuous for x ~= 0
 discontinuous = not (issingleton (result));
-result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
+result.dec (discontinuous) = min (result.dec (discontinuous), _def ());
 
 onlyrestrictioncontinuous = inf (x) == 0 & sup (x) == 0;
 result.dec (onlyrestrictioncontinuous) = ...
-    mindec (result.dec (onlyrestrictioncontinuous), "dac");
+    min (result.dec (onlyrestrictioncontinuous), _dac ());
 
 endfunction
 

@@ -64,12 +64,12 @@ endif
 
 result = newdec (psi (intervalpart (x)));
 ## psi is continuous where it is defined
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
             (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
             (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
-result.dec (undefined) = mindec (result.dec (undefined), "trv");
+result.dec (undefined) = _trv ();
 
 endfunction
 

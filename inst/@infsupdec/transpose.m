@@ -43,7 +43,8 @@ if (nargin ~= 1)
     return
 endif
 
-result = infsupdec (transpose (intervalpart (x)), transpose (x.dec));
+result = newdec (transpose (intervalpart (x)));
+result.dec = transpose (x.dec);
 
 endfunction
 

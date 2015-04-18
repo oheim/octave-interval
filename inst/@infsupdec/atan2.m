@@ -58,19 +58,19 @@ if (isnai (y))
 endif
 
 result = newdec (atan2 (intervalpart (y), intervalpart (x)));
-result.dec = mindec (result.dec, y.dec, x.dec);
+result.dec = min (result.dec, min (y.dec, x.dec));
 
 ## The function is discontinuous for x <= 0 and y == 0
 discontinuos = inf (y) < 0 & sup (y) >= 0 & inf (x) < 0;
-result.dec (discontinuos) = mindec (result.dec (discontinuos), "def");
+result.dec (discontinuos) = min (result.dec (discontinuos), _def ());
 
 ## For y = [0, y.sup] the function is discontinuous, but its restriction is not
 onlyrestrictioncontinuous = inf (y) == 0 & inf (x) < 0;
 result.dec (onlyrestrictioncontinuous) = ...
-    mindec (result.dec (onlyrestrictioncontinuous), "dac");
+    min (result.dec (onlyrestrictioncontinuous), _dac ());
 
 ## The only undefined input is <0,0>
-result.dec (ismember (0, y) & ismember (0, x)) = "trv";
+result.dec (ismember (0, y) & ismember (0, x)) = _trv ();
 
 endfunction
 

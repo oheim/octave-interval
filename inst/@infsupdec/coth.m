@@ -48,8 +48,8 @@ endif
 
 result = newdec (coth (intervalpart (x)));
 ## coth is defined and continuous for x ~= 0
-result.dec = mindec (result.dec, x.dec);
-result.dec (inf (x) <= 0 & sup (x) >= 0) = "trv";
+result.dec = min (result.dec, x.dec);
+result.dec (inf (x) <= 0 & sup (x) >= 0) = _trv ();
 
 endfunction
 

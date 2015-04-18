@@ -77,10 +77,10 @@ else
     result = newdec (mtimes (intervalpart (x), intervalpart (y), accuracy));
 endif
 
-dec_x = reducedec (x.dec, 2);
-dec_y = reducedec (y.dec, 1);
+dec_x = min (x.dec, [], 2);
+dec_y = min (y.dec, [], 1);
 parfor i = 1 : rows (x.dec)
-    result.dec (:, i) = mindec (result.dec (:, i), dec_x, dec_y (i));
+    result.dec (:, i) = min (result.dec (:, i), min (dec_x, dec_y (i)));
 endparfor
 
 endfunction

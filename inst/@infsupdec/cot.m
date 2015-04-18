@@ -47,12 +47,12 @@ if (isnai (x))
 endif
 
 result = newdec (cot (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## Because tan (nextdown (pi)) < realmax, we can simple check for
 ## a singularity by comparing the result with entire for x ~= 0.
 domain = not (isentire (result)) | (inf (x) <= 0 & sup (x) >= 0);
-result.dec (not (domain)) = "trv";
+result.dec (not (domain)) = _trv ();
 
 endfunction
 

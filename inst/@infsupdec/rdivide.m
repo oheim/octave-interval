@@ -60,13 +60,13 @@ if (isnai (y))
 endif
 
 result = newdec (rdivide (intervalpart (x), intervalpart (y)));
-result.dec = mindec (result.dec, x.dec, y.dec);
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 divisionbyzero = ismember (0, y);
 if (isscalar (y) && not (isscalar (x)))
-    divisionbyzero = divisionbyzero * ones (size (x));
+    divisionbyzero = divisionbyzero (ones (size (x)));
 endif
-result.dec (divisionbyzero) = "trv";
+result.dec (divisionbyzero) = _trv ();
 
 endfunction
 

@@ -47,11 +47,11 @@ if (isnai (x))
 endif
 
 result = newdec (realsqrt (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## realsqrt is continuous everywhere, but defined for x >= 0 only
 defined = subset (x, infsupdec (0, inf));
-result.dec (not (defined)) = "trv";
+result.dec (not (defined)) = _trv ();
 
 endfunction
 

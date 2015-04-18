@@ -50,11 +50,11 @@ if (isnai (x))
 endif
 
 result = newdec (round (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## Round is like a scaled fix function
 discontinuous = not (issingleton (result));
-result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
+result.dec (discontinuous) = min (result.dec (discontinuous), _def ());
 
 onlyrestrictioncontinuous = issingleton (result) & not (...
     (sup (x) >= 0 | ...
@@ -62,7 +62,7 @@ onlyrestrictioncontinuous = issingleton (result) & not (...
     (inf (x) <= 0 | ...
             fix (inf (x)) == inf (x) | fix (inf (x) * 2) / 2 ~= inf (x)));
 result.dec (onlyrestrictioncontinuous) = ...
-    mindec (result.dec (onlyrestrictioncontinuous), "dac");
+    min (result.dec (onlyrestrictioncontinuous), _dac ());
 
 endfunction
 

@@ -47,9 +47,9 @@ if (isnai (x))
 endif
 
 result = newdec (acosh (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 ## acosh is continuous everywhere, but defined for [1, Inf] only
-result.dec (not (subset (x, infsupdec (1, inf)))) = "trv";
+result.dec (not (subset (x, infsupdec (1, inf)))) = _trv ();
 
 endfunction
 

@@ -66,9 +66,7 @@ if (isnai (y))
     return
 endif
 
-result = newdec (gauss (intervalpart (x), intervalpart (y)));
-## Reverse operations should not carry decoration
-result.dec (:) = "trv";
+result = infsupdec (gauss (intervalpart (x), intervalpart (y)), "trv");
 
 endfunction
 

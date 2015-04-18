@@ -47,9 +47,9 @@ if (isnai (x))
 endif
 
 result = newdec (atanh (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 ## atanh is continuous everywhere, but defined for ]-1, 1[ only
-result.dec (not (interior (x, infsupdec (-1, 1)))) = "trv";
+result.dec (not (interior (x, infsupdec (-1, 1)))) = _trv ();
 
 endfunction
 

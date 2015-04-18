@@ -50,11 +50,11 @@ if (isnai (x))
 endif
 
 result = newdec (pown (intervalpart (x), p));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## x^P is undefined for x == 0 and P < 0
 domain = p >= 0 | not (ismember (0, x));
-result.dec (not (domain)) = "trv";
+result.dec (not (domain)) = _trv ();
 
 endfunction
 

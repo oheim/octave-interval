@@ -48,7 +48,7 @@ endif
 
 result = newdec (expm1 (intervalpart (x)));
 ## expm1 is defined and continuous everywhere
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 endfunction
 

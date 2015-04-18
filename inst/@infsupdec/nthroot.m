@@ -44,14 +44,14 @@ if (isnai (x))
 endif
 
 result = newdec (nthroot (intervalpart (x), n));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## nthroot is continuous everywhere, but not defined everywhere
 even = mod (n, 2) == 0;
 defined = (not (even) & (n > 0 | inf (x) > 0 | sup (x) < 0)) ...
         | (even       & ((n > 0 & inf (x) >= 0) ...
                        | (n < 0 & inf (x) > 0)));
-result.dec (not (defined)) = "trv";
+result.dec (not (defined)) = _trv ();
 
 endfunction
 

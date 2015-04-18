@@ -61,7 +61,7 @@ endif
 
 result = newdec (plus (intervalpart (x), intervalpart (y)));
 ## plus is continuous and defined everywhere
-result.dec = mindec (result.dec, x.dec, y.dec);
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

@@ -34,9 +34,7 @@ if (nargin ~= 1)
 endif
 
 ## NaI is internally stored as a scalar empty interval with ill decoration.
-## Therefore, we do not have to perform an expensive strcmp operation on large
-## matrices when it suffices to look at the number of elements.
-result = numel (interval.dec) == 1 && strcmp (interval.dec, "ill");
+result = interval.dec == _ill ();
 
 endfunction
 

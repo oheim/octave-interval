@@ -48,7 +48,7 @@ endif
 
 result = newdec (pow10 (intervalpart (x)));
 ## pow10 is defined and continuous everywhere
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 endfunction
 

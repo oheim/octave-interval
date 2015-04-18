@@ -59,7 +59,7 @@ if (isnai (x))
 endif
 
 [s, isexact] = intervaltotext (intervalpart (x), format);
-s = strcat (s, "_", x.dec);
+s = strcat (s, {"_"}, decorationpart (x));
 if (isscalar (s))
     s = s {1};
 endif

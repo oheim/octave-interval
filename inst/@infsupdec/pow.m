@@ -62,7 +62,7 @@ if (isnai (y))
 endif
 
 result = newdec (pow (intervalpart (x), intervalpart (y)));
-result.dec = mindec (result.dec, x.dec, y.dec);
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 ## pow is continuous everywhere (where it is defined),
 ## but defined for x > 0 or (x = 0 and y > 0) only
@@ -70,7 +70,7 @@ nonnegative = infsupdec (0, inf);
 domain = interior (x, nonnegative) | ...
         (subset (x, nonnegative) & interior (y, nonnegative));
 
-result.dec (not (domain)) = "trv";
+result.dec (not (domain)) = _trv ();
 
 endfunction
 

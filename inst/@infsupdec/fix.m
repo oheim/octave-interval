@@ -50,18 +50,18 @@ if (isnai (x))
 endif
 
 result = newdec (fix (intervalpart (x)));
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 ## Between two integral numbers the function is constant, thus continuous
 ## At x == 0 the function is continuous.
 discontinuous = not (issingleton (result));
-result.dec (discontinuous) = mindec (result.dec (discontinuous), "def");
+result.dec (discontinuous) = min (result.dec (discontinuous), _def ());
 
 onlyrestrictioncontinuous = issingleton (result) & ...
     ((sup (x) < 0 & fix (sup (x)) == sup (x)) | ...
      (inf (x) > 0 & fix (inf (x)) == inf (x)));
 result.dec (onlyrestrictioncontinuous) = ...
-    mindec (result.dec (onlyrestrictioncontinuous), "dac");
+    min (result.dec (onlyrestrictioncontinuous), _dac ());
 
 endfunction
 

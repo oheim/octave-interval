@@ -54,16 +54,10 @@ if (isnai (B))
     return
 endif
 
-x = subsasgn (intervalpart (A), S, intervalpart (B));
-dx = subsasgn (A.dec, S, B.dec);
+result = newdec (subsasgn (intervalpart (A), S, intervalpart (B)));
+result.dec = subsasgn (A.dec, S, B.dec);
+result.dec (result.dec == 0) = _trv (); # any new elements are [Empty]_trv
 
-## Implicit new elements carry the value [Empty] and must be initialized with
-## decoration trv.  Old elements that have been [Empty] before, already have
-## the decoration trv.
-dx (isempty (x)) = "trv";
-
-result = infsupdec (x, dx);
- 
 endfunction
 
 %!test

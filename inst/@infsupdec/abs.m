@@ -50,7 +50,7 @@ endif
 
 result = newdec (abs (intervalpart (x)));
 ## abs is defined and continuous everywhere
-result.dec = mindec (result.dec, x.dec);
+result.dec = min (result.dec, x.dec);
 
 endfunction
 

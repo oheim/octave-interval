@@ -68,7 +68,7 @@ if (isnai (y))
 endif
 
 result = newdec (power (intervalpart (x), intervalpart (y)));
-result.dec = mindec (result.dec, x.dec, y.dec);
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 ## The general power function is continuous where it is defined
 domain = not (isempty (result)) & (...
@@ -77,7 +77,7 @@ domain = not (isempty (result)) & (...
             # defined for x < 0 only where y is integral
             (issingleton (y) & fix (inf (y)) == inf (y) & ... 
                 (inf (y) > 0 | not (ismember (0, x))))); # not defined for 0^0
-result.dec (not (domain)) = "trv";
+result.dec (not (domain)) = _trv ();
 
 endfunction
 

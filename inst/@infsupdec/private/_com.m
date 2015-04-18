@@ -15,38 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} reducedec (@var{X}, @var{DIM})
-## 
-## For an array of decorations, determine the worst (minimum) decoration of all
-## elements along a given dimension.
-##
-## @example
-## @group
-## reducedec ({"com", "dac", "def"; "com", "com", "trv"}, 1)
-##   @result{} {"com", "dac", "trv"}
-## @end group
-## @end example
+## @deftypefn {Function File} {} _com ()
+## Return numeric representation of the common decoration
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2015-01-31
+## Created: 2015-04-18
 
-function result = reducedec (x, dim)
-
-if (strcmp (x, "ill"))
-    result = x;
-    return
-endif
-
-resultsize = size (x);
-resultsize (dim) = 1;
-result = cell (resultsize);
-
-## Initialize with best possible decoration and then degrade as necessary
-result (:) = "com";
-for d = {"dac", "def", "trv"}
-    result (any (strcmp (x, d), dim)) = d;
-endfor
-
+function d = _com ()
+## See IEEE 1788 14.4 Interchange representations and encodings
+persistent d = uint8 (16);
 endfunction

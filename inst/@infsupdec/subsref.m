@@ -60,9 +60,8 @@ endif
 
 switch (S (1).type)
     case "()"
-        x = subsref (intervalpart (A), S (1));
-        dx = subsref (A.dec, S (1));
-        result = infsupdec (x, dx);
+        result = newdec (subsref (intervalpart (A), S (1)));
+        result.dec = subsref (A.dec, S (1));
     case "{}"
         error ("interval cannot be indexed with {}")
     case "."

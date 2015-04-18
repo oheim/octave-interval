@@ -62,7 +62,7 @@ else
 endif
 
 result = newdec (sum (intervalpart (x), dim));
-result.dec = mindec (result.dec, reducedec (x.dec, dim));
+result.dec = min (result.dec, min (x.dec, [], dim));
 
 endfunction
 

@@ -64,7 +64,7 @@ endif
 
 result = newdec (max (intervalpart (x), intervalpart (y)));
 ## max is defined and continuous everywhere
-result.dec = mindec (result.dec, x.dec, y.dec);
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 
