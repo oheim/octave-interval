@@ -38,18 +38,14 @@
 
 function result = horzcat (varargin)
 
-l = u = cell (1, nargin);
+## Conversion to interval
+intervals = cellfun ("isclass", varargin, "infsup");
+to_convert = not (intervals);
+varargin (to_convert) = cellfun (@infsup, varargin (to_convert), ...
+                                 "UniformOutput", false ());
 
-for i = 1 : nargin
-    if (not (isa (varargin {i}, "infsup")))
-        varargin {i} = infsup (varargin {i});
-    endif
-    l {i} = inf (varargin {i});
-    u {i} = sup (varargin {i});
-endfor
-
-l = cell2mat (l);
-u = cell2mat (u);
+l = cell2mat (cellfun (@(x) x.inf, varargin, "UniformOutput", false ()));
+u = cell2mat (cellfun (@(x) x.sup, varargin, "UniformOutput", false ()));
 
 result = infsup (l, u);
 

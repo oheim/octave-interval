@@ -40,22 +40,27 @@
 
 function result = vertcat (varargin)
 
-l = u = dx = cell (nargin, 1);
+varargin = transpose (varargin);
 
-for i = 1 : nargin
-    if (not (isa (varargin {i}, "infsupdec")))
-        varargin {i} = infsupdec (varargin {i});
-    endif
-    l {i} = inf (varargin {i});
-    u {i} = sup (varargin {i});
-    dx {i} = decorationpart (varargin {i});
-endfor
+## Conversion to interval
+decoratedintervals = cellfun ("isclass", varargin, "infsupdec");
+to_convert = not (decoratedintervals);
+varargin (to_convert) = cellfun (@infsupdec, varargin (to_convert), ...
+                                 "UniformOutput", false ());
 
-l = cell2mat (l);
-u = cell2mat (u);
-dx = vertcat (dx {:});
+nais = cellfun (@isnai, varargin);
+if (any (nais))
+    ## Simply return first NaI
+    result = varargin {find (nais, 1)};
+    return
+endif
 
-result = infsupdec (l, u, dx);
+l = cell2mat (cellfun (@inf, varargin, "UniformOutput", false ()));
+u = cell2mat (cellfun (@sup, varargin, "UniformOutput", false ()));
+d = cell2mat (cellfun (@(x) x.dec, varargin, "UniformOutput", false ()));
+
+result = newdec (infsup (l, u));
+result.dec = d;
 
 endfunction
 
