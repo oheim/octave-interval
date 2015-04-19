@@ -34,7 +34,7 @@
 ## @example
 ## @group
 ## prepad (infsupdec (1 : 3), 5, 42)
-##   @result{} 5×1 interval matrix
+##   @result{} 5×1 interval vector
 ##   
 ##      [42]_com   [42]_com   [1]_com   [2]_com   [3]_com
 ## @end group
