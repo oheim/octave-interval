@@ -1,3 +1,16 @@
+0.1.6 xxxx-xx-xx
+================
+
+ * New utility functions: cat, postpad, prepad, reshape, resize
+ 
+ * and, or: Removed deprecated functions
+
+ * Minor performance improvements (all decorated interval functions, horzcat,
+   vertcat)
+
+Bugfixes:
+ * issquare, isrow, iscolumn: Fixed compatibility issues with GNU Octave 4.0
+
 0.1.5 2015-04-06
 ================
 
@@ -25,7 +38,6 @@
    more consistently and in more cases than before (also affects console
    output).  Improved accuracy and performance with support for interval
    matrices.
-   
 
 Bugfixes
  * mtimes, mldivide: Support for broadcasting of scalar parameters
