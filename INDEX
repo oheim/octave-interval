@@ -152,6 +152,7 @@ Utility function
  @infsup/length
  @infsup/ndims
  @infsup/numel
+ @infsup/postpad
  @infsup/reshape
  @infsup/resize
  @infsup/rows
