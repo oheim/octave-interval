@@ -15,38 +15,38 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} postpad (@var{X}, @var{L})
-## @deftypefn {Function File} {} postpad (@var{X}, @var{L}, @var{C})
-## @deftypefn {Function File} {} postpad (@var{X}, @var{L}, @var{C}, @var{DIM})
+## @deftypefn {Function File} {} prepad (@var{X}, @var{L})
+## @deftypefn {Function File} {} prepad (@var{X}, @var{L}, @var{C})
+## @deftypefn {Function File} {} prepad (@var{X}, @var{L}, @var{C}, @var{DIM})
 ##
-## Append the scalar interval value @var{C} to the interval vector @var{X}
+## Prepend the scalar interval value @var{C} to the interval vector @var{X}
 ## until it is of length @var{L}.  If @var{C} is not given, an empty interval
 ## is used.
 ##
-## If @code{length (@var{X}) > L}, elements from the end of @var{X} are removed
-## until an interval vector of length @var{L} is obtained.
+## If @code{length (@var{X}) > L}, elements from the beginning of @var{X} are
+## removed until an interval vector of length @var{L} is obtained.
 ##
-## If @var{X} is an interval matrix, elements are appended or removed from each
-## row or column.
+## If @var{X} is an interval matrix, elements are prepended or removed from
+## each row or column.
 ##
 ## If the optional argument DIM is given, operate along this dimension.
 ##
 ## @example
 ## @group
-## postpad (infsup (1 : 3), 5, 42)
+## prepad (infsup (1 : 3), 5, 42)
 ##   @result{} 5×1 interval matrix
 ##   
-##      [1]   [2]   [3]   [42]   [42]
+##      [42]   [42]   [1]   [2]   [3]
 ## @end group
 ## @end example
-## @seealso{@@infsup/reshape, @@infsup/cat, @@infsup/prepad, @@infsup/resize}
+## @seealso{@@infsup/reshape, @@infsup/cat, @@infsup/postpad, @@infsup/resize}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = postpad (x, len, c, dim)
+function result = prepad (x, len, c, dim)
 
 if (nargin < 2 || nargin > 4)
     print_usage ();
@@ -67,11 +67,11 @@ if (nargin < 4)
     endif
 endif
 
-l = postpad (x.inf, len, c.inf, dim);
-u = postpad (x.sup, len, c.sup, dim);
+l = prepad (x.inf, len, c.inf, dim);
+u = prepad (x.sup, len, c.sup, dim);
 result = infsup (l, u);
 
 endfunction
 
-%!assert (postpad (infsup (1:3), 4, 4) == infsup (1:4));
-%!assert (postpad (infsup (1:3), 2, 4) == infsup (1:2));
+%!assert (prepad (infsup (2:4), 4, 1) == infsup (1:4));
+%!assert (prepad (infsup (0:2), 2, 1) == infsup (1:2));

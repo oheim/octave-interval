@@ -15,38 +15,38 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} postpad (@var{X}, @var{L})
-## @deftypefn {Function File} {} postpad (@var{X}, @var{L}, @var{C})
-## @deftypefn {Function File} {} postpad (@var{X}, @var{L}, @var{C}, @var{DIM})
+## @deftypefn {Function File} {} prepad (@var{X}, @var{L})
+## @deftypefn {Function File} {} prepad (@var{X}, @var{L}, @var{C})
+## @deftypefn {Function File} {} prepad (@var{X}, @var{L}, @var{C}, @var{DIM})
 ##
-## Append the scalar interval value @var{C} to the interval vector @var{X}
+## Prepend the scalar interval value @var{C} to the interval vector @var{X}
 ## until it is of length @var{L}.  If @var{C} is not given, an empty interval
 ## is used.
 ##
-## If @code{length (@var{X}) > L}, elements from the end of @var{X} are removed
-## until an interval vector of length @var{L} is obtained.
+## If @code{length (@var{X}) > L}, elements from the beginning of @var{X} are
+## removed until an interval vector of length @var{L} is obtained.
 ##
-## If @var{X} is an interval matrix, elements are appended or removed from each
-## row or column.
+## If @var{X} is an interval matrix, elements are prepended or removed from
+## each row or column.
 ##
 ## If the optional argument DIM is given, operate along this dimension.
 ##
 ## @example
 ## @group
-## postpad (infsupdec (1 : 3), 5, 42)
+## prepad (infsupdec (1 : 3), 5, 42)
 ##   @result{} 5×1 interval matrix
 ##   
-##      [1]_com   [2]_com   [3]_com   [42]_com   [42]_com
+##      [42]_com   [42]_com   [1]_com   [2]_com   [3]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/reshape, @@infsup/cat, @@infsupdec/prepad, @@infsupdec/resize}
+## @seealso{@@infsupdec/reshape, @@infsup/cat, @@infsupdec/postpad, @@infsupdec/resize}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = postpad (x, len, c, dim)
+function result = prepad (x, len, c, dim)
 
 if (nargin < 2 || nargin > 4)
     print_usage ();
@@ -80,10 +80,10 @@ if (isnai (c))
     return
 endif
 
-result = newdec (postpad (intervalpart (x), len, intervalpart (c), dim));
-result.dec = postpad (x.dec, len, c.dec, dim);
+result = newdec (prepad (intervalpart (x), len, intervalpart (c), dim));
+result.dec = prepad (x.dec, len, c.dec, dim);
 
 endfunction
 
-%!xtest assert (isequal (postpad (infsupdec (1:3), 4, 4), infsupdec (1:4)));
-%!xtest assert (isequal (postpad (infsupdec (1:3), 2, 4), infsupdec (1:2)));
+%!xtest assert (isequal (prepad (infsupdec (2:4), 4, 1), infsupdec (1:4)));
+%!xtest assert (isequal (prepad (infsupdec (0:2), 2, 1), infsupdec (1:2)));
