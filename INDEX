@@ -138,6 +138,7 @@ Interval solver
  @infsup/fzero
  @infsup/gauss
 Utility function
+ @infsup/cat
  @infsup/columns
  @infsup/ctranspose
  @infsup/display
