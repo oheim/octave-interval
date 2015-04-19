@@ -34,7 +34,7 @@ if (nargin ~= 1)
 endif
 
 ## NaI is internally stored as a scalar empty interval with ill decoration.
-result = interval.dec == _ill ();
+result = isscalar (interval.dec) && interval.dec == _ill ();
 
 endfunction
 
