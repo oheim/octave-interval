@@ -17,7 +17,7 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} midrad (@var{M}, @var{R})
 ## @deftypefnx {Function File} {} midrad (@var{M})
-## @deftypefn {Function File} {} midrad ()
+## @deftypefnx {Function File} {} midrad ()
 ## 
 ## Create an interval enclosure for [@var{M}-@var{R}, @var{M}+@var{R}].
 ##
