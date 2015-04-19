@@ -79,4 +79,4 @@ result.dec = dec;
 
 endfunction
 
-%!assert (isequal (resize (infsupdec (magic (3)), 4, 2), [infsupdec([8, 1; 3, 5; 4, 9]); infsupdec([inf, inf], [-inf, -inf])]));
+%!xtest assert (isequal (resize (infsupdec (magic (3)), 4, 2), [infsupdec([8, 1; 3, 5; 4, 9]); infsupdec([inf, inf], [-inf, -inf])]));
