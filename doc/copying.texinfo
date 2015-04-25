@@ -1,0 +1,31 @@
+\input texinfo
+@setfilename COPYING
+@settitle COPYING file
+@documentencoding utf-8
+
+@copying
+    Copyright @copyright{} 2015 Oliver Heimlich
+
+@comment GNU All-Permissive License
+    Copying and distribution of this file, with or without modification,
+    are permitted in any medium without royalty provided the copyright
+    notice and this notice are preserved.  This file is offered as-is,
+    without any warranty.
+@end copying
+
+The majority of code of the interval package and the interval package as a whole are licensed under the GNU General Public License.  The code is combined with unit tests from the C++ framework libieeep1788, which are released under the Apache License.
+
+The wording of both licenses can be found below.
+
+The Apache License grants “additional permissions” (as defined by section 7 of the GNU General Public License) solely to source files where this licensing is explicitly declared in the file's header.
+
+@sp 5
+
+@center The GNU General Public License.
+@include gpl-3.0.texi
+
+@sp 5
+
+@include apache-2.0.texi
+
+@bye
