@@ -11,6 +11,7 @@ HTML_DIR = $(BUILD_DIR)/$(PACKAGE)-html
 HTML_TARBALL_COMPRESSED = $(HTML_DIR).tar.gz
 INSTALLED_PACKAGE = ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
 GENERATED_HTML = $(HTML_DIR)/$(PACKAGE)/index.html
+GENERATED_NEWS = $(BUILD_DIR)/NEWS
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
 OCTAVE ?= octave
@@ -53,7 +54,8 @@ $(RELEASE_TARBALL): .hg/dirstate
 	@mkdir -p "$(BUILD_DIR)"
 	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
 
-$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
+$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL) $(GENERATED_NEWS)
+	@tar --append --file "$<" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" "$(GENERATED_NEWS)"
 	@(cd "$(BUILD_DIR)" && gzip --best -f -k "../$<")
 
 $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
@@ -63,6 +65,9 @@ $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 	@echo "Generating HTML documentation for the package. This may take a while ..."
 	@$(OCTAVE) --silent --eval "pkg load generate_html; generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', 'octave-forge')"
+
+$(GENERATED_NEWS): doc/news.texinfo
+	makeinfo --plaintext --output="$@" "$<" 
 
 $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"

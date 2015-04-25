@@ -1,0 +1,190 @@
+\input texinfo
+@setfilename NEWS
+@settitle NEWS file
+@documentencoding utf-8
+
+@copying
+    Copyright @copyright{} 2014–2015 Oliver Heimlich
+
+@comment GNU All-Permissive License
+    Copying and distribution of this file, with or without modification,
+    are permitted in any medium without royalty provided the copyright
+    notice and this notice are preserved.  This file is offered as-is,
+    without any warranty.
+@end copying
+
+@macro release{version, date}
+@heading Version \version\ \date\
+@end macro
+
+@center GNU Octave Interval Package
+@center Summary of important user-visible changes
+
+@release{0.1.6, xxxx-xx-xx}
+@itemize
+@item
+    New utility functions: cat, postpad, prepad, reshape, resize
+@item
+    and, or: Removed deprecated functions
+@item
+    Minor performance improvements (all decorated interval functions, horzcat, vertcat)
+@end itemize
+
+Bugfixes
+@itemize
+@item issquare, isrow, iscolumn: Fixed compatibility issues with GNU Octave 4.0
+@end itemize
+
+@release{0.1.5, 2015-04-06}
+@itemize
+@item
+    Implicit decoration of bare intervals triggers a warning now and can be allowed or forbidden by the user.  Implicit decoration of bare interval literals is not affected.
+@item
+    newdec: New operation for explicit promotion of bare intervals into decorated intervals (without warning).
+@item
+    Decorated interval literals with illegal decoration are no longer allowed and produce NaIs.
+@item
+    hull: In contrast to the union function, the interval constructor is no longer considered a set operation and can create intervals with a non-trivial decoration.
+@item
+    setdiff, setxor: New set operations
+@item
+    intersect, union: Renamed set operations; the old function names (and, or) are hereby deprecated and are going to be removed in the next release.
+@item
+    intervaltotext, intervaltoexact: Decimal fractions no longer omit zero before the point, and unnecessary trailing decimal places can be omitted more consistently and in more cases than before (also affects console
+    output).  Improved accuracy and performance with support for interval matrices.
+@end itemize
+
+Bugfixes
+@itemize
+@item
+    mtimes, mldivide: Support for broadcasting of scalar parameters
+@item
+    nextout: Support for decorated intervals
+@item
+    An error in GNU Octave core, which could lead to lost or wrong interval decorations, no longer affects decorated intervals (bug #42735)
+@item
+    Some errors in the function documentation have been fixed (thanks to doctest-for-matlab and Colin's texinfo compatibility patches)
+@item
+    Fixed interval field access on Windows
+@end itemize
+
+@release{0.1.4, 2015-03-15}
+@itemize
+@item
+    New interval constructors: hull, midrad
+@item
+    New interval arithmetic functions: cbrt, cot, coth, csc, csch, dilog, ei,
+    erf, erfc, gamma, gammaln, psi, rsqrt, sec, sech
+@item
+    mtimes: Support for fast, less accurate evaluation using BLAS routines
+@item
+    mldivide, mrdivide, inv: Improved performance by using faster mtimes
+@item
+    infsup, infsupdec: Enabled broadcasting of scalar boundaries
+@item
+    rad: May compute mid and rad simultaneously
+@item
+    subsref: Access to interval properties using field syntax: x.inf and x.sup
+@end itemize
+
+@release{0.1.3, 2015-02-24}
+@itemize
+@item
+    Fixed a compile error that could possibly occur during package installation
+@end itemize
+
+@release{0.1.2, 2015-02-22}
+@itemize
+@item
+    New interval arithmetic functions: nthroot, hypot, log1p, expm1
+@item
+    lu: New operation for LU(P) decomposition of interval matrices
+@item
+    nai: New decorated interval constant
+@item
+    mldivide, mrdivide, inv: Greatly improved accuracy and performance of the linear solver
+@item
+    Improved accuracy of vector sums, dot products, pownrev, and powrev2
+@item
+    powrev1, powrev2, pownrev, mulrev: Now allow non-scalar arguments
+@item
+    overlap: Renamed one overlapping state from equal to equals
+@item
+    mulrevtopair: No longer available, use mulrev with two output parameters for two-output division
+@item
+    setdec: No longer available, use infsupdec instead
+@item
+    Small performance improvements
+@end itemize
+
+Bugfixes
+@itemize
+@item
+    Compatibility with GNU Octave 4.0 (bug #43925)
+@item
+    Build problems during package installation with environment variables
+@item
+    iscommoninterval: The decorated variant must return true for common intervals without com decoration
+@item
+    eq: The decorated variant must not consider the decoration value
+@item
+    Several decorated functions: When evaluated on a subset of the function's domain, the result's decoration must be dac if the function's restriction to that subset is continuous
+@item
+    Decorated boolean functions: Must return false when evaluated on NaI input
+@item
+    Interval constructors: A PossibleUndefined warning must be issued if an interval is created from two very close decimal numbers (which can not be separated in the floating-point context) where the lower boundary is greater than the upper boundary when compared with infinite precision
+@item
+    Interval constructors: NaNs must produce empty intervals
+@item
+    Decorated interval constructor: Illegal decorations for empty intervals must be adjusted to trv, and illegal decoration com for unbounded intervals must be adjusted to dac.
+@item
+    cancelminus/cancelplus: The functions returned wrong results if the interval widths could not be compared in double-precision
+@item
+    cos: Accuracy for x = [0] improved
+@item
+    pow, powrev1, powrev2: The function must be defined for x = 0 and y > 0
+@item
+    All reverse operations: Must return a trivial decoration information at best (the only exception is mulrev)
+@end itemize
+
+@release{0.1.1, 2015-02-01}
+@itemize
+@item
+    Increased speed of computation for large matrices
+@item
+    Improved performance for fma and dot
+@item
+    mpfr_vector_dot_d: Changed syntax for faster computation on intervals
+@item
+    Decorated versions of mtimes, mldivide, mpower, inv and reduction operations sum, dot, subabs, subsquare
+@item
+    Renamed function sumsquare to sumsq in accordance with GNU Octave function names
+@item
+    New function: fzero for finding all roots of an interval arithmetic function
+@end itemize
+
+Bugfixes
+@itemize
+@item
+    nextout: Function returned wrong results
+@item
+    exacttointerval: Now produces bare intervals instead of decorated intervals in conformance with IEEE 1788
+@item
+    atanh: Function returned wrong results for ±1
+@item
+    dot: Function returned wrong results for some inputs
+@item
+    fma: Function returned wrong results for some inputs
+@item
+    infsup: Function returned wrong interval boundaries for decimal numbers, function failed on mixed numerical and string boundaries in single cell array parameter
+@item
+    mulrevtopair: Fixed order of operands in conformance with IEEE 1788 and wrong results when evaluated on intervals that contain zero
+@end itemize
+
+@release{0.1.0, 2015-01-21}
+@itemize
+@item
+    Initial release version, which already contains all required operations of the preliminary standard document IEEE P1788.
+@end itemize
+
+@bye
