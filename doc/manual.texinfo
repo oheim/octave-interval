@@ -67,9 +67,9 @@ An OCT-file interface for setting the rounding mode, developed by:
 
 @appendix
 @appendixsec IEEE 1788 Conformance
-@include ieee-1788-conformance.texinfo
+@include chapter/ieee-1788-conformance.texinfo
 
 @appendixsec GNU Free Documentation License
-@include fdl-1.3.texi
+@include license/fdl-1.3.texi
 
 @bye

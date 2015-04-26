@@ -22,10 +22,10 @@ The Apache License grants “additional permissions” (as defined by section 7
 @sp 5
 
 @center The GNU General Public License.
-@include gpl-3.0.texi
+@include license/gpl-3.0.texi
 
 @sp 5
 
-@include apache-2.0.texi
+@include license/apache-2.0.texi
 
 @bye
