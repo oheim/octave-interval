@@ -66,6 +66,7 @@ An OCT-file interface for setting the rounding mode, developed by:
     @url{http://kontakt.tuhh.de/de/suchergebnis.php?id=ti3kto}.
 
 @appendix IEEE 1788
+@include chapter/ieee-1788-functions.texinfo
 @include chapter/ieee-1788-conformance.texinfo
 
 @appendix GNU Free Documentation License
