@@ -31,39 +31,7 @@
 @sp 5
 
 @chapter Acknowledgment
-
-The GNU Octave interval package is build upon great third-party software.
-
-Several unit tests are derived from libieeep1788, developed by:
-    Marco Nehmeier @email{nehmeier@@informatik.uni-wuerzburg.de},
-    Chair of Software Engineering,
-    Department of Computer Science,
-    University of Würzburg,
-    Germany,
-    @url{http://se.informatik.uni-wuerzburg.de/},
-    @url{https://github.com/nehmeier/libieeep1788}.
-
-A linear system solver is derived from a routine developed for C-XSC by:
-    Martin Zimmer,
-    Chair of Scientific computing,
-    University of Wuppertal,
-    Germany,
-    @url{http://www2.math.uni-wuppertal.de/~xsc/}.
-
-Correctly rounded arithmetic operations are based on the GNU MPFR library by:
-    Guillaume Hanrot,
-    Vincent Lefèvre,
-    Patrick Pélissier,
-    Philippe Théveny and
-    Paul Zimmermann
-    @url{http://www.mpfr.org/}.
-
-An OCT-file interface for setting the rounding mode, developed by:
-    Kai Torben Ohlus,
-    Institute for Reliable Computing,
-    Hamburg University of Technology,
-    Germany,
-    @url{http://kontakt.tuhh.de/de/suchergebnis.php?id=ti3kto}.
+@include chapter/acknowledgment.texinfo
 
 @appendix IEEE 1788
 @include chapter/ieee-1788-functions.texinfo
