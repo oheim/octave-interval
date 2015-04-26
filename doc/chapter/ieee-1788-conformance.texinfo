@@ -1,9 +1,9 @@
 @documentencoding utf-8
-@appendixsubsec Conformance Claim
+@appendixsec Conformance Claim
 
 The inverval package version @value{version} for GNU Octave is conforming to the P1788 Standard for Interval Arithmetic, version D9.7 (March 2015).  It is conforming to the set-based flavor with IEEE 754 conformance for the infsup binary64 interval type and without compressed arithmetic.  Additionally it provides no further flavors.
 
-@appendixsubsec Conformance Questionnaire
+@appendixsec Conformance Questionnaire
 
 @enumerate a
 @item Implementation-defined behavior
