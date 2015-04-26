@@ -65,13 +65,15 @@ $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 
 $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 	@echo "Generating HTML documentation for the package. This may take a while ..."
-	@$(OCTAVE) --silent --eval "pkg load generate_html; generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', 'octave-forge')"
+	@$(OCTAVE) --silent --eval "pkg load generate_html; options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo'; generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
 
 $(GENERATED_NEWS): doc/news.texinfo
-	makeinfo --plaintext --output="$@" "$<" 
+	@echo "Compiling NEWS file ..."
+	@makeinfo --plaintext --output="$@" "$<" 
 
 $(GENERATED_COPYING): doc/copying.texinfo
-	makeinfo --plaintext --output="$@" "$<" 
+	@echo "Compiling COPYING file ..."
+	@makeinfo --plaintext --output="$@" "$<" 
 
 $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
