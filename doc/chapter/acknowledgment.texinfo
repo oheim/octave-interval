@@ -21,7 +21,7 @@ The GNU Octave interval package is build upon great third-party software.
     @comment libieeep1788/NOTICE
     @comment According to the Apache License, this shall be included in the documentation
     @indentedblock
-    @verbatiminclude libieeep1788.NOTICE
+    @verbatiminclude license/libieeep1788.NOTICE
     @end indentedblock
 
 @item
