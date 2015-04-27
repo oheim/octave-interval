@@ -130,17 +130,17 @@ endif
 ## The following rules are required for generation of test files ##
 ###################################################################
 
-TST_SOURCES = $(wildcard src/*.itl)
+TST_SOURCES = $(wildcard test/*.itl)
 TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/interval
-TST_GENERATED = $(TST_SOURCES:src/%.itl=$(TST_GENERATED_DIR)/%.tst)
+TST_GENERATED = $(TST_SOURCES:test/%.itl=$(TST_GENERATED_DIR)/%.tst)
 PWD = $(shell pwd)
 
 .PHONY: tests
 tests: $(TST_GENERATED)
 
-$(TST_GENERATED_DIR)/%.tst: src/%.itl
+$(TST_GENERATED_DIR)/%.tst: test/%.itl
 	@echo "Compiling $< ..."
-	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/src")
+	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/test")
 	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
 		echo "## by the Interval Testing Framework for IEEE 1788."; \
 		echo -n "## https://github.com/nehmeier/ITF1788/tree/"; \
