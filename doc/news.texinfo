@@ -1,7 +1,7 @@
 \input texinfo
 @setfilename NEWS
 @settitle NEWS file
-@documentencoding utf-8
+@documentencoding UTF-8
 
 @copying
     Copyright @copyright{} 2014–2015 Oliver Heimlich
