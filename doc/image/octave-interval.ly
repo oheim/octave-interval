@@ -15,10 +15,11 @@
   line-width = #(- line-width (* mm  3.000000) (* mm 1))
 }
 
-\layout {
+\score {
+  % Between d' and d'' lies an octave interval.
+  \new Voice = "" { { <d' d''>1 } }
+  % Frequency of d' in just intonation is approx. 293,7 Hz,
+  % wheras d'' has this doubled.
+  \addlyrics { \lyricmode { "[293, 588]" } }
+  \layout { }
 }
-
-{
-  <c' c''>1
-}
-
