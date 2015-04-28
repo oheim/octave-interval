@@ -1,4 +1,20 @@
-@documentencoding utf-8
 @c This is part of the GNU Octave Interval Package Manual.
 @c Copyright (C) 2015 Oliver Heimlich.
 @c See the file manual.texinfo for copying conditions.
+
+Development of the GNU Octave Interval Package started in September 2014. The proposed IEEE standard for interval arithmetic, IEEE P1788, had been drafted by its working group until July 2014 and was about to enter the balloting process. In January 2015 a first package release could be made, which contained the full set of functions required by the standard's draft. The interval package can be seen as the first complete standard conforming interval arithmetic library. Also it is the first interval arithmetic package ever released for GNU Octave.
+
+Originally it was intended to only implement the operations required by the standard document, but support for fundamental concepts of GNU Octave as well as interval vectors and interval matrices have soon been added.
+
+@noindent
+@ifnothtml
+@image{image/octave-interval,,,[GNU Octave Interval Logo],}
+@end ifnothtml
+@html
+<p>
+ <img align="middle"
+      border="0"
+      src="../image/octave-interval.png"
+      alt="[GNU Octave Interval Logo]">
+</p>
+@end html

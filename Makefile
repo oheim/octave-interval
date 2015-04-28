@@ -13,6 +13,11 @@ INSTALLED_PACKAGE = ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
 GENERATED_HTML = $(HTML_DIR)/$(PACKAGE)/index.html
 GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_COPYING = $(BUILD_DIR)/COPYING
+GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
+GENERATED_IMAGES = \
+	$(GENERATED_IMAGE_DIR)/octave-interval.png \
+	$(GENERATED_IMAGE_DIR)/octave-interval.eps \
+	$(GENERATED_IMAGE_DIR)/octave-interval.pdf
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
 OCTAVE ?= octave
@@ -55,8 +60,9 @@ $(RELEASE_TARBALL): .hg/dirstate
 	@mkdir -p "$(BUILD_DIR)"
 	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
 
-$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL) $(GENERATED_NEWS) $(GENERATED_COPYING)
-	@tar --append --file "$<" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" "$(GENERATED_NEWS)" "$(GENERATED_COPYING)"
+$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL) $(GENERATED_NEWS) $(GENERATED_COPYING) $(GENERATED_IMAGES)
+	@echo "Patching generated documentation into release tarball ..."
+	@tar --append --file "$<" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" "$(GENERATED_NEWS)" "$(GENERATED_COPYING)" $(GENERATED_IMAGES)
 	@(cd "$(BUILD_DIR)" && gzip --best -f -k "../$<")
 
 $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
@@ -65,7 +71,13 @@ $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 
 $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 	@echo "Generating HTML documentation for the package. This may take a while ..."
-	@$(OCTAVE) --silent --eval "pkg load generate_html; options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo'; generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
+	@$(OCTAVE) --silent --eval \
+		"pkg load generate_html; \
+		 options = get_html_options ('octave-forge'); \
+		 options.package_doc = 'manual.texinfo'; \
+		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
+	@mkdir -p "$(HTML_DIR)/$(PACKAGE)/image"
+	@cp $(GENERATED_IMAGE_DIR)/*.png "$(HTML_DIR)/$(PACKAGE)/image/"
 
 $(GENERATED_NEWS): doc/news.texinfo
 	@echo "Compiling NEWS file ..."
@@ -74,6 +86,15 @@ $(GENERATED_NEWS): doc/news.texinfo
 $(GENERATED_COPYING): doc/copying.texinfo
 	@echo "Compiling COPYING file ..."
 	@makeinfo --plaintext --output="$@" "$<" 
+
+$(GENERATED_IMAGE_DIR)/%.pdf: $(GENERATED_IMAGE_DIR)/%.eps
+	@epstopdf "$<"
+
+$(GENERATED_IMAGE_DIR)/octave-interval.eps: $(GENERATED_IMAGE_DIR)/octave-interval.png
+$(GENERATED_IMAGE_DIR)/octave-interval.png: doc/image/octave-interval.ly
+	@echo "Compiling logo with GNU LilyPond ..."
+	@mkdir -p "$(GENERATED_IMAGE_DIR)"
+	@lilypond --png --output "$(GENERATED_IMAGE_DIR)" --silent "$<"
 
 $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
