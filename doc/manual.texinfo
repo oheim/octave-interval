@@ -28,10 +28,28 @@
 
 @contents
 
-@sp 5
+@sp 2
 
-@chapter Acknowledgment
+@comment The following structure has been inspired by the GNU Octave manual
+
+@unnumbered Preface
+@include chapter/preface.texinfo
+@unnumberedsec Acknowledgment
 @include chapter/acknowledgment.texinfo
+@unnumberedsec Distribution
+@include chapter/distribution.texinfo
+
+@chapter Brief Introduction
+@include chapter/introduction.texinfo
+
+@chapter Getting Started
+@include chapter/getting-started.texinfo
+
+@chapter Advanced Topics
+@include chapter/advanced-topics.texinfo
+
+@chapter Introduction to Interval Arithmetic
+@include chapter/introduction-to-interval-arithmetic.texinfo
 
 @appendix IEEE 1788
 @include chapter/ieee-1788-functions.texinfo
