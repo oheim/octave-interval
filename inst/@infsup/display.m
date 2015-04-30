@@ -13,6 +13,18 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+## -*- texinfo -*-
+## @documentencoding utf-8
+## @deftypefn {Function File} {} display (@var{X})
+## 
+## Display the value of interval variable @var{X}.
+##
+## If @var{X} is a variable, the interval is display together with its variable
+## name.
+##
+## @seealso{@@infsup/disp}
+## @end deftypefn
+
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2014-10-28
@@ -24,60 +36,64 @@ if (nargin ~= 1)
     return
 endif
 
-[s, isexact] = intervaltotext (x);
-if (length (inputname (1)) > 0)
-    fprintf ("%s ", inputname (1));
-    if (isexact)
-        fprintf ("= ");
+global current_print_indent_level;
+save_current_print_indent_level = current_print_indent_level;
+unwind_protect
+    label = inputname (1);
+    if (isempty (label) && regexp(argn, '^\[\d+,\d+\]$'))
+        ## During output of cell array contents
+        label = argn;
+        ## FIXME: Need access to octave_value::current_print_indent_level
+        ## for correctly formatted nested cell array output
+        current_print_indent_level = 2;
     else
-        fprintf ("⊂ ");
+        current_print_indent_level = 0;
     endif
-endif
-
-if (not (iscell (s)))
-    fprintf (s);
-    fprintf ("\n");
-    return
-else
+    
+    line_prefix = " " (ones (1, current_print_indent_level));
+    
+    [s, isexact] = disp (x);
+    
+    fprintf (line_prefix);
+    if (not (isempty (label)))
+        fprintf (label);
+        if (isexact)
+            fprintf (" = ");
+        else
+            fprintf (" ⊂ ");
+        endif
+    endif
+    
+    if (isscalar (x.inf))
+        ## Scalar interval
+        fprintf (s);
+        if (isempty (label))
+            fprintf ("\n");
+        endif
+        return
+    endif
+    
     fprintf ("%d×%d interval ", size (x, 1), size (x, 2));
-    if (isvector (x))
+    if (isvector (x.inf))
         fprintf ("vector");
     else
         fprintf ("matrix");
     endif
     fprintf ("\n\n");
-endif
-
-columnwidth = max (cellfun ("length", s), [], 1);
-columnwidth += 3; # add 3 spaces between columns
-
-## Print all columns
-maxwidth = terminal_size () (2);
-cstart = uint32 (1);
-cend = cstart - 1;
-while (cstart <= columns (x))
-    ## Determine number of columns to print, print at least one column
-    usedwidth = 0;
-    submatrix = "";
-    do
-        cend ++;
-        submatrix = strcat (submatrix, ...
-            prepad (strjust (char (s (:, cend))), columnwidth (cend), " ", 2));
-        usedwidth += columnwidth (cend);
-    until (cend == columns (x) || ...
-           (split_long_rows () && ...
-             usedwidth + columnwidth (cend + 1) > maxwidth))
-    if (cstart > 1 || cend < columns (x))
-        if (cend > cstart)
-            fprintf (" Columns %d through %d:\n\n", cstart, cend);
-        else
-            fprintf (" Column %d:\n\n", cstart);
-        endif
+    
+    fprintf (line_prefix);
+    
+    if (current_print_indent_level > 0)
+        s = strrep (s, "\n", cstrcat ("\n", line_prefix));
+        s (end - current_print_indent_level + 1 : end) = "";
     endif
-    disp (submatrix);
+    
+    fprintf (s);
+    
     fprintf ("\n");
-    cstart = cend + 1;
-endwhile
+unwind_protect_cleanup
+    current_print_indent_level = save_current_print_indent_level;
+end_unwind_protect
 
 endfunction
 

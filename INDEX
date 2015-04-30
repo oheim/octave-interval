@@ -132,6 +132,8 @@ Interval input and output
  interval_bitpack
  exacttointerval
  @infsup/bitunpack
+ @infsup/disp
+ @infsup/display
  @infsup/intervaltoexact
  @infsup/intervaltotext
 Interval solver
