@@ -2,3 +2,115 @@
 @c Copyright (C) 2015 Oliver Heimlich.
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
+
+This chapter explains the necessary steps before using the package. The next chapter teaches basic concepts. Users who are not familiar with interval arithmetic should read the Introduction to Interval Arithmetic first.
+
+@section Installation
+Unless the package is provided by a third-party distributor, the interval package can be installed with the @command{pkg} command from within Octave. Latest release versions are published at Octave Forge and can be downloaded with the @option{-forge} option.
+
+@example
+@group
+pkg install -forge interval
+  @result{} For information about changes from previous versions of the interval package, run 'news interval'.
+@end group
+@end example
+
+During installation parts of the package are compiled for the target system, which requires the GNU MPFR development libraries (version ≥ 3.1.0) to be installed. The official GNU Octave release for Microsoft Windows already includes this dependency. For other systems it might be necessary to install MPFR development files, which are provided by most GNU distributions or can be obtained from @url{http://www.mpfr.org/}.
+
+In order to use the package during an Octave session, it must have been loaded. In the following parts of the manual it is assumed that the package has been loaded.
+
+@example
+pkg load interval
+@end example
+
+
+@section What to Expect
+
+Features
+@itemize
+@item Many interval arithmetic functions with high, system-independent accuracy
+@item Conforming to IEEE 1788
+@item Support for interval vectors and interval matrices
+@itemize
+@item very accurate vector sum, vector dot and matrix multiplication (< 1 ULP)
+@item fast matrix multiplication and fast solver for dense linear systems (BLAS routines)
+@item vectorized function evaluation
+@item broadcasting
+@end itemize
+@item Easy usage: Convenient interval constructors and GNU Octave function names 
+@end itemize
+
+@noindent
+Limitations
+@itemize
+@item No complex numbers
+@item No sparse matrices (maybe in the future, if requested by users)
+@item No multidimensional arrays (maybe in the future, if requested by users)
+@end itemize
+
+The interval arithmetic provided by the interval package focuses on easy usage, accuracy and correctness. It is rather slow compared to other arithmetic libraries.
+
+@emph{Why is the interval package slow?} All arithmetic interval operations are simulated in high-level Octave language using C99 or multi-precision floating-point routines, which is a lot slower than a @uref{https://books.google.de/books?id=JTc4XdXFnQIC&pg=PA61,hardware implementation}. Building interval arithmetic operations from floating-point routines is easy for simple monotonic functions, e. g., addition and subtraction, but is complex for others, e. g., interval power function, atan2, or reverse functions. For some interval operations it is not even possible to rely on floating-point routines, since not all required routines are available in C99 or BLAS.
+
+For example, multiplication of matrices with many elements becomes unfeasible as it takes a lot of time.
+
+Approximate runtime (wall clock time in seconds) — Results have been produced with GNU Octave 3.8.2 and Interval package 0.1.4 on an Intel® Core™ i5-4340M CPU (2.9–3.6 GHz)
+
+@multitable @columnfractions .16 .12 .12 .12 .12 .12 .12 .12
+@headitem
+    @tab@command{plus}
+    @tab@command{times}
+    @tab@command{log}
+    @tab@command{pow}
+    @tab@command{mtimes}
+    @tab@command{mtimes}
+    @tab@command{inv}
+@item Interval matrix size
+    @tab tightest@*accuracy
+    @tab tightest@*accuracy
+    @tab tightest@*accuracy
+    @tab tightest@*accuracy
+    @tab valid@*accuracy
+    @tab tightest@*accuracy
+    @tab valid@*accuracy
+@item 10 × 10
+    @tab < 0.001
+    @tab < 0.001
+    @tab 0.001
+    @tab 0.008
+    @tab 0.001
+    @tab 0.002
+    @tab 0.025
+@item 100 × 100
+    @tab 0.003
+    @tab 0.010
+    @tab 0.055
+    @tab 0.61
+    @tab 0.012
+    @tab 0.53
+    @tab 0.30
+@item 500 × 500
+    @tab 0.060
+    @tab 0.24
+    @tab 1.3
+    @tab 15
+    @tab 0.30
+    @tab 63
+    @tab 4.2
+@end multitable
+
+@emph{Why is the interval package accurate?} The GNU Octave built-in floating-point routines are not useful for interval arithmetic: Their results depend on hardware, system libraries and compilation options. The interval package handles all arithmetic functions with the help of the GNU MPFR library. With MPFR it is possible to compute system-independent, valid and tight enclosures of the correct results for most functions. However, it should be noted that some reverse operations and matrix operations do not exists in GNU MPFR and therefore cannot be computed with the same accuracy. 
+
+
+@section Getting Help
+
+The interval package contains online help for every function, which can be accessed with the @command{help} command from Octave. The interval arithmetic is implemented with specialized data types which override standard functions. Whilst @command{help @var{function name}} shows the documentation for core Octave functions, the interval variants of these functions can be requested with @command{help @@infsup/@var{function name}}.
+
+Further help can be seeked at the @uref{https://lists.gnu.org/mailman/listinfo/help-octave,Octave Help mailing list}.
+
+
+@section Development
+
+The source code of the interval package is distributed together with its release. The source code repository is located at @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,Octave Forge} and contains the latest development version.
+
+Bugs and feature requests may be posted under the @uref{http://savannah.gnu.org/projects/octave,Octave Project at Savannah}.

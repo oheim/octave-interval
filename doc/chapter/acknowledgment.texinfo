@@ -27,3 +27,5 @@ The GNU Octave interval package is build upon great third-party software.
 @item
     Fast matrix multiplication @code{mtimes (@var{x}, @var{y}, 'valid')} as well as the linear system solver @code{mldivide} use BLAS routines with directed rounding. An OCT-file interface for setting the rounding mode has been developed by Kai Torben Ohlus, Institute for Reliable Computing, Hamburg University of Technology, Germany.
 @end itemize
+
+Last, but not least, many thanks to everybody who has contributed to the success of free software!
