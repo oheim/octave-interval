@@ -19,10 +19,28 @@
 ##
 ## Display the value of interval @var{X}.
 ##
+## Interval boundaries are approximated with faithful decimal numbers.
+##
+## Interval matrices with many rows are wrapped according to the terminal
+## width.  @code{disp} prints nothing when @var{X} is an interval matrix
+## without elements.
+##
+## Note that the output from @code{disp} always ends with a newline.
+##
 ## If an output value is requested, @code{disp} prints nothing and returns the
 ## formatted output in a string.
 ##
-## @seealso{@@infsup/display}
+## @example
+## @group
+## disp (infsupdec ("pi"))
+##   @result{} [3.141592653589793, 3.1415926535897936]_com
+## disp (infsupdec (1 : 5))
+##   @result{}    [1]_com   [2]_com   [3]_com   [4]_com   [5]_com
+## s = disp (infsupdec (0))
+##   @result{} s = [0]_com
+## @end group
+## @end example
+## @seealso{@@infsup/display, @@infsup/intervaltotext}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -55,48 +73,46 @@ columnwidth += 3; # add 3 spaces between columns
 
 ## Print all columns
 buffer = "";
-## FIXME: See display.m for how current_print_indent_level is used
-global current_print_indent_level;
-maxwidth = terminal_size () (2) - current_print_indent_level;
-cstart = uint32 (1);
-cend = cstart - 1;
-while (cstart <= columns (x))
-    ## Determine number of columns to print, print at least one column
-    usedwidth = 0;
-    submatrix = "";
-    do
-        cend ++;
-        submatrix = strcat (submatrix, ...
-            prepad (strjust (char (s (:, cend))), columnwidth (cend), " ", 2));
-        usedwidth += columnwidth (cend);
-    until (cend == columns (x) || ...
-           (split_long_rows () && ...
-             usedwidth + columnwidth (cend + 1) > maxwidth))
-    if (cstart > 1 || cend < columns (x))
-        if (cstart > 1)
-            buffer = cstrcat (buffer, "\n");
+if (rows (x) > 0)
+    ## FIXME: See display.m for how current_print_indent_level is used
+    global current_print_indent_level;
+    maxwidth = terminal_size () (2) - current_print_indent_level;
+    cstart = uint32 (1);
+    cend = cstart - 1;
+    while (cstart <= columns (x))
+        ## Determine number of columns to print, print at least one column
+        usedwidth = 0;
+        submatrix = "";
+        do
+            cend ++;
+            submatrix = strcat (submatrix, ...
+                prepad (strjust (char (s (:, cend))), columnwidth (cend), " ", 2));
+            usedwidth += columnwidth (cend);
+        until (cend == columns (x) || ...
+               (split_long_rows () && ...
+                 usedwidth + columnwidth (cend + 1) > maxwidth))
+        if (cstart > 1 || cend < columns (x))
+            if (cstart > 1)
+                buffer = cstrcat (buffer, "\n");
+            endif
+            if (cend > cstart)
+                buffer = cstrcat (buffer, ...
+                                  sprintf(" Columns %d through %d:\n\n", ...
+                                        cstart, cend)); ...
+            else
+                buffer = cstrcat (buffer, ...
+                                  sprintf(" Column %d:\n\n", cstart));
+            endif
         endif
-        if (cend > cstart)
-            buffer = cstrcat (buffer, ...
-                              sprintf(" Columns %d through %d:\n\n", ...
-                                    cstart, cend)); ...
-        else
-            buffer = cstrcat (buffer, ...
-                              sprintf(" Column %d:\n\n", cstart));
+        ## Convert string matrix into string with newlines
+        buffer = cstrcat (buffer, strjoin (cellstr (submatrix), "\n"), "\n");
+        if (nargout == 0)
+            fprintf (buffer);
+            buffer = "";
         endif
-    endif
-    ## Convert string matrix into string with newlines
-    buffer = cstrcat (buffer, strjoin (cellstr (submatrix), '\n'));
-    if (nargout == 0)
-        disp (buffer);
-        buffer = "";
-    else
-        ## disp (buffer) adds an implicit newline at the end,
-        ## we have to compensate if output is returned as a string
-        buffer = cstrcat (buffer, "\n");
-    endif
-    cstart = cend + 1;
-endwhile
+        cstart = cend + 1;
+    endwhile
+endif
 
 if (nargout > 0)
     varargout {1} = buffer;

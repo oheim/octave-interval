@@ -17,12 +17,46 @@
 ## @documentencoding utf-8
 ## @deftypefn {Function File} {} display (@var{X})
 ## 
-## Display the value of interval variable @var{X}.
+## Display the variable name and value of interval @var{X}.
+##
+## Interval boundaries are approximated with faithful decimal numbers.
 ##
 ## If @var{X} is a variable, the interval is display together with its variable
-## name.
+## name.  The variable name is followed by an equality sign if all decimal
+## boundaries exactly represent the actual boundaries.  Otherwise a subset
+## symbol is used instead.
 ##
-## @seealso{@@infsup/disp}
+## For non-scalar intervals the size and classification (interval vector or
+## interval matrix) is displayed before the content.
+##
+## @example
+## @group
+## display (infsupdec (2));
+##   @result{} [2]_com
+## @end group
+## @end example
+## @example
+## @group
+## x = infsupdec (2); display (x);
+##   @result{} x = [2]_com
+## @end group
+## @end example
+## @example
+## @group
+## y = infsupdec (eps); display (y);
+##   @result{} y ⊂ [2.220446049250313e-16, 2.220446049250314e-16]_com
+## @end group
+## @end example
+## @example
+## @group
+## z = infsupdec (pascal (2)); display (z);
+##   @result{} z = 2×2 interval matrix
+##   
+##      [1]_com   [1]_com
+##      [1]_com   [2]_com
+## @end group
+## @end example
+## @seealso{@@infsup/disp, @@infsup/intervaltotext}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -64,7 +98,7 @@ unwind_protect
         endif
     endif
     
-    if (isscalar (x.inf))
+    if (isscalar (x))
         ## Scalar interval
         fprintf (s);
         if (isempty (label))
@@ -74,7 +108,7 @@ unwind_protect
     endif
     
     fprintf ("%d×%d interval ", size (x, 1), size (x, 2));
-    if (isvector (x.inf))
+    if (isvector (x))
         fprintf ("vector");
     else
         fprintf ("matrix");
