@@ -46,7 +46,8 @@ l = u = cossignl = cossignu = zeros (size (x.inf));
 ## Check, if wid (x) is certainly greater than 2*pi. This can save the
 ## computation if some sine values.
 width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
-twopi.sup = 0x6487ED5 * pow2 (-24) + 0x442D190 * pow2 (-54);
+pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+twopi.sup = 2 * pi.sup;
 certainlyfullperiod = width >= twopi.sup;
 l (certainlyfullperiod) = -1;
 u (certainlyfullperiod) = 1;
@@ -70,11 +71,13 @@ cossignl (cossignl == 0) = sign (l (cossignl == 0));
 cossignu (cossignu == 0) = (-1) * sign (u (cossignu == 0));
 
 containsinf = possiblynotfullperiod & ((cossignl == -1 & cossignu == 1) | ...
-                                       (cossignl == cossignu & width > 4));
+                                       (cossignl == cossignu & ...
+                                            width >= pi.sup));
 l (containsinf) = -1;
 
 containssup = possiblynotfullperiod & ((cossignl == 1 & cossignu == -1) | ...
-                                       (cossignl == cossignu & width > 4));
+                                       (cossignl == cossignu & ...
+                                            width >= pi.sup));
 u (containssup) = 1;
 
 emptyresult = isempty (x);
