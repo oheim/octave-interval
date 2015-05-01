@@ -34,7 +34,7 @@
 ## @example
 ## @group
 ## prepad (infsup (1 : 3), 5, 42)
-##   @result{} 5×1 interval vector
+##   @result{} 1×5 interval vector
 ##   
 ##      [42]   [42]   [1]   [2]   [3]
 ## @end group

@@ -29,7 +29,7 @@
 ## @example
 ## @group
 ## reshape (infsupdec (1 : 6), 2, 3)
-##   @result{} 2×3 interval matrix
+##   @result{} ans = 2×3 interval matrix
 ##   
 ##          [1]_com   [3]_com   [5]_com
 ##          [2]_com   [4]_com   [6]_com
