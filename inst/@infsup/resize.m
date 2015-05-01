@@ -34,7 +34,7 @@
 ## @example
 ## @group
 ## resize (infsup (magic (3)), 4, 2)
-##   @result{} ans = 4×2 interval matrix
+##   @result{} 4×2 interval matrix
 ##   
 ##          [8]       [1]
 ##          [3]       [5]

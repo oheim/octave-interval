@@ -34,7 +34,7 @@
 ## @example
 ## @group
 ## postpad (infsup (1 : 3), 5, 42)
-##   @result{} ans = 1×5 interval vector
+##   @result{} 1×5 interval vector
 ##   
 ##      [1]   [2]   [3]   [42]   [42]
 ## @end group
