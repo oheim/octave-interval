@@ -23,9 +23,13 @@
 @release{0.1.6, xxxx-xx-xx}
 @itemize
 @item
+    User manual included in the package, see doc/manual.texinfo
+@item
     New utility functions: cat, postpad, prepad, reshape, resize
 @item
     and, or: Removed deprecated functions
+@item
+    Improved display output for cell arrays and new function: disp
 @item
     Minor performance improvements (all decorated interval functions, horzcat, vertcat)
 @end itemize
