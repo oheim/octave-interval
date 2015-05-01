@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} expm1 (@var{X})
 ## 
 ## Compute @code{exp (@var{X} - 1)} accurately in the neighborhood of zero.

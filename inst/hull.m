@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} hull (@var{X1}, @var{X2}, …)
 ## 
 ## Create an interval enclosure for a list of parameters.

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn  {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF}, @var{MAXSTEPS})
 ## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF})
 ## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{MAXSTEPS})

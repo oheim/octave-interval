@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} roundb (@var{X})
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are

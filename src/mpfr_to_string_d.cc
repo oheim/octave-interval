@@ -21,7 +21,7 @@
 
 DEFUN_DLD (mpfr_to_string_d, args, nargout, 
   "-*- texinfo -*-\n"
-  "@documentencoding utf-8\n"
+  "@documentencoding UTF-8\n"
   "@deftypefn  {Loadable Function} {} mpfr_to_string_d (@var{R}, @var{FORMAT}, @var{X})\n"
   "\n"
   "Convert binary64 numbers @var{X} to string representation, either exact or "

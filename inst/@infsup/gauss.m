@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} {@var{x} =} gauss (@var{A}, @var{b})
 ## 
 ## Solve a linear interval system @var{A} * @var{x} = @var{b} using Gaussian

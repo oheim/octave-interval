@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {[@var{QUOTIENT}, @var{REMAINDER}] =} decimaldivide (@var{DIVIDEND}, @var{DIVISOR}, @var{PRECISION})
 ## 
 ## Divide two decimal numbers.  The parameter @var{PRECISION} limits the

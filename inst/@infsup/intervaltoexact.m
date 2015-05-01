@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {@var{S} =} intervaltoexact (@var{X})
 ## 
 ## Build an exact representation of the interval @var{X} in

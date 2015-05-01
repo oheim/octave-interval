@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} strictprecedes (@var{A}, @var{B})
 ## 
 ## Evaluate strict precedes comparison on intervals.

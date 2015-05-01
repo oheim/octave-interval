@@ -195,7 +195,7 @@ std::pair <double, double> vector_dot (
 
 DEFUN_DLD (mpfr_vector_dot_d, args, nargout, 
   "-*- texinfo -*-\n"
-  "@documentencoding utf-8\n"
+  "@documentencoding UTF-8\n"
   "@deftypefn  {Loadable Function} {[@var{L}, @var{U}] =} mpfr_vector_dot_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
   "@deftypefnx {Loadable Function} {[@var{D}, @var{E}] =} mpfr_vector_dot_d (@var{R}, @var{X}, @var{Y})\n"
   "\n"

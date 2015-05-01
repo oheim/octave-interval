@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} pown (@var{X}, @var{P})
 ## 
 ## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.

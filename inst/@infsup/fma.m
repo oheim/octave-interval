@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} fma (@var{X}, @var{Y}, @var{Z})
 ## 
 ## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.

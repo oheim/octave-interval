@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} resize (@var{X}, @var{M})
 ## @deftypefnx {Function File} {} resize (@var{X}, @var{M}, @var{N})
 ## @deftypefnx {Function File} {} resize (@var{X}, [@var{M} @var{N}])

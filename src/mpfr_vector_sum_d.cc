@@ -21,7 +21,7 @@
 
 DEFUN_DLD (mpfr_vector_sum_d, args, nargout, 
   "-*- texinfo -*-\n"
-  "@documentencoding utf-8\n"
+  "@documentencoding UTF-8\n"
   "@deftypefn  {Loadable Function} {[@var{S}, @var{E}] =} mpfr_vector_sum_d (@var{R}, @var{X})\n"
   "\n"
   "Compute the sum @var{S} of all numbers in a binary64 vector @var{X} with "

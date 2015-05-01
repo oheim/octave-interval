@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} {} [@var{ARRAY1}; @var{ARRAY2}; ...]
 ##
 ## Return the vertical concatenation of interval array objects along

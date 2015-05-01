@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {@var{Z} =} cancelminus (@var{X}, @var{Y})
 ## 
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one

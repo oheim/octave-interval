@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} cat (@var{DIM}, @var{MATRIX1}, @var{MATRIX2}, …)
 ##
 ## Return the concatenation of interval matrices @var{MATRIX1}, @var{MATRIX2}, 

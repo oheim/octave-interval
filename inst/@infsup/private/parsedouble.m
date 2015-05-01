@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {[@var{SIGN}, @var{EXPONENT}, @var{MANTISSA}] =} parsedouble (@var{X})
 ## 
 ## Parse a finite binary floating point number @var{X} in double precision.

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} {} setxor (@var{A}, @var{B})
 ## @deftypefnx {Function File} {} {[C, C1, C2]} setxor (@var{A}, @var{B})
 ## 

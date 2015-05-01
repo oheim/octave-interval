@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {@var{DECIMAL} =} decimaladd (@var{DECIMAL}, @var{ADDEND})
 ## 
 ## Add two decimal numbers.

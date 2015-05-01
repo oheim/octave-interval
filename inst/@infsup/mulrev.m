@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {@var{X} =} mulrev (@var{B}, @var{C}, @var{X})
 ## @deftypefnx {Function File} {@var{X} =} mulrev (@var{B}, @var{C})
 ## @deftypefnx {Function File} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C})

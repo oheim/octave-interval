@@ -163,7 +163,7 @@ void nthroot (
 
 DEFUN_DLD (mpfr_function_d, args, nargout, 
   "-*- texinfo -*-\n"
-  "@documentencoding utf-8\n"
+  "@documentencoding UTF-8\n"
   "@deftypefn  {Loadable Function} {} mpfr_function_d ('acos', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('acosh', @var{R}, @var{X})\n"
   "@deftypefnx {Loadable Function} {} mpfr_function_d ('asin', @var{R}, @var{X})\n"
