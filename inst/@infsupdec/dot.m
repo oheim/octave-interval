@@ -88,7 +88,7 @@ endif
 
 result = newdec (dot (intervalpart (x), intervalpart (y), dim));
 result.dec = min (result.dec, ...
-                  min (x.dec, y.dec, dim));
+                  min (min (x.dec, [], dim), min (y.dec, [], dim)));
 
 endfunction
 
