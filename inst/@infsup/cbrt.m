@@ -17,14 +17,14 @@
 ## @documentencoding UTF-8
 ## @deftypefn {Function File} {} cbrt (@var{X})
 ## 
-## Compute the cube root (for all non-negative numbers).
+## Compute the cube root.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## cbrt (infsup (-6, 27))
-##   @result{} [0, 3]
+## cbrt (infsup (-27, 27))
+##   @result{} [-3, 3]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/realsqrt, @@infsup/nthroot}
@@ -36,10 +36,10 @@
 
 function result = cbrt (x)
 
-l = mpfr_function_d ('cbrt', -inf, max (0, x.inf));
-u = mpfr_function_d ('cbrt', +inf, max (0, x.sup));
+l = mpfr_function_d ('cbrt', -inf, x.inf);
+u = mpfr_function_d ('cbrt', +inf, x.sup);
 
-emptyresult = isempty (x) | x.sup < 0;
+emptyresult = isempty (x);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
@@ -48,4 +48,4 @@ result = infsup (l, u);
 endfunction
 
 %!test "from the documentation string";
-%! assert (cbrt (infsup (-6, 27)) == infsup (0, 3));
+%! assert (cbrt (infsup (-27, 27)) == infsup (-3, 3));

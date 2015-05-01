@@ -37,6 +37,7 @@
 Bugfixes
 @itemize
 @item issquare, isrow, iscolumn: Fixed compatibility issues with GNU Octave 4.0
+@item cbrt: Allow negative values as parameter
 @end itemize
 
 @release{0.1.5, 2015-04-06}

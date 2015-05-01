@@ -17,14 +17,14 @@
 ## @documentencoding UTF-8
 ## @deftypefn {Function File} {} cbrt (@var{X})
 ## 
-## Compute the cube root (for all non-negative numbers).
+## Compute the cube root.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## cbrt (infsupdec (-6, 27))
-##   @result{} [0, 3]_trv
+## cbrt (infsupdec (-27, 27))
+##   @result{} [-3, 3]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/realsqrt, @@infsupdec/nthroot}
@@ -49,11 +49,7 @@ endif
 result = newdec (cbrt (intervalpart (x)));
 result.dec = min (result.dec, x.dec);
 
-## cbrt is continuous everywhere, but defined for x >= 0 only
-defined = subset (x, infsupdec (0, inf));
-result.dec (not (defined)) = _trv ();
-
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (cbrt (infsupdec (-6, 27)), infsupdec (0, 3, "trv")));
+%! assert (isequal (cbrt (infsupdec (-27, 27)), infsupdec (-3, 3)));
