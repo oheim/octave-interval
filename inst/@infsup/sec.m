@@ -46,8 +46,8 @@ l = u = derivl = derivu = zeros (size (x.inf));
 ## Check, if wid (x) is certainly greater than 2*pi. This can save the
 ## computation if some values.
 width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
-twopi.sup = 0x6487ED5 * pow2 (-24) + 0x442D190 * pow2 (-54);
-certainlysingularity = width >= twopi.sup;
+pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
+certainlysingularity = width >= pi.sup;
 
 ## We simply compute the secant for both endpoints.
 select = not (certainlysingularity);
@@ -59,7 +59,7 @@ u (select) = max (...
     mpfr_function_d ('sec', inf, x.sup (select)));
 
 ## A change of sign is a sufficient singularity indicator
-certainlysingularity = certainlysingularity | (select & l < 0 & u > 0);
+certainlysingularity = certainlysingularity | (select & sign (l) ~= sign (u));
 l (certainlysingularity) = -inf;
 u (certainlysingularity) = inf;
 
