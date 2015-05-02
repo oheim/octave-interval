@@ -7,22 +7,25 @@ The GNU Octave interval package is build upon great third-party software.
 
 @itemize
 @item
-    Correctly rounded arithmetic operations are based on the GNU MPFR library @url{http://www.mpfr.org/} by Guillaume Hanrot, Vincent Lefèvre, Patrick Pélissier, Philippe Théveny and Paul Zimmermann.
+    Correctly rounded arithmetic operations are based on the @uref{http://www.mpfr.org/,GNU MPFR library} by Guillaume Hanrot, Vincent Lefèvre, Patrick Pélissier, Philippe Théveny and Paul Zimmermann.
 
 @item
-    A linear system solver @code{mldivide} for bare intervals is derived from a routine developed for C-XSC @url{http://www2.math.uni-wuppertal.de/~xsc/} by Martin Zimmer, Chair of Scientific Computing, University of Wuppertal, Germany.
+    A linear system solver @code{mldivide} for bare intervals is derived from a routine developed for @uref{http://www2.math.uni-wuppertal.de/~xsc/,C-XSC} by Martin Zimmer, Chair of Scientific Computing, University of Wuppertal, Germany.
 
 @item
-    Most unit tests are written in portable ITL format and converted into GNU Octave test cases with the Interval Testing Framework for IEEE 1788 @url{https://github.com/nehmeier/ITF1788}. The framework has been developed by Maximilian Kiesner and Marco Nehmeier, Chair of Software Engineering, Department of Computer Science, University of Würzburg, Germany.
+    Most unit tests are written in portable ITL format and converted into GNU Octave test cases with the @uref{https://github.com/nehmeier/ITF1788,Interval Testing Framework for IEEE 1788}. The framework has been developed by Maximilian Kiesner and Marco Nehmeier, Chair of Software Engineering, Department of Computer Science, University of Würzburg, Germany.
 
 @item
-    Several unit tests are derived from libieeep1788 @url{https://github.com/nehmeier/libieeep1788}, a C++ implementation of the IEEE 1788 standard for interval arithmetic. The C++ library contains several unit tests for its IEEE 754 flavor, which is compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 6000 of these test cases into portable ITL format for verification of this package.
+    Several unit tests are derived from @uref{https://github.com/nehmeier/libieeep1788,libieeep1788}, a C++ implementation of the IEEE 1788 standard for interval arithmetic. The library contains several unit tests for its IEEE 754 flavor, which is compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 6000 of these test cases into portable ITL format for verification of this package.
     
     @comment libieeep1788/NOTICE
     @comment According to the Apache License, this shall be included in the documentation
     @indentedblock
     @verbatiminclude license/libieeep1788.NOTICE
     @end indentedblock
+
+@item
+    Several unit tests are derived from @uref{http://perso.ens-lyon.fr/nathalie.revol/software.html,MPFI}, a C++ interval arithmetic library based on GNU MPFR. The library contains several unit tests for binary64 numbers, which are compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 1500 of these test cases into portable ITL format for verification of this package.
 
 @item
     Fast matrix multiplication @code{mtimes (@var{x}, @var{y}, 'valid')} as well as the linear system solver @code{mldivide} use BLAS routines with directed rounding. An OCT-file interface for setting the rounding mode has been developed by Kai Torben Ohlus, Institute for Reliable Computing, Hamburg University of Technology, Germany.
