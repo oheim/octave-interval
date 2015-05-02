@@ -386,7 +386,7 @@ testcase mpfi_coth {
     coth [-8.0, 0.0] = [-infinity, -0x1000003c6ab7e7p-52];
     coth [-3.0, 0.0] = [-infinity, -0x10145b3cc9964bp-52];
     coth [-1.0, 0.0] = [-infinity, -0x150231499b6b1dp-52];
-    coth [0.0, 0.0] = [entire];
+    coth [0.0, 0.0] = [empty];
     coth [0.0, +1.0] = [0x150231499b6b1dp-52, +infinity];
     coth [0.0, +3.0] = [0x10145b3cc9964bp-52, +infinity];
     coth [0.0, +8.0] = [0x1000003c6ab7e7p-52, +infinity];
