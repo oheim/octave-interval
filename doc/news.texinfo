@@ -34,7 +34,7 @@
     Minor performance improvements (all decorated interval functions, horzcat, vertcat)
 @end itemize
 
-Bugfixes
+@noindent Bugfixes
 @itemize
 @item issquare, isrow, iscolumn: Fixed compatibility issues with GNU Octave 4.0
 @item cbrt: Allow negative values as parameter
@@ -61,7 +61,7 @@ Bugfixes
     output).  Improved accuracy and performance with support for interval matrices.
 @end itemize
 
-Bugfixes
+@noindent Bugfixes
 @itemize
 @item
     mtimes, mldivide: Support for broadcasting of scalar parameters
@@ -124,7 +124,7 @@ Bugfixes
     Small performance improvements
 @end itemize
 
-Bugfixes
+@noindent Bugfixes
 @itemize
 @item
     Compatibility with GNU Octave 4.0 (bug #43925)
@@ -170,7 +170,7 @@ Bugfixes
     New function: fzero for finding all roots of an interval arithmetic function
 @end itemize
 
-Bugfixes
+@noindent Bugfixes
 @itemize
 @item
     nextout: Function returned wrong results
