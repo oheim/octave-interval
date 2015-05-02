@@ -53,6 +53,9 @@ possiblynotfullperiod = not (certainlyfullperiod);
 l (possiblynotfullperiod) = mpfr_function_d ('cot', -inf, x.sup (possiblynotfullperiod));
 u (possiblynotfullperiod) = mpfr_function_d ('cot', inf, x.inf (possiblynotfullperiod));
 
+l (x.sup == 0) = -inf;
+u (x.inf == 0) = +inf;
+
 singularity = certainlyfullperiod | ...
               l > u | (...
                   width > 2 & (...

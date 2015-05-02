@@ -38,6 +38,7 @@ Bugfixes
 @itemize
 @item issquare, isrow, iscolumn: Fixed compatibility issues with GNU Octave 4.0
 @item cbrt: Allow negative values as parameter
+@item cot: Fixed accuracy for x = 0
 @item cos, csc, sec, sin: Fixed correctness in certain cases
 @end itemize
 
