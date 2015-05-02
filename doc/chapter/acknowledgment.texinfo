@@ -28,6 +28,9 @@ The GNU Octave interval package is build upon great third-party software.
     Several unit tests are derived from @uref{http://perso.ens-lyon.fr/nathalie.revol/software.html,MPFI}, a C++ interval arithmetic library based on GNU MPFR. The library contains several unit tests for binary64 numbers, which are compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 1500 of these test cases into portable ITL format for verification of this package.
 
 @item
+    Several unit tests are derived from @uref{http://www2.math.uni-wuppertal.de/wrswt/software/filib.html,FI_LIB}, an ANSI-C interval arithmetic library based on binary64 numbers. The library contains several unit tests, which are compatible with the arithmetic of the GNU Octave interval package. I have converted 800 of these test cases into portable ITL format for verification of this package.
+
+@item
     Fast matrix multiplication @code{mtimes (@var{x}, @var{y}, 'valid')} as well as the linear system solver @code{mldivide} use BLAS routines with directed rounding. An OCT-file interface for setting the rounding mode has been developed by Kai Torben Ohlus, Institute for Reliable Computing, Hamburg University of Technology, Germany.
 @end itemize
 
