@@ -175,7 +175,7 @@ $(RELEASE_TARBALL_COMPRESSED): patch-tests
 .INTERMEDIATE: patch-tests
 patch-tests: $(RELEASE_TARBALL) $(TST_GENERATED) 
 	@echo "Patching generated tests into release tarball ..."
-	@tar --append --file "$<" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/!" $(TST_GENERATED_DIR)/*
+	@tar --append --file "$<" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $(TST_GENERATED_DIR)/*
 
 check: $(TST_GENERATED)
 
