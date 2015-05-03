@@ -19,7 +19,7 @@
 @image{\file\,,,\description\,}
 @end ifnothtml
 @html
-<p><img border="0" src="../\file\.png" alt="\description\" /></p>
+<p><img border="0" src="\file\.png" alt="\description\" /></p>
 @end html
 @end macro
 

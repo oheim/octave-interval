@@ -14,13 +14,11 @@ GENERATED_HTML = $(HTML_DIR)/$(PACKAGE)/index.html
 GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_COPYING = $(BUILD_DIR)/COPYING
 GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
+IMAGE_SOURCES = $(wildcard doc/image/*)
 GENERATED_IMAGES = \
-	$(GENERATED_IMAGE_DIR)/octave-interval.ly.png \
-	$(GENERATED_IMAGE_DIR)/octave-interval.ly.eps \
-	$(GENERATED_IMAGE_DIR)/octave-interval.ly.pdf \
-	$(GENERATED_IMAGE_DIR)/inverse-power.svg.png \
-	$(GENERATED_IMAGE_DIR)/inverse-power.svg.eps \
-	$(GENERATED_IMAGE_DIR)/inverse-power.svg.pdf
+	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.png) \
+	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.eps) \
+	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.pdf)
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
 OCTAVE ?= octave
@@ -79,8 +77,6 @@ $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
 		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
-	@mkdir -p "$(HTML_DIR)/$(PACKAGE)/image"
-	@cp $(GENERATED_IMAGE_DIR)/*.png "$(HTML_DIR)/$(PACKAGE)/image/"
 
 $(GENERATED_NEWS): doc/news.texinfo
 	@echo "Compiling NEWS ..."
