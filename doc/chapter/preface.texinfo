@@ -12,5 +12,3 @@ Originally it was intended to only implement the operations required by the stan
 @myimage{image/octave-interval.ly,GNU Octave Interval Logo}
 
 Like Octave, the interval package has nothing to do with music. Above logo is a pun and shows an octave interval between d' and d''. The frequencies of these notes can be enclosed by an interval which is a subset of [293, 588] Hz.
-
-The interval package is free software: Everyone is encouraged to use it, copy it and redistribute it, as well as to make changes under the terms of the GNU General Public License. This manual is also free and can be used under the terms of the GNU Free Documentation License.

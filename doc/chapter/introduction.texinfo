@@ -17,8 +17,6 @@ pkg install -forge interval
 
 During installation parts of the package are compiled for the target system, which requires the GNU MPFR development libraries (version ≥ 3.1.0) to be installed. The official GNU Octave release for Microsoft Windows already includes this dependency. For other systems it might be necessary to install MPFR development files, which are provided by most GNU distributions or can be obtained from @url{http://www.mpfr.org/}.
 
-Ports for Mac OS X and FreeBSD are know to exist at MacPorts and FreshPorts respectively.
-
 In order to use the package during an Octave session, it must have been loaded. In the following parts of the manual it is assumed that the package has been loaded.
 
 @example
@@ -36,12 +34,16 @@ Features
 @item Conforming to IEEE 1788
 @item Support for interval vectors and interval matrices
 @itemize
-@item very accurate vector sum, vector dot and matrix multiplication (< 1 ULP)
+@item very accurate vector sum, vector dot and matrix multiplication (correctly rounded)
 @item fast matrix multiplication and fast solver for dense linear systems (BLAS routines)
 @item vectorized function evaluation
+@end itemize
+@item Easy usage
+@itemize
+@item GNU Octave function names 
+@item convenient interval constructors
 @item broadcasting
 @end itemize
-@item Easy usage: Convenient interval constructors and GNU Octave function names 
 @end itemize
 
 @noindent
@@ -122,8 +124,8 @@ Further help can be seeked at the @uref{https://lists.gnu.org/mailman/listinfo/h
 
 @section Development
 
-The source code of the interval package is distributed together with its release. The source code repository is located at @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,Octave Forge} and contains the latest development version.
+The source code of the interval package is distributed together with its release. The @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,source code repository} is located at Octave Forge and contains the latest development version. The current status of development is tracked on the @uref{http://wiki.octave.org/Interval_package,package's page at Octave wiki}.
 
-Bug reports and feature requests for either the software or this manual are highly appreciated and may be posted under the @uref{http://savannah.gnu.org/projects/octave,Octave Project at Savannah}.
+Bug reports and feature requests for either the software or this manual may be posted under the @uref{http://savannah.gnu.org/projects/octave,Octave Project at Savannah}.
 
 Contributions to the software and this manual are highly appreciated.
