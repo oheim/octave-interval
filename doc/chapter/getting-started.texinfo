@@ -2,3 +2,289 @@
 @c Copyright (C) 2015 Oliver Heimlich.
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
+
+@section Input and Output
+
+Before exercising interval arithmetic, interval objects must be created from non-interval data. There are interval constants @command{empty} and @command{entire} and the interval constructors @command{infsupdec} (create an interval from boundaries), @command{midrad} (create an interval from midpoint and radius) and @command{hull} (create an interval enclosure for a list of mixed arguments: numbers, intervals or interval literals). The constructors are very sophisticated and can be used with several kinds of parameters: Interval boundaries can be given by numeric values or string values with decimal numbers. 
+
+Create intervals for performing interval arithmetic 
+@example
+@group
+infsupdec (1)
+  @result{} [1]_com
+@end group
+@end example
+@example
+@group
+infsupdec (1, 2)
+  @result{} [1, 2]_com
+@end group
+@end example
+@example
+@group
+infsupdec ("3", "4")
+  @result{} [3, 4]_com
+@end group
+@end example
+@example
+@group
+infsupdec ("1.1")
+  @result{} [1.0999999999999998, 1.100000000000001]_com
+@end group
+@end example
+@example
+@group
+infsupdec ("5.8e-17")
+  @result{} [5.799999999999999e-17, 5.800000000000001e-17]_com
+@end group
+@end example
+@example
+@group
+midrad (12, 3)
+  @result{} [9, 15]_com
+@end group
+@end example
+@example
+@group
+midrad ("4.2", "1e-7")
+  @result{} [4.199999899999999, 4.200000100000001]_com
+@end group
+@end example
+@example
+@group
+hull (3, 42, "19.3", "-2.3")
+  @result{} [-2.300000000000001, +42]_com
+@end group
+@end example
+@example
+@group
+hull ("pi", "e")
+  @result{} [2.718281828459045, 3.1415926535897936]_com
+@end group
+@end example
+
+The default text representation of intervals is not guaranteed to be exact, because this would massively spam console output. For example, the exact text representation of @command{realmin} would be over 700 decimal places long! However, the default text representation is correct as it guarantees to contain the actual boundaries. 
+
+@strong{Warning:} Decimal fractions as well as numbers of high magnitude (> 2^53) should always be passed as a string to the constructor. Otherwise it is possible, that GNU Octave introduces conversion errors when the numeric literal is converted into floating-point format @emph{before} it is passed to the constructor.
+
+Beware of the conversion pitfall 
+@example
+@group
+## The numeric constant “0.3” is an approximation of the
+## decimal number 0.3.  An interval around this approximation
+## will not contain the decimal number 0.3.
+infsupdec (0.3)
+  @result{} [0.29999999999999998, 0.29999999999999999]_com
+@end group
+@end example
+@example
+@group
+## However, passing the decimal number 0.3 as a string
+## to the interval constructor will create an interval which
+## actually encloses the decimal number.
+infsupdec ("0.3")
+  @result{} [0.29999999999999998, 0.3000000000000001]_com
+@end group
+@end example
+
+
+@subsection Interval Vectors and Matrices
+
+Vectors and matrices of intervals can be created by passing numerical matrices, char vectors or cell arrays to the interval constructors. With cell arrays it is also possible to mix several types of boundaries.
+
+Interval matrices behave like normal matrices in GNU Octave and can be used for broadcasting and vectorized function evaluation. 
+
+Create interval matrices
+@example
+@group
+M = infsup (magic (3))
+  @result{} [8]   [1]   [6]
+    [3]   [5]   [7]
+    [4]   [9]   [2]
+@end group
+@end example
+@example
+@group
+infsup (magic (3), magic (3) + 1)
+  @result{} [8, 9]    [1, 2]   [6, 7]
+    [3, 4]    [5, 6]   [7, 8]
+    [4, 5]   [9, 10]   [2, 3]
+@end group
+@end example
+@example
+@group
+infsupdec (["0.1"; "0.2"; "0.3"; "0.4"; "0.5"])
+  @result{} [0.09999999999999999, 0.1000000000000001]_com
+    [0.19999999999999998, 0.2000000000000001]_com
+    [0.29999999999999998, 0.3000000000000001]_com
+    [0.39999999999999996, 0.4000000000000001]_com
+                                        [0.5]_com
+@end group
+@end example
+@example
+@group
+infsup (@{1, eps; "4/7", "pi"@}, @{2, 1; "e", "0xff"@})
+  @result {}                                   [1, 2]   [2.220446049250313e-16, 1]
+    [0.5714285714285713, 2.7182818284590456]     [3.141592653589793, 255]
+@end group
+@end example
+
+
+@section Arithmetic Operations
+
+The interval packages comprises many interval arithmetic operations. A complete list can be found in its function reference. Function names match GNU Octave standard functions where applicable and follow recommendations by IEEE 1788 otherwise, cf. IEEE 1788 index.
+
+Arithmetic functions in a set-based interval arithmetic follow these rules: Intervals are sets. They are subsets of the set of real numbers. The interval version of an elementary function such as sin(x) is essentially the natural extension to sets of the corresponding point-wise function on real numbers. That is, the function is evaluated for each number in the interval where the function is defined and the result must be an enclosure of all possible values that may occur.
+
+By default arithmetic functions are computed with best possible accuracy (which is more than what is guaranteed by GNU Octave core functions). The result will therefore be a tight and very accurate enclosure of the true mathematical value in most cases. Details on each function's accuracy can be found in its documentation, which is accessible with GNU Octave's help command. 
+
+Examples of using interval arithmetic functions
+@example
+@group
+sin (infsupdec (0.5))
+  @result{} [.4794255386042029, .4794255386042031]_com
+@end group
+@end example
+@example
+@group
+power (infsupdec (2), infsupdec (3, 4))
+  @result{} [8, 16]_com
+@end group
+@end example
+@example
+@group
+atan2 (infsupdec (1), infsupdec (1))
+  @result{} [.7853981633974482, .7853981633974484]_com
+@end group
+@end example
+@example
+@group
+midrad (magic (3), 0.5) * pascal (3)
+  @result{} [13.5, 16.5]_com   [25, 31]_com   [42, 52]_com
+    [13.5, 16.5]_com   [31, 37]_com   [55, 65]_com
+    [13.5, 16.5]_com   [25, 31]_com   [38, 48]_com
+@end group
+@end example
+
+
+@section Numerical Operations
+
+Some operations on intervals do not return an interval enclosure, but a single number (in double-precision). Most important are @command{inf} and @command{sup}, which return the lower and upper interval boundaries.
+
+More such operations are @command{mid} (approximation of the interval's midpoint), @command{wid} (approximation of the interval's width), @command{rad} (approximation of the interval's radius), @command{mag} (interval's magnitude) and @command{mig} (interval's mignitude). 
+
+
+@section Boolean Operations
+
+Interval comparison operations produce boolean results. While some comparisons are especially for intervals (subset, interior, ismember, isempty, disjoint, …) others are extensions of simple numerical comparison. For example, the less-or-equal comparison is mathematically defined as ∀a ∃b a ≤ b ∧ ∀b ∃a a ≤ b.
+
+@example
+@group
+infsup (1, 3) <= infsup (2, 4)
+  @result{}  1
+@end group
+@end example
+
+
+@section Matrix Operations
+
+Above mentioned operations can also be applied element-wise to interval vectors and matrices. Many operations use vectorization techniques.
+
+In addition, there are matrix operations on interval matrices. These operations comprise: dot product, matrix multiplication, vector sums (all with tightest accuracy), matrix inversion, matrix powers, and solving linear systems (the latter are less accurate). As a result of missing hardware / low-level library support and missing optimizations, these operations are relatively slow compared to familiar operations in floating-point arithmetic. 
+
+Examples of using interval matrix functions
+@example
+@group
+A = infsup ([1, 2, 3; 4, 0, 0; 0, 0, 1]); A (2, 3) = "[0, 6]"
+  @result{} [1]   [2]      [3]
+    [4]   [0]   [0, 6]
+    [0]   [0]      [1]
+@end group
+@end example
+@example
+@group
+B = inv (A)
+  @result{}   [0]     [0.25]       [-1.5, 0]
+    [0.5]   [-0.125]   [-1.5, -0.75]
+      [0]        [0]             [1]
+@end group
+@end example
+@example
+@group
+A * B
+  @result{} [1]   [0]   [-1.5, +1.5]
+    [0]   [1]       [-6, +6]
+    [0]   [0]            [1]
+@end group
+@end example
+@example
+@group
+A = infsup (magic (3))
+  @result{} [8]   [1]   [6]
+    [3]   [5]   [7]
+    [4]   [9]   [2]
+@end group
+@end example
+@example
+@group
+c = A \ [3; 4; 5]
+  @result{} [0.18333333333333315, 0.18333333333333358]
+    [0.43333333333333318, 0.43333333333333346]
+    [0.18333333333333307, 0.18333333333333355]
+@end group
+@end example
+@example
+@group
+A * c
+  @result{} [2.9999999999999964, 3.0000000000000036]
+     [3.9999999999999964, 4.000000000000004]
+      [4.999999999999997, 5.000000000000003]
+@end group
+@end example
+
+
+@subsection Notes on Linear Systems
+
+A system of linear equations in the form A@var{x} = b with intervals can be seen as a range of classical linear systems, which can be solved simultaneously. Whereas classical algorithms compute an approximation for a single solution of a single linear system, interval algorithms compute an enclosure for all possible solutions of (possibly several) linear systems. Some characteristics should definitely be known when linear interval systems are solved:
+
+@itemize
+@item
+    If the linear system is underdetermined and has infinitely many solutions, the interval solution will be unbound in at least one of its coordinates. Contrariwise, from an unbound result it can not be concluded whether the linear system is underdetermined or has solutions.
+@item
+    If the interval result is empty in at least one of its coordinates, the linear system is guaranteed to be underdetermined and has no solutions. Contrariwise, from a non-empty result it can not be concluded whether all or some of the systems have solutions or not.
+@item
+    Wide intervals within the matrix A can easily lead to a superposition of cases, where the rank of A is no longer unique. If the linear interval system contains cases of linear independent equations as well as linear dependent equations, the resulting enclosure of solutions will inevitably be very broad.
+@end itemize
+
+However, solving linear systems with interval arithmetic can produce useful results in many cases and automatically carries a guaranty for error boundaries. Additionally, it can give better information than the floating-point variants for some cases. 
+
+
+Standard floating point arithmetic versus interval arithmetic on ill-conditioned linear systems
+@example
+@group
+A = [1, 0; 2, 0];
+## This linear system has no solutions
+A \ [3; 0]
+  @result{} warning: matrix singular to machine precision, rcond = 0
+    0.60000
+    0.00000
+## This linear system has many solutions
+A \ [4; 8]
+  @result{} 4
+    0
+@end group
+@end example
+
+@example
+@group
+## The empty interval vector proves that there is no solution
+infsup (A) \ [3; 0]
+  @result{} [Empty]
+    [Empty]
+## The unbound interval vector indicates that there may be many solutions
+infsup (A) \ [4; 8]
+  @result{}      [4]
+    [Entire]
+@end group
+@end example
+

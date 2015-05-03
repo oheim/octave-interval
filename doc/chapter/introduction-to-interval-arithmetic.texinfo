@@ -2,3 +2,50 @@
 @c Copyright (C) 2015 Oliver Heimlich.
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
+
+@section Motivation
+
+@quotation
+Give a digital computer a problem in arithmetic, and it will grind away methodically, tirelessly, at gigahertz speed, until ultimately it produces the wrong answer. … An interval computation yields a pair of numbers, an upper and a lower bound, which are guaranteed to enclose the exact answer. Maybe you still don’t know the truth, but at least you know how much you don’t know.
+@author Brian Hayes, @uref{http://dx.doi.org/10.1511/2003.6.484,DOI: 10.1511/2003.6.484}
+@end quotation
+
+Floating-point arithmetic, as specified by @uref{http://en.wikipedia.org/wiki/IEEE_floating_point,IEEE 754}, is available in almost every computer system today. It is wide-spread, implemented in common hardware and integral part in programming languages. For example, the double-precision format is the default numeric data type in GNU Octave. Benefits are obvious: The results of arithmetic operations are well-defined and comparable between different systems and computation is highly efficient.
+
+However, there are some downsides of floating-point arithmetic in practice, which will eventually produce errors in computations.
+
+@itemize
+@item
+    Floating-point arithmetic is often used mindlessly by developers. @url{http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html} @url{http://www.cs.berkeley.edu/~wkahan/Mindless.pdf} @url{http://www.ima.umn.edu/~arnold/disasters/}
+@item
+    The binary data types categorically are not suitable for doing financial computations. Very often representational errors are introduced when using “real world” decimal numbers. @url{http://en.wikipedia.org/wiki/Decimal_computer}
+@item
+    Even if the developer would be proficient, most developing environments / technologies limit floating-point arithmetic capabilities to a very limited subset of IEEE 754: Only one or two data types, no rounding modes, missing functions … @url{http://www.cs.berkeley.edu/~wkahan/JAVAhurt.pdf}
+@item
+    Results are @uref{https://hal.archives-ouvertes.fr/hal-00128124/en/,hardly predictable}. All operations produce the best possible accuracy at runtime, this is how a floating point works. Contrariwise, financial computer systems typically use a @uref{http://en.wikipedia.org/wiki/Fixed-point_arithmetic,fixed-point arithmetic} (COBOL, PL/I, …), where overflow and rounding can be precisely predicted at @emph{compile-time}.
+@item
+    Results are system dependent. All but the most basic floating-point operations are @uref{http://www.gnu.org/software/libc/manual/html_node/Errors-in-Math-Functions.html#Errors-in-Math-Functions,not guaranteed to be accurate} and produce different results depending on low level libraries and @uref{http://developer.amd.com/tools-and-sdks/cpu-development/libm/,hardware}.
+@item
+    If you do not know the technical details (cf. first bullet) you ignore the fact that the computer lies to you in many situations. For example, when looking at numerical output and the computer says “@code{ans = 0.1},” this is not absolutely correct. In fact, the value is only close enough to the value 0.1. Additionally, many functions produce limit values (∞ × −∞ = −∞, ∞ ÷ 0 = ∞, ∞ ÷ −0 = −∞, log (0) = −∞), which is sometimes (but not always!) useful when overflow and underflow occur.
+@end itemize
+
+Interval arithmetic addresses above problems in its very special way and introduces new possibilities for algorithms. For example, the @uref{http://en.wikipedia.org/wiki/Interval_arithmetic#Interval_Newton_method,interval newton method} is able to find @emph{all} zeros of a particular function.
+
+
+@section Theory
+@subsection Online Introductions
+@uref{http://www.maths.manchester.ac.uk/~higham/narep/narep416.pdf,Interval analysis in MATLAB} Note: The INTLAB toolbox for Matlab is not entirely compatible with this interval package for GNU Octave. However, basic operations can be compared and should be compatible for common intervals. 
+
+@subsection Moore's fundamental theorem of interval arithmetic
+
+Let y = f(x) be the result of interval-evaluation of f over a box x = (x1,  … , xn) using any interval versions of its component library functions. Then
+@enumerate
+@item
+    In all cases, y contains the range of f over x, that is, the set of f(x) at points of x where it is defined: y ⊇ Rge(f | x) = @{f(x) | x ∈ x ∩ Dom(f) @}
+@item
+    If also each library operation in f is everywhere defined on its inputs, while evaluating y, then f is everywhere defined on x, that is Dom(f) ⊇ x.
+@item
+    If in addition, each library operation in f is everywhere continuous on its inputs, while evaluating y, then f is everywhere continuous on x.
+@item
+    If some library operation in f is nowhere defined on its inputs, while evaluating y, then f is nowhere defined on x, that is Dom(f) ∩ x = Ø.
+@end enumerate

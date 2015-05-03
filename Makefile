@@ -15,9 +15,12 @@ GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_COPYING = $(BUILD_DIR)/COPYING
 GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
 GENERATED_IMAGES = \
-	$(GENERATED_IMAGE_DIR)/octave-interval.png \
-	$(GENERATED_IMAGE_DIR)/octave-interval.eps \
-	$(GENERATED_IMAGE_DIR)/octave-interval.pdf
+	$(GENERATED_IMAGE_DIR)/octave-interval.ly.png \
+	$(GENERATED_IMAGE_DIR)/octave-interval.ly.eps \
+	$(GENERATED_IMAGE_DIR)/octave-interval.ly.pdf \
+	$(GENERATED_IMAGE_DIR)/inverse-power.svg.png \
+	$(GENERATED_IMAGE_DIR)/inverse-power.svg.eps \
+	$(GENERATED_IMAGE_DIR)/inverse-power.svg.pdf
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
 OCTAVE ?= octave
@@ -80,21 +83,35 @@ $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 	@cp $(GENERATED_IMAGE_DIR)/*.png "$(HTML_DIR)/$(PACKAGE)/image/"
 
 $(GENERATED_NEWS): doc/news.texinfo
-	@echo "Compiling NEWS file ..."
+	@echo "Compiling NEWS ..."
 	@makeinfo --plaintext --output="$@" "$<" 
 
 $(GENERATED_COPYING): doc/copying.texinfo
-	@echo "Compiling COPYING file ..."
+	@echo "Compiling COPYING ..."
 	@makeinfo --plaintext --output="$@" "$<" 
 
-$(GENERATED_IMAGE_DIR)/%.pdf: $(GENERATED_IMAGE_DIR)/%.eps
+$(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps
 	@epstopdf "$<"
 
-$(GENERATED_IMAGE_DIR)/octave-interval.eps: $(GENERATED_IMAGE_DIR)/octave-interval.png
-$(GENERATED_IMAGE_DIR)/octave-interval.png: doc/image/octave-interval.ly
-	@echo "Compiling logo with GNU LilyPond ..."
+$(GENERATED_IMAGE_DIR)/%.ly.eps: $(GENERATED_IMAGE_DIR)/%.ly.png
+	@touch --no-create "$@"
+$(GENERATED_IMAGE_DIR)/%.ly.png: doc/image/%.ly
+	@echo "Compiling $< ..."
 	@mkdir -p "$(GENERATED_IMAGE_DIR)"
-	@lilypond --png --output "$(GENERATED_IMAGE_DIR)" --silent "$<"
+	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
+
+$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.eps
+	@touch --no-create "$@"
+$(GENERATED_IMAGE_DIR)/%.svg.pdf: $(GENERATED_IMAGE_DIR)/%.svg.eps
+	@touch --no-create "$@"
+$(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg
+	@echo "Compiling $< ..."
+	@mkdir -p "$(GENERATED_IMAGE_DIR)"
+	@inkscape --without-gui \
+		--export-eps="$(BUILD_DIR)/$<.eps" \
+		--export-png="$(BUILD_DIR)/$<.png" \
+		--export-pdf="$(BUILD_DIR)/$<.pdf" \
+		"$<" > /dev/null
 
 $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"

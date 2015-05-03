@@ -2,3 +2,243 @@
 @c Copyright (C) 2015 Oliver Heimlich.
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
+
+@section Error Handling
+
+Due to the nature of set-based interval arithmetic, one should not observe errors (in the sense of raised GNU Octave error messages) during computation unless operations are evaluated for incompatible data types. Arithmetic operations which are not defined for (parts of) their input, simply ignore anything that is outside of their domain.
+
+However, the interval constructors can produce errors depending on the input. The @command{infsup} constructor will fail if the interval boundaries are invalid. Contrariwise, the (preferred) @command{infsupdec}, @command{midrad} and @command{hull} constructors will only issue a warning and return a [NaI] object, which will propagate and survive through computations. NaI stands for “not an interval”. 
+
+Effects of set-based interval arithmetic on partial functions and the NaI object 
+@example
+@group
+## Evaluation of a function outside of its domain returns an empty interval
+infsupdec (2) / 0
+  @result{} [Empty]_trv
+infsupdec (0) ^ infsupdec (0)
+  @result{} [Empty]_trv
+@end group
+@end example
+
+@example
+@group
+## Illegal interval construction creates a NaI
+infsupdec (3, 2)
+  @result{} [NaI]
+## NaI even survives through computations
+ans + 1
+  @result{} [NaI]
+@end group
+@end example
+
+There are some situations where the interval package cannot decide whether an error occurred or not and issues a warning. The user may choose to ignore these warnings or handle them as errors, see @command{help warning} for instructions. 
+
+@float Table,tab:warnings
+@caption{Warning IDs}
+@table @option
+@item interval:PossiblyUndefined
+@table @asis
+@item Reason
+Interval construction with boundaries in decimal format, and the constructor can't decide whether the lower boundary is smaller than the upper boundary. Both boundaries are very close and lie between subsequent binary64 numbers. 
+
+@item Possible consequences
+The constructed interval is a valid and tight enclosure of both numbers. If the lower boundary was actually greater than the upper boundary, this illegal interval is not considered an error. 
+
+@end table
+@item interval:ImplicitPromote 
+@table @asis
+@item Reason
+An interval operation has been evaluated on both, a bare and a decorated interval. The bare interval has been converted into a decorated interval in order to produce a decorated result. Note: This warning does not occur if a bare interval literal string gets promoted into a decorated interval, e. g., @code{infsupdec (1, 2) + "[3, 4]"} does not produce this warning whereas @code{infsupdec (1, 2) + infsup (3, 4)} does. A bare interval can be explicitly promoted with the @command{newdec} function. 
+
+@item Possible consequences
+The implicit conversion applies the best possible decoration for the bare interval. If the bare interval has been produced from an interval arithmetic computation, this branch of computation is not covered by the decoration information and the final decoration could be considered wrong. For example,  @code{infsupdec (1, 2) + infsup (0, 1) ^ 0} would ignore that 0^0 is undefined. 
+
+@end table
+@item interval:NaI 
+@table @asis
+@item Reason
+An error has occured during interval construction and the NaI object has been produced. The warning text contains further details. A NaI can be explicitly created with the @command{nai} function. 
+
+@item Possible consequences
+Nothing bad is going to happen, because the semantics of NaI are well defined by IEEE 1788. However, the user might choose to cancel the algorithm immediately when the NaI is encountered for the first time. 
+
+@end table
+@end table
+@end float
+
+@section Decorations
+
+The interval package provides a powerful decoration system for intervals, as specified by the IEEE standard for interval arithmetic. By default any interval carries a decoration, which collects additional information about the course of function evaluation on the interval data.
+
+Only the (unfavored) infsup constructor creates bare, undecorated intervals and the intervalpart operation may be used to demote decorated intervals into bare, undecorated ones. It is highly recommended to always use the decorated interval arithmetic, which gives additional information about an interval result in exchange for a tiny overhead.
+
+The following decorations are available: 
+
+@multitable @columnfractions .2 .1 .1 .1 .5
+@headitem Decoration
+    @tab Bounded
+    @tab Continuous
+    @tab Defined
+    @tab Definition
+@item com (common)
+    @tab ✓
+    @tab ✓
+    @tab ✓
+    @tab x is a bounded, nonempty subset of Dom(f); f is continuous at each point of x; and the computed interval f(x) is bounded
+@item dac (defined and continuous)
+    @tab 
+    @tab ✓
+    @tab ✓
+    @tab x is a nonempty subset of Dom(f); and the restriction of f to x is continuous 
+@item def (defined)
+    @tab 
+    @tab 
+    @tab ✓
+    @tab x is a nonempty subset of Dom(f)
+@item trv (trivial)
+    @tab
+    @tab
+    @tab
+    @tab always true (so gives no information) 
+@item ill (ill-formed)
+    @tab
+    @tab
+    @tab
+    @tab Not an interval, at least one interval constructor failed during the course of computation 
+@end multitable
+
+The decoration information is especially useful after a very long and complicated function evaluation. For example, when the “def” decoration survives until the final result, it is proven that the overall function is actually defined for all values covered by the input intervals. 
+
+Examples of using the decoration system
+@example
+@group
+x = infsupdec (3, 4)
+  @result{} [3, 4]_com
+y = x - 3.5
+  @result{} [-0.5, +0.5]_com
+## The square root function ignores any negative part of the input,
+## but the decoration indicates whether this has or has not happened.
+sqrt (x)
+  @result{} [1.732050807568877, 2]_com
+sqrt (y)
+  @result{} [0, 0.7071067811865476]_trv
+@end group
+@end example
+
+
+@section Specialized interval constructors
+
+Above mentioned interval construction with decimal numbers or numeric data is straightforward. Beyond that, there are more ways to define intervals or interval boundaries.
+
+@itemize
+@item
+    Hexadecimal-floating-constant form: Each interval boundary may be defined by a hexadecimal number (optionally containing a point) and an exponent field with an integral power of two as defined by the C99 standard @uref{http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1256.pdf,@asis{ISO/IEC9899, N1256, §6.4.4.2}}. This can be used as a convenient way to define interval boundaries in double-precision, because the hexadecimal form is much shorter than the decimal representation of many numbers.
+@item
+    Rational literals: Each interval boundary may be defined as a fraction of two decimal numbers. This is especially useful if interval boundaries shall be tightest enclosures of fractions, that would be hard to write down as a decimal number.
+@item
+    Uncertain form: The interval as a whole can be defined by a midpoint or upper/lower boundary and an integral number of @uref{http://en.wikipedia.org/wiki/Unit_in_the_last_place,“units in last place” (ULPs)} as an uncertainty. The format is @code{m?ruE}, where
+@table @code
+@item m
+        is a mantissa in decimal,
+@item r
+        is either empty (which means ½ ULP) or is a non-negative decimal integral ULP count or is the @option{?} character (for unbounded intervals),
+@item u
+        is either empty (symmetrical uncertainty of r ULPs in both directions) or is either @option{u} (up) or @option{d} (down),
+@item E
+        is either empty or an exponent field comprising the character @code{e} followed by a decimal integer exponent (base 10).
+@end table
+@end itemize
+
+Examples of different formats during interval construction
+@example
+@group
+infsup ("0x1.999999999999Ap-4") # hex-form
+  @result{} [0.1, 0.1000000000000001]
+@end group
+@end example
+@example
+@group
+infsup ("1/3", "7/9") # rational form
+  @result{} [0.3333333333333333, 0.7777777777777778]
+@end group
+@end example
+@example
+@group
+infsup ("121.2?") # uncertain form
+  @result{} [121.14999999999999, 121.25]
+@end group
+@end example
+@example
+@group
+infsup ("5?32e2") # uncertain form with ulp count
+  @result{} [-2700, +3700]
+@end group
+@end example
+@example
+@group
+infsup ("-42??u") # unbound uncertain form
+  @result{} [-42, +Inf]
+@end group
+@end example
+
+
+@section Reverse Arithmetic Operations
+
+Some arithmetic functions also provide reverse mode operations. That is inverse functions with interval constraints. For example the @command{sqrrev} can compute the inverse of the @command{sqr} function on intervals. The syntax is @code{sqrrev (@var{C}, @var{X})} and will compute the enclosure of all numbers x ∈ @var{X} that fulfill the constraint x² ∈ @var{C}.
+
+In the following example, we compute the constraints for base and exponent of the power function pow as shown in the figure. 
+
+@float Figure,reverse
+@caption{Reverse power operations. A relevant subset of the function's domain is outlined and hatched. In this example we use x^y ∈ [2, 3].}
+@shortcaption{Reverse power operations}
+@myimage{image/inverse-power.svg,Reverse Power Functions}
+@end float
+
+@example
+@group
+x = powrev1 (infsup ("[1.1, 1.45]"), infsup (2, 3))
+  @result{} x ⊂ [1.6128979635153646, 2.714854726565793]
+y = powrev2 (infsup ("[2.14, 2.5]"), infsup (2, 3))
+  @result{} y ⊂ [0.7564707973660299, 1.4440113978403289]
+@end group
+@end example
+
+
+@section Tips and Tricks
+
+For convenience it is possible to implicitly call the interval constructor during all interval operations if at least one input already is an interval object.
+
+@example
+@group
+infsupdec ("17.7") + 1
+  @result{} ans ⊂ [18.699999999999999, 18.70000000000001]_com
+ans + "[0, 2]"
+  @result{} ans ⊂ [18.699999999999999, 20.70000000000001]_com
+@end group
+@end example
+
+Interval functions with only one argument can be called by using property syntax, e. g. @code{x.inf}, @code{x.sup} or even @code{x.sqr}.
+
+When matrices are resized using subscripted assignment, any implicit new matrix elements will carry an empty interval.
+
+@example
+@group
+M = infsup (magic (3)); M (4, 4) = 42
+  @result{} M = 4×4 interval matrix
+
+        [8]       [1]       [6]   [Empty]
+        [3]       [5]       [7]   [Empty]
+        [4]       [9]       [2]   [Empty]
+    [Empty]   [Empty]   [Empty]      [42]
+@end group
+@end example
+
+Whilst most functions (size, isvector, ismatrix, …) work as expected on interval data types, the function isempty is evaluated element-wise and checks if an interval equals the empty set.
+
+@example
+@group
+builtin ("isempty", empty ()), isempty (empty ())
+  @result{} ans = 0
+    ans =  1
+@end group
+@end example
