@@ -34,6 +34,7 @@
 ##   @result{} [8, 9]_com
 ## x (:, 2)
 ##   @result{} 3×1 interval vector
+##
 ##       [1, 2]_com
 ##       [5, 6]_com
 ##      [9, 10]_com

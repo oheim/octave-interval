@@ -25,6 +25,7 @@
 ## @group
 ## infsupdec ([1, 0; 0, 2]) \ [2, 0; 0, 4]
 ##   @result{} 2×2 interval matrix
+##
 ##      [2]_trv   [0]_trv
 ##      [0]_trv   [2]_trv
 ## @end group

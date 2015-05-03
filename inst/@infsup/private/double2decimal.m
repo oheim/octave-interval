@@ -33,17 +33,20 @@
 ## @example
 ## @group
 ## x = double2decimal (-200)
-##   @result{} x.s = 1
-##   @result{} x.m = [2]
-##   @result{} x.e = 2
+##   @result{}
+##     x.s = 1
+##     x.m = [2]
+##     x.e = 2
 ## y = double2decimal (0.125)
-##   @result{} y.s = 0
-##   @result{} y.m = [1 2 5]'
-##   @result{} y.e = 0
+##   @result{}
+##     y.s = 0
+##     y.m = [1 2 5]'
+##     y.e = 0
 ## z = double2decimal (0)
-##   @result{} z.s = 0
-##   @result{} z.m = []
-##   @result{} z.e = 0
+##   @result{}
+##     z.s = 0
+##     z.m = []
+##     z.e = 0
 ## @end group
 ## @end example
 ## @seealso{str2decimal}

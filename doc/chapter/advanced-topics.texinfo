@@ -238,7 +238,8 @@ Whilst most functions (size, isvector, ismatrix, …) work as expected on interv
 @example
 @group
 builtin ("isempty", empty ()), isempty (empty ())
-  @result{} ans = 0
+  @result{}
+    ans = 0
     ans =  1
 @end group
 @end example

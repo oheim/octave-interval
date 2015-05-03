@@ -31,7 +31,8 @@
 ## x = infsup (1, 3);
 ## y = infsup (2, 4);
 ## [z, z1, z2] = setxor (x, y)
-##   @result{} z = [1, 4]
+##   @result{}
+##     z = [1, 4]
 ##     z1 = [1, 2]
 ##     z2 = [3, 4]
 ## @end group

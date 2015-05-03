@@ -35,7 +35,8 @@
 ## x = infsupdec (1, 3);
 ## y = infsupdec (2, 4);
 ## [z, z1, z2] = setxor (x, y)
-##   @result{} z = [1, 4]_trv
+##   @result{}
+##     z = [1, 4]_trv
 ##     z1 = [1, 2]_trv
 ##     z2 = [3, 4]_trv
 ## @end group

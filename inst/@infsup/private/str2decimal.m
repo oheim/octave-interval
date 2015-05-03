@@ -37,17 +37,20 @@
 ## @example
 ## @group
 ## x = str2decimal ("-12.3e14")
-##   @result{} x.s = 1
-##   @result{} x.m = [1 2 3]'
-##   @result{} x.e = 16
+##   @result{}
+##     x.s = 1
+##     x.m = [1 2 3]'
+##     x.e = 16
 ## y = str2decimal ("0.00123e-14")
-##   @result{} y.s = 0
-##   @result{} y.m = [1 2 3]'
-##   @result{} y.e = -12
+##   @result{}
+##     y.s = 0
+##     y.m = [1 2 3]'
+##     y.e = -12
 ## z = str2decimal ("0")
-##   @result{} z.s = 0
-##   @result{} z.m = []
-##   @result{} z.e = 0
+##   @result{}
+##     z.s = 0
+##     z.m = []
+##     z.e = 0
 ## @end group
 ## @end example
 ## @seealso{double2decimal}
