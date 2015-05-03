@@ -1,5 +1,65 @@
 SHELL   = /bin/sh
 
+## Copyright 2015 Oliver Heimlich
+##
+## Copying and distribution of this file, with or without modification,
+## are permitted in any medium without royalty provided the copyright
+## notice and this notice are preserved.  This file is offered as-is,
+## without any warranty.
+
+## This file helps the package maintainer to
+##   1. run the development version
+##   2. check that all tests pass
+##   3. prepare the release 
+##
+## This Makefile is _not_ meant to be portable. In order to use it, you
+## have to install certain dependencies. This file is not distributed in
+## the release tarball, so its dependencies must be met by developers only.
+##
+## It is intended that users of the release tarball do not need to install
+## the tools and generators used here!
+##
+## DEPENDENCIES
+##   * You should use GNU make and a GNU operating system. So far, this
+##     Makefile has been used with Debian GNU/Linux 8 only and is not
+##     guaranteed to work on other systems.
+##
+##   * Interval Testing Framework for IEEE 1788
+##
+##     The tool is used to convert test/*.itl into GNU Octave *.tst files
+##     for validation of the package.
+##
+##     Check out with git from https://github.com/oheim/ITF1788
+##     [this should be the branch with the latest Octave specific extensions]
+##     Set the environment variable ITF1788_HOME to the local git workspace,
+##     e. g. in .bashrc:
+##	 export ITF1788_HOME=/home/oliver/Dokumente/ITF1788
+##
+##     It is important to have a local git workspace, because the generated
+##     files will be tagged with the generator version.
+##
+##     See its requirements.txt file for required python packages.
+##
+##   * Doctest
+##
+##     The tool is used to find errors in the code of @example blocks
+##     from the documentation.
+##
+##     Download from https://github.com/catch22/doctest-for-matlab
+##     Set the environment variable DOCTEST_HOME to the local copy,
+##     e. g. in .bashrc:
+##       export DOCTEST_HOME=/home/oliver/Dokumente/doctest-for-matlab
+##
+##   * GNU LilyPond, Inkscape and poppler-utils
+##
+##     These are used to generate or convert images for the manual.
+##
+##     The package repository contains only source code for the images, whereas
+##     the release tarball additionally contains .PNG, .EPS and .PDF versions
+##     of all images. The .PNG versions are also used in the HTML manual, which
+##     is published at Octave Forge.
+##
+
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 CC_SOURCES = $(wildcard src/*.cc)
