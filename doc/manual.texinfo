@@ -3,7 +3,7 @@
 @settitle GNU Octave Interval Package Manual
 @documentencoding UTF-8
 
-@set version 0.1.6
+@set version 0.2.0
 
 @copying
     This manual is for the GNU Octave interval package, version @value{version}.

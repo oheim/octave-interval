@@ -20,7 +20,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{0.1.6, xxxx-xx-xx}
+@release{0.2.0, 2015-05-03}
 @itemize
 @item
     User manual included in the package, see doc/manual.texinfo

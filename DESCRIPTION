@@ -1,6 +1,6 @@
 Name: interval
-Version: 0.1.5
-Date: 2015-04-06
+Version: 0.2.0
+Date: 2015-05-03
 Author: Oliver Heimlich <oheim@posteo.de>
 Maintainer: Oliver Heimlich <oheim@posteo.de>
 Title: Real-valued interval arithmetic
@@ -13,9 +13,8 @@ Description: The interval package for real-valued interval arithmetic provides
  boundaries represented by binary64 numbers and is standard conforming to
  IEEE 1788.
 Problems: IEEE 1788 is no official standard yet.  Comparison with isequal fails
- for interval matrices in Octave 4.0.0-rc3 (bug #44334).
+ for interval matrices in Octave 4.0.0-rc4 (bug #44334).
 Depends: Octave (>= 3.8.2)
 SystemRequirements: mpfr (>= 3.1.0) [Debian] libmpfr4 (>= 3.1.0)
 BuildRequires: mpfr (>= 3.1.0) [Debian] libmpfr-dev (>= 3.1.0)
-License: GPLv3+, FDL (manual), Apache2 (certain tests)
-
+License: GPLv3+, FDL (manual), Apache2 (certain unit tests)
