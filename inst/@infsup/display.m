@@ -122,16 +122,18 @@ unwind_protect
     endif
     fprintf ("\n\n");
     
-    fprintf (line_prefix);
-    
-    if (current_print_indent_level > 0)
-        s = strrep (s, "\n", cstrcat ("\n", line_prefix));
-        s (end - current_print_indent_level + 1 : end) = "";
+    if (not (isempty (s)))
+        fprintf (line_prefix);
+        
+        if (current_print_indent_level > 0)
+            s = strrep (s, "\n", cstrcat ("\n", line_prefix));
+            s (end - current_print_indent_level + 1 : end) = "";
+        endif
+        
+        fprintf (s);
+        
+        fprintf ("\n");
     endif
-    
-    fprintf (s);
-    
-    fprintf ("\n");
 unwind_protect_cleanup
     current_print_indent_level = save_current_print_indent_level;
 end_unwind_protect
