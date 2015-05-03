@@ -24,7 +24,7 @@
 ## If @var{X} is a variable, the interval is display together with its variable
 ## name.  The variable name is followed by an equality sign if all decimal
 ## boundaries exactly represent the actual boundaries.  Otherwise a subset
-## symbol is used instead.
+## symbol is used instead (this feature is not available on Microsoft Windows).
 ##
 ## For non-scalar intervals the size and classification (interval vector or
 ## interval matrix) is displayed before the content.
@@ -91,9 +91,11 @@ unwind_protect
     fprintf (line_prefix);
     if (not (isempty (label)))
         fprintf (label);
-        if (isexact)
+        if (isexact || ispc ())
             fprintf (" = ");
         else
+            ## The Microsoft Windows console does not support this multibyte
+            ## character.
             fprintf (" ⊂ ");
         endif
     endif
@@ -107,7 +109,12 @@ unwind_protect
         return
     endif
     
-    fprintf ("%d×%d interval ", size (x, 1), size (x, 2));
+    if (ispc ())
+        fprintf ("%dx%d interval ", size (x, 1), size (x, 2));
+    else
+        ## The Microsoft Windows console does not support multibyte characters.
+        fprintf ("%d×%d interval ", size (x, 1), size (x, 2));
+    endif
     if (isvector (x))
         fprintf ("vector");
     else
