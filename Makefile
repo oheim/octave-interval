@@ -96,8 +96,10 @@ $(GENERATED_IMAGE_DIR)/%.ly.png: doc/image/%.ly
 	@mkdir -p "$(GENERATED_IMAGE_DIR)"
 	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
 
-$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.eps
-	@touch --no-create "$@"
+$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
+	@pdftocairo -png -singlefile -gray -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
+	@mv "$(BUILD_DIR)/cairo.tmp.png" "$@"
+
 $(GENERATED_IMAGE_DIR)/%.svg.pdf: $(GENERATED_IMAGE_DIR)/%.svg.eps
 	@touch --no-create "$@"
 $(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg
@@ -105,7 +107,6 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg
 	@mkdir -p "$(GENERATED_IMAGE_DIR)"
 	@inkscape --without-gui \
 		--export-eps="$(BUILD_DIR)/$<.eps" \
-		--export-png="$(BUILD_DIR)/$<.png" \
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
 		"$<" > /dev/null
 
