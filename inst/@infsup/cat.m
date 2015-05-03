@@ -53,6 +53,6 @@ endswitch
 
 endfunction
 
-%!assert (cat (1, infsup ([]), infsup ([])) == infsup ([]));
+%!assert (size (cat (1, infsup ([]), infsup ([]))), [0 0]);
 %!assert (cat (1, infsup (1), infsup (2)) == infsup (cat (1, 1, 2)));
 %!assert (cat (2, infsup (1), infsup (2)) == infsup (cat (2, 1, 2)));
