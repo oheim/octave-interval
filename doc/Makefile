@@ -1,15 +1,14 @@
 SHELL   = /bin/sh
-OBJ     = manual.pdf manual.html
 
-all: $(OBJ)
+manual.html: manual.texinfo
+	makeinfo --html --no-split "$<"
 
-%.pdf: %.texinfo
+## PDF support is still experimental, so the default target is for
+## generation of the HTML documentation only.
+manual.pdf: manual.texinfo
 	makeinfo --pdf "$<"
 	rm *.aux *.cp *.fn *.ky *.log *.pg *.toc *.tp *.vr
 
-%.html: %.texinfo
-	makeinfo --html --no-split "$<"
-
 .PHONY: clean
 clean:
-	rm $(OBJ)
+	rm manual.pdf manual.html
