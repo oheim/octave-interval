@@ -24,6 +24,10 @@ SHELL   = /bin/sh
 ##     Makefile has been used with Debian GNU/Linux 8 only and is not
 ##     guaranteed to work on other systems.
 ##
+##     For example, doctest will fail on Windows, because console output
+##     uses singlebyte characters on Windows and multibyte characters
+##     on better systems.
+##
 ##   * Interval Testing Framework for IEEE 1788
 ##
 ##     The tool is used to convert test/*.itl into GNU Octave *.tst files
@@ -203,7 +207,7 @@ check: doctest
 .PHONY: doctest
 doctest: $(OCT_COMPILED)
 	@echo "Testing documentation strings ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --path "$(DOCTEST_HOME)" --eval "doctest $(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.)"
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --path "$(DOCTEST_HOME)" --eval "doctest $(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)"
 	@echo
 
 else
