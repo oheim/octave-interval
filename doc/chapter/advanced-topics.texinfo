@@ -234,7 +234,6 @@ When matrices are resized using subscripted assignment, any implicit new matrix 
 @group
 M = infsup (magic (3)); M (4, 4) = 42
   @result{} M = 4×4 interval matrix
-
         [8]       [1]       [6]   [Empty]
         [3]       [5]       [7]   [Empty]
         [4]       [9]       [2]   [Empty]
