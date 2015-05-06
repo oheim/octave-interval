@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## inf (infsup (2.5, 3.5))
-##   @result{} 2.5
+##   @result{} ans = 2.5000
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sup, @@infsup/mid}

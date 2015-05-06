@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## realsqrt (infsup (-6, 4))
-##   @result{} [0, 2]
+##   @result{} ans = [0, 2]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sqr, @@infsup/rsqrt, @@infsup/pow, @@infsup/cbrt, @@infsup/nthroot}

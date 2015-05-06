@@ -29,7 +29,7 @@
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
 ## min (x, y)
-##   @result{} [1, 2]_com
+##   @result{} ans = [1, 2]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/max}

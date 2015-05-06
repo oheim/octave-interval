@@ -22,8 +22,7 @@
 ## @example
 ## @group
 ## infsup (zeros (1, 3), ones (1, 3)) .'
-##   @result{} 3×1 interval vector
-##
+##   @result{} ans = 3×1 interval vector
 ##      [0, 1]
 ##      [0, 1]
 ##      [0, 1]

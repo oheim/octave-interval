@@ -28,9 +28,9 @@
 ## @example
 ## @group
 ## fma (infsup (1+eps), infsup (7), infsup ("0.1"))
-##   @result{} [7.100000000000001, 7.100000000000003]
+##   @result{} ans ⊂ [7.100000000000001, 7.100000000000003]
 ## infsup (1+eps) * infsup (7) + infsup ("0.1")
-##   @result{} [7.1, 7.100000000000003]
+##   @result{} ans ⊂ [7.1, 7.100000000000003]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus, @@infsup/times}

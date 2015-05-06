@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## expm1 (infsupdec (eps))
-##   @result{} [2.220446049250313e-16, 2.2204460492503136e-16]_com
+##   @result{} ans ⊂ [2.220446049250313e-16, 2.2204460492503136e-16]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsup/exp, @@infsup/log1p}

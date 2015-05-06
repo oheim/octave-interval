@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## csc (infsupdec (1))
-##   @result{} [1.188395105778121, 1.1883951057781213]_com
+##   @result{} ans ⊂ [1.188395105778121, 1.1883951057781213]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sin, @@infsupdec/sec, @@infsupdec/cot}

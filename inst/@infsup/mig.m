@@ -27,7 +27,7 @@
 ## @example
 ## @group
 ## mig (infsup (-2, -1))
-##   @result{} 1
+##   @result{} ans = 1
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mag, @@infsup/inf, @@infsup/sup}

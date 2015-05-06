@@ -29,7 +29,7 @@
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
 ## max (x, y)
-##   @result{} [2, 3]
+##   @result{} ans = [2, 3]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/min}

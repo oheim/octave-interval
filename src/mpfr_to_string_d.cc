@@ -44,7 +44,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   "\n\n"
   "@example\n"
   "@group\n"
-  "mpfr_to_string (-inf, \"exact hexadecimal\", magic (3) / 10)\n"
+  "mpfr_to_string_d (-inf, \"exact hexadecimal\", magic (3) / 10)\n"
   "  @result{}\n"
   "    @{\n"
   "      [1,1] = 0XC.CCCCCCCCCCCD0P-4\n"

@@ -81,15 +81,15 @@
 ## @example
 ## @group
 ## v = infsupdec ()
-##   @result{} [Empty]_trv
+##   @result{} v = [Empty]_trv
 ## w = infsupdec (1)
-##   @result{} [1]_com
+##   @result{} w = [1]_com
 ## x = infsupdec (2, 3)
-##   @result{} [2, 3]_com
+##   @result{} x = [2, 3]_com
 ## y = infsupdec ("0.1")
-##   @result{} [0.09999999999999999, 0.1000000000000001]_com
+##   @result{} y ⊂ [0.09999999999999999, 0.1000000000000001]_com
 ## z = infsupdec ("0.1", "0.2")
-##   @result{} [0.09999999999999999, 0.2000000000000001]_com
+##   @result{} z ⊂ [0.09999999999999999, 0.2000000000000001]_com
 ## @end group
 ## @end example
 ## @seealso{exacttointerval, hull, midrad, @@infsup/newdec}

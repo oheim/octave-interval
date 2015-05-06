@@ -26,7 +26,7 @@
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
 ## x - y
-##   @result{} [0, 2]
+##   @result{} ans = [0, 2]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus}

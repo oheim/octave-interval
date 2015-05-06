@@ -24,9 +24,9 @@
 ## @example
 ## @group
 ## abs (infsup (2.5, 3.5))
-##   @result{} [2.5, 3.5]
+##   @result{} ans = [2.5, 3.5]
 ## abs (infsup (-0.5, 5.5))
-##   @result{} [0, 5.5]
+##   @result{} ans = [0, 5.5]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mag, @@infsup/mig}

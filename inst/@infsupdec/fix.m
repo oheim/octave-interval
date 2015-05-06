@@ -25,9 +25,9 @@
 ## @example
 ## @group
 ## fix (infsupdec (2.5, 3.5))
-##   @result{} [2, 3]_def
+##   @result{} ans = [2, 3]_def
 ## fix (infsupdec (-0.5, 5))
-##   @result{} [0, 5]_def
+##   @result{} ans = [0, 5]_def
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/floor, @@infsupdec/ceil, @@infsupdec/round, @@infsupdec/roundb}

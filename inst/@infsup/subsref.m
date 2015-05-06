@@ -30,15 +30,14 @@
 ## @group
 ## x = infsup (magic (3), magic (3) + 1);
 ## x (1)
-##   @result{} [8, 9]
+##   @result{} ans = [8, 9]
 ## x (:, 2)
-##   @result{} 3×1 interval vector
-##
+##   @result{} ans = 3×1 interval vector
 ##       [1, 2]
 ##       [5, 6]
 ##      [9, 10]
 ## x.inf
-##   @result{}
+##   @result{} ans =
 ##      8   1   6
 ##      3   5   7
 ##      4   9   2

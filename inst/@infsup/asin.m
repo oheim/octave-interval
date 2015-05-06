@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## asin (infsup (.5))
-##   @result{} [0.5235987755982988, 0.523598775598299]
+##   @result{} ans ⊂ [0.5235987755982988, 0.523598775598299]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sin}

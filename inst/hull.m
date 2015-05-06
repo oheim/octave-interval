@@ -42,13 +42,13 @@
 ## @example
 ## @group
 ## hull (1, 4, 3, 2)
-##   @result{} [1, 4]_com
+##   @result{} ans = [1, 4]_com
 ## hull (empty, entire)
-##   @result{} [Entire]_trv
+##   @result{} ans = [Entire]_trv
 ## hull ("0.1", "pi", "e")
-##   @result{} [0.09999999999999999, 3.1415926535897936]_com
+##   @result{} ans ⊂ [0.09999999999999999, 3.1415926535897936]_com
 ## hull ("[0, 3]", "[4, 7]")
-##   @result{} [0, 7]_com
+##   @result{} ans = [0, 7]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/union}

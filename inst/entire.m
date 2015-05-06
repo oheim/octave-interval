@@ -41,11 +41,11 @@
 ## @example
 ## @group
 ## x = entire ()
-##   @result{} [Entire]_dac
+##   @result{} x = [Entire]_dac
 ## inf (x)
-##   @result{} -Inf
+##   @result{} ans = -Inf
 ## sup (x)
-##   @result{} Inf
+##   @result{} ans = Inf
 ## @end group
 ## @end example
 ## @seealso{@@infsup/isentire, empty}

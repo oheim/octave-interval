@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## cosrev (infsup (0), infsup (6, 9))
-##   @result {} [7.853981633974482, 7.853981633974485]
+##   @result {} ans ⊂ [7.853981633974482, 7.853981633974485]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cos}

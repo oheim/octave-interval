@@ -24,8 +24,7 @@
 ## @group
 ## a = infsupdec (2, 5);
 ## [a, a, a]
-##   @result{} 1×3 interval vector
-##
+##   @result{} ans = 1×3 interval vector
 ##      [2, 5]_com   [2, 5]_com   [2, 5]_com
 ## @end group
 ## @end example

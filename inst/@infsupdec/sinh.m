@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sinh (infsupdec (1))
-##   @result{} [1.1752011936438013, 1.1752011936438017]_com
+##   @result{} ans ⊂ [1.1752011936438013, 1.1752011936438017]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/asinh, @@infsupdec/csch, @@infsupdec/cosh, @@infsupdec/tanh}

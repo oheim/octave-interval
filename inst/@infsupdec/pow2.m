@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## pow2 (infsupdec (5))
-##   @result{} [32]_com
+##   @result{} ans = [32]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/log2, @@infsupdec/pow, @@infsupdec/pow10, @@infsupdec/exp}

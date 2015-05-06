@@ -33,9 +33,9 @@
 ## @example
 ## @group
 ## x = nai ()
-##   @result{} [NaI]
+##   @result{} x = [NaI]
 ## x + 42
-##   @result{} [NaI]
+##   @result{} ans = [NaI]
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/infsupdec}

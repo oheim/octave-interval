@@ -29,11 +29,11 @@
 ## @example
 ## @group
 ## dot ([infsup(1), 2, 3], [infsup(2), 3, 4])
-##   @result{} [20]
+##   @result{} ans = [20]
 ## @end group
 ## @group
 ## dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1)
-##   @result{} [-2.2250738585072014e-308, -2.2250738585072013e-308]
+##   @result{} ans ⊂ [-2.2250738585072014e-308, -2.2250738585072013e-308]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus, @@infsup/sum, @@infsup/times, @@infsup/sumabs, @@infsup/sumsq}

@@ -24,9 +24,9 @@
 ## @example
 ## @group
 ## ceil (infsup (2.5, 3.5))
-##   @result{} [3, 4]
+##   @result{} ans = [3, 4]
 ## ceil (infsup (-0.5, 5))
-##   @result{} [0, 5]
+##   @result{} ans = [0, 5]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/floor, @@infsup/round, @@infsup/roundb, @@infsup/fix}

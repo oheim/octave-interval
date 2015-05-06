@@ -31,15 +31,14 @@
 ## @group
 ## x = infsupdec (magic (3), magic (3) + 1);
 ## x (1)
-##   @result{} [8, 9]_com
+##   @result{} ans = [8, 9]_com
 ## x (:, 2)
-##   @result{} 3×1 interval vector
-##
+##   @result{} ans = 3×1 interval vector
 ##       [1, 2]_com
 ##       [5, 6]_com
 ##      [9, 10]_com
 ## x.inf
-##   @result{}
+##   @result{} ans =
 ##      8   1   6
 ##      3   5   7
 ##      4   9   2

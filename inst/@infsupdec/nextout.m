@@ -29,7 +29,7 @@
 ## @group
 ## x = infsupdec (1);
 ## nextout (x) == infsupdec (1 - eps / 2, 1 + eps)
-##   @result{} 1
+##   @result{} ans = 1
 ## @end group
 ## @end example
 ## @end deftypefn

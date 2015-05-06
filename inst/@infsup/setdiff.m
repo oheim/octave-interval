@@ -26,7 +26,7 @@
 ## x = infsup (1, 3);
 ## y = infsup (2, 4);
 ## setdiff (x, y)
-##   @result{} [1, 2]
+##   @result{} ans = [1, 2]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/intersect, @@infsup/union, @@infsup/setxor}

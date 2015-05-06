@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## sumsq ([infsup(1), pow2(-1074), -1])
-##   @result{} [2, 2.000000000000001]
+##   @result{} ans ⊂ [2, 2.000000000000001]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus, @@infsup/sum, @@infsup/sumabs, @@infsup/sqr}

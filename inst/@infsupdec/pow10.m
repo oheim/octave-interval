@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## pow10 (infsupdec (5))
-##   @result{} [100000]_com
+##   @result{} ans = [100000]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/log10, @@infsupdec/pow, @@infsupdec/pow2, @@infsupdec/exp}

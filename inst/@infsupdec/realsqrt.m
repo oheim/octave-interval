@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## realsqrt (infsupdec (-6, 4))
-##   @result{} [0, 2]_trv
+##   @result{} ans = [0, 2]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sqr, @@infsupdec/rsqrt, @@infsupdec/pow, @@infsupdec/cbrt, @@infsupdec/nthroot}

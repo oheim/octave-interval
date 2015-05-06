@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## psi (infsupdec (1))
-##   @result{} [-0.5772156649015329, -0.5772156649015327]_com
+##   @result{} ans ⊂ [-0.5772156649015329, -0.5772156649015327]_com
 ## @end group
 ## @end example
 ## @end deftypefn

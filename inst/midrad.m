@@ -39,13 +39,13 @@
 ## @example
 ## @group
 ## midrad (42, 3)
-##   @result{} [39, 45]_com
+##   @result{} ans = [39, 45]_com
 ## midrad (0, inf)
-##   @result{} [Entire]_dac
+##   @result{} ans = [Entire]_dac
 ## midrad ("1.1", "0.1")
-##   @result{} [0.9999999999999997, 1.200000000000001]_com
+##   @result{} ans ⊂ [0.9999999999999997, 1.200000000000001]_com
 ## midrad ("25", "3/7")
-##   @result{} [24.571428571428569, 25.42857142857144]_com
+##   @result{} ans ⊂ [24.571428571428569, 25.42857142857144]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/infsupdec, hull, @@infsupdec/mid, @@infsupdec/rad}

@@ -34,7 +34,7 @@
 ## @example
 ## @group
 ## infsup (-5, 6) .^ infsup (2, 3)
-##   @result{} [-125, +216]
+##   @result{} ans = [-125, +216]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow, @@infsup/pown, @@infsup/pow2, @@infsup/pow10, @@infsup/exp}

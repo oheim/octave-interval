@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## mid (infsup (2.5, 3.5))
-##   @result{} 3
+##   @result{} ans = 3
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/rad}

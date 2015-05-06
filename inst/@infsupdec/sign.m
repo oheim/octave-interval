@@ -24,11 +24,11 @@
 ## @example
 ## @group
 ## sign (infsupdec (2, 3))
-##   @result{} [1]_com
+##   @result{} ans = [1]_com
 ## sign (infsupdec (0, 5))
-##   @result{} [0, 1]_def
+##   @result{} ans = [0, 1]_def
 ## sign (infsupdec (-17))
-##   @result{} [-1]_com
+##   @result{} ans = [-1]_com
 ## @end group
 ## @end example
 ## @end deftypefn

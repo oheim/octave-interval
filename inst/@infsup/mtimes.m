@@ -34,8 +34,7 @@
 ## x = infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]);
 ## y = infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]);
 ## x * y
-##   @result{} 2×2 interval matrix
-##
+##   @result{} ans = 2×2 interval matrix
 ##          [3, 6]      [5, 10.5]
 ##      [21, 22.5]   [36, 54.375]
 ## @end group

@@ -30,7 +30,7 @@
 ## x = infsupdec (1, 3);
 ## y = infsupdec (2, 4);
 ## union (x, y)
-##   @result{} [1, 4]_trv
+##   @result{} ans = [1, 4]_trv
 ## @end group
 ## @end example
 ## @seealso{hull, @@infsupdec/intersect, @@infsupdec/setdiff, @@infsupdec/setxor}

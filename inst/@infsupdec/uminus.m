@@ -25,7 +25,7 @@
 ## @group
 ## x = infsupdec (2, 3);
 ## - x
-##   @result{} [-3, -2]_com
+##   @result{} ans = [-3, -2]_com
 ## @end group
 ## @end example
 ## @end deftypefn

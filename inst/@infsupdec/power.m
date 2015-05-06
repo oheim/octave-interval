@@ -34,7 +34,7 @@
 ## @example
 ## @group
 ## infsupdec (-5, 6) .^ infsupdec (2, 3)
-##   @result{} [-125, +216]_trv
+##   @result{} ans = [-125, +216]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/pow, @@infsupdec/pown, @@infsupdec/pow2, @@infsupdec/pow10, @@infsupdec/exp}

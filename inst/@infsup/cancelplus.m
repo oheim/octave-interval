@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## cancelplus (infsup (2, 3), infsup (1, 1.5))
-##   @result{} [3.5, 4]
+##   @result{} ans = [3.5, 4]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cancelminus}

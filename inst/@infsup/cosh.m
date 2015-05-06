@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## cosh (infsup (1))
-##   @result{} [1.5430806348152437, 1.543080634815244]
+##   @result{} ans ⊂ [1.5430806348152437, 1.543080634815244]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/acosh, @@infsup/sech, @@infsup/sinh, @@infsup/tanh}

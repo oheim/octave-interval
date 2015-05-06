@@ -29,7 +29,7 @@
 ## @example
 ## @group
 ## cancelminus (infsupdec (2, 3), infsupdec (1, 1.5))
-##   @result{} [1, 1.5]_trv
+##   @result{} ans = [1, 1.5]_trv
 ## @end group
 ## @end example
 ## @end deftypefn

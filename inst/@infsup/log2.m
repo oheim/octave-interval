@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## log2 (infsup (2))
-##   @result{} [1]
+##   @result{} ans = [1]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow2, @@infsup/log, @@infsup/log10}

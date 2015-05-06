@@ -24,8 +24,7 @@
 ## @group
 ## a = infsup (2, 5);
 ## [a; a; a]
-##   @result{} 3×1 interval vector
-##
+##   @result{} ans = 3×1 interval vector
 ##      [2, 5]
 ##      [2, 5]
 ##      [2, 5]

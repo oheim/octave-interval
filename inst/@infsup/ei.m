@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## ei (infsup (1))
-##   @result{} [1.8951178163559365, 1.8951178163559368]
+##   @result{} ans ⊂ [1.8951178163559365, 1.8951178163559368]
 ## @end group
 ## @end example
 ## @end deftypefn

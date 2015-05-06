@@ -31,8 +31,7 @@
 ## @example
 ## @group
 ## infsup (magic (3)) ^ 2
-##   @result{} 3×3 interval matrix
-##
+##   @result{} ans = 3×3 interval matrix
 ##      [91]   [67]   [67]
 ##      [67]   [91]   [67]
 ##      [67]   [67]   [91]

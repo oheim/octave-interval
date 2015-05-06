@@ -28,7 +28,7 @@
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
 ## x == y
-##   @result{} 0
+##   @result{} ans =  0
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}

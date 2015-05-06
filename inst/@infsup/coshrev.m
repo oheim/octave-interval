@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## coshrev (infsup (-2, 1))
-##   @result{} [0]
+##   @result{} ans = [0]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cosh}

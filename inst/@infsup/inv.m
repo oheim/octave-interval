@@ -24,14 +24,12 @@
 ## @example
 ## @group
 ## inv (infsup ([2, 1, 1; 0, 1, 0; 1, 0, 0]))
-##   @result{} 3×3 interval matrix
-##
+##   @result{} ans = 3×3 interval matrix
 ##      [0]    [0]    [1]
 ##      [0]    [1]    [0]
 ##      [1]   [-1]   [-2]
 ## inv (infsup ([1, 2, 3; 4, 0, 6; 0, 0, 1]))
-##   @result{} 3×3 interval matrix
-##
+##   @result{} ans = 3×3 interval matrix
 ##        [0]     [0.25]    [-1.5]
 ##      [0.5]   [-0.125]   [-0.75]
 ##        [0]        [0]       [1]

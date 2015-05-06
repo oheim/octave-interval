@@ -26,7 +26,7 @@
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
 ## x ./ y
-##   @result{} [1, 3]
+##   @result{} ans = [1, 3]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/times}

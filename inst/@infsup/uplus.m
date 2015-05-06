@@ -25,7 +25,7 @@
 ## @group
 ## x = infsup (2, 3);
 ## + x
-##   @result{} [2, 3]
+##   @result{} ans = [2, 3]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/uminus}

@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## exp (infsup (1))
-##   @result{} [2.718281828459045, 2.7182818284590456]
+##   @result{} ans ⊂ [2.718281828459045, 2.7182818284590456]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/log, @@infsup/pow}

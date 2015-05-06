@@ -27,7 +27,7 @@
 ## @example
 ## @group
 ## sqrt (infsup (-6, 4))
-##   @result{} [0, 2]
+##   @result{} ans = [0, 2]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sqr, @@infsup/pow, @@infsup/nthroot, @@infsup/cbrt}

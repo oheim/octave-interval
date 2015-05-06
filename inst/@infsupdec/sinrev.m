@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## sinrev (infsupdec (-1), infsupdec (0, 6))
-##   @result{} [4.712388980384689, 4.712388980384691]_trv
+##   @result{} ans ⊂ [4.712388980384689, 4.712388980384691]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sin}

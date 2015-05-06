@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## acos (infsupdec (.5))
-##   @result{} [1.0471975511965976, 1.0471975511965979]_com
+##   @result{} ans ⊂ [1.0471975511965976, 1.0471975511965979]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cos}

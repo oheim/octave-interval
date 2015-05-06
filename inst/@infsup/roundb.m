@@ -25,9 +25,9 @@
 ## @example
 ## @group
 ## roundb (infsup (2.5, 3.5))
-##   @result{} [2, 4]
+##   @result{} ans = [2, 4]
 ## roundb (infsup (-0.5, 5.5))
-##   @result{} [0, 6]
+##   @result{} ans = [0, 6]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/floor, @@infsup/ceil, @@infsup/round, @@infsup/fix}

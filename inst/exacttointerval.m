@@ -37,11 +37,11 @@
 ## @example
 ## @group
 ## w = exacttointerval ("[ ]")
-##   @result{} [Empty]
+##   @result{} w = [Empty]
 ## x = exacttointerval ("[2, 3]")
-##   @result{} [2, 3]
+##   @result{} x = [2, 3]
 ## y = exacttointerval ("[,]")
-##   @result{} [Entire]
+##   @result{} y = [Entire]
 ## z = exacttointerval ("[21e-1]")
 ##   @result{} ??? exacttointerval: interval wouldn't be exact
 ## @end group

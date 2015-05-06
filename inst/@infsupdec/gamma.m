@@ -42,7 +42,7 @@
 ## @example
 ## @group
 ## gamma (infsupdec (1.5))
-##   @result{} [0.8862269254527579, 0.8862269254527581]_com
+##   @result{} ans ⊂ [0.8862269254527579, 0.8862269254527581]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/psi, @@infsupdec/gammaln}

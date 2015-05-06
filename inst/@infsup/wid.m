@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## wid (infsup (2.5, 3.5))
-##   @result{} 1
+##   @result{} ans = 1
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/rad}

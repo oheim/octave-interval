@@ -37,11 +37,11 @@
 ## @example
 ## @group
 ## x = empty ()
-##   @result{} [Empty]_trv
+##   @result{} x = [Empty]_trv
 ## inf (x)
-##   @result{} Inf
+##   @result{} ans = Inf
 ## sup (x)
-##   @result{} -Inf
+##   @result{} ans = -Inf
 ## @end group
 ## @end example
 ## @seealso{@@infsup/isempty, entire}

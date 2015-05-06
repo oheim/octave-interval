@@ -27,7 +27,7 @@
 ## @example
 ## @group
 ## mag (infsup (-3, 2))
-##   @result{} 3
+##   @result{} ans = 3
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mig, @@infsup/inf, @@infsup/sup}

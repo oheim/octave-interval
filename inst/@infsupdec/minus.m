@@ -26,7 +26,7 @@
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
 ## x - y
-##   @result{} [0, 2]_com
+##   @result{} ans = [0, 2]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/plus}

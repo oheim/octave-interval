@@ -26,9 +26,9 @@
 ## @example
 ## @group
 ## sum ([infsup(1), pow2(-1074), -1])
-##   @result{} [4.940656458412465e-324, 4.940656458412466e-324]
+##   @result{} ans ⊂ [4.940656458412465e-324, 4.940656458412466e-324]
 ## infsup (1) + pow2 (-1074) - 1
-##   @result{} [0, 2.220446049250314e-16]
+##   @result{} ans ⊂ [0, 2.220446049250314e-16]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus}

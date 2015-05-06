@@ -27,7 +27,7 @@
 ## @example
 ## @group
 ## pown (infsupdec (5, 6), 2)
-##   @result{} [25, 36]_com
+##   @result{} ans = [25, 36]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/pow, @@infsupdec/pow2, @@infsupdec/pow10, @@infsupdec/exp}

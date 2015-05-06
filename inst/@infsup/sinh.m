@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sinh (infsup (1))
-##   @result{} [1.1752011936438013, 1.1752011936438017]
+##   @result{} ans ⊂ [1.1752011936438013, 1.1752011936438017]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/asinh, @@infsup/csch, @@infsup/cosh, @@infsup/tanh}

@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## cos (infsupdec (1))
-##   @result{} [0.5403023058681396, 0.5403023058681398]_com
+##   @result{} ans ⊂ [0.5403023058681396, 0.5403023058681398]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/acos, @@infsupdec/sec, @@infsupdec/cosh}

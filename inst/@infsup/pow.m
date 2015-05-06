@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## pow (infsup (5, 6), infsup (2, 3))
-##   @result{} [25, 216]
+##   @result{} ans = [25, 216]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pown, @@infsup/pow2, @@infsup/pow10, @@infsup/exp, @@infsup/power}

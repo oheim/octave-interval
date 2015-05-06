@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## asinh (infsupdec (1))
-##   @result{} [0.8813735870195429, 0.8813735870195431]_com
+##   @result{} ans ⊂ [0.8813735870195429, 0.8813735870195431]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sinh}

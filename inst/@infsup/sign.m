@@ -24,11 +24,11 @@
 ## @example
 ## @group
 ## sign (infsup (2, 3))
-##   @result{} [1]
+##   @result{} ans = [1]
 ## sign (infsup (0, 5))
-##   @result{} [0, 1]
+##   @result{} ans = [0, 1]
 ## sign (infsup (-17))
-##   @result{} [-1]
+##   @result{} ans = [-1]
 ## @end group
 ## @end example
 ## @end deftypefn

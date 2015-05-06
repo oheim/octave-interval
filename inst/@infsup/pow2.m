@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## pow2 (infsup (5))
-##   @result{} [32]
+##   @result{} ans = [32]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/log2, @@infsup/pow, @@infsup/pow10, @@infsup/exp}

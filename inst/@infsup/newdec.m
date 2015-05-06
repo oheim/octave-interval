@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## newdec (infsup (2, 3))
-##   @result{} [2, 3]_com
+##   @result{} ans = [2, 3]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/infsupdec}

@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## ei (infsupdec (1))
-##   @result{} [1.8951178163559365, 1.8951178163559368]_com
+##   @result{} ans ⊂ [1.8951178163559365, 1.8951178163559368]_com
 ## @end group
 ## @end example
 ## @end deftypefn

@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## asinh (infsup (1))
-##   @result{} [0.8813735870195429, 0.8813735870195431]
+##   @result{} ans ⊂ [0.8813735870195429, 0.8813735870195431]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sinh}

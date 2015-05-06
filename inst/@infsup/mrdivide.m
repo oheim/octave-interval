@@ -24,8 +24,7 @@
 ## @example
 ## @group
 ## infsup ([1, 2; 3, 4]) / [3, 4; 1, 2]
-##   @result{} 2×2 interval matrix
-##
+##   @result{} ans = 2×2 interval matrix
 ##      [0]   [1]
 ##      [1]   [0]
 ## @end group

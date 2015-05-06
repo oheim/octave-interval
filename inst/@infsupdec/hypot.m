@@ -26,7 +26,7 @@
 ## x = infsupdec (2, 3);
 ## y = infsupdec (1, 2);
 ## hypot (x, y)
-##   @result{} [2.236067977499789, 3.6055512754639896]_com
+##   @result{} ans ⊂ [2.236067977499789, 3.6055512754639896]_com
 ## @end group
 ## @end example
 ## @end deftypefn

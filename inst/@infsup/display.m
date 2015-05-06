@@ -51,7 +51,6 @@
 ## @group
 ## z = infsupdec (pascal (2)); display (z);
 ##   @result{} z = 2×2 interval matrix
-##   
 ##      [1]_com   [1]_com
 ##      [1]_com   [2]_com
 ## @end group

@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## coshrev (infsupdec (-2, 1))
-##   @result{} [0]_trv
+##   @result{} ans = [0]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cosh}

@@ -28,7 +28,7 @@
 ## @example
 ## @group
 ## atan2rev1 (infsup (1, 2), infsup ("pi") / 4)
-##   @result{} [0.9999999999999998, 2.000000000000001]
+##   @result{} ans ⊂ [0.9999999999999998, 2.000000000000001]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/atan2}

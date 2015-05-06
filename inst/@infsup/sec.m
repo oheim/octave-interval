@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sec (infsup (1))
-##   @result{} [1.8508157176809254, 1.8508157176809257]
+##   @result{} ans ⊂ [1.8508157176809254, 1.8508157176809257]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cos, @@infsup/csc, @@infsup/cot}
