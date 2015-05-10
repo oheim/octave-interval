@@ -136,6 +136,7 @@ Interval input and output
  @infsup/display
  @infsup/intervaltoexact
  @infsup/intervaltotext
+ @infsup/plot
 Interval solver
  @infsup/fzero
  @infsup/gauss

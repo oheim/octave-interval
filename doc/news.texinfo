@@ -20,6 +20,17 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{0.2.1, xxxx-xx-xx}
+@itemize
+@item
+    plot: New interval plotting function
+@end itemize
+
+@noindent Bugfixes
+@itemize
+
+@end itemize
+
 @release{0.2.0, 2015-05-03}
 @itemize
 @item
