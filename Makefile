@@ -136,8 +136,13 @@ $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 
 $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 	@echo "Generating HTML documentation for the package. This may take a while ..."
+	@# Set papersize to 4x3in.
+	@# Demo figures are printed with 150dpi resulting in 600x450px.
 	@$(OCTAVE) --silent --eval \
 		"pkg load generate_html; \
+		 set (0, 'defaultfigurepaperunits', 'inches'); \
+		 set (0, 'defaultfigurepapersize', [4 3]); \
+		 set (0, 'defaultfigurepaperposition', [0 0 4 3]); \
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
 		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
