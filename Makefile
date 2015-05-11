@@ -117,9 +117,11 @@ clean:
 	rm -f src/*.oct src/*.o
 	rm -f fntests.log
 
-$(RELEASE_TARBALL): .hg/dirstate
+$(BUILD_DIR) $(GENERATED_IMAGE_DIR):
+	@mkdir -p "$@"
+
+$(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
 	@echo "Creating package release ..."
-	@mkdir -p "$(BUILD_DIR)"
 	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
 
 $(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL) $(GENERATED_NEWS) $(GENERATED_COPYING) $(GENERATED_IMAGES)
@@ -157,9 +159,8 @@ $(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps
 
 $(GENERATED_IMAGE_DIR)/%.ly.eps: $(GENERATED_IMAGE_DIR)/%.ly.png
 	@touch --no-create "$@"
-$(GENERATED_IMAGE_DIR)/%.ly.png: doc/image/%.ly
+$(GENERATED_IMAGE_DIR)/%.ly.png: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
-	@mkdir -p "$(GENERATED_IMAGE_DIR)"
 	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
 
 $(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
@@ -168,9 +169,8 @@ $(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
 
 $(GENERATED_IMAGE_DIR)/%.svg.pdf: $(GENERATED_IMAGE_DIR)/%.svg.eps
 	@touch --no-create "$@"
-$(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg
+$(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
-	@mkdir -p "$(GENERATED_IMAGE_DIR)"
 	@inkscape --without-gui \
 		--export-eps="$(BUILD_DIR)/$<.eps" \
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
@@ -182,10 +182,9 @@ $(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 $(CC_SOURCES): src/Makefile
 	@touch --no-create "$@"
 
-$(OCT_COMPILED): $(CC_SOURCES)
+$(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR)
 	@echo "Compiling OCT-files ..."
 	@(cd src; MKOCTFILE=$(MKOCTFILE) make)
-	@mkdir -p "$(BUILD_DIR)"
 	@touch "$@"
 
 run: $(OCT_COMPILED)
