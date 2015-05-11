@@ -28,6 +28,26 @@ SHELL   = /bin/sh
 ##     uses singlebyte characters on Windows and multibyte characters
 ##     on better systems.
 ##
+##   * Octave Package: doctest
+##
+##     The Octave Forge package is used to find errors in the code of
+##     @example blocks from the documentation (both function documentation
+##     and user manual).
+##
+##   * Octave package: generate_html
+##
+##     The Octave Forge package is used to generate the HTML documentation
+##     for publication of this package on Octave Forge.
+##
+##   * GNU LilyPond, Inkscape and poppler-utils
+##
+##     These are used to generate or convert images for the manual.
+##
+##     The package repository contains only source code for the images, whereas
+##     the release tarball additionally contains .PNG, .EPS and .PDF versions
+##     of all images. The .PNG versions are also used in the HTML manual, which
+##     is published at Octave Forge.
+##
 ##   * Interval Testing Framework for IEEE 1788
 ##
 ##     The tool is used to convert test/*.itl into GNU Octave *.tst files
@@ -44,22 +64,6 @@ SHELL   = /bin/sh
 ##
 ##     See its requirements.txt file for required python packages.
 ##
-##   * Doctest
-##
-##     The tool is used to find errors in the code of @example blocks
-##     from the documentation.
-##
-##     Must be installed as an Octave package.
-##
-##   * GNU LilyPond, Inkscape and poppler-utils
-##
-##     These are used to generate or convert images for the manual.
-##
-##     The package repository contains only source code for the images, whereas
-##     the release tarball additionally contains .PNG, .EPS and .PDF versions
-##     of all images. The .PNG versions are also used in the HTML manual, which
-##     is published at Octave Forge.
-##
 
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
@@ -71,7 +75,6 @@ RELEASE_TARBALL_COMPRESSED = $(RELEASE_TARBALL).gz
 HTML_DIR = $(BUILD_DIR)/$(PACKAGE)-html
 HTML_TARBALL_COMPRESSED = $(HTML_DIR).tar.gz
 INSTALLED_PACKAGE = ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
-GENERATED_HTML = $(HTML_DIR)/$(PACKAGE)/index.html
 GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_COPYING = $(BUILD_DIR)/COPYING
 GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
@@ -80,12 +83,14 @@ GENERATED_IMAGES = \
 	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.png) \
 	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.eps) \
 	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.pdf)
+GENERATED_OBJ = $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES)
+TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile
 
-.PHONY: help dist release html run check install clean md5
+.PHONY: help dist release html run check test doctest install clean md5
 
 help:
 	@echo
@@ -95,12 +100,13 @@ help:
 	@echo "   make release  Create both of the above plus md5 sums"
 	@echo
 	@echo "   make install  Install the package in GNU Octave"
-	@echo "   make check    Execute package tests (w/o install)"
+	@echo "   make check    Validate the package (w/o install)"
 	@echo "   make run      Run the package in GNU Octave (w/o install)"
 	@echo
 	@echo "   make clean    Cleanup"
 	@echo
 
+check: doctest test
 dist: $(RELEASE_TARBALL_COMPRESSED)
 html: $(HTML_TARBALL_COMPRESSED)
 md5:  $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED)
@@ -123,17 +129,58 @@ $(BUILD_DIR) $(GENERATED_IMAGE_DIR):
 $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
 	@echo "Creating package release ..."
 	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
+	@# build/.tar* files are used for incremental updates
+	@# to the tarball and must be cleared
+	@rm $(BUILD_DIR)/.tar*
 
-$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL) $(GENERATED_NEWS) $(GENERATED_COPYING) $(GENERATED_IMAGES)
-	@echo "Patching generated documentation into release tarball ..."
-	@tar --append --file "$<" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" "$(GENERATED_NEWS)" "$(GENERATED_COPYING)" $(GENERATED_IMAGES)
+$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
+	@echo "Compressing release tarball ..."
 	@(cd "$(BUILD_DIR)" && gzip --best -f -k "../$<")
 
 $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 	@echo "Installing package in GNU Octave ..."
 	@$(OCTAVE) --silent --eval "pkg install $<"
 
-$(GENERATED_HTML): $(INSTALLED_PACKAGE)
+## COPYING and NEWS are generated from GNU TexInfo sources
+$(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.texinfo
+	@echo "Compiling $< ..."
+	@makeinfo --plaintext --output="$@" "$<"
+
+## GNU LilyPond graphics
+$(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps
+	@epstopdf "$<"
+$(GENERATED_IMAGE_DIR)/%.ly.eps: $(GENERATED_IMAGE_DIR)/%.ly.png
+	@touch --no-create "$@"
+$(GENERATED_IMAGE_DIR)/%.ly.png: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
+	@echo "Compiling $< ..."
+	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
+
+## Inkscape SVG graphics
+$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
+	@# --export-png in Inkscape produces poor results, use poppler instead
+	@pdftocairo -png -singlefile -gray -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
+	@mv "$(BUILD_DIR)/cairo.tmp.png" "$@"
+$(GENERATED_IMAGE_DIR)/%.svg.pdf: $(GENERATED_IMAGE_DIR)/%.svg.eps
+	@touch --no-create "$@"
+$(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
+	@echo "Compiling $< ..."
+	@inkscape --without-gui \
+		--export-eps="$(BUILD_DIR)/$<.eps" \
+		--export-pdf="$(BUILD_DIR)/$<.pdf" \
+		"$<" > /dev/null
+
+## Patch generated stuff into the release tarball
+$(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
+$(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
+	@echo "Patching generated files into release tarball ..."
+	@# `tar --update --transform` fails to update the files
+	@# The following line is a workaroung that removes duplicates
+	@tar --delete --file "$|" $(patsubst $(BUILD_DIR)/%,$(PACKAGE)-$(VERSION)/%,$?) 2> /dev/null || true
+	@tar --update --file "$|" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" $?
+	@touch "$@"
+
+## HTML Documentation for Octave Forge
+$(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE)
 	@echo "Generating HTML documentation for the package. This may take a while ..."
 	@# Set papersize to 4x3in.
 	@# Demo figures are printed with 150dpi resulting in 600x450px.
@@ -145,60 +192,33 @@ $(GENERATED_HTML): $(INSTALLED_PACKAGE)
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
 		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
-
-$(GENERATED_NEWS): doc/news.texinfo
-	@echo "Compiling NEWS ..."
-	@makeinfo --plaintext --output="$@" "$<" 
-
-$(GENERATED_COPYING): doc/copying.texinfo
-	@echo "Compiling COPYING ..."
-	@makeinfo --plaintext --output="$@" "$<" 
-
-$(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps
-	@epstopdf "$<"
-
-$(GENERATED_IMAGE_DIR)/%.ly.eps: $(GENERATED_IMAGE_DIR)/%.ly.png
-	@touch --no-create "$@"
-$(GENERATED_IMAGE_DIR)/%.ly.png: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
-	@echo "Compiling $< ..."
-	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
-
-$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
-	@pdftocairo -png -singlefile -gray -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
-	@mv "$(BUILD_DIR)/cairo.tmp.png" "$@"
-
-$(GENERATED_IMAGE_DIR)/%.svg.pdf: $(GENERATED_IMAGE_DIR)/%.svg.eps
-	@touch --no-create "$@"
-$(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
-	@echo "Compiling $< ..."
-	@inkscape --without-gui \
-		--export-eps="$(BUILD_DIR)/$<.eps" \
-		--export-pdf="$(BUILD_DIR)/$<.pdf" \
-		"$<" > /dev/null
-
-$(HTML_TARBALL_COMPRESSED): $(GENERATED_HTML)
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
 
+## If the src/Makefile changes, recompile all oct-files
 $(CC_SOURCES): src/Makefile
 	@touch --no-create "$@"
 
+## Compilation of oct-files happens in a separate Makefile,
+## which is bundled in the release and will be used during
+## package installation by Octave.
 $(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR)
 	@echo "Compiling OCT-files ..."
 	@(cd src; MKOCTFILE=$(MKOCTFILE) make)
 	@touch "$@"
 
+## Interactive shell with the package's functions in the path
 run: $(OCT_COMPILED)
 	@echo "Run GNU Octave with the development version of the package"
 	@$(OCTAVE) --silent --path "inst/" --path "src/"
 	@echo
 
-check: $(OCT_COMPILED)
+## Validate unit tests
+test: $(OCT_COMPILED)
 	@echo "Testing package in GNU Octave ..."
 	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
 	@echo
 
-check: doctest
-.PHONY: doctest
+## Validate code examples
 doctest: $(OCT_COMPILED)
 	@echo "Testing documentation strings ..."
 	@# Due to a missing evalc function in Octave we must filter
@@ -218,10 +238,8 @@ doctest: $(OCT_COMPILED)
 TST_SOURCES = $(wildcard test/*.itl)
 TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/interval
 TST_GENERATED = $(TST_SOURCES:test/%.itl=$(TST_GENERATED_DIR)/%.tst)
+TST_PATCHED = $(BUILD_DIR)/.tar.tests
 PWD = $(shell pwd)
-
-.PHONY: tests
-tests: $(TST_GENERATED)
 
 $(TST_GENERATED_DIR)/%.tst: test/%.itl
 	@echo "Compiling $< ..."
@@ -235,13 +253,15 @@ $(TST_GENERATED_DIR)/%.tst: test/%.itl
 
 ifdef ITF1788_HOME
 
-$(RELEASE_TARBALL_COMPRESSED): patch-tests
-.INTERMEDIATE: patch-tests
-patch-tests: $(RELEASE_TARBALL) $(TST_GENERATED) 
+test: $(TST_GENERATED)
+$(RELEASE_TARBALL_COMPRESSED): $(TST_PATCHED)
+$(TST_PATCHED): $(TST_GENERATED) | $(RELEASE_TARBALL)
 	@echo "Patching generated tests into release tarball ..."
-	@tar --append --file "$<" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $(TST_GENERATED_DIR)/*
-
-check: $(TST_GENERATED)
+	@# `tar --update --transform` fails to update the files
+	@# The following line is a workaroung that removes duplicates
+	@tar --delete --file "$|" $(patsubst $(TST_GENERATED_DIR)/%,$(PACKAGE)-$(VERSION)/inst/test/%,$?) 2> /dev/null || true
+	@tar --update --file "$|" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $?
+	@touch "$@"
 
 else
 
