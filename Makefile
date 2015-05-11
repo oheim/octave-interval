@@ -49,10 +49,7 @@ SHELL   = /bin/sh
 ##     The tool is used to find errors in the code of @example blocks
 ##     from the documentation.
 ##
-##     Download from https://github.com/catch22/doctest-for-matlab
-##     Set the environment variable DOCTEST_HOME to the local copy,
-##     e. g. in .bashrc:
-##       export DOCTEST_HOME=/home/oliver/Dokumente/doctest-for-matlab
+##     Must be installed as an Octave package.
 ##
 ##   * GNU LilyPond, Inkscape and poppler-utils
 ##
@@ -201,34 +198,19 @@ check: $(OCT_COMPILED)
 	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
 	@echo
 
-####################################################################
-## The following rule checks for errors in @example blocks within ##
-## the functions' documentation strings                           ##
-####################################################################
-
-ifdef DOCTEST_HOME
-
 check: doctest
 .PHONY: doctest
 doctest: $(OCT_COMPILED)
 	@echo "Testing documentation strings ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --path "$(DOCTEST_HOME)" --eval "doctest $(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)"
+	@# Due to a missing evalc function in Octave we must filter
+	@# temporary output while running the doctests.
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval \
+		"pkg load doctest; \
+		 targets = '$(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)'; \
+		 targets = strsplit (targets, ' '); \
+		 doctest (targets)" \
+		| awk '/^Start of temporary output/ {hide=1} /^End of temporary output/ {hide=0;next} !hide {print}'
 	@echo
-
-else
-
-check: DOCTESTWARNING
-.PHONY: DOCTESTWARNING
-DOCTESTWARNING:
-	@echo
-	@echo "WARNING: doctest-for-matlab not installed properly."
-	@echo "Documentation strings will not be checked."
-	@echo
-	@echo "Download doctest-for-matlab from https://github.com/catch22/doctest-for-matlab"
-	@echo "and set the environment variable DOCTEST_HOME accordingly."
-	@echo
-
-endif
 
 ###################################################################
 ## The following rules are required for generation of test files ##
