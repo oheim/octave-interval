@@ -1,0 +1,18 @@
+\input texinfo
+@setfilename CITATION
+@settitle CITATION file
+@documentencoding UTF-8
+
+@copying
+    Copyright @copyright{} 2015 Oliver Heimlich
+
+@comment GNU All-Permissive License
+    Copying and distribution of this file, with or without modification,
+    are permitted in any medium without royalty provided the copyright
+    notice and this notice are preserved.  This file is offered as-is,
+    without any warranty.
+@end copying
+
+Heimlich, Oliver. 2015. “GNU Octave Interval Package.” http://www.gnu.org/software/octave/.
+
+@bye
