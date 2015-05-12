@@ -13,6 +13,23 @@
     without any warranty.
 @end copying
 
-Heimlich, Oliver. 2015. “GNU Octave Interval Package.” http://www.gnu.org/software/octave/.
+The @dfn{interval} package is a collection of functions for interval arithmetic. It is developed at Octave Forge, a sibling of the GNU Octave project. To cite the package in publications use:
+
+@indentedblock
+Heimlich, Oliver. 2015. “GNU Octave Interval Package.” @url{http://octave.sourceforge.net/interval/}.
+@end indentedblock
+
+@noindent A BibTeX entry for LaTeX users is:
+
+@example
+@@Electronic@{octave-interval,
+  Title  = @{GNU Octave Interval Package@},
+  Author = @{Oliver Heimlich@},
+  Url    = @{http://octave.sourceforge.net/interval/@},
+  Year   = @{2015@},
+@}
+@end example
+
+@noindent See also @command{citation} for citing Octave as a whole.
 
 @bye
