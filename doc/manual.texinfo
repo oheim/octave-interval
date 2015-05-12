@@ -2,6 +2,27 @@
 @setfilename manual.info
 @settitle GNU Octave Interval Package Manual
 @documentencoding UTF-8
+@tex
+\DeclareUnicodeCharacter{00A0}{\ }
+\DeclareUnicodeCharacter{00A7}{\S}
+\DeclareUnicodeCharacter{00B2}{${}^2$}
+\DeclareUnicodeCharacter{00BD}{1/2}
+\DeclareUnicodeCharacter{00D7}{$\times$}
+\DeclareUnicodeCharacter{00F7}{$\div$}
+\DeclareUnicodeCharacter{202F}{\thinspace}
+\DeclareUnicodeCharacter{2122}{(TM)}
+\DeclareUnicodeCharacter{2200}{$\forall$}
+\DeclareUnicodeCharacter{2203}{$\exists$}
+\DeclareUnicodeCharacter{2208}{$\in$}
+\DeclareUnicodeCharacter{221E}{$\infty$}
+\DeclareUnicodeCharacter{2227}{$\wedge$}
+\DeclareUnicodeCharacter{2229}{$\cap$}
+\DeclareUnicodeCharacter{2264}{$\leq$}
+\DeclareUnicodeCharacter{2265}{$\geq$}
+\DeclareUnicodeCharacter{2282}{$\subset$}
+\DeclareUnicodeCharacter{2287}{$\supseteq$}
+\DeclareUnicodeCharacter{2713}{$\ast$}
+@end tex
 
 @set version 0.2.0
 
