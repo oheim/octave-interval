@@ -23,7 +23,7 @@ Heimlich, Oliver. 2015. “GNU Octave Interval Package.” @url{http://octave.so
 
 @example
 @@Electronic@{octave-interval,
-  Title  = @{GNU Octave Interval Package@},
+  Title  = @{@{GNU Octave@} Interval Package@},
   Author = @{Oliver Heimlich@},
   Url    = @{http://octave.sourceforge.net/interval/@},
   Year   = @{2015@},
