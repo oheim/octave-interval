@@ -1,14 +1,15 @@
-SHELL   = /bin/sh
+SHELL = /bin/sh
+OBJ   = manual.html manual.pdf
 
-manual.html: manual.texinfo
+.PHONY: all clean
+
+all: $(OBJ)
+
+manual.html: manual.texinfo $(wildcard chapter/*) license/fdl-1.3.texi
 	makeinfo --html --no-split "$<"
 
-## PDF support is still experimental, so the default target is for
-## generation of the HTML documentation only.
-manual.pdf: manual.texinfo
-	makeinfo --pdf "$<"
-	rm *.aux *.cp *.fn *.ky *.log *.pg *.toc *.tp *.vr
+manual.pdf: manual.texinfo $(wildcard chapter/*) license/fdl-1.3.texi $(wildcard image/*.pdf)
+	makeinfo --pdf --Xopt=--clean "$<"
 
-.PHONY: clean
 clean:
-	rm manual.pdf manual.html
+	rm $(OBJ)
