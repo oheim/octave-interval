@@ -87,51 +87,51 @@ unwind_protect
     
     [s, isexact] = disp (x);
     
-    fprintf (line_prefix);
+    printf (line_prefix);
     if (not (isempty (label)))
-        fprintf (label);
+        printf (label);
         if (isexact || ispc ())
-            fprintf (" = ");
+            printf (" = ");
         else
             ## The Microsoft Windows console does not support this multibyte
             ## character.
-            fprintf (" ⊂ ");
+            printf (" ⊂ ");
         endif
     endif
     
     if (isscalar (x))
         ## Scalar interval
-        fprintf (s);
+        printf (s);
         if (isempty (label))
-            fprintf ("\n");
+            printf ("\n");
         endif
         return
     endif
     
     if (ispc ())
-        fprintf ("%dx%d interval ", size (x, 1), size (x, 2));
+        printf ("%dx%d interval ", size (x, 1), size (x, 2));
     else
         ## The Microsoft Windows console does not support multibyte characters.
-        fprintf ("%d×%d interval ", size (x, 1), size (x, 2));
+        printf ("%d×%d interval ", size (x, 1), size (x, 2));
     endif
     if (isvector (x))
-        fprintf ("vector");
+        printf ("vector");
     else
-        fprintf ("matrix");
+        printf ("matrix");
     endif
-    fprintf ("\n\n");
+    printf ("\n\n");
     
     if (not (isempty (s)))
-        fprintf (line_prefix);
+        printf (line_prefix);
         
         if (current_print_indent_level > 0)
             s = strrep (s, "\n", cstrcat ("\n", line_prefix));
             s (end - current_print_indent_level + 1 : end) = "";
         endif
         
-        fprintf (s);
+        printf (s);
         
-        fprintf ("\n");
+        printf ("\n");
     endif
 unwind_protect_cleanup
     current_print_indent_level = save_current_print_indent_level;

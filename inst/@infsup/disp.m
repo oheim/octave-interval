@@ -107,7 +107,7 @@ if (rows (x) > 0)
         ## Convert string matrix into string with newlines
         buffer = cstrcat (buffer, strjoin (cellstr (submatrix), "\n"), "\n");
         if (nargout == 0)
-            fprintf (buffer);
+            printf (buffer);
             buffer = "";
         endif
         cstart = cend + 1;
