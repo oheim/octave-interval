@@ -70,7 +70,7 @@ The default text representation of intervals is not guaranteed to be exact, beca
 Beware of the conversion pitfall 
 @example
 @group
-## The numeric constant “0.3” is an approximation of the
+## The numeric constant 0.3 is an approximation of the
 ## decimal number 0.3.  An interval around this approximation
 ## will not contain the decimal number 0.3.
 infsupdec (0.3)
@@ -126,10 +126,12 @@ infsupdec (["0.1"; "0.2"; "0.3"; "0.4"; "0.5"])
 @end example
 @example
 @group
-infsup (@{1, eps; "4/7", "pi"@}, @{2, 1; "e", "0xff"@})
-  @result {} ans ⊂ 2×2 interval matrix
-                                      [1, 2]   [2.220446049250313e-16, 1]
-    [0.5714285714285713, 2.7182818284590456]     [3.141592653589793, 255]
+infsup (@{1; eps; "4/7"; "pi"@}, @{2; 1; "e"; "0xff"@})
+  @result{} ans ⊂ 4×1 interval vector
+                                     [1, 2]
+                 [2.220446049250313e-16, 1]
+   [0.5714285714285713, 2.7182818284590456]
+                   [3.141592653589793, 255]
 @end group
 @end example
 
@@ -303,7 +305,8 @@ infsup (A) \ [3; 0]
 @end example
 @example
 @group
-## The unbound interval vector indicates that there may be many solutions
+## The unbound interval vector indicates
+## that there may be many solutions
 infsup (A) \ [4; 8]
   @result{} ans = 2×1 interval vector
             [4]

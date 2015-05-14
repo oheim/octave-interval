@@ -12,7 +12,8 @@ However, the interval constructors can produce errors depending on the input. Th
 Effects of set-based interval arithmetic on partial functions and the NaI object 
 @example
 @group
-## Evaluation of a function outside of its domain returns an empty interval
+## Evaluation of a function outside of its domain
+## returns an empty interval
 infsupdec (2) / 0
   @result{} ans = [Empty]_trv
 infsupdec (0) ^ infsupdec (0)
@@ -24,7 +25,8 @@ infsupdec (0) ^ infsupdec (0)
 @group
 ## Illegal interval construction creates a NaI
 infsupdec (3, 2)
-  @result{} warning: illegal interval boundaries: infimum greater than supremum
+  @result{} warning: illegal interval boundaries:
+      infimum greater than supremum
     ans = [NaI]
 @end group
 @end example
@@ -79,7 +81,7 @@ Only the (unfavored) infsup constructor creates bare, undecorated intervals and 
 
 The following decorations are available: 
 
-@multitable @columnfractions .2 .1 .1 .1 .5
+@multitable {Decoration ABC} {Bounded} {Continuous} {Defined} {Definition Definition Definition}
 @headitem Decoration
     @tab Bounded
     @tab Continuous
@@ -104,7 +106,7 @@ The following decorations are available:
     @tab
     @tab
     @tab
-    @tab always true (so gives no information) 
+    @tab always true@*(so gives no information) 
 @item ill (ill-formed)
     @tab
     @tab

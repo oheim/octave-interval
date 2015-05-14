@@ -10,7 +10,7 @@ Unless the package is provided by a third-party distributor, the interval packag
 
 @c Can't use example block here, because that would be evaluated by doctest
 @indentedblock
-@t{pkg install -forge interval@*  @result{} For information about changes from previous versions of the interval package, run 'news interval'.}
+@t{pkg install -forge interval@*  @result{} For information about changes from previous versions@*      of the interval package, run 'news interval'.}
 @end indentedblock
 
 During installation parts of the package are compiled for the target system, which requires the GNU MPFR development libraries (version ≥ 3.1.0) to be installed. The official GNU Octave release for Microsoft Windows already includes this dependency. For other systems it might be necessary to install MPFR development files, which are provided by most GNU distributions or can be obtained from @url{http://www.mpfr.org/}.
@@ -65,17 +65,15 @@ For some interval operations it is not even possible to rely on floating-point r
 @caption{Approximate runtime for certain functions (wall clock time in seconds) — Results have been produced with GNU Octave 3.8.2 and Interval package 0.1.4 on an Intel® Core™ i5-4340M CPU (2.9–3.6 GHz)}
 @shortcaption{Approximate runtime for certain functions}
 
-@multitable @columnfractions .16 .12 .12 .12 .12 .12 .12 .12
+@multitable {matrix size} {accuracy} {accuracy} {accuracy} {accuracy} {accuracy} {accuracy}
 @headitem
     @tab@command{plus}
-    @tab@command{times}
     @tab@command{log}
     @tab@command{pow}
     @tab@command{mtimes}
     @tab@command{mtimes}
     @tab@command{inv}
-@item Interval matrix size
-    @tab tightest@*accuracy
+@item Interval@*matrix size
     @tab tightest@*accuracy
     @tab tightest@*accuracy
     @tab tightest@*accuracy
@@ -84,7 +82,6 @@ For some interval operations it is not even possible to rely on floating-point r
     @tab valid@*accuracy
 @item 10 × 10
     @tab < 0.001
-    @tab < 0.001
     @tab 0.001
     @tab 0.008
     @tab 0.001
@@ -92,7 +89,6 @@ For some interval operations it is not even possible to rely on floating-point r
     @tab 0.025
 @item 100 × 100
     @tab 0.003
-    @tab 0.010
     @tab 0.055
     @tab 0.61
     @tab 0.012
@@ -100,7 +96,6 @@ For some interval operations it is not even possible to rely on floating-point r
     @tab 0.30
 @item 500 × 500
     @tab 0.060
-    @tab 0.24
     @tab 1.3
     @tab 15
     @tab 0.30

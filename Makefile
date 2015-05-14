@@ -39,7 +39,7 @@ SHELL   = /bin/sh
 ##     The Octave Forge package is used to generate the HTML documentation
 ##     for publication of this package on Octave Forge.
 ##
-##   * GNU LilyPond, Inkscape and poppler-utils
+##   * GNU LilyPond and Inkscape
 ##
 ##     These are used to generate or convert images for the manual.
 ##
@@ -150,24 +150,19 @@ $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.tex
 ## GNU LilyPond graphics
 $(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps
 	@epstopdf "$<"
-$(GENERATED_IMAGE_DIR)/%.ly.eps: $(GENERATED_IMAGE_DIR)/%.ly.png
-	@touch --no-create "$@"
-$(GENERATED_IMAGE_DIR)/%.ly.png: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
+$(GENERATED_IMAGE_DIR)/%.ly.png $(GENERATED_IMAGE_DIR)/%.ly.eps: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
 	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
 
 ## Inkscape SVG graphics
-$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
-	@# --export-png in Inkscape produces poor results, use poppler instead
-	@pdftocairo -png -singlefile -gray -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
-	@mv "$(BUILD_DIR)/cairo.tmp.png" "$@"
-$(GENERATED_IMAGE_DIR)/%.svg.pdf: $(GENERATED_IMAGE_DIR)/%.svg.eps
-	@touch --no-create "$@"
-$(GENERATED_IMAGE_DIR)/%.svg.eps: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
+$(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf $(GENERATED_IMAGE_DIR)/%.svg.png: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
 	@inkscape --without-gui \
+		--export-dpi=120 \
+		--export-ignore-filters \
 		--export-eps="$(BUILD_DIR)/$<.eps" \
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
+		--export-png="$(BUILD_DIR)/$<.png" \
 		"$<" > /dev/null
 
 ## Patch generated stuff into the release tarball
@@ -237,7 +232,7 @@ doctest: $(OCT_COMPILED)
 GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PNG)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
 	@(cd doc; make manual.html)
 	@mv doc/manual.html "$@"
 $(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PDF)
