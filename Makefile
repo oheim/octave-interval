@@ -80,10 +80,10 @@ GENERATED_CITATION = $(BUILD_DIR)/CITATION
 GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
 IMAGE_SOURCES = $(wildcard doc/image/*)
-GENERATED_IMAGES = \
-	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.png) \
-	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.eps) \
-	$(IMAGE_SOURCES:%=$(BUILD_DIR)/%.pdf)
+GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
+GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
+GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
+GENERATED_IMAGES = $(GENERATED_IMAGES_EPS) $(GENERATED_IMAGES_PDF) $(GENERATED_IMAGES_PNG)
 GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES)
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
@@ -91,7 +91,7 @@ OCT_COMPILED = $(BUILD_DIR)/.oct
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile
 
-.PHONY: help dist release html run check test doctest install clean md5
+.PHONY: help dist release html run check test doctest install info clean md5
 
 help:
 	@echo
@@ -132,7 +132,7 @@ $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
 	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
 	@# build/.tar* files are used for incremental updates
 	@# to the tarball and must be cleared
-	@rm $(BUILD_DIR)/.tar*
+	@rm -f $(BUILD_DIR)/.tar*
 
 $(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
 	@echo "Compressing release tarball ..."
@@ -231,6 +231,21 @@ doctest: $(OCT_COMPILED)
 		 doctest (targets)" \
 		| awk '/^Start of temporary output/ {hide=1} /^End of temporary output/ {hide=0;next} !hide {print}'
 	@echo
+
+## Check the creation of the manual
+## The doc/Makefile may be used by the end user
+GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
+GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
+info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PNG)
+	@(cd doc; make manual.html)
+	@mv doc/manual.html "$@"
+$(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PDF)
+	@(cd doc; \
+	  TEXI2DVI_BUILD_DIRECTORY="../$(BUILD_DIR)/doc" \
+	  MAKEINFO="makeinfo -I ../$(BUILD_DIR)/doc --Xopt=--tidy" \
+	  make manual.pdf)
+	@mv doc/manual.pdf "$@"
 
 ###################################################################
 ## The following rules are required for generation of test files ##
