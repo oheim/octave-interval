@@ -68,7 +68,7 @@ endif
 
 oldhold = ishold ();
 if (not (oldhold))
-    newplot;
+    clf
     hold on
 endif
 
@@ -99,6 +99,7 @@ end_unwind_protect
 endfunction
 
 %!test
+%!  clf
 %!  hold on
 %!  plot (infsup (0), infsup (0));
 %!  plot (infsup (1, 2), infsup (0));
@@ -109,12 +110,12 @@ endfunction
 %!  close
 
 %!test
-%!  newplot
+%!  clf
 %!  plot (infsup (-rand (50, 1), +rand (50, 1)));
 %!  close
 
 %!demo
-%!  newplot
+%!  clf
 %!  hold on
 %!  axis off
 %!  range = infsup (0, 9);
