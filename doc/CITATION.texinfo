@@ -13,7 +13,7 @@
     without any warranty.
 @end copying
 
-The @dfn{interval} package is a collection of functions for interval arithmetic. It is developed at Octave Forge, a sibling of the GNU Octave project. To cite the package in publications use:
+The interval package is a collection of functions for interval arithmetic. It is developed at Octave Forge, a sibling of the GNU Octave project. To cite the interval package in publications use:
 
 @indentedblock
 Heimlich, Oliver. 2015. “GNU Octave Interval Package.” @url{http://octave.sourceforge.net/interval/}.
