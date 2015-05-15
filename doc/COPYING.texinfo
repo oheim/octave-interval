@@ -13,11 +13,13 @@
     without any warranty.
 @end copying
 
-The majority of code of the interval package and the interval package as a whole are licensed under the GNU General Public License.  The code is combined with unit tests from the C++ framework libieeep1788, which are released under the Apache License.
+The interval package is free software.
 
-The wording of both licenses can be found below.
+The majority of code and the package as a whole are licensed under the GNU General Public License Version 3 (or later).  The included manual is licensed under the GNU Free Documentation License Version 1.3 (or later).  The code is combined with certain unit tests, which are licensed under the Apache License Version 2.0.
 
-The Apache License grants “additional permissions” (as defined by section 7 of the GNU General Public License) solely to source files where this licensing is explicitly declared in the file's header.
+The wording of both software licenses can be found below.  The GNU Free Documentation License is included in the manual.
+
+The Apache License solely applies to source files where this licensing is explicitly declared in the file's header.
 
 @sp 5
 
