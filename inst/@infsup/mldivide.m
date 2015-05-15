@@ -1,14 +1,13 @@
-## Copyright 2015 Oliver Heimlich
+## Copyright 1990-2000 Institut für Angewandte Mathematik,
+##                     Universität Karlsruhe, Germany
+## Copyright 2000-2014 Wissenschaftliches Rechnen/Softwaretechnologie,
+##                     Universität Wuppertal, Germany
+## Copyright 2015      Oliver Heimlich
 ## 
 ## This program is derived from FastLSS in CXSC, C++ library for eXtended
 ## Scientific Computing (V 2.5.4), which is distributed under the terms of
-## LGPLv2+.
-##     Original Author     Michael Zimmer
-##     Original Copyrights
-##     1990-2000           Institut für Angewandte Mathematik,
-##                         Universität Karlsruhe, Germany
-##     2000-2014           Wissenschaftliches Rechnen/Softwaretechnologie,
-##                         Universität Wuppertal, Germany
+## LGPLv2+.  Original Author is Michael Zimmer.  Migration to Octave code has
+## been performed by Oliver Heimlich.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by

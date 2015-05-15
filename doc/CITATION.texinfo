@@ -3,15 +3,9 @@
 @settitle CITATION file
 @documentencoding UTF-8
 
-@copying
-    Copyright @copyright{} 2015 Oliver Heimlich
-
-@comment GNU All-Permissive License
-    Copying and distribution of this file, with or without modification,
-    are permitted in any medium without royalty provided the copyright
-    notice and this notice are preserved.  This file is offered as-is,
-    without any warranty.
-@end copying
+@c This is part of the GNU Octave Interval Package.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file COPYING for copying conditions.
 
 The interval package is a collection of functions for interval arithmetic. It is developed at Octave Forge, a sibling of the GNU Octave project. To cite the interval package in publications use:
 
