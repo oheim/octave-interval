@@ -17,7 +17,7 @@
 @release{0.2.1, xxxx-xx-xx}
 @itemize
 @item
-    plot: New interval plotting function
+    plot, plot3: New interval plotting functions
 @end itemize
 
 @noindent Bugfixes
