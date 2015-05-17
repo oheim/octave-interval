@@ -43,14 +43,20 @@ if (nargin > 4)
     return
 endif
 
-if (not (isa (x, "infsup")))
-    x = infsup (x);
+warning ("off", "interval:ImplicitPromote", "local");
+if (not (isa (x, "infsupdec")))
+    x = infsupdec (x);
 endif
-if (not (isa (y, "infsup")))
-    y = infsup (y);
+if (not (isa (y, "infsupdec")))
+    y = infsupdec (y);
 endif
-if (not (isa (z, "infsup")))
-    z = infsup (z);
+if (not (isa (z, "infsupdec")))
+    z = infsupdec (z);
+endif
+
+if (isnai (x) || isnai (y) || isnai (z))
+    error ("interval:NaI", "Cannot plot3 NaIs");
+    return
 endif
 
 if (nargin < 4)

@@ -49,17 +49,23 @@ if (nargin > 3)
     return
 endif
 
-if (not (isa (x, "infsup")))
-    x = infsup (x);
+warning ("off", "interval:ImplicitPromote", "local");
+if (not (isa (x, "infsupdec")))
+    x = infsupdec (x);
 endif
+if (nargin >= 2 && not (isa (y, "infsupdec")))
+    y = infsupdec (y);
+endif
+
+if (isnai (x) || (nargin >= 2 && isnai (y)))
+    error ("interval:NaI", "Cannot plot NaIs");
+    return
+endif
+
 if (nargin < 2)
     y = x;
     ## x = 1 ... n
-    x = infsup (reshape (1 : numel (y.inf), size (y.inf)));
-else
-    if (not (isa (y, "infsup")))
-        y = infsup (y);
-    endif
+    x = infsupdec (reshape (1 : numel (y.inf), size (y.inf)));
 endif
 
 if (nargin < 3)
