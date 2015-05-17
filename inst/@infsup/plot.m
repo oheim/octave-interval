@@ -18,6 +18,7 @@
 ## @deftypefn {Function File} {} plot (@var{X}, @var{Y})
 ## @deftypefnx {Function File} {} plot (@var{Y})
 ## @deftypefnx {Function File} {} plot (@var{X}, @var{Y}, @var{COLOR})
+## @deftypefnx {Function File} {} plot (@var{X}, @var{Y}, @var{COLOR}, @var{EDGECOLOR})
 ## 
 ## Create a 2D-plot of intervals.
 ##
@@ -36,15 +37,18 @@
 ## lines, which are parallel to the y axis, at the coordinates
 ## @code{@var{X} = [1, …, n]}.
 ##
+## If an optional parameter @var{EDGECOLOR} is given, rectangles  will have
+## visible edges in a distinct color.
+##
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2015-05-10
 
-function plot (x, y, color)
+function plot (x, y, color, edgecolor)
 
-if (nargin > 3)
+if (nargin > 4)
     print_usage ();
     return
 endif
@@ -72,6 +76,10 @@ if (nargin < 3)
     color = 'b';
 endif
 
+if (nargin < 4)
+    edgecolor = color;
+endif
+
 oldhold = ishold ();
 if (not (oldhold))
     clf
@@ -85,15 +93,22 @@ unwind_protect
     lines = xor (issingleton (x), issingleton (y)) & not (empty);
     boxes = not (points | lines | empty);
     
-    arrayfun (@(x, y) plot (x, y, color), x.inf (points), y.inf (points));
+    arrayfun (@(x, y) plot (x, y, edgecolor), x.inf (points), y.inf (points));
     
     x_line = [vec(x.inf (lines)), vec(x.sup (lines))]';
     y_line = [vec(y.inf (lines)), vec(y.sup (lines))]';
-    plot (x_line, y_line, color, 'linewidth', 2, 'color', color);
+    plot (x_line, y_line, edgecolor, 'linewidth', 2, 'color', edgecolor);
     
     x_box = [vec(x.inf (boxes)), vec(x.sup (boxes))] (:, [1 2 2 1])';
     y_box = [vec(y.inf (boxes)), vec(y.sup (boxes))] (:, [1 1 2 2])';
-    fill (x_box, y_box, color, 'linewidth', 0, 'edgecolor', color);
+    if (nargin >= 4)
+        edgewidth = 2;
+    else
+        edgewidth = 0;
+    endif
+    fill (x_box, y_box, color, 'linewidth', edgewidth, ...
+                               'edgecolor', edgecolor, ...
+                               'facecolor', color);
 
 unwind_protect_cleanup
     ## Reset hold state
@@ -132,6 +147,6 @@ endfunction
 %!  y = f (x);
 %!  Y = f (X);
 %!  plot (range, f (range), [42 161 152]/255);
-%!  plot (X, Y, [238 232 213]/255);
+%!  plot (X, Y, [238 232 213]/255, [88 110 117]/255);
 %!  plot (x, y, 'color', [220 50 47]/255, 'linewidth', 2);
 %!  hold off
