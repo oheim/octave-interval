@@ -28,7 +28,7 @@ SHELL   = /bin/sh
 ##     uses singlebyte characters on Windows and multibyte characters
 ##     on better systems.
 ##
-##   * Octave Package: doctest
+##   * Octave package: doctest
 ##
 ##     The Octave Forge package is used to find errors in the code of
 ##     @example blocks from the documentation (both function documentation
@@ -142,7 +142,7 @@ $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 	@echo "Installing package in GNU Octave ..."
 	@$(OCTAVE) --silent --eval "pkg install $<"
 
-## COPYING and NEWS are generated from GNU TexInfo sources
+## Plaintext info files are generated from GNU TexInfo sources
 $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.texinfo
 	@echo "Compiling $< ..."
 	@makeinfo --plaintext --output="$@" "$<"
@@ -176,8 +176,13 @@ $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
 	@touch "$@"
 
 ## HTML Documentation for Octave Forge
-$(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE)
+$(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@echo "Generating HTML documentation for the package. This may take a while ..."
+	@# The html generation has problems when there are leftovers from
+	@# a previous run, see bug #45111. Since anything is generated
+	@# from scratch anyway, there is no point in keeping the
+	@# deprecated files.
+	@rm -rf "$(HTML_DIR)"
 	@# Set papersize to 4x3in.
 	@# Demo figures are printed with 150dpi resulting in 600x450px.
 	@$(OCTAVE) --silent --eval \
