@@ -8,19 +8,25 @@ This chapter explains the necessary steps before using the package. The next cha
 @section Installation
 Unless the package is provided by a third-party distributor, the interval package can be installed with the @command{pkg} command from within Octave. Latest release versions are published at Octave Forge and can be downloaded with the @option{-forge} option.
 
-@c Can't use example block here, because that would be evaluated by doctest
-@indentedblock
-@t{pkg install -forge interval@*  @result{} For information about changes from previous versions@*      of the interval package, run 'news interval'.}
-@end indentedblock
+@example
+@c doctest: +SKIP
+@group
+pkg install -forge interval
+  @result{} For information about changes from previous versions
+      of the interval package, run 'news interval'.
+@end group
+@end example
 
 During installation parts of the package are compiled for the target system, which requires the GNU MPFR development libraries (version ≥ 3.1.0) to be installed. The official GNU Octave release for Microsoft Windows already includes this dependency. For other systems it might be necessary to install MPFR development files, which are provided by most GNU distributions or can be obtained from @url{http://www.mpfr.org/}.
 
 In order to use the package during an Octave session, it must have been loaded. In the following parts of the manual it is assumed that the package has been loaded.
 
-@c Can't use example block here, because that would be evaluated by doctest
-@indentedblock
-@t{pkg load interval}
-@end indentedblock
+@example
+@c doctest: +SKIP
+@group
+pkg load interval
+@end group
+@end example
 
 
 @section What to Expect
