@@ -219,9 +219,9 @@ end_unwind_protect
 
 endfunction
 
-%!test
+%!test "this test is rather pointless";
 %!  clf
-%!  plot3 (infsup (0), infsup (0), infsup (0))
+%!  plot3 (empty (), empty (), empty ());
 %!  close
 
 %!demo

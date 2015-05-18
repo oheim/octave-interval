@@ -119,7 +119,12 @@ end_unwind_protect
 
 endfunction
 
-%!test
+%!test "this test is rather pointless";
+%!  clf
+%!  plot (empty ());
+%!  close
+
+%!demo
 %!  clf
 %!  hold on
 %!  plot (infsup (0), infsup (0));
@@ -128,12 +133,10 @@ endfunction
 %!  plot (infsup (1, 2), infsup (1, 2));
 %!  axis ([-.5, 2.5, -.5, 2.5]);
 %!  hold off
-%!  close
 
-%!test
+%!demo
 %!  clf
 %!  plot (infsup (-rand (50, 1), +rand (50, 1)));
-%!  close
 
 %!demo
 %!  clf
