@@ -71,14 +71,14 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
   if (error_state)
     return octave_value_list ();
   
-  const unsigned int n = vector.numel ();
+  const octave_idx_type n = vector.numel ();
   // Compute sum in accumulator
   // This is faster than the less accurate mpfr_sum function, because we
   // do not have to instantiate an array of mpfr_t values.
   mpfr_t accu;
   mpfr_init2 (accu, BINARY64_ACCU_PRECISION);
   mpfr_set_zero (accu, 0);
-  for (int i = 0; i < n; i++)
+  for (octave_idx_type i = 0; i < n; i++)
     {
       int exact = mpfr_add_d (accu, accu, vector.elem (i), rnd);
       if (exact != 0)

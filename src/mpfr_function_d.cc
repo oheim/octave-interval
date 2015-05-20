@@ -41,7 +41,7 @@ void evaluate (
   mpfr_t mp;
   mpfr_init2 (mp, BINARY64_PRECISION);
   
-  const unsigned int n = arg1.numel ();
+  const octave_idx_type n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp, arg1.elem (i), MPFR_RNDZ);
@@ -73,7 +73,7 @@ void evaluate (
       scalar1 = false;
     }
   
-  const unsigned int n = std::max (arg1.numel (), arg2.numel ());
+  const octave_idx_type n = std::max (arg1.numel (), arg2.numel ());
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp1, arg1.elem (i), MPFR_RNDZ);
@@ -107,19 +107,21 @@ void evaluate (
   bool scalar3 = arg3.numel () == 1;
   
   if (scalar1)
-    // arg1 shall contain the result and must possibly be resized
-    if (!scalar2)
-      {
-        arg1 = Matrix (arg2.dims (), arg1.elem (0));
-        scalar1 = false;
-      }
-    else if (!scalar3)
-      {
-        arg1 = Matrix (arg3.dims (), arg1.elem (0));
-        scalar1 = false;
-      }
+    {
+      // arg1 shall contain the result and must possibly be resized
+      if (!scalar2)
+        {
+          arg1 = Matrix (arg2.dims (), arg1.elem (0));
+          scalar1 = false;
+        }
+      else if (!scalar3)
+        {
+          arg1 = Matrix (arg3.dims (), arg1.elem (0));
+          scalar1 = false;
+        }
+    }
 
-  const unsigned int n = std::max (std::max (arg1.numel (), arg2.numel ()),
+  const octave_idx_type n = std::max (std::max (arg1.numel (), arg2.numel ()),
                                    arg3.numel ());
   for (octave_idx_type i = 0; i < n; i ++)
     {
@@ -150,7 +152,7 @@ void nthroot (
   mpfr_t mp;
   mpfr_init2 (mp, BINARY64_PRECISION);
   
-  const unsigned int n = arg1.numel ();
+  const octave_idx_type n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp, arg1.elem (i), MPFR_RNDZ);

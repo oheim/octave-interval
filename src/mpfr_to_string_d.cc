@@ -80,7 +80,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   const Matrix x           = args (2).matrix_value ();
   if (error_state)
     return octave_value_list ();
-  if (str_template == "")
+  if (strcmp (str_template, ""))
     {
       error ("mpfr_to_string_d: Illegal format");
       return octave_value_list ();
@@ -101,8 +101,8 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
                                        (rnd == MPFR_RNDA) ? MPFR_RNDZ :
                                        MPFR_RNDN;
   
-  const unsigned n = x.numel ();
-  for (int i = 0; i < n; i++)
+  const octave_idx_type n = x.numel ();
+  for (octave_idx_type i = 0; i < n; i++)
     {
       mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
       mpfr_sprintf (buf, str_template, rnd, mp);

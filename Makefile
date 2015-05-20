@@ -89,7 +89,7 @@ TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
 OCTAVE ?= octave
-MKOCTFILE ?= mkoctfile
+MKOCTFILE ?= mkoctfile -Wall
 
 .PHONY: help dist release html run check test doctest install info clean md5
 
@@ -204,7 +204,7 @@ $(CC_SOURCES): src/Makefile
 ## package installation by Octave.
 $(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR)
 	@echo "Compiling OCT-files ..."
-	@(cd src; MKOCTFILE=$(MKOCTFILE) make)
+	@(cd src; MKOCTFILE="$(MKOCTFILE)" make)
 	@touch "$@"
 
 ## Interactive shell with the package's functions in the path

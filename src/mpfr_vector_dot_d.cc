@@ -36,7 +36,7 @@ std::pair <double, double> interval_vector_dot (
       vector_yu = Matrix (vector_xl.dims (), vector_yu.elem (0));
     }
     
-  const unsigned int n = vector_xl.numel ();
+  const octave_idx_type n = vector_xl.numel ();
   // Using accumulators instead of the (less accurate) mpfr_sum function saves
   // us some computation time, because we do not have to instantiate so many
   // mpfr_t values.
@@ -49,7 +49,7 @@ std::pair <double, double> interval_vector_dot (
   mpfr_init2 (mp_addend_l, 2 * BINARY64_PRECISION + 1);
   mpfr_init2 (mp_addend_u, 2 * BINARY64_PRECISION + 1);
   mpfr_init2 (mp_temp,     2 * BINARY64_PRECISION + 1);
-  for (int i = 0; i < n; i++)
+  for (octave_idx_type i = 0; i < n; i++)
     {
       const double xl = vector_xl.elem (i);
       const double xu = vector_xu.elem (i);
@@ -141,7 +141,7 @@ std::pair <double, double> vector_dot (
     // Broadcast vector y
     vector_y = Matrix (vector_x.dims (), vector_y.elem (0));
   
-  const unsigned int n = vector_x.numel ();
+  const octave_idx_type n = vector_x.numel ();
   // Compute sum of products in accumulator
   // This is faster than the less accurate mpfr_sum function, because we
   // do not have to instantiate an array of mpfr_t values.
@@ -150,7 +150,7 @@ std::pair <double, double> vector_dot (
   mpfr_set_zero (accu, 0);
   mpfr_t product;
   mpfr_init2 (product, 2 * BINARY64_PRECISION + 1);
-  for (int i = 0; i < n; i++)
+  for (octave_idx_type i = 0; i < n; i++)
     {
       mpfr_set_d (product, vector_x.elem (i), MPFR_RNDZ);
       mpfr_mul_d (product, product, vector_y.elem (i), MPFR_RNDZ);
@@ -172,11 +172,14 @@ std::pair <double, double> vector_dot (
     }
   else
     if (mpfr_cmp_d (accu, 0.0) == 0)
-      // exact zero
-      if (rnd == MPFR_RNDD)
-        result = -0.0;
-      else
-        result = +0.0;
+      {
+        // exact zero
+        if (rnd == MPFR_RNDD)
+          result = -0.0;
+        else
+          result = +0.0;
+        error = 0.0;
+      }
     else
       {
         result = mpfr_get_d (accu, rnd);
@@ -185,6 +188,8 @@ std::pair <double, double> vector_dot (
             mpfr_sub_d (accu, accu, result, MPFR_RNDA);
             error = mpfr_get_d (accu, MPFR_RNDA);
           }
+        else
+          error = 0.0;
       }
       
   mpfr_clear (accu);

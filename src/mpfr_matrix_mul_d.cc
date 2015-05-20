@@ -23,9 +23,9 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
   const Matrix matrix_xl, const Matrix matrix_yl,
   const Matrix matrix_xu, const Matrix matrix_yu)
 {
-  const unsigned int n = matrix_xl.rows (),
-                     m = matrix_yl.columns (),
-                     l = matrix_xl.columns ();
+  const octave_idx_type n = matrix_xl.rows (),
+                        m = matrix_yl.columns (),
+                        l = matrix_xl.columns ();
   if (l != matrix_yl.rows () ||
       n != matrix_xu.rows () ||
       m != matrix_yl.columns () ||
@@ -37,7 +37,7 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
   Matrix result_l (dim_vector (n, m));
   Matrix result_u (dim_vector (n, m));
   #pragma omp parallel for
-  for (int i = 0; i < n; i++)
+  for (octave_idx_type i = 0; i < n; i++)
     {
       // Using accumulators instead of the (less accurate) mpfr_sum function
       // saves us some computation time, because we do not have to instantiate
@@ -49,11 +49,11 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
       mpfr_init2 (mp_addend_l, 2 * BINARY64_PRECISION + 1);
       mpfr_init2 (mp_addend_u, 2 * BINARY64_PRECISION + 1);
       mpfr_init2 (mp_temp,     2 * BINARY64_PRECISION + 1);
-      for (int j = 0; j < m; j++)
+      for (octave_idx_type j = 0; j < m; j++)
         {
           mpfr_set_zero (accu_l, 0);
           mpfr_set_zero (accu_u, 0);
-          for (int k = 0; k < l; k++)
+          for (octave_idx_type k = 0; k < l; k++)
             {
               double xl, xu, yl, yu;
               #pragma omp critical
