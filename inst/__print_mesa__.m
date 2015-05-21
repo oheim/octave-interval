@@ -93,3 +93,6 @@ img = uint8 (img / 4);
 imwrite (img, filename);
 
 endfunction
+
+%!# This function cannot be tested -- it would also fail on Octave < 3.8.2
+%!assert (1);
