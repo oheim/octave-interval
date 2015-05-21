@@ -80,7 +80,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   const Matrix x           = args (2).matrix_value ();
   if (error_state)
     return octave_value_list ();
-  if (strcmp (str_template, ""))
+  if (std::string () == str_template)
     {
       error ("mpfr_to_string_d: Illegal format");
       return octave_value_list ();
