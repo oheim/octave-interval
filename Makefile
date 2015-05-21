@@ -68,6 +68,7 @@ SHELL   = /bin/sh
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 CC_SOURCES = $(wildcard src/*.cc)
+CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
 BUILD_DIR = build
 RELEASE_DIR = $(BUILD_DIR)/$(PACKAGE)-$(VERSION)
 RELEASE_TARBALL = $(RELEASE_DIR).tar
@@ -84,9 +85,12 @@ GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
 GENERATED_IMAGES = $(GENERATED_IMAGES_EPS) $(GENERATED_IMAGES_PDF) $(GENERATED_IMAGES_PNG)
-GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES)
+EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/test/%.cc-tst,$(CC_WITH_TESTS))
+GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(EXTRACTED_CC_TESTS)
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
+
+
 
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
@@ -124,7 +128,7 @@ clean:
 	rm -f src/*.oct src/*.o
 	rm -f fntests.log
 
-$(BUILD_DIR) $(GENERATED_IMAGE_DIR):
+$(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/test:
 	@mkdir -p "$@"
 
 $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
@@ -203,6 +207,15 @@ $(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR)
 	@(cd src; MKOCTFILE="$(MKOCTFILE)" make)
 	@touch "$@"
 
+## Extract tests for oct-files. These would be lost during pkg install.
+$(EXTRACTED_CC_TESTS): $(BUILD_DIR)/test/%.cc-tst: src/%.cc | $(BUILD_DIR)/test
+	@echo "Extracting tests from $< ..."
+	@rm -f "$@-t" "$@"
+	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
+		echo $(shell cd "$(ITF1788_HOME)" && git log --max-count=1 | head -1 | cut -f2 -d" "); \
+		grep '^%!' "$<") > "$@_"
+	@mv "$@_" "$@"
+
 ## Interactive shell with the package's functions in the path
 run: $(OCT_COMPILED)
 	@echo "Run GNU Octave with the development version of the package"
@@ -210,7 +223,7 @@ run: $(OCT_COMPILED)
 	@echo
 
 ## Validate unit tests
-test: $(OCT_COMPILED)
+test: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
 	@echo "Testing package in GNU Octave ..."
 	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
 	@echo
