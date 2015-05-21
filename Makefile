@@ -85,7 +85,7 @@ GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
 GENERATED_IMAGES = $(GENERATED_IMAGES_EPS) $(GENERATED_IMAGES_PDF) $(GENERATED_IMAGES_PNG)
-EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/test/%.cc-tst,$(CC_WITH_TESTS))
+EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/inst/test/%.cc-tst,$(CC_WITH_TESTS))
 GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(EXTRACTED_CC_TESTS)
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
@@ -128,7 +128,7 @@ clean:
 	rm -f src/*.oct src/*.o
 	rm -f fntests.log
 
-$(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/test:
+$(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/inst/test:
 	@mkdir -p "$@"
 
 $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
@@ -208,11 +208,10 @@ $(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR)
 	@touch "$@"
 
 ## Extract tests for oct-files. These would be lost during pkg install.
-$(EXTRACTED_CC_TESTS): $(BUILD_DIR)/test/%.cc-tst: src/%.cc | $(BUILD_DIR)/test
+$(EXTRACTED_CC_TESTS): $(BUILD_DIR)/inst/test/%.cc-tst: src/%.cc | $(BUILD_DIR)/inst/test
 	@echo "Extracting tests from $< ..."
 	@rm -f "$@-t" "$@"
 	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
-		echo $(shell cd "$(ITF1788_HOME)" && git log --max-count=1 | head -1 | cut -f2 -d" "); \
 		grep '^%!' "$<") > "$@_"
 	@mv "$@_" "$@"
 
