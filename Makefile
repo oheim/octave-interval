@@ -141,6 +141,7 @@ $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
 $(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
 	@echo "Compressing release tarball ..."
 	@(cd "$(BUILD_DIR)" && gzip --best -f -k "../$<")
+	@touch "$@"
 
 $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 	@echo "Installing package in GNU Octave ..."
@@ -190,6 +191,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@$(OCTAVE) --silent --eval \
 		"pkg load generate_html; \
 		 function print (h, filename); __print_mesa__ (h, filename); endfunction; \
+		 makeinfo_program ('makeinfo --css-ref=https://www.gnu.org/software/octave/doc/manual.css'); \
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
 		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
@@ -246,7 +248,9 @@ GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
 $(GENERATED_MANUAL_HTML): doc/manual.texinfo $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
-	@(cd doc; make manual.html)
+	@(cd doc; \
+	  MAKEINFO="makeinfo --css-ref=https://www.gnu.org/software/octave/doc/manual.css" \
+	  make manual.html)
 	@mv doc/manual.html "$@"
 $(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PDF)
 	@(cd doc; \
