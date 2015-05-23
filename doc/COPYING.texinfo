@@ -9,11 +9,11 @@
 
 The interval package is free software.
 
-The software is licensed under the GNU General Public License Version 3 (or later).  The wording of the license can be found below.  The included manual is licensed under the GNU Free Documentation License Version 1.3 (or later).
+The software is licensed under the GNU General Public License Version 3 (or later).  The wording of the license can be found below.  The included manual is licensed under the GNU Free Documentation License Version 1.3 (or later).
 
 The interval package contains derivative work, which is based on other free software released under various licenses.  Original authors are properly attributed in the manual and copyright statements have been retained in the particular source files.  For simplicity, any derivative work has been relicensed in this package.  Thus, the GNU General Public License is the only effective license for the software in this package.
 
-For legal reasons a copy of the Apache License 2.0 is included in this package.  You can find the license in the file @code{doc/license/apache-2.0.texi}.  However, that license does not apply to the software in this package.
+For legal reasons a copy of the Apache License 2.0 is included in this package.  You can find the license in the file @code{doc/license/apache-2.0.texi}.  However, that license does not apply to the software in this package.
 
 @sp 5
 
