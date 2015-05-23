@@ -18,11 +18,15 @@
 @itemize
 @item
     plot, plot3: New interval plotting functions
+    
+    Pay attention to the included examples, which can be executed with @code{demo @@infsup/plot} and @code{demo @@infsup/plot3} respectively.
+@item
+    Simplified licensing: Relicensed parts of the software that were not under GPL
 @end itemize
 
 @noindent Bugfixes
 @itemize
-
+@item Fixed generation of the manual in PDF format
 @end itemize
 
 @release{0.2.0, 2015-05-03}
