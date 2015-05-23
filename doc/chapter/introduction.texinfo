@@ -3,7 +3,7 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
-This chapter explains the necessary steps before using the package. The next chapter teaches basic concepts. Users who are not familiar with interval arithmetic should read the Introduction to Interval Arithmetic first.
+This chapter explains the necessary steps before using the package. The next chapter, @ref{Getting Started}, teaches basic concepts. Users who are not familiar with interval arithmetic should read @ref{Introduction to Interval Arithmetic} first.
 
 @section Installation
 Unless the package is provided by a third-party distributor, the interval package can be installed with the @command{pkg} command from within Octave. Latest release versions are published at Octave Forge and can be downloaded with the @option{-forge} option.
@@ -34,9 +34,9 @@ pkg load interval
 @noindent
 Features
 @itemize
-@item Free software licensed under the terms of the GNU General Public License
+@item Free software licensed under the terms of the GNU General Public License (Version 3)
 @item Many interval arithmetic functions with high, system-independent accuracy
-@item Conforming to IEEE 1788
+@item Conforming to IEEE 1788, the standard for interval arithmetic
 @item Support for interval vectors and interval matrices
 @itemize
 @item very accurate vector sum, vector dot and matrix multiplication (correctly rounded)
@@ -65,7 +65,7 @@ If accurate type checking during compile time—a substantial feature for verifi
 
 @emph{Why is the interval package slow?} All arithmetic interval operations are simulated in high-level Octave language using C99 or multi-precision floating-point routines, which is a lot slower than a @uref{https://books.google.de/books?id=JTc4XdXFnQIC&pg=PA61,hardware implementation}. Building interval arithmetic operations from floating-point routines is easy for simple monotonic functions, e. g., addition and subtraction, but is complex for others, e. g., interval power function, atan2, or reverse functions.
 
-For some interval operations it is not even possible to rely on floating-point routines, since not all required routines are available in C99 or BLAS. For example, multiplication of matrices with many elements becomes unfeasible as it takes a lot of time.
+For some interval operations it is not even possible to rely on floating-point routines, since not all required routines are available in C99 or BLAS. For example, accurate multiplication of matrices with many elements becomes unfeasible as it takes a lot of time.
 
 @float Table,tab:runtime
 @caption{Approximate runtime for certain functions (wall clock time in seconds) — Results have been produced with GNU Octave 3.8.2 and Interval package 0.1.4 on an Intel® Core™ i5-4340M CPU (2.9–3.6 GHz)}
@@ -117,7 +117,7 @@ It is possible to use faster (BLAS based) routines during computation of the mat
 
 @section Getting Help
 
-The interval package contains online help for every function, which can be accessed with the @command{help} command from Octave. The interval arithmetic is implemented with specialized data types which override standard functions. Whilst @command{help @var{function name}} shows the documentation for core Octave functions, the interval variants of these functions can be requested with @command{help @@infsup/@var{function name}}.
+The interval package contains online help for every function, which can be accessed with the @command{help} command from Octave. The interval arithmetic is implemented with specialized data types, which override standard functions. Whilst the command @command{help @var{function name}} shows the documentation for core Octave functions, the interval variants of these functions can be requested with the command @command{help @@infsup/@var{function name}}.
 
 Further help can be seeked at the @uref{https://lists.gnu.org/mailman/listinfo/help-octave,Octave Help mailing list}.
 

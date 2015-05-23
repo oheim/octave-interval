@@ -77,7 +77,7 @@ Nothing bad is going to happen, because the semantics of NaI are well defined by
 
 The interval package provides a powerful decoration system for intervals, as specified by the IEEE standard for interval arithmetic. By default any interval carries a decoration, which collects additional information about the course of function evaluation on the interval data.
 
-Only the (unfavored) infsup constructor creates bare, undecorated intervals and the intervalpart operation may be used to demote decorated intervals into bare, undecorated ones. It is highly recommended to always use the decorated interval arithmetic, which gives additional information about an interval result in exchange for a tiny overhead.
+Only the (unfavored) @code{infsup} constructor creates bare, undecorated intervals and the @code{intervalpart} operation may be used to demote decorated intervals into bare, undecorated ones. It is highly recommended to always use the decorated interval arithmetic, which gives additional information about an interval result in exchange for a tiny overhead.
 
 The following decorations are available: 
 

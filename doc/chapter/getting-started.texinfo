@@ -138,11 +138,11 @@ infsup (@{1; eps; "4/7"; "pi"@}, @{2; 1; "e"; "0xff"@})
 
 @section Arithmetic Operations
 
-The interval packages comprises many interval arithmetic operations. A complete list can be found in its function reference. Function names match GNU Octave standard functions where applicable and follow recommendations by IEEE 1788 otherwise, cf. IEEE 1788 index.
+The interval packages comprises many interval arithmetic operations. A complete list can be found in its function reference. Function names match GNU Octave standard functions where applicable and follow recommendations by IEEE 1788 otherwise, @pxref{Function Names}.
 
 Arithmetic functions in a set-based interval arithmetic follow these rules: Intervals are sets. They are subsets of the set of real numbers. The interval version of an elementary function such as sin(x) is essentially the natural extension to sets of the corresponding point-wise function on real numbers. That is, the function is evaluated for each number in the interval where the function is defined and the result must be an enclosure of all possible values that may occur.
 
-By default arithmetic functions are computed with best possible accuracy (which is more than what is guaranteed by GNU Octave core functions). The result will therefore be a tight and very accurate enclosure of the true mathematical value in most cases. Details on each function's accuracy can be found in its documentation, which is accessible with GNU Octave's help command. 
+By default arithmetic functions are computed with best possible accuracy (which is more than what is guaranteed by GNU Octave core functions). The result will therefore be a tight and very accurate enclosure of the true mathematical value in most cases. Details on each function's accuracy can be found in its documentation, which is accessible with GNU Octave's @command{help} command. 
 
 Examples of using interval arithmetic functions
 @example
@@ -269,7 +269,7 @@ A system of linear equations in the form A@var{x} = b with intervals can be seen
     Wide intervals within the matrix A can easily lead to a superposition of cases, where the rank of A is no longer unique. If the linear interval system contains cases of linear independent equations as well as linear dependent equations, the resulting enclosure of solutions will inevitably be very broad.
 @end itemize
 
-However, solving linear systems with interval arithmetic can produce useful results in many cases and automatically carries a guaranty for error boundaries. Additionally, it can give better information than the floating-point variants for some cases. 
+However, solving linear systems with interval arithmetic can produce useful results in many cases and automatically carries a guarantee for error boundaries. Additionally, it can give better information than the floating-point variants for some cases. 
 
 
 Standard floating point arithmetic versus interval arithmetic on ill-conditioned linear systems
