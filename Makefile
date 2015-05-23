@@ -191,7 +191,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@$(OCTAVE) --silent --eval \
 		"pkg load generate_html; \
 		 function print (h, filename); __print_mesa__ (h, filename); endfunction; \
-		 makeinfo_program ('makeinfo -D octave-forge --css-ref=https://www.gnu.org/software/octave/doc/manual.css'); \
+		 makeinfo_program ('makeinfo -D octave-forge --css-include=doc/manual.css'); \
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
 		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
@@ -247,9 +247,8 @@ doctest: $(OCT_COMPILED)
 GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
 	@(cd doc; \
-	  MAKEINFO="makeinfo --css-ref=https://www.gnu.org/software/octave/doc/manual.css" \
 	  make manual.html)
 	@mv doc/manual.html "$@"
 $(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PDF)

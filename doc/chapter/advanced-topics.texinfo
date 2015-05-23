@@ -81,6 +81,7 @@ Only the (unfavored) @code{infsup} constructor creates bare, undecorated interva
 
 The following decorations are available: 
 
+@float
 @multitable {Decoration ABC} {Bounded} {Continuous} {Defined} {Definition Definition Definition}
 @headitem Decoration
     @tab Bounded
@@ -113,6 +114,7 @@ The following decorations are available:
     @tab
     @tab Not an interval, at least one interval constructor failed during the course of computation 
 @end multitable
+@end float
 
 The decoration information is especially useful after a very long and complicated function evaluation. For example, when the “def” decoration survives until the final result, it is proven that the overall function is actually defined for all values covered by the input intervals. 
 
