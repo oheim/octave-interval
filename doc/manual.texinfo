@@ -57,20 +57,18 @@
 @insertcopying
 @end ifnottex
 
-@iftex
-@contents
-@end iftex
-
-@comment The following structure has been inspired by the GNU Octave manual
-@ifhtml
+@ifset octave-forge
+@c For the HTML version at Octave Forge we must fix the up node,
+@c because “../doc/index.html” does not exist.
 @node Top, Preface,, (..)
-@end ifhtml
-@ifnothtml
+@end ifset
+@ifclear octave-forge
 @node Top
-@end ifnothtml
+@end ifclear
 @ifnottex
 @top
 @end ifnottex
+
 @menu
 How to install and use the interval package for GNU Octave
 * Preface:: Background information
@@ -81,8 +79,12 @@ How to install and use the interval package for GNU Octave
 
 Appendix
 * IEEE 1788:: Standard for interval arithmetic
-* FDL:: The license for this manual
+* GNU Free Documentation License:: The license for this manual
 @end menu
+
+@contents
+
+@comment The following structure has been inspired by the GNU Octave manual
 
 @node Preface
 @unnumbered Preface
@@ -130,7 +132,7 @@ Appendix
 @node Conformance Claim
 @include chapter/ieee-1788-conformance.texinfo
 
-@node FDL
+@node GNU Free Documentation License
 @appendix GNU Free Documentation License
 @include license/fdl-1.3.texi
 

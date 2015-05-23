@@ -191,7 +191,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@$(OCTAVE) --silent --eval \
 		"pkg load generate_html; \
 		 function print (h, filename); __print_mesa__ (h, filename); endfunction; \
-		 makeinfo_program ('makeinfo --css-ref=https://www.gnu.org/software/octave/doc/manual.css'); \
+		 makeinfo_program ('makeinfo -D octave-forge --css-ref=https://www.gnu.org/software/octave/doc/manual.css'); \
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
 		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
