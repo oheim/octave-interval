@@ -42,6 +42,10 @@ if (not (isa (A, "infsup")))
 endif
 if (not (isa (B, "infsup")))
     B = infsup (B);
+elseif (isa (B, "infsupdec"))
+    ## Workaround for bug #42735
+    result = subsasgn (A, S, B);
+    return
 endif
 
 assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");

@@ -27,6 +27,7 @@
 @noindent Bugfixes
 @itemize
 @item Fixed generation of the manual in PDF format
+@item subsasgn: Fixed cases where decoration could be lost (bug #42735)
 @end itemize
 
 @release{0.2.0, 2015-05-03}
