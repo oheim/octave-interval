@@ -55,72 +55,88 @@ if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
-assert (isscalar (c) && isscalar (x), "only implemented for interval scalars");
-
 arccosine = acos (c);
+result = x;
 
-if (isempty (arccosine) || isempty (x))
-    result = infsup ();
-    return
+## Resize, if scalar × matrix
+if (isscalar (arccosine.inf) ~= isscalar (result.inf))
+    arccosine.inf = ones (size (result.inf)) .* arccosine.inf;
+    arccosine.sup = ones (size (result.inf)) .* arccosine.sup;
+    result.inf = ones (size (arccosine.inf)) .* result.inf;
+    result.sup = ones (size (arccosine.inf)) .* result.sup;
 endif
+
+result.inf (isempty (arccosine)) = inf;
+result.sup (isempty (arccosine)) = -inf;
+
+idx.type = '()';
 
 pi = infsup ("pi");
+select = not (isempty (result)) ...
+    & not (subset (infsup (0, pi.sup), arccosine));
 
-if (arccosine.inf <= inf (-pi) / 2 && arccosine.sup >= sup (pi) / 2)
-    result = infsup (x.inf, x.sup);
-    return
-endif
-
-if (x.sup == inf)
-    u = inf;
-else
-    ## Find n, such that x.sup is within a distance of pi/2
+if (any (any (select)))
+    ## Find a smaller upper bound for x, if the restriction from c allows it
+    u = inf (size (result.inf));
+    select_u = select & result.sup < inf;
+    ## Find n, such that result.sup is within a distance of pi/2
     ## around (n + 1/2) * pi.
-    n = floor (sup (x.sup / pi));
-    if (rem (n, 2) == 0)
-        arccosineshifted = arccosine + n * pi;
-    else
-        arccosineshifted = (infsup (n) + 1) * pi - arccosine;
-    endif
-    if (not (isempty (intersect (x, arccosineshifted))))
-        u = min (x.sup, arccosineshifted.sup);
-    else
-        m = mpfr_function_d ('minus', +inf, n, 1);
-        if (rem (n, 2) == 0)
-            u = sup (n * pi - arccosine);
-        else
-            u = sup (arccosine + m * pi);
-        endif
-    endif
-endif
+    n = result.sup;
+    n (select_u) = floor (sup (n (select_u) ./ pi));
+    arccosineshifted = arccosine;
+    idx.subs = {(select_u & rem (n, 2) == 0)};
+    arccosineshifted = subsasgn (arccosineshifted, idx, ...
+        subsref (arccosine, idx) + subsref (n, idx) .* pi);
+    idx.subs = {(select_u & rem (n, 2) ~= 0)};
+    arccosineshifted = subsasgn (arccosineshifted, idx, ...
+        (infsup (subsref (n, idx)) + 1) .* pi - subsref (arccosine, idx));
+    overlapping = not (isempty (intersect (result, arccosineshifted)));
+    u (select_u & overlapping) = ...
+        min (result.sup (select_u & overlapping), ...
+             arccosineshifted.sup (select_u & overlapping));
+    m = n;
+    m (select_u & ~overlapping) = ...
+        mpfr_function_d ('minus', +inf, m (select_u & ~overlapping), 1);
+    idx.subs = {(select_u & ~overlapping & rem (n, 2) == 0)};
+    u (idx.subs {1}) = ...
+        sup (subsref (n, idx) .* pi - subsref (arccosine, idx));
+    idx.subs = {(select_u & ~overlapping & rem (n, 2) ~= 0)};
+    u (idx.subs {1}) = ...
+        sup (subsref (arccosine, idx) + subsref (m, idx) .* pi);
 
-if (x.inf == -inf)
-    l = -inf;
-else
-    ## Find n, such that x.inf is within a distance of pi/2
+    ## Find a larger lower bound for x, if the restriction from c allows it
+    l = -inf (size (result.inf));
+    select_l = select & result.inf > -inf;
+    ## Find n, such that result.inf is within a distance of pi/2
     ## around (n + 1/2) * pi.
-    n = floor (inf (x.inf / pi));
-    if (rem (n, 2) == 0)
-        arccosineshifted = arccosine + n * pi;
-    else
-        arccosineshifted = (infsup (n) + 1) * pi - arccosine;
-    endif
-    if (not (isempty (intersect (x, arccosineshifted))))
-        l = max (x.inf, arccosineshifted.inf);
-    else
-        m = mpfr_function_d ('plus', -inf, n, 1);
-        if (rem (n, 2) == 0)
-            l = inf ((infsup (m) + 1) * pi - arccosine);
-        else
-            l = inf (arccosine + m * pi);
-        endif
-    endif
-endif
-
-if (l > u)
-    result = infsup ();
-else
-    result = intersect (x, infsup (l, u));
+    n = result.inf;
+    n (select_l) = floor (inf (n (select_l) ./ pi));
+    arccosineshifted = arccosine;
+    idx.subs = {(select_l & rem (n, 2) == 0)};
+    arccosineshifted = subsasgn (arccosineshifted, idx, ...
+        subsref (arccosine, idx) + subsref (n, idx) .* pi);
+    idx.subs = {(select_l & rem (n, 2) ~= 0)};
+    arccosineshifted = subsasgn (arccosineshifted, idx, ...
+        (infsup (subsref (n, idx)) + 1) .* pi - subsref (arccosine, idx));
+    overlapping = not (isempty (intersect (result, arccosineshifted)));
+    l (select_l & overlapping) = ...
+        max (result.inf (select_l & overlapping), ...
+             arccosineshifted.inf (select_l & overlapping));
+    m = n;
+    m (select_l & ~overlapping) = ...
+        mpfr_function_d ('plus', -inf, m (select_l & ~overlapping), 1);
+    idx.subs = {(select_l & ~overlapping & rem (n, 2) == 0)};
+    l (idx.subs {1}) = ...
+        inf ((infsup (subsref (m, idx)) + 1) .* pi - subsref (arccosine, idx));
+    idx.subs = {(select_l & ~overlapping & rem (n, 2) ~= 0)};
+    l (idx.subs {1}) = ...
+        inf (subsref (arccosine, idx) + subsref (m, idx) .* pi);
+    
+    result.inf (select) = max (l (select), result.inf (select));
+    result.sup (select) = min (u (select), result.sup (select));
+    
+    result.inf (result.inf > result.sup) = inf;
+    result.sup (result.inf > result.sup) = -inf;
 endif
 
 endfunction
