@@ -55,54 +55,72 @@ if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
-assert (isscalar (c) && isscalar (x), "only implemented for interval scalars");
-
-if (isempty (c) || isempty (x))
-    result = infsup ();
-    return
-endif
-
 arctangent = atan (c);
+result = x;
 
-if (isentire (arctangent))
-    result = infsup (x.inf, x.sup);
-    return
+## Resize, if scalar × matrix
+if (isscalar (arctangent.inf) ~= isscalar (result.inf))
+    arctangent.inf = ones (size (result.inf)) .* arctangent.inf;
+    arctangent.sup = ones (size (result.inf)) .* arctangent.sup;
+    result.inf = ones (size (arctangent.inf)) .* result.inf;
+    result.sup = ones (size (arctangent.inf)) .* result.sup;
 endif
+
+result.inf (isempty (arctangent)) = inf;
+result.sup (isempty (arctangent)) = -inf;
+
+idx.type = '()';
 
 pi = infsup ("pi");
+select = not (isempty (result)) ...
+    & not (subset (infsup (-pi.sup / 2, pi.sup / 2), arctangent));
 
-if (x.sup == inf)
-    u = inf;
-else
-    ## Find n, such that x.sup is within a distance of pi/2 around n * pi.
-    n = ceil (floor (sup (x.sup / (pi / 2))) / 2);
-    arctangentshifted = arctangent + n * pi;
-    if (not (isempty (intersect (x, arctangentshifted))))
-        u = min (x.sup, arctangentshifted.sup);
-    else
-        m = mpfr_function_d ('minus', +inf, n, 1);
-        u = sup (arctangent + m * pi);
-    endif
-endif
-
-if (x.inf == -inf)
-    l = -inf;
-else
-    ## Find n, such that x.inf is within a distance of pi/2 around n * pi.
-    n = floor (ceil (inf (x.inf / (pi / 2))) / 2);
-    arctangentshifted = arctangent + n * pi;
-    if (not (isempty (intersect (x, arctangentshifted))))
-        l = max (x.inf, arctangentshifted.inf);
-    else
-        m = mpfr_function_d ('plus', -inf, n, 1);
-        l = inf (arctangent + m * pi);
-    endif
-endif
-
-if (l > u)
-    result = infsup ();
-else
-    result = intersect (x, infsup (l, u));
+if (any (any (select)))
+    ## Find a smaller upper bound for x, if the restriction from c allows it
+    u = inf (size (result.inf));
+    select_u = select & result.sup < inf;
+    ## Find n, such that result.sup is within a distance of pi/2 around n * pi.
+    n = result.sup;
+    n (select_u) = ceil (floor (sup (n (select_u) ./ (pi ./ 2))) ./ 2);
+    arctangentshifted = arctangent;
+    idx.subs = {select_u};
+    arctangentshifted = subsasgn (arctangentshifted, idx, ...
+        subsref (arctangentshifted, idx) + n (select_u) .* pi);
+    overlapping = not (isempty (intersect (result, arctangentshifted)));
+    u (select_u & overlapping) = ...
+        min (result.sup (select_u & overlapping), ...
+             arctangentshifted.sup (select_u & overlapping));
+    n (select_u & ~overlapping) = ...
+        mpfr_function_d ('minus', +inf, n (select_u & ~overlapping), 1);
+    idx.subs = {(select_u & ~overlapping)};
+    u (idx.subs {1}) = ...
+        sup (subsref (arctangent, idx) + subsref (n, idx) .* pi);
+    
+    ## Find a larger lower bound for x, if the restriction from c allows it
+    l = -inf (size (result.inf));
+    select_l = select & result.inf > -inf;
+    ## Find n, such that result.inf is within a distance of pi/2 around n * pi.
+    n = result.inf;
+    n (select_l) = floor (ceil (inf (n (select_l) ./ (pi ./ 2))) ./ 2);
+    arctangentshifted = arctangent;
+    idx.subs = {select_l};
+    arctangentshifted = subsasgn (arctangentshifted, idx, ...
+        subsref (arctangentshifted, idx) + n (select_l) .* pi);
+    overlapping = not (isempty (intersect (result, arctangentshifted)));
+    l (select_l & overlapping) = ...
+        max (result.inf (select_l & overlapping), ...
+            arctangentshifted.inf (select_l & overlapping));
+    n (select_l & ~overlapping) = ...
+        mpfr_function_d ('plus', -inf, n (select_l & ~overlapping), 1);
+    idx.subs = {(select_l & ~overlapping)};
+    l (idx.subs {1}) = ...
+        inf (subsref (arctangent, idx) + subsref (n, idx) .* pi);
+    
+    result.inf (select) = max (l (select), result.inf (select));
+    result.sup (select) = min (u (select), result.sup (select));
+    
+    result.inf (result.inf > result.sup) = inf;
+    result.sup (result.inf > result.sup) = -inf;
 endif
 
 endfunction
