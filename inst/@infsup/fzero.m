@@ -151,28 +151,16 @@ endif
 
 ## Switch to bisection if the newton step did not produce two intervals
 if ((eq (x0, a) || isempty (b)) && not (issingleton (a)) && not (isempty (a)))
-    if (interior (0, a))
-        m = 0;
-    else
-        ## When the interval is very large, bisection at the midpoint would
-        ## take “forever” to converge, because floating point numbers are not
-        ## distributed evenly on the real number lane.
-        ##
-        ## We enumerate all floating point numbers within a with
-        ## 1, 2, ... 2n and split the interval at n.
-        ##
-        ## When the interval is small, this algorithm will choose
-        ## approximately mid (a).
-        s = sign (a);
-        s = inf (union (intersect (s, 1), intersect (s, -1)));
-        m = s .* min (realmax (), pow2 (max (-1074, mid (log2 (abs (a))))));
-        if (not (ismember (m, a)))
-            ## Fallback, if computation fails
-            m = mid (a);
-        endif
-    endif
-    b = infsup (m, sup (a));
-    a = infsup (inf (a), m);
+    ## When the interval is very large, bisection at the midpoint would
+    ## take “forever” to converge, because floating point numbers are not
+    ## distributed evenly on the real number lane.
+    ##
+    ## We enumerate all floating point numbers within a with
+    ## 1, 2, ... 2n and split the interval at n.
+    ##
+    ## When the interval is small, this algorithm will choose
+    ## approximately mid (a).
+    [a, b] = bisect (a);
 elseif (b < a)
     ## Sort the roots in ascending order
     [a, b] = deal (b, a);

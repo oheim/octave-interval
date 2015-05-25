@@ -102,6 +102,7 @@ Interval comparison
  @infsup/subset
  @infsupdec/isnai
 Set operation
+ @infsup/bisect
  @infsup/intersect
  @infsup/nextout
  @infsup/setdiff
