@@ -191,7 +191,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@$(OCTAVE) --silent --eval \
 		"pkg load generate_html; \
 		 function print (h, filename); __print_mesa__ (h, filename); endfunction; \
-		 makeinfo_program ('makeinfo -D octave-forge --css-include=doc/manual.css'); \
+		 makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --css-include=doc/manual.css'); \
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
 		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
@@ -249,12 +249,14 @@ GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
 $(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
 	@(cd doc; \
+	  VERSION=$(VERSION) \
 	  make manual.html)
 	@mv doc/manual.html "$@"
 $(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PDF)
 	@(cd doc; \
 	  TEXI2DVI_BUILD_DIRECTORY="../$(BUILD_DIR)/doc" \
 	  MAKEINFO="makeinfo -I ../$(BUILD_DIR)/doc --Xopt=--tidy" \
+	  VERSION=$(VERSION) \
 	  make manual.pdf)
 	@mv doc/manual.pdf "$@"
 

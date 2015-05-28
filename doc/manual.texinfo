@@ -24,8 +24,6 @@
 \DeclareUnicodeCharacter{2713}{$\ast$}
 @end tex
 
-@set version 0.2.0
-
 @copying
     This manual is for the GNU Octave interval package, version @value{version}.
 
