@@ -7,20 +7,15 @@
 @c Copyright (C) 2015 Oliver Heimlich.
 @c See the file COPYING for copying conditions.
 
-The interval package is a collection of functions for interval arithmetic. It is developed at Octave Forge, a sibling of the GNU Octave project. To cite the interval package in publications use:
-
-@indentedblock
-Heimlich, Oliver. 2015. “GNU Octave Interval Package.” @url{http://octave.sourceforge.net/interval/}.
-@end indentedblock
-
-@noindent A BibTeX entry for LaTeX users is:
+The interval package is a collection of functions for interval arithmetic. It is developed at Octave Forge, a sibling of the GNU Octave project. To cite this particular version of the interval package in publications use:
 
 @display
-@@Electronic@{octave-interval,
-  Title  = @{@{GNU Octave@} Interval Package@},
-  Author = @{Oliver Heimlich@},
-  Url    = @{http://octave.sourceforge.net/interval/@},
-  Year   = @{2015@},
+@@software@{octave-interval,
+  author  = @{Oliver Heimlich@},
+  title   = @{GNU Octave Interval Package@},
+  url     = @{http://octave.sourceforge.net/interval/@},
+  version = @{@value{version}@},
+  date    = @{@value{date}@},
 @}
 @end display
 

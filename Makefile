@@ -67,6 +67,7 @@ SHELL   = /bin/sh
 
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
+DATE = $(shell grep "^Date: " DESCRIPTION | cut -f2 -d" ")
 CC_SOURCES = $(wildcard src/*.cc)
 CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
 BUILD_DIR = build
@@ -150,7 +151,7 @@ $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 ## Plaintext info files are generated from GNU TexInfo sources
 $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.texinfo
 	@echo "Compiling $< ..."
-	@makeinfo --plaintext --output="$@" "$<"
+	@makeinfo --plaintext -D "version $(VERSION)" -D "date $(DATE)" --output="$@" "$<"
 
 ## GNU LilyPond graphics
 $(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps

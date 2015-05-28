@@ -26,6 +26,8 @@
     sinrev, cosrev, tanrev, atan2rev1, atan2rev2: Now allow non-scalar arguments
 @item
     Simplified licensing: Relicensed parts of the software that were not under GPL
+@item
+    Updated information for citation of the package
 @end itemize
 
 @noindent Bugfixes
