@@ -17,8 +17,7 @@
 @release{0.2.1, xxxx-xx-xx}
 @itemize
 @item
-    plot, plot3: New interval plotting functions
-    
+    plot, plot3: New interval plotting functions.    
     Pay attention to the included examples, which can be executed with @code{demo @@infsup/plot} and @code{demo @@infsup/plot3} respectively.
 @item
     polyval: New interval arithmetic algorithm
