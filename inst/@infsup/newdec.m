@@ -14,6 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
+## @documentencoding UTF-8
 ## @deftypefn {Function File} {} newdec (@var{X})
 ## 
 ## Create a decorated interval from a bare interval.
