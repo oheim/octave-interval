@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefn {Function File} {} {} setxor (@var{A}, @var{B})
-## @deftypefnx {Function File} {} {[C, C1, C2]} setxor (@var{A}, @var{B})
+## @deftypefnx {Function File} {} {[@var{C}, @var{C1}, @var{C2}] =} setxor (@var{A}, @var{B})
 ## 
 ## Build the symmetric difference of intervals @var{A} and @var{B}.
 ##
