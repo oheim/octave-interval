@@ -10,7 +10,7 @@ The GNU Octave interval package is build upon great third-party software.
     Correctly rounded arithmetic operations are based on the @uref{http://www.mpfr.org/,GNU MPFR library} by Guillaume Hanrot, Vincent Lefèvre, Patrick Pélissier, Philippe Théveny and Paul Zimmermann.
 
 @item
-    A linear system solver @code{mldivide} for bare intervals is derived from a routine developed for @uref{http://www2.math.uni-wuppertal.de/~xsc/,C-XSC} by Martin Zimmer, Chair of Scientific Computing, University of Wuppertal, Germany.
+    A linear system solver @code{mldivide} and a polynomial evaluation algorithm @code{polyval} for bare intervals are derived from routines developed for @uref{http://www2.math.uni-wuppertal.de/~xsc/,C-XSC} at University of Wuppertal, Germany.
 
 @item
     Most unit tests are written in portable ITL format and converted into GNU Octave test cases with the @uref{https://github.com/nehmeier/ITF1788,Interval Testing Framework for IEEE 1788}. The framework has been developed by Maximilian Kiesner and Marco Nehmeier, Chair of Software Engineering, Department of Computer Science, University of Würzburg, Germany.
