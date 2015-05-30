@@ -14,7 +14,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{0.2.1, xxxx-xx-xx}
+@release{0.2.1, 2015-05-30}
 @itemize
 @item
     plot, plot3: New interval plotting functions.    
