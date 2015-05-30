@@ -110,7 +110,7 @@ result = subsref (p, idxNext);
 yy = subsasgn (yy, idxNext, result);
 for i = 2 : n
     idxNext.subs = {i};
-    result = result .* x + subsref (p, idxNext);
+    result = fma (result, x, subsref (p, idxNext));
     yy = subsasgn (yy, idxNext, result);
 endfor
 
