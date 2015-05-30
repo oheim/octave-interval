@@ -21,6 +21,8 @@
     
     Pay attention to the included examples, which can be executed with @code{demo @@infsup/plot} and @code{demo @@infsup/plot3} respectively.
 @item
+    polyval: New interval arithmetic algorithm
+@item
     bisect: New set operation for bisecting algorithms
 @item
     sinrev, cosrev, tanrev, atan2rev1, atan2rev2: Now allow non-scalar arguments

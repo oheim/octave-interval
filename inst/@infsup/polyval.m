@@ -4,7 +4,7 @@
 ## Copyright 2000-2014 Wissenschaftliches Rechnen/Softwaretechnologie,
 ##                     Universität Wuppertal, Germany
 ## Copyright 2015      Oliver Heimlich
-## 
+##
 ## This program is derived from RPolyEval in CXSC, C++ library for eXtended
 ## Scientific Computing (V 2.5.4), which is distributed under the terms of
 ## LGPLv2+.  Migration to Octave code has been performed by Oliver Heimlich.
@@ -24,94 +24,120 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} polyval_verified (@var{P}, @var{X})
-## 
-## Evaluate polynomial @var{P} at @var{X}.
+## @deftypefn {Function File} {} polyval (@var{P}, @var{X})
+##
+## Evaluate polynomial @var{P} with argument @var{X}.
+##
+## Horner's scheme is used to evaluate a first approximation.  The result is
+## improved with iterative refinement.
 ##
 ## Accuracy: The result is a tight enclosure for polynomials of degree 1 or
-## less.  For polynomials of higher degree the result is a valid enclosure, but
-## the algorithm tries to compute a tight enclosure via iterative refinement.
+## less.  For polynomials of higher degree the result is a valid enclosure.
+## For @var{X} being no singleton interval, the algorithm suffers from the
+## dependency problem.
 ##
+## @example
+## @group
+## polyval (infsup ([3 4 2 1]), 42) # 3x^3 + 4x^2 + 2x^1 + 1 | x = 42
+##   @result{} [229405]
+## polyval (infsup ([3 4 2 1]), "42?") # ... | x = 41.5 .. 42.5
+##   @result{} [221393.125, 237607.875]
+## @end group
+## @end example
+## @seealso{@@infsup/fzero}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2015-05-29
 
-function result = polyval_verified (p, x)
+function result = polyval (p, x)
 
-if (not (isfloat (x) && isreal (x) && isscalar (x)))
-    error ('point of evaluation X must be a scalar real number')
+if (nargin ~= 2)
+    print_usage ();
+    return
 endif
 
-if (not (isfloat (p) && isreal (p) && isvector (p)))
-    error ('polynomial P must be a vector of real numbers')
+if (not (isa (x, "infsup")))
+    x = infsup (x);
+endif
+if (not (isa (p, "infsup")))
+    p = infsup (p);
 endif
 
-p = vec (p);
+if (not (isscalar (x)))
+    error ('point of evaluation X must be a scalar')
+endif
+
+if (not (isvector (p)))
+    error ('polynomial P must be a vector of coefficients')
+endif
+
 n = numel (p);
 switch (n)
     case 0 # empty sum
-        result = infsupdec (0);
+        result = infsup (0);
         return
     case 1 # p .* x.^0
-        result = infsupdec (p);
+        result = p;
         return
     case 2 # p(1) .* x.^1 + p(2) .* x.^0
-        result = fma (infsupdec (x), infsupdec (p (1)), infsupdec (p (2)));
+        result = fma (x, subsref (p, struct ('type', '()', 'subs', {{1}})), ...
+                         subsref (p, struct ('type', '()', 'subs', {{2}})));
         return
 endswitch
 
 if (x == 0)
-    result = infsupdec (p (n));
+    result = subsref (p, struct ('type', '()', 'subs', {{n}}));
     return
 elseif (x == 1)
-    result = sum (infsupdec (p));
+    result = sum (p);
     return
 elseif (x == -1)
-    result = dot (infsupdec (p), ...
-                  x .^ ((n : -1 : 1) - 1));
+    result = dot (p, (-1) .^ ((n : -1 : 1) - 1));
     return
 endif
 
 kMax = 20;
 
-y = zeros (n, kMax);
-yy = infsupdec (zeros (size (p)));
-result = infsupdec ();
 idxNext.type = '()';
 idxLast.type = '()';
 
+## Compute first approximation using Horner's scheme
+yy = infsup (zeros (n, 1));
+idxNext.subs = {1};
+result = subsref (p, idxNext);
+yy = subsasgn (yy, idxNext, result);
+for i = 2 : n
+    idxNext.subs = {i};
+    result = result .* x + subsref (p, idxNext);
+    yy = subsasgn (yy, idxNext, result);
+endfor
+
+y = zeros (n, kMax);
 for k = 1 : kMax
-    if (k == 1)
-        ## Compute first approximation using Horner's scheme
-        y (1, k) = p (1);
-        for i = 2 : n
-            y (i, k) = y (i - 1, k) .* x + p (i);
-        endfor
-        continue
-    endif
-    
+    lastresult = result;
+
     ## Iterative refinement
     ## Store middle of residual as the next correction of y
     y (:, k) = mid (yy);
-    yy = infsupdec (zeros (size (p)));
-    
+
     ## Computation of the residual [r] and
     ## evaluation of the interval system A*[y] = [r]
+    yy = infsup (zeros (n, 1));
     for i = 2 : n
         idxNext.subs = {i};
         idxLast.subs = {i-1};
         
+        coef = subsref (p, idxNext);
         yy = subsasgn (yy, idxNext, dot (...
-            [subsref(yy, idxLast), p(i), y(i, 1 : k), y(i - 1, 1 : k)], ...
-            [x,                    1,    -ones(1, k), x(ones (1, k))]));
+            [subsref(yy, idxLast), coef, y(i, 1 : k), y(i - 1, 1 : k)], ...
+            [x,                    1,    -ones(1, k), x.*ones(1, k)]));
     endfor
     
     ## Determination of a new enclosure of p (x)
     idxLast.subs = {n};
-    lastresult = result;
-    result = sum ([subsref(yy, idxLast), y(n, 1 : k)]);
+    result = intersect (result, sum ([subsref(yy, idxLast), y(n, 1 : k)]));
     if (eq (result, lastresult))
         ## No improvement
         break
@@ -124,3 +150,10 @@ for k = 1 : kMax
 endfor
 
 endfunction
+
+%!assert (polyval (infsup (42), 0) == 42);
+%!assert (polyval (infsup ([42 42]), 0) == 42);
+%!assert (polyval (infsup ([42 42]), 1) == 84);
+%!assert (polyval (infsup ([42 42]), -1) == 0);
+%!assert (polyval (infsup ([-42 42 42]), .5) == -42*0.5^2 + 42*0.5 + 42);
+%!assert (polyval (infsup (vec (pascal (3))), 0.1) == "[0X6.502E9A7231A08P+0, 0X6.502E9A7231A0CP+0]");

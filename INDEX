@@ -142,6 +142,7 @@ Interval input and output
 Interval solver
  @infsup/fzero
  @infsup/gauss
+ @infsup/polyval
 Utility function
  @infsup/cat
  @infsup/columns
