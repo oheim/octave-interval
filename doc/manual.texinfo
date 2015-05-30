@@ -89,13 +89,13 @@ Appendix
 @include chapter/preface.texinfo
 
 @menu
-* Acknowledgment::
+* Acknowledgments::
 * Distribution::
 @end menu
 
-@node Acknowledgment
-@unnumberedsec Acknowledgment
-@include chapter/acknowledgment.texinfo
+@node Acknowledgments
+@unnumberedsec Acknowledgments
+@include chapter/acknowledgments.texinfo
 
 @node Distribution
 @unnumberedsec Distribution
