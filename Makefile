@@ -227,7 +227,9 @@ run: $(OCT_COMPILED)
 ## Validate unit tests
 test: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
 	@echo "Testing package in GNU Octave ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "__run_test_suite__ ({'.'}, {})"
+	@$(OCTAVE) --silent --path "inst/" --path "src/" \
+		--eval "__run_test_suite__ ({'.'}, {})"
+	@! grep '!!!!! test failed' fntests.log
 	@echo
 
 ## Validate code examples
@@ -239,8 +241,8 @@ doctest: $(OCT_COMPILED)
 		"pkg load doctest; \
 		 targets = '$(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)'; \
 		 targets = strsplit (targets, ' '); \
-		 doctest (targets)" \
-		| awk '/^Start of temporary output/ {hide=1} /^End of temporary output/ {hide=0;next} !hide {print}'
+		 success = doctest (targets); \
+		 exit (!success)"
 	@echo
 
 ## Check the creation of the manual
