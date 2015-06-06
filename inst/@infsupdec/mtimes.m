@@ -79,9 +79,8 @@ endif
 
 dec_x = min (x.dec, [], 2);
 dec_y = min (y.dec, [], 1);
-parfor i = 1 : rows (x.dec)
-    result.dec (:, i) = min (result.dec (:, i), min (dec_x, dec_y (i)));
-endparfor
+warning ('off', 'Octave:broadcast', 'local');
+result.dec = min (result.dec, min (dec_x, dec_y));
 
 endfunction
 
