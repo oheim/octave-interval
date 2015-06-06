@@ -6,7 +6,7 @@
 This chapter explains the necessary steps before using the package. The next chapter, @ref{Getting Started}, teaches basic concepts. Users who are not familiar with interval arithmetic should read @ref{Introduction to Interval Arithmetic} first.
 
 @section Installation
-Unless the package is provided by a third-party distributor, the interval package can be installed with the @command{pkg} command from within Octave. Latest release versions are published at Octave Forge and can be downloaded with the @option{-forge} option.
+Unless the package is provided by a third-party distributor, the interval package can be installed with the @command{pkg} command from within Octave. Latest release versions are published at Octave Forge and can be automatically downloaded with the @option{-forge} option.
 
 @example
 @c doctest: +SKIP
@@ -17,16 +17,11 @@ pkg install -forge interval
 @end group
 @end example
 
-During installation parts of the package are compiled for the target system, which requires the GNU MPFR development libraries (version ≥ 3.1.0) to be installed. The official GNU Octave release for Microsoft Windows already includes this dependency. For other systems it might be necessary to install MPFR development files, which are provided by most GNU distributions or can be obtained from @url{http://www.mpfr.org/}.
+During this kind of installation parts of the interval package are compiled for the target system, which requires development libraries for GNU Octave (version ≥ 3.8.2) and GNU MPFR (version ≥ 3.1.0) to be installed. The official Octave release for Microsoft Windows already includes these dependencies. For other systems it might be necessary to install packages “liboctave-dev” and “libmpfr-dev”, which are provided by most GNU distributions (names may vary).
 
-In order to use the package during an Octave session, it must have been loaded. In the following parts of the manual it is assumed that the package has been loaded.
+In order to use the interval package during an Octave session, it must have been loaded, i. e., added to the path.  In the following parts of the manual it is assumed that the package has been loaded, which can be accomplished with the @command{pkg load interval} command.  Automatic loading of the interval package can be activated with the @command{pkg rebuild -auto interval} command and is recommended for regular use.
 
-@example
-@c doctest: +SKIP
-@group
-pkg load interval
-@end group
-@end example
+That's it.  After only two commands the package is ready to be used within Octave.
 
 
 @section What to Expect

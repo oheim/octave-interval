@@ -64,7 +64,7 @@ The implicit conversion applies the best possible decoration for the bare interv
 @item interval:NaI 
 @table @asis
 @item Reason
-An error has occured during interval construction and the NaI object has been produced. The warning text contains further details. A NaI can be explicitly created with the @command{nai} function. 
+An error has occurred during interval construction and the NaI object has been produced. The warning text contains further details. A NaI can be explicitly created with the @command{nai} function. 
 
 @item Possible consequences
 Nothing bad is going to happen, because the semantics of NaI are well defined by IEEE 1788. However, the user might choose to cancel the algorithm immediately when the NaI is encountered for the first time. 
@@ -72,6 +72,7 @@ Nothing bad is going to happen, because the semantics of NaI are well defined by
 @end table
 @end table
 @end float
+
 
 @section Decorations
 
@@ -138,6 +139,8 @@ sqrt (y)
 @end group
 @end example
 
+Please note that decoration information will not survive through reverse operations (see below) and set operations.
+
 
 @section Specialized interval constructors
 
@@ -145,7 +148,7 @@ Above mentioned interval construction with decimal numbers or numeric data is st
 
 @itemize
 @item
-    Hexadecimal-floating-constant form: Each interval boundary may be defined by a hexadecimal number (optionally containing a point) and an exponent field with an integral power of two as defined by the C99 standard @uref{http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1256.pdf,@asis{ISO/IEC9899, N1256, §6.4.4.2}}. This can be used as a convenient way to define interval boundaries in double-precision, because the hexadecimal form is much shorter than the decimal representation of many numbers.
+    Hexadecimal-floating-constant form: Each interval boundary may be defined by a hexadecimal number (optionally containing a point) and an exponent field with an integral power of two as defined by the C99 standard @uref{http://www.open-std.org/jtc1/sc22/WG14/www/docs/n1256.pdf,@asis{ISO/IEC9899, N1256, §6.4.4.2}}. This can be used as a convenient way to define interval boundaries in binary64 precision, because the hexadecimal form is much shorter than the decimal representation of many numbers.
 @item
     Rational literals: Each interval boundary may be defined as a fraction of two decimal numbers. This is especially useful if interval boundaries shall be tightest enclosures of fractions, that would be hard to write down as a decimal number.
 @item
@@ -165,32 +168,32 @@ Above mentioned interval construction with decimal numbers or numeric data is st
 Examples of different formats during interval construction
 @example
 @group
-infsup ("0x1.999999999999Ap-4") # hex-form
-  @result{} ans ⊂ [0.1, 0.1000000000000001]
+infsupdec ("0x1.999999999999Ap-4") # hex-form
+  @result{} ans ⊂ [0.1, 0.1000000000000001]_com
 @end group
 @end example
 @example
 @group
-infsup ("1/3", "7/9") # rational form
-  @result{} ans ⊂ [0.3333333333333333, 0.7777777777777778]
+infsupdec ("1/3", "7/9") # rational form
+  @result{} ans ⊂ [0.3333333333333333, 0.7777777777777778]_com
 @end group
 @end example
 @example
 @group
-infsup ("121.2?") # uncertain form
-  @result{} ans ⊂ [121.14999999999999, 121.25]
+infsupdec ("121.2?") # uncertain form
+  @result{} ans ⊂ [121.14999999999999, 121.25]_com
 @end group
 @end example
 @example
 @group
-infsup ("5?32e2") # uncertain form with ulp count
-  @result{} ans = [-2700, +3700]
+infsupdec ("5?32e2") # uncertain form with ulp count
+  @result{} ans = [-2700, +3700]_com
 @end group
 @end example
 @example
 @group
-infsup ("-42??u") # unbound uncertain form
-  @result{} ans = [-42, +Inf]
+infsupdec ("-42??u") # unbound uncertain form
+  @result{} ans = [-42, +Inf]_dac
 @end group
 @end example
 
@@ -209,10 +212,10 @@ In the following example, we compute the constraints for base and exponent of th
 
 @example
 @group
-x = powrev1 (infsup ("[1.1, 1.45]"), infsup (2, 3))
-  @result{} x ⊂ [1.6128979635153646, 2.714854726565793]
-y = powrev2 (infsup ("[2.14, 2.5]"), infsup (2, 3))
-  @result{} y ⊂ [0.7564707973660299, 1.4440113978403289]
+x = powrev1 (infsupdec ("[1.1, 1.45]"), infsupdec (2, 3))
+  @result{} x ⊂ [1.6128979635153646, 2.714854726565793]_trv
+y = powrev2 (infsupdec ("[2.14, 2.5]"), infsupdec (2, 3))
+  @result{} y ⊂ [0.7564707973660299, 1.4440113978403289]_trv
 @end group
 @end example
 
@@ -236,12 +239,13 @@ When matrices are resized using subscripted assignment, any implicit new matrix 
 
 @example
 @group
-M = infsup (magic (3)); M (4, 4) = 42
+M = infsupdec (magic (3)); M (4, 4) = 42
   @result{} M = 4×4 interval matrix
-        [8]       [1]       [6]   [Empty]
-        [3]       [5]       [7]   [Empty]
-        [4]       [9]       [2]   [Empty]
-    [Empty]   [Empty]   [Empty]      [42]
+  
+        [8]_com       [1]_com       [6]_com   [Empty]_trv
+        [3]_com       [5]_com       [7]_com   [Empty]_trv
+        [4]_com       [9]_com       [2]_com   [Empty]_trv
+    [Empty]_trv   [Empty]_trv   [Empty]_trv      [42]_com
 @end group
 @end example
 

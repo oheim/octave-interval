@@ -234,8 +234,6 @@ test: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
 ## Validate code examples
 doctest: $(OCT_COMPILED)
 	@echo "Testing documentation strings ..."
-	@# Due to a missing evalc function in Octave we must filter
-	@# temporary output while running the doctests.
 	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval \
 		"pkg load doctest; \
 		 targets = '$(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)'; \

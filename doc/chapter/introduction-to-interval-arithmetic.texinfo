@@ -1,5 +1,6 @@
 @c This is part of the GNU Octave Interval Package Manual.
 @c Copyright (C) 2015 Oliver Heimlich.
+@c Copyright (C) 2008-2009 Simone Pernice.
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
@@ -10,9 +11,9 @@ Give a digital computer a problem in arithmetic, and it will grind away methodic
 @author Brian Hayes, @uref{http://dx.doi.org/10.1511/2003.6.484,DOI: 10.1511/2003.6.484}
 @end quotation
 
-Floating-point arithmetic, as specified by @uref{http://en.wikipedia.org/wiki/IEEE_floating_point,IEEE 754}, is available in almost every computer system today. It is wide-spread, implemented in common hardware and integral part in programming languages. For example, the double-precision format is the default numeric data type in GNU Octave. Benefits are obvious: The results of arithmetic operations are well-defined and comparable between different systems and computation is highly efficient.
+Floating-point arithmetic, as specified by @uref{http://en.wikipedia.org/wiki/IEEE_floating_point,IEEE 754}, is available in almost every computer system today. It is wide-spread, implemented in common hardware and integral part in programming languages. For example, the binary64 format (a.k.a. double-precision) is the default numeric data type in GNU Octave. Benefits are obvious: The results of arithmetic operations are (mostly) well-defined and comparable between different systems and computation is highly efficient.
 
-However, there are some downsides of floating-point arithmetic in practice, which will eventually produce errors in computations.
+However, there are some downsides of floating-point arithmetic in practice, which will eventually produce errors in computations.  Generally speaking, most of these problems occur in any arithmetic with finite precision.
 
 @itemize
 @item
@@ -29,12 +30,128 @@ However, there are some downsides of floating-point arithmetic in practice, whic
     If you do not know the technical details (cf. first bullet) you ignore the fact that the computer lies to you in many situations. For example, when looking at numerical output and the computer says “@code{ans = 0.1},” this is not absolutely correct. In fact, the value is only close enough to the value 0.1. Additionally, many functions produce limit values (∞ × −∞ = −∞, ∞ ÷ 0 = ∞, ∞ ÷ −0 = −∞, log (0) = −∞), which is sometimes (but not always!) useful when overflow and underflow occur.
 @end itemize
 
-Interval arithmetic addresses above problems in its very special way and introduces new possibilities for algorithms. For example, the @uref{http://en.wikipedia.org/wiki/Interval_arithmetic#Interval_Newton_method,interval newton method} is able to find @emph{all} zeros of a particular function.
+Interval arithmetic addresses above problems in its very special way.  It accepts the fact that numbers cannot be stored or computed with infinite precision and introduces enclosures of exact values, which can be computed on any machine with finite precision.
+
+This introduces new possibilities for algorithms.  Any errors are covered by the range of an interval during the course of computation.  All members of intervals are by definition finite real numbers, which results in an exception free and mathematically well-defined arithmetic.  The possibility to actually evaluate a function on a connected range of values and compute a guaranteed enclosure of all possible values is a unique selling point.
+
+For example, the @uref{http://en.wikipedia.org/wiki/Interval_arithmetic#Interval_Newton_method,interval newton method} is able to find @emph{all} zeros of a particular function.  More precisely, the algorithm is able to reliably eliminate ranges of values where the function cannot have a root by a simple interval evaluation of either the function itself or its derivative.
+
+
+@section Error bounds in real life
+
+@c This section is largely based on the documentation for the Octave SIMP package by Simone Pernice.
+
+Intervals can be used instead of simple numbers to automatically take into account the tolerance of the values used in calculation.  Every day we need to compute the result of a lot of simple mathematical equations.  For example the cost of the apples bought at the farmer's market is given by:
+@display
+    apple price = apple cost per kilo · kilos of apple bought
+@end display
+
+When we need the result of those mathematical expressions, we put the values on the right hand side of the equation and we compute its result for the left hand side.  We usually put wrong (erroneous) numbers into the equation and therefore where is no doubt we get wrong results.  There are a lot of reasons why we use incorrect values, for example
+@enumerate
+@item
+    Most of the values are measured, therefore they are known within a given tolerance. @uref{http://en.wikipedia.org/wiki/Accuracy_and_precision,Wikipedia sv. accuracy and precision}
+@item
+    Some values have an infinite number of digits after the (decimal) point, e.g. π.
+@item
+    Some values change with time or samples (or whatever), like the weight of a person, which can change of 5 percent during the day, or the current gain of a bipolar junction transistor (BJP), which can change of 50 percent on the samples of the same series.
+@item
+    Some values are estimation or guess—something like between a minimum and a maximum.
+@end enumerate
+
+@noindent
+For example, if a pipe breaks and you want to buy a new one you need its diameter.  If you do not have a caliber, you may measure its circumference and divide it by π.
+@display
+diameter = circumference / π
+@end display
+
+Here there are two errors: the circumference is known within the tolerance given by your meter, moreover π has an infinite number of digits while only few of them can be used in the operation. You may think the error is negligible, the result is enough accurate to buy a new pipe in a hardware shop.  However, the not infinite precision of those operations avoid the use of computers as automatic theorem demonstration tools and so on.
+
+This kind of issue is quite common in engineer design.  What engineers do is to make sure their design will work in the work in the worst case or in most of the cases (usually more than 99.9 percent). A simple example follows.
+
+Let us say you want to repaint the walls of your living room completely messed up by your children.  You need to compute how many paint cans you need to buy.  The equation is quite simple:
+@display
+paint cans = 2 · (room width + room length) · room height
+    / (paint per can · paint efficiency),
+@end display
+
+@noindent
+where “paint efficiency” is how many square meters of surface can be painted with a liter of paint.  The problem here is that usually we do not have a long enough meter to measure the room width and length.  It is much simpler to count the number of steps to go through it (1 step is about a meter, let us say from 0.9 to 1.1 meters).  Moreover, the paint provider usually declares a paint efficiency range.
+
+Here is the data:
+@itemize
+@item
+    room width = 6 steps (5.4m to 6.6m)
+@item
+    room length = 4 steps (3.6m to 4.4m)
+@item
+    room height = 3m (it is assumed to be correct)
+@item
+    paint efficiency = from 0.7 to 1.3 square meters per liter
+@item
+    paint liters per can = 40 (it is assumed to be correct)
+@end itemize
+
+@noindent
+To compute the average result just put average values in. We get: paint cans = 2 · (6 + 4) · 3 / (40 · 1) = 1.5, which means two paint cans unless you are able to buy just half of the second can.
+
+What happens in the worst case? Just put pessimistic values in the equation. We get: paint cans = 2 · (6.6 + 4.4) · 3 / (40 · 0.7) = 2.36. That is, in the worst case we would be short 0.36 cans of paint.  It makes sense to buy 3 cans.
+
+Last, consider the best case. Is it enough to only buy a single can of paint?  Just put optimistic values in the equation. We get: paint cans = 2 · (5.4 + 3.6) · 3 / (40 · 1.3) = 1.04, which means one can of paint would not be enough.
+
+You have to buy at least two cans, but probably need one more.  For this result we had to go through the equation multiple times (at least twice) and carefully consider for each variable, which would be the most optimistic / pessimistic value assignment, which is not trivial. For example consider the room size versus the paint efficiency: It depends whether the highest or the lowest value takes an optimistic or pessimistic role.
+
+Using interval arithmetic it is possible to compute the result in a single run with ranges as inputs.  The following example demonstrates this and further below is explained how it works.
+
+@example
+@group
+step = midrad (1, "0.1");
+w = 6 * step;
+l = 4 * step;
+h = 3;
+eff = infsupdec ("[0.7, 1.3]");
+cansize = 40;
+cans = 2 * (w + l) * h / (eff * cansize)
+  @result{} cans ⊂ [1.0384615384615378, 2.357142857142859]_com
+@end group
+@end example
+@example
+@group
+## Since we can only buy whole cans
+ceil (cans)
+  @result{} ans = [2, 3]_def
+@end group
+@end example
 
 
 @section Theory
+
+The two most important and fundamental concepts in the context of the interval package are:
+@enumerate
+@item
+    Intervals are closed, connected subsets of the real numbers.  Intervals may be unbound (in either or both directions) or empty.  In special cases @code{+inf} and @code{-inf} are used to denote boundaries of unbound intervals, but any member of the interval is a @emph{finite} real number.
+@item
+    Classical functions are extended to interval functions as follows: The result of function @var{f} evaluated on interval @var{x} is an interval enclosure of all possible values of @var{f} over @var{x} where the function is defined.
+    
+    Most interval arithmetic functions in this package manage to produce a very accurate such enclosure.
+@end enumerate
+
+
 @subsection Online Introductions
-@uref{http://www.maths.manchester.ac.uk/~higham/narep/narep416.pdf,Interval analysis in MATLAB} Note: The INTLAB toolbox for Matlab is not entirely compatible with this interval package for GNU Octave. However, basic operations can be compared and should be compatible for common intervals. 
+
+There are several good introductions to interval arithmetic available on the internet.
+@itemize
+@item
+    @uref{http://en.wikipedia.org/wiki/Interval_arithmetic,Wikipedia sv. interval arithmetic}
+@item
+    @uref{http://www-sop.inria.fr/coprin/logiciels/ALIAS/Examples/COURS/index.html,Introduction to the methods used in interval arithmetic (French)}.
+
+@item
+    @uref{http://www.maths.manchester.ac.uk/~higham/narep/narep416.pdf,Interval analysis in MATLAB} Note: The INTLAB toolbox for Matlab is not entirely compatible with this interval package for GNU Octave. However, basic operations can be compared and should be compatible for common intervals.
+
+@item
+    @uref{http://www.cs.utep.edu/interval-comp/,Interval related collection of links}
+@end itemize
+
 
 @subsection Moore's fundamental theorem of interval arithmetic
 
