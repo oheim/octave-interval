@@ -16,6 +16,7 @@
 */
 
 #include <octave/oct.h>
+#include <octave/oct-openmp.h>
 #include <mpfr.h>
 #include "mpfr_commons.cc"
 
@@ -36,7 +37,7 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
   
   Matrix result_l (dim_vector (n, m));
   Matrix result_u (dim_vector (n, m));
-  #pragma omp parallel for
+  OCTAVE_OMP_PRAGMA (omp parallel for)
   for (octave_idx_type i = 0; i < n; i++)
     {
       // Using accumulators instead of the (less accurate) mpfr_sum function
@@ -56,7 +57,7 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
           for (octave_idx_type k = 0; k < l; k++)
             {
               double xl, xu, yl, yu;
-              #pragma omp critical
+              OCTAVE_OMP_PRAGMA (omp critical)
               {
                 // Access to shared memory is critical
                 xl = matrix_xl.elem (i, k);
@@ -126,14 +127,14 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
               if (mpfr_add (accu_l, accu_l, mp_addend_l, MPFR_RNDZ) != 0 ||
                   mpfr_add (accu_u, accu_u, mp_addend_u, MPFR_RNDZ) != 0)
                 {
-                  #pragma omp critical
+                  OCTAVE_OMP_PRAGMA (omp critical)
                   error ("mpfr_matrix_mul_d: "
                          "Failed to compute exact matrix multiplication");
                 }
             }
           const double accu_l_d = mpfr_get_d (accu_l, MPFR_RNDD);
           const double accu_u_d = mpfr_get_d (accu_u, MPFR_RNDU);
-          #pragma omp critical
+          OCTAVE_OMP_PRAGMA (omp critical)
           {
             // Access to shared memory is critical
             result_l.elem (i, j) = accu_l_d;

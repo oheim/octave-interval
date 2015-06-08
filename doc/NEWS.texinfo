@@ -23,6 +23,7 @@
 @noindent Bugfixes
 @itemize
 @item mtimes: Fixed matrix-vector multiplication of decorated intervals
+@item Fixed a linking error that could prevent package installation (bug #45280)
 @end itemize
 
 @release{0.2.1, 2015-05-30}
