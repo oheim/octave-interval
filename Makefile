@@ -155,6 +155,10 @@ $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.tex
 ## GNU LilyPond graphics
 $(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps
 	@epstopdf "$<"
+	@# The eps produced by LilyPond is quite big
+	@# and can be optimized via conversion eps -> pdf -> eps
+	@pdftops -eps "$@" "$<"
+	@touch "$@"
 $(GENERATED_IMAGE_DIR)/%.ly.png $(GENERATED_IMAGE_DIR)/%.ly.eps: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
 	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
