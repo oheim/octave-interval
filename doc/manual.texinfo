@@ -27,11 +27,11 @@
 @end tex
 
 @copying
-    This manual is for the GNU Octave interval package, version @value{version}.
+This manual is for the GNU Octave interval package, version @value{version}.
 
-    Copyright @copyright{} 2015 Oliver Heimlich
+Copyright @copyright{} 2015 Oliver Heimlich
 
-    Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in @ref{GNU Free Documentation License}.
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU General Public License, Version 3 or any later version published by the Free Software Foundation. A copy of the license is included in @ref{GNU General Public License}.
 @end copying
 
 @macro myimage{file, description}
@@ -79,7 +79,7 @@ How to install and use the interval package for GNU Octave
 
 Appendix
 * IEEE 1788:: Standard for interval arithmetic
-* GNU Free Documentation License:: The license for this manual
+* GNU General Public License:: The license for this software and its manual
 @end menu
 
 @contents
@@ -132,8 +132,8 @@ Appendix
 @node Conformance Claim
 @include chapter/ieee-1788-conformance.texinfo
 
-@node GNU Free Documentation License
-@appendix GNU Free Documentation License
-@include license/fdl-1.3.texi
+@node GNU General Public License
+@appendix GNU General Public License
+@include license/gpl-3.0.texi
 
 @bye

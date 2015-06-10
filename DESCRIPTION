@@ -17,4 +17,4 @@ Problems: IEEE 1788 is no official standard yet.  Comparison with isequal fails
 Depends: Octave (>= 3.8.2)
 SystemRequirements: mpfr (>= 3.1.0) [Debian] libmpfr4 (>= 3.1.0)
 BuildRequires: mpfr (>= 3.1.0) [Debian] libmpfr-dev (>= 3.1.0)
-License: GPLv3+ (software), FDL (manual)
+License: GPLv3+

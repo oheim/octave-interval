@@ -3,7 +3,7 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
-The interval package is free software: Everyone is encouraged to use it, copy it and redistribute it, as well as to make changes under the terms of the GNU General Public License. This manual is also free and can be used under the terms of the GNU Free Documentation License.
+The interval package is free software: Everyone is encouraged to use it, copy it and redistribute it, as well as to make changes under the terms of the GNU General Public License.
 
 The interval package is part of Octave Forge, a sibling of the GNU Octave project. Official releases are published at @url{http://octave.sourceforge.net/}.
 

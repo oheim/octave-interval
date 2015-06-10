@@ -24,7 +24,7 @@
      id="metadata3104"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>Inserse Power Function</dc:title><dc:date>2012-10-11</dc:date><dc:creator><cc:Agent><dc:title>Oliver Heimlich</dc:title></cc:Agent></dc:creator><cc:license
-           rdf:resource="http://www.gnu.org/licenses/fdl-1.3" /><dc:rights><cc:Agent><dc:title>Copyright 2012-2015 Oliver Heimlich</dc:title></cc:Agent></dc:rights><dc:source>own work</dc:source><dc:description>Graphical interpretation of reverse power operations. The (twodimensional) inverse image of z is hatched and outlined in the figure, in the shown example it is z = [2, 3]. A, for given intervals y and z find every x with x^y ∩ z ≠ Ø. B, for given intervals x and z find every y with x^y ∩ z ≠ Ø. </dc:description></cc:Work></rdf:RDF></metadata><defs
+           rdf:resource="http://www.gnu.org/licenses/gpl-3.0" /><dc:rights><cc:Agent><dc:title>Copyright 2012-2015 Oliver Heimlich</dc:title></cc:Agent></dc:rights><dc:source>own work</dc:source><dc:description>Graphical interpretation of reverse power operations. The (twodimensional) inverse image of z is hatched and outlined in the figure, in the shown example it is z = [2, 3]. A, for given intervals y and z find every x with x^y ∩ z ≠ Ø. B, for given intervals x and z find every y with x^y ∩ z ≠ Ø. </dc:description></cc:Work></rdf:RDF></metadata><defs
      id="defs3102"><pattern
        inkscape:collect="always"
        xlink:href="#pattern8774"
@@ -203,15 +203,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1050"
-     inkscape:window-height="1643"
+     inkscape:window-width="1680"
+     inkscape:window-height="986"
      id="namedview3100"
      showgrid="false"
      inkscape:zoom="1.4142136"
-     inkscape:cx="214.06882"
+     inkscape:cx="-3.7200628"
      inkscape:cy="104.28725"
-     inkscape:window-x="2970"
-     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1"
      inkscape:object-nodes="true"

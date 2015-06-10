@@ -1,3 +1,8 @@
+/*
+This is part of the GNU Octave Interval Package Manual.
+Copyright (C) 2015 Oliver Heimlich.
+See the file manual.texinfo for copying conditions.
+*/
 body > * { max-width: 42em; }
 div.header { max-width: 100%; }
 hr { margin-left: 0; border: none; border-top: 3px double black; }
