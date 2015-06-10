@@ -160,14 +160,17 @@ $(GENERATED_IMAGE_DIR)/%.ly.png $(GENERATED_IMAGE_DIR)/%.ly.eps: doc/image/%.ly 
 	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
 
 ## Inkscape SVG graphics
-$(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf $(GENERATED_IMAGE_DIR)/%.svg.png: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
+$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
+	@# The output of pdftocairo has a much better quality
+	@# compared to the output from inkscape --export-png.
+	@pdftocairo -png -singlefile -gray -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
+	@mv "$(BUILD_DIR)/cairo.tmp.png" "$@"
+$(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
 	@inkscape --without-gui \
-		--export-dpi=120 \
 		--export-ignore-filters \
 		--export-eps="$(BUILD_DIR)/$<.eps" \
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
-		--export-png="$(BUILD_DIR)/$<.png" \
 		"$<" > /dev/null
 
 ## Patch generated stuff into the release tarball
