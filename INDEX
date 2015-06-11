@@ -122,11 +122,14 @@ Interval reverse operation
  @infsup/sqrrev
  @infsup/tanrev
 Interval numeric function
+ @infsup/hdist
+ @infsup/idist
  @infsup/inf
  @infsup/mag
  @infsup/mid
  @infsup/mig
  @infsup/rad
+ @infsup/sdist
  @infsup/sup
  @infsup/wid
 Interval input and output

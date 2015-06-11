@@ -17,7 +17,7 @@
 @release{0.2.2, xxxx-xx-xx}
 @itemize
 @item
-    
+    hdist, idist, sdist: New interval metric functions
 @end itemize
 
 @noindent Bugfixes
