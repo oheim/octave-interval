@@ -19,6 +19,8 @@
 ## 
 ## Compute the euclidean norm.
 ##
+## @code{hypot (@var{x}, @var{y}) = sqrt (@var{x}^2 + @var{y}^2)}
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
