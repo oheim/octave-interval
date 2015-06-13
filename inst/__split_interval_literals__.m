@@ -69,6 +69,7 @@ result = vertcat (row {:});
 endfunction
 
 %!assert (__split_interval_literals__ (""), {""});
+%!assert (__split_interval_literals__ (","), {""});
 %!assert (__split_interval_literals__ ("1"), {"1"});
 %!assert (__split_interval_literals__ ("1?"), {"1?"});
 %!assert (__split_interval_literals__ ("1?u"), {"1?u"});
