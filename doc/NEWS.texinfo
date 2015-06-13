@@ -20,12 +20,14 @@
     IEEE 1788, the standard for interval arithmetic, was approved on June 11.  To mark the occasion, the major version number has been raised.
 @item
     hdist, idist, sdist: New interval metric functions
+@item
+    User manual: Relicensed under GPL, added examples from the former Octave SIMP package, and various minor improvements.
 @end itemize
 
 @noindent Bugfixes
 @itemize
 @item mtimes: Fixed matrix-vector multiplication of decorated intervals
-@item Fixed a linking error that could prevent package installation (bug #45280)
+@item Fixed a linking error in mkoctfile that could prevent package installation (bug #45280)
 @end itemize
 
 @release{0.2.1, 2015-05-30}
