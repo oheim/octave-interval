@@ -71,8 +71,8 @@
 ## function parameter will be automatically adjusted.
 ##
 ## For the creation of interval matrices, arguments may be provided as (1) cell 
-## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) string
-## column vectors.  Scalar values do broadcast.
+## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.
+## Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
 ## however it implements the IEEE 1788 functions setDec, numsToInterval, and
@@ -105,7 +105,7 @@ function [x, isexact] = infsupdec (varargin)
 ## construction failed, so we use a try & catch block.
 try
     if (nargin >= 1 && ischar (varargin {end}))
-        varargin {end} = cellstr (varargin {end});
+        varargin {end} = __split_interval_literals__ (varargin {end});
     endif
     
     ## The setDec function, as described by IEEE 1788, may fix decorations

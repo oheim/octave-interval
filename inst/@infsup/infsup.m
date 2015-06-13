@@ -50,8 +50,8 @@
 ## magnitude (> 2^53) can also be affected from precision loss.
 ##
 ## For the creation of interval matrices, arguments may be provided as (1) cell 
-## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) string
-## column vectors.  Scalar values do broadcast.
+## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.  
+## Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE 1788,
 ## however it implements both IEEE 1788 functions numsToInterval and
@@ -108,7 +108,7 @@ if (nargin == 1)
         return
     endif
     if (ischar (l))
-        l = cellstr (l);
+        l = __split_interval_literals__ (l);
     endif
     if (iscell (l))
         ## Parse interval literals
@@ -181,10 +181,10 @@ if (nargin == 1)
 endif
 
 if (ischar (l))
-    l = cellstr (lower (l));
+    l = __split_interval_literals__ (lower (l));
 endif
 if (ischar (u))
-    u = cellstr (lower (u));
+    u = __split_interval_literals__ (lower (u));
 endif
 
 if (not (size_equal (l, u)))

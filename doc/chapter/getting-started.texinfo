@@ -113,7 +113,7 @@ The default text representation of intervals is not guaranteed to be exact, beca
 
 @subsection Interval Vectors and Matrices
 
-Vectors and matrices of intervals can be created by passing numerical matrices, char vectors or cell arrays to the interval constructors. With cell arrays it is also possible to mix several types of boundaries.
+Vectors and matrices of intervals can be created by passing numerical matrices, string or cell arrays to the interval constructors. With cell arrays it is also possible to mix several types of boundaries.
 
 Interval matrices behave like normal matrices in GNU Octave and can be used for broadcasting and vectorized function evaluation.  Vectorized function evaluation usually is the key to create very fast programs.
 
@@ -140,7 +140,7 @@ infsupdec (magic (3), magic (3) + 1)
 @end example
 @example
 @group
-infsupdec (["0.1"; "0.2"; "0.3"; "0.4"; "0.5"])
+infsupdec ("0.1; 0.2; 0.3; 0.4; 0.5")
   @result{} ans ⊂ 5×1 interval vector
   
     [0.09999999999999999, 0.1000000000000001]_com
@@ -148,6 +148,15 @@ infsupdec (["0.1"; "0.2"; "0.3"; "0.4"; "0.5"])
     [0.29999999999999998, 0.3000000000000001]_com
     [0.39999999999999996, 0.4000000000000001]_com
                                         [0.5]_com
+@end group
+@end example
+@example
+@group
+infsupdec ("1 [2, 3]; 4, 5, 6")
+  @result{} ans = 2×3 interval matrix
+  
+    [1]_com   [2, 3]_com   [Empty]_trv
+    [4]_com      [5]_com       [6]_com
 @end group
 @end example
 @example

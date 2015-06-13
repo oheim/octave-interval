@@ -19,6 +19,8 @@
 @item
     IEEE 1788, the standard for interval arithmetic, was approved on June 11.  To mark the occasion, the major version number has been raised.
 @item
+    All interval constructors have been extended to create interval matrices from a single string.  Commas or spaces may be used as a columns separator.  Semicolon and new line characters can be used as a row separator.
+@item
     hdist, idist, sdist: New interval metric functions
 @item
     User manual: Relicensed under GPL, added examples from the former Octave SIMP package, and various minor improvements.
