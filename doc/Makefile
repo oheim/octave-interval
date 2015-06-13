@@ -1,7 +1,7 @@
 SHELL     = /bin/sh
 OBJ       = manual.html manual.pdf
 MAKEINFO ?= makeinfo
-VERSION  ?= $(shell grep "^Version: " ../packinfo/DESCRIPTION | cut -f2 -d" ")
+VERSION  ?= $(shell grep "^Version: " ../packinfo/DESCRIPTION ../DESCRIPTION | head -1 | cut -f2 -d" ")
 
 .PHONY: all clean
 
