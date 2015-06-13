@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,39 +15,42 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} mag (@var{X})
+## @deftypefn {Function File} {} smig (@var{X})
 ## 
-## Get the magnitude of numbers in interval @var{X}, that is the maximum of
-## absolute values for each element.
+## Get the signed mignitude of numbers in interval @var{X}, that is the unique
+## number closest to zero for each element.
 ##
-## If @var{X} is empty, @code{mag (@var{X})} is NaN.
+## If @var{X} is empty, @code{smig (@var{X})} is NaN.
 ##
 ## Accuracy: The result is exact.
 ##
 ## @example
 ## @group
-## mag (infsup (-3, 2))
-##   @result{} ans = 3
+## smig (infsup (-2, -1))
+##   @result{} ans = -1
 ## @end group
 ## @end example
-## @seealso{@@infsup/mig, @@infsup/smig, @@infsup/inf, @@infsup/sup}
+## @seealso{@@infsup/mig, @@infsup/mag, @@infsup/inf, @@infsup/sup}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-09-30
+## Created: 2015-06-13
 
-function result = mag (x)
+function result = smig (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = max (abs (x.inf), abs (x.sup));
+result = zeros (size (x.inf));
+result (x.inf > 0) = x.inf;
+result (x.sup < 0) = x.sup;
 result (isempty (x)) = nan ();
 
 endfunction
 
-%!assert (mag (infsup (-3, 4)), 4);
-%!assert (mag (infsup (-4, 3)), 4);
+%!assert (smig (infsup (-1, 2)), 0);
+%!assert (smig (infsup (-42, -23)), -23);
+%!assert (smig (infsup (23, 42)), 23);

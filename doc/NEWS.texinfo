@@ -21,7 +21,7 @@
 @item
     All interval constructors have been extended to create interval matrices from a single string.  Commas or spaces may be used as a columns separator.  Semicolon and new line characters can be used as a row separator.
 @item
-    hdist, idist, sdist: New interval metric functions
+    hdist, idist, sdist, smig: New interval numeric functions
 @item
     User manual: Relicensed under GPL, added examples from the former Octave SIMP package, and various minor improvements.
 @end itemize

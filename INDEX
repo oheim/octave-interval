@@ -130,6 +130,7 @@ Interval numeric function
  @infsup/mig
  @infsup/rad
  @infsup/sdist
+ @infsup/smig
  @infsup/sup
  @infsup/wid
 Interval input and output
