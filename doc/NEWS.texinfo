@@ -14,8 +14,10 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{0.2.2, xxxx-xx-xx}
+@release{1.0.0, xxxx-xx-xx}
 @itemize
+@item
+    IEEE 1788, the standard for interval arithmetic, was approved on June 11.  To mark the occasion, the major version number has been raised.
 @item
     hdist, idist, sdist: New interval metric functions
 @end itemize

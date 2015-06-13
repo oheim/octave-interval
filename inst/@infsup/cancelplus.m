@@ -16,7 +16,6 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefn {Function File} {@var{Z} =} cancelplus (@var{X}, @var{Y})
-## @cindex IEEE1788 cancelPlus
 ## 
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one
 ## knows @var{X} was obtained as the difference @var{Z} - @var{Y}.

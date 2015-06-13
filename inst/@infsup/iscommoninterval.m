@@ -21,7 +21,7 @@
 ## bounded real interval.
 ##
 ## Common intervals are used in class Moore interval arithmetic and are
-## flavor-independent in IEEE1788 interval arithmetic.
+## flavor-independent in IEEE 1788 interval arithmetic.
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##

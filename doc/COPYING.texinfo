@@ -6,7 +6,7 @@
 @c This is part of the GNU Octave Interval Package.
 @c Copyright (C) 2015 Oliver Heimlich.
 
-The interval package is free software and can be used under the terms of the GNU General Public License Version 3 (or later).  The wording of the license can be found below.
+The interval package is free software and can be used under the terms of the GNU General Public License Version 3 (or at your option any later version).  The wording of the license can be found below.
 
 The interval package contains derivative work, which is based on other free software released under various licenses.  Original authors are properly attributed in the manual and copyright statements have been retained in the particular source files.  For simplicity, any derivative work has been relicensed in this package.  Thus, the GPLv3+ is the only effective license for the software in this package.
 
