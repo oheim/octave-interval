@@ -177,6 +177,17 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
 		"$<" > /dev/null
 
+## Octave plots
+## Due to a bug with the export of patch objects in gl2ps it makes no sense
+## export eps and pdf files from within Octave.
+$(GENERATED_IMAGE_DIR)/%.m.png: doc/image/%.m $(OCT_COMPILED) | $(GENERATED_IMAGE_DIR)
+	@echo "Compiling $< ..."
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "source ('$<'); __print_mesa__ (gcf, '$@')"
+$(GENERATED_IMAGE_DIR)/%.m.eps: $(GENERATED_IMAGE_DIR)/%.m.png
+	@convert "$<" -density 120 eps3:"$@"
+$(GENERATED_IMAGE_DIR)/%.m.pdf: $(GENERATED_IMAGE_DIR)/%.m.eps
+	@epstopdf --outfile="$@" "$<"
+
 ## Patch generated stuff into the release tarball
 $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
 $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
