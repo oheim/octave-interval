@@ -14,6 +14,17 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{1.0.1, 2015-xx-xx}
+@itemize
+@item
+    Minor improvements to the documentation
+@end itemize
+
+@noindent Bugfixes
+@itemize
+@item plot3: Fixed plotting of interval edges when plotting several intervals at once using matrices
+@end itemize
+
 @release{1.0.0, 2015-06-13}
 @itemize
 @item
