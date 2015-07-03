@@ -174,7 +174,7 @@ infsupdec (@{1; eps; "4/7"; "pi"@}, @{2; 1; "e"; "0xff"@})
 
 @section Arithmetic Operations
 
-The interval packages comprises many interval arithmetic operations. A complete list can be found in its function reference. Function names match GNU Octave standard functions where applicable and follow recommendations by IEEE 1788 otherwise, @pxref{Function Names}.
+The interval package comprises many interval arithmetic operations. A complete list can be found in its function reference. Function names match GNU Octave standard functions where applicable and follow recommendations by IEEE 1788 otherwise, @pxref{Function Names}.
 
 The interval arithmetic flavor used by this package is the “set-based” interval arithmetic and follows these rules: Intervals are sets. They are subsets of the set of real numbers. The interval version of an elementary function such as sin(x) is essentially the natural extension to sets of the corresponding point-wise function on real numbers. That is, the function is evaluated for each number in the interval where the function is defined and the result must be an enclosure of all possible values that may occur.
 

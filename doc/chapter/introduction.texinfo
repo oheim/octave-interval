@@ -63,7 +63,7 @@ If accurate type checking during compile time—a substantial feature for verifi
 For some interval operations it is not even possible to rely on floating-point routines, since not all required routines are available in C99 or BLAS. For example, accurate multiplication of matrices with many elements becomes unfeasible as it takes a lot of time.
 
 @float Table,tab:runtime
-@caption{Approximate runtime for certain functions (wall clock time in seconds) — Results have been produced with GNU Octave 3.8.2 and Interval package 0.1.4 on an Intel® Core™ i5-4340M CPU (2.9–3.6 GHz)}
+@caption{Approximate runtime for certain functions (wall clock time in seconds) — Results have been produced with GNU Octave 3.8.2 and Interval package 0.1.4 on an Intel Core i5-4340M CPU (2.9–3.6 GHz)}
 @shortcaption{Approximate runtime for certain functions}
 
 @multitable {matrix size} {accuracy} {accuracy} {accuracy} {accuracy} {accuracy} {accuracy}

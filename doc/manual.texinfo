@@ -12,7 +12,6 @@
 \DeclareUnicodeCharacter{00F7}{$\div$}
 \DeclareUnicodeCharacter{03C0}{$\pi$}
 \DeclareUnicodeCharacter{202F}{\thinspace}
-\DeclareUnicodeCharacter{2122}{(TM)}
 \DeclareUnicodeCharacter{2200}{$\forall$}
 \DeclareUnicodeCharacter{2203}{$\exists$}
 \DeclareUnicodeCharacter{2208}{$\in$}
