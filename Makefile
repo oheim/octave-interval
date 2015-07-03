@@ -182,7 +182,7 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 ## export eps and pdf files from within Octave.
 $(GENERATED_IMAGE_DIR)/%.m.png: doc/image/%.m $(OCT_COMPILED) | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "source ('$<'); __print_mesa__ (gcf, '$@')"
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "source ('$<'); if (exist ('__osmesa_print__')); __print_mesa__ (gcf, '$@'); else; builtin ('print', gcf, '$@'); endif"
 $(GENERATED_IMAGE_DIR)/%.m.eps: $(GENERATED_IMAGE_DIR)/%.m.png
 	@convert "$<" -density 120 eps3:"$@"
 $(GENERATED_IMAGE_DIR)/%.m.pdf: $(GENERATED_IMAGE_DIR)/%.m.eps
@@ -208,7 +208,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@rm -rf "$(HTML_DIR)"
 	@$(OCTAVE) --silent --eval \
 		"pkg load generate_html; \
-		 function print (h, filename); __print_mesa__ (h, filename); endfunction; \
+		 function print (h, filename); if (exist ('__osmesa_print__')); __print_mesa__ (h, filename); else; builtin ('print', h, filename); endif; endfunction; \
 		 makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --css-include=doc/manual.css'); \
 		 options = get_html_options ('octave-forge'); \
 		 options.package_doc = 'manual.texinfo'; \
