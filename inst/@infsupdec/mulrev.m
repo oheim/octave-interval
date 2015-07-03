@@ -104,7 +104,7 @@ endif
 
 endfunction
 
-%!test "IEEE 1788 mulRevToPair examples";
+%!test "IEEE Std 1788-2015 mulRevToPair examples";
 %!  [u, v] = mulrev (infsupdec (0), infsupdec (1, 2));
 %!  assert (isempty (u) & isempty (v));
 %!  [u, v] = mulrev (infsupdec (0), infsupdec (0, 1));

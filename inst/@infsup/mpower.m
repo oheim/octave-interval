@@ -23,7 +23,7 @@
 ## Otherwise, @var{X} must be a square matrix and @var{Y} must be a single
 ## integer.
 ##
-## Warning: This function is not defined by IEEE 1788.
+## Warning: This function is not defined by IEEE Std 1788-2015.
 ##
 ## Accuracy: The result is a valid enclosure.  The result is tightest for
 ## @var{Y} in @{0, 1, 2@}.

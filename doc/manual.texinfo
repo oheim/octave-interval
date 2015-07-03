@@ -80,7 +80,7 @@ How to install and use the interval package for GNU Octave
 * Introduction to Interval Arithmetic:: Demonstration of fundamental concepts
 
 Appendix
-* IEEE 1788:: Standard for interval arithmetic
+* IEEE Std 1788-2015:: IEEE standard for interval arithmetic
 * GNU General Public License:: The license for this software and its manual
 
 @myimage{image/sombrero.m,Interval sombrero}
@@ -123,8 +123,8 @@ Appendix
 @chapter Introduction to Interval Arithmetic
 @include chapter/introduction-to-interval-arithmetic.texinfo
 
-@node IEEE 1788
-@appendix IEEE 1788
+@node IEEE Std 1788-2015
+@appendix IEEE Std 1788-2015
 
 @menu
 * Function Names::

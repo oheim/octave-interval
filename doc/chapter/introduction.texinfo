@@ -31,7 +31,7 @@ Features
 @itemize
 @item Free software licensed under the terms of the GNU General Public License (Version 3)
 @item Many interval arithmetic functions with high, system-independent accuracy
-@item Conforming to IEEE 1788, the standard for interval arithmetic
+@item Conforming to IEEE Std 1788-2015, IEEE standard for interval arithmetic
 @item Support for interval vectors and interval matrices
 @itemize
 @item very accurate vector sum, vector dot and matrix multiplication (correctly rounded)

@@ -27,7 +27,7 @@
 ## @code{exp (@var{Y} * log (@var{X}))} with initial branch of complex
 ## logarithm and complex exponential function.
 ##
-## Warning: This function is not defined by IEEE 1788.
+## Warning: This function is not defined by IEEE Std 1788-2015.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

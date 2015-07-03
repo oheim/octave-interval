@@ -67,7 +67,7 @@ The implicit conversion applies the best possible decoration for the bare interv
 An error has occurred during interval construction and the NaI object has been produced. The warning text contains further details. A NaI can be explicitly created with the @command{nai} function. 
 
 @item Possible consequences
-Nothing bad is going to happen, because the semantics of NaI are well defined by IEEE 1788. However, the user might choose to cancel the algorithm immediately when the NaI is encountered for the first time. 
+Nothing bad is going to happen, because the semantics of NaI are well defined by IEEE Std 1788-2015. However, the user might choose to cancel the algorithm immediately when the NaI is encountered for the first time. 
 
 @end table
 @end table
@@ -76,7 +76,7 @@ Nothing bad is going to happen, because the semantics of NaI are well defined by
 
 @section Decorations
 
-The interval package provides a powerful decoration system for intervals, as specified by the IEEE standard for interval arithmetic. By default any interval carries a decoration, which collects additional information about the course of function evaluation on the interval data.
+The interval package provides a powerful decoration system for intervals, as specified by IEEE Std 1788-2015, IEEE standard for interval arithmetic. By default any interval carries a decoration, which collects additional information about the course of function evaluation on the interval data.
 
 Only the (unfavored) @code{infsup} constructor creates bare, undecorated intervals and the @code{intervalpart} operation may be used to demote decorated intervals into bare, undecorated ones. It is highly recommended to always use the decorated interval arithmetic, which gives additional information about an interval result in exchange for a tiny overhead.
 

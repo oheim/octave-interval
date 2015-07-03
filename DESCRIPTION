@@ -10,7 +10,8 @@ Description: The interval package for real-valued interval arithmetic provides
  it can be applied to computer-assisted proofs, constraint programming and help
  find guaranteed solutions to numerical problems.  The implementation of
  intervals is based on interval boundaries represented by binary64 numbers and
- is standard conforming to IEEE 1788.
+ is standard conforming to IEEE Std 1788-2015, IEEE standard for
+ interval arithmetic.
 Problems: Comparison with isequal fails for interval matrices in
  Octave 4.0.0 (bug #44334).
 Depends: Octave (>= 3.8.2)

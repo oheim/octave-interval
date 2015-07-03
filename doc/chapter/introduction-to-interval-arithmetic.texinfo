@@ -11,7 +11,7 @@ Give a digital computer a problem in arithmetic, and it will grind away methodic
 @author Brian Hayes, @uref{http://dx.doi.org/10.1511/2003.6.484,DOI: 10.1511/2003.6.484}
 @end quotation
 
-Floating-point arithmetic, as specified by @uref{http://en.wikipedia.org/wiki/IEEE_floating_point,IEEE 754}, is available in almost every computer system today. It is wide-spread, implemented in common hardware and integral part in programming languages. For example, the binary64 format (a.k.a. double-precision) is the default numeric data type in GNU Octave. Benefits are obvious: The results of arithmetic operations are (mostly) well-defined and comparable between different systems and computation is highly efficient.
+Floating-point arithmetic, as specified by @uref{http://en.wikipedia.org/wiki/IEEE_floating_point,IEEE Std 754}, is available in almost every computer system today. It is wide-spread, implemented in common hardware and integral part in programming languages. For example, the binary64 format (a.k.a. double-precision) is the default numeric data type in GNU Octave. Benefits are obvious: The results of arithmetic operations are (mostly) well-defined and comparable between different systems and computation is highly efficient.
 
 However, there are some downsides of floating-point arithmetic in practice, which will eventually produce errors in computations.  Generally speaking, most of these problems occur in any arithmetic with finite precision.
 
@@ -21,7 +21,7 @@ However, there are some downsides of floating-point arithmetic in practice, whic
 @item
     The binary data types categorically are not suitable for doing financial computations. Very often representational errors are introduced when using “real world” decimal numbers. @url{http://en.wikipedia.org/wiki/Decimal_computer}
 @item
-    Even if the developer would be proficient, most developing environments / technologies limit floating-point arithmetic capabilities to a very limited subset of IEEE 754: Only one or two data types, no rounding modes, missing functions … @url{http://www.cs.berkeley.edu/~wkahan/JAVAhurt.pdf}
+    Even if the developer would be proficient, most developing environments / technologies limit floating-point arithmetic capabilities to a very limited subset of IEEE Std 754: Only one or two data types, no rounding modes, missing functions … @url{http://www.cs.berkeley.edu/~wkahan/JAVAhurt.pdf}
 @item
     Results are @uref{https://hal.archives-ouvertes.fr/hal-00128124/en/,hardly predictable}. All operations produce the best possible accuracy at runtime, this is how a floating point works. Contrariwise, financial computer systems typically use a @uref{http://en.wikipedia.org/wiki/Fixed-point_arithmetic,fixed-point arithmetic} (COBOL, PL/I, …), where overflow and rounding can be precisely predicted at @emph{compile-time}.
 @item

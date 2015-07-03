@@ -34,8 +34,9 @@
 ## function is not considered a set operation and the result carries the best
 ## possible decoration, which is allowed by the input parameters.
 ##
-## Warning: This function is not defined by IEEE 1788 and shall not be confused
-## with the standard's convexHull function, which is implemented by union.
+## Warning: This function is not defined by IEEE Std 1788-2015 and shall not be
+## confused with the standard's convexHull function, which is implemented by
+## @code{union}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

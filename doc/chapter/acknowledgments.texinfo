@@ -19,7 +19,7 @@ The GNU Octave interval package is build upon great third-party software.
     Most unit tests are written in portable ITL format and converted into GNU Octave test cases with the @uref{https://github.com/nehmeier/ITF1788,Interval Testing Framework for IEEE 1788}. The framework has been developed by Maximilian Kiesner and Marco Nehmeier, Chair of Software Engineering, Department of Computer Science, University of Würzburg, Germany.
 
 @item
-    Several unit tests are derived from @uref{https://github.com/nehmeier/libieeep1788,libieeep1788}, a C++ implementation of the IEEE 1788 standard for interval arithmetic. The library contains several unit tests for its IEEE 754 flavor, which is compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 6000 of these test cases into portable ITL format for verification of this package.
+    Several unit tests are derived from @uref{https://github.com/nehmeier/libieeep1788,libieeep1788}, a C++ implementation of IEEE Std 1788-2015, IEEE standard for interval arithmetic. The library contains several unit tests for its IEEE 754 flavor, which is compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 6000 of these test cases into portable ITL format for verification of this package.
     
     @comment libieeep1788/NOTICE
     @comment According to the Apache License, this shall be included in the documentation

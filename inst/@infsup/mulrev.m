@@ -180,7 +180,7 @@ endif
 
 endfunction
 
-%!test "IEEE 1788 mulRevToPair examples";
+%!test "IEEE Std 1788-2015 mulRevToPair examples";
 %!  [u, v] = mulrev (infsup (0), infsup (1, 2));
 %!  assert (isempty (u) & isempty (v));
 %!  [u, v] = mulrev (infsup (0), infsup (0, 1));

@@ -17,7 +17,7 @@
 @release{1.0.0, 2015-06-13}
 @itemize
 @item
-    IEEE 1788, the standard for interval arithmetic, was approved on June 11.  To mark the occasion, the major version number has been raised.
+    IEEE Std 1788-2015, IEEE standard for interval arithmetic, was approved on June 11.  To mark the occasion, the major version number has been raised.
 @item
     All interval constructors have been extended to create interval matrices from a single string.  Commas or spaces may be used as a column separator (consecutive separators are trimmed).  Semicolon and new line characters can be used as a row separator.
 @item
@@ -211,7 +211,7 @@
 @item
     nextout: Function returned wrong results
 @item
-    exacttointerval: Now produces bare intervals instead of decorated intervals in conformance with IEEE 1788
+    exacttointerval: Now produces bare intervals instead of decorated intervals in conformance with IEEE P1788
 @item
     atanh: Function returned wrong results for ±1
 @item
@@ -221,7 +221,7 @@
 @item
     infsup: Function returned wrong interval boundaries for decimal numbers, function failed on mixed numerical and string boundaries in single cell array parameter
 @item
-    mulrevtopair: Fixed order of operands in conformance with IEEE 1788 and wrong results when evaluated on intervals that contain zero
+    mulrevtopair: Fixed order of operands in conformance with IEEE P1788 and wrong results when evaluated on intervals that contain zero
 @end itemize
 
 @release{0.1.0, 2015-01-21}

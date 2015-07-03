@@ -5,7 +5,7 @@
 
 @appendixsec Conformance Claim
 
-The inverval package version @value{version} for GNU Octave is conforming to the IEEE 1788 Standard for Interval Arithmetic.  It is conforming to the set-based flavor with IEEE 754 conformance for the infsup binary64 interval type and without compressed arithmetic.  Additionally it provides no further flavors.
+The inverval package version @value{version} for GNU Octave is conforming to IEEE Std 1788-2015, IEEE Standard for Interval Arithmetic.  It is conforming to the set-based flavor with IEEE 754 conformance for the infsup binary64 interval type and without compressed arithmetic.  Additionally it provides no further flavors.
 
 @appendixsec Conformance Questionnaire
 
@@ -28,7 +28,7 @@ The inverval package version @value{version} for GNU Octave is conforming to th
 @item
     What accuracy is achieved (i.e., tightest, accurate, or valid) for each of the implementation’s interval operations?
 
-    The accuracy requirements of IEEE 1788 are fulfilled.  Most operations achieve tightest accuracy, some operations (especially reverse operations) do not.  The tightness of each operation is documented in the function's documentation string and can be displayed with the help command.
+    The accuracy requirements of IEEE Std 1788-2015 are fulfilled.  Most operations achieve tightest accuracy, some operations (especially reverse operations) do not.  The tightness of each operation is documented in the function's documentation string and can be displayed with the help command.
 
 @item
     Under what conditions is a constructor unable to determine whether a Level 1 value exists that corresponds to the supplied inputs?
@@ -70,7 +70,7 @@ The inverval package version @value{version} for GNU Octave is conforming to th
 @item
     What mechanisms of exception handling are used in exception handlers provided by the implementation?  What additional exception handling is provided by the implementation?
 
-    The exceptions described by IEEE 1788 raise an error, which can be handled with GNU Octave's error mechanism.  The implementation provides no additional exception handling.
+    The exceptions described by IEEE Std 1788-2015 raise an error, which can be handled with GNU Octave's error mechanism.  The implementation provides no additional exception handling.
 
 @item
     [Question does not apply to IEEE 754 conforming types.]

@@ -53,9 +53,9 @@
 ## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.  
 ## Scalar values do broadcast.
 ##
-## Non-standard behavior: This class constructor is not described by IEEE 1788,
-## however it implements both IEEE 1788 functions numsToInterval and
-## textToInterval.
+## Non-standard behavior: This class constructor is not described by IEEE Std
+## 1788-2015, IEEE standard for interval arithmetic, however it implements both
+## standard functions numsToInterval and textToInterval.
 ## 
 ## @example
 ## @group

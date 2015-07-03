@@ -74,9 +74,9 @@
 ## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.
 ## Scalar values do broadcast.
 ##
-## Non-standard behavior: This class constructor is not described by IEEE 1788,
-## however it implements the IEEE 1788 functions setDec, numsToInterval, and
-## textToInterval.
+## Non-standard behavior: This class constructor is not described by IEEE Std
+## 1788-2015, however it implements the standard functions setDec,
+## numsToInterval, and textToInterval.
 ## 
 ## @example
 ## @group
@@ -108,7 +108,8 @@ try
         varargin {end} = __split_interval_literals__ (varargin {end});
     endif
     
-    ## The setDec function, as described by IEEE 1788, may fix decorations
+    ## The setDec function, as described by IEEE Std 1788-2015,
+    ## may fix decorations
     fix_illegal_decorations = true ();
     
     if (nargin >= 1 && ...

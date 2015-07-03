@@ -3,7 +3,7 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
-Development of the GNU Octave Interval Package started in September 2014. The standard for interval arithmetic, IEEE 1788, had been drafted by its working group until July 2014 and was about to enter the balloting process. In January 2015 a first package release could be made, which contained the full set of functions required by the standard's draft. On June 11 the standard finally became approved and the interval package can be seen as the first ever completed standard conforming interval arithmetic library.
+Development of the GNU Octave Interval Package started in September 2014. The IEEE standard for interval arithmetic, IEEE Std 1788-2015, had been drafted by its working group until July 2014 and was about to enter the balloting process. In January 2015 a first package release could be made, which contained the full set of functions required by the standard's draft. On June 11 the standard finally became approved and the interval package can be seen as the first ever completed standard conforming interval arithmetic library.
 
 The creation of the interval package has been straightforward, although the author had no previous experience with Octave. Octave is a great environment for getting things done and its active community helps a lot. In this spirit, the interval package wants to be an easy to use tool for experimenting with and quick prototyping of interval arithmetic algorithms and applications.
 
