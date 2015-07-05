@@ -38,7 +38,7 @@ Permission is granted to copy, distribute and/or modify this document under the 
 @center @image{\file\,,,\description\,}
 @end ifnothtml
 @html
-<p><img border="0" src="\file\.png" alt="\description\" style="margin-left:auto;margin-right:auto;" /></p>
+<img border="0" src="\file\.png" alt="\description\" />
 @end html
 @end macro
 

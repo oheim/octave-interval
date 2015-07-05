@@ -11,7 +11,6 @@ div.example, div.display, div.indentedblock, div.smalldisplay, div.lisp, div.sma
 blockquote { margin-left: 3.2em; margin-right: 3.2em; max-width: 35.6em; }
 body { font-family: sans-serif; padding-left: 7.5em; padding-right: 7.5em; }
 h1, h2, h3, h4, h5 { font-family: serif; }
-img { display: block; }
 div.float table, img { margin-left: auto; margin-right: auto; }
 div.float table, div.float th { border-collapse: collapse; border-top: 1px solid black; border-bottom: 1px solid black; }
 div.float th, div.float td { padding: 0.5em; }
