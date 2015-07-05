@@ -35,14 +35,25 @@
 
 function __print_mesa__ (h, filename)
 
+if (not (exist ('__osmesa_print__')))
+    warning (['__print_mesa__ requires Octave >= 4.0.0, ' ...
+              'falling back to builtin print function'])
+    builtin ('print', h, filename);
+    return
+endif
+
 ## hide figure (for __osmesa_print__ to work)
 set (h, 'visible', 'off');
 
+screensize = get (h, 'position') (3 : 4);
+## print exports raster graphics with 150 dpi
+exportsize = 150 .* get (h, 'paperposition') (3 : 4);
 ## __osmesa_print__ seems to apply no anti-aliasing.
 ## Thus, we apply a FXAA filter ourself. Since this would make the image pretty
 ## small, we have to increase the figure size.
-oldposition = get (h, 'position');
-set (h, 'position', [oldposition(1 : 2), 2*oldposition(3 : 4)]);
+rendersize = 2 .* exportsize;
+set (h, 'position', [0, 0, rendersize]);
+resizefactor = mean (rendersize ./ screensize);
 
 ## The greater figure size together with the FXAA filter effectively increase
 ## the image's resolution. In order to get readable text and visible lines,
@@ -54,8 +65,8 @@ set (h, 'position', [oldposition(1 : 2), 2*oldposition(3 : 4)]);
 a = allchild (h);
 a = a (strcmp (get (a, 'type'), 'axes')); # axis and legend
 for obj = a'
-    set (obj, 'fontsize', 2 * get (obj, 'fontsize'), ...
-              'linewidth', 2 * get (obj, 'linewidth'));
+    set (obj, 'fontsize', resizefactor * get (obj, 'fontsize'), ...
+              'linewidth', resizefactor * get (obj, 'linewidth'));
 endfor
 l = allchild (a);
 if (iscell (l))
@@ -63,7 +74,7 @@ if (iscell (l))
 endif
 l = l (strcmp (get (l, 'type'), 'line') | strcmp (get (l, 'type'), 'patch'));
 for obj = l'
-    set (obj, 'linewidth', 2 * get (obj, 'linewidth'));
+    set (obj, 'linewidth', resizefactor * get (obj, 'linewidth'));
 endfor
 g = allchild (a);
 if (iscell (g))
@@ -76,7 +87,7 @@ if (iscell (p))
 endif
 p = p (strcmp (get (p, 'type'), 'patch'));
 for obj = p'
-    set (obj, 'markersize', 2 * get (obj, 'markersize'));
+    set (obj, 'markersize', resizefactor * get (obj, 'markersize'));
 endfor
 
 ## Capture OpenGL scene (without gl2ps)

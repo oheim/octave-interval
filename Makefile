@@ -182,7 +182,7 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 ## export eps and pdf files from within Octave.
 $(GENERATED_IMAGE_DIR)/%.m.png: doc/image/%.m $(OCT_COMPILED) | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "source ('$<'); if (exist ('__osmesa_print__')); __print_mesa__ (gcf, '$@'); else; builtin ('print', gcf, '$@'); endif"
+	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "source ('$<'); __print_mesa__ (gcf, '$@')"
 $(GENERATED_IMAGE_DIR)/%.m.eps: $(GENERATED_IMAGE_DIR)/%.m.png
 	@convert "$<" -density 120 eps3:"$@"
 $(GENERATED_IMAGE_DIR)/%.m.pdf: $(GENERATED_IMAGE_DIR)/%.m.eps
@@ -206,13 +206,19 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@# from scratch anyway, there is no point in keeping the
 	@# deprecated files.
 	@rm -rf "$(HTML_DIR)"
-	@$(OCTAVE) --silent --eval \
-		"pkg load generate_html; \
-		 function print (h, filename); if (exist ('__osmesa_print__')); __print_mesa__ (h, filename); else; builtin ('print', h, filename); endif; endfunction; \
-		 makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --css-include=doc/manual.css'); \
-		 options = get_html_options ('octave-forge'); \
-		 options.package_doc = 'manual.texinfo'; \
-		 generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
+	@# 1. Load the generate_html package
+	@# 2. Replace builtin print function because of various
+	@#    bugs #44181, #45104, #45137
+	@# 3. Use custom CSS and global version number
+	@#    (only affects package manual)
+	@# 4. Specify path to package manual
+	@# 5. Run the generation
+	@$(OCTAVE) --silent \
+		--eval "pkg load generate_html;" \
+		--eval "function print (h, filename); __print_mesa__ (h, filename); endfunction;" \
+		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --css-include=doc/manual.css');" \
+		--eval "options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo';" \
+		--eval "generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
 
 ## If the src/Makefile changes, recompile all oct-files
