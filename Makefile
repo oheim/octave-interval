@@ -76,12 +76,13 @@ RELEASE_TARBALL = $(RELEASE_DIR).tar
 RELEASE_TARBALL_COMPRESSED = $(RELEASE_TARBALL).gz
 HTML_DIR = $(BUILD_DIR)/$(PACKAGE)-html
 HTML_TARBALL_COMPRESSED = $(HTML_DIR).tar.gz
-INSTALLED_PACKAGE = ~/octave/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
+INSTALLED_PACKAGE_DIR = ~/octave/$(PACKAGE)-$(VERSION)
+INSTALLED_PACKAGE = $(INSTALLED_PACKAGE_DIR)/packinfo/DESCRIPTION
 GENERATED_COPYING = $(BUILD_DIR)/COPYING
 GENERATED_CITATION = $(BUILD_DIR)/CITATION
 GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
-IMAGE_SOURCES = $(wildcard doc/image/*)
+IMAGE_SOURCES = $(wildcard doc/image/*.svg) $(wildcard doc/image/*.ly)
 GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
@@ -177,17 +178,6 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
 		"$<" > /dev/null
 
-## Octave plots
-## Due to a bug with the export of patch objects in gl2ps it makes no sense
-## export eps and pdf files from within Octave.
-$(GENERATED_IMAGE_DIR)/%.m.png: doc/image/%.m $(OCT_COMPILED) | $(GENERATED_IMAGE_DIR)
-	@echo "Compiling $< ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval "source ('$<'); __print_mesa__ (gcf, '$@')"
-$(GENERATED_IMAGE_DIR)/%.m.eps: $(GENERATED_IMAGE_DIR)/%.m.png
-	@convert "$<" -density 120 eps3:"$@"
-$(GENERATED_IMAGE_DIR)/%.m.pdf: $(GENERATED_IMAGE_DIR)/%.m.eps
-	@epstopdf --outfile="$@" "$<"
-
 ## Patch generated stuff into the release tarball
 $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
 $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
@@ -206,11 +196,14 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@# from scratch anyway, there is no point in keeping the
 	@# deprecated files.
 	@rm -rf "$(HTML_DIR)"
+	@# Compile images from m-file scripts,
+	@# which are not shipped in the release tarball
+	@OCTAVE="$(OCTAVE)" make --directory="$(INSTALLED_PACKAGE_DIR)/doc" $(patsubst doc/%,%.png,$(wildcard doc/image/*.m))
 	@# 1. Load the generate_html package
 	@# 2. Replace builtin print function because of various
 	@#    bugs #44181, #45104, #45137
 	@# 3. Use custom CSS and global version number
-	@#    (only affects package manual)
+	@#    (only affects package manual, not function reference)
 	@# 4. Specify path to package manual
 	@# 5. Run the generation
 	@$(OCTAVE) --silent \
