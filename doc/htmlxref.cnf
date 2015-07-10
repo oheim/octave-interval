@@ -1,0 +1,5 @@
+OF = http://octave.sourceforge.net
+OF_INTERVAL = ${OF}/interval
+interval node ${OF_INTERVAL}/function/
+@infsup node ${OF_INTERVAL}/function/@infsup/
+@infsupdec node ${OF_INTERVAL}/function/@infsupdec/

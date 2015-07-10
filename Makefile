@@ -134,7 +134,7 @@ $(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/inst/test:
 
 $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
 	@echo "Creating package release ..."
-	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
+	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" --exclude "htmlxref.cnf" "$@"
 	@# build/.tar* files are used for incremental updates
 	@# to the tarball and must be cleared
 	@rm -f $(BUILD_DIR)/.tar*
@@ -264,7 +264,7 @@ doctest: $(OCT_COMPILED)
 GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) doc/htmlxref.cnf | $(GENERATED_IMAGES_PNG)
 	@(cd doc; \
 	  VERSION=$(VERSION) \
 	  make manual.html)

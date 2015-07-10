@@ -1,0 +1,6 @@
+## This file is used only during generation of documentation for octave-forge.
+## The file doc/htmlxref.cnf gets distributed as part of the release and
+## contains absolute link locations instead.
+interval node ../function/
+@infsup node ../function/@infsup/
+@infsupdec node ../function/@infsupdec/

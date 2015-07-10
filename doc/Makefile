@@ -10,7 +10,7 @@ OCTAVE    ?= octave
 
 all: $(OBJ)
 
-manual.html: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(IMAGE_OBJ)
+manual.html: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(IMAGE_OBJ) htmlxref.cnf
 	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --css-include manual.css "$<"
 
 manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.pdf) $(IMAGE_OBJ)
