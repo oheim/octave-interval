@@ -28,7 +28,7 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 @item
     What accuracy is achieved (i.e., tightest, accurate, or valid) for each of the implementation’s interval operations?
 
-    The accuracy requirements of IEEE Std 1788-2015 are fulfilled.  Most operations achieve tightest accuracy, some operations (especially reverse operations) do not.  The tightness of each operation is documented in the function's documentation string and can be displayed with the help command.
+    The accuracy requirements of IEEE Std 1788-2015 are fulfilled.  Most operations achieve tightest accuracy, some operations (especially reverse operations) do not.  The tightness of each operation is documented in the function's documentation string and can be displayed with the @command{help} command.
 
 @item
     Under what conditions is a constructor unable to determine whether a Level 1 value exists that corresponds to the supplied inputs?
@@ -38,19 +38,19 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 @item
     How are ties broken in rounding numbers if multiple numbers qualify as the rounded result?
 
-    Tie-breaking uses the IEEE 754 default: round ties to even.
+    Tie-breaking uses the IEEE Std 754 default: round ties to even.
 
 @item
     How are interval datums converted to their exact text representations?
 
-    The binary64 boundaries are converted into hexadecimal-significand form as required by the standard.  It is also possible to convert interval datums to exact interval literals in decimal form, see optional arguments of function intervaltotext for that purpose.
+    The binary64 boundaries are converted into hexadecimal-significand form as required by the standard.  It is also possible to convert interval datums to exact interval literals in decimal form, see optional arguments of function @funref{@@infsup/intervaltotext} for that purpose.
 @end enumerate
 
 @item Implementation-defined behavior
 @enumerate 1
     Does the implementation include the interval overlapping function?  If so, how is it made available to the user?
 
-    Yes, the interval overlapping function is implemented under the name overlap.
+    Yes, the interval overlapping function is implemented under the name @funref{@@infsup/overlap}.
 
 @item
     Does the implementation store additional information in a NaI? What functions are provided for the user to set and read this information?
@@ -78,7 +78,7 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 @item
     Does the implementation include different versions of the same operation for a given type and how are these provided to the user?
 
-    The interval matrix multiplication (mtimes) offers two implementations, with either tightest or valid accuracy.  The user may chose the desired version with an optional argument during the function call.
+    The interval matrix multiplication (see @funref{@@infsup/mtimes}) offers two implementations, with either @option{tightest} or @option{valid} accuracy.  The user may chose the desired version with an optional argument during the function call.
 
 @item
     What combinations of formats are supported in interval constructors?
@@ -105,7 +105,7 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 
     Any non-interval input to Level 3 operations is implicitly converted into an interval and the operation silently continues on interval inputs.
 
-    If at least one input is a decorated interval, bare interval inputs are implicitly decorated as described by newDec in the standard document. Implicit promotion from a bare interval to a decorated interval is signaled with GNU Octave's warning mechanism.
+    If at least one input is a decorated interval, bare interval inputs are implicitly decorated as described by @command{newDec} in the standard document. Implicit promotion from a bare interval to a decorated interval is signaled with GNU Octave's warning mechanism.
 
     If implicit conversion fails (e.g., illegal interval literals), bare interval operations raise an error, whereas the decorated interval operations continue on NaI inputs.
 

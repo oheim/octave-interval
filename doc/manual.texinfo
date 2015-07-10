@@ -42,6 +42,10 @@ Permission is granted to copy, distribute and/or modify this document under the 
 @end html
 @end macro
 
+@macro funref{function}
+@inlinefmtifelse{html,@uref{@inlineifset{octave-forge,..}@inlineifclear{octave-forge,http://octave.sourceforge.net/interval}/function/\function\.html,\function\},@command{\function\}}
+@end macro
+
 @titlepage
 @title GNU Octave Interval Package
 @subtitle User Manual

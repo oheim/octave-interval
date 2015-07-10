@@ -7,7 +7,7 @@
 
 Due to the nature of set-based interval arithmetic, one should not observe errors (in the sense of raised GNU Octave error messages) during computation unless operations are evaluated for incompatible data types. Arithmetic operations which are not defined for (parts of) their input, simply ignore anything that is outside of their domain.
 
-However, the interval constructors can produce errors depending on the input. The @command{infsup} constructor will fail if the interval boundaries are invalid. Contrariwise, the (preferred) @command{infsupdec}, @command{midrad} and @command{hull} constructors will only issue a warning and return a [NaI] object, which will propagate and survive through computations. NaI stands for “not an interval”. 
+However, the interval constructors can produce errors depending on the input. The @funref{@@infsup/infsup} constructor will fail if the interval boundaries are invalid. Contrariwise, the (preferred) @funref{@@infsupdec/infsupdec}, @funref{midrad} and @funref{hull} constructors will only issue a warning and return a [NaI] object, which will propagate and survive through computations. NaI stands for “not an interval”. 
 
 Effects of set-based interval arithmetic on partial functions and the NaI object 
 @example
@@ -55,7 +55,7 @@ The constructed interval is a valid and tight enclosure of both numbers. If the 
 @item interval:ImplicitPromote 
 @table @asis
 @item Reason
-An interval operation has been evaluated on both, a bare and a decorated interval. The bare interval has been converted into a decorated interval in order to produce a decorated result. Note: This warning does not occur if a bare interval literal string gets promoted into a decorated interval, e. g., @code{infsupdec (1, 2) + "[3, 4]"} does not produce this warning whereas @code{infsupdec (1, 2) + infsup (3, 4)} does. A bare interval can be explicitly promoted with the @command{newdec} function. 
+An interval operation has been evaluated on both, a bare and a decorated interval. The bare interval has been converted into a decorated interval in order to produce a decorated result. Note: This warning does not occur if a bare interval literal string gets promoted into a decorated interval, e. g., @code{infsupdec (1, 2) + "[3, 4]"} does not produce this warning whereas @code{infsupdec (1, 2) + infsup (3, 4)} does. A bare interval can be explicitly promoted with the @funref{@@infsup/newdec} function. 
 
 @item Possible consequences
 The implicit conversion applies the best possible decoration for the bare interval. If the bare interval has been produced from an interval arithmetic computation, this branch of computation is not covered by the decoration information and the final decoration could be considered wrong. For example,  @code{infsupdec (1, 2) + infsup (0, 1) ^ 0} would ignore that 0^0 is undefined. 
@@ -64,7 +64,7 @@ The implicit conversion applies the best possible decoration for the bare interv
 @item interval:NaI 
 @table @asis
 @item Reason
-An error has occurred during interval construction and the NaI object has been produced. The warning text contains further details. A NaI can be explicitly created with the @command{nai} function. 
+An error has occurred during interval construction and the NaI object has been produced. The warning text contains further details. A NaI can be explicitly created with the @funref{nai} function. 
 
 @item Possible consequences
 Nothing bad is going to happen, because the semantics of NaI are well defined by IEEE Std 1788-2015. However, the user might choose to cancel the algorithm immediately when the NaI is encountered for the first time. 
@@ -78,7 +78,7 @@ Nothing bad is going to happen, because the semantics of NaI are well defined by
 
 The interval package provides a powerful decoration system for intervals, as specified by IEEE Std 1788-2015, IEEE standard for interval arithmetic. By default any interval carries a decoration, which collects additional information about the course of function evaluation on the interval data.
 
-Only the (unfavored) @code{infsup} constructor creates bare, undecorated intervals and the @code{intervalpart} operation may be used to demote decorated intervals into bare, undecorated ones. It is highly recommended to always use the decorated interval arithmetic, which gives additional information about an interval result in exchange for a tiny overhead.
+Only the (unfavored) @funref{@@infsup/infsup} constructor creates bare, undecorated intervals and the @funref{@@infsupdec/intervalpart} operation may be used to demote decorated intervals into bare, undecorated ones. It is highly recommended to always use the decorated interval arithmetic, which gives additional information about an interval result in exchange for a tiny overhead.
 
 The following decorations are available: 
 
@@ -200,7 +200,7 @@ infsupdec ("-42??u") # unbound uncertain form
 
 @section Reverse Arithmetic Operations
 
-Some arithmetic functions also provide reverse mode operations. That is inverse functions with interval constraints. For example the @command{sqrrev} can compute the inverse of the @command{sqr} function on intervals. The syntax is @code{sqrrev (@var{C}, @var{X})} and will compute the enclosure of all numbers x ∈ @var{X} that fulfill the constraint x² ∈ @var{C}.
+Some arithmetic functions also provide reverse mode operations. That is inverse functions with interval constraints. For example the @funref{@@infsup/sqrrev} function can compute the inverse of the @funref{@@infsup/sqr} function on intervals. The syntax is @code{sqrrev (@var{C}, @var{X})} and will compute the enclosure of all numbers x ∈ @var{X} that fulfill the constraint x² ∈ @var{C}.
 
 In the following example, we compute the constraints for base and exponent of the power function pow as shown in the figure. 
 
@@ -249,7 +249,7 @@ M = infsupdec (magic (3)); M (4, 4) = 42
 @end group
 @end example
 
-Whilst most functions (size, isvector, ismatrix, …) work as expected on interval data types, the function isempty is evaluated element-wise and checks if an interval equals the empty set.
+Whilst most functions (@funref{@@infsup/size}, @funref{@@infsup/isvector}, @funref{@@infsup/ismatrix}, …) work as expected on interval data types, the function @funref{@@infsup/isempty} is evaluated element-wise and checks if an interval equals the empty set.
 
 @example
 @group

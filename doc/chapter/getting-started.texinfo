@@ -8,7 +8,7 @@ This chapter gives a quick overview on the interval packages basic capabilities.
 
 @section Input and Output
 
-Before exercising interval arithmetic, interval objects must be created from non-interval data. There are interval constants @command{empty} and @command{entire} and the interval constructors @command{infsupdec} (create an interval from boundaries), @command{midrad} (create an interval from midpoint and radius) and @command{hull} (create an interval enclosure for a list of mixed arguments: numbers, intervals or interval literals). The constructors are very sophisticated and can be used with several kinds of parameters: Interval boundaries can be given by numeric values or string values with decimal numbers. 
+Before exercising interval arithmetic, interval objects must be created from non-interval data. There are interval constants @funref{empty} and @funref{entire} and the interval constructors @funref{@@infsupdec/infsupdec} (create an interval from boundaries), @funref{midrad} (create an interval from midpoint and radius) and @funref{hull} (create an interval enclosure for a list of mixed arguments: numbers, intervals or interval literals). The constructors are very sophisticated and can be used with several kinds of parameters: Interval boundaries can be given by numeric values or string values with decimal numbers. 
 
 Create intervals for performing interval arithmetic 
 @example
@@ -213,9 +213,9 @@ midrad (magic (3), 0.5) * pascal (3)
 
 @section Numerical Operations
 
-Some interval functions do not return an interval enclosure, but a single number (in binary64 precision). Most important are @command{inf} and @command{sup}, which return the lower and upper interval boundaries.
+Some interval functions do not return an interval enclosure, but a single number (in binary64 precision). Most important are @funref{@@infsup/inf} and @funref{@@infsup/sup}, which return the lower and upper interval boundaries.
 
-More such operations are @command{mid} (approximation of the interval's midpoint), @command{wid} (approximation of the interval's width), @command{rad} (approximation of the interval's radius), @command{mag} (interval's magnitude) and @command{mig} (interval's mignitude). 
+More such operations are @funref{@@infsup/mid} (approximation of the interval's midpoint), @funref{@@infsup/wid} (approximation of the interval's width), @funref{@@infsup/rad} (approximation of the interval's radius), @funref{@@infsup/mag} (interval's magnitude) and @funref{@@infsup/mig} (interval's mignitude). 
 
 @example
 @group
@@ -229,7 +229,7 @@ wid (infsupdec ("0.1"))
 
 @section Boolean Operations
 
-Interval comparison operations produce boolean results. While some comparisons are especially for intervals (subset, interior, ismember, isempty, disjoint, …) others are interval extensions of simple numerical comparison. For example, the less-or-equal comparison is mathematically defined as ∀a ∃b a ≤ b ∧ ∀b ∃a a ≤ b.
+Interval comparison operations produce boolean results. While some comparisons are especially for intervals (@funref{@@infsup/subset}, @funref{@@infsup/interior}, @funref{@@infsup/ismember}, @funref{@@infsup/isempty}, @funref{@@infsup/disjoint}, …) others are interval extensions of simple numerical comparison. For example, the less-or-equal comparison is mathematically defined as ∀a ∃b a ≤ b ∧ ∀b ∃a a ≤ b.
 
 @example
 @group

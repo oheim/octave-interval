@@ -34,7 +34,7 @@ Interval arithmetic addresses above problems in its very special way.  It accept
 
 This introduces new possibilities for algorithms.  Any errors are covered by the range of an interval during the course of computation.  All members of intervals are by definition finite real numbers, which results in an exception free and mathematically well-defined arithmetic.  The possibility to actually evaluate a function on a connected range of values and compute a guaranteed enclosure of all possible values is a unique selling point.
 
-For example, the @uref{http://en.wikipedia.org/wiki/Interval_arithmetic#Interval_Newton_method,interval newton method} is able to find @emph{all} zeros of a particular function.  More precisely, the algorithm is able to reliably eliminate ranges of values where the function cannot have a root by a simple interval evaluation of either the function itself or its derivative.
+For example, the @uref{http://en.wikipedia.org/wiki/Interval_arithmetic#Interval_Newton_method,interval newton method} (see @funref{@@infsup/fzero}) is able to find @emph{all} zeros of a particular function.  More precisely, the algorithm is able to reliably eliminate ranges of values where the function cannot have a root by a simple interval evaluation of either the function itself or its derivative.
 
 
 @section Error bounds in real life

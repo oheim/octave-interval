@@ -10,7 +10,7 @@ The GNU Octave interval package is build upon great third-party software.
     Correctly rounded arithmetic operations are based on the @uref{http://www.mpfr.org/,GNU MPFR library} by Guillaume Hanrot, Vincent Lefèvre, Patrick Pélissier, Philippe Théveny and Paul Zimmermann.
 
 @item
-    A linear system solver @code{mldivide} and a polynomial evaluation algorithm @code{polyval} for bare intervals are derived from routines developed for @uref{http://www2.math.uni-wuppertal.de/~xsc/,C-XSC} at University of Wuppertal, Germany.
+    A linear system solver @funref{@@infsup/mldivide} and a polynomial evaluation algorithm @funref{@@infsup/polyval} for bare intervals are derived from routines developed for @uref{http://www2.math.uni-wuppertal.de/~xsc/,C-XSC} at University of Wuppertal, Germany.
 
 @item
     @ref{Introduction to Interval Arithmetic} is partly based on the documentation for the former SIMP package for Octave by Simone Pernice.
@@ -37,7 +37,7 @@ The GNU Octave interval package is build upon great third-party software.
     Some unit tests are derived from @uref{http://www2.math.uni-wuppertal.de/~xsc/xsc/cxsc_new.html,C-XSC}, a C++ class library for interval arithmetic. The library contains some unit tests, which are compatible with the arithmetic of the GNU Octave interval package. I have converted 160 of these test cases into portable ITL format for verification of this package.
 
 @item
-    Fast matrix multiplication @code{mtimes (@var{x}, @var{y}, 'valid')} as well as the linear system solver @code{mldivide} use BLAS routines with directed rounding. An OCT-file interface for setting the rounding mode has been developed by Kai Torben Ohlus, Institute for Reliable Computing, Hamburg University of Technology, Germany.
+    Fast matrix multiplication (see @funref{@@infsup/mtimes}) as well as the linear system solver (see @funref{@@infsup/mldivide}) use BLAS routines with directed rounding. An OCT-file interface for setting the rounding mode has been developed by Kai Torben Ohlus, Institute for Reliable Computing, Hamburg University of Technology, Germany.
 @end itemize
 
 Last, but not least, many thanks to everybody who has contributed to the success of free software!

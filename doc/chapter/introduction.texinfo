@@ -107,7 +107,7 @@ For some interval operations it is not even possible to rely on floating-point r
 
 @emph{Why is the interval package accurate?} The GNU Octave built-in floating-point routines are not useful for interval arithmetic: Their results depend on hardware, system libraries and compilation options. The interval package handles all arithmetic functions with the help of the GNU MPFR library. With MPFR it is possible to compute system-independent, valid and tight enclosures of the correct results for most functions. However, it should be noted that some reverse operations and matrix operations do not exists in GNU MPFR and therefore cannot be computed with the same accuracy.
 
-It is possible to use faster (BLAS based) routines during computation of the matrix multiplication @command{mtimes}, because correctly rounded matrix multiplication could be considered too slow for certain applications. However, this is not the default behavior and must be explicitly activated by the user.
+It is possible to use faster (BLAS based) routines during computation of the matrix multiplication @funref{@@infsup/mtimes}, because correctly rounded matrix multiplication could be considered too slow for certain applications. However, this is not the default behavior and must be explicitly activated by the user.
 
 
 @section Getting Help
