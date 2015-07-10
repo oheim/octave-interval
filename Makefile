@@ -265,16 +265,20 @@ GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
 $(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) doc/htmlxref.cnf | $(GENERATED_IMAGES_PNG)
+	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  VERSION=$(VERSION) \
 	  make manual.html)
+	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
 	@mv doc/manual.html "$@"
 $(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PDF)
+	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  TEXI2DVI_BUILD_DIRECTORY="../$(BUILD_DIR)/doc" \
 	  MAKEINFO="makeinfo -I ../$(BUILD_DIR)/doc --Xopt=--tidy" \
 	  VERSION=$(VERSION) \
 	  make manual.pdf)
+	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
 	@mv doc/manual.pdf "$@"
 
 ###################################################################
