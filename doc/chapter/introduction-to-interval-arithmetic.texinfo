@@ -4,12 +4,17 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
-@section Motivation
-
 @quotation
 Give a digital computer a problem in arithmetic, and it will grind away methodically, tirelessly, at gigahertz speed, until ultimately it produces the wrong answer. … An interval computation yields a pair of numbers, an upper and a lower bound, which are guaranteed to enclose the exact answer. Maybe you still don’t know the truth, but at least you know how much you don’t know.
 @author Brian Hayes, @uref{http://dx.doi.org/10.1511/2003.6.484,DOI: 10.1511/2003.6.484}
 @end quotation
+
+Interval arithmetic adds two unique features to ordinary computer arithmetic: (1) Functions can be evaluated over (connected) subsets of their domain, and (2) any computational errors are automatically considered and are accumulated in the final outcome.  In conjunction they yield a @emph{verified result enclosure} over a range of input values.
+
+These possibilities of interval arithmetic enable great new possibilities, but what is wrong with the well-known computer arithmetic in the first place?
+
+
+@section Motivation
 
 Floating-point arithmetic, as specified by @uref{http://en.wikipedia.org/wiki/IEEE_floating_point,IEEE Std 754}, is available in almost every computer system today. It is wide-spread, implemented in common hardware and integral part in programming languages. For example, the binary64 format (a.k.a. double-precision) is the default numeric data type in GNU Octave. Benefits are obvious: The results of arithmetic operations are (mostly) well-defined and comparable between different systems and computation is highly efficient.
 
@@ -19,9 +24,9 @@ However, there are some downsides of floating-point arithmetic in practice, whic
 @item
     Floating-point arithmetic is often used mindlessly by developers. @url{http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html} @url{http://www.cs.berkeley.edu/~wkahan/Mindless.pdf} @url{http://www.ima.umn.edu/~arnold/disasters/}
 @item
-    The binary data types categorically are not suitable for doing financial computations. Very often representational errors are introduced when using “real world” decimal numbers. @url{http://en.wikipedia.org/wiki/Decimal_computer}
+    The binary (base-2) data types categorically are not suitable for doing financial computations. Very often representational errors are introduced when using “real world” decimal numbers. @url{http://en.wikipedia.org/wiki/Decimal_computer}
 @item
-    Even if the developer would be proficient, most developing environments / technologies limit floating-point arithmetic capabilities to a very limited subset of IEEE Std 754: Only one or two data types, no rounding modes, missing functions … @url{http://www.cs.berkeley.edu/~wkahan/JAVAhurt.pdf}
+    Even if the developer would be proficient, most developing environments / technologies limit floating-point arithmetic capabilities to a very limited subset of IEEE Std 754: Only one or two data types, no rounding modes, missing functions, … @url{http://www.cs.berkeley.edu/~wkahan/JAVAhurt.pdf}
 @item
     Results are @uref{https://hal.archives-ouvertes.fr/hal-00128124/en/,hardly predictable}. All operations produce the best possible accuracy at runtime, this is how a floating point works. Contrariwise, financial computer systems typically use a @uref{http://en.wikipedia.org/wiki/Fixed-point_arithmetic,fixed-point arithmetic} (COBOL, PL/I, …), where overflow and rounding can be precisely predicted at @emph{compile-time}.
 @item
@@ -34,14 +39,14 @@ Interval arithmetic addresses above problems in its very special way.  It accept
 
 This introduces new possibilities for algorithms.  Any errors are covered by the range of an interval during the course of computation.  All members of intervals are by definition finite real numbers, which results in an exception free and mathematically well-defined arithmetic.  The possibility to actually evaluate a function on a connected range of values and compute a guaranteed enclosure of all possible values is a unique selling point.
 
-For example, the @uref{http://en.wikipedia.org/wiki/Interval_arithmetic#Interval_Newton_method,interval newton method} (see @funref{@@infsup/fzero}) is able to find @emph{all} zeros of a particular function.  More precisely, the algorithm is able to reliably eliminate ranges of values where the function cannot have a root by a simple interval evaluation of either the function itself or its derivative.
+For example, the @uref{http://en.wikipedia.org/wiki/Interval_arithmetic#Interval_Newton_method,interval newton method} (see @funref{@@infsup/fzero}) is able to find @emph{all} zeros of a particular function.  More precisely, the algorithm is able to reliably eliminate ranges of values where the function cannot have a root by a simple interval evaluation of either the function itself or its derivative.  Global convergence can be achieved by bisecting the intermediate ranges.
 
 
 @section Error bounds in real life
 
 @c This section is largely based on the documentation for the Octave SIMP package by Simone Pernice.
 
-Intervals can be used instead of simple numbers to automatically take into account the tolerance of the values used in calculation.  Every day we need to compute the result of a lot of simple mathematical equations.  For example the cost of the apples bought at the farmer's market is given by:
+Intervals can be used instead of simple numbers to automatically take into account the tolerance (or uncertainty) of the values used in calculation.  Every day we need to compute the result of a lot of simple mathematical equations.  For example the cost of the apples bought at the farmer's market is given by:
 @display
     apple price = apple cost per kilo · kilos of apple bought
 @end display
@@ -64,9 +69,9 @@ For example, if a pipe breaks and you want to buy a new one you need its diamete
 diameter = circumference / π
 @end display
 
-Here there are two errors: the circumference is known within the tolerance given by your meter, moreover π has an infinite number of digits while only few of them can be used in the operation. You may think the error is negligible, the result is enough accurate to buy a new pipe in a hardware shop.  However, the not infinite precision of those operations avoid the use of computers as automatic theorem demonstration tools and so on.
+Here are two errors: the circumference is known within the tolerance given by your meter, moreover π has an infinite number of digits while only few of them can be used in the operation. You may think the error is negligible, the result is enough accurate to buy a new pipe in a hardware shop.  However, the not infinite precision of those operations avoid the use of computers as automatic theorem demonstration tools and so on.
 
-This kind of issue is quite common in engineer design.  What engineers do is to make sure their design will work in the work in the worst case or in most of the cases (usually more than 99.9 percent). A simple example follows.
+This kind of issue is quite common in engineer design.  What engineers do is to make sure their design will work in the worst case or in most of the cases (usually more than 99.9 percent). A simple example follows.
 
 Let us say you want to repaint the walls of your living room completely messed up by your children.  You need to compute how many paint cans you need to buy.  The equation is quite simple:
 @display
@@ -98,7 +103,7 @@ What happens in the worst case? Just put pessimistic values in the equation. We 
 
 Last, consider the best case. Is it enough to only buy a single can of paint?  Just put optimistic values in the equation. We get: paint cans = 2 · (5.4 + 3.6) · 3 / (40 · 1.3) = 1.04, which means one can of paint would not be enough.
 
-You have to buy at least two cans, but probably need one more.  For this result we had to go through the equation multiple times (at least twice) and carefully consider for each variable, which would be the most optimistic / pessimistic value assignment, which is not trivial. For example consider the room size versus the paint efficiency: It depends whether the highest or the lowest value takes an optimistic or pessimistic role.
+You have to buy at least two cans, but probably need one more.  For this result we had to go through the equation multiple times (at least twice) and carefully consider for each variable, which would be the most optimistic / pessimistic value assignment, which is not trivial. For example consider the room size versus the paint efficiency: It depends whether the highest or the lowest value takes an optimistic or pessimistic role—and this was a simple example with basic arithmetic operations.
 
 Using interval arithmetic it is possible to compute the result in a single run with ranges as inputs.  The following example demonstrates this and further below is explained how it works.
 
@@ -123,25 +128,62 @@ ceil (cans)
 @end example
 
 
+@section Pros and Cons
+
+Interval arithmetic, introduced in the 1960s, is a young and powerful technique.  Its first application has been to control errors in computations and simplify error analysis for engineers (rounding errors, truncation errors, and conversion errors).  The range evaluation of functions has soon been exploited for reliably checking for certain function values and for self-verifying algorithms.  Latest usage scenarios comprise root finding, function approximation, and robust pattern recognition.  More useful applications are certainly left to be detected.
+
+The major problem in interval arithmetic is that errors can easily build up, such that the final result is too wide to be useful.  This is especially true when the @emph{dependency problem} applies, that is, a single variable occurs several times within a computation and is represented by an interval in each occurrence.  Then, the variable virtually may take different values independently, which introduces a systematic error. For example, computing @code{sqr (x)} will always yield a subset of @code{times (x, x)}, the latter considers two intervals independent of each other.
+
+@example
+@group
+x = infsupdec ("[-1, 3]");
+sqr (x)
+ @result{} [0, 9]_com
+times (x, x)
+ @result{} [-3, +9]_com
+@end group
+@end example
+
+After all, it is possible to reduce overestimation errors by subdividing the function's domain into smaller intervals, e. g., with bisection.  This technique is called “mincing”.  The computational errors are proportional to the interval width and a linear convergence can be achieved.
+
+@example
+@group
+x1 = infsupdec ("[-1, 1]");
+x2 = infsupdec ("[1, 3]");
+hull (sqr (x1), sqr (x2))
+ @result{} [0, 9]_com
+hull (times (x1, x1), times (x2, x2))
+ @result{} [-1, +9]_com
+@end group
+@end example
+
+However, this does not help when ranges of input values are too big.  For certain applications it is better to use statistical models, where infinite domains are supported.
+
+
 @section Theory
 
-The two most important and fundamental concepts in the context of the interval package are:
-@enumerate
+The most important and fundamental concepts in the context of the interval package are:
+@itemize
 @item
     Intervals are closed, connected subsets of the real numbers.  Intervals may be unbound (in either or both directions) or empty.  In special cases @code{+inf} and @code{-inf} are used to denote boundaries of unbound intervals, but any member of the interval is a @emph{finite} real number.
 @item
     Classical functions are extended to interval functions as follows: The result of function @var{f} evaluated on interval @var{x} is an interval enclosure of all possible values of @var{f} over @var{x} where the function is defined.
     
     Most interval arithmetic functions in this package manage to produce a very accurate such enclosure.
-@end enumerate
+@item
+    The result of an interval arithmetic function is an interval in general.  It might happen, that the mathematical range of a function consist of several intervals, but their union will be returned, e. g., 1 / [-1, 1] = [Entire].
+    
+    However, there are also exceptions, e. g., @funref{@@infsup/mulrev} with two return values, and supplementary functions that do not return intervals.
+@end itemize
 
-
-@subsection Online Introductions
-
-There are several good introductions to interval arithmetic available on the internet.
+There are good introductions to interval arithmetic available and should be consulted for a deeper understanding of the topic.  The following recommendations can make a starting point.
 @itemize
 @item
     @uref{http://en.wikipedia.org/wiki/Interval_arithmetic,Wikipedia sv. interval arithmetic}
+    
+@item
+    Introduction to Interval Analysis (2009), by Ramon E. Moore, R. Baker Kearfott, and Michael J. Cloud. Cambridge University Press. ISBN 978-0898716696.
+    
 @item
     @uref{http://www-sop.inria.fr/coprin/logiciels/ALIAS/Examples/COURS/index.html,Introduction to the methods used in interval arithmetic (French)}.
 
@@ -150,19 +192,5 @@ There are several good introductions to interval arithmetic available on the int
 
 @item
     @uref{http://www.cs.utep.edu/interval-comp/,Interval related collection of links}
+    
 @end itemize
-
-
-@subsection Moore's fundamental theorem of interval arithmetic
-
-Let y = f(x) be the result of interval-evaluation of f over a box x = (x1,  … , xn) using any interval versions of its component library functions. Then
-@enumerate
-@item
-    In all cases, y contains the range of f over x, that is, the set of f(x) at points of x where it is defined: y ⊇ Rge(f | x) = @{f(x) | x ∈ x ∩ Dom(f) @}
-@item
-    If also each library operation in f is everywhere defined on its inputs, while evaluating y, then f is everywhere defined on x, that is Dom(f) ⊇ x.
-@item
-    If in addition, each library operation in f is everywhere continuous on its inputs, while evaluating y, then f is everywhere continuous on x.
-@item
-    If some library operation in f is nowhere defined on its inputs, while evaluating y, then f is nowhere defined on x, that is Dom(f) ∩ x = Ø.
-@end enumerate
