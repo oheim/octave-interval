@@ -1,0 +1,15 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
+The IEEE standard for interval arithmetic is an important asset for the general use of interval arithmetic.  Several interval arithmetic libraries have been created (most popular for the language C++), which vary greatly in their philosophy, completeness and—most important—mathematical definition of certain functions and arithmetic evaluation.  The standard grants support for several interval arithmetic flavors, but fights incompatibilities on many layers: Interval arithmetic applications shall be portable, predictable, and reproducible.  This is especially important since interval arithmetic shall lead to reliable results.  Also a common standard is necessary to catalyze the availability of (fast) interval operations in hardware.
+
+For all conforming implementations certain accuracy constraints must be satisfied and a good amount of interval functions must be implemented.  It is defined how to handle functions that are not globally defined or have limiting values.  Also such basic things like interval representation, many useful constructors, and interchange encoding are addressed.
+
+The interval package for GNU Octave is the first complete implementation that claims to be standard conforming.
+
+@menu
+* Function Names:: List of functions defined by IEEE Std 1788-2015@*and how they have been implemented in GNU Octave
+* Conformance Claim:: Official statement and some@*implementation specific details regarding the standard
+@end menu

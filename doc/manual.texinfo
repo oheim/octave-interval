@@ -130,12 +130,7 @@ Appendix
 
 @node IEEE Std 1788-2015
 @appendix IEEE Std 1788-2015
-
-@menu
-* Function Names::
-* Conformance Claim::
-@end menu
-
+@include chapter/ieee-1788.texinfo
 @node Function Names
 @include chapter/ieee-1788-functions.texinfo
 @node Conformance Claim

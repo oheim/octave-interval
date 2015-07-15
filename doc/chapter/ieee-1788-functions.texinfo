@@ -5,57 +5,414 @@
 
 @appendixsec Function Index
 
-In terms of a better integration into the GNU Octave language, several operations use a function name which is different from the name proposed in the standard document. The following table translates the function names of the standard for interval arithmetic where function names differ.
+In terms of a better integration into the GNU Octave language, several operations use a function name which is different from the name proposed in the standard document. The following table translates and lists the implemented function names of the IEEE standard for interval arithmetic.
 
-@table @asis
-@item numsToInterval
-    bare version: @code{infsup (@var{l}, @var{u})}
-    @*
-    decorated version: @code{infsupdec (@var{l}, @var{u})}
-@item textToInterval
-    bare version: @code{infsup (@var{s})}
-    @*
-    decorated version: @code{infsupdec (@var{s})}
-@item setDec
-    @code{infsupdec (@var{x}, @var{dx})}
-@item exp10
-    pow10
-@item exp2
-    pow2
-@item recip
-    inv
-@item sqrt
-    realsqrt
-@item rootn
-    nthroot
-@item logp1
-    log1p
-@item roundTiesToAway
-    round
-@item roundTiesToEven
-    roundb
-@item trunc
-    fix
-@item sum
-    on intervals: sum
-    @*
-    on binary64 numbers: mpfr_vector_sum_d
-@item dot
-    on intervals: dot
-    @*
-    on binary64 numbers: mpfr_vector_dot_d
-@item sumAbs
-    on intervals: sumabs
-    @*
-    on binary64 numbers: @code{mpfr_vector_sum_d (@var{rounding mode}, abs (@var{x}))}
-@item sumSquare
-    on intervals: sumsq
-    @*
-    on binary64 numbers: @code{mpfr_vector_dot_d (@var{rounding mode}, @var{x}, @var{x})}
-@item intersection
-    intersect
-@item convexHull
-    union
-@item mulRevToPair
-    mulrev with two output parameters
-@end table
+The implementation provides several additional functions, but this section lists only functions that are mentioned in IEEE Std 1788-2015.
+
+
+
+@appendixsubsec Interval constants
+
+See @funref{empty} and @funref{entire}.
+
+
+
+@appendixsubsec Constructors
+
+The operations textToInterval (@var{S}), numsToInterval (@var{l}, @var{u}), and setDec (@var{x}) are implemented by the class constructors @funref{@@infsup/infsup} for bare intervals and @funref{@@infsupdec/infsupdec} for decorated intervals.
+
+
+
+@appendixsubsec Required functions
+
+@float Table,tab:required-forward-functions
+@caption{Required forward elementary functions}
+@shortcaption{Required forward elementary functions}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness
+@ifnottex
+@headitem
+    @tab @r{@emph{Basic operations}} @tab
+@end ifnottex
+@item neg (@var{x})
+    @tab@funref{@@infsup/uminus}
+    @tab tightest
+@item add (@var{x}, @var{y})
+    @tab@funref{@@infsup/plus}
+    @tab tightest
+@item sub (@var{x}, @var{y})
+    @tab@funref{@@infsup/minus}
+    @tab tightest
+@item mul (@var{x}, @var{y})
+    @tab@funref{@@infsup/times}
+    @tab tightest
+@item div (@var{x}, @var{y})
+    @tab@funref{@@infsup/rdivide}
+    @tab tightest
+@item recip (@var{x})
+    @tab@funref{@@infsup/inv}
+    @tab tightest (on scalar intervals)
+@item sqr (@var{x})
+    @tab@funref{@@infsup/sqr}
+    @tab tightest
+@item sqrt (@var{x})
+    @tab@funref{@@infsup/realsqrt}
+    @tab tightest
+@item fma (@var{x}, @var{y}, @var{z})
+    @tab@funref{@@infsup/fma}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Power functions}} @tab
+@end ifnottex
+@item pown (@var{x}, @var{p})
+    @tab@funref{@@infsup/pown}
+    @tab tightest
+@item pow (@var{x}, @var{y})
+    @tab@funref{@@infsup/pow}
+    @tab tightest
+@item exp (@var{x})
+    @tab@funref{@@infsup/exp}
+    @tab tightest
+@item exp2 (@var{x})
+    @tab@funref{@@infsup/pow2}
+    @tab tightest
+@item exp10 (@var{x})
+    @tab@funref{@@infsup/pow10}
+    @tab tightest
+@item log (@var{x})
+    @tab@funref{@@infsup/log}
+    @tab tightest
+@item log2 (@var{x})
+    @tab@funref{@@infsup/log2}
+    @tab tightest
+@item log10 (@var{x})
+    @tab@funref{@@infsup/log10}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Trigonometric / hyperbolic}} @tab
+@end ifnottex
+@item sin (@var{x})
+    @tab@funref{@@infsup/sin}
+    @tab tightest
+@item cos (@var{x})
+    @tab@funref{@@infsup/cos}
+    @tab tightest
+@item tan (@var{x})
+    @tab@funref{@@infsup/tan}
+    @tab tightest
+@item asin (@var{x})
+    @tab@funref{@@infsup/asin}
+    @tab tightest
+@item acos (@var{x})
+    @tab@funref{@@infsup/acos}
+    @tab tightest
+@item atan (@var{x})
+    @tab@funref{@@infsup/atan}
+    @tab tightest
+@item atan2 (@var{y}, @var{x})
+    @tab@funref{@@infsup/atan2}
+    @tab tightest
+@item sinh (@var{x})
+    @tab@funref{@@infsup/sinh}
+    @tab tightest
+@item cosh (@var{x})
+    @tab@funref{@@infsup/cosh}
+    @tab tightest
+@item tanh (@var{x})
+    @tab@funref{@@infsup/tanh}
+    @tab tightest
+@item asinh (@var{x})
+    @tab@funref{@@infsup/asinh}
+    @tab tightest
+@item acosh (@var{x})
+    @tab@funref{@@infsup/acosh}
+    @tab tightest
+@item atanh (@var{x})
+    @tab@funref{@@infsup/atanh}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Integer functions}} @tab
+@end ifnottex
+@item sign (@var{x})
+    @tab@funref{@@infsup/sign}
+    @tab tightest
+@item ceil (@var{x})
+    @tab@funref{@@infsup/ceil}
+    @tab tightest
+@item floor (@var{x})
+    @tab@funref{@@infsup/floor}
+    @tab tightest
+@item trunc (@var{x})
+    @tab@funref{@@infsup/fix}
+    @tab tightest
+@item roundTiesToEven (@var{x})
+    @tab@funref{@@infsup/roundb}
+    @tab tightest
+@item roundTiesToAway (@var{x})
+    @tab@funref{@@infsup/round}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Absmax functions}} @tab
+@end ifnottex
+@item abs (@var{x})
+    @tab@funref{@@infsup/abs}
+    @tab tightest
+@item min (@var{x}, @var{y})
+    @tab@funref{@@infsup/min}
+    @tab tightest
+@item max (@var{x}, @var{y})
+    @tab@funref{@@infsup/max}
+    @tab tightest
+@end multitable
+@end float
+
+@float Table,tab:required-reverse-functions
+@caption{Required reverse functions}
+@shortcaption{Required reverse functions}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness
+@ifnottex
+@headitem
+    @tab @r{@emph{From unary functions}} @tab
+@end ifnottex
+@item sqrRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/sqrrev}
+    @tab tightest
+@item absRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/absrev}
+    @tab tightest
+@item pownRev (@var{c}, @var{x}, @var{p})
+    @tab@funref{@@infsup/pownrev}
+    @tab valid (tightest for @var{p} ≥ @minus{}2)
+@item sinRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/sinrev}
+    @tab valid
+@item cosRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/cosrev}
+    @tab valid
+@item tanRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/tanrev}
+    @tab valid
+@item coshRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/coshrev}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{From binary functions}} @tab
+@end ifnottex
+@item mulRev (@var{b}, @var{c}, @var{x})
+    @tab@funref{@@infsup/mulrev}
+    @tab tightest
+@item powRev1 (@var{b}, @var{c}, @var{x})
+    @tab@funref{@@infsup/powrev1}
+    @tab valid
+@item powRev2 (@var{a}, @var{c}, @var{x})
+    @tab@funref{@@infsup/powrev2}
+    @tab valid
+@item atan2Rev1 (@var{b}, @var{c}, @var{x})
+    @tab@funref{@@infsup/atan2rev1}
+    @tab valid
+@item atan2Rev2 (@var{a}, @var{c}, @var{x})
+    @tab@funref{@@infsup/atan2rev2}
+    @tab valid
+@ifnottex
+@headitem
+    @tab @r{@emph{Two-output division}} @tab
+@end ifnottex
+@item mulRevToPair (@var{b}, @var{c})
+    @tab@funref{@@infsup/mulrev}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Cancellative addition@*and subtraction}} @tab
+@end ifnottex
+@item cancelMinus (@var{x}, @var{y})
+    @tab@funref{@@infsup/cancelminus}
+    @tab tightest
+@item cancelPlus (@var{x}, @var{y})
+    @tab@funref{@@infsup/cancelplus}
+    @tab tightest
+@end multitable
+@end float
+
+@float Table,tab:required-set-operations
+@caption{Required set operations}
+@shortcaption{Required set operations}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness
+@item intersection (@var{x}, @var{y})
+    @tab@funref{@@infsup/intersect}
+    @tab tightest
+@item convexHull (@var{x}, @var{y})
+    @tab@funref{@@infsup/union}
+    @tab tightest
+@end multitable
+@end float
+
+
+@float Table,tab:required-numeric-functions
+@caption{Required numeric functions of intervals}
+@shortcaption{Required numeric functions of intervals}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Rounding mode
+@item inf (@var{x})
+    @tab@funref{@@infsup/inf}
+    @tab
+@item sup (@var{x})
+    @tab@funref{@@infsup/sup}
+    @tab
+@item mid (@var{x})
+    @tab@funref{@@infsup/mid}
+    @tab to nearest, ties to even
+@item wid (@var{x})
+    @tab@funref{@@infsup/wid}
+    @tab toward +∞
+@item rad (@var{x})
+    @tab@funref{@@infsup/rad}
+    @tab toward +∞
+@item mag (@var{x})
+    @tab@funref{@@infsup/mag}
+    @tab
+@item mig (@var{x})
+    @tab@funref{@@infsup/mig}
+    @tab
+@end multitable
+@end float
+
+
+@float Table,tab:required-boolean-functions
+@caption{Required boolean functions of intervals}
+@shortcaption{Required boolean functions of intervals}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Description
+@item equal (@var{a}, @var{b})
+    @tab@funref{@@infsup/eq}
+    @tab @var{a} equals @var{b}
+@item subset (@var{a}, @var{b})
+    @tab@funref{@@infsup/subset}
+    @tab @var{a} is a subset of @var{b}
+@item less (@var{a}, @var{b})
+    @tab@funref{@@infsup/le}
+    @tab @var{a} is weakly less than @var{b}
+@item precedes (@var{a}, @var{b})
+    @tab@funref{@@infsup/precedes}
+    @tab @var{a} is left of but may touch @var{b}
+@item interior (@var{a}, @var{b})
+    @tab@funref{@@infsup/interior}
+    @tab @var{a} is interior to @var{b}
+@item strictLess (@var{a}, @var{b})
+    @tab@funref{@@infsup/lt}
+    @tab @var{a} is strictly less than @var{b}
+@item strictPrecedes (@var{a}, @var{b})
+    @tab@funref{@@infsup/strictprecedes}
+    @tab @var{a} is strictly left of @var{b}
+@item disjoint (@var{a}, @var{b})
+    @tab@funref{@@infsup/disjoint}
+    @tab @var{a} and @var{b} are disjoint
+@end multitable
+@end float
+
+
+@appendixsubsec Recommended functions
+
+@float Table,tab:recommended-functions
+@caption{Recommended functions}
+@shortcaption{Recommended functions}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness / Comments
+@ifnottex
+@headitem
+    @tab @r{@emph{Elementary functions}} @tab
+@end ifnottex
+@item rootn (@var{x}, @var{q})
+    @tab@funref{@@infsup/nthroot}
+    @tab valid (tightest for @var{q} ≥ @minus{}2)
+@item expm1 (@var{x})
+    @tab@funref{@@infsup/expm1}
+    @tab tightest
+@item logp1 (@var{x})
+    @tab@funref{@@infsup/log1p}
+    @tab tightest
+@item hypot (@var{x}, @var{y})
+    @tab@funref{@@infsup/hypot}
+    @tab tightest
+@item rSqrt (@var{x})
+    @tab@funref{@@infsup/rsqrt}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Boolean functions}} @tab
+@end ifnottex
+@item isCommonInterval (@var{x})
+    @tab@funref{@@infsup/iscommoninterval}
+    @tab (=bound and non-empty)
+@item isSingleton (@var{x})
+    @tab@funref{@@infsup/issingleton}
+    @tab (=single real)
+@item isMember (@var{m}, @var{x})
+    @tab@funref{@@infsup/ismember}
+    @tab
+@ifnottex
+@headitem
+    @tab @r{@emph{Extended comparison}} @tab
+@end ifnottex
+@item overlap (@var{a}, @var{b})
+    @tab@funref{@@infsup/overlap}
+    @tab
+
+@end multitable
+@end float
+
+
+
+@appendixsubsec Operations on/with decorations
+
+See @funref{@@infsup/newdec}, @funref{@@infsupdec/intervalpart}, and @funref{@@infsupdec/decorationpart}.  The operation setDec is implemented by @funref{@@infsupdec/infsupdec}.
+
+@appendixsubsec Reduction operations
+
+See @funref{mpfr_vector_sum_d} and @funref{mpfr_vector_dot_d}.  The operations @code{sumAbs} and @code{sumSquare} can be computed with @code{mpfr_vector_sum_d (@var{rounding mode}, abs (@var{x}))} and @code{mpfr_vector_dot_d (@var{rounding mode}, @var{x}, @var{x})} respectively.
+
+@appendixsubsec Input
+
+The operation @code{textToInterval} is implemented by the class constructors @funref{@@infsup/infsup} for bare intervals and @funref{@@infsupdec/infsupdec} for decorated intervals.  Both are able to operate on interval literals provided as strings.
+
+@appendixsubsec Output
+
+See @funref{@@infsup/intervaltotext}.
+
+@appendixsubsec Exact text representation
+
+See @funref{exacttointerval} and @funref{@@infsup/intervaltoexact}.
+
+@appendixsubsec Interchange representation and encoding
+
+See @funref{interval_bitpack} and @funref{@@infsup/bitunpack}.
