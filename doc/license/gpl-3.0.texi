@@ -78,6 +78,9 @@ modification follow.
 
 @heading TERMS AND CONDITIONS
 
+@html
+<div class="zero-list"></div>
+@end html
 @enumerate 0
 @item Definitions.
 
@@ -221,6 +224,9 @@ produce it from the Program, in the form of source code under the
 terms of section 4, provided that you also meet all of these
 conditions:
 
+@html
+<div class="alpha-list"></div>
+@end html
 @enumerate a
 @item
 The work must carry prominent notices stating that you modified it,
@@ -265,6 +271,9 @@ sections 4 and 5, provided that you also convey the machine-readable
 Corresponding Source under the terms of this License, in one of these
 ways:
 
+@html
+<div class="alpha-list"></div>
+@end html
 @enumerate a
 @item
 Convey the object code in, or embodied in, a physical product
@@ -387,6 +396,9 @@ Notwithstanding any other provision of this License, for material you
 add to a covered work, you may (if authorized by the copyright holders
 of that material) supplement the terms of this License with terms:
 
+@html
+<div class="alpha-list"></div>
+@end html
 @enumerate a
 @item
 Disclaiming warranty or limiting liability differently from the terms

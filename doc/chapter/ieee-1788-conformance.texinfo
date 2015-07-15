@@ -9,6 +9,9 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 
 @appendixsec Conformance Questionnaire
 
+@html
+<div class="alpha-list"></div>
+@end html
 @enumerate a
 @item Implementation-defined behavior
 @enumerate 1

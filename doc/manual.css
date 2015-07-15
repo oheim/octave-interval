@@ -16,3 +16,7 @@ div.float table { width: 38em; }
 div.float table, div.float th { border-collapse: collapse; border-top: 1px solid black; border-bottom: 1px solid black; }
 div.float th, div.float td { padding: 0.5em; }
 dd > p:first-child { margin-top: 0; }
+div.alpha-list + ol { list-style-type:lower-alpha; }
+div.zero-list + ol { counter-reset: item -1; }
+div.zero-list + ol > li { display:block; }
+div.zero-list + ol > li:before { content: counter(item) "."; counter-increment: item; display:inline-block; margin-left: -2.5em; min-width: 2em; margin-right: 0.2em; text-align: right; }
