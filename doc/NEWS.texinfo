@@ -14,10 +14,22 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{1.0.1, 2015-xx-xx}
+@release{1.0.1, 2015-07-16}
 @itemize
 @item
-    Minor improvements to the documentation
+    Improvements to the documentation
+    @itemize
+    @item
+        Added cross-references between package documentation and function reference
+    @item
+        Extended information about interval arithmetic in general
+    @item
+        Extended information about implemented IEEE Std 1788-2015 functions and fixed references to the standard document
+    @item
+        Simplified package description
+    @item
+        Graphics with higher resolutions, demo of interval sombrero function plot, and minor style fixes
+    @end itemize
 @end itemize
 
 @noindent Bugfixes
