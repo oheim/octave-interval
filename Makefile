@@ -190,15 +190,10 @@ $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
 
 ## HTML Documentation for Octave Forge
 $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
-	@echo "Generating HTML documentation for the package. This may take a while ..."
-	@# The html generation has problems when there are leftovers from
-	@# a previous run, see bug #45111. Since anything is generated
-	@# from scratch anyway, there is no point in keeping the
-	@# deprecated files.
-	@rm -rf "$(HTML_DIR)"
 	@# Compile images from m-file scripts,
 	@# which are not shipped in the release tarball
 	@OCTAVE="$(OCTAVE)" make --directory="$(INSTALLED_PACKAGE_DIR)/doc" $(patsubst doc/%,%.png,$(wildcard doc/image/*.m))
+	@echo "Generating HTML documentation for the package. This may take a while ..."
 	@# 1. Load the generate_html package
 	@# 2. Replace builtin print function because of various
 	@#    bugs #44181, #45104, #45137
