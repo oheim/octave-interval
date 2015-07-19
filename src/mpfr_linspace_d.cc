@@ -35,7 +35,7 @@ DEFUN_DLD (mpfr_linspace_d, args, nargout,
   "\n\n"
   "@example\n"
   "@group\n"
-  "mpfr_linspace_d (-inf, 1, 10, 3)\n"
+  "mpfr_linspace_d (-inf, 0, 10, 3)\n"
   "  @result{} ans = \n"
   "        0    5   10\n"
   "@end group\n"
