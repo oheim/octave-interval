@@ -41,6 +41,7 @@ Interval function (most with tightest accuracy)
  @infsup/gammaln
  @infsup/hypot
  @infsup/ldivide
+ @infsup/linspace
  @infsup/log
  @infsup/log10
  @infsup/log1p
