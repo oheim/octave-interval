@@ -1,5 +1,6 @@
 SHELL          = /bin/sh
 OBJ            = mpfr_function_d.oct \
+                 mpfr_linspace_d.oct \
                  mpfr_matrix_mul_d.oct \
                  mpfr_to_string_d.oct \
                  mpfr_vector_sum_d.oct \
