@@ -99,11 +99,18 @@ DEFUN_DLD (mpfr_linspace_d, args, nargout,
                     MPFR_RNDZ);
         for (unsigned int j = 0; j <= n_1; j ++)
           {
-            mpfr_mul_ui (tmp1, mp_limit, j, rnd); // exact
-            mpfr_mul_ui (tmp2, mp_base, n_1 - j, rnd); // exact
-            mpfr_add (tmp1, tmp1, tmp2, rnd); // rounded
-            mpfr_div_ui (tmp1, tmp1, n_1, rnd); // rounded
-            result_d.elem (i, j) = mpfr_get_d (tmp1, rnd);
+            if (j == 0 || mpfr_equal_p (mp_base, mp_limit))
+              result_d.elem (i, j) = mpfr_get_d (mp_base, MPFR_RNDZ);
+            else if (j == n_1)
+              result_d.elem (i, j) = mpfr_get_d (mp_limit, MPFR_RNDZ);
+            else
+              {
+                mpfr_mul_ui (tmp1, mp_limit, j, MPFR_RNDZ); // exact
+                mpfr_mul_ui (tmp2, mp_base, n_1 - j, MPFR_RNDZ); // exact
+                mpfr_add (tmp1, tmp1, tmp2, rnd); // rounded
+                mpfr_div_ui (tmp1, tmp1, n_1, rnd); // rounded
+                result_d.elem (i, j) = mpfr_get_d (tmp1, rnd);
+              }
           }
       }
 
