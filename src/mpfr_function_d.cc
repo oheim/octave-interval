@@ -252,8 +252,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   
   // Read parameters
   const std::string function = args (0).string_value ();
-  const mpfr_rnd_t  rnd      = parse_rounding_mode (
-                               args (1).matrix_value ().elem (0));
+  const mpfr_rnd_t  rnd      = parse_rounding_mode (args (1).scalar_value ());
   Matrix            arg1     = args (2).matrix_value ();
   Matrix            arg2;
   Matrix            arg3;

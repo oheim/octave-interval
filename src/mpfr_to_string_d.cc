@@ -70,8 +70,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
       return octave_value_list ();
     }
 
-  const mpfr_rnd_t rnd     = parse_rounding_mode (
-                             args (0).matrix_value ().elem (0));
+  const mpfr_rnd_t rnd     = parse_rounding_mode (args (0).scalar_value ());
   const std::string format = args (1).string_value ();
   const char* str_template = (format == "decimal") ? "%.16R*g" :
                              (format == "exact decimal") ? "%.751R*g" :

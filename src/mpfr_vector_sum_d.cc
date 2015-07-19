@@ -65,8 +65,7 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
     }
   
   // Read parameters
-  const mpfr_rnd_t rnd    = parse_rounding_mode (
-                            args (0).matrix_value ().elem (0));
+  const mpfr_rnd_t rnd    = parse_rounding_mode (args (0).scalar_value ());
   const Matrix     vector = args (1).row_vector_value ();
   if (error_state)
     return octave_value_list ();
