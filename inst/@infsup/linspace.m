@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefn {Function File} {} linspace (@var{BASE}, @var{LIMIT})
-## @deftypefn {Function File} {} linspace (@var{BASE}, @var{LIMIT}, @var{N})
+## @deftypefnx {Function File} {} linspace (@var{BASE}, @var{LIMIT}, @var{N})
 ## 
 ## Return a row vector of @var{N} linearly spaced members between @var{BASE}
 ## and @var{LIMIT}.

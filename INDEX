@@ -106,6 +106,7 @@ Interval comparison
 Set operation
  @infsup/bisect
  @infsup/intersect
+ @infsup/mince
  @infsup/nextout
  @infsup/setdiff
  @infsup/setxor

@@ -38,7 +38,7 @@
 ##     b = [8, 32]
 ## @end group
 ## @end example
-## @seealso{@@infsup/nextout}
+## @seealso{@@infsup/mince, @@infsup/nextout}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
