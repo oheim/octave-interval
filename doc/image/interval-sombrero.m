@@ -12,10 +12,8 @@ yellow = [181 137 0] ./ 255;
 orange = [203 75 22] ./ 255;
 red = [220 50 47] ./ 255;
 
-range = linspace (-8, 8, 13);
-[x, y] = meshgrid (range, range);
-x = midrad (vec (x), (range (2) - range (1)) ./ 2);
-y = midrad (vec (y), (range (2) - range (1)) ./ 2);
+range = mince (infsupdec (-8, 8), 13);
+[x, y] = meshgrid (range);
 
 h = hypot (x, y);
 z = sin (h) ./ h;
