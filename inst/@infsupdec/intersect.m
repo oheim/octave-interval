@@ -15,9 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} intersect (@var{A}, @var{B})
+## @deftypefn {Function File} {} {} intersect (@var{A})
+## @deftypefnx {Function File} {} {} intersect (@var{A}, @var{B})
+## @deftypefnx {Function File} {} {} intersect (@var{A}, [], @var{DIM})
 ## 
-## Intersect two intervals.
+## Intersect intervals.
+##
+## With two arguments the intersection is built pair-wise.  Otherwise the
+## intersection is computed for all interval members along dimension @var{DIM},
+## which defaults to the first non-singleton dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -40,30 +46,41 @@
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = intersect (a, b)
+function result = intersect (a, b, dim)
 
-if (nargin ~= 2)
-    print_usage ();
-    return
-endif
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
-    b = infsupdec (b);
 endif
 
 if (isnai (a))
     result = a;
     return
 endif
-if (isnai (b))
-    result = b;
-    return
-endif
+
+switch (nargin)
+    case 1
+        bare = intersect (intervalpart (a));
+    case 2
+        if (not (isa (b, "infsupdec")))
+            b = infsupdec (b);
+        endif
+        if (isnai (b))
+            result = b;
+            return
+        endif
+        bare = intersect (intervalpart (a), intervalpart (b));
+    case 3
+        if (not (builtin ("isempty", b)))
+            warning ("intersect: second argument is ignored");
+        endif
+        bare = intersect (intervalpart (a), [], dim);
+    otherwise
+        print_usage ();
+        return
+endswitch
 
 ## intersection must not retain any useful decoration
-result = infsupdec (intersect (intervalpart (a), intervalpart (b)), "trv");
+result = infsupdec (bare, "trv");
 
 endfunction
 

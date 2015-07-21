@@ -15,9 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} union (@var{A}, @var{B})
+## @deftypefn {Function File} {} {} union (@var{A})
+## @deftypefnx {Function File} {} {} union (@var{A}, @var{B})
+## @deftypefnx {Function File} {} {} union (@var{A}, [], @var{DIM})
 ## 
-## Build the interval hull of the union of two intervals.
+## Build the interval hull of the union of intervals.
+##
+## With two arguments the union is built pair-wise.  Otherwise the union is
+## computed for all interval members along dimension @var{DIM}, which defaults
+## to the first non-singleton dimension.
 ##
 ## Accuracy: The result is exact.
 ##
@@ -40,31 +46,41 @@
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = union (a, b)
-
-if (nargin ~= 2)
-    print_usage ();
-    return
-endif
+function result = union (a, b, dim)
 
 if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
-    b = infsupdec (b);
 endif
 
 if (isnai (a))
     result = a;
     return
 endif
-if (isnai (b))
-    result = b;
-    return
-endif
+
+switch (nargin)
+    case 1
+        bare = union (intervalpart (a));
+    case 2
+        if (not (isa (b, "infsupdec")))
+            b = infsupdec (b);
+        endif
+        if (isnai (b))
+            result = b;
+            return
+        endif
+        bare = union (intervalpart (a), intervalpart (b));
+    case 3
+        if (not (builtin ("isempty", b)))
+            warning ("union: second argument is ignored");
+        endif
+        bare = union (intervalpart (a), [], dim);
+    otherwise
+        print_usage ();
+        return
+endswitch
 
 ## convexHull must not retain any useful decoration
-result = infsupdec (union (intervalpart (a), intervalpart (b)), "trv");
+result = infsupdec (bare, "trv");
 
 endfunction
 

@@ -15,9 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} union (@var{A}, @var{B})
+## @deftypefn {Function File} {} {} union (@var{A})
+## @deftypefnx {Function File} {} {} union (@var{A}, @var{B})
+## @deftypefnx {Function File} {} {} union (@var{A}, [], @var{DIM})
 ## 
-## Build the interval hull of the union of two intervals.
+## Build the interval hull of the union of intervals.
+##
+## With two arguments the union is built pair-wise.  Otherwise the union is
+## computed for all interval members along dimension @var{DIM}, which defaults
+## to the first non-singleton dimension.
 ##
 ## Accuracy: The result is exact.
 ##
@@ -36,22 +42,32 @@
 ## Keywords: interval
 ## Created: 2014-10-02
 
-function result = union (a, b)
+function result = union (a, b, dim)
 
-if (nargin ~= 2)
-    print_usage ();
-    return
-endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-if (not (isa (b, "infsup")))
-    b = infsup (b);
-endif
 
-## This also works for unbound intervals and empty intervals
-l = min (a.inf, b.inf);
-u = max (a.sup, b.sup);
+switch (nargin)
+    case 1
+        l = min (a.inf);
+        u = max (a.sup);
+    case 2
+        if (not (isa (b, "infsup")))
+            b = infsup (b);
+        endif
+        l = min (a.inf, b.inf);
+        u = max (a.sup, b.sup);
+    case 3
+        if (not (builtin ("isempty", b)))
+            warning ("union: second argument is ignored");
+        endif
+        l = min (a.inf, [], dim);
+        u = max (a.sup, [], dim);
+    otherwise
+        print_usage ();
+        return
+endswitch
 
 result = infsup (l, u);
 

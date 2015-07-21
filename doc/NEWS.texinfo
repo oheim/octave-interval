@@ -14,6 +14,16 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{1.1.0, xxxx-xx-xx}
+@itemize
+@item
+    meshgrid, mince: New utility functions to help plotting of interval functions
+@item
+    linspace: New interval arithmetic function
+@item
+    intersect, union: Allow intersection (or union) of several intervals along a dimension within interval matrices.
+@end itemize
+
 @release{1.0.1, 2015-07-16}
 @itemize
 @item

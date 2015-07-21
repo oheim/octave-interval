@@ -15,9 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} intersect (@var{A}, @var{B})
+## @deftypefn {Function File} {} {} intersect (@var{A})
+## @deftypefnx {Function File} {} {} intersect (@var{A}, @var{B})
+## @deftypefnx {Function File} {} {} intersect (@var{A}, [], @var{DIM})
 ## 
-## Intersect two intervals.
+## Intersect intervals.
+##
+## With two arguments the intersection is built pair-wise.  Otherwise the
+## intersection is computed for all interval members along dimension @var{DIM},
+## which defaults to the first non-singleton dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -36,25 +42,35 @@
 ## Keywords: interval
 ## Created: 2014-10-02
 
-function result = intersect (a, b)
+function result = intersect (a, b, dim)
 
-if (nargin ~= 2)
-    print_usage ();
-    return
-endif
 if (not (isa (a, "infsup")))
     a = infsup (a);
 endif
-if (not (isa (b, "infsup")))
-    b = infsup (b);
-endif
 
-## This also works for unbound intervals and empty intervals
-l = max (a.inf, b.inf);
-u = min (a.sup, b.sup);
+switch (nargin)
+    case 1
+        l = max (a.inf);
+        u = min (a.sup);
+    case 2
+        if (not (isa (b, "infsup")))
+            b = infsup (b);
+        endif
+        l = max (a.inf, b.inf);
+        u = min (a.sup, b.sup);
+    case 3
+        if (not (builtin ("isempty", b)))
+            warning ("intersect: second argument is ignored");
+        endif
+        l = max (a.inf, [], dim);
+        u = min (a.sup, [], dim);
+    otherwise
+        print_usage ();
+        return
+endswitch
 
 ## If the intervals do not intersect, the result must be empty.
-emptyresult = a.sup < b.inf | b.sup < a.inf;
+emptyresult = l > u;
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
