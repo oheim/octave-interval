@@ -156,8 +156,7 @@ endfunction
 %!  axis off
 %!  range = infsup (0, 9);
 %!  x = linspace (inf (range), sup (range), 250);
-%!  X = infsup (inf (range) : sup (range) - 1, ...
-%!              inf (range) + 1 : sup (range));
+%!  X = mince (range, 9);
 %!  f = @ (x) 0.5 * sin (x) .* x .^ 2;
 %!  y = f (x);
 %!  Y = f (X);
