@@ -371,3 +371,64 @@ infsup (A) \ [4; 8]
 @end group
 @end example
 
+
+@section Plotting
+
+Plotting of intervals in 2D and 3D can be achieved with the functions @funref{@@infsup/plot} and @funref{@@infsup/plot3} respectively.  However, some differences in comparison with classical plotting in Octave shall be noted.
+
+When plotting classical (non-interval) functions in Octave, one normally uses a vector and evaluates a function on that vector element-wise.  The resulting X and Y (and possibly Z) coordinates are then drawn against each other, whilst coordinates can be connected using interpolated lines.  The plot shows an approximation of the function's graph and the accuracy (and smoothness of the graph) primarily depends on the number of coordinates where the function has been evaluated.
+
+Evaluating the same function on a single interval (e. g. the part of the function's domain that is of interest) yields a single interval result which covers the actual range of the function.  Plotting just two intervals, input and output, against each other is boring, because the plot would only show a single rectangle.  Contrariwise, evaluating the function for many individual points (e. g. using @funref{@@infsup/linspace}) would hardly fit in the philosophy of interval arithmetic.  Individual points of evaluation are not interconnected by the interval plotting functions, because that would introduce errors.
+
+The solution for plotting functions with interval arithmetic is called: “mincing”.  The @funref{@@infsup/mince} function divides an interval into many smaller adjacent subsets, which can be used for range evaluations of the function.  As a result, one gets vectors of intervals, which produce a coverage of the function's graph using rectangles.  Please note, how the rectangles cover the sine function's true range from @minus{}1 to 1 in the following example, whilst the interpolated lines make a poor approximation.
+
+@example
+@group
+@c doctest: skip
+hold on
+blue = [38 139 210] ./ 255;
+shade = [238 232 213] ./ 255;
+@end group
+@group
+## Interval plotting
+x = mince (2*infsup (0, "pi"), 6);
+plot (x, sin (x), shade)
+@end group
+@group
+## Classical plotting
+x = linspace (0, 2*pi, 7);
+plot (x, sin (x), 'linewidth', 2, 'color', blue)
+@end group
+@group
+set (gca, 'XTick', 0 : pi : 2*pi)
+set (gca, 'XTickLabel', @{'0', 'pi', '2 pi'@})
+@end group
+@end example
+
+@myimage{image/interval-vs-normal-plot.m,Plotting an interval function and a classic function}
+
+
+For 3D plotting the @funref{@@infsup/meshgrid} function, as usual, becomes handy.  The following example shows how two different ranges for X and Y coordinates are used to construct a grid, where the function @funref{@@infsup/atan2} is evaluated.  In this particular case the interval grid has gaps, because X and Y coordinates have been constructed such that intervals do not intersect.
+
+@example
+@group
+@c doctest: skip
+red = [220 50 47] ./ 255;
+shade = [238 232 213] ./ 255;
+@end group
+@group
+x = midrad (1 : 6, 0.25);
+y = midrad (-3 : 3, 0.25);
+[x, y] = meshgrid (x, y);
+z = atan2 (y, x);
+plot3 (x, y, z, shade, red)
+@end group
+@group
+view ([-35, 30])
+box off
+set (gca, "xgrid", "on", "ygrid", "on", "zgrid", "on")
+@end group
+@end example
+
+@myimage{image/interval-plot3.m,Plotting 3D interval grid points}
+
