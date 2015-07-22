@@ -15,12 +15,21 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} max (@var{X}, @var{Y})
+## @deftypefn {Function File} {} max (@var{X})
+## @deftypefnx {Function File} {} max (@var{X}, @var{Y})
+## @deftypefnx {Function File} {} max (@var{X}, [], @var{DIM})
 ## 
-## Compute the maximum value for each pair of numbers chosen from intervals
-## @var{X} and @var{Y}.
+## Compute the maximum value chosen from intervals.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## This function does not return the greatest element of the interval (see
+## @code{sup}), but returns an interval enclosure of the function:
+## @display
+## max (@var{x}, @var{y}) = ( (x + y) + abs (x - y) ) / 2
+## @end display
+##
+## With two arguments the function is applied element-wise.  Otherwise the
+## maximum is computed for all interval members along dimension @var{DIM},
+## which defaults to the first non-singleton dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -39,32 +48,49 @@
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = max (x, y)
-
-if (nargin ~= 2)
-    print_usage ();
-    return
-endif
+function result = max (x, y, dim)
 
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
-    y = infsupdec (y);
 endif
 
 if (isnai (x))
     result = x;
     return
 endif
-if (isnai (y))
-    result = y;
-    return
-endif
 
-result = newdec (max (intervalpart (x), intervalpart (y)));
+switch (nargin)
+    case 1
+        bare = max (intervalpart (x));
+    case 2
+        if (not (isa (y, "infsupdec")))
+            y = infsupdec (y);
+        endif
+        if (isnai (y))
+            result = y;
+            return
+        endif
+        bare = max (intervalpart (x), intervalpart (y));
+    case 3
+        if (not (builtin ("isempty", y)))
+            warning ("max: second argument is ignored");
+        endif
+        bare = max (intervalpart (x), [], dim);
+    otherwise
+        print_usage ();
+        return
+endswitch
+
+result = newdec (bare);
 ## max is defined and continuous everywhere
-result.dec = min (result.dec, min (x.dec, y.dec));
+switch (nargin)
+    case 1
+        result.dec = min (result.dec, min (x.dec));
+    case 2
+        result.dec = min (result.dec, min (x.dec, y.dec));
+    case 3
+        result.dec = min (result.dec, min (x.dec, [], dim));
+endswitch
 
 endfunction
 

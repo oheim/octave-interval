@@ -15,12 +15,21 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} min (@var{X}, @var{Y})
+## @deftypefn {Function File} {} min (@var{X})
+## @deftypefnx {Function File} {} min (@var{X}, @var{Y})
+## @deftypefnx {Function File} {} min (@var{X}, [], @var{DIM})
 ## 
-## Compute the minimum value for each pair of numbers chosen from intervals
-## @var{X} and @var{Y}.
+## Compute the minimum value chosen from intervals.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## This function does not return the least element of the interval (see
+## @code{inf}), but returns an interval enclosure of the function:
+## @display
+## min (@var{x}, @var{y}) = ( (x + y) - abs (x - y) ) / 2
+## @end display
+##
+## With two arguments the function is applied element-wise.  Otherwise the
+## minimum is computed for all interval members along dimension @var{DIM},
+## which defaults to the first non-singleton dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -39,32 +48,49 @@
 ## Keywords: interval
 ## Created: 2014-10-13
 
-function result = min (x, y)
-
-if (nargin ~= 2)
-    print_usage ();
-    return
-endif
+function result = min (x, y, dim)
 
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
-    y = infsupdec (y);
 endif
 
 if (isnai (x))
     result = x;
     return
 endif
-if (isnai (y))
-    result = y;
-    return
-endif
 
-result = newdec (min (intervalpart (x), intervalpart (y)));
+switch (nargin)
+    case 1
+        bare = min (intervalpart (x));
+    case 2
+        if (not (isa (y, "infsupdec")))
+            y = infsupdec (y);
+        endif
+        if (isnai (y))
+            result = y;
+            return
+        endif
+        bare = min (intervalpart (x), intervalpart (y));
+    case 3
+        if (not (builtin ("isempty", y)))
+            warning ("min: second argument is ignored");
+        endif
+        bare = min (intervalpart (x), [], dim);
+    otherwise
+        print_usage ();
+        return
+endswitch
+
+result = newdec (bare);
 ## min is defined and continuous everywhere
-result.dec = min (result.dec, min (x.dec, y.dec));
+switch (nargin)
+    case 1
+        result.dec = min (result.dec, min (x.dec));
+    case 2
+        result.dec = min (result.dec, min (x.dec, y.dec));
+    case 3
+        result.dec = min (result.dec, min (x.dec, [], dim));
+endswitch
 
 endfunction
 

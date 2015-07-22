@@ -21,7 +21,7 @@
 @item
     linspace: New interval arithmetic function
 @item
-    intersect, union: Allow intersection (or union) of several intervals along a dimension within interval matrices.
+    intersect, max, min, union: Allow evaluation as aggregate functions within an interval matrix along a common dimension
 @item
     Improvements to the documentation
     @itemize

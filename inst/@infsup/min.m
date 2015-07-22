@@ -15,12 +15,21 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} min (@var{X}, @var{Y})
+## @deftypefn {Function File} {} min (@var{X})
+## @deftypefnx {Function File} {} min (@var{X}, @var{Y})
+## @deftypefnx {Function File} {} min (@var{X}, [], @var{DIM})
 ## 
-## Compute the minimum value for each pair of numbers chosen from intervals
-## @var{X} and @var{Y}.
+## Compute the minimum value chosen from intervals.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## This function does not return the least element of the interval (see
+## @code{inf}), but returns an interval enclosure of the function:
+## @display
+## min (@var{x}, @var{y}) = ( (x + y) - abs (x - y) ) / 2
+## @end display
+##
+## With two arguments the function is applied element-wise.  Otherwise the
+## minimum is computed for all interval members along dimension @var{DIM},
+## which defaults to the first non-singleton dimension.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -39,23 +48,35 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = min (x, y)
+function result = min (x, y, dim)
 
-if (nargin ~= 2)
-    print_usage ();
-    return
-endif
 if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
-if (not (isa (y, "infsup")))
-    y = infsup (y);
-endif
 
-l = min (x.inf, y.inf);
-u = min (x.sup, y.sup);
-
-l (isempty (x) | isempty (y)) = inf;
+switch (nargin)
+    case 1
+        l = min (x.inf);
+        u = min (x.sup);
+        l (any (isempty (x))) = inf;
+    case 2
+        if (not (isa (y, "infsup")))
+            y = infsup (y);
+        endif
+        l = min (x.inf, y.inf);
+        u = min (x.sup, y.sup);
+        l (isempty (x) | isempty (y)) = inf;
+    case 3
+        if (not (builtin ("isempty", y)))
+            warning ("min: second argument is ignored");
+        endif
+        l = min (x.inf, [], dim);
+        u = min (x.sup, [], dim);
+        l (any (isempty (x), dim)) = inf;
+    otherwise
+        print_usage ();
+        return
+endswitch
 
 result = infsup (l, u);
 
