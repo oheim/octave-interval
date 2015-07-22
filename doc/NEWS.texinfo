@@ -22,10 +22,6 @@
     linspace: New interval arithmetic function
 @item
     intersect, union: Allow intersection (or union) of several intervals along a dimension within interval matrices.
-@end itemize
-
-@release{1.0.1, 2015-07-16}
-@itemize
 @item
     Improvements to the documentation
     @itemize
@@ -36,9 +32,11 @@
     @item
         Extended information about implemented IEEE Std 1788-2015 functions and fixed references to the standard document
     @item
+        Added information about plotting intervals
+    @item
         Simplified package description
     @item
-        Graphics with higher resolutions, demo of interval sombrero function plot, and minor style fixes
+        Graphics with higher resolutions, demo of interval sombrero function plot on first page, and minor style fixes
     @end itemize
 @end itemize
 
