@@ -14,7 +14,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{1.1.0, xxxx-xx-xx}
+@release{1.1.0, 2015-07-23}
 @itemize
 @item
     meshgrid, mince: New utility functions to help plotting of interval functions
