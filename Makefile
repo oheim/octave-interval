@@ -168,7 +168,7 @@ $(GENERATED_IMAGE_DIR)/%.ly.png $(GENERATED_IMAGE_DIR)/%.ly.eps: doc/image/%.ly 
 $(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
 	@# The output of pdftocairo has a much better quality
 	@# compared to the output from inkscape --export-png.
-	@pdftocairo -png -singlefile -gray -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
+	@pdftocairo -png -singlefile -transp -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
 	@mv "$(BUILD_DIR)/cairo.tmp.png" "$@"
 $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
@@ -204,7 +204,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@$(OCTAVE) --silent \
 		--eval "pkg load generate_html;" \
 		--eval "function print (h, filename); __print_mesa__ (h, filename); endfunction;" \
-		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --css-include=doc/manual.css');" \
+		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' --init-file=doc/manual.init -D octave-forge --css-include=doc/manual.css');" \
 		--eval "options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo';" \
 		--eval "generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
@@ -259,7 +259,7 @@ doctest: $(OCT_COMPILED)
 GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.init doc/manual.css $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
 	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  VERSION=$(VERSION) \

@@ -20,3 +20,6 @@ div.alpha-list + ol { list-style-type:lower-alpha; }
 div.zero-list + ol { counter-reset: item -1; }
 div.zero-list + ol > li { display:block; }
 div.zero-list + ol > li:before { content: counter(item) "."; counter-increment: item; display:inline-block; margin-left: -2.5em; min-width: 2em; margin-right: 0.2em; text-align: right; }
+div.logo { text-align: center; }
+div.logo object { height: 4em; }
+div.logo object, div.logo img { padding-bottom: 1em; padding-top: 5em; }
