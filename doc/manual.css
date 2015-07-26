@@ -5,17 +5,21 @@ See the file manual.texinfo for copying conditions.
 */
 body > * { max-width: 42em; }
 div.header { max-width: 100%; }
-hr { margin-left: 0; border: none; border-top: 3px double black; }
+hr { margin-left: 0; border: none; border-top: 3px double #657b83; }
+div.header, div.float-caption { color: #657b83; }
 ul, ol { max-width: 39.5em; padding-left: 2.5em; }
 div.example, div.display, div.indentedblock, div.smalldisplay, div.lisp, div.smallindentedblock, div.smallexample, div.smalllisp { max-width: 38.8em; margin-left: 3.2em; }
 blockquote { margin-left: 3.2em; margin-right: 3.2em; max-width: 35.6em; }
-body { font-family: sans-serif; padding-left: 7.5em; padding-right: 7.5em; }
-h1, h2, h3, h4, h5 { font-family: serif; text-align: left !important; }
+body, span.roman { font-family: 'Roboto Condensed', RobotoCondensedRegular, sans-serif; }
+body { padding-left: 7.5em; padding-right: 7.5em; }
+h1, h2, h3, h4, h5, pre.menu-comment { font-family: 'Roboto Condensed', RobotoCondensedBold, serif; text-align: left !important; }
 div.float table, img { margin-left: auto; margin-right: auto; }
 div.float table { width: 38em; }
 div.float table, div.float th { border-collapse: collapse; border-top: 1px solid black; border-bottom: 1px solid black; }
 div.float th, div.float td { padding: 0.5em; }
 dd > p:first-child { margin-top: 0; }
+a { color: #268bd2; }
+a:visited { color: #d33682; }
 div.alpha-list + ol { list-style-type:lower-alpha; }
 div.zero-list + ol { counter-reset: item -1; }
 div.zero-list + ol > li { display:block; }
@@ -23,3 +27,8 @@ div.zero-list + ol > li:before { content: counter(item) "."; counter-increment: 
 div.logo { text-align: center; }
 div.logo object { height: 4em; }
 div.logo object, div.logo img { padding-bottom: 1em; padding-top: 5em; }
+code, samp { font-family: 'Fantasque Sans Mono', FantasqueSansMonoItalic,  monospace; padding: 0 0.1em; font-style: italic; }
+pre.example, pre.smallexample, pre.verbatim { font-family: 'Fantasque Sans Mono', FantasqueSansMonoRegular,  monospace; }
+pre.example { background-color: #fdf6e3; color: #657b83; padding: 0.5em; }
+.example { margin-bottom: 1em; }
+.example + .example { margin-top: -0.5em }
