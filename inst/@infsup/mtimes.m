@@ -76,8 +76,18 @@ endif
 if (nargin == 3)
     switch (accuracy)
         case "valid"
-            result = fast_mtimes (x, y);
-            return
+            ## Fast matrix multiplication uses rounding mode switches, which
+            ## might not work on all systems.  Thus, we validate whether the
+            ## BLAS routines respect rounding modes correctly on the current
+            ## platform and fall back to the slow implementation otherwise.
+            persistent use_rounding_mode = check_rounding_mode ();
+            if (use_rounding_mode)
+                result = fast_mtimes (x, y);
+                return
+            else
+                warning (['mtimes: rounding modes not supported, falling ', ...
+                          'back to slow but accurate matrix multiplication']);
+            endif
         case "tight"
             ## Default mode
         otherwise
@@ -124,5 +134,27 @@ C = infsup (l, u);
 
 endfunction
 
+function works = check_rounding_mode ()
+
+try
+    unwind_protect
+        works = true ();
+        __setround__ (+inf);
+        works &= (1 + realmin > 1);
+        works &= ([1 1 -1] * [1; realmin; realmin] > 1);
+        __setround__ (-inf);
+        works &= (1 + realmin == 1);
+        works &= ([1 1 -1] * [1; realmin; realmin] < 1);
+    unwind_protect_cleanup
+        __setround__ (0.5);
+    end_unwind_protect
+catch
+    works = false ();
+end_try_catch
+
+endfunction
+
 %!test "from the documentation string";
 %! assert (infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]) * infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]) == infsup ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375]));
+%!test "matrix multiplication using BLAS routines";
+%! assert (mtimes (infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]), infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]), 'valid') == infsup ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375]));
