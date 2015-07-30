@@ -111,10 +111,10 @@ function C = fast_mtimes (A, B)
 rhoA = sign (mA) .* min (abs (mA), rA);
 rhoB = sign (mB) .* min (abs (mB), rB);
 unwind_protect
-    __setround__ (+1); # rounding towards +inf
+    __setround__ (+inf);
     rC = abs (mA) * rB + rA * (abs (mB) + rB) + (-abs (rhoA)) * abs (rhoB);
     u = mA * mB + rhoA * rhoB + rC;
-    __setround__ (-1); # rounding towards -inf
+    __setround__ (-inf);
     l = mA * mB + rhoA * rhoB - rC;
 unwind_protect_cleanup
     __setround__ (0); # restore default rounding mode (to nearest)
