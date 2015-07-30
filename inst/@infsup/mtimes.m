@@ -117,7 +117,7 @@ unwind_protect
     __setround__ (-inf);
     l = mA * mB + rhoA * rhoB - rC;
 unwind_protect_cleanup
-    __setround__ (0); # restore default rounding mode (to nearest)
+    __setround__ (0.5); # restore default rounding mode (to nearest)
 end_unwind_protect
 
 C = infsup (l, u);

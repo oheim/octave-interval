@@ -33,7 +33,7 @@ DEFUN_DLD (__setround__, args, nargout,
   "@table @option\n"
   "@item @var{rnd} =  -inf\n"
   "switch rounding downwards (towards -inf)\n"
-  "@item @var{rnd} =  0\n"
+  "@item @var{rnd} =  0.5\n"
   "switch rounding to nearest (default rounding mode)\n"
   "@item @var{rnd} =  +inf\n"
   "switch rounding upwards (towards +inf)\n"
@@ -54,13 +54,13 @@ DEFUN_DLD (__setround__, args, nargout,
     mode = FE_DOWNWARD;
   else if (rnd == +INFINITY)
     mode = FE_UPWARD;
-  else if (rnd == 0.0)
+  else if (rnd == 0.5)
     mode = FE_TONEAREST;
   else
     // No other rounding modes might be supported
     // (depends on the C implementation)
     error ("__setround__: Unsupported rounding mode, please use -inf, +inf "
-           "or 0");
+           "or 0.5");
 
   if (error_state)
     return octave_value_list ();
@@ -76,17 +76,16 @@ DEFUN_DLD (__setround__, args, nargout,
 %!  __setround__ (+inf);
 %!  assert (1 + realmin > 1, true);
 %!  assert (1 - realmin == 1, true);
-%!  __setround__ (0);
+%!  __setround__ (0.5);
 %!test
 %!  __setround__ (-inf);
 %!  assert (1 + realmin == 1, true);
 %!  assert (1 - realmin < 1, true);
-%!  __setround__ (0);
+%!  __setround__ (0.5);
 %!test 
-%!  __setround__ (0);
+%!  __setround__ (0.5);
 %!  assert (1 + realmin == 1, true);
 %!  assert (1 - realmin == 1, true);
-%!  __setround__ (0);
 %!shared
-%!  __setround__ (0);
+%!  __setround__ (0.5);
 */
