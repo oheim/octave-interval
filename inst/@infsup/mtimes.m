@@ -85,7 +85,8 @@ if (nargin == 3)
                 result = fast_mtimes (x, y);
                 return
             else
-                warning (['mtimes: rounding modes not supported, falling ', ...
+                warning ('interval:rounding', ...
+                         ['mtimes: rounding modes not supported, falling ', ...
                           'back to slow but accurate matrix multiplication']);
             endif
         case "tight"

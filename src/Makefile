@@ -36,5 +36,11 @@ mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
 ## <cfenv> api oct-file
+##
+## Note to redistributors:
+## If you can't compile this function for a particular platform
+## or `test @infsup/mtimes` throws a warning in Octave, you can safely
+## omit the __setround__ function from a redistributed binary package.
+## However, please inform the package maintainer of the error.
 __setround__.oct: __setround__.cc
 	$(MKOCTFILE)  -o $@  $<
