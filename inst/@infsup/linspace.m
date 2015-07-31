@@ -73,4 +73,4 @@ result = infsup (l, u);
 
 endfunction
 
-%!assert (isequal (linspace (infsup (0), infsup (10), 9), infsup (linspace (0, 10, 9))));
+%!xtest assert (isequal (linspace (infsup (0), infsup (10), 9), infsup (linspace (0, 10, 9))));

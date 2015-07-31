@@ -77,4 +77,4 @@ result.dec = min (result.dec, min (base.dec, limit.dec));
 
 endfunction
 
-%!assert (isequal (linspace (infsupdec (0), infsupdec (10), 9), infsupdec (linspace (0, 10, 9))));
+%!xtest assert (isequal (linspace (infsupdec (0), infsupdec (10), 9), infsupdec (linspace (0, 10, 9))));
