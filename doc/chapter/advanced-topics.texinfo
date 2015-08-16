@@ -25,9 +25,9 @@ infsupdec (0) ^ infsupdec (0)
 @group
 ## Illegal interval construction creates a NaI
 infsupdec (3, 2)
-  @result{} warning: illegal interval boundaries:
-      infimum greater than supremum
-    ans = [NaI]
+  @print{} warning: illegal interval boundaries:
+  @print{} infimum greater than supremum
+  @result{} ans = [NaI]
 @end group
 @end example
 @example
@@ -253,9 +253,9 @@ Whilst most functions (@funref{@@infsup/size}, @funref{@@infsup/isvector}, @funr
 
 @example
 @group
-builtin ("isempty", empty ()), isempty (empty ())
-  @result{}
-    ans = 0
-    ans =  1
+builtin ("isempty", empty ())
+  @result{} ans = 0
+isempty (empty ())
+  @result{} ans =  1
 @end group
 @end example

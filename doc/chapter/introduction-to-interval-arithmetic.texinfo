@@ -138,9 +138,9 @@ The major problem in interval arithmetic is that errors can easily build up, suc
 @group
 x = infsupdec ("[-1, 3]");
 sqr (x)
- @result{} [0, 9]_com
+  @result{} ans = [0, 9]_com
 times (x, x)
- @result{} [-3, +9]_com
+  @result{} ans = [-3, +9]_com
 @end group
 @end example
 
@@ -151,9 +151,9 @@ After all, it is possible to reduce overestimation errors by subdividing the fun
 x1 = infsupdec ("[-1, 1]");
 x2 = infsupdec ("[1, 3]");
 hull (sqr (x1), sqr (x2))
- @result{} [0, 9]_com
+  @result{} ans = [0, 9]_com
 hull (times (x1, x1), times (x2, x2))
- @result{} [-1, +9]_com
+  @result{} ans = [-1, +9]_com
 @end group
 @end example
 

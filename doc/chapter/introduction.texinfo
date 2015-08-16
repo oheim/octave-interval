@@ -12,8 +12,8 @@ Unless the package is provided by a third-party distributor, the interval packag
 @c doctest: +SKIP
 @group
 pkg install -forge interval
-  @result{} For information about changes from previous versions
-      of the interval package, run 'news interval'.
+  @print{} For information about changes from previous versions
+  @print{} of the interval package, run 'news interval'.
 @end group
 @end example
 
