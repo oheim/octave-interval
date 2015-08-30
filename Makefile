@@ -287,7 +287,7 @@ TST_PATCHED = $(BUILD_DIR)/.tar.tests
 
 $(TST_GENERATED_DIR)/%.tst: test/%.itl
 	@echo "Compiling $< ..."
-	@PYTHONPATH="$(ITF1788_HOME)/build/lib" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(BUILD_DIR)" -s "test"
+	@PYTHONPATH="$(ITF1788_HOME)" python3 -m src -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(BUILD_DIR)" -s "test"
 	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
 		echo "## by the Interval Testing Framework for IEEE 1788."; \
 		echo -n "## https://github.com/nehmeier/ITF1788/tree/"; \
