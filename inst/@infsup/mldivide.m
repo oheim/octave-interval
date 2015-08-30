@@ -225,7 +225,7 @@ for s = 1 : columns (b.inf)
     
     if (not (C_computed))
         ## C = I - R * A - R2 * A (lazy computation)
-        C = [eye(rows (R)), R, R2] * [ones(rows (R)); -A; -A];
+        C = [eye(rows (R)), R, R2] * [eye(rows (R)); -A; -A];
         C_computed = true ();
     endif
     
