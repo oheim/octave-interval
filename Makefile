@@ -284,11 +284,10 @@ TST_SOURCES = $(wildcard test/*.itl)
 TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/interval
 TST_GENERATED = $(TST_SOURCES:test/%.itl=$(TST_GENERATED_DIR)/%.tst)
 TST_PATCHED = $(BUILD_DIR)/.tar.tests
-PWD = $(shell pwd)
 
 $(TST_GENERATED_DIR)/%.tst: test/%.itl
 	@echo "Compiling $< ..."
-	@(cd "$(ITF1788_HOME)/src" && python3 main.py -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(PWD)/$(BUILD_DIR)" -s "$(PWD)/test")
+	@PYTHONPATH="$(ITF1788_HOME)/build/lib" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(BUILD_DIR)" -s "test"
 	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
 		echo "## by the Interval Testing Framework for IEEE 1788."; \
 		echo -n "## https://github.com/nehmeier/ITF1788/tree/"; \
