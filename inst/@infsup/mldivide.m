@@ -81,7 +81,7 @@ endif
 cfg.maxIterVer = 5;
 ## Epsilon for the verification step
 ## (used for the Epsilon inflation during verification)
-cfg.epsVer = 1e-5;
+cfg.epsVer = 1e-1;
 ## Maximum number of iterations during the refinement step
 cfg.maxIterRef = 5;
 ## Epsilon for the refinement step (stopping criterion for refinement step)
@@ -294,3 +294,4 @@ endfunction
 %!  assert (all (isempty (infsup ([1, 0; 2, 0]) \ [3; 0])));
 %!test "many solutions";
 %!  assert (infsup ([1, 0; 2, 0]) \ [4; 8] == infsup ([4; -inf], [4; inf]));
+%!assert (all (subset (infsup ([2, -1; -1, 2], [4, 1; 1, 4]) \ infsup ([-3; .8], [3; .8]), infsup ([-2.3; -1.1], [2.3; 1.6]))));
