@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sin (infsupdec (1))
-##   @result{} ans ⊂ [0.8414709848078965, 0.8414709848078967]_com
+##   @result{} ans ⊂ [0.84147, 0.84148]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/asin, @@infsupdec/csc, @@infsupdec/sinh}

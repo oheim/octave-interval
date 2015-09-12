@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## exp (infsupdec (1))
-##   @result{} ans ⊂ [2.718281828459045, 2.7182818284590456]_com
+##   @result{} ans ⊂ [2.7182, 2.7183]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/log, @@infsupdec/pow}

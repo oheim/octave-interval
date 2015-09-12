@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## coth (infsup (1))
-##   @result{} ans ⊂ [1.3130352854993312, 1.3130352854993315]
+##   @result{} ans ⊂ [1.313, 1.3131]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/tanh, @@infsup/csch, @@infsup/sech}

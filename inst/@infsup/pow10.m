@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## pow10 (infsup (5))
-##   @result{} ans = [100000]
+##   @result{} ans = [1e+05]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/log10, @@infsup/pow, @@infsup/pow2, @@infsup/exp}

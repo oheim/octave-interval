@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## acosh (infsup (2))
-##   @result{} ans ⊂ [1.3169578969248165, 1.3169578969248168]
+##   @result{} ans ⊂ [1.3169, 1.317]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cosh}

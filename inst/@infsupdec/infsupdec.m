@@ -87,9 +87,9 @@
 ## x = infsupdec (2, 3)
 ##   @result{} x = [2, 3]_com
 ## y = infsupdec ("0.1")
-##   @result{} y ⊂ [0.09999999999999999, 0.1000000000000001]_com
+##   @result{} y ⊂ [0.099999, 0.10001]_com
 ## z = infsupdec ("0.1", "0.2")
-##   @result{} z ⊂ [0.09999999999999999, 0.2000000000000001]_com
+##   @result{} z ⊂ [0.099999, 0.20001]_com
 ## @end group
 ## @end example
 ## @seealso{exacttointerval, hull, midrad, @@infsup/newdec}

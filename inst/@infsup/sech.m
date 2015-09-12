@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sech (infsup (1))
-##   @result{} ans ⊂ [0.6480542736638853, 0.6480542736638855]
+##   @result{} ans ⊂ [0.64805, 0.64806]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cosh, @@infsup/csch, @@infsup/coth}

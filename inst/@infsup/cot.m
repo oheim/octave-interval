@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## cot (infsup (1))
-##   @result{} ans ⊂ [0.6420926159343306, 0.6420926159343308]
+##   @result{} ans ⊂ [0.64209, 0.6421]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/tan, @@infsup/csc, @@infsup/sec}

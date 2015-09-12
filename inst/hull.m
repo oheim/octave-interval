@@ -47,7 +47,7 @@
 ## hull (empty, entire)
 ##   @result{} ans = [Entire]_trv
 ## hull ("0.1", "pi", "e")
-##   @result{} ans ⊂ [0.09999999999999999, 3.1415926535897936]_com
+##   @result{} ans ⊂ [0.099999, 3.1416]_com
 ## hull ("[0, 3]", "[4, 7]")
 ##   @result{} ans = [0, 7]_com
 ## @end group

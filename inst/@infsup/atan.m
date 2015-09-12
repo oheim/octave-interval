@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## atan (infsup (1))
-##   @result{} ans ⊂ [0.7853981633974482, 0.7853981633974484]
+##   @result{} ans ⊂ [0.78539, 0.7854]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/tan, @@infsup/atan2}

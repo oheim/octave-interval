@@ -26,7 +26,7 @@
 ## @example
 ## @group
 ## log10 (infsup (2))
-##   @result{} ans ⊂ [0.3010299956639811, 0.3010299956639812]
+##   @result{} ans ⊂ [0.30102, 0.30103]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow10, @@infsup/log, @@infsup/log2}

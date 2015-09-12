@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## erf (infsup (1))
-##   @result{} ans ⊂ [0.8427007929497147, 0.8427007929497149]
+##   @result{} ans ⊂ [0.8427, 0.84271]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/erfc}

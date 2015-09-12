@@ -27,6 +27,7 @@
 ##
 ## @example
 ## @group
+## output_precision (16, 'local')
 ## fma (infsupdec (1+eps), infsupdec (7), infsupdec ("0.1"))
 ##   @result{} ans ⊂ [7.100000000000001, 7.100000000000003]_com
 ## infsupdec (1+eps) * infsupdec (7) + infsupdec ("0.1")

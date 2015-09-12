@@ -28,7 +28,7 @@
 ## x = infsup (2, 3);
 ## y = infsup (1, 2);
 ## hypot (x, y)
-##   @result{} ans ⊂ [2.236067977499789, 3.6055512754639896]
+##   @result{} ans ⊂ [2.236, 3.6056]
 ## @end group
 ## @end example
 ## @end deftypefn

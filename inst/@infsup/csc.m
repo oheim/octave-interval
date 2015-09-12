@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## csc (infsup (1))
-##   @result{} ans ⊂ [1.188395105778121, 1.1883951057781213]
+##   @result{} ans ⊂ [1.1883, 1.1884]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sin, @@infsup/sec, @@infsup/cot}

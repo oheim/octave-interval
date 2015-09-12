@@ -33,10 +33,10 @@
 ## transpose (linspace (infsup (0), infsup (10), 4))
 ##   @result{} ans ⊂ 4×1 interval vector
 ##   
-##                                            [0]
-##        [3.333333333333333, 3.3333333333333335]
-##         [6.666666666666666, 6.666666666666667]
-##                                           [10]
+##                     [0]
+##        [3.3333, 3.3334]
+##        [6.6666, 6.6667]
+##                    [10]
 ## @end group
 ## @end example
 ## @seealso{linspace}

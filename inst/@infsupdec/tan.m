@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## tan (infsupdec (1))
-##   @result{} ans ⊂ [1.557407724654902, 1.5574077246549023]_com
+##   @result{} ans ⊂ [1.5574, 1.5575]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/atan, @@infsupdec/tanh}

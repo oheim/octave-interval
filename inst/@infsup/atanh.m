@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## atanh (infsup (.5))
-##   @result{} ans ⊂ [0.5493061443340547, 0.5493061443340549]
+##   @result{} ans ⊂ [0.5493, 0.54931]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/tanh}

@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## acos (infsup (.5))
-##   @result{} ans ⊂ [1.0471975511965976, 1.0471975511965979]
+##   @result{} ans ⊂ [1.0471, 1.0472]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cos}

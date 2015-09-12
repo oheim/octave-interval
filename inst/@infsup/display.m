@@ -44,7 +44,7 @@
 ## @example
 ## @group
 ## y = infsupdec (eps); display (y);
-##   @result{} y ⊂ [2.220446049250313e-16, 2.220446049250314e-16]_com
+##   @result{} y ⊂ [2.2204e-16, 2.2205e-16]_com
 ## @end group
 ## @end example
 ## @example

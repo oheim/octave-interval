@@ -26,9 +26,9 @@
 ## @example
 ## @group
 ## sum ([infsupdec(1), pow2(-1074), -1])
-##   @result{} ans ⊂ [4.940656458412465e-324, 4.940656458412466e-324]_com
+##   @result{} ans ⊂ [4.9406e-324, 4.9407e-324]_com
 ## infsupdec (1) + pow2 (-1074) - 1
-##   @result{} ans ⊂ [0, 2.220446049250314e-16]_com
+##   @result{} ans ⊂ [0, 2.2205e-16]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/plus}

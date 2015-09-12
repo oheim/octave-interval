@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## atan2rev2 (infsupdec (1, 2), infsupdec ("pi") / 4)
-##   @result{} ans ⊂ [0.9999999999999997, 2.000000000000001]_trv
+##   @result{} ans ⊂ [0.99999, 2.0001]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/atan2}

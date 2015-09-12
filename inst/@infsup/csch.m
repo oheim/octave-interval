@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## csch (infsup (1))
-##   @result{} ans ⊂ [0.8509181282393214, 0.8509181282393216]
+##   @result{} ans ⊂ [0.85091, 0.85092]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sinh, @@infsup/sech, @@infsup/coth}

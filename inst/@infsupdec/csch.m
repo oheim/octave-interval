@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## csch (infsupdec (1))
-##   @result{} ans ⊂ [0.8509181282393214, 0.8509181282393216]_com
+##   @result{} ans ⊂ [0.85091, 0.85092]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sinh, @@infsupdec/sech, @@infsupdec/coth}

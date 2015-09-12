@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## tanrev (infsupdec (0), infsupdec (2, 4))
-##   @result{} ans ⊂ [3.141592653589793, 3.1415926535897936]_trv
+##   @result{} ans ⊂ [3.1415, 3.1416]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/tan}

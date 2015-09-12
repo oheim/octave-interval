@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## sec (infsupdec (1))
-##   @result{} ans ⊂ [1.8508157176809254, 1.8508157176809257]_com
+##   @result{} ans ⊂ [1.8508, 1.8509]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cos, @@infsupdec/csc, @@infsupdec/cot}

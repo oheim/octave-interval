@@ -41,7 +41,7 @@
 ## @example
 ## @group
 ## dilog (infsup (1))
-##   @result{} ans ⊂ [1.6449340668482264, 1.6449340668482267]
+##   @result{} ans ⊂ [1.6449, 1.645]
 ## @end group
 ## @end example
 ## @end deftypefn

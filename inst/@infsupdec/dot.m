@@ -33,7 +33,7 @@
 ## @end group
 ## @group
 ## dot (infsupdec ([realmax; realmin; realmax]), [1; -1; -1], 1)
-##   @result{} ans ⊂ [-2.2250738585072014e-308, -2.2250738585072013e-308]_com
+##   @result{} ans ⊂ [-2.2251e-308, -2.225e-308]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/plus, @@infsupdec/sum, @@infsupdec/times}

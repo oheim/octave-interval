@@ -29,6 +29,7 @@
 ##
 ## @example
 ## @group
+## output_precision (16, 'local')
 ## polyval (infsupdec ([3 4 2 1]), 42) # 3x^3 + 4x^2 + 2x^1 + 1 | x = 42
 ##   @result{} [229405]_com
 ## polyval (infsupdec ([3 4 2 1]), "42?") # ... | x = 41.5 .. 42.5
