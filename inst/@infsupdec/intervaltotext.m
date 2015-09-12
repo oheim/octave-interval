@@ -28,11 +28,10 @@
 ## output is not exact, the boundaries are rounded accordingly (e. g. the upper
 ## boundary is rounded towards infinite for output representation).
 ## 
-## Enough digits are used to ensure separation of subsequent floating point
-## numbers.  The exact decimal format may produce a lot of digits.
+## The exact decimal format may produce a lot of digits.
 ##
 ## Possible values for @var{FORMAT} are: @code{decimal} (default),
-## @code{exact decimal}, @code{exact hexadecimal}
+## @code{exact decimal}, @code{exact hexadecimal}, @code{auto}
 ## 
 ## Accuracy: For all intervals @var{X} is an accurate subset of
 ## @code{infsupdec (intervaltotext (@var{X}))}.

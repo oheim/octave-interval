@@ -15,9 +15,19 @@
   along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <sstream>
 #include <octave/oct.h>
+#include <octave/octave.h>
+#include <octave/parse.h>
 #include <mpfr.h>
 #include "mpfr_commons.cc"
+
+std::string inttostring (const int number)
+{
+  std::ostringstream buffer;
+  buffer << number;
+  return buffer.str ();
+}
 
 DEFUN_DLD (mpfr_to_string_d, args, nargout, 
   "-*- texinfo -*-\n"
@@ -34,8 +44,14 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   "\n\n"
   "The @var{FORMAT} may be one of the following:\n"
   "@table @option\n"
+  "@item auto\n"
+  "Varying mantissa length with 5 or 15 places, depending on the currently "
+  "active @command{format}.  It is also possible to define other values with "
+  "the @command{output_precision} function.\n"
   "@item decimal\n"
-  "Varying mantissa length with up to 16 or 17 places.\n"
+  "Varying mantissa length with up to 16 or 17 places.  This format will "
+  "correctly seperate subsequent numbers of binary64 precision with the least "
+  "possible number of digits.\n"
   "@item exact decimal\n"
   "Varying mantissa length with up to 751 places.\n"
   "@item exact hexadecimal\n"
@@ -69,17 +85,24 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
       print_usage ();
       return octave_value_list ();
     }
-
+  
   const mpfr_rnd_t rnd     = parse_rounding_mode (args (0).scalar_value ());
   const std::string format = args (1).string_value ();
-  const char* str_template = (format == "decimal") ? "%.16R*g" :
-                             (format == "exact decimal") ? "%.751R*g" :
-                             (format == "exact hexadecimal") ? "%.13R*A" :
-                             "";
+  const int precision      = (format == "decimal") ? 16 : (int)
+                             feval ("output_precision")(0).scalar_value ();
+  const std::string str_template
+                           = (format == "exact decimal") ?
+                             "%.751R*g"
+                           : (format == "exact hexadecimal") ?
+                              "%.13R*A"
+                           : ("%."
+                              // number is not exact
+                              + inttostring (precision)
+                              + "R*g");
   const Matrix x           = args (2).matrix_value ();
   if (error_state)
     return octave_value_list ();
-  if (std::string () == str_template)
+  if (str_template == "")
     {
       error ("mpfr_to_string_d: Illegal format");
       return octave_value_list ();
@@ -104,7 +127,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   for (octave_idx_type i = 0; i < n; i++)
     {
       mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
-      mpfr_sprintf (buf, str_template, rnd, mp);
+      mpfr_sprintf (buf, str_template.c_str (), rnd, mp);
       str.elem (i) = buf;
       if (format == "decimal")
         {
@@ -112,7 +135,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
             {
               // Precision 16 might not be enough
               mpfr_nexttoward (mp, zero);
-              mpfr_sprintf (buf, str_template, rnd, mp);
+              mpfr_sprintf (buf, str_template.c_str (), rnd, mp);
               mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
               if (str.elem (i).string_value () == buf)
                 {
@@ -121,14 +144,14 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
                   str.elem (i) = buf;
                 }
             }
-          
-          
-          if (isexact && nargout >=2)
-            {
-              mpfr_sprintf (buf, str_template, complementary_rnd, mp);
-              if (str.elem (i).string_value () != buf)
-                isexact = false;
-            }
+        }
+      if (isexact && nargout >=2 &&
+          format != "exact decimal" &&
+          format != "exact hexadecimal")
+        {
+          mpfr_sprintf (buf, str_template.c_str (), complementary_rnd, mp);
+          if (str.elem (i).string_value () != buf)
+            isexact = false;
         }
     }
   

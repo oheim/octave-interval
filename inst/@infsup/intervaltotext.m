@@ -28,11 +28,10 @@
 ## output is not exact, the boundaries are rounded accordingly (e. g. the upper
 ## boundary is rounded towards infinite for output representation).
 ## 
-## Enough digits are used to ensure separation of subsequent floating point
-## numbers.  The exact decimal format may produce a lot of digits.
+## The exact decimal format may produce a lot of digits.
 ##
 ## Possible values for @var{FORMAT} are: @code{decimal} (default),
-## @code{exact decimal}, @code{exact hexadecimal}
+## @code{exact decimal}, @code{exact hexadecimal}, @code{auto}
 ## 
 ## Accuracy: For all intervals @var{X} is an accurate subset of
 ## @code{infsup (intervaltotext (@var{X}))}.
@@ -116,6 +115,11 @@ endfunction
 
 %!assert (intervaltotext (infsup (1 + eps), "exact decimal"), "[1.0000000000000002220446049250313080847263336181640625]");
 %!assert (intervaltotext (infsup (1 + eps), "exact hexadecimal"), "[0X1.0000000000001P+0]");
+%!test
+%! output_precision (3, 'local');
+%! assert (intervaltotext (infsup (pi), "auto"), "[3.14, 3.15]");
+%! output_precision (4, 'local');
+%! assert (intervaltotext (infsup (pi), "auto"), "[3.141, 3.142]");
 %!test "from the documentation string";
 %! assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.000000000000001]");
 %! assert (intervaltotext (nextout (infsup (1 + eps))), "[1, 1.0000000000000005]");

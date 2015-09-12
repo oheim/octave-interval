@@ -32,8 +32,12 @@
 ##
 ## @example
 ## @group
+## format long
 ## disp (infsupdec ("pi"))
-##   @result{} [3.141592653589793, 3.1415926535897936]_com
+##   @result{} [3.14159265358979, 3.1415926535898]_com
+## format short
+## disp (infsupdec ("pi"))
+##   @result{} [3.1415, 3.1416]_com
 ## disp (infsupdec (1 : 5))
 ##   @result{}    [1]_com   [2]_com   [3]_com   [4]_com   [5]_com
 ## s = disp (infsupdec (0))
@@ -54,7 +58,8 @@ if (nargin ~= 1)
     return
 endif
 
-[s, isexact] = intervaltotext (x);
+## With format="auto" the output precision can be set with the format command
+[s, isexact] = intervaltotext (x, "auto");
 
 if (not (iscell (s)))
     ## Scalar interval
