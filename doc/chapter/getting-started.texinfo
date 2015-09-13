@@ -56,8 +56,8 @@ midrad (12, 3)
 @example
 @group
 ## Again with decimal numbers
-midrad ("4.2", "1e-7")
-  @result{} ans ⊂ [4.1999, 4.2001]_com
+midrad ("4.2", "1e-3")
+  @result{} ans ⊂ [4.1989, 4.2011]_com
 @end group
 @end example
 @example
