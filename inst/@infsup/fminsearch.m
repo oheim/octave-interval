@@ -65,7 +65,7 @@
 ##
 ## It is possible to use the following optimization @var{options}:
 ## @option{Display}, @option{MaxFunEvals}, @option{MaxIter},
-## @option{TolFun}, @option{TolX}.
+## @option{OutputFcn}, @option{TolFun}, @option{TolX}.
 ##
 ## @example
 ## @group
@@ -154,6 +154,11 @@ while (true)
     [pt1, pt2] = bisect (subsref (X, idx));
     X1 = subsasgn (X1, idx, pt1);
     X2 = subsasgn (X2, idx, pt2);
+    
+    if (not (isempty (options.OutputFcn)))
+        feval (options.OutputFcn, X1);
+        feval (options.OutputFcn, X2);
+    endif    
     
     ## 5 Improve upper bound
     fmX1 = feval (f, infsup (mid (X1)));
@@ -270,3 +275,12 @@ endfunction
 %!test
 %!  [x, y] = fminsearch (@sqr, infsup (-inf, inf));
 %!  assert (y == 0);
+
+%!demo
+%!  clf
+%!  hold on
+%!  draw = @(x) plot (x(1), x(2), [238 232 213]/255, [88 110 117]/255);
+%!  f = @(x) sqr (x(1) - 2) - sqr (x(2));
+%!  fminsearch (f, infsup ("[1, 3] [0, 1]"), ...
+%!              optimset ('OutputFcn', draw));
+%!  hold off
