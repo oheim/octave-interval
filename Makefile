@@ -146,7 +146,7 @@ $(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
 
 $(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
 	@echo "Installing package in GNU Octave ..."
-	@$(OCTAVE) --silent --eval "pkg install $<"
+	@$(OCTAVE) --no-gui --silent --eval "pkg install $<"
 
 ## Plaintext info files are generated from GNU TexInfo sources
 $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.texinfo
@@ -201,7 +201,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@#    (only affects package manual, not function reference)
 	@# 4. Specify path to package manual
 	@# 5. Run the generation
-	@$(OCTAVE) --silent \
+	@$(OCTAVE) --no-gui --silent \
 		--eval "pkg load generate_html;" \
 		--eval "function print (h, filename); __print_mesa__ (h, filename); endfunction;" \
 		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' --init-file=doc/manual.init -D octave-forge --css-include=doc/manual.css');" \
@@ -232,13 +232,13 @@ $(EXTRACTED_CC_TESTS): $(BUILD_DIR)/inst/test/%.cc-tst: src/%.cc | $(BUILD_DIR)/
 ## Interactive shell with the package's functions in the path
 run: $(OCT_COMPILED)
 	@echo "Run GNU Octave with the development version of the package"
-	@$(OCTAVE) --silent --path "inst/" --path "src/"
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/"
 	@echo
 
 ## Validate unit tests
 test: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
 	@echo "Testing package in GNU Octave ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" \
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
 		--eval "__run_test_suite__ ({'.'}, {})"
 	@! grep '!!!!! test failed' fntests.log
 	@echo
@@ -246,7 +246,7 @@ test: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
 ## Validate code examples
 doctest: $(OCT_COMPILED)
 	@echo "Testing documentation strings ..."
-	@$(OCTAVE) --silent --path "inst/" --path "src/" --eval \
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --eval \
 		"pkg load doctest; \
 		 targets = '$(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)'; \
 		 targets = strsplit (targets, ' '); \
