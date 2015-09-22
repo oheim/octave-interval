@@ -44,7 +44,7 @@
 ## Keywords: interval
 ## Created: 2011
 
-function result = power (x, y)
+function z = power (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -57,7 +57,14 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 elseif (isa (y, "infsupdec"))
     ## Workaround for bug #42735
-    result = power (x, y);
+    z = power (x, y);
+    return
+endif
+
+## Short circuit integral powers, e.g., x.^2
+if (not (any (any (y.inf == 0))) && ... # can't use pown, because 0^0 = [Empty]
+    all (all (y.inf == y.sup & isfinite (y.inf) & fix (y.inf) == y.inf)))
+    z = pown (x, y.inf);
     return
 endif
 
@@ -69,83 +76,97 @@ if (isscalar (x.inf) ~= isscalar (y.inf))
     y.sup = ones (size (x.inf)) .* y.sup;
 endif
 
-l = u = zeros (size (x.inf));
+idx.type = "()";
+
+emptyresult = x.inf == inf | y.inf == inf | ...
+              (x.inf == 0 & x.sup == 0 & y.sup <= 0);
 
 zPlus = pow (x, y); # pow is only defined for x > 0
+zContainsZero = y.inf > 0 & x.inf <= 0 & x.sup >= 0;
+zMinus = infsup ();
+zMinus.inf = zMinus.inf (ones (size (x.inf)));
+zMinus.sup = zMinus.sup (ones (size (x.sup)));
 
-for i = 1 : numel (x.inf)
-    ## Implements Algorithm A.3 in
-    ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-    ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
-    ## http://exp.ln0.de/heimlich-power-2011.htm.
-    if (x.inf (i) == inf || y.inf (i) == inf || ...
-        (x.inf (i) == 0 && x.sup (i) == 0 && y.sup (i) <= 0))
-        l (i) = inf;
-        u (i) = -inf;
-        continue
-    endif
-    
-    if (y.sup (i) > 0 && ismember (0, infsup (x.inf (i), x.sup (i))))
-        zZero = infsup (0);
-    else
-        zZero = infsup ();
-    endif
-    
-    if (x.inf (i) >= 0)
-        ## no negative x
-        zMinus = infsup ();
-    elseif (isfinite (y.inf (i)) && isfinite (y.sup (i)) && ceil (y.inf (i)) > floor (y.sup (i)))
-        ## y contains no integer
-        zMinus = infsup ();
-    elseif (isfinite (y.inf (i)) && isfinite (y.sup (i)) && ceil (y.inf (i)) == floor (y.sup (i)))
-        ## y contains a single integer
-        xMinus = intersect (...
-                     infsup (x.inf (i), x.sup (i)), ...
-                     infsup (-inf, 0)); # speed up computation of pown
-        zMinus = pown (xMinus, ceil (y.inf (i)));
-    else
-        ## y contains several integers
-        zMinus = multipleintegers (infsup (x.inf (i), x.sup (i)), infsup (y.inf (i), y.sup (i)));
-    endif
-    
-    z = union (union (zMinus, zZero), infsup (zPlus.inf (i), zPlus.sup (i)));
-    l (i) = z.inf;
-    u (i) = z.sup;
-endfor
+xMinusWithIntegerY = not (emptyresult) & x.inf < 0 & ...
+                     not (isfinite (y.inf) & isfinite (y.sup) & ...
+                          ceil (y.inf) > floor (y.sup));
 
-result = infsup (l, u);
+if (any (any (xMinusWithIntegerY)))
+    ySingleInteger = isfinite (y.inf) & isfinite (y.sup) & ...
+                     ceil (y.inf) == floor (y.sup);
+    
+    ## y contains a single integer
+    idx.subs = {xMinusWithIntegerY & ySingleInteger};
+    if (any (any (idx.subs {1})))
+        xMinus = intersect (subsref (x, idx), ... # intersect to 
+                            infsup (-inf, 0));    # speed up computation
+        zMinus = subsasgn (zMinus, idx, ...
+                           pown (xMinus, ceil (subsref (y.inf, idx))));
+    endif
+    
+    ## y contains several integers
+    idx.subs = {xMinusWithIntegerY & not(ySingleInteger)};
+    if (any (any (idx.subs {1})))
+        zMinus = subsasgn (zMinus, idx, ...
+                           multipleintegers (subsref (x, idx), ...
+                                             subsref (y, idx)));
+    endif
+endif
+
+z = union (zMinus, zPlus);
+idx.subs = {zContainsZero};
+z = subsasgn (z, idx, union (subsref (z, idx), 0));
+z.inf(emptyresult) = inf;
+z.sup(emptyresult) = -inf;
 
 endfunction
 
 function z = multipleintegers (x, y)
 ## Value of power on NEGATIVE base and multiple integral exponents
 
+## Intersect to simplify computation
 x = intersect (x, infsup (-inf, 0));
 y = intersect (ceil (y), floor (y));
-assert (y.inf < y.sup);
-assert (not (isempty (x)));
-assert (x.inf < 0);
+
+assert (all (all (y.inf < y.sup & x.inf < 0)));
 
 ## Implements Table 3.4 in
 ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
 ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
 ## http://exp.ln0.de/heimlich-power-2011.htm.
-if (x.sup <= -1 && y.sup <= 0)
-    z = twointegers (x.sup, goe (y), gee (y));
-elseif (-1 <= x.inf && 0 <= y.inf)
-    z = twointegers (x.inf, loe (y), lee (y));
-else
-    if ((x.sup <= -1 || (x.inf < -1 && -1 < x.sup)) && ...
-        (0 <= y.inf || (y.inf <= -1 && 1 <= y.sup)))
-        z = twointegers (x.inf, goe (y), gee (y));
-    else
-        z = infsup ();
-    endif
-    if (((x.inf < -1 && -1 < x.sup) || -1 <= x.inf) && ...
-        ((y.inf <= -1 && 1 <= y.sup) || y.sup <= 0))
-        z = union (z, twointegers (x.sup, loe (y), lee (y)));
-    endif
+z = infsup ();
+z.inf = z.inf(ones (size (x.inf)));
+z.sup = z.sup(ones (size (x.sup)));
+idx.type = "()";
+
+idx.subs = {(x.sup <= -1 & y.sup <= 0)};
+if (any (any (idx.subs {1})))
+    xsup_idx = subsref (x.sup, idx);
+    y_idx = subsref (y, idx);
+    z = subsasgn (z, idx, twointegers (xsup_idx, goe (y_idx), gee (y_idx)));
 endif
+idx.subs = {(-1 <= x.inf & 0 <= y.inf)};
+if (any (any (idx.subs {1})))
+    xinf_idx = subsref (x.inf, idx);
+    y_idx = subsref (y, idx);
+    z = subsasgn (z, idx, twointegers (xinf_idx, loe (y_idx), lee (y_idx)));
+endif
+idx.subs = {((x.sup <= -1 | (x.inf < -1 & -1 < x.sup)) & ...
+             ((0 <= y.inf & not (-1 <= x.inf)) | (y.inf <= -1 & 1 <= y.sup)))};
+if (any (any (idx.subs {1})))
+    xinf_idx = subsref (x.inf, idx);
+    y_idx = subsref (y, idx);
+    z = subsasgn (z, idx, twointegers (xinf_idx, goe (y_idx), gee (y_idx)));
+endif
+idx.subs = {(((x.inf < -1 & -1 < x.sup) | -1 <= x.inf) & ...
+             ((y.inf <= -1 & 1 <= y.sup) | (y.sup <= 0 & not (x.sup <= -1))))};
+if (any (any (idx.subs {1})))
+    xsup_idx = subsref (x.sup, idx);
+    y_idx = subsref (y, idx);
+    z = subsasgn (z, idx, union (subsref (z, idx), ...
+                          twointegers (xsup_idx, loe (y_idx), lee (y_idx))));
+endif
+
 endfunction
 
 function z = twointegers (base, oddexponent, evenexponent)
@@ -164,131 +185,73 @@ function z = twointegers (base, oddexponent, evenexponent)
 ## Note: oddexponent must not necessarily be odd, since it can be an
 ## overestimation of an actual odd exponent, if its magnitude is > 2^53.
 
-assert (oddexponent ~= 0);
-if (isfinite (oddexponent) && isfinite (evenexponent))
-    assert (abs (oddexponent - evenexponent) <= 1);
-endif
+assert (all (all (oddexponent ~= 0)));
+assert (all (all (not (isfinite (oddexponent) & isfinite (evenexponent)) | ...
+                  abs (oddexponent - evenexponent) <= 1)));
 base = abs (base);
-if (base == 0)
-    if (oddexponent > 0)
-        z.inf = 0;
-    else # oddexponent < 0
-        z.inf = -inf;
-    endif
-    if (evenexponent > 0)
-        z.sup = 0;
-    elseif (evenexponent < 0)
-        z.sup = inf;
-    else # evenexponent == 0
-        z.sup = 1;
-    endif
-elseif (base == inf)
-    if (oddexponent > 0)
-        z.inf = -inf;
-    else # oddexponent < 0
-        z.inf = 0;
-    endif
-    if (evenexponent > 0)
-        z.sup = inf;
-    elseif (evenexponent < 0)
-        z.sup = 0;
-    else # evenexponent == 0
-        z.sup = 1;
-    endif
-else # 0 < base < inf
-    if (not (isfinite (evenexponent)))
-        if (base == 1)
-            z.sup = 1;
-        elseif ((base < 1 && evenexponent > 0) || ...
-                (base > 1 && evenexponent < 0))
-            z.sup = 0;
-        else
-            z.sup = inf;
-        endif
-    else
-        z.sup = sup (pown (infsup (base), evenexponent));
-    endif
-    if (oddexponent == evenexponent)
-        ## This can happen with big exponents.
-        z.inf = -z.sup;
-    elseif (not (isfinite (oddexponent)))
-        if (base == 1)
-            z.inf = -1;
-        elseif ((base < 1 && oddexponent > 0) || ...
-                (base > 1 && oddexponent < 0))
-            z.inf = 0;
-        else
-            z.inf = -inf;
-        endif
-    else
-        z.inf = -sup (pown (infsup (base), oddexponent));
-    endif
+z.inf = z.sup = zeros (size (base));
+z.inf(base == 0 & oddexponent < 0) = -inf;
+z.sup(base == 0 & evenexponent < 0) = inf;
+z.sup(base == 0 & evenexponent == 0) = 1;
+
+z.inf(base == inf & oddexponent > 0) = -inf;
+z.sup(base == inf & evenexponent > 0) = inf;
+z.sup(base == inf & evenexponent == 0) = 1;
+
+z.sup(base == 1) = 1;
+z.sup(0 < base & base < 1 & evenexponent <= 0) = inf;
+z.sup(1 < base & base < inf & evenexponent >= 0) = inf;
+select = 0 < base & base < inf & isfinite (evenexponent);
+if (any (any (select)))
+    z.sup(select) = sup (pown (infsup (base(select)), evenexponent(select)));
 endif
+
+z.inf(base == 1) = -1;
+z.inf(0 < base & base < 1 & oddexponent <= 0) = -inf;
+z.inf(1 < base & base < inf & oddexponent >= 0) = -inf;
+
+bigexponent = oddexponent == evenexponent;
+select = 0 < base & base < inf & bigexponent;
+z.inf(select) = -z.sup(select);
+
+select = 0 < base & base < inf & isfinite (oddexponent) & not (bigexponent);
+if (any (any (select)))
+    z.inf(select) = -sup (pown (infsup (base(select)), oddexponent(select)));
+endif
+
 z = infsup (z.inf, z.sup);
 endfunction
 
 function e = goe (y)
 ## GOE Greatest odd exponent in interval y
-if (y.sup == inf)
-    e = inf;
-else
-    e = floor (y.sup);
-    if (rem (e, 2) == 0)
-        e = mpfr_function_d ('minus', +inf, e, 1);
-    endif
-    if (e < y.inf)
-        ## No odd number in interval
-        e = nan ();
-    endif
-endif
+e = floor (y.sup);
+even = rem (e, 2) == 0;
+e(even) = mpfr_function_d ('minus', +inf, e(even), 1);
+e(e < y.inf) = nan (); # no odd number in interval
 endfunction
 
 function e = gee (y)
 ## GEE Greatest even exponent in interval y
-if (y.sup == inf)
-    e = inf;
-else
-    e = floor (y.sup);
-    if (rem (e, 2) ~= 0)
-        e = mpfr_function_d ('minus', +inf, e, 1);
-    endif
-    if (e < y.inf)
-        ## No even number in interval
-        e = nan ();
-    endif
-endif
+e = floor (y.sup);
+odd = rem (e, 2) ~= 0;
+e(odd) = mpfr_function_d ('minus', +inf, e(odd), 1);
+e(e < y.inf) = nan (); # no even number in interval
 endfunction
 
 function e = loe (y)
 ## LOE Least odd exponent in interval y
-if (y.inf == -inf)
-    e = -inf;
-else
-    e = ceil (y.inf);
-    if (rem (e, 2) == 0)
-        e = mpfr_function_d ('plus', -inf, e, 1);
-    endif
-    if (e > y.sup)
-        ## No odd number in interval
-        e = nan ();
-    endif
-endif
+e = ceil (y.inf);
+even = rem (e, 2) == 0;
+e(even) = mpfr_function_d ('plus', -inf, e(even), 1);
+e(e > y.sup) = nan (); # no odd number in interval
 endfunction
 
 function e = lee (y)
 ## LOE Least even exponent in interval y
-if (y.inf == -inf)
-    e = -inf;
-else
-    e = ceil (y.inf);
-    if (rem (e, 2) ~= 0)
-        e = mpfr_function_d ('plus', -inf, e, 1);
-    endif
-    if (e > y.sup)
-        ## No even number in interval
-        e = nan ();
-    endif
-endif
+e = ceil (y.inf);
+odd = rem (e, 2) ~= 0;
+e(odd) = mpfr_function_d ('plus', -inf, e(odd), 1);
+e(e > y.sup) = nan (); # no odd number in interval
 endfunction
 
 %!test "from the documentation string";
