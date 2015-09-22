@@ -20,6 +20,8 @@
     The output format for intervals has been changed.  The number of decimal places now respects what has been set by the user with the @command{format short} or @command{format long} command, and is much shorter by default.  Also it is possible to use @command{format hex}.  The old format can be accessed with the @command{intervaltotext} function.
 @item
     fminsearch: New optimizer function for finding the minimum value of a function over interval constraints using the Skelboe-Moore algorithm.
+@item
+    fzero: Changed command line parameters to support optimset options.
 @end itemize
 
 @noindent Bugfixes

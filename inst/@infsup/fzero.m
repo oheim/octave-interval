@@ -15,10 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn  {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF}, @var{MAXSTEPS})
+## @deftypefn  {Function File} {@var{X} =} fzero (@var{F}, @var{X0})
 ## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF})
-## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{MAXSTEPS})
-## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0})
+## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{OPTIONS})
+## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF}, @var{OPTIONS})
 ## 
 ## Compute the enclosure of all roots of function @var{F} in interval @var{X0}.
 ##
@@ -28,9 +28,9 @@
 ## The function must be an interval arithmetic function.
 ##
 ## Optional parameters are the function's derivative @var{DF} and the maximum
-## recursion steps @var{MAXSTEPS} (default: 200) to use.  If @var{DF} is given,
-## the algorithm tries to apply the interval newton method for finding the
-## roots; otherwise pure bisection is used (which is slower).
+## recursion steps @var{OPTIONS}.MaxIter (default: 200) to use.  If @var{DF} is
+## given, the algorithm tries to apply the interval newton method for finding
+## the roots; otherwise pure bisection is used (which is slower).
 ##
 ## The result is a column vector with one element for each root enclosure that
 ## has been be found.  Each root enclosure may contain more than one root and
@@ -42,6 +42,10 @@
 ## from the dependency problem of interval arithmetic, (b) the derivative
 ## @var{DF} is given, (c) the derivative is non-zero at the function's roots,
 ## and (d) the derivative is continuous.
+##
+## It is possible to use the following optimization @var{options}:
+## @option{Display}, @option{MaxFunEvals}, @option{MaxIter},
+## @option{OutputFcn}, @option{TolFun}, @option{TolX}.
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
@@ -68,7 +72,7 @@
 ## Keywords: interval
 ## Created: 2015-02-01
 
-function result = fzero (f, x0, df, maxsteps)
+function result = fzero (f, x0, df, options)
 
 if (nargin > 4 || nargin < 2)
     print_usage ();
@@ -76,16 +80,19 @@ if (nargin > 4 || nargin < 2)
 endif
 
 ## Set default parameters
+defaultoptions = optimset (optimset, 'MaxIter', 200);
 if (nargin == 2)
     df = [];
-    maxsteps = 200;
+    options = defaultoptions;
 elseif (nargin == 3)
-    if (isnumeric (df))
-        maxsteps = df;
+    if (isstruct (df))
+        options = optimset (defaultoptions, options);
         df = [];
     else
-        maxsteps = 200;
+        options = defaultoptions;
     endif
+else
+    options = optimset (defaultoptions, options);
 endif
 
 ## Check parameters
@@ -105,9 +112,6 @@ elseif (not (isempty (df)) && ...
         not (ischar (df)))
     error ("interval:InvalidOperand", ...
            "fzero: Parameter DF is not function handle")
-elseif (not (isreal (maxsteps)) || maxsteps < 1)
-    error ("interval:InvalidOperand", ...
-           "fzero: Parameter MAXSTEPS must be a positive real number")
 endif
 
 ## Does not work on decorated intervals, strip decoration part
@@ -119,14 +123,14 @@ if (isa (x0, "infsupdec"))
     x0 = intervalpart (x0);
 endif
 
-[l, u] = findroots (f, df, x0, 0, maxsteps);
+[l, u] = findroots (f, df, x0, 0, options);
 
 result = infsup (l, u);
 
 endfunction
 
 ## This function will perform the recursive newton / bisection steps
-function [l, u] = findroots (f, df, x0, stepcount, maxsteps)
+function [l, u] = findroots (f, df, x0, stepcount, options)
 
 l = u = zeros (0, 1);
 
@@ -169,6 +173,10 @@ endif
 for x1 = {a, b}
     x1 = x1 {1};
     
+    if (strcmp (options.Display, "iter"))
+        display (x1);
+    endif
+    
     f_x1 = feval (f, x1);
     if  (not (ismember (0, f_x1)))
         ## The interval evaluation of f over x1 proves that there are no roots
@@ -178,14 +186,15 @@ for x1 = {a, b}
     if (isentire (f_x1) || ...
         wid (f_x1) / max (realmin (), wid (x1)) < pow2 (-20))
         ## Slow convergence detected, cancel iteration soon
-        maxsteps = maxsteps / 1.5;
+        options.MaxIter = options.MaxIter / 1.5;
     endif
     
-    if (eq (x1, x0) || stepcount >= maxsteps)
+    if (eq (x1, x0) || stepcount >= options.MaxIter
+        || wid (x1) <= options.TolX || wid (f_x1) <= options.TolFun)
         ## Stop recursion if result is accurate enough or if no improvement
         [newl, newu] = deal (x1.inf, x1.sup);
     else
-        [newl, newu] = findroots (f, df, x1, stepcount + 1, maxsteps);
+        [newl, newu] = findroots (f, df, x1, stepcount + 1, options);
     endif
     if (not (isempty (newl)))
         if (isempty (l))
