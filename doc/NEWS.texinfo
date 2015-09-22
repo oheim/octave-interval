@@ -25,6 +25,7 @@
 @noindent Bugfixes
 @itemize
 @item mldivide: Fixed algorithm to handle more matrices without error.
+@item bisect: Fixed an error during bisection of singleton intervals.
 @end itemize
 
 

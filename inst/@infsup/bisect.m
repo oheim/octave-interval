@@ -94,9 +94,9 @@ if (any (any (both_signs_n)))
 endif
 
 m (isempty (x)) = -inf;
-a = infsup (x.inf, m);
+a = infsup (x.inf, min (m, x.sup));
 m (isempty (x)) = inf;
-b = infsup (m, x.sup);
+b = infsup (max (m, x.inf), x.sup);
 
 endfunction
 
