@@ -197,6 +197,8 @@ infsupdec ("-42??u") # unbound uncertain form
 @end group
 @end example
 
+The hex-form can be set for output with the @command{format hex} command.
+
 
 @section Reverse Arithmetic Operations
 

@@ -19,6 +19,7 @@
 #include <octave/oct.h>
 #include <octave/octave.h>
 #include <octave/parse.h>
+#include <octave/ov-uint8.h>
 #include <mpfr.h>
 #include "mpfr_commons.cc"
 
@@ -87,26 +88,43 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
     }
   
   const mpfr_rnd_t rnd     = parse_rounding_mode (args (0).scalar_value ());
-  const std::string format = args (1).string_value ();
-  const int precision      = (format == "decimal") ? 16 : (int)
-                             feval ("output_precision")(0).scalar_value ();
-  const std::string str_template
-                           = (format == "exact decimal") ?
-                             "%.751R*g"
-                           : (format == "exact hexadecimal") ?
-                              "%.13R*A"
-                           : ("%."
-                              // number is not exact
-                              + inttostring (precision)
-                              + "R*g");
-  const Matrix x           = args (2).matrix_value ();
-  if (error_state)
-    return octave_value_list ();
-  if (str_template == "")
+  std::string format = args (1).string_value ();
+  std::string str_template;
+  
+  // Switch to hexadecimal, if “format hex” is active
+  if (format == "auto")
+    // Maybe there is an easier way to find out whether format hex is active?!
+    if (feval ("disp",
+               octave_value_list(octave_value (octave_uint8(255))),
+               1)
+              (0).string_value () == "ff\n")
+      format = "exact hexadecimal";
+  
+  // Switch the conversion template depending on the format
+  if (format == "auto")
+    {
+      const int precision = feval ("output_precision")(0).scalar_value ();
+      str_template = "%."
+                     + inttostring (precision)
+                     + "R*g";
+    }
+  else if (format == "decimal")
+    // This might be increased to 17 below, if 16 is not enough for the
+    // particular number.
+    str_template = "%.16R*g";
+  else if (format == "exact hexadecimal")
+    str_template = "%.13R*A";
+  else if (format == "exact decimal")
+    str_template = "%.751R*g";
+  else
     {
       error ("mpfr_to_string_d: Illegal format");
       return octave_value_list ();
     }
+  
+  const Matrix x = args (2).matrix_value ();
+  if (error_state)
+    return octave_value_list ();
   
   char buf [768];
   mpfr_t mp;
@@ -145,6 +163,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
                 }
             }
         }
+      // Check, whether output was exact
       if (isexact && nargout >=2 &&
           format != "exact decimal" &&
           format != "exact hexadecimal")

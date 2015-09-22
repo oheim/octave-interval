@@ -17,15 +17,15 @@
 @release{1.2.0, 2015-xx-xx}
 @itemize
 @item
-    The output format for intervals has been changed.  The number of decimal places now respects what has been set by the user with the @command{format short} or @command{format long} command, and is therefore much shorter by default.  The old format can be accessed with the @command{intervaltotext} function.
+    The output format for intervals has been changed.  The number of decimal places now respects what has been set by the user with the @command{format short} or @command{format long} command, and is much shorter by default.  Also it is possible to use @command{format hex}.  The old format can be accessed with the @command{intervaltotext} function.
 @item
-    fminsearch: New optimizer function for finding the minimum value of a function over interval constraints.
+    fminsearch: New optimizer function for finding the minimum value of a function over interval constraints using the Skelboe-Moore algorithm.
 @end itemize
 
 @noindent Bugfixes
 @itemize
 @item mldivide: Fixed algorithm to handle more matrices without error.
-@item bisect: Fixed an error during bisection of singleton intervals.
+@item bisect: Fixed an error during bisection of singleton intervals (thanks to Helmut for finding this during OctConf 2015).
 @end itemize
 
 
