@@ -23,7 +23,7 @@ OBJ            = mpfr_function_d.oct \
                  mpfr_vector_dot_d.oct \
                  __setround__.oct
 
-LDFLAGS_MPFR   =-lmpfr -lgmp
+LDFLAGS_MPFR   =-lmpfr
 ## Use important flags in XTRA_CFLAGS for OpenMP (workaround for bug #45280)
 CFLAG_OPENMP   =$(findstring -fopenmp,$(shell $(MKOCTFILE) -p XTRA_CFLAGS))
 
