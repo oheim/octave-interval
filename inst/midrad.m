@@ -120,12 +120,12 @@ endfunction
 %!assert (isempty (midrad (0, "-.1")));
 %!assert (isempty (midrad (0, infsup("-.1"))));
 %!assert (isequal (midrad ("pi"), infsupdec ("pi")));
-%!assert (isequal (midrad (infsup (2), 2), infsupdec (0, 4)));
+%!warning assert (isequal (midrad (infsup (2), 2), infsupdec (0, 4)));
 %!assert (isequal (midrad (2, infsup (2)), infsupdec (0, 4)));
-%!assert (isequal (midrad (infsup (2), infsup (2)), infsupdec (0, 4)));
+%!warning assert (isequal (midrad (infsup (2), infsup (2)), infsupdec (0, 4)));
 %!assert (isequal (midrad (2, infsupdec (2)), infsupdec (0, 4)));
 %!assert (isequal (midrad (infsupdec (2), 2), infsupdec (0, 4)));
-%!assert (isequal (midrad (infsup (2), infsupdec (2)), infsupdec (0, 4)));
+%!warning assert (isequal (midrad (infsup (2), infsupdec (2)), infsupdec (0, 4)));
 %!assert (isequal (midrad (infsupdec (2), infsup (2)), infsupdec (0, 4)));
 %!assert (isequal (midrad (infsupdec (2), infsupdec (2)), infsupdec (0, 4)));
 %!xtest assert (isequal (midrad (1, magic (3)), infsupdec ([-7, 0, -5; -2, -4, -6; -3, -8, -1], [9, 2, 7; 4, 6, 8; 5, 10, 3])));
