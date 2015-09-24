@@ -4,9 +4,10 @@ Date: 2015-08-03
 Author: Oliver Heimlich <oheim@posteo.de>
 Maintainer: Oliver Heimlich <oheim@posteo.de>
 Title: Real-valued interval arithmetic
-Description: The interval package for real-valued interval arithmetic allows to
- evaluate functions over subsets of their domain.  All results are verified,
- because interval computations automatically keep track of any errors.
+Description: The interval package for real-valued interval arithmetic allows
+ one to evaluate functions over subsets of their domain.  All results are
+ verified, because interval computations automatically keep track of any
+ errors.
  
  These concepts can be used to handle uncertainties, estimate arithmetic errors
  and produce reliable results.  Also it can be applied to computer-assisted
