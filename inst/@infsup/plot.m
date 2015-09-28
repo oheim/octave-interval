@@ -37,8 +37,10 @@
 ## lines, which are parallel to the y axis, at the coordinates
 ## @code{@var{X} = [1, …, n]}.
 ##
-## If an optional parameter @var{EDGECOLOR} is given, rectangles  will have
-## visible edges in a distinct color.
+## If no @var{COLOR} is given, the current @command{colormap} is used.  Use
+## @var{COLOR} = @option{none} to disable plotting of filled rectangles.  If an
+## optional parameter @var{EDGECOLOR} is given, rectangles will have visible
+## edges in a distinct color.
 ##
 ## @end deftypefn
 
@@ -72,11 +74,15 @@ if (nargin < 2)
     x = infsupdec (reshape (1 : numel (y.inf), size (y.inf)));
 endif
 
-if (nargin < 3)
-    color = 'b';
-endif
-
-if (nargin < 4)
+if (nargin < 3 || isempty (color))
+    # don't use last row of colormap, which would often be just white
+    color = colormap ()(ceil (rows (colormap ()) / 2), :);
+    if (nargin < 4)
+        # will only be used for lines and dots
+        edgecolor = colormap ()(1, :);
+    endif
+elseif (nargin < 4)
+    # will only be used for lines and dots
     edgecolor = color;
 endif
 
@@ -106,7 +112,8 @@ unwind_protect
     if (any (any (lines)))
         x_line = [vec(x.inf (lines)), vec(x.sup (lines))]';
         y_line = [vec(y.inf (lines)), vec(y.sup (lines))]';
-        plot (x_line, y_line, edgecolor, ...
+        plot (x_line, y_line, ...
+              'color', edgecolor, ...
               'linewidth', edgewidth);
     endif
     

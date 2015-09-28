@@ -24,6 +24,8 @@
     fzero: Changed command line parameters to support optimset options
 @item
     power: Improved speed of the general interval power function and monomials with the notation x.^n
+@item
+    plot, plot3: Added support for colormaps
 @end itemize
 
 @noindent Bugfixes

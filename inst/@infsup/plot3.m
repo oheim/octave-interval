@@ -34,8 +34,10 @@
 ## interpolation would be wrong in general (in the sense that the actual values
 ## are enclosed by the plot).
 ##
-## If an optional parameter @var{EDGECOLOR} is given, rectangles and cuboids
-## will have visible edges in a distinct color.
+## If no @var{COLOR} is given, the current @command{colormap} is used.  Use
+## @var{COLOR} = @option{none} to disable plotting of filled rectangles.  If an
+## optional parameter @var{EDGECOLOR} is given, rectangles and cuboids will
+## have visible edges in a distinct color.
 ##
 ## @end deftypefn
 
@@ -45,7 +47,7 @@
 
 function plot3 (x, y, z, color, edgecolor)
 
-if (nargin > 5)
+if (nargin < 3 || nargin > 5)
     print_usage ();
     return
 endif
@@ -64,13 +66,20 @@ endif
 if (isnai (x) || isnai (y) || isnai (z))
     error ("interval:NaI", "Cannot plot3 NaIs");
     return
+else
+    x = intervalpart (x);
+    y = intervalpart (y);
+    z = intervalpart (z);
 endif
 
-if (nargin < 4)
-    color = 'b';
-endif
-
-if (nargin < 5)
+if (nargin < 4 || isempty (color))
+    color = 'interp';
+    if (nargin < 5)
+        # will only be used for lines and dots
+        edgecolor = colormap ()(1, :);
+    endif
+elseif (nargin < 5)
+    # will only be used for lines and dots
     edgecolor = color;
 endif
 
@@ -175,7 +184,8 @@ unwind_protect
                'Faces', faces, ...
                'EdgeColor', edgecolor, ...
                'LineWidth', edgewidth, ...
-               'FaceColor', color);
+               'FaceColor', color, ...
+               'FaceVertexCData', vertices (:, 3));
     endif
 
 unwind_protect_cleanup
@@ -194,18 +204,34 @@ endfunction
 
 %!demo
 %!  clf
-%!  hold on
-%!  t = 0 : .1 : 10;
-%!  x = infsup (sin (t)) + "0.01?";
-%!  y = infsup (cos (t)) + "0.1?";
-%!  z = infsup (t) + (infsup ("[-1, 1]") .* sin (t) .^ 2);
-%!  blue = [38 139 210]/255; red = [220 50 47]/255; green = [133 153 0]/255;
-%!  yellow = [181 137 0]/255; base0 = [131 148 150]/255;
-%!  base1 = [147 161 161]/255; base2 = [238 232 213]/255;
-%!  plot3 (x, y, z, blue);
-%!  plot3 (infsup ("0?"), infsup ("0?"), infsup (-1, 9), base2, green);
-%!  plot3 (1.5, infsup ("[-1.5, 1.5]"), infsup (0, 10), base0, yellow);
-%!  plot3 (infsup ("[-1.5, 1.5]"), 1.5, infsup (0, 10), base1, yellow);
-%!  plot3 (0, 0, infsup (-4, 12), red);
+%!  colormap hot
+%!  x = y = z = (1 : 3) + infsup ("[0, 1]");
+%!  plot3 (x, y, z);
 %!  view (300, 30)
-%!  hold off
+%!  grid on
+
+%!demo
+%!  clf
+%!  colormap jet
+%!  z = 1 : 8;
+%!  x = y = infsup ("[-1, 1]") ./ z;
+%!  plot3 (x, y, z);
+%!  view (33, 24)
+%!  grid on
+
+%!demo
+%!  clf
+%!  [x, y] = meshgrid (mince (infsup ("[-5, 5]"), 20), ...
+%!                     mince (infsup ("[0.1, 5]"), 10));
+%!  z = log (hypot (x, y));
+%!  blue = [38 139 210]/255; base2 = [238 232 213]/255;
+%!  plot3 (x, y, z, base2, blue);
+%!  view (330, 12)
+
+%!demo
+%!  clf
+%!  [x, y] = meshgrid (midrad (-10 : 0.5 : 10, .25));
+%!  z = sin (hypot (x, y)) .* hypot (x, y);
+%!  plot3 (mid (x), mid (y), z);
+%!  view (33, 50)
+%!  grid on
