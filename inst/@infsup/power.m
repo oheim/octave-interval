@@ -27,7 +27,11 @@
 ## @code{exp (@var{Y} * log (@var{X}))} with initial branch of complex
 ## logarithm and complex exponential function.
 ##
-## Warning: This function is not defined by IEEE Std 1788-2015.
+## Warning: This function is not defined by IEEE Std 1788-2015.  However, it
+## has been published as “pow2” in O. Heimlich, M. Nehmeier, J. Wolff von
+## Gudenberg. 2013. “Variants of the general interval power function.”
+## Soft Computing. Volume 17, Issue 8, pp 1357–1366.
+## Springer Berlin Heidelberg. DOI 10.1007/s00500-013-1008-8.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -256,3 +260,4 @@ endfunction
 
 %!test "from the documentation string";
 %! assert (infsup (-5, 6) .^ infsup (2, 3) == infsup (-125, 216));
+%!assert (infsup (-10, 0) .^ infsup (0, 1:8) == infsup ([-1e1, -1e1, -1e3, -1e3, -1e5, -1e5, -1e7, -1e7], [1e0, 1e2, 1e2, 1e4, 1e4, 1e6, 1e6, 1e8]));

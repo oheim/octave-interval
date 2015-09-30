@@ -43,46 +43,55 @@ if (nargin ~= 2)
     print_usage ();
     return
 endif
-if (not (isnumeric (p)) || fix (p) ~= p)
+if (not (isnumeric (p)) || any (any (fix (p) ~= p)))
     error ("interval:InvalidOperand", "pown: exponent is not an integer");
 endif
 
-if (p == 1) # x^1
-    result = infsup (x.inf, x.sup);
-    return
+## Resize, if scalar × matrix
+if (isscalar (x.inf) ~= isscalar (p))
+    x.inf = ones (size (p)) .* x.inf;
+    x.sup = ones (size (p)) .* x.sup;
+    p = ones (size (x.inf)) .* p;
 endif
 
-if (p == 0) # x^0
-    result = infsup (ones (size (x)));
-    result.inf (isempty (x)) = inf;
-    result.sup (isempty (x)) = -inf;
-    return
+result = x; % already correct for p == 1
+
+select = (p == 0 & not (isempty (x)));
+result.inf(select) = result.sup(select) = 1;
+
+idx.type = "()";
+idx.subs = {(p == 2)}; # x^2
+if (any (any (idx.subs{1})))
+    result = subsasgn (result, idx, sqr (subsref (x, idx)));
 endif
 
-if (p == 2) # x^2
-    result = sqr (x);
-    return
+idx.subs = {(rem (p, 2) == 0 & p ~= 2 & p ~= 0)};
+if (any (any (idx.subs{1}))) # p even
+    x_mig = mig (subsref (x, idx));
+    x_mig(isnan (x_mig)) = inf;
+
+    x_mag = mag (subsref (x, idx));
+    x_mag(isnan (x_mag)) = -inf;
+    
+    x.inf = subsasgn (x.inf, idx, x_mig);
+    x.sup = subsasgn (x.sup, idx, x_mag);
+    
+    result = subsasgn (result, idx, pow (subsref (x, idx), subsref (p, idx)));
 endif
 
-if (rem (p, 2) == 0) # p even
-    x.mig = mig (x);
-    x.mag = mag (x);
-    x.inf = x.mig;
-    x.inf (isnan (x.inf)) = inf;
-    x.sup = x.mag;
-    x.sup (isnan (x.sup)) = -inf;
-    result = pow (x, p);
-else # p odd
-    result = union (pow (x, infsup (p)), ...
-                    -pow (-x, infsup (p)));
+idx.subs = {(rem (p, 2) ~= 0)};
+if (any (any (idx.subs{1}))) # p odd
+    x_idx = subsref (x, idx);
+    p_idx = infsup (subsref (p, idx));
+    result = subsasgn (result, idx, ...
+                        union (pow (x_idx, p_idx), ...
+                              -pow (-x_idx, p_idx)));
 endif
 
 ## Special case: x = [0]. The pow function used above would be undefined.
-if (p >= 0)
-    zero = x.inf == 0 & x.sup == 0;
-    result.inf (zero) = -0;
-    result.sup (zero) = +0;
-endif
+select = (p > 0 & x.inf == 0 & x.sup == 0);
+result.inf(select) = -0;
+result.sup(select) = +0;
 
 endfunction
 
