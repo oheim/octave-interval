@@ -56,13 +56,13 @@ endif
 
 result = newdec (subsasgn (intervalpart (A), S, intervalpart (B)));
 result.dec = subsasgn (A.dec, S, B.dec);
-result.dec (result.dec == 0) = _trv (); # any new elements are [Empty]_trv
+result.dec (result.dec == 0) = _com (); # any new elements are [0]_com
 
 endfunction
 
 %!test
 %! A = infsupdec (magic (3));
 %! A (4, 4) = 42;
-%! assert (inf (A), [magic(3),[inf;inf;inf];inf,inf,inf,42]);
-%! assert (sup (A), [magic(3),[-inf;-inf;-inf];-inf,-inf,-inf,42]);
-%! assert (decorationpart (A), {"com", "com", "com", "trv"; "com", "com", "com", "trv"; "com", "com", "com", "trv"; "trv", "trv", "trv", "com"});
+%! assert (inf (A), [magic(3),[0;0;0];0,0,0,42]);
+%! assert (sup (A), [magic(3),[0;0;0];0,0,0,42]);
+%! assert (decorationpart (A), {"com", "com", "com", "com"; "com", "com", "com", "com"; "com", "com", "com", "com"; "com", "com", "com", "com"});

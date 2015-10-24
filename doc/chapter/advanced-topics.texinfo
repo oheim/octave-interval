@@ -237,20 +237,6 @@ ans + "[0, 2]"
 
 Interval functions with only one argument can be called by using property syntax, e. g. @code{x.inf}, @code{x.sup} or even @code{x.sqr}.
 
-When matrices are resized using subscripted assignment, any implicit new matrix elements will carry an empty interval.
-
-@example
-@group
-M = infsupdec (magic (3)); M (4, 4) = 42
-  @result{} M = 4×4 interval matrix
-  
-        [8]_com       [1]_com       [6]_com   [Empty]_trv
-        [3]_com       [5]_com       [7]_com   [Empty]_trv
-        [4]_com       [9]_com       [2]_com   [Empty]_trv
-    [Empty]_trv   [Empty]_trv   [Empty]_trv      [42]_com
-@end group
-@end example
-
 Whilst most functions (@funref{@@infsup/size}, @funref{@@infsup/isvector}, @funref{@@infsup/ismatrix}, …) work as expected on interval data types, the function @funref{@@infsup/isempty} is evaluated element-wise and checks if an interval equals the empty set.
 
 @example

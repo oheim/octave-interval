@@ -53,16 +53,6 @@ assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
 l = subsasgn (A.inf, S, B.inf);
 u = subsasgn (A.sup, S, B.sup);
 
-## Implicit new elements in the matrices take the value 0. We can detect them
-## in the inf matrix, because zeros in the inf matrix are set to -0 by the
-## infsup constructor.
-
-newelements = not (signbit (l)) & (l == 0);
-
-## Set the implicit new elements to [Empty].
-l (newelements) = inf;
-u (newelements) = -inf;
-
 result = infsup (l, u);
  
 endfunction
@@ -70,5 +60,5 @@ endfunction
 %!test
 %! A = infsup (magic (3));
 %! A (4, 4) = 42;
-%! assert (inf (A), [magic(3),[inf;inf;inf];inf,inf,inf,42]);
-%! assert (sup (A), [magic(3),[-inf;-inf;-inf];-inf,-inf,-inf,42]);
+%! assert (inf (A), [magic(3),[0;0;0];0,0,0,42]);
+%! assert (sup (A), [magic(3),[0;0;0];0,0,0,42]);
