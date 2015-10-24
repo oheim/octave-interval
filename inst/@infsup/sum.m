@@ -31,7 +31,7 @@
 ##   @result{} ans ⊂ [0, 2.2205e-16]
 ## @end group
 ## @end example
-## @seealso{@@infsup/plus}
+## @seealso{@@infsup/plus, @@infsup/prod}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -54,16 +54,16 @@ if (nargin < 2)
 endif
 
 if (dim == 1)
-    resultsize = [1, size(x.inf, 2)];
+    resultsize = [1, max(1, size (x.inf, 2))];
 elseif (dim == 2)
-    resultsize = [size(x.inf, 1), 1];
+    resultsize = [max(1, size (x.inf, 1)), 1];
 else
     error ("interval:InvalidOperand", "sum: DIM must be a valid dimension")
 endif
 
 l = u = zeros (resultsize);
 
-for n = 1 : numel (l)
+for n = 1 : size (x.inf, 3 - dim)
     idx.type = "()";
     idx.subs = cell (1, 2);
     idx.subs {dim} = ":";
@@ -92,3 +92,4 @@ endfunction
 
 %!test "from the documentation string";
 %! assert (sum ([infsup(1), pow2(-1074), -1]) == infsup (pow2 (-1074)));
+%!assert (sum (infsup ([])) == 0);

@@ -43,6 +43,15 @@ if (nargin > 2)
     return
 endif
 
+if (isempty (x.inf))
+    if (isa (x, 'infsupdec'))
+        result = infsupdec (0);
+    else
+        result = infsup (0);
+    endif
+    return
+endif
+
 x = abs (x);
 if (nargin < 2)
     result = dot (x, x);
@@ -53,3 +62,4 @@ endfunction
 
 %!test "from the documentation string";
 %! assert (sumsq ([infsup(1), pow2(-1074), -1]) == infsup (2, 2+eps*2));
+%!assert (sumsq (infsup ([])) == 0);

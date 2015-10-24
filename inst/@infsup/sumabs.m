@@ -53,3 +53,4 @@ endfunction
 
 %!test "from the documentation string";
 %! assert (sumabs ([infsup(1), pow2(-1074), -1]) == infsup (2, 2+eps*2));
+%!assert (sumabs (infsup ([])) == 0);

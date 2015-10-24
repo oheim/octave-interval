@@ -53,16 +53,10 @@ if (nargin < 2)
     endif
 endif
 
-if (dim == 1)
-    resultsize = [1, size(x.dec, 2)];
-elseif (dim == 2)
-    resultsize = [size(x.dec, 1), 1];
-else
-    error ("interval:InvalidOperand", "sum: DIM must be a valid dimension")
-endif
-
 result = newdec (sum (intervalpart (x), dim));
-result.dec = min (result.dec, min (x.dec, [], dim));
+if (not (isempty (x.dec)))
+    result.dec = min (result.dec, min (x.dec, [], dim));
+endif
 
 endfunction
 
