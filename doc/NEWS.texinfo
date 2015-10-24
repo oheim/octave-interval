@@ -17,6 +17,7 @@
 @release{1.x.x, 2015-xx-xx}
 @itemize
 @item prod: New interval arithmetic function
+@item diag: New utility function to create diagonal matrices or extract vectors from diagonals of matrices
 @end itemize
 
 @noindent Bugfixes

@@ -156,6 +156,7 @@ Utility function
  @infsup/cat
  @infsup/columns
  @infsup/ctranspose
+ @infsup/diag
  @infsup/display
  @infsup/horzcat
  @infsup/iscolumn
