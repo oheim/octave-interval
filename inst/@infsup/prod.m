@@ -76,10 +76,14 @@ idx.type = "()";
 idx.subs = {":", ":"};
 idx.subs{3 - dim} = not (emptyresult | zeroresult | entireresult);
 if (any (idx.subs{3 - dim}))
+    idx.subs{dim} = 1;
+    result2 = subsref (result, idx);
     for i = 1 : size (x.inf, dim)
         idx.subs{dim} = i;
-        result = times (result, subsref (x, idx));
+        result2 = times (result2, subsref (x, idx));
     endfor
+    idx.subs{dim} = 1;
+    result = subsasgn (result, idx, result2);
 endif
 
 endfunction
