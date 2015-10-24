@@ -40,32 +40,38 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2015-10-23
+## Created: 2015-10-24
 
 function result = diag (x, m, n)
 
-if (nargin >= 2 && isa (m, 'infsup'))
-    error ('diag: invalid second argument; it must not be an interval');
+if (not (isa (x, 'infsupdec')))
+    error ('diag: invalid argument; only the first may be an interval');
 endif
-if (nargin >= 3 && isa (n, 'infsup'))
-    error ('diag: invalid third argument; it must not be an interval');
+if (isnai (x))
+    result = x;
+    return
 endif
 
 switch (nargin)
     case 1
-        result = infsup (diag (x.inf), diag (x.sup));
+        result = newdec (diag (intervalpart (x)));
+        result.dec = diag (x.dec);
     case 2
-        result = infsup (diag (x.inf, m), diag (x.sup, m));
+        result = newdec (diag (intervalpart (x), m));
+        result.dec = diag (x.dec, m);
     case 3
-        result = infsup (diag (x.inf, m, n), diag (x.sup, m, n));
+        result = newdec (diag (intervalpart (x), m, n));
+        result.dec = diag (x.dec, m, n);
     otherwise
         print_usage ();
 endswitch
+
+result.dec (result.dec == 0) = _com (); # any new elements are [0]_com
 
 endfunction
 
 %!assert (diag (infsupdec (-inf, inf)) == "[Entire]");
 %!assert (diag (infsupdec ()) == "[Empty]");
-%!assert (diag (infsupdec ([])) == infsup ([]));
+%!xtest assert (isequal (diag (infsupdec ([])), infsupdec (zeros (0))));
 %!assert (diag (infsupdec (magic (3))) == [8; 5; 2]);
 %!assert (diag (infsupdec ([8 5 3])) == [8 0 0; 0 5 0; 0 0 3]);
