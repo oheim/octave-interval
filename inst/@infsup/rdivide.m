@@ -29,7 +29,7 @@
 ##   @result{} ans = [1, 3]
 ## @end group
 ## @end example
-## @seealso{@@infsup/times}
+## @seealso{@@infsup/recip, @@infsup/times}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich

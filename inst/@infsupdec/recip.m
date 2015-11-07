@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2015 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,60 +15,42 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} ./ @var{Y}
+## @deftypefn {Function File} {} recip (@var{X})
 ## 
-## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
+## Compute the reciprocal of @var{X}.
+##
+## The result is equivalent to @code{1 ./ @var{X}}, but is computed more
+## efficiently.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## x = infsupdec (2, 3);
-## y = infsupdec (1, 2);
-## x ./ y
-##   @result{} ans = [1, 3]_com
+## recip (infsupdec (1, 4))
+##   @result{} ans = [0.25, 1]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/recip, @@infsupdec/mtimes}
+## @seealso{@@infsup/inv, @@infsupdec/rdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-10-13
+## Created: 2015-11-07
 
-function result = rdivide (x, y)
+function result = recip (x)
 
-if (nargin ~= 2)
+if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-if (not (isa (x, "infsupdec")))
-    x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
-    y = infsupdec (y);
-endif
+result = newdec (recip (intervalpart (x)));
+result.dec = min (result.dec, x.dec);
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (rdivide (intervalpart (x), intervalpart (y)));
-result.dec = min (result.dec, min (x.dec, y.dec));
-
-divisionbyzero = ismember (0, y);
-if (isscalar (y) && not (isscalar (x)))
-    divisionbyzero = divisionbyzero (ones (size (x)));
-endif
-result.dec (divisionbyzero) = _trv ();
+divisionbyzero = ismember (0, x);
+result.dec(divisionbyzero) = _trv ();
 
 endfunction
 
 %!test "from the documentation string";
-%! assert (isequal (infsupdec (2, 3) ./ infsupdec (1, 2), infsupdec (1, 3)));
+%!  assert (recip (infsupdec (1, 4)) == infsupdec (0.25, 1));

@@ -35,7 +35,7 @@
 ##        [0]        [0]       [1]
 ## @end group
 ## @end example
-## @seealso{@@infsup/mrdivide}
+## @seealso{@@infsup/recip, @@infsup/mrdivide}
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -51,7 +51,7 @@ endif
 
 n = length (x);
 if (n <= 1)
-    result = 1 ./ x;
+    result = recip (x);
     return
 endif
 

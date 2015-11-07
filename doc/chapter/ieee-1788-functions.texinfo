@@ -54,8 +54,8 @@ The operations textToInterval (@var{S}), numsToInterval (@var{l}, @var{u}), and 
     @tab@funref{@@infsup/rdivide}
     @tab tightest
 @item recip (@var{x})
-    @tab@funref{@@infsup/inv}
-    @tab tightest (on scalar intervals)
+    @tab@funref{@@infsup/recip}
+    @tab tightest
 @item sqr (@var{x})
     @tab@funref{@@infsup/sqr}
     @tab tightest
