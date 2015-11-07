@@ -72,6 +72,6 @@ endfunction
 
 %!assert (diag (infsupdec (-inf, inf)) == "[Entire]");
 %!assert (diag (infsupdec ()) == "[Empty]");
-%!xtest assert (isequal (diag (infsupdec ([])), infsupdec (zeros (0))));
-%!assert (diag (infsupdec (magic (3))) == [8; 5; 2]);
-%!assert (diag (infsupdec ([8 5 3])) == [8 0 0; 0 5 0; 0 0 3]);
+%!assert (numel (diag (infsupdec ([]))), 0);
+%!xtest assert (isequal (diag (infsupdec (magic (3))), infsupdec ([8; 5; 2])));
+%!xtest assert (isequal (diag (infsupdec ([8 5 3])), infsupdec ([8 0 0; 0 5 0; 0 0 3])));
