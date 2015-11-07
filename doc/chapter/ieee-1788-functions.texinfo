@@ -397,6 +397,8 @@ The operations textToInterval (@var{S}), numsToInterval (@var{l}, @var{u}), and 
 
 See @funref{@@infsup/newdec}, @funref{@@infsupdec/intervalpart}, and @funref{@@infsupdec/decorationpart}.  The operation setDec is implemented by @funref{@@infsupdec/infsupdec}.
 
+For comparison of decorations with respect to the propagation order @code{com > dac > def > trv > ill} use the numeric value returned by @code{decorationpart (@var{x}, "uint8")}.
+
 @appendixsubsec Reduction operations
 
 See @funref{mpfr_vector_sum_d} and @funref{mpfr_vector_dot_d}.  The operations @code{sumAbs} and @code{sumSquare} can be computed with @code{mpfr_vector_sum_d (@var{rounding mode}, abs (@var{x}))} and @code{mpfr_vector_dot_d (@var{rounding mode}, @var{x}, @var{x})} respectively.
