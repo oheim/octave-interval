@@ -309,6 +309,12 @@ The operations textToInterval (@var{S}), numsToInterval (@var{l}, @var{u}), and 
     Operation
     @tab Implementation
     @tab Description
+@item isEmpty (@var{x})
+    @tab@funref{@@infsup/isempty}
+    @tab @var{x} is the empty set
+@item isEntire (@var{x})
+    @tab@funref{@@infsup/isentire}
+    @tab @var{x} is the whole line
 @item equal (@var{a}, @var{b})
     @tab@funref{@@infsup/eq}
     @tab @var{a} equals @var{b}
