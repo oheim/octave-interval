@@ -44,6 +44,11 @@ if (nargin ~= 1)
     return
 endif
 
+if (isnai (x))
+    result = x;
+    return
+endif
+
 result = newdec (det (intervalpart (x)));
 result.dec = min (result.dec, min (min (x.dec)));
 
