@@ -319,7 +319,7 @@ A system of linear equations in the form A@var{x} = b with intervals can be seen
 @item
     If the linear system is underdetermined and has infinitely many solutions, the interval solution will be unbound in at least one of its coordinates. Contrariwise, from an unbound result it can not be concluded whether the linear system is underdetermined or has solutions.
 @item
-    If the interval result is empty in at least one of its coordinates, the linear system is guaranteed to be underdetermined and has no solutions. Contrariwise, from a non-empty result it can not be concluded whether all or some of the systems have solutions or not.
+    If the interval result is empty in at least one of its coordinates, the linear system is guaranteed to be overdetermined and has no solutions. Contrariwise, from a non-empty result it can not be concluded whether all or some of the systems have solutions or not.
 @item
     Wide intervals within the matrix A can easily lead to a superposition of cases, where the rank of A is no longer unique. If the linear interval system contains cases of linear independent equations as well as linear dependent equations, the resulting enclosure of solutions will inevitably be very broad.
 @end itemize
