@@ -150,6 +150,7 @@ Interval input and output
  @infsup/plot3
 Interval solver or optimizer
  @infsup/fminsearch
+ @infsup/fsolve
  @infsup/fzero
  @infsup/gauss
  @infsup/polyval
