@@ -54,7 +54,7 @@ wid (nextout (infsup ([0, 1, 1e10, 1e100])))
 
 @section Parameter estimation
 
-Consider the model @code{y (@var{t}) = @var{p1} * exp (@var{p2} * t)}.  The parameters @var{p} = [@var{p1}; @var{p2}] are unknown, but it is known that the model fulfills the following constraints, which have been obtained using measurements with known error bounds.
+Consider the model @code{y (@var{t}) = @var{p1} * exp (@var{p2} * t)}.  The parameters @var{p1} and @var{p2} are unknown, but it is known that the model fulfills the following constraints, which have been obtained using measurements with known error bounds.
 
 @display
 @verbatim
@@ -66,12 +66,12 @@ y (4)   ∈ [-0.1, 0.03]
 @end verbatim
 @end display
 
-A better enclosure of the parameters @var{p} can be estimated with the @funref{@@infsup/fsolve} function.
+A better enclosure of the parameters @var{p1} and @var{p2} can be estimated with the @funref{@@infsup/fsolve} function.
 
 @example
 @group
-y = @@(p, t) p(1) .* exp (p(2) .* t);
-f = @@(p) y (p, [0.2; 1; 2; 4]);
+y = @@(p1, p2, t) p1 .* exp (p2 .* t);
+f = @@(p1, p2) y (p1, p2, [0.2; 1; 2; 4]);
 p = fsolve (f, infsup ("[-3, 3] [-3, 3]")', ...
                infsup ("[1.5, 2] [0.7, 0.8] [0.1, 0.3] [-0.1, 0.03]")')
   @result{} p ⊂ 2×1 interval vector
@@ -82,11 +82,11 @@ p = fsolve (f, infsup ("[-3, 3] [-3, 3]")', ...
 @end group
 @end example
 
-The resulting @code{p} guarantees to contain all parameters which satisfy all constraints on @var{y}. It is no surprise that @code{f (p)} intersects the constraints for @var{y}.
+The resulting @code{p} guarantees to contain all parameters @code{[@var{p1}; @var{p2}]} which satisfy all constraints on @var{y}. It is no surprise that @code{f (p)} intersects the constraints for @var{y}.
 
 @example
 @group
-f (p)
+f (p(1), p(2))
   @result{} ans ⊂ 4×1 interval vector
 
             [1.5241, 2.1166]

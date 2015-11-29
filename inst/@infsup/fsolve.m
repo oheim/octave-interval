@@ -44,6 +44,16 @@
 ## algorithm.  That is, @var{X} is bisected until @var{F}(@var{X}) is either
 ## a subset of @var{Y} or until they are disjoint.
 ##
+## Note on performance: The bisection method is a brute-force approach to
+## exhaust the function's domain and requires a lot of function evaluations.
+## It is highly recommended to vectorize the function @var{F} to speed up
+## computation.  If @var{Y} is a vector and @var{F} accepts @var{n} input
+## arguments, where @var{n} is the number of elements of @var{X0}, this
+## function will try to use vectorized function evaluation for @var{F}.  If
+## vectorized function evaluation is used, @var{X_PAVING} will be returned as
+## vector with an @var{x} enclosure in each column (or row) and
+## @var{X_INNER_IDX} will then be an row (or column) index vector.
+##
 ## It is possible to use the following optimization @var{options}:
 ## @option{MaxFunEvals}, @option{MaxIter}, @option{TolFun}, @option{TolX}.
 ##
@@ -60,12 +70,11 @@
 ## @group
 ## # Solve x1 ^ 2 + x2 ^ 2 = 1 for -3 ≤ x1, x2 ≤ 3,
 ## # the exact solution is a unit circle
-## f = @@(x) hypot (x(1), x(2));
-## x = fsolve (f, infsup ([-3; -3], [3; 3]), 1, optimset ('TolX', 0.1))
+## x = fsolve (@@hypot, infsup ([-3; -3], [3; 3]), 1)
 ##   @result{} x ⊂ 2×1 interval vector
 ##
-##       [-1.0313, +1.0313]
-##       [-1.0313, +1.0313]
+##       [-1.0002, +1.0002]
+##       [-1.0002, +1.0002]
 ##
 ## @end group
 ## @end example
@@ -156,6 +165,30 @@ if (isa (y, "infsupdec"))
 endif
 
 warning ("off", "interval:ImplicitPromote", "local");
+
+## Try to vectorize function evaluation
+if (isvector (y))
+    try
+        f_argn = nargin (f);
+    catch
+        ## nargin doesn't work for built-in functions, which happen to agree
+        ## with infsup methods
+        f_argn = 0;
+    end_try_catch
+    if (f_argn != 1 || numel (x0) == 1)
+        try
+            [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
+            return
+        catch
+            ## Unable to use vectorized evaluation, fall back to cellfun usage
+            warning ('interval:fsolve:vectorize', lasterr)
+            warning ('interval:fsolve:vectorize', ...
+                     ['fsolve: unable to use vectorization, ' ...
+                      'falling back to slow algorithm'])
+        end_try_catch
+    endif
+endif
+
 x = empty (size (x0));
 x_paving = {};
 x_inner_idx = false (0);
@@ -262,8 +295,120 @@ x = intervalpart (x);
 endfunction
 
 function interval = replace_coordinate (interval, coord, l, u)
-    interval.inf(coord) = l;
-    interval.sup(coord) = u;
+interval.inf(coord) = l;
+interval.sup(coord) = u;
+endfunction
+
+## Variant of above algorithm, which utilized vectorized evaluation of f
+function [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options)
+
+if (iscolumn (y))
+    x0 = vec (x0);
+    data_dim = 1;
+    cat_dim = 2;
+else
+    assert (isrow (y));
+    x0 = transpose (vec (x0));
+    data_dim = 2;
+    cat_dim = 1;
+endif
+
+x = intervalpart (empty (size (x0)));
+s = size (x0);
+s(cat_dim) = 0;
+x_paving = infsup (zeros (s));
+x_inner_idx = false (0);
+queue = x0;
+x_scalar = isscalar (x0);
+
+## Test functions
+verify_subset = @(fval) all (subset (fval, y), data_dim);
+verify_disjoint = @(fval) any (disjoint (fval, y), data_dim);
+
+## Utility functions for indexing the queue
+idx.type = '()';
+idx.subs = {:, :};
+
+while (not (isempty (queue.inf)))
+    ## Evaluate f(x)
+    l_args = num2cell (queue.inf, cat_dim);
+    u_args = num2cell (queue.sup, cat_dim);
+    f_args = cellfun (@(l, u) infsup (l, u), ...
+                      l_args, u_args, ...
+                      "UniformOutput", false);
+    fval = feval (f, f_args{:});
+    options.MaxFunEvals --;
+    options.MaxIter --;
+    ## Check whether x is outside of the preimage of y
+    ## or x is inside the preimage of y
+    is_outside = verify_disjoint (fval);
+    is_inside = verify_subset (fval) & not (is_outside);
+    ## Store the verified subsets of the preimage of y and continue only on
+    ## elements that are not verified
+    idx.subs{cat_dim} = is_inside;
+    queue_inside = subsref (queue, idx);
+    x = union (cat (cat_dim, x, queue_inside), [], cat_dim);
+    x_paving = cat (cat_dim, x_paving, queue_inside);
+    x_inner_idx = cat (cat_dim, x_inner_idx, is_inside(is_inside));
+    idx.subs{cat_dim} = not (is_inside | is_outside);
+    queue = subsref (queue, idx);
+    ## Stop after MaxIter or MaxFunEvals
+    if (options.MaxIter <= 0 || options.MaxFunEvals <= 0)
+        x = union (cat (cat_dim, x, queue), [], cat_dim);
+        x_paving = cat (cat_dim, x_paving, queue);
+        s = size (queue);
+        s(data_dim) = 1
+        x_inner_idx = cat (cat_dim, x_inner_idx, false (s));
+        break
+    endif
+    ## Stop iteration for small intervals
+    if (not (isempty (options.TolFun)))
+        idx.subs{cat_dim} = not (is_inside | is_outside);
+        fval = subsref (fval, idx);
+        widths = max (wid (fval), [], data_dim);
+        is_small = widths < options.TolFun;
+    else
+        s = size (queue);
+        s(data_dim) = 1
+        is_small = false (s);
+    endif
+    [widths, bisect_coord] = max (wid (queue), [], data_dim);
+    is_small = is_small | (widths < options.TolX);
+    idx.subs{cat_dim} = is_small;
+    queue_is_small = subsref (queue, idx);
+    x = union (cat (cat_dim, x, queue_is_small), [], cat_dim);
+    x_paving = cat (cat_dim, x_paving, queue_is_small);
+    x_inner_idx = cat (cat_dim, x_inner_idx, not (is_small(is_small)));
+    idx.subs{cat_dim} = not (is_small);
+    queue = subsref (queue, idx);
+    widths = widths(not (is_small));
+    bisect_coord = bisect_coord(not (is_small));
+    ## Bisect remaining intervals at the largest coordinate.
+    x1 = x2 = queue;
+    if (x_scalar)
+        coord = queue;
+    else
+        coord_idx.type = "()";
+        coord_idx.subs = {:, :};
+        coord_idx.subs{data_dim} = bisect_coord;
+        coord = subsref (queue, coord_idx);
+    endif
+    m_coord = mid (coord);
+    if (x_scalar)
+        x1.sup = x2.inf = m_coord;
+    else
+        x1.sup = subsasgn (x1.sup, coord_idx, m_coord);
+        x2.inf = subsasgn (x2.inf, coord_idx, m_coord);
+    endif
+    queue = cat (cat_dim, x1, x2);
+    ## Short-circuit if no paving must be computed and remaining intervals
+    ## are subsets of the already computed interval enclosure.
+    if (nargout < 2)
+        idx.subs{cat_dim} = all (subset (queue, x), data_dim);
+        queue = subsref (queue, idx);
+    endif
+endwhile
+
 endfunction
 
 %!assert (subset (sqrt (infsup (2)), fsolve (@sqr, infsup (0, 3), 2)));
@@ -278,13 +423,12 @@ endfunction
 %! cyan = [42 161 152] / 255;
 %! red = [220 50 47] / 255;
 %! # 2D ring
-%! f = @(x) hypot (x(1), x(2));
-%! [x, paving, inner] = fsolve (f, infsup ([-3; -3], [3; 3]), ...
-%!                                 infsup (0.5, 2), ...
-%!                                 optimset ('TolX', 0.1));
+%! f = @(x, y) hypot (x, y);
+%! [outer, paving, inner] = fsolve (f, infsup ([-3; -3], [3; 3]), ...
+%!                                  infsup (0.5, 2), ...
+%!                                  optimset ('TolX', 0.1));
 %! # Plot the outer interval enclosure
-%! plot (x(1), x(2), shade)
-%! paving = horzcat (paving{:});
+%! plot (outer(1), outer(2), shade)
 %! # Plot the guaranteed inner interval enclosures of the preimage
 %! plot (paving(1, inner), paving(2, inner), blue, cyan);
 %! # Plot the boundary of the preimage
@@ -297,11 +441,10 @@ endfunction
 %! shade = [238 232 213] / 255;
 %! blue = [38 139 210] / 255;
 %! # This 3D ring is difficult to approximate with interval boxes
-%! f = @(x) hypot (hypot (x(1), x(2)) - 2, x(3));
-%! [x, paving, inner] = fsolve (f, infsup ([-4; -4; -2], [4; 4; 2]), ...
+%! f = @(x, y, z) hypot (hypot (x, y) - 2, z);
+%! [~, paving, inner] = fsolve (f, infsup ([-4; -4; -2], [4; 4; 2]), ...
 %!                                 infsup (0, 0.5), ...
-%!                                 optimset ('TolX', 0.1, 'MaxFunEval', 8000));
-%! paving = horzcat (paving{:});
+%!                                 optimset ('TolX', 0.2));
 %! plot3 (paving(1, not (inner)), ...
 %!        paving(2, not (inner)), ...
 %!        paving(3, not (inner)), shade, blue);
