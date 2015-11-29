@@ -73,8 +73,8 @@
 ## x = fsolve (@@hypot, infsup ([-3; -3], [3; 3]), 1)
 ##   @result{} x ⊂ 2×1 interval vector
 ##
-##       [-1.0002, +1.0002]
-##       [-1.0002, +1.0002]
+##       [-1.002, +1.002]
+##       [-1.002, +1.002]
 ##
 ## @end group
 ## @end example
@@ -301,6 +301,8 @@ endfunction
 
 ## Variant of above algorithm, which utilized vectorized evaluation of f
 function [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options)
+
+warning ("off", "Octave:broadcast", "local");
 
 if (iscolumn (y))
     x0 = vec (x0);
