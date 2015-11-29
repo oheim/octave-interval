@@ -63,27 +63,33 @@ void evaluate (
   mpfr_init2 (mp1, BINARY64_PRECISION);
   mpfr_init2 (mp2, BINARY64_PRECISION);
   
-  bool scalar1 = arg1.numel () == 1;
-  bool scalar2 = arg2.numel () == 1;
+  // arg1 shall contain the result and must be resized
+  if (arg1.rows () == 1 && arg2.rows () != 1)
+    arg1 = arg1.index (idx_vector (ColumnVector (arg2.rows (), 1.0)), 
+                       idx_vector::colon);
+  if (arg1.columns () == 1 && arg2.columns () != 1)
+    arg1 = arg1.index (idx_vector::colon,
+                       idx_vector (RowVector (arg2.columns (), 1.0)));
   
-  if (scalar1 && ! scalar2)
-    {
-      // arg1 shall contain the result and must be resized
-      arg1 = Matrix (arg2.dims (), arg1.elem (0));
-      scalar1 = false;
-    }
+  const octave_idx_type n = arg1.rows ();
+  const octave_idx_type m = arg1.columns ();
+  const bool broadcast_r = n != 1 && arg2.rows () == 1;
+  const bool broadcast_c = m != 1 && arg2.columns () == 1;
   
-  const octave_idx_type n = std::max (arg1.numel (), arg2.numel ());
   for (octave_idx_type i = 0; i < n; i ++)
-    {
-      mpfr_set_d (mp1, arg1.elem (i), MPFR_RNDZ);
-      mpfr_set_d (mp2,
-                  (scalar2) ? arg2.elem (0) // broadcast
-                            : arg2.elem (i),
-                  MPFR_RNDZ);
-      (*f) (mp1, mp1, mp2, rnd);
-      arg1.elem (i) = mpfr_get_d (mp1, rnd);
-    }
+    for (octave_idx_type j = 0; j < m; j ++)
+      {
+        mpfr_set_d (mp1, arg1.elem (i, j), MPFR_RNDZ);
+        mpfr_set_d (mp2,
+                    (broadcast_r)
+                      ? ((broadcast_c) ? arg2.elem (0, 0)
+                                       : arg2.elem (0, j))
+                      : ((broadcast_c) ? arg2.elem (i, 0)
+                                       : arg2.elem (i, j))
+                    , MPFR_RNDZ);
+        (*f) (mp1, mp1, mp2, rnd);
+        arg1.elem (i, j) = mpfr_get_d (mp1, rnd);
+      }
   
   mpfr_clear (mp1);
   mpfr_clear (mp2);
@@ -259,8 +265,11 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   if (nargin >= 4)
     {
       arg2                   = args (3).matrix_value ();
-      if (arg1.numel () != 1 && arg2.numel () != 1 &&
-          arg1.numel () != arg2.numel ())
+      if (arg1.rows () != 1 && arg2.rows () != 1 &&
+          arg1.rows () != arg2.rows ())
+        error ("mpfr_function_d: Matrix dimensions must agree!");
+      if (arg1.columns () != 1 && arg2.columns () != 1 &&
+          arg1.columns () != arg2.columns ())
         error ("mpfr_function_d: Matrix dimensions must agree!");
     }
   if (nargin >= 5)
