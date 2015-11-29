@@ -1,0 +1,98 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
+This chapter presents some more or less exotic use cases for the interval package.
+
+
+@section Floating-point numbers
+
+Floating-point numbers are most commonly used in binary64 format, a.k.a. double precision.  Internally they are stored in the form @code{± @var{m} * 2 ^ @var{e}} with some integral mantissa @var{m} and exponent @var{e}.  Most decimal fractions can only be stored approximately in this format.
+
+The @funref{@@infsup/intervaltotext} function can be used to output the approximate value up to the last decimal digit.
+
+@example
+@group
+intervaltotext (infsup (0.1), "exact decimal")
+  @result{} ans = [0.1000000000000000055511151231257827021181583404541015625]
+@end group
+@end example
+
+It can be seen that 0.1 is converted into the most accurate floating-point number.  In this case that value is greater than 0.1.  The next lower value can be seen after producing an interval enclosure around 0.1 with the nearest floating-point numbers in each direction.
+
+@example
+@group
+intervaltotext (infsup ("0.1"), "exact decimal")
+  @result{} ans =
+    [0.09999999999999999167332731531132594682276248931884765625,
+     0.1000000000000000055511151231257827021181583404541015625]
+@end group
+@end example
+
+The error of this approximation can be examined with the @funref{@@infsup/wid} function.
+
+@example
+@group
+wid (infsup ("0.1"))
+  @result{} ans =    1.3878e-17
+@end group
+@end example
+
+With the @funref{@@infsup/nextout} function an interval can be enlarged in each direction up to the next floating-point number.  Around zero the distance towards the next floating point number is very small, but gets bigger for numbers of higher magnitude.
+
+@example
+@group
+wid (nextout (infsup ([0, 1, 1e10, 1e100])))
+  @result{} ans =
+
+       9.8813e-324    3.3307e-16    3.8147e-06    3.8853e+84
+
+@end group
+@end example
+
+
+@section Parameter estimation
+
+Consider the model @code{y (@var{t}) = @var{p1} * exp (@var{p2} * t)}.  The parameters @var{p} = [@var{p1}; @var{p2}] are unknown, but it is known that the model fulfills the following constraints, which have been obtained using measurements with known error bounds.
+
+@display
+@verbatim
+p1, p2  ∈   [-3, 3]
+y (0.2) ∈  [1.5, 2]
+y (1)   ∈  [0.7, 0.8]
+y (2)   ∈  [0.1, 0.3]
+y (4)   ∈ [-0.1, 0.03]
+@end verbatim
+@end display
+
+A better enclosure of the parameters @var{p} can be estimated with the @funref{@@infsup/fsolve} function.
+
+@example
+@group
+y = @@(p, t) p(1) .* exp (p(2) .* t);
+f = @@(p) y (p, [0.2; 1; 2; 4]);
+p = fsolve (f, infsup ("[-3, 3] [-3, 3]")', ...
+               infsup ("[1.5, 2] [0.7, 0.8] [0.1, 0.3] [-0.1, 0.03]")')
+  @result{} p ⊂ 2×1 interval vector
+
+         [1.9863, 2.6075]
+       [-1.3243, -1.0429]
+
+@end group
+@end example
+
+The resulting @code{p} guarantees to contain all parameters which satisfy all constraints on @var{y}. It is no surprise that @code{f (p)} intersects the constraints for @var{y}.
+
+@example
+@group
+feval (f, p)
+  @result{} ans ⊂ 4×1 interval vector
+
+            [1.5241, 2.1166]
+          [0.52838, 0.91888]
+          [0.14055, 0.32382]
+       [0.0099459, 0.040216]
+
+@end group
+@end example

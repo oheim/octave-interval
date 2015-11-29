@@ -82,8 +82,9 @@ How to install and use the interval package for GNU Octave
 * Preface:: Background information
 * Brief Introduction:: Before using the package
 * Getting Started:: Quick-start guide
+* Examples:: Demonstration of use cases
 * Advanced Topics:: Get the most out of it
-* Introduction to Interval Arithmetic:: Demonstration of fundamental concepts
+* Introduction to Interval Arithmetic:: Fundamental concepts
 
 Appendix
 * IEEE Std 1788-2015:: IEEE standard for interval arithmetic
@@ -122,6 +123,10 @@ Appendix
 @node Getting Started
 @chapter Getting Started
 @include chapter/getting-started.texinfo
+
+@node Examples
+@chapter Examples
+@include chapter/examples.texinfo
 
 @node Advanced Topics
 @chapter Advanced Topics
