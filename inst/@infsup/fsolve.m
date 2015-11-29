@@ -160,28 +160,21 @@ x = empty (size (x0));
 x_paving = {};
 x_inner_idx = false (0);
 queue = {x0};
+x_scalar = isscalar (x0);
 
 ## Test functions
 verify_subset = @(fval) all (all (subset (fval, y)));
 verify_disjoint = @(fval) any (any (disjoint (fval, y)));
 max_wid = @(interval) max (max (wid (interval)));
+
 ## Utility functions for bisection
-if (isscalar (x0))
-    ## For univariate functions the bisection is simpler
-    largest_coordinate = @(interval, max_wid) 1;
-    extract_coordinate = @(interval, coord) interval;
-    replace_coordinate = @(interval, coord, l, u) infsup (l, u);
+if (x_scalar)
+    bisect_coord = {1};
+    exchange_coordinate = @(interval, coord, l, u) infsup (l, u);
 else
     largest_coordinate = @(interval, max_wid) ...
                          find (wid (interval) == max_wid, 1);
-    extract_coordinate = @(interval, coord) ...
-                         subsref (interval, ...
-                                  struct ('type', '()', 'subs', {{coord}}));
-    replace_coordinate = @(interval, coord, l, u) ...
-                         subsasgn (interval, ...
-                                   struct ('type', '()', ...
-                                           'subs', {{coord}}), ...
-                                   infsup (l, u));
+    exchange_coordinate = @replace_coordinate;
 endif
 
 while (not (isempty (queue)))
@@ -225,26 +218,35 @@ while (not (isempty (queue)))
     ##
     ## Since the bisect function is the most costly, we want to call it only
     ## once. Thus, we extract the largest coordinate from each interval matrix
-    ## inside queue and combine them into an interval vector b with the size of
-    ## queue. We call the bisect function on this vector, which bisects each
-    ## interval component of b and produces vectors x1 and x2. These are used
-    ## to replace the largest coordinate from each original interval matrix.
-    bisect_coord = num2cell (cellfun (largest_coordinate, ...
-                                      queue, num2cell (widths)));
-    b = cellfun (extract_coordinate, ...
-                     queue, bisect_coord, ...
-                     "UniformOutput", false);
-    m = cellfun (@mid, b);
-    x1 = infsup (cellfun (@inf, b), m);
-    x2 = infsup (m, cellfun (@sup, b));
+    ## inside queue and combine them into an interval vector [l_coord, u_coord]
+    ## with the length of queue. We call the bisect function on this vector,
+    ## which bisects each interval component and produces vectors
+    ## [l_coord, m_coord] and [m_coord, u_coord]. These are used to replace the
+    ## largest coordinate from each original interval matrix.
+    if (x_scalar)
+        [l_coord, u_coord] = ...
+            cellfun (@(interval) ...
+                     deal (interval.inf, interval.sup), ...
+                     queue);
+    else
+        bisect_coord = cellfun (largest_coordinate, ...
+                                queue, num2cell (widths), ...
+                                "UniformOutput", false);
+        [l_coord, u_coord] = ...
+            cellfun (@(interval, coord) ...
+                     deal (interval.inf(coord), interval.sup(coord)), ...
+                     queue, bisect_coord);
+    endif
+    m_coord = mid (infsup (l_coord, u_coord));
+    l_coord = num2cell (l_coord);
+    m_coord = num2cell (m_coord);
+    u_coord = num2cell (u_coord);
     queue = vertcat (...
-        cellfun (replace_coordinate, ...
-                 queue, bisect_coord, ...
-                 num2cell (inf (x1)), num2cell (sup (x1)), ...
+        cellfun (exchange_coordinate, ...
+                 queue, bisect_coord, l_coord, m_coord, ...
                  "UniformOutput", false), ...
-        cellfun (replace_coordinate, ...
-                 queue, bisect_coord, ...
-                 num2cell (inf (x2)), num2cell (sup (x2)), ...
+        cellfun (exchange_coordinate, ...
+                 queue, bisect_coord, m_coord, u_coord, ...
                  "UniformOutput", false));
     ## Short-circuit if no paving must be computed and remaining intervals
     ## are subsets of the already computed interval enclosure.
@@ -257,6 +259,11 @@ endwhile
 
 x = intervalpart (x);
 
+endfunction
+
+function interval = replace_coordinate (interval, coord, l, u)
+    interval.inf(coord) = l;
+    interval.sup(coord) = u;
 endfunction
 
 %!assert (subset (sqrt (infsup (2)), fsolve (@sqr, infsup (0, 3), 2)));
