@@ -100,7 +100,7 @@ f (p(1), p(2))
 
 @section Finding root enclosures
 
-Consider the function @code{f (@var{x}, @var{y}) = -(5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^6 + (-(5*@var{x} - 20*@var{x}^3 + 16*@var{x}^5)^3 + 5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^2}, which has several roots in the area @var{x}, @var{y} ∈ [-2, 2].
+Consider the function @code{f (@var{x}, @var{y}) = -(5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^6 + (-(5*@var{x} - 20*@var{x}^3 + 16*@var{x}^5)^3 + 5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^2}, which has several roots in the area @var{x}, @var{y} ∈ [-1, 1].
 
 @myimage{image/poly-example-surf.m,Surface plot of @code{f (@var{x}, @var{y})} which shows a lot of roots for the function}
 
@@ -108,11 +108,12 @@ The function is particular difficult to compute with intervals, because its vari
 
 @example
 @group
-f = @@(x,y) ... @c doctest: +SKIP
+@c doctest: +SKIP
+f = @@(x,y) ...
     -(5.*y - 20.*y.^3 + 16.*y.^5).^6 + ...
         (-(5.*x - 20.*x.^3 + 16.*x.^5).^3 + ...
            5.*y - 20.*y.^3 + 16.*y.^5).^2;
-X = Y = infsup ("[-2, 2]");
+X = Y = infsup ("[-1, 1]");
 has_roots = n = 1;
 @end group
 @group
@@ -152,7 +153,8 @@ Now we use the same algorithm with the same number of iterations, but also utili
 
 @example
 @group
-f_dx = @@(x,y) ... @c doctest: +SKIP
+@c doctest: +SKIP
+f_dx = @@(x,y) ...
        -6.*(5 - 60.*x.^2 + 80.*x.^4) .* ...
            (5.*x - 20.*x.^3 + 16.*x.^5).^2 .* ...
            (-(5.*x - 20.*x.^3 + 16.*x.^5).^3 + ...

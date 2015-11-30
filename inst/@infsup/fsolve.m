@@ -51,7 +51,7 @@
 ## vectorization to speed up computation.  If @var{Y} is a scalar or vector,
 ## this function will try to call @var{F} in a vectorized manner.  That is,
 ## the function will be called with input arguments @code{@var{x}(1)},
-## @code{@var{x}(2)}, @dots, @code{@var{x}(numel (@var{X0}))} and each input
+## @code{@var{x}(2)}, @dots{}, @code{@var{x}(numel (@var{X0}))} and each input
 ## argument will carry a vector of values.
 ##
 ## It is possible to use the following optimization @var{options}:
@@ -73,8 +73,8 @@
 ## x = fsolve (@@hypot, infsup ([-3; -3], [3; 3]), 1)
 ##   @result{} x ⊂ 2×1 interval vector
 ##
-##       [-1.002, +1.002]
-##       [-1.002, +1.002]
+##         [-1.002, +1.002]
+##       [-1.0079, +1.0079]
 ##
 ## @end group
 ## @end example
@@ -88,7 +88,7 @@ function [x, x_paving, x_inner_idx] = fsolve (f, x0, y, options)
 
 ## Set default parameters
 defaultoptions = optimset (optimset, ...
-                           'MaxIter',    16, ...
+                           'MaxIter',    20, ...
                            'MaxFunEval', 3000, ...
                            'TolX',       1e-2, ...
                            'TolFun',     1e-2);
