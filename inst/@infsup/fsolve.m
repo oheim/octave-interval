@@ -35,10 +35,11 @@
 ##
 ## Return value @var{X} is an interval enclosure of
 ## @code{@{@var{x} ∈ @var{X0} | @var{F}(@var{x}) ∈ @var{Y}@}}.  The optional
-## return value @var{X_PAVING} is a cell array of non-overlapping intervals,
-## which form a more detailed enclosure for the preimage of @var{Y}.  An index
-## vector @var{X_INNER_IDX} indicates the components of @var{X_PAVING}, which
-## are guaranteed to be subsets of the preimage of @var{Y}.
+## return value @var{X_PAVING} is a matrix of non-overlapping interval values
+## for @var{x} in each column, which form a more detailed enclosure for the
+## preimage of @var{Y}.  An index vector @var{X_INNER_IDX} indicates the
+## columns of @var{X_PAVING}, which are guaranteed to be subsets of the
+## preimage of @var{Y}.
 ##
 ## The function uses the set inversion via interval arithmetic (SIVIA)
 ## algorithm.  That is, @var{X} is bisected until @var{F}(@var{X}) is either
@@ -46,13 +47,12 @@
 ##
 ## Note on performance: The bisection method is a brute-force approach to
 ## exhaust the function's domain and requires a lot of function evaluations.
-## It is highly recommended to vectorize the function @var{F} to speed up
-## computation.  If @var{Y} is a vector and @var{F} accepts @var{n} input
-## arguments, where @var{n} is the number of elements of @var{X0}, this
-## function will try to use vectorized function evaluation for @var{F}.  If
-## vectorized function evaluation is used, @var{X_PAVING} will be returned as
-## vector with an @var{x} enclosure in each column (or row) and
-## @var{X_INNER_IDX} will then be an row (or column) index vector.
+## It is highly recommended to use a function @var{F}, which allows
+## vectorization to speed up computation.  If @var{Y} is a scalar or vector,
+## this function will try to call @var{F} in a vectorized manner.  That is,
+## the function will be called with input arguments @code{@var{x}(1)},
+## @code{@var{x}(2)}, @dots, @code{@var{x}(numel (@var{X0}))} and each input
+## argument will carry a vector of values.
 ##
 ## It is possible to use the following optimization @var{options}:
 ## @option{MaxFunEvals}, @option{MaxIter}, @option{TolFun}, @option{TolX}.
@@ -88,7 +88,7 @@ function [x, x_paving, x_inner_idx] = fsolve (f, x0, y, options)
 
 ## Set default parameters
 defaultoptions = optimset (optimset, ...
-                           'MaxIter',    100, ...
+                           'MaxIter',    16, ...
                            'MaxFunEval', 3000, ...
                            'TolX',       1e-2, ...
                            'TolFun',     1e-2);
@@ -164,8 +164,6 @@ if (isa (y, "infsupdec"))
     y = intervalpart (y);
 endif
 
-warning ("off", "interval:ImplicitPromote", "local");
-
 ## Try to vectorize function evaluation
 if (isvector (y))
     try
@@ -177,7 +175,11 @@ if (isvector (y))
     end_try_catch
     if (f_argn != 1 || numel (x0) == 1)
         try
-            [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
+            if (nargout >= 2)
+                [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
+            else
+                x = vectorized (f, x0, y, options);
+            endif
             return
         catch
             ## Unable to use vectorized evaluation, fall back to cellfun usage
@@ -189,6 +191,7 @@ if (isvector (y))
     endif
 endif
 
+warning ("off", "interval:ImplicitPromote", "local");
 x = empty (size (x0));
 x_paving = {};
 x_inner_idx = false (0);
@@ -291,6 +294,10 @@ while (not (isempty (queue)))
 endwhile
 
 x = intervalpart (x);
+if (nargout >= 2)
+    x_paving = cellfun (@vec, x_paving, "UniformOutput", false);
+    x_paving = horzcat (x_paving{:});
+endif
 
 endfunction
 
@@ -304,6 +311,8 @@ function [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options)
 
 warning ("off", "Octave:broadcast", "local");
 
+## Make vectorization dimension cat_dim orthogonal to the dimension of the data
+## in y to allow simple function definitions.
 if (iscolumn (y))
     x0 = vec (x0);
     data_dim = 1;
@@ -359,7 +368,7 @@ while (not (isempty (queue.inf)))
         x = union (cat (cat_dim, x, queue), [], cat_dim);
         x_paving = cat (cat_dim, x_paving, queue);
         s = size (queue);
-        s(data_dim) = 1
+        s(data_dim) = 1;
         x_inner_idx = cat (cat_dim, x_inner_idx, false (s));
         break
     endif
@@ -371,7 +380,7 @@ while (not (isempty (queue.inf)))
         is_small = widths < options.TolFun;
     else
         s = size (queue);
-        s(data_dim) = 1
+        s(data_dim) = 1;
         is_small = false (s);
     endif
     [widths, bisect_coord] = max (wid (queue), [], data_dim);
@@ -406,10 +415,14 @@ while (not (isempty (queue.inf)))
     ## Short-circuit if no paving must be computed and remaining intervals
     ## are subsets of the already computed interval enclosure.
     if (nargout < 2)
-        idx.subs{cat_dim} = all (subset (queue, x), data_dim);
+        idx.subs{cat_dim} = not (all (subset (queue, x), data_dim));
         queue = subsref (queue, idx);
     endif
 endwhile
+
+if (nargout >= 2 && data_dim != 1)
+    x_paving = transpose (x_paving);
+endif
 
 endfunction
 
