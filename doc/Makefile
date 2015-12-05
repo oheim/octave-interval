@@ -20,7 +20,9 @@ image/%.m.png: image/%.m
 	$(OCTAVE) \
 		--no-gui --silent --no-history \
 		--eval "pkg ('load', 'interval');" \
-		--eval "source ('$<'); __print_mesa__ (gcf, '$@');"
+		--eval "figure ('visible', false);" \
+		--eval "source ('$<');" \
+		--eval "__print_mesa__ (gcf, '$@');"
 	@# The image size is too large for inclusion in the pdf,
 	@# thus we increase the resolution from 150 to 250 dpi.
 	convert -density 98.425 -units PixelsPerCentimeter "$@" "$@"
