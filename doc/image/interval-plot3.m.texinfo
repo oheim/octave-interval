@@ -1,0 +1,24 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
+@example
+@group
+@c doctest: skip
+red = [220 50 47] ./ 255;
+shade = [238 232 213] ./ 255;
+@end group
+@group
+x = midrad (1 : 6, 0.25);
+y = midrad (-3 : 3, 0.25);
+[x, y] = meshgrid (x, y);
+z = atan2 (y, x);
+plot3 (x, y, z, shade, red)
+@end group
+@group
+view ([-35, 30])
+box off
+set (gca, "xgrid", "on", "ygrid", "on", "zgrid", "on")
+@end group
+@end example

@@ -1,10 +1,19 @@
-f = @(x,y) ...
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
+@example
+@group
+@c doctest: +SKIP
+f = @@(x,y) ...
     -(5.*y - 20.*y.^3 + 16.*y.^5).^6 + ...
         (-(5.*x - 20.*x.^3 + 16.*x.^5).^3 + ...
            5.*y - 20.*y.^3 + 16.*y.^5).^2;
 X = Y = infsup ("[-1, 1]");
 has_roots = n = 1;
-
+@end group
+@group
 for iter = 1 : 10
     ## Bisect
     [i,j] = ind2sub ([n,n], has_roots);
@@ -24,10 +33,13 @@ for iter = 1 : 10
     X = X(zero_contained);
     Y = Y(zero_contained);
 endfor
-
+@end group
+@group
 colormap gray
 B = false (n);
 B(has_roots) = true;
 imagesc (B)
 axis equal
 axis off
+@end group
+@end example

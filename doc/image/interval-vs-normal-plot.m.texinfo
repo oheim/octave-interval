@@ -1,0 +1,27 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
+@example
+@group
+@c doctest: skip
+hold on
+blue = [38 139 210] ./ 255;
+shade = [238 232 213] ./ 255;
+@end group
+@group
+## Interval plotting
+x = mince (2*infsup (0, "pi"), 6);
+plot (x, sin (x), shade)
+@end group
+@group
+## Classical plotting
+x = linspace (0, 2*pi, 7);
+plot (x, sin (x), 'linewidth', 2, 'color', blue)
+@end group
+@group
+set (gca, 'XTick', 0 : pi : 2*pi)
+set (gca, 'XTickLabel', @{'0', 'pi', '2 pi'@})
+@end group
+@end example

@@ -1,5 +1,5 @@
 SHELL      = /bin/sh
-M_IMAGE    = $(wildcard image/*.m)
+M_IMAGE    = $(wildcard image/*.m) $(patsubst %.m.texinfo,%.m,$(wildcard image/*.m.texinfo))
 IMAGE_OBJ  = $(patsubst %,%.png,$(M_IMAGE))
 OBJ        = manual.html manual.pdf $(IMAGE_OBJ)
 MAKEINFO  ?= makeinfo
@@ -24,6 +24,9 @@ image/%.m.png: image/%.m
 	@# The image size is too large for inclusion in the pdf,
 	@# thus we increase the resolution from 150 to 250 dpi.
 	convert -density 98.425 -units PixelsPerCentimeter "$@" "$@"
+
+image/%.m: image/%.m.texinfo
+	$(MAKEINFO) --plaintext "$<" > "$@"
 
 clean:
 	rm $(OBJ)

@@ -384,53 +384,12 @@ Evaluating the same function on a single interval (e. g. the part of the functio
 
 The solution for plotting functions with interval arithmetic is called: “mincing”.  The @funref{@@infsup/mince} function divides an interval into many smaller adjacent subsets, which can be used for range evaluations of the function.  As a result, one gets vectors of intervals, which produce a coverage of the function's graph using rectangles.  Please note, how the rectangles cover the sine function's true range from @minus{}1 to 1 in the following example, whilst the interpolated lines make a poor approximation.
 
-@example
-@group
-@c doctest: skip
-hold on
-blue = [38 139 210] ./ 255;
-shade = [238 232 213] ./ 255;
-@end group
-@group
-## Interval plotting
-x = mince (2*infsup (0, "pi"), 6);
-plot (x, sin (x), shade)
-@end group
-@group
-## Classical plotting
-x = linspace (0, 2*pi, 7);
-plot (x, sin (x), 'linewidth', 2, 'color', blue)
-@end group
-@group
-set (gca, 'XTick', 0 : pi : 2*pi)
-set (gca, 'XTickLabel', @{'0', 'pi', '2 pi'@})
-@end group
-@end example
-
+@include image/interval-vs-normal-plot.m.texinfo
 @myimage{image/interval-vs-normal-plot.m,Plotting an interval function and a classic function}
 
 
 For 3D plotting the @funref{@@infsup/meshgrid} function, as usual, becomes handy.  The following example shows how two different ranges for X and Y coordinates are used to construct a grid, where the function @funref{@@infsup/atan2} is evaluated.  In this particular case the interval grid has gaps, because X and Y coordinates have been constructed such that intervals do not intersect.
 
-@example
-@group
-@c doctest: skip
-red = [220 50 47] ./ 255;
-shade = [238 232 213] ./ 255;
-@end group
-@group
-x = midrad (1 : 6, 0.25);
-y = midrad (-3 : 3, 0.25);
-[x, y] = meshgrid (x, y);
-z = atan2 (y, x);
-plot3 (x, y, z, shade, red)
-@end group
-@group
-view ([-35, 30])
-box off
-set (gca, "xgrid", "on", "ygrid", "on", "zgrid", "on")
-@end group
-@end example
-
+@include image/interval-plot3.m.texinfo
 @myimage{image/interval-plot3.m,Plotting 3D interval grid points}
 
