@@ -192,7 +192,7 @@ $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
 $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@# Compile images from m-file scripts,
 	@# which are not shipped in the release tarball
-	@OCTAVE="$(OCTAVE)" make --directory="$(INSTALLED_PACKAGE_DIR)/doc" $(patsubst doc/%,%.png,$(wildcard doc/image/*.m))
+	@OCTAVE="$(OCTAVE)" make --directory="$(INSTALLED_PACKAGE_DIR)/doc" images
 	@echo "Generating HTML documentation for the package. This may take a while ..."
 	@# 1. Load the generate_html package
 	@# 2. Replace builtin print function because of various

@@ -6,9 +6,11 @@ MAKEINFO  ?= makeinfo
 VERSION   ?= $(shell grep "^Version: " ../packinfo/DESCRIPTION ../DESCRIPTION | head -1 | cut -f2 -d" ")
 OCTAVE    ?= octave
 
-.PHONY: all clean
+.PHONY: all clean images
 
 all: $(OBJ)
+
+images: $(IMAGE_OBJ)
 
 manual.html: manual.texinfo manual.init $(wildcard chapter/*) license/gpl-3.0.texi $(IMAGE_OBJ)
 	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --init-file manual.init --css-include manual.css "$<"
