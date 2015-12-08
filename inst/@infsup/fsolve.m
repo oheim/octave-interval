@@ -284,11 +284,8 @@ while (not (isempty (queue)))
     options.MaxFunEvals -= numel (queue);
     options.MaxIter --;
     if (options.Contract)
-        fval_and_contractions = nthargout ([1 2], @cellfun, ...
-                                           f, {y}, queue, ...
-                                           "UniformOutput", false);
-        fval = fval_and_contractions{1};
-        contractions = fval_and_contractions{2};
+        [fval, contractions] = cellfun (f, {y}, queue, ...
+                                        "UniformOutput", false);
         ## Sanitize the contractions returned by the function
         queue = cellfun (@intersect, queue, contractions, ...
                          "UniformOutput", false);
@@ -534,6 +531,15 @@ endif
 endfunction
 
 %!assert (subset (sqrt (infsup (2)), fsolve (@sqr, infsup (0, 3), 2)));
+%!assert (subset (sqrt (infsup (2)), fsolve (@sqr, infsup (0, 3), 2, struct ("Vectorize", false))));
+
+%!function [fval, x] = contractor (y, x)
+%!  fval = sqr (x);
+%!  y = intersect (y, fval);
+%!  x = sqrrev (y, x);
+%!endfunction
+%!assert (subset (sqrt (infsup (2)), fsolve (@contractor, infsup (0, 3), 2, struct ("Contract", true))));
+%!assert (subset (sqrt (infsup (2)), fsolve (@contractor, infsup (0, 3), 2, struct ("Contract", true, "Vectorize", false))));
 
 %!demo
 %! clf
