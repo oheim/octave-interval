@@ -41,23 +41,9 @@
 ## columns of @var{X_PAVING}, which are guaranteed to be subsets of the
 ## preimage of @var{Y}.
 ##
-## The function uses the set inversion via interval arithmetic (SIVIA)
+## This function uses the set inversion via interval arithmetic (SIVIA)
 ## algorithm.  That is, @var{X} is bisected until @var{F}(@var{X}) is either
 ## a subset of @var{Y} or until they are disjoint.
-##
-## Note on performance: The bisection method is a brute-force approach to
-## exhaust the function's domain and requires a lot of function evaluations.
-## It is highly recommended to use a function @var{F}, which allows
-## vectorization to speed up computation.  If @var{Y} is a scalar or vector,
-## this function will try to call @var{F} in a vectorized manner.  That is,
-## the function will be called with input arguments @code{@var{x}(1)},
-## @code{@var{x}(2)}, @dots{}, @code{@var{x}(numel (@var{X0}))} and each input
-## argument will carry a vector of values.
-##
-## It is possible to use the following optimization @var{options}:
-## @option{MaxFunEvals}, @option{MaxIter}, @option{TolFun}, @option{TolX}.
-##
-## Accuracy: The result is a valid enclosure.
 ##
 ## @example
 ## @group
@@ -65,6 +51,18 @@
 ##   @result{} ans ⊂ [1.5646, 1.5708]
 ## @end group
 ## @end example
+##
+## It is possible to use the following optimization @var{options}:
+## @option{MaxFunEvals}, @option{MaxIter}, @option{TolFun}, @option{TolX},
+## @option{Vectorize}, @option{Contract}.
+##
+## If @option{Vectorize} is @code{true}, the function @var{F} will be called
+## with input arguments @code{@var{x}(1)}, @code{@var{x}(2)}, @dots{},
+## @code{@var{x}(numel (@var{X0}))} and each input argument will carry a vector
+## of different values which shall be computed simultaneously.  If @var{Y} is a
+## scalar or vector, @option{Vectorize} defaults to @code{true}.  If
+## @option{Vectorize} is @code{false}, the function @var{F} will receive only
+## one input argument @var{x} at a time, which has the size of @var{X0}.
 ##
 ## @example
 ## @group
@@ -78,6 +76,72 @@
 ##
 ## @end group
 ## @end example
+##
+## If @option{Contract} is @code{true}, the function @var{F} will be called
+## with @var{Y} as an additional leading input argument and, in addition to the
+## function value, must return a @dfn{contraction} of its input argument(s).
+## A contraction for input argument @var{x} is a subset of @var{x} which
+## contains all possible solutions for the equation
+## @code{@var{F} (@var{x}) = @var{Y}}.  Contractions can be computed using
+## interval reverse operations, for example with @code{@@infsup/absrev} which
+## contracts the input argument for the absolute value function.
+##
+## @example
+## @group
+## # Solve x1 ^ 2 + x2 ^ 2 = 1 for -3 ≤ x1, x2 ≤ 3 again,
+## # but now contractions speed up the algorithm.
+## function [fval, cx1, cx2] = f (y, x1, x2)
+##   # Forward evaluation
+##   x1_sqr = sqr (x1);
+##   x2_sqr = sqr (x2);
+##   fval = hypot (x1, x2);
+##
+##   # Reverse evaluation and contraction
+##   y = intersect (y, fval);
+##   # Contract the squares
+##   x1_sqr = intersect (x1_sqr, y - x2_sqr);
+##   x2_sqr = intersect (x2_sqr, y - x1_sqr);
+##   # Contract the parameters
+##   cx1 = sqrrev (x1_sqr, x1);
+##   cx2 = sqrrev (x2_sqr, x2);
+## endfunction
+##
+## x = fsolve (@@f, infsup ([-3; -3], [3; 3]), 1, ...
+##             struct ('Contract', true))
+##   @result{} x = 2×1 interval vector
+##
+##       [-1, +1]
+##       [-1, +1]
+##
+## @end group
+## @end example
+##
+## It is possible to combine options @option{Vectorize} and @option{Contract}.
+## Depending on the combination, function @var{F} should have one of the
+## following signatures.
+##
+## @table @code
+## @item function fval = f (x)
+## @option{Vectorize} = @code{false} and @option{Contract} = @code{false}.
+## @item function fval = f (x1, x2, @dots{}, xN)
+## @option{Vectorize} = @code{true} and @option{Contract} = @code{false}.
+## @item function [fval, cx] = f (y, x)
+## @option{Vectorize} = @code{false} and @option{Contract} = @code{true}.
+## @code{cx} is a contraction of @code{x}.
+## @item function [fval, cx1, cx2, @dots{}, cxN] = f (y, x1, x2, @dots{}, xN)
+## @option{Vectorize} = @code{true} and @option{Contract} = @code{true}.
+## @code{cx1} is a contraction of @code{x1}, @code{cx2} is a contraction of
+## @code{x2}, and so on.
+## @end table
+##
+## Note on performance: The bisection method is a brute-force approach to
+## exhaust the function's domain and requires a lot of function evaluations.
+## It is highly recommended to use a function @var{F} which allows
+## vectorization.  For higher dimensions of @var{X0} it is also necessary to
+## use a contraction function.
+##
+## Accuracy: The result is a valid enclosure.
+##
 ## @end deftypefn
 
 ## Author: Oliver Heimlich
@@ -87,11 +151,15 @@
 function [x, x_paving, x_inner_idx] = fsolve (f, x0, y, options)
 
 ## Set default parameters
+warning ("off", "", "local") # disable optimset warning
 defaultoptions = optimset (optimset, ...
                            'MaxIter',    20, ...
                            'MaxFunEval', 3000, ...
                            'TolX',       1e-2, ...
-                           'TolFun',     1e-2);
+                           'TolFun',     1e-2, ...
+                           'Vectorize',  [], ...
+                           'Contract',   false);
+
 switch (nargin)
     case 1
         x0 = infsup (-inf, inf);
@@ -165,30 +233,35 @@ if (isa (y, "infsupdec"))
 endif
 
 ## Try to vectorize function evaluation
-if (isvector (y))
+if (isempty (options.Vectorize) && isvector (y))
     try
         f_argn = nargin (f);
+        if (options.Contract)
+            options.Vectorize = (f_argn > 2 || numel (x0) == 1);
+        else
+            options.Vectorize = (f_argn > 1 || numel (x0) == 1);
+        endif
     catch
         ## nargin doesn't work for built-in functions, which happen to agree
-        ## with infsup methods
-        f_argn = 0;
+        ## with infsup methods.  Try to vectorize these.
+        options.Vectorize = true;
     end_try_catch
-    if (f_argn != 1 || numel (x0) == 1)
-        try
-            if (nargout >= 2)
-                [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
-            else
-                x = vectorized (f, x0, y, options);
-            endif
-            return
-        catch
-            ## Unable to use vectorized evaluation, fall back to cellfun usage
-            warning ('interval:fsolve:vectorize', lasterr)
-            warning ('interval:fsolve:vectorize', ...
-                     ['fsolve: unable to use vectorization, ' ...
-                      'falling back to slow algorithm'])
-        end_try_catch
-    endif
+endif
+if (options.Vectorize)
+    try
+        if (nargout >= 2)
+            [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
+        else
+            x = vectorized (f, x0, y, options);
+        endif
+        return
+    catch
+        ## Unable to use vectorized evaluation, fall back to cellfun usage
+        warning ('interval:fsolve:vectorize', lasterr)
+        warning ('interval:fsolve:vectorize', ...
+                 ['fsolve: unable to use vectorization, ' ...
+                  'falling back to slow algorithm'])
+    end_try_catch
 endif
 
 warning ("off", "interval:ImplicitPromote", "local");
@@ -201,6 +274,7 @@ x_scalar = isscalar (x0);
 ## Test functions
 verify_subset = @(fval) all (all (subset (fval, y)));
 verify_disjoint = @(fval) any (any (disjoint (fval, y)));
+check_contradiction = @(x) any (any (isempty (x)));
 max_wid = @(interval) max (max (wid (interval)));
 
 ## Utility functions for bisection
@@ -215,9 +289,27 @@ endif
 
 while (not (isempty (queue)))
     ## Evaluate f(x)
-    fval = cellfun (f, queue, "UniformOutput", false);
     options.MaxFunEvals -= numel (queue);
     options.MaxIter --;
+    if (options.Contract)
+        fval_and_contractions = nthargout ([1 2], @cellfun, ...
+                                           f, {y}, queue, ...
+                                           "UniformOutput", false);
+        fval = fval_and_contractions{1};
+        contractions = fval_and_contractions{2};
+        ## Sanitize the contractions returned by the function
+        queue = cellfun (@intersect, queue, contractions, ...
+                         "UniformOutput", false);
+        ## Utilize contradictions to discard candidates
+        contradiction = cellfun (check_contradiction, queue);
+        queue = queue(not (contradiction));
+        if (isempty (queue))
+            break
+        endif
+        fval = fval(not (contradiction));
+    else
+        fval = cellfun (f, queue, "UniformOutput", false);
+    endif
     ## Check whether x is outside of the preimage of y
     ## or x is inside the preimage of y
     is_outside = cellfun (verify_disjoint, fval);
@@ -347,9 +439,26 @@ while (not (isempty (queue.inf)))
     f_args = cellfun (@(l, u) infsup (l, u), ...
                       l_args, u_args, ...
                       "UniformOutput", false);
-    fval = feval (f, f_args{:});
     options.MaxFunEvals --;
     options.MaxIter --;
+    if (options.Contract)
+        fval_and_contractions = nthargout (1 : (1 + length (x0)), ...
+                                           @feval, f, y, f_args{:});
+        fval = fval_and_contractions{1};
+        contractions = cat (data_dim, fval_and_contractions{2 : end});
+        ## Sanitize the contractions returned by the function
+        queue = intersect (queue, contractions);
+        ## Utilize contradictions to discard candidates
+        contradiction = any (isempty (queue), data_dim);
+        idx.subs{cat_dim} = not (contradiction);
+        queue = subsref (queue, idx);
+        if (isempty (queue.inf))
+            break
+        endif
+        fval = subsref (fval, idx);
+    else
+        fval = feval (f, f_args{:});
+    endif
     ## Check whether x is outside of the preimage of y
     ## or x is inside the preimage of y
     is_outside = verify_disjoint (fval);
