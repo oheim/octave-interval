@@ -248,20 +248,12 @@ if (isempty (options.Vectorize) && isvector (y))
     end_try_catch
 endif
 if (options.Vectorize)
-    try
-        if (nargout >= 2)
-            [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
-        else
-            x = vectorized (f, x0, y, options);
-        endif
-        return
-    catch
-        ## Unable to use vectorized evaluation, fall back to cellfun usage
-        warning ('interval:fsolve:vectorize', lasterr)
-        warning ('interval:fsolve:vectorize', ...
-                 ['fsolve: unable to use vectorization, ' ...
-                  'falling back to slow algorithm'])
-    end_try_catch
+    if (nargout >= 2)
+        [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
+    else
+        x = vectorized (f, x0, y, options);
+    endif
+    return
 endif
 
 warning ("off", "interval:ImplicitPromote", "local");
@@ -378,6 +370,9 @@ while (not (isempty (queue)))
                  "UniformOutput", false));
     ## Short-circuit if no paving must be computed and remaining intervals
     ## are subsets of the already computed interval enclosure.
+    if (isempty (queue))
+        break
+    endif
     if (nargout < 2)
         x_bare = intervalpart (x);
         queue = queue(not (cellfun (@(q) all (all (subset (q, x_bare))), ...
@@ -521,6 +516,9 @@ while (not (isempty (queue.inf)))
         x2.inf = subsasgn (x2.inf, coord_idx, m_coord);
     endif
     queue = cat (cat_dim, x1, x2);
+    if (isempty (queue.inf))
+        break
+    endif
     ## Short-circuit if no paving must be computed and remaining intervals
     ## are subsets of the already computed interval enclosure.
     if (nargout < 2)
