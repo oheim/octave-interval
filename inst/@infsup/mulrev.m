@@ -72,12 +72,18 @@ if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
-## Resize, if scalar × matrix
-if (isscalar (b.inf) ~= isscalar (c.inf))
-    b.inf = ones (size (c.inf)) .* b.inf;
-    b.sup = ones (size (c.inf)) .* b.sup;
-    c.inf = ones (size (b.inf)) .* c.inf;
-    c.sup = ones (size (b.inf)) .* c.sup;
+## Resize, if scalar × matrix or vector × matrix or scalar × vector
+if (rows (b.inf) ~= rows (c.inf))
+    b.inf = ones (rows (c.inf), columns (b.inf)) .* b.inf;
+    b.sup = ones (rows (c.inf), columns (b.inf)) .* b.sup;
+    c.inf = ones (rows (b.inf), columns (c.inf)) .* c.inf;
+    c.sup = ones (rows (b.inf), columns (c.inf)) .* c.sup;
+endif
+if (columns (b.inf) ~= columns (c.inf))
+    b.inf = ones (rows (b.inf), columns (c.inf)) .* b.inf;
+    b.sup = ones (rows (b.inf), columns (c.inf)) .* b.sup;
+    c.inf = ones (rows (c.inf), columns (b.inf)) .* c.inf;
+    c.sup = ones (rows (c.inf), columns (b.inf)) .* c.sup;
 endif
 
 u.inf = v.inf = inf (size (b.inf));
