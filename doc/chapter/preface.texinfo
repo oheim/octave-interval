@@ -3,12 +3,180 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
-Development of the GNU Octave Interval Package started in September 2014. The IEEE standard for interval arithmetic, IEEE Std 1788-2015, had been drafted by its working group until July 2014 and was about to enter the balloting process. In January 2015 a first package release could be made, which contained the full set of functions required by the standard's draft. On June 11 the standard finally became approved and the interval package can be seen as the first ever completed standard conforming interval arithmetic library.
+@unnumbered Preface
+
+Welcome to the user manual of the @dfn{interval package} for GNU Octave. This chapter presents background information and may safely be skipped. First-time users who want to cut right to the chase should read @ref{Getting Started}, which teaches basic concepts and first steps with the package. Users who are not familiar with interval arithmetic should read @ref{Introduction to Interval Arithmetic} first. Still feeling undecided? Look at the @ref{Examples} and see how easy you can put this software to great use!
+
+Development of the GNU Octave Interval Package started in September 2014. The IEEE standard for interval arithmetic, IEEE Std 1788-2015, had been drafted by its working group until July 2014 and was about to enter the balloting process. In January 2015 a first package release could be made, which contained the full set of functions required by the standard's draft. On June 11 the standard finally became approved and this interval package can be seen as the first ever completed standard conforming interval arithmetic library.
 
 The creation of the interval package has been straightforward, although the author had no previous experience with Octave. Octave is a great environment for getting things done and its active community helps a lot. In this spirit, the interval package wants to be an easy to use tool for experimenting with and quick prototyping of interval arithmetic algorithms and applications.
 
-Originally it was intended to only implement the operations required by the standard document, but support for fundamental concepts of Octave as well as interval vectors and interval matrices have soon been added.
+Originally it was intended to only implement the operations required by the standard document, but support for fundamental concepts of Octave as well as interval vectors and interval matrices have soon been added. Today the package contains many useful interval analysis algorithms and solvers, which, together with basic arithmetic functions, form a powerful and versatile library.
 
-@myimage{image/octave-interval.ly,GNU Octave Interval Logo}
+@myimage{image/octave-interval.ly,GNU Octave Interval Pun}
 
-Like Octave, the interval package has nothing to do with music. Above logo is a pun and shows an “octave interval” between the notes d' and d''. The frequencies of these notes can be enclosed by an interval which is a subset of [293, 588] Hz.
+Like Octave, the interval package has nothing to do with music. Above picture is a pun and shows an “octave interval” between the notes d' and d''. The frequencies of these notes can be enclosed by an interval which is a subset of [293, 588] Hz.
+
+@menu
+* Acknowledgments::
+* Philosophy::
+* Distribution and Development::
+* Getting Help::
+@end menu
+
+@node Acknowledgments
+@section Acknowledgments
+
+The GNU Octave interval package is build upon great third-party software.
+
+@itemize
+@item
+    Correctly rounded arithmetic operations are based on the @uref{http://www.mpfr.org/,GNU MPFR library} by Guillaume Hanrot, Vincent Lefèvre, Patrick Pélissier, Philippe Théveny and Paul Zimmermann.
+
+@item
+    A linear system solver @funref{@@infsup/mldivide} and a polynomial evaluation algorithm @funref{@@infsup/polyval} for bare intervals are derived from routines developed for @uref{http://www2.math.uni-wuppertal.de/~xsc/,C-XSC} at University of Wuppertal, Germany.
+
+@item
+    @ref{Introduction to Interval Arithmetic} is partly based on the documentation for the former SIMP package for Octave by Simone Pernice.
+
+@item
+    In the @ref{Examples} for finding root enclosures a function and code by Helmut Podhaisky has been used.
+
+@item
+    Most unit tests are written in portable ITL format and converted into GNU Octave test cases with the @uref{https://github.com/nehmeier/ITF1788,Interval Testing Framework for IEEE 1788}. The framework has been developed by Maximilian Kiesner and Marco Nehmeier, Chair of Software Engineering, Department of Computer Science, University of Würzburg, Germany.
+
+@item
+    Several unit tests are derived from @uref{https://github.com/nehmeier/libieeep1788,libieeep1788}, a C++ implementation of IEEE Std 1788-2015, IEEE standard for interval arithmetic. The library contains several unit tests for its IEEE 754 flavor, which is compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 6000 of these test cases into portable ITL format for verification of this package.
+    
+    @comment libieeep1788/NOTICE
+    @comment According to the Apache License, this shall be included in the documentation
+    @indentedblock
+    @verbatiminclude license/libieeep1788.NOTICE
+    @end indentedblock
+
+@item
+    Several unit tests are derived from @uref{http://perso.ens-lyon.fr/nathalie.revol/software.html,MPFI}, a C++ interval arithmetic library based on GNU MPFR. The library contains several unit tests for binary64 numbers, which are compatible with the arithmetic of the GNU Octave interval package. I have converted nearly 1500 of these test cases into portable ITL format for verification of this package.
+
+@item
+    Several unit tests are derived from @uref{http://www2.math.uni-wuppertal.de/wrswt/software/filib.html,FI_LIB}, an ANSI-C interval arithmetic library based on binary64 numbers. The library contains several unit tests, which are compatible with the arithmetic of the GNU Octave interval package. I have converted 800 of these test cases into portable ITL format for verification of this package.
+
+@item
+    Some unit tests are derived from @uref{http://www2.math.uni-wuppertal.de/~xsc/xsc/cxsc_new.html,C-XSC}, a C++ class library for interval arithmetic. The library contains some unit tests, which are compatible with the arithmetic of the GNU Octave interval package. I have converted 160 of these test cases into portable ITL format for verification of this package.
+
+@item
+    Fast matrix multiplication (see @funref{@@infsup/mtimes}) as well as the linear system solver (see @funref{@@infsup/mldivide}) use BLAS routines with directed rounding. An OCT-file interface for setting the rounding mode has been developed by Kai Torben Ohlus, Institute for Reliable Computing, Hamburg University of Technology, Germany.
+@end itemize
+
+Last, but not least, many thanks to everybody who has contributed to the success of free software!
+
+
+@node Philosophy
+@section Philosophy
+
+@noindent
+Features
+@itemize
+@item Free software licensed under the terms of the GNU General Public License (Version 3 or later)
+@item Many interval arithmetic functions with high, system-independent accuracy
+@item Conforming to IEEE Std 1788-2015, IEEE standard for interval arithmetic
+@item Support for interval vectors and interval matrices
+@itemize
+@item very accurate vector sum, vector dot and matrix multiplication (correctly rounded)
+@item fast matrix multiplication and fast solver for dense linear systems (BLAS routines)
+@item vectorized function evaluation
+@end itemize
+@item Easy usage
+@itemize
+@item GNU Octave function names 
+@item convenient interval constructors
+@item broadcasting
+@end itemize
+@end itemize
+
+@noindent
+Limitations
+@itemize
+@item No complex numbers
+@item No sparse matrices (maybe in the future, if requested by users)
+@item No multidimensional arrays (maybe in the future, if requested by users)
+@end itemize
+
+The interval arithmetic provided by the interval package focuses on easy usage, accuracy and correctness. It is rather slow compared to other arithmetic libraries.
+
+If accurate type checking during compile time—a substantial feature for verified computing—is needed, the user is advised to try third-party interval libraries for strongly typed programming languages like C/C++. The interval package for GNU Octave can nonetheless be used for prototyping of interval algorithms.
+
+@emph{Why is the interval package slow?} All arithmetic interval operations are simulated in high-level Octave language using C99 or multi-precision floating-point routines, which is a lot slower than a @uref{https://books.google.de/books?id=JTc4XdXFnQIC&pg=PA61,hardware implementation}. Building interval arithmetic operations from floating-point routines is easy for simple monotonic functions, e. g., addition and subtraction, but is complex for others, e. g., interval power function, atan2, or reverse functions.
+
+For some interval operations it is not even possible to rely on floating-point routines, since not all required routines are available in C99 or BLAS. For example, accurate multiplication of matrices with many elements becomes unfeasible as it takes a lot of time.
+
+@float Table,tab:runtime
+@caption{Approximate runtime for certain functions (wall clock time in seconds) — Results have been produced with GNU Octave 3.8.2 and Interval package 0.1.4 on an Intel Core i5-4340M CPU (2.9–3.6 GHz)}
+@shortcaption{Approximate runtime for certain functions}
+
+@multitable {matrix size} {accuracy} {accuracy} {accuracy} {accuracy} {accuracy} {accuracy}
+@headitem
+    @tab@command{plus}
+    @tab@command{log}
+    @tab@command{pow}
+    @tab@command{mtimes}
+    @tab@command{mtimes}
+    @tab@command{inv}
+@item Interval@*matrix size
+    @tab tightest@*accuracy
+    @tab tightest@*accuracy
+    @tab tightest@*accuracy
+    @tab valid@*accuracy
+    @tab tightest@*accuracy
+    @tab valid@*accuracy
+@item 10 × 10
+    @tab < 0.001
+    @tab 0.001
+    @tab 0.008
+    @tab 0.001
+    @tab 0.002
+    @tab 0.025
+@item 100 × 100
+    @tab 0.003
+    @tab 0.055
+    @tab 0.61
+    @tab 0.012
+    @tab 0.53
+    @tab 0.30
+@item 500 × 500
+    @tab 0.060
+    @tab 1.3
+    @tab 15
+    @tab 0.30
+    @tab 63
+    @tab 4.2
+@end multitable
+@end float
+
+@emph{Why is the interval package accurate?} The GNU Octave built-in floating-point routines are not useful for interval arithmetic: Their results depend on hardware, system libraries and compilation options. The interval package handles all arithmetic functions with the help of the GNU MPFR library. With MPFR it is possible to compute system-independent, valid and tight enclosures of the correct results for most functions. However, it should be noted that some reverse operations and matrix operations do not exists in GNU MPFR and therefore cannot be computed with the same accuracy.
+
+It is possible to use faster (BLAS based) routines during computation of the matrix multiplication @funref{@@infsup/mtimes}, because correctly rounded matrix multiplication could be considered too slow for certain applications. However, this is not the default behavior and must be explicitly activated by the user.
+
+@node Distribution and Development
+@section Distribution
+
+The interval package is free software: Everyone is encouraged to use it, copy it and redistribute it, as well as to make changes under the terms of the GNU General Public License.
+
+The interval package is part of Octave Forge, a sibling of the GNU Octave project. Official releases are published at @url{http://octave.sourceforge.net/}.
+
+Ports for Mac OS X and FreeBSD are know to exist at @uref{https://trac.macports.org/browser/trunk/dports/math/octave-interval,MacPorts} and @uref{http://www.freshports.org/math/octave-forge-interval/,FreshPorts} respectively.
+
+@section Development
+
+The source code of the interval package is distributed together with its release. The @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,source code repository} is located at Octave Forge and contains the latest development version. The current status of development is tracked on the @uref{http://wiki.octave.org/Interval_package,package's page at Octave wiki}.
+
+Bug reports and feature requests for either the software or this manual may be posted under the @uref{http://savannah.gnu.org/projects/octave,Octave Project at Savannah}.
+
+Contributions to the software and this manual are highly appreciated.
+
+
+@node Getting Help
+@section Getting Help
+
+The interval package contains online help for every function, which can be accessed with the @command{help} command from Octave. The interval arithmetic is implemented with specialized data types, which override standard functions. Whilst the command @command{help @var{function name}} shows the documentation for core Octave functions, the interval variants of these functions can be requested with the command @command{help @@infsup/@var{function name}}.
+
+Further help can be seeked at the @uref{https://lists.gnu.org/mailman/listinfo/help-octave,Octave Help mailing list}.

@@ -3,6 +3,8 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
+@chapter Examples
+
 This chapter presents some more or less exotic use cases for the interval package.
 
 

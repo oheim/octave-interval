@@ -3,6 +3,8 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
+@appendix IEEE Std 1788-2015
+
 The IEEE standard for interval arithmetic is an important asset for the general use of interval arithmetic.  Several interval arithmetic libraries have been created (most popular for the language C++), which vary greatly in their philosophy, completeness and—most important—mathematical definition of certain functions and arithmetic evaluation.  The standard grants support for several interval arithmetic flavors, but fights incompatibilities on many layers: Interval arithmetic applications shall be portable, predictable, and reproducible.  This is especially important since interval arithmetic shall lead to reliable results.  Also a common standard is necessary to catalyze the availability of (fast) interval operations in hardware.
 
 For all conforming implementations certain accuracy constraints must be satisfied and a good amount of interval functions must be implemented.  It is defined how to handle functions that are not globally defined or have limiting values.  Also such basic things like interval representation, many useful constructors, and interchange encoding are addressed.
@@ -13,3 +15,555 @@ The interval package for GNU Octave is the first complete implementation that cl
 * Function Names:: List of functions defined by IEEE Std 1788-2015@*and how they have been implemented in GNU Octave
 * Conformance Claim:: Official statement and some@*implementation specific details regarding the standard
 @end menu
+
+
+@node Function Names
+@appendixsec Function Index
+
+In terms of a better integration into the GNU Octave language, several operations use a function name which is different from the name proposed in the standard document. The following table translates and lists the implemented function names of the IEEE standard for interval arithmetic.
+
+The implementation provides several additional functions, but this section lists only functions that are mentioned in IEEE Std 1788-2015.
+
+
+
+@appendixsubsec Interval constants
+
+See @funref{empty} and @funref{entire}.
+
+
+
+@appendixsubsec Constructors
+
+The operations textToInterval (@var{S}), numsToInterval (@var{l}, @var{u}), and setDec (@var{x}) are implemented by the class constructors @funref{@@infsup/infsup} for bare intervals and @funref{@@infsupdec/infsupdec} for decorated intervals.
+
+
+
+@appendixsubsec Required functions
+
+@float Table,tab:required-forward-functions
+@caption{Required forward elementary functions}
+@shortcaption{Required forward elementary functions}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness
+@ifnottex
+@headitem
+    @tab @r{@emph{Basic operations}} @tab
+@end ifnottex
+@item neg (@var{x})
+    @tab@funref{@@infsup/uminus}
+    @tab tightest
+@item add (@var{x}, @var{y})
+    @tab@funref{@@infsup/plus}
+    @tab tightest
+@item sub (@var{x}, @var{y})
+    @tab@funref{@@infsup/minus}
+    @tab tightest
+@item mul (@var{x}, @var{y})
+    @tab@funref{@@infsup/times}
+    @tab tightest
+@item div (@var{x}, @var{y})
+    @tab@funref{@@infsup/rdivide}
+    @tab tightest
+@item recip (@var{x})
+    @tab@funref{@@infsup/recip}
+    @tab tightest
+@item sqr (@var{x})
+    @tab@funref{@@infsup/sqr}
+    @tab tightest
+@item sqrt (@var{x})
+    @tab@funref{@@infsup/realsqrt}
+    @tab tightest
+@item fma (@var{x}, @var{y}, @var{z})
+    @tab@funref{@@infsup/fma}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Power functions}} @tab
+@end ifnottex
+@item pown (@var{x}, @var{p})
+    @tab@funref{@@infsup/pown}
+    @tab tightest
+@item pow (@var{x}, @var{y})
+    @tab@funref{@@infsup/pow}
+    @tab tightest
+@item exp (@var{x})
+    @tab@funref{@@infsup/exp}
+    @tab tightest
+@item exp2 (@var{x})
+    @tab@funref{@@infsup/pow2}
+    @tab tightest
+@item exp10 (@var{x})
+    @tab@funref{@@infsup/pow10}
+    @tab tightest
+@item log (@var{x})
+    @tab@funref{@@infsup/log}
+    @tab tightest
+@item log2 (@var{x})
+    @tab@funref{@@infsup/log2}
+    @tab tightest
+@item log10 (@var{x})
+    @tab@funref{@@infsup/log10}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Trigonometric / hyperbolic}} @tab
+@end ifnottex
+@item sin (@var{x})
+    @tab@funref{@@infsup/sin}
+    @tab tightest
+@item cos (@var{x})
+    @tab@funref{@@infsup/cos}
+    @tab tightest
+@item tan (@var{x})
+    @tab@funref{@@infsup/tan}
+    @tab tightest
+@item asin (@var{x})
+    @tab@funref{@@infsup/asin}
+    @tab tightest
+@item acos (@var{x})
+    @tab@funref{@@infsup/acos}
+    @tab tightest
+@item atan (@var{x})
+    @tab@funref{@@infsup/atan}
+    @tab tightest
+@item atan2 (@var{y}, @var{x})
+    @tab@funref{@@infsup/atan2}
+    @tab tightest
+@item sinh (@var{x})
+    @tab@funref{@@infsup/sinh}
+    @tab tightest
+@item cosh (@var{x})
+    @tab@funref{@@infsup/cosh}
+    @tab tightest
+@item tanh (@var{x})
+    @tab@funref{@@infsup/tanh}
+    @tab tightest
+@item asinh (@var{x})
+    @tab@funref{@@infsup/asinh}
+    @tab tightest
+@item acosh (@var{x})
+    @tab@funref{@@infsup/acosh}
+    @tab tightest
+@item atanh (@var{x})
+    @tab@funref{@@infsup/atanh}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Integer functions}} @tab
+@end ifnottex
+@item sign (@var{x})
+    @tab@funref{@@infsup/sign}
+    @tab tightest
+@item ceil (@var{x})
+    @tab@funref{@@infsup/ceil}
+    @tab tightest
+@item floor (@var{x})
+    @tab@funref{@@infsup/floor}
+    @tab tightest
+@item trunc (@var{x})
+    @tab@funref{@@infsup/fix}
+    @tab tightest
+@item roundTiesToEven (@var{x})
+    @tab@funref{@@infsup/roundb}
+    @tab tightest
+@item roundTiesToAway (@var{x})
+    @tab@funref{@@infsup/round}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Absmax functions}} @tab
+@end ifnottex
+@item abs (@var{x})
+    @tab@funref{@@infsup/abs}
+    @tab tightest
+@item min (@var{x}, @var{y})
+    @tab@funref{@@infsup/min}
+    @tab tightest
+@item max (@var{x}, @var{y})
+    @tab@funref{@@infsup/max}
+    @tab tightest
+@end multitable
+@end float
+
+@float Table,tab:required-reverse-functions
+@caption{Required reverse functions}
+@shortcaption{Required reverse functions}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness
+@ifnottex
+@headitem
+    @tab @r{@emph{From unary functions}} @tab
+@end ifnottex
+@item sqrRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/sqrrev}
+    @tab tightest
+@item absRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/absrev}
+    @tab tightest
+@item pownRev (@var{c}, @var{x}, @var{p})
+    @tab@funref{@@infsup/pownrev}
+    @tab valid (tightest for @var{p} ≥ @minus{}2)
+@item sinRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/sinrev}
+    @tab valid
+@item cosRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/cosrev}
+    @tab valid
+@item tanRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/tanrev}
+    @tab valid
+@item coshRev (@var{c}, @var{x})
+    @tab@funref{@@infsup/coshrev}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{From binary functions}} @tab
+@end ifnottex
+@item mulRev (@var{b}, @var{c}, @var{x})
+    @tab@funref{@@infsup/mulrev}
+    @tab tightest
+@item powRev1 (@var{b}, @var{c}, @var{x})
+    @tab@funref{@@infsup/powrev1}
+    @tab valid
+@item powRev2 (@var{a}, @var{c}, @var{x})
+    @tab@funref{@@infsup/powrev2}
+    @tab valid
+@item atan2Rev1 (@var{b}, @var{c}, @var{x})
+    @tab@funref{@@infsup/atan2rev1}
+    @tab valid
+@item atan2Rev2 (@var{a}, @var{c}, @var{x})
+    @tab@funref{@@infsup/atan2rev2}
+    @tab valid
+@ifnottex
+@headitem
+    @tab @r{@emph{Two-output division}} @tab
+@end ifnottex
+@item mulRevToPair (@var{b}, @var{c})
+    @tab@funref{@@infsup/mulrev}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Cancellative addition@*and subtraction}} @tab
+@end ifnottex
+@item cancelMinus (@var{x}, @var{y})
+    @tab@funref{@@infsup/cancelminus}
+    @tab tightest
+@item cancelPlus (@var{x}, @var{y})
+    @tab@funref{@@infsup/cancelplus}
+    @tab tightest
+@end multitable
+@end float
+
+@float Table,tab:required-set-operations
+@caption{Required set operations}
+@shortcaption{Required set operations}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness
+@item intersection (@var{x}, @var{y})
+    @tab@funref{@@infsup/intersect}
+    @tab tightest
+@item convexHull (@var{x}, @var{y})
+    @tab@funref{@@infsup/union}
+    @tab tightest
+@end multitable
+@end float
+
+
+@float Table,tab:required-numeric-functions
+@caption{Required numeric functions of intervals}
+@shortcaption{Required numeric functions of intervals}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Rounding mode
+@item inf (@var{x})
+    @tab@funref{@@infsup/inf}
+    @tab
+@item sup (@var{x})
+    @tab@funref{@@infsup/sup}
+    @tab
+@item mid (@var{x})
+    @tab@funref{@@infsup/mid}
+    @tab to nearest, ties to even
+@item wid (@var{x})
+    @tab@funref{@@infsup/wid}
+    @tab toward +∞
+@item rad (@var{x})
+    @tab@funref{@@infsup/rad}
+    @tab toward +∞
+@item mag (@var{x})
+    @tab@funref{@@infsup/mag}
+    @tab
+@item mig (@var{x})
+    @tab@funref{@@infsup/mig}
+    @tab
+@end multitable
+@end float
+
+
+@float Table,tab:required-boolean-functions
+@caption{Required boolean functions of intervals}
+@shortcaption{Required boolean functions of intervals}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Description
+@item isEmpty (@var{x})
+    @tab@funref{@@infsup/isempty}
+    @tab @var{x} is the empty set
+@item isEntire (@var{x})
+    @tab@funref{@@infsup/isentire}
+    @tab @var{x} is the whole line
+@item equal (@var{a}, @var{b})
+    @tab@funref{@@infsup/eq}
+    @tab @var{a} equals @var{b}
+@item subset (@var{a}, @var{b})
+    @tab@funref{@@infsup/subset}
+    @tab @var{a} is a subset of @var{b}
+@item less (@var{a}, @var{b})
+    @tab@funref{@@infsup/le}
+    @tab @var{a} is weakly less than @var{b}
+@item precedes (@var{a}, @var{b})
+    @tab@funref{@@infsup/precedes}
+    @tab @var{a} is left of but may touch @var{b}
+@item interior (@var{a}, @var{b})
+    @tab@funref{@@infsup/interior}
+    @tab @var{a} is interior to @var{b}
+@item strictLess (@var{a}, @var{b})
+    @tab@funref{@@infsup/lt}
+    @tab @var{a} is strictly less than @var{b}
+@item strictPrecedes (@var{a}, @var{b})
+    @tab@funref{@@infsup/strictprecedes}
+    @tab @var{a} is strictly left of @var{b}
+@item disjoint (@var{a}, @var{b})
+    @tab@funref{@@infsup/disjoint}
+    @tab @var{a} and @var{b} are disjoint
+@end multitable
+@end float
+
+
+@appendixsubsec Recommended functions
+
+@float Table,tab:recommended-functions
+@caption{Recommended functions}
+@shortcaption{Recommended functions}
+
+@multitable {roundTiesToAway (x)} {@@infsupdec/iscommoninterval} {Tightness (and comments...)} 
+@headitem
+    Operation
+    @tab Implementation
+    @tab Tightness / Comments
+@ifnottex
+@headitem
+    @tab @r{@emph{Elementary functions}} @tab
+@end ifnottex
+@item rootn (@var{x}, @var{q})
+    @tab@funref{@@infsup/nthroot}
+    @tab valid (tightest for @var{q} ≥ @minus{}2)
+@item expm1 (@var{x})
+    @tab@funref{@@infsup/expm1}
+    @tab tightest
+@item logp1 (@var{x})
+    @tab@funref{@@infsup/log1p}
+    @tab tightest
+@item hypot (@var{x}, @var{y})
+    @tab@funref{@@infsup/hypot}
+    @tab tightest
+@item rSqrt (@var{x})
+    @tab@funref{@@infsup/rsqrt}
+    @tab tightest
+@ifnottex
+@headitem
+    @tab @r{@emph{Boolean functions}} @tab
+@end ifnottex
+@item isCommonInterval (@var{x})
+    @tab@funref{@@infsup/iscommoninterval}
+    @tab (=bound and non-empty)
+@item isSingleton (@var{x})
+    @tab@funref{@@infsup/issingleton}
+    @tab (=single real)
+@item isMember (@var{m}, @var{x})
+    @tab@funref{@@infsup/ismember}
+    @tab
+@ifnottex
+@headitem
+    @tab @r{@emph{Extended comparison}} @tab
+@end ifnottex
+@item overlap (@var{a}, @var{b})
+    @tab@funref{@@infsup/overlap}
+    @tab
+
+@end multitable
+@end float
+
+
+
+@appendixsubsec Operations on/with decorations
+
+See @funref{@@infsup/newdec}, @funref{@@infsupdec/intervalpart}, and @funref{@@infsupdec/decorationpart}.  The operation setDec is implemented by @funref{@@infsupdec/infsupdec}.
+
+For comparison of decorations with respect to the propagation order @code{com > dac > def > trv > ill} use the numeric value returned by @code{decorationpart (@var{x}, "uint8")}.
+
+@appendixsubsec Reduction operations
+
+See @funref{mpfr_vector_sum_d} and @funref{mpfr_vector_dot_d}.  The operations @code{sumAbs} and @code{sumSquare} can be computed with @code{mpfr_vector_sum_d (@var{rounding mode}, abs (@var{x}))} and @code{mpfr_vector_dot_d (@var{rounding mode}, @var{x}, @var{x})} respectively.
+
+@appendixsubsec Input
+
+The operation @code{textToInterval} is implemented by the class constructors @funref{@@infsup/infsup} for bare intervals and @funref{@@infsupdec/infsupdec} for decorated intervals.  Both are able to operate on interval literals provided as strings.
+
+@appendixsubsec Output
+
+See @funref{@@infsup/intervaltotext}.
+
+@appendixsubsec Exact text representation
+
+See @funref{exacttointerval} and @funref{@@infsup/intervaltoexact}.
+
+@appendixsubsec Interchange representation and encoding
+
+See @funref{interval_bitpack} and @funref{@@infsup/bitunpack}.
+
+
+@node Conformance Claim
+@appendixsec Conformance Claim
+
+The inverval package version @value{version} for GNU Octave is conforming to IEEE Std 1788-2015, IEEE Standard for Interval Arithmetic.  It is conforming to the set-based flavor with IEEE 754 conformance for the infsup binary64 interval type and without compressed arithmetic.  Additionally it provides no further flavors.
+
+@appendixsec Conformance Questionnaire
+
+@html
+<div class="alpha-list"></div>
+@end html
+@enumerate a
+@item Implementation-defined behavior
+@enumerate 1
+@item
+    What status flags or other means to signal the occurrence of certain decoration values in computations does the implementation provide if any?
+
+    The implementation does not signal the occurrence of decoration values.
+@end enumerate
+
+@item Documentation of behavior
+@enumerate 1
+@item
+    If the implementation supports implicit interval types, how is the interval hull operation realized?
+
+    The implementation supports explicit interval types only.
+
+@item
+    What accuracy is achieved (i.e., tightest, accurate, or valid) for each of the implementation’s interval operations?
+
+    The accuracy requirements of IEEE Std 1788-2015 are fulfilled.  Most operations achieve tightest accuracy, some operations (especially reverse operations) do not.  The tightness of each operation is documented in the function's documentation string and can be displayed with the @command{help} command.
+
+@item
+    Under what conditions is a constructor unable to determine whether a Level 1 value exists that corresponds to the supplied inputs?
+
+    When two different string boundaries for an interval both lie between the same two subsequent binary64 numbers, a PossiblyUndefined warning is created.
+
+@item
+    How are ties broken in rounding numbers if multiple numbers qualify as the rounded result?
+
+    Tie-breaking uses the IEEE Std 754 default: round ties to even.
+
+@item
+    How are interval datums converted to their exact text representations?
+
+    The binary64 boundaries are converted into hexadecimal-significand form as required by the standard.  It is also possible to convert interval datums to exact interval literals in decimal form, see optional arguments of function @funref{@@infsup/intervaltotext} for that purpose.
+@end enumerate
+
+@item Implementation-defined behavior
+@enumerate 1
+    Does the implementation include the interval overlapping function?  If so, how is it made available to the user?
+
+    Yes, the interval overlapping function is implemented under the name @funref{@@infsup/overlap}.
+
+@item
+    Does the implementation store additional information in a NaI? What functions are provided for the user to set and read this information?
+
+    No additional information is stored in a NaI.
+
+@item
+    What means if any does the implementation provide for an exception to be signaled when a NaI is produced?
+
+    The creation of a NaI is signaled with GNU Octave's warning mechanism.
+
+@item
+    What interval types are supported besides the required ones?
+
+    None.
+
+@item
+    What mechanisms of exception handling are used in exception handlers provided by the implementation?  What additional exception handling is provided by the implementation?
+
+    The exceptions described by IEEE Std 1788-2015 raise an error, which can be handled with GNU Octave's error mechanism.  The implementation provides no additional exception handling.
+
+@item
+    [Question does not apply to IEEE 754 conforming types.]
+
+@item
+    Does the implementation include different versions of the same operation for a given type and how are these provided to the user?
+
+    The interval matrix multiplication (see @funref{@@infsup/mtimes}) offers two implementations, with either @option{tightest} or @option{valid} accuracy.  The user may chose the desired version with an optional argument during the function call.
+
+@item
+    What combinations of formats are supported in interval constructors?
+
+    Any reasonable combination of the formats described in the standard document is supported.
+
+@item
+    [Question does not apply to IEEE 754 conforming types.]
+
+@item
+    What methods are used to read or write strings from or to character streams?  Does the implementation employ variations in locales (such as specific character case matching)?  This includes the syntax used in the strings for reading and writing.
+
+    Input and output is implemented with GNU Octave string variables in UTF-8 encoding.  There is no discrimination between different locales. Character case is ignored during input.  The syntax for interval literals is used as described by the standard document.
+
+@item
+    What is the tightness for the interval to string conversion for all interval types?
+
+    The general-purpose interval to string conversion produces the tightest decimal infsup form which has no more digits than are necessary to separate two binary64 numbers.
+
+@item
+    What is the result of Level 3 operations for invalid inputs?
+
+    Interval constructors prevent the creation of invalid Level 3 interval datums.
+
+    Any non-interval input to Level 3 operations is implicitly converted into an interval and the operation silently continues on interval inputs.
+
+    If at least one input is a decorated interval, bare interval inputs are implicitly decorated as described by @command{newDec} in the standard document. Implicit promotion from a bare interval to a decorated interval is signaled with GNU Octave's warning mechanism.
+
+    If implicit conversion fails (e.g., illegal interval literals), bare interval operations raise an error, whereas the decorated interval operations continue on NaI inputs.
+
+@item
+    [Question does not apply to IEEE 754 conforming types.]
+
+@item
+    What decorations does the implementation provide and what is their mathematical definition?  How are these decorations mapped when converting an interval to the interchange format?
+
+    The implementation provides the decorations com, dac, def, trv, and ill as described by the standard document.
+
+@item
+    [Question does not apply to IEEE 754 conforming types.]
+@end enumerate
+
+@item [Question applies to compressed arithmetic only, which is not supported.]
+
+@item [Questions apply to non-standard flavors only, which are not supported.]
+@end enumerate

@@ -79,12 +79,11 @@ Permission is granted to copy, distribute and/or modify this document under the 
 
 @menu
 How to install and use the interval package for GNU Octave
-* Preface:: Background information
-* Brief Introduction:: Before using the package
-* Getting Started:: Quick-start guide
-* Examples:: Demonstration of use cases
-* Advanced Topics:: Get the most out of it
+* Preface:: Background information before usage
+* Getting Started:: Quick-start guide for the basics
 * Introduction to Interval Arithmetic:: Fundamental concepts
+* Examples:: Showcase of use cases
+* Advanced Topics:: Get the most out of it
 
 Appendix
 * IEEE Std 1788-2015:: IEEE standard for interval arithmetic
@@ -97,52 +96,23 @@ Appendix
 
 @contents
 
-@comment The following structure has been inspired by the GNU Octave manual
-
 @node Preface
-@unnumbered Preface
 @include chapter/preface.texinfo
 
-@menu
-* Acknowledgments::
-* Distribution::
-@end menu
-
-@node Acknowledgments
-@unnumberedsec Acknowledgments
-@include chapter/acknowledgments.texinfo
-
-@node Distribution
-@unnumberedsec Distribution
-@include chapter/distribution.texinfo
-
-@node Brief Introduction
-@chapter Brief Introduction
-@include chapter/introduction.texinfo
-
 @node Getting Started
-@chapter Getting Started
 @include chapter/getting-started.texinfo
 
+@node Introduction to Interval Arithmetic
+@include chapter/introduction-to-interval-arithmetic.texinfo
+
 @node Examples
-@chapter Examples
 @include chapter/examples.texinfo
 
 @node Advanced Topics
-@chapter Advanced Topics
 @include chapter/advanced-topics.texinfo
 
-@node Introduction to Interval Arithmetic
-@chapter Introduction to Interval Arithmetic
-@include chapter/introduction-to-interval-arithmetic.texinfo
-
 @node IEEE Std 1788-2015
-@appendix IEEE Std 1788-2015
 @include chapter/ieee-1788.texinfo
-@node Function Names
-@include chapter/ieee-1788-functions.texinfo
-@node Conformance Claim
-@include chapter/ieee-1788-conformance.texinfo
 
 @node GNU General Public License
 @appendix GNU General Public License

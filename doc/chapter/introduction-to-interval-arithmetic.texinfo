@@ -4,6 +4,8 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
+@chapter Introduction to Interval Arithmetic
+
 @quotation
 Give a digital computer a problem in arithmetic, and it will grind away methodically, tirelessly, at gigahertz speed, until ultimately it produces the wrong answer. … An interval computation yields a pair of numbers, an upper and a lower bound, which are guaranteed to enclose the exact answer. Maybe you still don’t know the truth, but at least you know how much you don’t know.
 @author Brian Hayes, @uref{http://dx.doi.org/10.1511/2003.6.484,DOI: 10.1511/2003.6.484}
@@ -161,20 +163,6 @@ However, this does not help when ranges of input values are too big.  For certai
 
 
 @section Theory
-
-The most important and fundamental concepts in the context of the interval package are:
-@itemize
-@item
-    Intervals are closed, connected subsets of the real numbers.  Intervals may be unbound (in either or both directions) or empty.  In special cases @code{+inf} and @code{-inf} are used to denote boundaries of unbound intervals, but any member of the interval is a @emph{finite} real number.
-@item
-    Classical functions are extended to interval functions as follows: The result of function @var{f} evaluated on interval @var{x} is an interval enclosure of all possible values of @var{f} over @var{x} where the function is defined.
-    
-    Most interval arithmetic functions in this package manage to produce a very accurate such enclosure.
-@item
-    The result of an interval arithmetic function is an interval in general.  It might happen, that the mathematical range of a function consist of several intervals, but their union will be returned, e. g., 1 / [-1, 1] = [Entire].
-    
-    However, there are also exceptions, e. g., @funref{@@infsup/mulrev} with two return values, and supplementary functions that do not return intervals.
-@end itemize
 
 There are good introductions to interval arithmetic available and should be consulted for a deeper understanding of the topic.  The following recommendations can make a starting point.
 @itemize

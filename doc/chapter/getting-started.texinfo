@@ -3,7 +3,42 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
-This chapter gives a quick overview on the interval packages basic capabilities.  More detailed information can usually be found in the functions' documentation.
+@chapter Getting Started
+
+This chapter takes you by the hand and gives a quick overview on the interval packages basic capabilities.  More detailed information can usually be found in the functions' documentation.
+
+@section Installation
+Unless the package is provided by a third-party distributor, the interval package can be installed with the @command{pkg} command from within Octave. Latest release versions are published at Octave Forge and can be automatically downloaded with the @option{-forge} option.
+
+@example
+@c doctest: +SKIP
+@group
+pkg install -forge interval
+  @print{} For information about changes from previous versions
+  @print{} of the interval package, run 'news interval'.
+@end group
+@end example
+
+During this kind of installation parts of the interval package are compiled for the target system, which requires development libraries for GNU Octave (version ≥ 3.8.0) and GNU MPFR (version ≥ 3.1.0) to be installed. The official Octave release for Microsoft Windows already includes these dependencies. For other systems it might be necessary to install packages “liboctave-dev” and “libmpfr-dev”, which are provided by most GNU distributions (names may vary).
+
+In order to use the interval package during an Octave session, it must have been loaded, i. e., added to the path.  In the following parts of the manual it is assumed that the package has been loaded, which can be accomplished with the @command{pkg load interval} command.  Automatic loading of the interval package can be activated with the @command{pkg rebuild -auto interval} command and is recommended for regular use.
+
+That's it.  After only two commands the package is ready to be used within Octave.
+
+
+@section Set-based Interval Arithmetic
+
+The most important and fundamental concepts in the context of the interval package are:
+@itemize
+@item
+    Intervals are closed, connected subsets of the real numbers.  Intervals may be unbound (in either or both directions) or empty.  In special cases @code{+inf} and @code{-inf} are used to denote boundaries of unbound intervals, but any member of the interval is a @emph{finite} real number.
+@item
+    Classical functions are extended to interval functions as follows: The result of function @var{f} evaluated on interval @var{x} is an interval enclosure of all possible values of @var{f} over @var{x} where the function is defined. Most interval arithmetic functions in this package manage to produce a very accurate such enclosure.
+@item
+    The result of an interval arithmetic function is an interval in general.  It might happen, that the mathematical range of a function consist of several intervals, but their union will be returned, e. g., 1 / [-1, 1] = [Entire].
+@end itemize
+
+More details can be found in @ref{Introduction to Interval Arithmetic}.
 
 
 @section Input and Output
@@ -104,7 +139,7 @@ For maximum portability it is recommended to use interval literals, which are st
 @example
 @group
 ## Interval literal
-infsupdec ("[20, 42e9]")
+infsupdec ("[20, 4.2e10]")
   @result{} ans = [20, 4.2e+10]_com
 @end group
 @end example

@@ -3,6 +3,8 @@
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
 
+@chapter Advanced Topics
+
 @section Error Handling
 
 Due to the nature of set-based interval arithmetic, one should not observe errors (in the sense of raised GNU Octave error messages) during computation unless operations are evaluated for incompatible data types. Arithmetic operations which are not defined for (parts of) their input, simply ignore anything that is outside of their domain.
