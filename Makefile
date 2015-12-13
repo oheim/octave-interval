@@ -197,7 +197,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@# 1. Load the generate_html package
 	@# 2. Replace builtin print function because of various
 	@#    bugs #44181, #45104, #45137
-	@# 3. Use off-screen rendering
+	@# 3. Set fonts for demo plots and use off-screen rendering
 	@# 4. Use custom CSS and global version number
 	@#    (only affects package manual, not function reference)
 	@# 5. Specify path to package manual
@@ -205,6 +205,8 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@$(OCTAVE) --no-gui --silent \
 		--eval "pkg load generate_html;" \
 		--eval "function print (h, filename); __print_mesa__ (h, filename); endfunction;" \
+		--eval "set (0, 'defaultaxesfontname', 'Fantasque Sans Mono');" \
+		--eval "set (0, 'defaulttextfontname', 'Roboto Condensed');" \
 		--eval "set (0, 'defaultfigurevisible', 'off');" \
 		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' --init-file=doc/manual.init -D octave-forge --css-include=doc/manual.css');" \
 		--eval "options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo';" \

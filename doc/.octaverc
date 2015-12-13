@@ -1,0 +1,4 @@
+set (0, 'defaultaxesfontname', 'Fantasque Sans Mono');
+set (0, 'defaulttextfontname', 'Roboto Condensed');
+set (0, 'defaultfigurevisible', 'off');
+pkg ('load', 'interval');

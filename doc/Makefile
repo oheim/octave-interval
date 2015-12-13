@@ -21,8 +21,6 @@ manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard
 image/%.m.png: image/%.m
 	$(OCTAVE) \
 		--no-gui --silent --no-history \
-		--eval "pkg ('load', 'interval');" \
-		--eval "set (0, 'defaultfigurevisible', 'off');" \
 		--eval "source ('$<');" \
 		--eval "__print_mesa__ (gcf, '$@');"
 	@# The image size is too large for inclusion in the pdf,
