@@ -54,6 +54,67 @@ wid (nextout (infsup ([0, 1, 1e10, 1e100])))
 @end example
 
 
+@section Root finding
+@subsection Interval newton method
+
+In numerical analysis, @uref{https://en.wikipedia.org/wiki/Newton%27s_method,Newton's method} can find an approximation to a root of a function.  Starting at a location @var{x}₀ the algorithms executes the following step to produce a better approximation:
+
+@display
+@var{x}₁ = @var{x}₀ @minus{} @var{f} (@var{x}₀) / @var{f}' (@var{x}₀)
+@end display
+
+The step can be interpreted geometrically as an intersection of the graph's tangent with the x-axis.  Eventually, this may converge to a single root. In interval analysis, we start with an interval @var{x}₀ and utilize the following interval Newton step:
+
+@display
+@var{x}₁ = (mid (@var{x}₀) @minus{} @var{f} (mid (@var{x}₀)) / @var{f}' (@var{x}₀)) ∩ @var{x}₀
+@end display
+
+Here we use the pivot element @code{mid (@var{x}₀)} and produce an enclosure of all possible tangents with the x-axis.  In special cases the division with @code{@var{f}' (@var{x}₀)} yields two intervals and the algorithm bisects the search range.  Eventually this algorithm produces enclosures for all possible roots of the function @var{f}.  The interval newton method is implemented by the function @funref{@@infsup/fzero}.
+
+In order to produce the derivative of function @var{f}, it is possible to use the automatic differentiation from the symbolic package. However, be careful since this may introduce numeric errors with coefficients.
+
+@example
+@group
+f = @@(x) sqrt (x) + (x + 1) .* cos (x);
+@end group
+@group
+pkg load symbolic
+df = function_handle (diff (formula (f (sym ("x")))))
+  @result{} df = @@(x) -(x + 1) .* sin (x) + cos (x) + 1 ./ (2 .* sqrt (x))
+@end group
+@group
+fzero (f, infsup ("[0, 6]"), df)
+  @result{} ans ⊂ 2×1 interval vector
+
+        [2.059, 2.0591]
+       [4.3107, 4.3108]
+
+@end group
+@end example
+
+We could find two roots in the interval [0, 6].
+
+
+@subsection Bisection
+
+Consider the function @code{f (@var{x}, @var{y}) = -(5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^6 + (-(5*@var{x} - 20*@var{x}^3 + 16*@var{x}^5)^3 + 5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^2}, which has several roots in the area @var{x}, @var{y} ∈ [-1, 1].
+
+@myimage{image/poly-example-surf.m,Surface plot of @code{f (@var{x}, @var{y})} which shows a lot of roots for the function}
+
+The function is particular difficult to compute with intervals, because its variables appear several times in the expression, which benefits overestimation from the dependency problem.  Computing root enclosures with the @funref{@@infsup/fsolve} function is unfeasible, because many bisections would be necessary until the algorithm terminates with a useful result.  It is possible to reduce the overestimation with the @funref{@@infsup/polyval} function to some degree, but since this function is quite costly to compute, it does not speed up the bisecting algorithm.
+
+@include image/poly-example-roots-simple.m.texinfo
+@myimage{image/poly-example-roots-simple.m,Enclosures of roots for the function @code{f (@var{x}, @var{y})}}
+
+Now we use the same algorithm with the same number of iterations, but also utilize the @emph{mean value theorem} to produce better enclosures of the function value with first order approximation of the function. The function is evaluated at the interval's midpoint and a range evaluation of the derivative can be used to produce an enclosure of possible function values.
+
+@include image/poly-example-roots-with-deriv.m.texinfo
+
+By using the derivative, it is possible to reduce overestimation errors and achieve a much better convergence behavior.
+
+@myimage{image/poly-example-roots-with-deriv.m,Enclosures of roots for the function @code{f (@var{x}, @var{y})}}
+
+
 @section Parameter estimation
 
 Consider the model @code{y (@var{t}) = @var{p1} * exp (@var{p2} * t)}.  The parameters @var{p1} and @var{p2} are unknown, but it is known that the model fulfills the following constraints, which have been obtained using measurements with known error bounds.
@@ -98,23 +159,3 @@ f (p(1), p(2))
 
 @end group
 @end example
-
-
-@section Finding root enclosures
-
-Consider the function @code{f (@var{x}, @var{y}) = -(5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^6 + (-(5*@var{x} - 20*@var{x}^3 + 16*@var{x}^5)^3 + 5*@var{y} - 20*@var{y}^3 + 16*@var{y}^5)^2}, which has several roots in the area @var{x}, @var{y} ∈ [-1, 1].
-
-@myimage{image/poly-example-surf.m,Surface plot of @code{f (@var{x}, @var{y})} which shows a lot of roots for the function}
-
-The function is particular difficult to compute with intervals, because its variables appear several times in the expression, which benefits overestimation from the dependency problem.  Computing root enclosures with the @funref{@@infsup/fsolve} function is unfeasible, because many bisections would be necessary until the algorithm terminates with a useful result.  It is possible to reduce the overestimation with the @funref{@@infsup/polyval} function to some degree, but since this function is quite costly to compute, it does not speed up the bisecting algorithm.
-
-@include image/poly-example-roots-simple.m.texinfo
-@myimage{image/poly-example-roots-simple.m,Enclosures of roots for the function @code{f (@var{x}, @var{y})}}
-
-Now we use the same algorithm with the same number of iterations, but also utilize the @emph{mean value theorem} to produce better enclosures of the function value with first order approximation of the function. The function is evaluated at the interval's midpoint and a range evaluation of the derivative can be used to produce an enclosure of possible function values.
-
-@include image/poly-example-roots-with-deriv.m.texinfo
-
-By using the derivative, it is possible to reduce overestimation errors and achieve a much better convergence behavior.
-
-@myimage{image/poly-example-roots-with-deriv.m,Enclosures of roots for the function @code{f (@var{x}, @var{y})}}

@@ -7,6 +7,7 @@
 @ifcommandnotdefined U
 \DeclareUnicodeCharacter{00A0}{\ }
 \DeclareUnicodeCharacter{00A7}{\S}
+\DeclareUnicodeCharacter{00B1}{$\pm$}
 \DeclareUnicodeCharacter{00B2}{${}^2$}
 \DeclareUnicodeCharacter{00B7}{$\cdot$}
 \DeclareUnicodeCharacter{00BD}{1/2}
@@ -15,6 +16,8 @@
 @end ifcommandnotdefined
 \DeclareUnicodeCharacter{03C0}{$\pi$}
 \DeclareUnicodeCharacter{202F}{\thinspace}
+\DeclareUnicodeCharacter{2080}{$_0$}
+\DeclareUnicodeCharacter{2081}{$_1$}
 \DeclareUnicodeCharacter{2200}{$\forall$}
 \DeclareUnicodeCharacter{2203}{$\exists$}
 \DeclareUnicodeCharacter{2208}{$\in$}

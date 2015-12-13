@@ -247,9 +247,13 @@ test: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
 
 ## Validate code examples
 doctest: $(OCT_COMPILED)
+	@# Workaround for OctSymPy issue 273, we must pre-initialize the package
+	@# Otherwise, it will make the doctests fail
 	@echo "Testing documentation strings ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --eval \
 		"pkg load doctest; \
+		 pkg load symbolic; warning ('off', 'OctSymPy:function_handle:nocodegen'); sym ('x'); \
+		 set (0, 'defaultfigurevisible', 'off'); \
 		 targets = '$(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)'; \
 		 targets = strsplit (targets, ' '); \
 		 success = doctest (targets); \
