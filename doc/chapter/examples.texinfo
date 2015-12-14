@@ -54,6 +54,23 @@ wid (nextout (infsup ([0, 1, 1e10, 1e100])))
 @end example
 
 
+@section Arithmetic with System-independent Accuracy
+
+According to IEEE Std 754 only the most basic floating-point operations must be provided with high accuracy.  This is also true for the arithmetic functions in Octave.  It is no surprise that many arithmetic functions fail to provide perfect results and their output may be system dependent.
+
+We compute the cosecant for 100 different values.
+
+@example
+@group
+x = vec (1 ./ magic (10));
+sum (subset (csc (x), csc (infsupdec (x))))
+  @result{} ans =  98
+@end group
+@end example
+
+Due to the general containment rule of interval arithmetic @code{x ∈ X ⇒ f (x) ∈ f (X)} one would expect the @code{csc (x)} to always be contained in the interval version of the cosecant for the same input.  However, the classic cosecant is not very accurate whereas the interval version is.  In 2 out 100 cases the built-in cosecant is less accurate than 1 ULP.
+
+
 @section Prove the Existence of a Fixed Point
 
 A weaker formulation of Brower's fixed-point theorem goes: If @var{x} is a bounded interval and function @var{f} is continuous and @var{f} (@var{x}) ⊂ @var{x}, then there exists a point @var{x}₀ ∈ @var{x} such that @var{f} (@var{x}₀) = @var{x}₀.
