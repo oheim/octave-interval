@@ -8,7 +8,7 @@
 This chapter presents some more or less exotic use cases for the interval package.
 
 
-@section Floating-point numbers
+@section Floating-point Numbers
 
 Floating-point numbers are most commonly used in binary64 format, a.k.a. double precision.  Internally they are stored in the form @code{± @var{m} * 2 ^ @var{e}} with some integral mantissa @var{m} and exponent @var{e}.  Most decimal fractions can only be stored approximately in this format.
 
@@ -54,8 +54,40 @@ wid (nextout (infsup ([0, 1, 1e10, 1e100])))
 @end example
 
 
-@section Root finding
-@subsection Interval newton method
+@section Prove the Existence of a Fixed Point
+
+A weaker formulation of Brower's fixed-point theorem goes: If @var{x} is a bounded interval and function @var{f} is continuous and @var{f} (@var{x}) ⊂ @var{x}, then there exists a point @var{x}₀ ∈ @var{x} such that @var{f} (@var{x}₀) = @var{x}₀.
+
+These properties can be tested automatically.  Decorated intervals can even prove that the function is continuous.
+
+@example
+@group
+x = infsupdec ("[-1, +1]");
+f = @@cos;
+subset (f (x), x)
+  @result{} ans =  1
+iscommoninterval (x)
+  @result{} ans =  1
+continuous = strcmp (decorationpart (f (x)), "com")
+  @result{} continuous =  1
+@end group
+@end example
+
+Furthermore it is sometimes possible to approximate the fixed-point by repetitive evaluation of the function, although there are better methods to do so in general.
+
+@example
+@group
+for i = 1 : 20
+    x = f (x);
+endfor
+display (x)
+  @result{} x ⊂ [0.73893, 0.73919]_com
+@end group
+@end example
+
+
+@section Root Finding
+@subsection Interval Newton Method
 
 In numerical analysis, @uref{https://en.wikipedia.org/wiki/Newton%27s_method,Newton's method} can find an approximation to a root of a function.  Starting at a location @var{x}₀ the algorithms executes the following step to produce a better approximation:
 
@@ -71,7 +103,7 @@ The step can be interpreted geometrically as an intersection of the graph's tang
 
 Here we use the pivot element @code{mid (@var{x}₀)} and produce an enclosure of all possible tangents with the x-axis.  In special cases the division with @code{@var{f}' (@var{x}₀)} yields two intervals and the algorithm bisects the search range.  Eventually this algorithm produces enclosures for all possible roots of the function @var{f}.  The interval newton method is implemented by the function @funref{@@infsup/fzero}.
 
-In order to produce the derivative of function @var{f}, it is possible to use the automatic differentiation from the symbolic package. However, be careful since this may introduce numeric errors with coefficients.
+To produce the derivative of function @var{f}, the automatic differentiation from the symbolic package bears a helping hand.  However, be careful since this may introduce numeric errors with coefficients.
 
 @example
 @group
@@ -115,7 +147,7 @@ By using the derivative, it is possible to reduce overestimation errors and achi
 @myimage{image/poly-example-roots-with-deriv.m,Enclosures of roots for the function @code{f (@var{x}, @var{y})}}
 
 
-@section Parameter estimation
+@section Parameter Estimation
 
 Consider the model @code{y (@var{t}) = @var{p1} * exp (@var{p2} * t)}.  The parameters @var{p1} and @var{p2} are unknown, but it is known that the model fulfills the following constraints, which have been obtained using measurements with known error bounds.
 
