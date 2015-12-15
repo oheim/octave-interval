@@ -21,7 +21,7 @@
 @item det, prod, recip: New interval arithmetic functions
 @item diag: New utility function to create diagonal matrices or extract vectors from diagonals of matrices
 @item decorationpart: Allow to choose between different return types with a second parameter
-@item For several binary functions it is now possible to broadcast row vectors against column vectors or vice versa.
+@item For several functions it is now possible to broadcast row vectors against column vectors or vectors against matrices.
 @end itemize
 
 @noindent Bugfixes
