@@ -501,8 +501,13 @@ while (not (isempty (queue.inf)))
         coord = queue;
     else
         coord_idx.type = "()";
-        coord_idx.subs = {:, :};
-        coord_idx.subs{data_dim} = bisect_coord;
+        if (data_dim == 1)
+            coord_idx.subs = {bisect_coord - 1 + ...
+                (1 : rows (queue.inf) : numel (queue.inf))};
+        else
+            coord_idx.subs = {bisect_coord - 1 + ...
+                (1 : columns (queue.inf) : numel (queue.inf)).'};
+        endif
         coord = subsref (queue, coord_idx);
     endif
     m_coord = mid (coord);
