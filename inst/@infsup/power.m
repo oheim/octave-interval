@@ -72,12 +72,18 @@ if (not (any (any (y.inf == 0))) && ... # can't use pown, because 0^0 = [Empty]
     return
 endif
 
-## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
-    x.inf = ones (size (y.inf)) .* x.inf;
-    x.sup = ones (size (y.inf)) .* x.sup;
-    y.inf = ones (size (x.inf)) .* y.inf;
-    y.sup = ones (size (x.inf)) .* y.sup;
+## Resize, if scalar × matrix or vector × matrix or scalar × vector
+if (rows (x.inf) ~= rows (y.inf))
+    x.inf = ones (rows (y.inf), columns (x.inf)) .* x.inf;
+    x.sup = ones (rows (y.inf), columns (x.inf)) .* x.sup;
+    y.inf = ones (rows (x.inf), columns (y.inf)) .* y.inf;
+    y.sup = ones (rows (x.inf), columns (y.inf)) .* y.sup;
+endif
+if (columns (x.inf) ~= columns (y.inf))
+    x.inf = ones (rows (x.inf), columns (y.inf)) .* x.inf;
+    x.sup = ones (rows (x.inf), columns (y.inf)) .* x.sup;
+    y.inf = ones (rows (y.inf), columns (x.inf)) .* y.inf;
+    y.sup = ones (rows (y.inf), columns (x.inf)) .* y.sup;
 endif
 
 idx.type = "()";

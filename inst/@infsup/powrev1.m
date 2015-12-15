@@ -60,30 +60,34 @@ endif
 x = intersect (x, infsup (0, inf));
 c = intersect (c, infsup (0, inf));
 
-## Broadcast parameters if necessary
-if (isscalar (x.inf))
-    if (not (isscalar (c.inf)))
-        x.inf = x.inf (ones (size (c.inf)));
-        x.sup = x.sup (ones (size (c.inf)));
-        if (isscalar (b.inf))
-            b.inf = b.inf (ones (size (c.inf)));
-            b.sup = b.sup (ones (size (c.inf)));
-        endif
-    elseif (not (isscalar (b.inf)))
-        x.inf = x.inf (ones (size (b.inf)));
-        x.sup = x.sup (ones (size (b.inf)));
-        c.inf = c.inf (ones (size (b.inf)));
-        c.sup = c.sup (ones (size (b.inf)));
-    endif
-else
-    if (isscalar (b.inf))
-        b.inf = b.inf (ones (size (x.inf)));
-        b.sup = b.sup (ones (size (x.inf)));
-    endif
-    if (isscalar (c.inf))
-        c.inf = c.inf (ones (size (x.inf)));
-        c.sup = c.sup (ones (size (x.inf)));
-    endif
+## Resize, if scalar × matrix or vector × matrix or scalar × vector
+if (rows (b.inf) ~= rows (c.inf))
+    b.inf = ones (rows (c.inf), columns (b.inf)) .* b.inf;
+    b.sup = ones (rows (c.inf), columns (b.inf)) .* b.sup;
+    c.inf = ones (rows (b.inf), columns (c.inf)) .* c.inf;
+    c.sup = ones (rows (b.inf), columns (c.inf)) .* c.sup;
+endif
+if (rows (b.inf) ~= rows (x.inf))
+    b.inf = ones (rows (x.inf), columns (b.inf)) .* b.inf;
+    b.sup = ones (rows (x.inf), columns (b.inf)) .* b.sup;
+    c.inf = ones (rows (x.inf), columns (c.inf)) .* c.inf;
+    c.sup = ones (rows (x.inf), columns (c.inf)) .* c.sup;
+    x.inf = ones (rows (b.inf), columns (x.inf)) .* x.inf;
+    x.sup = ones (rows (b.inf), columns (x.inf)) .* x.sup;
+endif
+if (columns (b.inf) ~= columns (c.inf))
+    b.inf = ones (rows (b.inf), columns (c.inf)) .* b.inf;
+    b.sup = ones (rows (b.inf), columns (c.inf)) .* b.sup;
+    c.inf = ones (rows (c.inf), columns (b.inf)) .* c.inf;
+    c.sup = ones (rows (c.inf), columns (b.inf)) .* c.sup;
+endif
+if (columns (b.inf) ~= columns (x.inf))
+    b.inf = ones (rows (b.inf), columns (x.inf)) .* b.inf;
+    b.sup = ones (rows (b.inf), columns (x.inf)) .* b.sup;
+    c.inf = ones (rows (c.inf), columns (x.inf)) .* c.inf;
+    c.sup = ones (rows (c.inf), columns (x.inf)) .* c.sup;
+    x.inf = ones (rows (x.inf), columns (b.inf)) .* x.inf;
+    x.sup = ones (rows (x.inf), columns (b.inf)) .* x.sup;
 endif
 
 l = x.inf;
