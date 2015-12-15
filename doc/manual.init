@@ -1,2 +1,1 @@
 set_from_init_file ('PRE_BODY_CLOSE', '<div class="logo"><object data="image/logo.svg" type="image/svg+xml"><param name="src" value="image/logo.svg" /><img src="image/logo.svg.png" /></object></div>');
-set_from_init_file ('EXTRA_HEAD', '<link rel="stylesheet" href="http://openfontlibrary.org/face/fantasque-sans-mono" type="text/css" /> <link rel="stylesheet" href="http://openfontlibrary.org/face/roboto-condensed" type="text/css"/> ');
