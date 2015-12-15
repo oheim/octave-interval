@@ -49,10 +49,10 @@ endfunction
 p = infsup ("[1.1, 2] [1.5, 2.5] [1, 5] [-5, -1] [0.1, 5]");
 [p, paving] = fsolve (@@contractor, ...
                       p, y, ...
-                      struct("Contract", true));
+                      struct ("Contract", true));
 display (p')
 @ifnotplaintext
-  @result{} 1×5 interval vector
+  @result{} 5×1 interval vector
 
           [1.3821, 1.719]
                [1.5, 2.5]
