@@ -1,0 +1,71 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
+@example
+@group
+# Simulate some data sets and add uncertainty
+x = -6 : 3 : 18;
+f = @@(p1, p2, p3, p4, p5) ...
+    p1 .^ (-p2 .* x) .* (p3 + p4 .* x + p5 .* x .^ 2);
+y = f (1.5, 2, 1, -3, 0.5) .* infsup ("[0.999, 1.001]");
+@end group
+@group
+function [fval, p1, p2, p3, p4, p5] = ...
+    contractor (y, p1, p2, p3, p4, p5)
+    x = -6 : 3 : 18;
+    # Forward evaluation
+    a = p2 .* -x;
+    b = p1 .^ a;
+    c = p4 .* x;
+    d = p3 + c;
+    e = p5 .* x .^ 2;
+    f = d + e;
+    fval = b .* f;
+    # Reverse evaluation and
+    # undo broadcasting of x
+    y = intersect (y, fval);
+    b = mulrev (f, y, b);
+    f = mulrev (b, y, f);
+    p1 = powrev1 (a, b, p1);
+    p1 = intersect (p1, [], 2);
+    a = powrev2 (p1, b, a);
+    p2 = mulrev (-x, a, p2);
+    p2 = intersect (p2, [], 2);
+    d = intersect (d, f - e);
+    e = intersect (e, f - d);
+    p3 = intersect (p3, d - c);
+    p3 = intersect (p3, [], 2);
+    c = intersect (c, d - p3);
+    p4 = mulrev (x, c, p4);
+    p4 = intersect (p4, [], 2);
+    p5 = mulrev (x .^ 2, e, p5);
+    p5 = intersect (p5, [], 2);
+endfunction
+@end group
+@group
+# Seach for solutions in the range of p
+p = infsup ("[1.1, 2] [1.5, 2.5] [1, 5] [-5, -1] [0.1, 5]");
+[p, paving] = fsolve (@@contractor, ...
+                      p, y, ...
+                      struct("Contract", true));
+display (p')
+@ifnotplaintext
+  @result{} 1×5 interval vector
+
+          [1.3821, 1.719]
+               [1.5, 2.5]
+              [1, 1.0011]
+       [-3.5516, -2.7474]
+       [0.44764, 0.59294]
+
+@end ifnotplaintext
+@end group
+@group
+# Plot p1 versus p2
+plot (paving(1, :), paving(2, :))
+xlabel ("p1")
+ylabel ("p2")
+@end group
+@end example

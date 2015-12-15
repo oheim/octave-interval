@@ -165,6 +165,7 @@ By using the derivative, it is possible to reduce overestimation errors and achi
 
 
 @section Parameter Estimation
+@subsection Small Search Space
 
 Consider the model @code{y (@var{t}) = @var{p1} * exp (@var{p2} * t)}.  The parameters @var{p1} and @var{p2} are unknown, but it is known that the model fulfills the following constraints, which have been obtained using measurements with known error bounds.
 
@@ -182,10 +183,14 @@ A better enclosure of the parameters @var{p1} and @var{p2} can be estimated with
 
 @example
 @group
+# Model
 y = @@(p1, p2, t) p1 .* exp (p2 .* t);
-f = @@(p1, p2) y (p1, p2, [0.2; 1; 2; 4]);
-p = fsolve (f, infsup ("[-3, 3] [-3, 3]")', ...
-               infsup ("[1.5, 2] [0.7, 0.8] [0.1, 0.3] [-0.1, 0.03]")')
+# Observations / Constraints
+t = [0.2; 1; 2; 4];
+y_t = infsup ("[1.5, 2]; [0.7, 0.8]; [0.1, 0.3]; [-0.1, 0.03]");
+# Estimate parameters
+f = @@(p1, p2) y (p1, p2, t);
+p = fsolve (f, infsup ("[-3, 3]; [-3, 3]"), y_t)
   @result{} p ⊂ 2×1 interval vector
 
          [1.9863, 2.6075]
@@ -208,3 +213,16 @@ f (p(1), p(2))
 
 @end group
 @end example
+
+
+@subsection Large Search Space
+
+Consider the function @code{f (x) = @var{p1} ^ (@minus{}@var{p2} * x) * (@var{p3} + @var{p4} * x + @var{p5} * x^2)}.  Let's say we have some known function values (measurements) and want to find matching parameters @var{p1} through @var{p5}.
+
+The data sets (@var{x}, @var{y}) can be simulated.  The parameters shall be reconstructed from the observed values on the search range @var{p}.  Using plain @funref{@@infsup/fsolve} would take a long time, because the search range is quite large with 5 dimensions.  Thus we use a contractor for function @var{f}, which in addition to the function value can produce a refinement for its parameter constraints.  Contractors can easily be build using interval reverse operations like @funref{@@infsup/mulrev}, @funref{@@infsup/sqrrev}, etc.
+
+@include image/contractor-example.m.texinfo
+
+The found range for parameters @var{p1} and @var{p2} looks very wide, but plotting them one against the other shows the functional dependency between the two parameters.
+
+@myimage{image/contractor-example.m,Plot of the first two parameters}

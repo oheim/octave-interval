@@ -1,3 +1,8 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
 @example
 @group
 @c doctest: +SKIP
