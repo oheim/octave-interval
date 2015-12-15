@@ -50,17 +50,17 @@ p = infsup ("[1.1, 2] [1.5, 2.5] [1, 5] [-5, -1] [0.1, 5]");
 [p, paving] = fsolve (@@contractor, ...
                       p, y, ...
                       struct ("Contract", true));
+@ifclear m-file
 display (p')
-@ifnotplaintext
-  @result{} 5×1 interval vector
-
-          [1.3821, 1.719]
-               [1.5, 2.5]
-              [1, 1.0011]
-       [-3.5516, -2.7474]
-       [0.44764, 0.59294]
-
-@end ifnotplaintext
+  @print{} 5×1 interval vector
+  @print{}
+  @print{}       [1.3821, 1.719]
+  @print{}            [1.5, 2.5]
+  @print{}           [1, 1.0011]
+  @print{}    [-3.5516, -2.7474]
+  @print{}    [0.44764, 0.59294]
+  @print{}
+@end ifclear
 @end group
 @group
 # Plot p1 versus p2

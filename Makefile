@@ -267,14 +267,14 @@ doctest: $(OCT_COMPILED)
 GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.init doc/manual.css $(wildcard doc/chapter/*) | $(GENERATED_IMAGES_PNG)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.init doc/manual.css $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) | $(GENERATED_IMAGES_PNG)
 	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  VERSION=$(VERSION) \
 	  make manual.html)
 	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
 	@mv doc/manual.html "$@"
-$(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(GENERATED_IMAGES_PDF)
+$(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) $(GENERATED_IMAGES_PDF)
 	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  TEXI2DVI_BUILD_DIRECTORY="../$(BUILD_DIR)/doc" \

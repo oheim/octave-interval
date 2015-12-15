@@ -12,10 +12,10 @@ all: $(OBJ)
 
 images: $(IMAGE_OBJ)
 
-manual.html: manual.texinfo manual.init $(wildcard chapter/*) license/gpl-3.0.texi $(IMAGE_OBJ)
+manual.html: manual.texinfo manual.init $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(IMAGE_OBJ)
 	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --init-file manual.init --css-include manual.css "$<"
 
-manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.pdf) $(IMAGE_OBJ)
+manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(wildcard image/*.pdf) $(IMAGE_OBJ)
 	$(MAKEINFO) --Xopt=--texinfo='@set version $(VERSION)' --pdf "$<"
 
 image/%.m.png: image/%.m
@@ -28,7 +28,7 @@ image/%.m.png: image/%.m
 	convert -density 98.425 -units PixelsPerCentimeter "$@" "$@"
 
 image/%.m: image/%.m.texinfo
-	$(MAKEINFO) --plaintext "$<" > "$@"
+	$(MAKEINFO) -D m-file --plaintext "$<" > "$@"
 
 clean:
 	rm $(OBJ)
