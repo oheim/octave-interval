@@ -72,6 +72,10 @@ l = allchild (a);
 if (iscell (l))
     l = vertcat (l {:});
 endif
+t = l (strcmp (get (l, 'type'), 'text'));
+for obj = t'
+    set (obj, 'fontsize', resizefactor * get (obj, 'fontsize'));
+endfor
 l = l (strcmp (get (l, 'type'), 'line') | strcmp (get (l, 'type'), 'patch'));
 for obj = l'
     set (obj, 'linewidth', resizefactor * get (obj, 'linewidth'));
