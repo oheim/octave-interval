@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{S} =} intervaltoexact (@var{X})
+## @deftypemethod {@@infsup} {@var{S} =} intervaltoexact (@var{X})
 ## 
 ## Build an exact representation of the interval @var{X} in
 ## hexadecimal-significand form.
@@ -28,7 +28,7 @@
 ##
 ## Accuracy: The output is exact.
 ## @seealso{exacttointerval}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

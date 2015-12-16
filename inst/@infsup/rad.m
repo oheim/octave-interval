@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{R} =} rad (@var{X})
-## @deftypefnx {Function File} {[@var{M}, @var{R}] =} rad (@var{X})
+## @deftypemethod {@@infsup} {@var{R} =} rad (@var{X})
+## @deftypemethodx {@@infsup} {[@var{M}, @var{R}] =} rad (@var{X})
 ## 
 ## Get the radius (and midpoint) of interval @var{X}.
 ##
@@ -36,7 +36,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/mid, @@infsup/wid}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} \ @var{Y}
+## @defop Method {@@infsupdec} mldivide (@var{X}, @var{Y})
+## @defopx Operator {@@infsupdec} {@var{X} \ @var{Y}}
 ## 
 ## Return the interval matrix left division of @var{X} and @var{Y}.
 ##
@@ -30,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/mtimes}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

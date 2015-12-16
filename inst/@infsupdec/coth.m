@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} coth (@var{X})
+## @defmethod {@@infsupdec} coth (@var{X})
 ## 
 ## Compute the hyperbolic cotangent, that is the reciprocal hyperbolic tangent.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/tanh, @@infsupdec/csch, @@infsupdec/sech}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

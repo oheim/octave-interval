@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} empty ()
-## @deftypefnx {Function File} {} empty (@var{N})
-## @deftypefnx {Function File} {} empty (@var{N}, @var{M})
+## @defun empty ()
+## @defunx empty (@var{N})
+## @defunx empty (@var{N}, @var{M})
 ## 
 ## Return the empty interval.
 ##
@@ -45,7 +45,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/isempty, entire}
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

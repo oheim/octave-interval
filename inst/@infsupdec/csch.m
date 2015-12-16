@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} csch (@var{X})
+## @defmethod {@@infsupdec} csch (@var{X})
 ## 
 ## Compute the hyperbolic cosecant, that is the reciprocal hyperbolic sine.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sinh, @@infsupdec/sech, @@infsupdec/coth}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

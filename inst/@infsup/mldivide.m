@@ -24,7 +24,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} \ @var{Y}
+## @defop Method {@@infsup} mldivide (@var{X}, @var{Y})
+## @defopx Operator {@@infsup} {@var{X} \ @var{Y}}
 ## 
 ## Return the interval matrix left division of @var{X} and @var{Y}.
 ##
@@ -39,7 +40,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mtimes, @@infsup/gauss}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

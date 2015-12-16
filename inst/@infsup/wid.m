@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} wid (@var{X})
+## @defmethod {@@infsup} wid (@var{X})
 ## 
 ## Get the width of interval @var{X}.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/rad}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

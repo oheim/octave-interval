@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} sqrrev (@var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} sqrrev (@var{C})
+## @deftypemethod {@@infsup} {@var{X} =} sqrrev (@var{C}, @var{X})
+## @deftypemethodx {@@infsup} {@var{X} =} sqrrev (@var{C})
 ## 
 ## Compute the reverse square function.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sqr}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} cbrt (@var{X})
+## @defmethod {@@infsupdec} cbrt (@var{X})
 ## 
 ## Compute the cube root.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/realsqrt, @@infsupdec/nthroot}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

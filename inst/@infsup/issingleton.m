@@ -15,14 +15,14 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} issingleton (@var{X})
+## @defmethod {@@infsup} issingleton (@var{X})
 ## 
 ## Check if the interval represents a set that contains a single real only.
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/isempty}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

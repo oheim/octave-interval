@@ -201,8 +201,8 @@ std::pair <double, double> vector_dot (
 DEFUN_DLD (mpfr_vector_dot_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding UTF-8\n"
-  "@deftypefn  {Loadable Function} {[@var{L}, @var{U}] =} mpfr_vector_dot_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
-  "@deftypefnx {Loadable Function} {[@var{D}, @var{E}] =} mpfr_vector_dot_d (@var{R}, @var{X}, @var{Y})\n"
+  "@deftypefun  {[@var{L}, @var{U}] =} mpfr_vector_dot_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
+  "@deftypefunx {[@var{D}, @var{E}] =} mpfr_vector_dot_d (@var{R}, @var{X}, @var{Y})\n"
   "\n"
   "Compute the dot product of binary64 numbers with correctly rounded result."
   "\n\n"
@@ -238,7 +238,7 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
   "@end group\n"
   "@end example\n"
   "@seealso{dot}\n"
-  "@end deftypefn"
+  "@end deftypefun"
   )
 {
   // Check call syntax

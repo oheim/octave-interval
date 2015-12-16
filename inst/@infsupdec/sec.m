@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sec (@var{X})
+## @defmethod {@@infsupdec} sec (@var{X})
 ## 
 ## Compute the secant in radians, that is the reciprocal cosine.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cos, @@infsupdec/csc, @@infsupdec/cot}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

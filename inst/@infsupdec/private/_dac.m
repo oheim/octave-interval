@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} _dac ()
+## @defvr Constant _dac
 ## Return numeric representation of the defined-and-continuous decoration
-## @end deftypefn
+## @end defvr
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

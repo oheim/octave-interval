@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} ismatrix (@var{A})
+## @defmethod {@@infsup} ismatrix (@var{A})
 ##
 ## Return true if @var{A} is an interval matrix.
 ##
@@ -23,7 +23,7 @@
 ## more general N-dimensional matrix and @code{ismatrix} will return true for
 ## these objects as well.
 ## @seealso{@@infsup/isscalar, @@infsup/isvector}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

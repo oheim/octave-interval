@@ -33,7 +33,7 @@ std::string inttostring (const int number)
 DEFUN_DLD (mpfr_to_string_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding UTF-8\n"
-  "@deftypefn  {Loadable Function} {} mpfr_to_string_d (@var{R}, @var{FORMAT}, @var{X})\n"
+  "@defun mpfr_to_string_d (@var{R}, @var{FORMAT}, @var{X})\n"
   "\n"
   "Convert binary64 numbers @var{X} to string representation, either exact or "
   "correctly rounded."
@@ -76,7 +76,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   "    @}\n"
   "@end group\n"
   "@end example\n"
-  "@end deftypefn"
+  "@end defun"
   )
 {
   // Check call syntax

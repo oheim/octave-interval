@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} cat (@var{DIM}, @var{MATRIX1}, @var{MATRIX2}, …)
+## @defmethod {@@infsup} cat (@var{DIM}, @var{MATRIX1}, @var{MATRIX2}, @dots{})
 ##
 ## Return the concatenation of interval matrices @var{MATRIX1}, @var{MATRIX2}, 
 ## … along dimension @var{DIM}.
@@ -33,7 +33,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/horzcat, @@infsup/vertcat}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

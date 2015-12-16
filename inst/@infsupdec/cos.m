@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} cos (@var{X})
+## @defmethod {@@infsupdec} cos (@var{X})
 ## 
 ## Compute the cosine in radians.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/acos, @@infsupdec/sec, @@infsupdec/cosh}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -25,7 +25,7 @@
 
 DEFUN_DLD (__setround__, args, nargout,
   "-*- texinfo -*-\n"
-  "@deftypefn  {Loadable Function} {} __setround__ (@var{rnd})\n"
+  "@defun __setround__ (@var{rnd})\n"
   "\n"
   "Changes the floating-point rounding direction for the current thread and "
   "any new threads which will be spawned from the current thread.\n"
@@ -38,7 +38,7 @@ DEFUN_DLD (__setround__, args, nargout,
   "@item @var{rnd} =  +inf\n"
   "switch rounding upwards (towards +inf)\n"
   "@end table\n"
-  "@end deftypefn"
+  "@end defun"
   )
 {
   const int nargin = args.length ();

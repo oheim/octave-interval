@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} abs (@var{X})
+## @defmethod {@@infsupdec} abs (@var{X})
 ## 
 ## Compute the absolute value of numbers.
 ##
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/mag, @@infsupdec/mig}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

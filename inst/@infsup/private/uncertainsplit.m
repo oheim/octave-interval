@@ -15,11 +15,11 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{BOUNDARY}, @var{UNCERTAIN}] =} uncertainsplit (@var{BOUNDARY})
+## @deftypefun {[@var{BOUNDARY}, @var{UNCERTAIN}] =} uncertainsplit (@var{BOUNDARY})
 ## 
 ## The the decimal number itself and the decimal number that represents the
 ## uncertainty for the number.
-## @end deftypefn
+## @end deftypefun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-10-21

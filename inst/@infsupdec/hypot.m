@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} hypot (@var{X}, @var{Y})
+## @defmethod {@@infsupdec} hypot (@var{X}, @var{Y})
 ## 
 ## Compute the euclidean norm.
 ##
@@ -31,7 +31,7 @@
 ##   @result{} ans ⊂ [2.236, 3.6056]_com
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

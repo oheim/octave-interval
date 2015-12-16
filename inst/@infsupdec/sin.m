@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sin (@var{X})
+## @defmethod {@@infsupdec} sin (@var{X})
 ## 
 ## Compute the sine in radians.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/asin, @@infsupdec/csc, @@infsupdec/sinh}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

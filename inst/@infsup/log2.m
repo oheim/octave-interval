@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} log2 (@var{X})
+## @defmethod {@@infsup} log2 (@var{X})
 ## 
 ## Compute the binary (base-2) logarithm.
 ##
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow2, @@infsup/log, @@infsup/log10}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

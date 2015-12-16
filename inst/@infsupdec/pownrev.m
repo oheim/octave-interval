@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
-## @deftypefnx {Function File} {@var{X} =} pownrev (@var{C}, @var{P})
+## @deftypemethod {@@infsupdec} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
+## @deftypemethodx {@@infsupdec} {@var{X} =} pownrev (@var{C}, @var{P})
 ## 
 ## Compute the reverse monomial @code{x^@var{P}}.
 ##
@@ -32,7 +32,7 @@
 ## contexts.  Therefore, the result will carry a @code{trv} decoration at best.
 ##
 ## @seealso{@@infsupdec/pown}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

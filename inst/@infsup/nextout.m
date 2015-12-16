@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} nextout (@var{X})
+## @defmethod {@@infsup} nextout (@var{X})
 ## 
 ## Increases the interval's boundaries in each direction to the next number.
 ##
@@ -28,7 +28,7 @@
 ##   @result{} ans = 1
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

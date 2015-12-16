@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} rsqrt (@var{X})
+## @defmethod {@@infsup} rsqrt (@var{X})
 ## 
 ## Compute the reciprocal square root (for all positive numbers).
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/realsqrt}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

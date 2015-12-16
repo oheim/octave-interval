@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} log10 (@var{X})
+## @defmethod {@@infsupdec} log10 (@var{X})
 ## 
 ## Compute the decimal (base-10) logarithm.
 ##
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/pow10, @@infsupdec/log, @@infsupdec/log2}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

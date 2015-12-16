@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} inv (@var{A})
+## @defmethod {@@infsup} inv (@var{A})
 ## 
 ## Compute the inverse of the square matrix @var{A}.
 ##
@@ -36,7 +36,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/recip, @@infsup/mrdivide}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,12 +15,12 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{S} =} intervalpart (@var{X})
+## @deftypemethod {@@infsupdec} {@var{S} =} intervalpart (@var{X})
 ## 
 ## Return the bare interval for the decorated interval @var{X}.
 ##
 ## @seealso{@@infsupdec/decorationpart}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

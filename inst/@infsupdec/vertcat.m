@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} [@var{ARRAY1}; @var{ARRAY2}; ...]
+## @defop Method {@@infsupdec} vertcat (@var{ARRAY1}, @var{ARRAY2}, @dots{})
+## @defopx Operator {@@infsupdec} {[@var{ARRAY1}; @var{ARRAY2}; @dots{}]}
 ##
 ## Return the vertical concatenation of interval array objects along
 ## dimension 1.
@@ -31,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/horzcat}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

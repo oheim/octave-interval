@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} exacttointerval (@var{S})
-## @deftypefnx {Function File} {} exacttointerval (@var{L}, @var{U})
-## @deftypefnx {Function File} {} exacttointerval (@var{M})
+## @defun exacttointerval (@var{S})
+## @defunx exacttointerval (@var{L}, @var{U})
+## @defunx exacttointerval (@var{M})
 ## 
 ## Create a bare interval.  Fail, if the interval cannot exactly represent the
 ## input.
@@ -47,7 +47,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/intervaltoexact, @@infsup/infsup}
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

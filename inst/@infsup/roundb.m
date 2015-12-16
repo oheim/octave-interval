@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} roundb (@var{X})
+## @defmethod {@@infsup} roundb (@var{X})
 ## 
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded towards the nearest even integer.
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/floor, @@infsup/ceil, @@infsup/round, @@infsup/fix}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} absrev (@var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} absrev (@var{C})
+## @deftypemethod {@@infsup} {@var{X} =} absrev (@var{C}, @var{X})
+## @deftypemethodx {@@infsup} {@var{X} =} absrev (@var{C})
 ## 
 ## Compute the reverse absolute value function.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/abs}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

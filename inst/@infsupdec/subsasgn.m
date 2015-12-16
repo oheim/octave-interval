@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} subsasgn (@var{A}, @var{IDX}, @var{RHS})
+## @defop Method {@@infsupdec} subsasgn (@var{A}, @var{IDX}, @var{RHS})
+## @defopx Operator {@@infsupdec} {@var{A}(@var{SUBS}) = @var{RHS}}
 ##
 ## Perform the subscripted assignment operation according to the subscript
 ## specified by @var{IDX}.
@@ -25,7 +26,7 @@
 ## @code{"()"}.  The @code{subs} field may be either @code{":"} or a cell array
 ## of index values.
 ## @seealso{@@infsupdec/subsref}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{X}, @var{ISEXACT}] =} hex2double (@var{S}, @var{DIRECTION})
+## @deftypefun {[@var{X}, @var{ISEXACT}] =} hex2double (@var{S}, @var{DIRECTION})
 ## 
 ## Convert a hexadecimal floating point number @var{S} to double precision with
 ## directed rounding.
@@ -23,7 +23,7 @@
 ## The input number format is [+-]0xh[,.]h[[pP][+-]d].
 ##
 ## @seealso{str2decimal}
-## @end deftypefn
+## @end deftypefun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-10-20

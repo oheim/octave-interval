@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} size (@var{A})
-## @deftypefnx {Function File} {} size (@var{A}, @var{DIM})
+## @defmethod {@@infsup} size (@var{A})
+## @defmethodx {@@infsup} size (@var{A}, @var{DIM})
 ##
 ## Return the number of rows and columns of @var{A}.
 ##
@@ -27,7 +27,7 @@
 ## If given a second argument, @code{size} will return the size of the
 ## corresponding dimension.
 ## @seealso{@@infsup/length, @@infsup/numel, @@infsup/rows, @@infsup/columns}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

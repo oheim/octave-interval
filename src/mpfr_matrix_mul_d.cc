@@ -156,7 +156,7 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
 DEFUN_DLD (mpfr_matrix_mul_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding UTF-8\n"
-  "@deftypefn  {Loadable Function} {[@var{L}, @var{U}] =} mpfr_matrix_mul_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
+  "@deftypefun {[@var{L}, @var{U}] =} mpfr_matrix_mul_d (@var{XL}, @var{YL}, @var{XU}, @var{YU})\n"
   "\n"
   "Compute the matrix product with binary64 numbers and correctly rounded "
   "result."
@@ -183,7 +183,7 @@ DEFUN_DLD (mpfr_matrix_mul_d, args, nargout,
   "@end group\n"
   "@end example\n"
   "@seealso{mtimes}\n"
-  "@end deftypefn"
+  "@end deftypefun"
   )
 {
   // Check call syntax

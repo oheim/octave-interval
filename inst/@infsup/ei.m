@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} ei (@var{X})
+## @defmethod {@@infsup} ei (@var{X})
 ## 
 ## Compute the exponential integral for positive arguments.
 ##
@@ -44,7 +44,7 @@
 ##   @result{} ans ⊂ [1.8951, 1.8952]
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

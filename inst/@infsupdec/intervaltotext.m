@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{S} =} intervaltotext (@var{X})
-## @deftypefnx {Function File} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
+## @deftypemethod {@@infsupdec} {@var{S} =} intervaltotext (@var{X})
+## @deftypemethodx {@@infsupdec} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
 ## 
 ## Build an approximate representation of the interval @var{X}.
 ##
@@ -35,7 +35,7 @@
 ## 
 ## Accuracy: For all intervals @var{X} is an accurate subset of
 ## @code{infsupdec (intervaltotext (@var{X}))}.
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

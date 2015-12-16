@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} atan2 (@var{Y}, @var{X})
+## @defmethod {@@infsup} atan2 (@var{Y}, @var{X})
 ## 
 ## Compute the inverse tangent with two arguments.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/tan}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

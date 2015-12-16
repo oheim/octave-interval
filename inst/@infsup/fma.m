@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} fma (@var{X}, @var{Y}, @var{Z})
+## @defmethod {@@infsup} fma (@var{X}, @var{Y}, @var{Z})
 ## 
 ## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.
 ##
@@ -35,7 +35,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus, @@infsup/times}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

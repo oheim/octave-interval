@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} hdist (@var{X}, @var{Y})
+## @defmethod {@@infsup} hdist (@var{X}, @var{Y})
 ## 
 ## Compute the Hausdorff distance between two intervals as sets.
 ##
@@ -34,7 +34,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sdist, @@infsup/idist}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

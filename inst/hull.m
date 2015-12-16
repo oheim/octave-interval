@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} hull (@var{X1}, @var{X2}, …)
+## @defun hull (@var{X1}, @var{X2}, …)
 ## 
 ## Create an interval enclosure for a list of parameters.
 ##
@@ -53,7 +53,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/union}
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

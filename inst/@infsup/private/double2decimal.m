@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{Y} =} double2decimal (@var{X})
+## @deffun double2decimal (@var{X})
 ## 
 ## Convert a binary floating point number @var{X} in double precision to a
 ## decimal floating point number with arbitrary precision.  The number must be
@@ -50,7 +50,7 @@
 ## @end group
 ## @end example
 ## @seealso{str2decimal}
-## @end deftypefn
+## @end deffun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-09-29

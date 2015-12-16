@@ -15,12 +15,12 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{QUOTIENT}, @var{REMAINDER}] =} decimaldivide (@var{DIVIDEND}, @var{DIVISOR}, @var{PRECISION})
+## @deftypefun {[@var{QUOTIENT}, @var{REMAINDER}] =} decimaldivide (@var{DIVIDEND}, @var{DIVISOR}, @var{PRECISION})
 ## 
 ## Divide two decimal numbers.  The parameter @var{PRECISION} limits the
 ## maximum significand places in the @var{QUOTIENT}.
 ##
-## @end deftypefn
+## @end deftypefun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-10-22

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} __print_mesa__ (@var{H}, @var{FILENAME})
+## @defun __print_mesa__ (@var{H}, @var{FILENAME})
 ## Render the OpenGL scene into an image file (internal function).
 ##
 ## This function can be used as an replacement of the @code{print} function,
@@ -27,7 +27,7 @@
 ## using @command{gl2ps}, which basically produces a screen shot of the figure.
 ##
 ## This function requires an Octave version of at least 4.0.0.
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: kludge

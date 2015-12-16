@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} tanrev (@var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} tanrev (@var{C})
+## @deftypemethod {@@infsup} {@var{X} =} tanrev (@var{C}, @var{X})
+## @deftypemethodx {@@infsup} {@var{X} =} tanrev (@var{C})
 ## 
 ## Compute the reverse tangent function.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/tan}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} iscommoninterval (@var{X})
+## @defmethod {@@infsup} iscommoninterval (@var{X})
 ## 
 ## Check if the interval is a common interval, that is a nonemty, closed
 ## bounded real interval.
@@ -26,7 +26,7 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/isempty, @@infsup/issingleton}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,11 +15,11 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} numel (@var{A})
+## @defmethod {@@infsup} numel (@var{A})
 ##
 ## Return the number of elements in the interval object @var{A}.
 ## @seealso{@@infsup/length, @@infsup/size, @@infsup/rows, @@infsup/columns}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

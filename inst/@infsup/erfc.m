@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} erfc (@var{X})
+## @defmethod {@@infsup} erfc (@var{X})
 ## 
 ## Compute the complementary error function.
 ##
@@ -45,7 +45,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/erf}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

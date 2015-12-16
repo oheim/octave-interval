@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} nthroot (@var{X}, @var{N})
+## @defmethod {@@infsupdec} nthroot (@var{X}, @var{N})
 ## 
 ## Compute the real n-th root of @var{X}.
 ##
@@ -23,7 +23,7 @@
 ## enclosure for @var{n} ≥ -2.  The result also is a tight enclosure if the
 ## reciprocal of @var{n} can be computed exactly in double-precision.
 ## @seealso{@@infsupdec/pown, @@infsupdec/pownrev, @@infsupdec/realsqrt, @@infsupdec/cbrt}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

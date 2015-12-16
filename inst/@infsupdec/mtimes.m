@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} * @var{Y}
-## @deftypefnx {Function File} {} mtimes (@var{X}, @var{Y})
-## @deftypefnx {Function File} {} mtimes (@var{X}, @var{Y}, @var{ACCURACY})
+## @defop Method {@@infsupdec} mtimes (@var{X}, @var{Y})
+## @defopx Method {@@infsupdec} mtimes (@var{X}, @var{Y}, @var{ACCURACY})
+## @defopx Operator {@@infsupdec} {@var{X} * @var{Y}}
 ##
 ## Compute the interval matrix multiplication.
 ##
@@ -40,7 +40,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/mrdivide}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

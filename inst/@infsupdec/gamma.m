@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} gamma (@var{X})
+## @defmethod {@@infsupdec} gamma (@var{X})
 ## 
 ## Compute the gamma function.
 ##
@@ -46,7 +46,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/psi, @@infsupdec/gammaln}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

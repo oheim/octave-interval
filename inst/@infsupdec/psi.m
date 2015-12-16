@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} psi (@var{X})
+## @defmethod {@@infsupdec} psi (@var{X})
 ## 
 ## Compute the digamma function, also known as the psi function.
 ##
@@ -44,7 +44,7 @@
 ##   @result{} ans ⊂ [-0.57722, -0.57721]_com
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} precedes (@var{A}, @var{B})
+## @defmethod {@@infsupdec} precedes (@var{A}, @var{B})
 ## 
 ## Evaluate precedes comparison on intervals.
 ##
@@ -24,7 +24,7 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/le, @@infsupdec/lt, @@infsupdec/gt, @@infsupdec/strictprecedes, @@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

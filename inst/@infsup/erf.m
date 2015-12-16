@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} erf (@var{X})
+## @defmethod {@@infsup} erf (@var{X})
 ## 
 ## Compute the error function.
 ##
@@ -45,7 +45,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/erfc}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

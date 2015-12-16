@@ -15,11 +15,11 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn  {Function File} {@var{X} =} fsolve (@var{F})
-## @deftypefnx {Function File} {@var{X} =} fsolve (@var{F}, @var{X0})
-## @deftypefnx {Function File} {@var{X} =} fsolve (@var{F}, @var{X0}, @var{Y})
-## @deftypefnx {Function File} {@var{X} =} fsolve (@dots{}, @var{OPTIONS})
-## @deftypefnx {Function File} {[@var{X}, @var{X_PAVING}, @var{X_INNER_IDX}] =} fsolve (@dots{})
+## @deftypemethod  {@@infsup} {@var{X} =} fsolve (@var{F})
+## @deftypemethodx {@@infsup} {@var{X} =} fsolve (@var{F}, @var{X0})
+## @deftypemethodx {@@infsup} {@var{X} =} fsolve (@var{F}, @var{X0}, @var{Y})
+## @deftypemethodx {@@infsup} {@var{X} =} fsolve (@dots{}, @var{OPTIONS})
+## @deftypemethodx {@@infsup} {[@var{X}, @var{X_PAVING}, @var{X_INNER_IDX}] =} fsolve (@dots{})
 ## 
 ## Compute the preimage of the set @var{Y} under function @var{F}.
 ##
@@ -142,7 +142,7 @@
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,11 +15,11 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} columns (@var{A})
+## @defmethod {@@infsup} columns (@var{A})
 ##
 ## Return the number of columns of @var{A}.
 ## @seealso{@@infsup/numel, @@infsup/size, @@infsup/length, @@infsup/rows}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,10 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn  {Function File} {@var{X} =} fzero (@var{F}, @var{X0})
-## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF})
-## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{OPTIONS})
-## @deftypefnx {Function File} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF}, @var{OPTIONS})
+## @deftypemethod  {@@infsup} {@var{X} =} fzero (@var{F}, @var{X0})
+## @deftypemethodx {@@infsup} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF})
+## @deftypemethodx {@@infsup} {@var{X} =} fzero (@var{F}, @var{X0}, @var{OPTIONS})
+## @deftypemethodx {@@infsup} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF}, @var{OPTIONS})
 ## 
 ## Compute the enclosure of all roots of function @var{F} in interval @var{X0}.
 ##
@@ -66,7 +66,7 @@
 ##   @result{} ans ⊂ [-3.2968e-161, +3.2968e-161]
 ## @end group
 ## @end example
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

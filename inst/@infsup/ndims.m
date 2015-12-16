@@ -15,14 +15,14 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} ndims (@var{A})
+## @defmethod {@@infsup} ndims (@var{A})
 ##
 ## Return the number of dimensions of @var{A}.
 ##
 ## For any array, the result will always be larger than or equal to 2.
 ## Trailing singleton dimensions are not counted.
 ## @seealso{@@infsup/length, @@infsup/numel, @@infsup/size, @@infsup/rows, @@infsup/columns}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

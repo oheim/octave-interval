@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} ./ @var{Y}
+## @defop Method {@@infsup} rdivide (@var{X}, @var{Y})
+## @defopx Operator {@@infsup} {@var{X} ./ @var{Y}}
 ## 
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
@@ -30,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/recip, @@infsup/times}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

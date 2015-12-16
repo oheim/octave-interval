@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sqr (@var{X})
+## @defmethod {@@infsup} sqr (@var{X})
 ## 
 ## Compute the square.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/realsqrt, @@infsup/pown, @@infsup/pow}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

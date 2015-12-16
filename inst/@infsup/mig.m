@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} mig (@var{X})
+## @defmethod {@@infsup} mig (@var{X})
 ## 
 ## Get the mignitude of numbers in interval @var{X}, that is the minimum of
 ## absolute values for each element.
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mag, @@infsup/inf, @@infsup/sup}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

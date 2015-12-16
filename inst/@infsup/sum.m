@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sum (@var{X})
-## @deftypefnx {Function File} {} sum (@var{X}, @var{DIM})
+## @defmethod {@@infsup} sum (@var{X})
+## @defmethodx {@@infsup} sum (@var{X}, @var{DIM})
 ## 
 ## Sum of elements along dimension @var{DIM}.  If @var{DIM} is omitted, it
 ## defaults to the first non-singleton dimension.
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus, @@infsup/prod}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

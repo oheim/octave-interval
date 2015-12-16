@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} tanh (@var{X})
+## @defmethod {@@infsupdec} tanh (@var{X})
 ## 
 ## Compute the hyperbolic tangent.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/atanh, @@infsupdec/coth, @@infsupdec/sinh, @@infsupdec/cosh}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

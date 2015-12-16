@@ -15,12 +15,12 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} iscolumn (@var{A})
+## @defmethod {@@infsup} iscolumn (@var{A})
 ##
 ## Return true if @var{A} is an interval column vector.
 ##
 ## @seealso{@@infsup/isvector, @@infsup/isrow}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

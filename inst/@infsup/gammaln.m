@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} gammaln (@var{X})
+## @defmethod {@@infsup} gammaln (@var{X})
 ## 
 ## Compute the logarithm of the gamma function for positive arguments.
 ##
@@ -45,7 +45,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/psi, @@infsup/gamma}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

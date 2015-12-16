@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} '
+## @defop Method {@@infsup} ctranspose (@var{X})
+## @defopx Operator {@@infsup} {@var{X}'}
 ##
 ## Return the complex conjugate transpose of @var{X}.
 ##
@@ -23,7 +24,7 @@
 ## @code{transpose} are equivalent.
 ##
 ## @seealso{@@infsup/transpose}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

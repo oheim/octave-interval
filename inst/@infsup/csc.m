@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} csc (@var{X})
+## @defmethod {@@infsup} csc (@var{X})
 ## 
 ## Compute the cosecant in radians, that is the reciprocal sine.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sin, @@infsup/sec, @@infsup/cot}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

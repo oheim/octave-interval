@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} ceil (@var{X})
+## @defmethod {@@infsupdec} ceil (@var{X})
 ## 
 ## Round each number in interval @var{X} towards +Inf.
 ##
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/floor, @@infsupdec/round, @@infsupdec/roundb, @@infsupdec/fix}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

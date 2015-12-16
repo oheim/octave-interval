@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} length (@var{A})
+## @defmethod {@@infsup} length (@var{A})
 ##
 ## Return the length of interval object @var{A}.
 ##
@@ -23,7 +23,7 @@
 ## for vectors.  For matrix objects, the length is the number of rows or
 ## columns, whichever is greater.
 ## @seealso{@@infsup/numel, @@infsup/size, @@infsup/rows, @@infsup/columns}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

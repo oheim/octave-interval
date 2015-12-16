@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} realsqrt (@var{X})
+## @defmethod {@@infsupdec} realsqrt (@var{X})
 ## 
 ## Compute the square root (for all non-negative numbers).
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/sqr, @@infsupdec/rsqrt, @@infsupdec/pow, @@infsupdec/cbrt, @@infsupdec/nthroot}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

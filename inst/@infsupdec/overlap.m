@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
+## @deftypemethod {@@infsupdec} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
 ## 
 ## Extensively compare the positions of intervals @var{A} and @var{B} on the
 ## real number line.
@@ -66,7 +66,7 @@
 ## @end table
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

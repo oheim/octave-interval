@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} .'
+## @defop Method {@@infsup} transpose (@var{X})
+## @defopx Operator {@@infsup} {@var{X}.'}
 ##
 ## Return the transpose of interval matrix or vector @var{X}.
 ##
@@ -29,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/ctranspose}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

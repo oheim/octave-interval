@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} pow (@var{X}, @var{Y})
+## @defmethod {@@infsupdec} pow (@var{X}, @var{Y})
 ## 
 ## Compute the simple power function on intervals defined by 
 ## @code{exp (@var{Y} * log (@var{X}))}.
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/pown, @@infsupdec/pow2, @@infsupdec/pow10, @@infsupdec/exp, @@infsupdec/mpower}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

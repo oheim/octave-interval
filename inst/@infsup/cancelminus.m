@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{Z} =} cancelminus (@var{X}, @var{Y})
+## @deftypemethod {@@infsup} {@var{Z} =} cancelminus (@var{X}, @var{Y})
 ## 
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one
 ## knows @var{X} was obtained as the sum @var{Y} + @var{Z}.
@@ -29,7 +29,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cancelplus}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

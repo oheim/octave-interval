@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sech (@var{X})
+## @defmethod {@@infsupdec} sech (@var{X})
 ## 
 ## Compute the hyperbolic secant, that is the reciprocal hyperbolic cosine.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cosh, @@infsupdec/csch, @@infsupdec/coth}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

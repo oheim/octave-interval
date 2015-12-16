@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} mag (@var{X})
+## @defmethod {@@infsup} mag (@var{X})
 ## 
 ## Get the magnitude of numbers in interval @var{X}, that is the maximum of
 ## absolute values for each element.
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mig, @@infsup/smig, @@infsup/inf, @@infsup/sup}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,14 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{A} > @var{B}
+## @defop Method {@@infsup} gt (@var{A}, @var{B})
+## @defopx Operator {@@infsup} {@var{A} > @var{B}}
 ## 
 ## Compare intervals @var{A} and @var{B} for strict greater.
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/lt, @@infsup/ge}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

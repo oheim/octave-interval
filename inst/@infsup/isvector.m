@@ -15,14 +15,14 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} isvector (@var{A})
+## @defmethod {@@infsup} isvector (@var{A})
 ##
 ## Return true if @var{A} is an interval vector.
 ##
 ## Scalars (1x1 vectors) are subsets of the more general vector and
 ## @code{isvector} will return true for these objects as well.
 ## @seealso{@@infsup/isscalar, @@infsup/ismatrix}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

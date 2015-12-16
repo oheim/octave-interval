@@ -15,9 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{A} (@var{I})
-## @deftypefnx {Function File} {} {} @var{A} (@var{I1}, @var{I2})
-## @deftypefnx {Function File} {} {} @var{A}.@var{P}
+## @defop Method {@@infsupdec} subsref (@var{A}, @var{IDX})
+## @defopx Operator {@@infsupdec} {@var{A}(@var{I})}
+## @defopx Operator {@@infsupdec} {@var{A}(@var{I1}, @var{I2})}
+## @defopx Operator {@@infsupdec} {@var{A}.@var{P}}
 ##
 ## Select property @var{P} or elements @var{I} from interval matrix @var{A}.
 ##
@@ -45,7 +46,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/subsasgn}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

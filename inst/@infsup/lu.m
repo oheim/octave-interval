@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {[@var{L}, @var{U}] = } lu (@var{A})
-## @deftypefnx {Function File} {} {[@var{L}, @var{U}, @var{P}] = } lu (@var{A})
+## @deftypemethod {@@infsup} {[@var{L}, @var{U}] = } lu (@var{A})
+## @deftypemethodx {@@infsup} {[@var{L}, @var{U}, @var{P}] = } lu (@var{A})
 ## 
 ## Compute the LU decomposition of @var{A}.
 ##
@@ -26,7 +26,7 @@
 ## value @var{P}.
 ##
 ## Accuracy: The result is a valid enclosure.
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -24,7 +24,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} polyval (@var{P}, @var{X})
+## @defmethod {@@infsup} polyval (@var{P}, @var{X})
 ##
 ## Evaluate polynomial @var{P} with argument @var{X}.
 ##
@@ -46,7 +46,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/fzero}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

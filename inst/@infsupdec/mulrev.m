@@ -15,10 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} mulrev (@var{B}, @var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} mulrev (@var{B}, @var{C})
-## @deftypefnx {Function File} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C})
-## @deftypefnx {Function File} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C}, @var{X})
+## @deftypemethod {@@infsupdec} {@var{X} =} mulrev (@var{B}, @var{C}, @var{X})
+## @deftypemethodx {@@infsupdec} {@var{X} =} mulrev (@var{B}, @var{C})
+## @deftypemethodx {@@infsupdec} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C})
+## @deftypemethodx {@@infsupdec} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C}, @var{X})
 ## 
 ## Compute the reverse multiplication function or the two-output division.
 ##
@@ -51,7 +51,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/times}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

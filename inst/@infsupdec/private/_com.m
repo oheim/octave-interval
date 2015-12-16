@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} _com ()
+## @defvr Constant _com
 ## Return numeric representation of the common decoration
-## @end deftypefn
+## @end defvr
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

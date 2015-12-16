@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} atan2rev2 (@var{A}, @var{C})
+## @deftypemethod {@@infsup} {@var{X} =} atan2rev2 (@var{A}, @var{C}, @var{X})
+## @deftypemethodx {@@infsup} {@var{X} =} atan2rev2 (@var{A}, @var{C})
 ## 
 ## Compute the reverse atan2 function for the second parameter.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/atan2}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

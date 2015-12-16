@@ -15,13 +15,13 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {} __split_interval_literals__ (@var{S})
+## @defun __split_interval_literals__ (@var{S})
 ##
 ## Split string @var{S} into a cell array of interval literals.
 ##
 ## This is an internal function of the interval package and should not be used
 ## directly.
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

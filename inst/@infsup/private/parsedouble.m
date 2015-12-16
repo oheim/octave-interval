@@ -15,13 +15,13 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{SIGN}, @var{EXPONENT}, @var{MANTISSA}] =} parsedouble (@var{X})
+## @deftypefun {[@var{SIGN}, @var{EXPONENT}, @var{MANTISSA}] =} parsedouble (@var{X})
 ## 
 ## Parse a finite binary floating point number @var{X} in double precision.
 ##
 ## The mantissa is normalized, the implicit first bit is moved after the point
 ## @code{@var{X} = (-1) ^ @var{SIGN} * @var{MANTISSA} (=0.XXXXX… in binary) * 2 ^ @var{EXPONENT}}.
-## @end deftypefn
+## @end deftypefun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-10-24

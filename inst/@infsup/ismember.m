@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} ismember (@var{M}, @var{X})
+## @defmethod {@@infsup} ismember (@var{M}, @var{X})
 ## 
 ## Check if the interval @var{X} contains the number @var{M}.
 ##
@@ -25,7 +25,7 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/issingleton, @@infsup/isempty}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

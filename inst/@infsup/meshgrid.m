@@ -15,10 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{XX}, @var{YY}] =} meshgrid (@var{X}, @var{Y})
-## @deftypefnx {Function File} {[@var{XX}, @var{YY}, @var{ZZ}] =} meshgrid (@var{X}, @var{Y}, @var{Z})
-## @deftypefnx {Function File} {[@var{XX}, @var{YY}] =} meshgrid (@var{X})
-## @deftypefnx {Function File} {[@var{XX}, @var{YY}, @var{ZZ}] =} meshgrid (@var{X})
+## @deftypemethod {@@infsup} {[@var{XX}, @var{YY}] =} meshgrid (@var{X}, @var{Y})
+## @deftypemethodx {@@infsup} {[@var{XX}, @var{YY}, @var{ZZ}] =} meshgrid (@var{X}, @var{Y}, @var{Z})
+## @deftypemethodx {@@infsup} {[@var{XX}, @var{YY}] =} meshgrid (@var{X})
+## @deftypemethodx {@@infsup} {[@var{XX}, @var{YY}, @var{ZZ}] =} meshgrid (@var{X})
 ## 
 ## Given vectors of @var{X} and @var{Y} coordinates, return matrices @var{XX}
 ## and @var{YY} corresponding to a full 2-D grid.
@@ -31,7 +31,7 @@
 ## because interval matrices currently only support two dimensions.  The 3-D
 ## grid is reshaped to fit into two dimensions accordingly.
 ##
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

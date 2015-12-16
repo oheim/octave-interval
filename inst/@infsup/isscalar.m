@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} isscalar (@var{A})
+## @defmethod {@@infsup} isscalar (@var{A})
 ##
 ## Return true if @var{A} is an interval scalar.
 ##
@@ -23,7 +23,7 @@
 ## @code{isvector} and @code{ismatrix} will return true for these objects as
 ## well.
 ## @seealso{@@infsup/isvector, @@infsup/ismatrix}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

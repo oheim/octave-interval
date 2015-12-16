@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} max (@var{X})
-## @deftypefnx {Function File} {} max (@var{X}, @var{Y})
-## @deftypefnx {Function File} {} max (@var{X}, [], @var{DIM})
+## @defmethod {@@infsup} max (@var{X})
+## @defmethodx {@@infsup} max (@var{X}, @var{Y})
+## @defmethodx {@@infsup} max (@var{X}, [], @var{DIM})
 ## 
 ## Compute the maximum value chosen from intervals.
 ##
@@ -42,7 +42,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/min}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

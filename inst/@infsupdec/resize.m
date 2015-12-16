@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} resize (@var{X}, @var{M})
-## @deftypefnx {Function File} {} resize (@var{X}, @var{M}, @var{N})
-## @deftypefnx {Function File} {} resize (@var{X}, [@var{M} @var{N}])
+## @defmethod {@@infsupdec} resize (@var{X}, @var{M})
+## @defmethodx {@@infsupdec} resize (@var{X}, @var{M}, @var{N})
+## @defmethodx {@@infsupdec} resize (@var{X}, [@var{M} @var{N}])
 ##
 ## Resize interval matrix @var{X} cutting off elements as necessary.
 ##
@@ -42,7 +42,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/reshape, @@infsup/cat, @@infsupdec/postpad, @@infsupdec/prepad}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

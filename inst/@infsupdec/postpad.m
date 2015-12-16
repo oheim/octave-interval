@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} postpad (@var{X}, @var{L})
-## @deftypefnx {Function File} {} postpad (@var{X}, @var{L}, @var{C})
-## @deftypefnx {Function File} {} postpad (@var{X}, @var{L}, @var{C}, @var{DIM})
+## @defmethod {@@infsupdec} postpad (@var{X}, @var{L})
+## @defmethodx {@@infsupdec} postpad (@var{X}, @var{L}, @var{C})
+## @defmethodx {@@infsupdec} postpad (@var{X}, @var{L}, @var{C}, @var{DIM})
 ##
 ## Append the scalar interval value @var{C} to the interval vector @var{X}
 ## until it is of length @var{L}.  If @var{C} is not given, an empty interval
@@ -39,7 +39,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/reshape, @@infsup/cat, @@infsupdec/prepad, @@infsupdec/resize}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

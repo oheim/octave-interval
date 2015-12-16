@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {@var{X} =} fminsearch (@var{f}, @var{X0})
-## @deftypefnx {Function File} {[@var{X}, @var{FVAL}] =} fminsearch (@var{f}, @var{X0}, @var{options})
+## @deftypemethod {@@infsup} {@var{X} =} fminsearch (@var{f}, @var{X0})
+## @deftypemethodx {@@infsup} {[@var{X}, @var{FVAL}] =} fminsearch (@var{f}, @var{X0}, @var{options})
 ##
 ## Minimize the function @var{f} over the interval box @var{X0} and return
 ## rigorous bounds.
@@ -87,7 +87,7 @@
 ## Mathematics.
 ##
 ## @seealso{optimset}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

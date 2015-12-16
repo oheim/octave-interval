@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} interval_bitpack (@var{X})
+## @defun interval_bitpack (@var{X})
 ## 
 ## Decode an interval from its interchange format.
 ##
@@ -29,7 +29,7 @@
 ## @code{@var{X} == bitunpack (interval_bitpack (@var{X}))}.
 ##
 ## @seealso{@@infsup/bitunpack, @@infsupdec/bitunpack}
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

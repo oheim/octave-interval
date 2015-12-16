@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} recip (@var{X})
+## @defmethod {@@infsup} recip (@var{X})
 ## 
 ## Compute the reciprocal of @var{X}.
 ##
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inv, @@infsup/rdivide}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

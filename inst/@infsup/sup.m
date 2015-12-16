@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sup (@var{X})
+## @defmethod {@@infsup} sup (@var{X})
 ## 
 ## Get the (least) upper boundary for all numbers of interval @var{X}.
 ##
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inf, @@infsup/mid}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

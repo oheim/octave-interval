@@ -15,14 +15,14 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} isentire (@var{X})
+## @defmethod {@@infsup} isentire (@var{X})
 ## 
 ## Check if the interval represents the entire set of real numbers.
 ##
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{entire, @@infsup/eq, @@infsup/isempty, @@infsup/issingleton}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

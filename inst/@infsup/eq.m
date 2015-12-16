@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{A} == @var{B}
+## @defop Method {@@infsup} eq (@var{A}, @var{B})
+## @defopx Operator {@@infsup} {@var{A} == @var{B}}
 ## 
 ## Compare intervals @var{A} and @var{B} for equality.
 ##
@@ -32,7 +33,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/subset, @@infsup/interior, @@infsup/disjoint}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

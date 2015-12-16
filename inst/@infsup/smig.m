@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} smig (@var{X})
+## @defmethod {@@infsup} smig (@var{X})
 ## 
 ## Get the signed mignitude of numbers in interval @var{X}, that is the unique
 ## number closest to zero for each element.
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mig, @@infsup/mag, @@infsup/inf, @@infsup/sup}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

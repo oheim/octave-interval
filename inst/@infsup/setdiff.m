@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} setdiff (@var{A}, @var{B})
+## @defmethod {@@infsup} setdiff (@var{A}, @var{B})
 ## 
 ## Build the relative complement of interval @var{B} in interval @var{A}.
 ##
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/intersect, @@infsup/union, @@infsup/setxor}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

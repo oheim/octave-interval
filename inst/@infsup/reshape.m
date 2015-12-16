@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} reshape (@var{A}, @var{M}, @var{N})
-## @deftypefnx {Function File} {} reshape (@var{X}, [@var{M} @var{N}])
+## @defmethod {@@infsup} reshape (@var{A}, @var{M}, @var{N})
+## @defmethodx {@@infsup} reshape (@var{X}, [@var{M} @var{N}])
 ##
 ## Return an interval matrix with the specified dimensions (M, N) whose
 ## elements are taken from the interval matrix @var{A}.  The elements of the
@@ -35,7 +35,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/resize, @@infsup/cat, @@infsup/postpad, @@infsup/prepad}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

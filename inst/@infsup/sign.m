@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sign (@var{X})
+## @defmethod {@@infsup} sign (@var{X})
 ## 
 ## Compute the signum function for each number in interval @var{X}.
 ##
@@ -31,7 +31,7 @@
 ##   @result{} ans = [-1]
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

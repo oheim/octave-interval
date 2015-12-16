@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} display (@var{X})
+## @defmethod {@@infsup} display (@var{X})
 ## 
 ## Display the variable name and value of interval @var{X}.
 ##
@@ -56,7 +56,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/disp, @@infsup/intervaltotext}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

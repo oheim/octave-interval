@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {@var{x} =} gauss (@var{A}, @var{b})
+## @deftypemethod {@@infsupdec} {@var{x} =} gauss (@var{A}, @var{b})
 ## 
 ## Solve a linear interval system @var{A} * @var{x} = @var{b} using Gaussian
 ## elimination.
@@ -38,7 +38,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/mldivide}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

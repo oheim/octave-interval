@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} dot (@var{X}, @var{Y})
-## @deftypefnx {Function File} {} dot (@var{X}, @var{Y}, @var{DIM})
+## @defmethod {@@infsupdec} dot (@var{X}, @var{Y})
+## @defmethodx {@@infsupdec} dot (@var{X}, @var{Y}, @var{DIM})
 ## 
 ## Compute the dot product of two interval vectors.
 ## 
@@ -37,7 +37,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/plus, @@infsupdec/sum, @@infsupdec/times}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

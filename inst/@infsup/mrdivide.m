@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} / @var{Y}
+## @defop Method {@@infsup} mrdivide (@var{X}, @var{Y})
+## @defopx Operator {@@infsup} {@var{X} / @var{Y}}
 ## 
 ## Return the interval matrix right division of @var{X} and @var{Y}.
 ##
@@ -30,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/mtimes}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

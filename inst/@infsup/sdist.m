@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sdist (@var{X}, @var{Y})
+## @defmethod {@@infsup} sdist (@var{X}, @var{Y})
 ## 
 ## Compute the signed distance between two intervals as sets.
 ##
@@ -41,7 +41,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/idist, @@infsup/hdist}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

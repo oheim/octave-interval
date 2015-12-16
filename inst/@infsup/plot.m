@@ -15,10 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} plot (@var{X}, @var{Y})
-## @deftypefnx {Function File} {} plot (@var{Y})
-## @deftypefnx {Function File} {} plot (@var{X}, @var{Y}, @var{COLOR})
-## @deftypefnx {Function File} {} plot (@var{X}, @var{Y}, @var{COLOR}, @var{EDGECOLOR})
+## @defmethod {@@infsup} plot (@var{X}, @var{Y})
+## @defmethodx {@@infsup} plot (@var{Y})
+## @defmethodx {@@infsup} plot (@var{X}, @var{Y}, @var{COLOR})
+## @defmethodx {@@infsup} plot (@var{X}, @var{Y}, @var{COLOR}, @var{EDGECOLOR})
 ## 
 ## Create a 2D-plot of intervals.
 ##
@@ -42,7 +42,7 @@
 ## optional parameter @var{EDGECOLOR} is given, rectangles will have visible
 ## edges in a distinct color.
 ##
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

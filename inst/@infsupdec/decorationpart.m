@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} decorationpart (@var{X})
-## @deftypefnx {Function File} {} decorationpart (@var{X}, @var{TYPE})
+## @defmethod {@@infsupdec} decorationpart (@var{X})
+## @defmethodx {@@infsupdec} decorationpart (@var{X}, @var{TYPE})
 ## 
 ## Return the decoration of the decorated interval @var{X}.
 ##
@@ -52,7 +52,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/intervalpart}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

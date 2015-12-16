@@ -15,10 +15,10 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{X}, @var{ISEXACT}] =} infsup ()
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
+## @deftypeop Constructor {@@infsup} {[@var{X}, @var{ISEXACT}] =} infsup ()
+## @deftypeopx Constructor {@@infsup} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
+## @deftypeopx Constructor {@@infsup} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
+## @deftypeopx Constructor {@@infsup} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
 ## 
 ## Create an interval (from boundaries).  Convert boundaries to double
 ## precision.
@@ -86,7 +86,7 @@
 ## @end group
 ## @end example
 ## @seealso{exacttointerval}
-## @end deftypefn
+## @end deftypeop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

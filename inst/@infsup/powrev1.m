@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} powrev1 (@var{B}, @var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} powrev1 (@var{B}, @var{C})
+## @deftypemethod {@@infsup} {@var{X} =} powrev1 (@var{B}, @var{C}, @var{X})
+## @deftypemethodx {@@infsup} {@var{X} =} powrev1 (@var{B}, @var{C})
 ## 
 ## Compute the reverse power function for the first parameter.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

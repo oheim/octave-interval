@@ -22,7 +22,7 @@
 DEFUN_DLD (mpfr_linspace_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding UTF-8\n"
-  "@deftypefn {Loadable Function} mpfr_linspace_d (@var{R}, @var{BASE}, @var{LIMIT}, @var{N})\n"
+  "@defun mpfr_linspace_d (@var{R}, @var{BASE}, @var{LIMIT}, @var{N})\n"
   "\n"
   "Return a row vector with @var{N} linearly spaced elements between "
   "@var{BASE} and @var{LIMIT}."
@@ -41,7 +41,7 @@ DEFUN_DLD (mpfr_linspace_d, args, nargout,
   "@end group\n"
   "@end example\n"
   "@seealso{linspace}\n"
-  "@end deftypefn"
+  "@end defun"
   )
 {
   // Check call syntax

@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
-## @deftypefnx {Function File} {@var{X} =} pownrev (@var{C}, @var{P})
+## @deftypemethod {@@infsup} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
+## @deftypemethodx {@@infsup} {@var{X} =} pownrev (@var{C}, @var{P})
 ## 
 ## Compute the reverse monomial @code{x^@var{P}}.
 ##
@@ -28,7 +28,7 @@
 ## reciprocal of @var{P} can be computed exactly in double-precision.
 ##
 ## @seealso{@@infsup/pown}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

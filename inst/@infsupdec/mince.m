@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} mince (@var{X})
-## @deftypefnx {Function File} {} mince (@var{X}, @var{N})
+## @defmethod {@@infsupdec} mince (@var{X})
+## @defmethodx {@@infsupdec} mince (@var{X}, @var{N})
 ## 
 ## Mince interval @var{X} into a row vector of @var{N} sub-intervals of equal
 ## size.
@@ -38,7 +38,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/linspace, @@infsupdec/bisect}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,11 +15,11 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{DECIMAL} =} decimaladd (@var{DECIMAL}, @var{ADDEND})
+## @deftypefun {@var{DECIMAL} =} decimaladd (@var{DECIMAL}, @var{ADDEND})
 ## 
 ## Add two decimal numbers.
 ##
-## @end deftypefn
+## @end deftypefun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-10-21

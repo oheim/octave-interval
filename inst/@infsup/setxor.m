@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} setxor (@var{A}, @var{B})
-## @deftypefnx {Function File} {} {[@var{C}, @var{C1}, @var{C2}] =} setxor (@var{A}, @var{B})
+## @deftypemethod {@@infsup} {} setxor (@var{A}, @var{B})
+## @deftypemethodx {@@infsup} {[@var{C}, @var{C1}, @var{C2}] =} setxor (@var{A}, @var{B})
 ## 
 ## Build the symmetric difference of intervals @var{A} and @var{B}.
 ##
@@ -38,7 +38,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/intersect, @@infsup/union, @@infsup/setdiff}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

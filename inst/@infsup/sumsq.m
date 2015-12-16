@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sumsq (@var{X})
-## @deftypefnx {Function File} {} sumsq (@var{X}, @var{DIM})
+## @defmethod {@@infsup} sumsq (@var{X})
+## @defmethodx {@@infsup} sumsq (@var{X}, @var{DIM})
 ## 
 ## Sum of squares along dimension @var{DIM}.  If @var{DIM} is omitted,
 ## it defaults to the first non-singleton dimension.
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/plus, @@infsup/sum, @@infsup/sumabs, @@infsup/sqr}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} sinrev (@var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} sinrev (@var{C})
+## @deftypemethod {@@infsup} {@var{X} =} sinrev (@var{C}, @var{X})
+## @deftypemethodx {@@infsup} {@var{X} =} sinrev (@var{C})
 ## 
 ## Compute the reverse sine function.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sin}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

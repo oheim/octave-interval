@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} pown (@var{X}, @var{P})
+## @defmethod {@@infsupdec} pown (@var{X}, @var{P})
 ## 
 ## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.
 ##
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/pow, @@infsupdec/pow2, @@infsupdec/pow10, @@infsupdec/exp}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

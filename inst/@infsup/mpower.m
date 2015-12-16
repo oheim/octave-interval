@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} ^ @var{Y}
+## @defop Method {@@infsup} mpower (@var{X}, @var{Y})
+## @defopx Operator {@@infsup} {@var{X} ^ @var{Y}}
 ## 
 ## Return the matrix power operation of @var{X} raised to the @var{Y} power.
 ##
@@ -38,7 +39,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow, @@infsup/pown, @@infsup/pow2, @@infsup/pow10, @@infsup/exp}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

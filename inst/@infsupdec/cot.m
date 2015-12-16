@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} cot (@var{X})
+## @defmethod {@@infsupdec} cot (@var{X})
 ## 
 ## Compute the cotangent in radians, that is the reciprocal tangent.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/tan, @@infsupdec/csc, @@infsupdec/sec}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

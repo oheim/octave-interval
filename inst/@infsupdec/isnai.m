@@ -15,12 +15,12 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} isnai (@var{X})
+## @defmethod {@@infsupdec} isnai (@var{X})
 ## 
 ## Check if the interval is the result of a failed interval construction.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/isentire, @@infsupdec/issingleton, @@infsupdec/isempty}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

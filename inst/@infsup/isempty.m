@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} isempty (@var{X})
+## @defmethod {@@infsup} isempty (@var{X})
 ## 
 ## Check if the interval represents the empty set.
 ##
@@ -25,7 +25,7 @@
 ## function.
 ##
 ## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/issingleton}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

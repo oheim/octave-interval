@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} min (@var{X})
-## @deftypefnx {Function File} {} min (@var{X}, @var{Y})
-## @deftypefnx {Function File} {} min (@var{X}, [], @var{DIM})
+## @defmethod {@@infsupdec} min (@var{X})
+## @defmethodx {@@infsupdec} min (@var{X}, @var{Y})
+## @defmethodx {@@infsupdec} min (@var{X}, [], @var{DIM})
 ## 
 ## Compute the minimum value chosen from intervals.
 ##
@@ -42,7 +42,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/max}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} midrad (@var{M}, @var{R})
-## @deftypefnx {Function File} {} midrad (@var{M})
-## @deftypefnx {Function File} {} midrad ()
+## @defun midrad (@var{M}, @var{R})
+## @defunx midrad (@var{M})
+## @defunx midrad ()
 ## 
 ## Create an interval enclosure for [@var{M}-@var{R}, @var{M}+@var{R}].
 ##
@@ -49,7 +49,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/infsupdec, hull, @@infsupdec/mid, @@infsupdec/rad}
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

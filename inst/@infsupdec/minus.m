@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} - @var{Y}
+## @defop Method {@@infsupdec} minus (@var{X}, @var{Y})
+## @defopx Operator {@@infsupdec} {@var{X} - @var{Y}}
 ## 
 ## Subtract all numbers of interval @var{Y} from all numbers of @var{X}.
 ##
@@ -30,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/plus}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

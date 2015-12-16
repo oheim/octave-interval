@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{X} .^ @var{Y}
+## @defop Method {@@infsup} power (@var{X}, @var{Y})
+## @defopx Operator {@@infsup} {@var{X} .^ @var{Y}}
 ## 
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
@@ -42,7 +43,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/pow, @@infsup/pown, @@infsup/pow2, @@infsup/pow10, @@infsup/exp}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} plot3 (@var{X}, @var{Y}, @var{Z})
-## @deftypefnx {Function File} {} plot3 (@var{X}, @var{Y}, @var{Z}, @var{COLOR})
-## @deftypefnx {Function File} {} plot3 (@var{X}, @var{Y}, @var{Z}, @var{COLOR}, @var{EDGECOLOR})
+## @defmethod {@@infsup} plot3 (@var{X}, @var{Y}, @var{Z})
+## @defmethodx {@@infsup} plot3 (@var{X}, @var{Y}, @var{Z}, @var{COLOR})
+## @defmethodx {@@infsup} plot3 (@var{X}, @var{Y}, @var{Z}, @var{COLOR}, @var{EDGECOLOR})
 ## 
 ## Create a 3D-plot of intervals.
 ##
@@ -39,7 +39,7 @@
 ## optional parameter @var{EDGECOLOR} is given, rectangles and cuboids will
 ## have visible edges in a distinct color.
 ##
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

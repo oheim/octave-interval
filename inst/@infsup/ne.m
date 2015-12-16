@@ -15,8 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{A} ~= @var{B}
-## @deftypefnx {Function File} {} {} @var{A} != @var{B}
+## @defop Method {@@infsup} ne (@var{A}, @var{B})
+## @defopx Operator {@@infsup} {@var{A} ~= @var{B}}
+## @defopx Operator {@@infsup} {@var{A} != @var{B}}
 ## 
 ## Compare intervals @var{A} and @var{B} for inequality.
 ##
@@ -25,7 +26,7 @@
 ## vice versa.
 ##
 ## @seealso{@@infsup/eq, @@infsup/subset, @@infsup/interior, @@infsup/disjoint}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

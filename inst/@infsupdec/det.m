@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} det (@var{A})
+## @defmethod {@@infsupdec} det (@var{A})
 ## 
 ## Compute the determinant of matrix @var{A}.
 ##
@@ -31,7 +31,7 @@
 ##   @result{} ans = [-360]_com
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

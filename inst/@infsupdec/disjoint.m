@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} disjoint (@var{A}, @var{B})
+## @defmethod {@@infsupdec} disjoint (@var{A}, @var{B})
 ## 
 ## Evaluate disjoint comparison on intervals.
 ##
@@ -25,7 +25,7 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/subset, @@infsupdec/interior}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

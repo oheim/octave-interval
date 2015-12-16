@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} linspace (@var{BASE}, @var{LIMIT})
-## @deftypefnx {Function File} {} linspace (@var{BASE}, @var{LIMIT}, @var{N})
+## @defmethod {@@infsup} linspace (@var{BASE}, @var{LIMIT})
+## @defmethodx {@@infsup} linspace (@var{BASE}, @var{LIMIT}, @var{N})
 ## 
 ## Return a row vector of @var{N} linearly spaced members between @var{BASE}
 ## and @var{LIMIT}.
@@ -40,7 +40,7 @@
 ## @end group
 ## @end example
 ## @seealso{linspace}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

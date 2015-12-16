@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} cosh (@var{X})
+## @defmethod {@@infsupdec} cosh (@var{X})
 ## 
 ## Compute the hyperbolic cosine.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/acosh, @@infsupdec/sech, @@infsupdec/sinh, @@infsupdec/tanh}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

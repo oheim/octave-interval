@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{Z} =} decimalcompare (@var{X}, @var{Y})
+## @deffun decimalcompare (@var{X}, @var{Y})
 ## 
 ## Compare two decimal floating point numbers.
 ##
@@ -24,7 +24,7 @@
 ## if @code{@var{X} > @var{Y}}.
 ##
 ## @seealso{str2decimal, double2decimal}
-## @end deftypefn
+## @end deffun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-09-29

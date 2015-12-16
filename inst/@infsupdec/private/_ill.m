@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} _ill ()
+## @defvr Constant _ill
 ## Return numeric representation of the ill-formed decoration
-## @end deftypefn
+## @end defvr
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

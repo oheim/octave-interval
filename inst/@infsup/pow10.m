@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} pow10 (@var{X})
+## @defmethod {@@infsup} pow10 (@var{X})
 ## 
 ## Compute @code{10^x} for all numbers in @var{X}.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/log10, @@infsup/pow, @@infsup/pow2, @@infsup/exp}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

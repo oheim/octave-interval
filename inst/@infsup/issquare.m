@@ -15,12 +15,12 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} issquare (@var{A})
+## @defmethod {@@infsup} issquare (@var{A})
 ##
 ## Return true if @var{A} is a square interval matrix.
 ##
 ## @seealso{@@infsup/isvector, @@infsup/ismatrix, @@infsup/isscalar}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

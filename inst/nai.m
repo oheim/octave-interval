@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} nai ()
+## @defun nai ()
 ## 
 ## Return the ill-formed decorated interval, called NaI (Not an Interval).
 ##
@@ -39,7 +39,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/infsupdec}
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

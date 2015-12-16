@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} _trv ()
+## @defvr Constant _trv
 ## Return numeric representation of the trivial decoration
-## @end deftypefn
+## @end defvr
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} str2decimal (@var{S})
+## @deffun str2decimal (@var{S})
 ## 
 ## Parse a decimal number string @var{S} and split the sign, the mantissa and
 ## the exponent information.
@@ -54,7 +54,7 @@
 ## @end group
 ## @end example
 ## @seealso{double2decimal}
-## @end deftypefn
+## @end deffun
 
 ## Author: Oliver Heimlich
 ## Created: 2014-09-27

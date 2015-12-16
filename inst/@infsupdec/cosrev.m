@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} cosrev (@var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} cosrev (@var{C})
+## @deftypemethod {@@infsupdec} {@var{X} =} cosrev (@var{C}, @var{X})
+## @deftypemethodx {@@infsupdec} {@var{X} =} cosrev (@var{C})
 ## 
 ## Compute the reverse cosine function.
 ##
@@ -36,7 +36,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/cos}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

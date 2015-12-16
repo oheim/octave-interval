@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{A}, @var{B}] =} bisect (@var{X})
+## @deftypemethod {@@infsupdec} {[@var{A}, @var{B}] =} bisect (@var{X})
 ##
 ## Bisect an interval into two intervals, which contain half the amount of
 ## binary64 numbers each.
@@ -43,7 +43,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/nextout}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

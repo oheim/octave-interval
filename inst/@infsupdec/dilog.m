@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} dilog (@var{X})
+## @defmethod {@@infsupdec} dilog (@var{X})
 ## 
 ## Compute the real part of the dilogarithm function.
 ##
@@ -44,7 +44,7 @@
 ##   @result{} ans ⊂ [1.6449, 1.645]_com
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

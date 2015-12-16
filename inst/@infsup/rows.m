@@ -15,11 +15,11 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} rows (@var{A})
+## @defmethod {@@infsup} rows (@var{A})
 ##
 ## Return the number of rows of @var{A}.
 ## @seealso{@@infsup/numel, @@infsup/size, @@infsup/length, @@infsup/columns}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} idist (@var{X}, @var{Y})
+## @defmethod {@@infsup} idist (@var{X}, @var{Y})
 ## 
 ## Compute the inner distance between two intervals as sets.
 ##
@@ -36,7 +36,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sdist, @@infsup/hdist}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

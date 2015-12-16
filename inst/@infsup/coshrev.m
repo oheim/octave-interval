@@ -15,8 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {@var{X} =} coshrev (@var{C}, @var{X})
-## @deftypefnx {Function File} {@var{X} =} coshrev (@var{C})
+## @deftypemethod {@@infsup} {@var{X} =} coshrev (@var{C}, @var{X})
+## @deftypemethodx {@@infsup} {@var{X} =} coshrev (@var{C})
 ## 
 ## Compute the reverse hyperbolic cosine function.
 ##
@@ -32,7 +32,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/cosh}
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

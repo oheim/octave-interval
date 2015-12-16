@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} union (@var{A})
-## @deftypefnx {Function File} {} {} union (@var{A}, @var{B})
-## @deftypefnx {Function File} {} {} union (@var{A}, [], @var{DIM})
+## @defmethod {@@infsupdec} union (@var{A})
+## @defmethodx {@@infsupdec} union (@var{A}, @var{B})
+## @defmethodx {@@infsupdec} union (@var{A}, [], @var{DIM})
 ## 
 ## Build the interval hull of the union of intervals.
 ##
@@ -40,7 +40,7 @@
 ## @end group
 ## @end example
 ## @seealso{hull, @@infsupdec/intersect, @@infsupdec/setdiff, @@infsupdec/setxor}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

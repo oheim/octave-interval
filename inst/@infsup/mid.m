@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} mid (@var{X})
+## @defmethod {@@infsup} mid (@var{X})
 ## 
 ## Get the midpoint of interval @var{X}.
 ##
@@ -36,7 +36,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/rad}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

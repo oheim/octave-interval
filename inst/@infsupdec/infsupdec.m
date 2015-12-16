@@ -15,13 +15,13 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec ()
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M})
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M}, @var{D})
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
-## @deftypefnx {Function File} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{I}, @var{D})
+## @deftypeop Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec ()
+## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M})
+## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{M}, @var{D})
+## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{S})
+## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
+## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
+## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{I}, @var{D})
 ## 
 ## Create a decorated interval from boundaries.  Convert boundaries to double
 ## precision.
@@ -93,7 +93,7 @@
 ## @end group
 ## @end example
 ## @seealso{exacttointerval, hull, midrad, @@infsup/newdec}
-## @end deftypefn
+## @end deftypeop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

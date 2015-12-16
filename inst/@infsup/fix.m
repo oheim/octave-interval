@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} fix (@var{X})
+## @defmethod {@@infsup} fix (@var{X})
 ## 
 ## Truncate fractional portion of each number in interval @var{X}.  This is
 ## equivalent to rounding towards zero.
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/floor, @@infsup/ceil, @@infsup/round, @@infsup/roundb}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} intersect (@var{A})
-## @deftypefnx {Function File} {} {} intersect (@var{A}, @var{B})
-## @deftypefnx {Function File} {} {} intersect (@var{A}, [], @var{DIM})
+## @defmethod {@@infsupdec} intersect (@var{A})
+## @defmethodx {@@infsupdec} intersect (@var{A}, @var{B})
+## @defmethodx {@@infsupdec} intersect (@var{A}, [], @var{DIM})
 ## 
 ## Intersect intervals.
 ##
@@ -40,7 +40,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/union, @@infsupdec/setdiff, @@infsupdec/setxor}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} subset (@var{A}, @var{B})
+## @defmethod {@@infsupdec} subset (@var{A}, @var{B})
 ## 
 ## Evaluate subset comparison on intervals.
 ##
@@ -25,7 +25,7 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/interior, @@infsupdec/disjoint}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

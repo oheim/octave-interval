@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sqrt (@var{X})
+## @defmethod {@@infsup} sqrt (@var{X})
 ## 
 ## Compute the square root (for all non-negative numbers).
 ##
@@ -31,7 +31,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/sqr, @@infsup/pow, @@infsup/nthroot, @@infsup/cbrt}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

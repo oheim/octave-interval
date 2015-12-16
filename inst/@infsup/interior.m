@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} interior (@var{A}, @var{B})
+## @defmethod {@@infsup} interior (@var{A}, @var{B})
 ## 
 ## Evaluate interior comparison on intervals.
 ##
@@ -26,7 +26,7 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/subset, @@infsup/disjoint}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

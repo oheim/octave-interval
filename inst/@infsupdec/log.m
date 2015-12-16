@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} log (@var{X})
+## @defmethod {@@infsupdec} log (@var{X})
 ## 
 ## Compute the natural logarithm.
 ##
@@ -30,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/exp, @@infsupdec/log2, @@infsupdec/log10}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

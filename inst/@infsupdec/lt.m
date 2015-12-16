@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} {} @var{A} < @var{B}
+## @defop Method {@@infsupdec} lt (@var{A}, @var{B})
+## @defopx Operator {@@infsupdec} {@var{A} < @var{B}}
 ## 
 ## Compare intervals @var{A} and @var{B} for strictly less.
 ##
@@ -26,7 +27,7 @@
 ## Evaluated on interval matrices, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/le, @@infsupdec/gt, @@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

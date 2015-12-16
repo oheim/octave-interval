@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} expm1 (@var{X})
+## @defmethod {@@infsup} expm1 (@var{X})
 ## 
 ## Compute @code{exp (@var{X} - 1)} accurately in the neighborhood of zero.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/exp, @@infsup/log1p}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

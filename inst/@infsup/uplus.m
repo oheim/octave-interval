@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} + @var{X}
+## @defop Method {@@infsup} uplus (@var{X})
+## @defopx Operator {@@infsup} {+@var{X}}
 ## 
 ## Return the interval itself.
 ##
@@ -29,7 +30,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/uminus}
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

@@ -15,11 +15,11 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {M =} diag (@var{V})
-## @deftypefnx {Function File} {V =} diag (@var{M})
-## @deftypefnx {Function File} {M =} diag (@var{V}, @var{K})
-## @deftypefnx {Function File} {M =} diag (@var{V}, @var{M}, @var{N})
-## @deftypefnx {Function File} {V =} diag (@var{M}, @var{K})
+## @deftypemethod {@@infsup} {M =} diag (@var{V})
+## @deftypemethodx {@@infsup} {V =} diag (@var{M})
+## @deftypemethodx {@@infsup} {M =} diag (@var{V}, @var{K})
+## @deftypemethodx {@@infsup} {M =} diag (@var{V}, @var{M}, @var{N})
+## @deftypemethodx {@@infsup} {V =} diag (@var{M}, @var{K})
 ## 
 ## Create a diagonal matrix @var{M} with vector @var{V} on diagonal @var{K} or
 ## extract a vector @var{V} from the @var{K}-th diagonal of matrix @var{M}.
@@ -36,7 +36,7 @@
 ##        [0]   [0]   [3]
 ## @end group
 ## @end example
-## @end deftypefn
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

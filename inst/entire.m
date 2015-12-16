@@ -15,9 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} entire ()
-## @deftypefnx {Function File} {} entire (@var{N})
-## @deftypefnx {Function File} {} entire (@var{N}, @var{M})
+## @defun entire ()
+## @defunx entire (@var{N})
+## @defunx entire (@var{N}, @var{M})
 ## 
 ## Return the entire set of real numbers.
 ##
@@ -49,7 +49,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/isentire, empty}
-## @end deftypefn
+## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

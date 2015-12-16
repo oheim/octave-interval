@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} sinh (@var{X})
+## @defmethod {@@infsup} sinh (@var{X})
 ## 
 ## Compute the hyperbolic sine.
 ##
@@ -28,7 +28,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsup/asinh, @@infsup/csch, @@infsup/cosh, @@infsup/tanh}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

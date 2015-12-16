@@ -15,7 +15,8 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} - @var{X}
+## @defop Method {@@infsupdec} uminus (@var{X})
+## @defopx Operator {@@infsupdec} {-@var{X}}
 ## 
 ## Negate all numbers in the interval.
 ##
@@ -24,11 +25,11 @@
 ## @example
 ## @group
 ## x = infsupdec (2, 3);
-## - x
+## -x
 ##   @result{} ans = [-3, -2]_com
 ## @end group
 ## @end example
-## @end deftypefn
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

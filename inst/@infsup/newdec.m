@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @deftypefn {Function File} {} newdec (@var{X})
+## @defmethod {@@infsup} newdec (@var{X})
 ## 
 ## Create a decorated interval from a bare interval.
 ##
@@ -33,7 +33,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/infsupdec}
-## @end deftypefn
+## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

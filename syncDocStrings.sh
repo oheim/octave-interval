@@ -23,9 +23,9 @@ for SUBCLASS_FILE in $SUBCLASS_FUNCTIONS
     ## Everything up to the first example, the end of the documentation string or the DO NOT SYNC... comment
     ## will be copied from the subclass to the base class.
     START_OF_SYNC_BASE=`grep --line-number --max-count=1 --fixed-strings --regexp="-*- texinfo -*-" "$BASECLASS_FILE" | cut -f1 -d":"`
-    END_OF_SYNC_BASE=`grep --line-number --max-count=1 --perl-regexp "@example|@seealso|@end deftypefn|DO NOT SYNCHRONIZE DOCUMENTATION STRING" "$BASECLASS_FILE" | cut -f1 -d":"`
+    END_OF_SYNC_BASE=`grep --line-number --max-count=1 --perl-regexp "@example|@seealso|@end def|DO NOT SYNCHRONIZE DOCUMENTATION STRING" "$BASECLASS_FILE" | cut -f1 -d":"`
     START_OF_SYNC_SUB=`grep --line-number --max-count=1 --fixed-strings --regexp="-*- texinfo -*-" "$SUBCLASS_FILE" | cut -f1 -d":"`
-    END_OF_SYNC_SUB=`grep --line-number --max-count=1 --perl-regexp "@example|@seealso|@end deftypefn|DO NOT SYNCHRONIZE DOCUMENTATION STRING" "$SUBCLASS_FILE" | cut -f1 -d":"`
+    END_OF_SYNC_SUB=`grep --line-number --max-count=1 --perl-regexp "@example|@seealso|@end def|DO NOT SYNCHRONIZE DOCUMENTATION STRING" "$SUBCLASS_FILE" | cut -f1 -d":"`
     
     ## Check for search failures or missing documentation strings
     [ -z "$START_OF_SYNC_BASE" ] && continue
