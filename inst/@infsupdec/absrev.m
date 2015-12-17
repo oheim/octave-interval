@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{X} =} absrev (@var{C}, @var{X})
-## @deftypemethod {@@infsupdec} {@var{X} =} absrev (@var{C})
+## @deftypemethodx {@@infsupdec} {@var{X} =} absrev (@var{C})
 ## 
 ## Compute the reverse absolute value function.
 ##

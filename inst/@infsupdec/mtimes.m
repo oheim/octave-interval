@@ -40,7 +40,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/mrdivide}
-## @end defmethod
+## @end defop
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

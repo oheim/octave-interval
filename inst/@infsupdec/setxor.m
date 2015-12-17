@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsupdec} setxor (@var{A}, @var{B})
+## @deftypemethod {@@infsupdec} {} setxor (@var{A}, @var{B})
 ## @deftypemethodx {@@infsupdec} {[@var{C}, @var{C1}, @var{C2}] =} setxor (@var{A}, @var{B})
 ## 
 ## Build the symmetric difference of intervals @var{A} and @var{B}.
@@ -42,7 +42,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/intersect, @@infsupdec/union, @@infsupdec/setdiff}
-## @end defmethod
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
