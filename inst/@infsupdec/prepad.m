@@ -20,8 +20,8 @@
 ## @defmethodx {@@infsupdec} prepad (@var{X}, @var{L}, @var{C}, @var{DIM})
 ##
 ## Prepend the scalar interval value @var{C} to the interval vector @var{X}
-## until it is of length @var{L}.  If @var{C} is not given, an empty interval
-## is used.
+## until it is of length @var{L}.  If @var{C} is not given, a value of 0 is
+## used.
 ##
 ## If @code{length (@var{X}) > L}, elements from the beginning of @var{X} are
 ## removed until an interval vector of length @var{L} is obtained.
@@ -57,7 +57,7 @@ if (not (isa (x, "infsupdec")))
 endif
 
 if (nargin < 3)
-    c = infsupdec ();
+    c = infsupdec (0);
 elseif (not (isa (c, "infsupdec")))
     c = infsupdec (c);
 endif

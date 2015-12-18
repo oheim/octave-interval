@@ -16,11 +16,11 @@
 
 @release{1.x.x, 2015-xx-xx}
 @itemize
-@item subsasgn: Implicit new elements during subscript assignment have been initialized with empty intervals before this release.  This behavior has changed.  Now, the implicit new element are initialized with zero to make a correct interval extension of the built-in subsasgn function.
+@item postpad, prepad, subsasgn: Implicit new elements during subscript assignment and padding have been initialized with empty intervals before this release.  This behavior has changed.  Now, the implicit new element are initialized with zero to make a correct interval extension of the corresponding built-in function.
 @item fsolve: New function to solve (systems of) equations and compute the inverse of a set under a function
 @item det, prod, recip: New interval arithmetic functions
 @item diag: New utility function to create diagonal matrices or extract vectors from diagonals of matrices
-@item decorationpart: Allow to choose between different return types with a second parameter
+@item decorationpart: Choose between different return types with a second parameter
 @item For several functions it is now possible to broadcast row vectors against column vectors or vectors against matrices.
 @item The user manual has been restructured for better accessibility by new users.  A bunch of usage examples demonstrates the package's capabilities.
 @end itemize
