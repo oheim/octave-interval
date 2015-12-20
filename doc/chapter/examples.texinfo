@@ -226,3 +226,9 @@ The data sets (@var{x}, @var{y}) can be simulated.  The parameters shall be reco
 The found range for parameters @var{p1} and @var{p2} looks very wide, but plotting them one against the other shows the functional dependency between the two parameters.
 
 @myimage{image/contractor-example.m,Plot of the first two parameters}
+
+
+@subsection Combination of Functions
+
+@include image/contractor-rings-union.m.texinfo
+@myimage{image/contractor-rings-union.m,Set inversion for two rings}
