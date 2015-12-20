@@ -237,9 +237,9 @@ if (isempty (options.Vectorize) && isvector (y))
     try
         f_argn = nargin (f);
         if (options.Contract)
-            options.Vectorize = (f_argn > 2 || numel (x0) == 1);
+            options.Vectorize = (f_argn > 2 || f_argn < 0 || numel (x0) == 1);
         else
-            options.Vectorize = (f_argn > 1 || numel (x0) == 1);
+            options.Vectorize = (f_argn > 1 || f_argn < 0 || numel (x0) == 1);
         endif
     catch
         ## nargin doesn't work for built-in functions, which happen to agree
