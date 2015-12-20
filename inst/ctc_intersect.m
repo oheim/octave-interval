@@ -15,15 +15,15 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @defun ctc_union (@var{C1}, @var{Y1}, @var{C2}, @var{Y2})
-## @defunx ctc_union (@var{C1}, @var{C2})
+## @defun ctc_intersect (@var{C1}, @var{Y1}, @var{C2}, @var{Y2})
+## @defunx ctc_intersect (@var{C1}, @var{C2})
 ##
-## Return a contractor function for the union of two sets.
+## Return a contractor function for the intersection of two sets.
 ##
 ## Functions @var{C1} and @var{C2} define two sets @code{S1 = @{@var{x} |
 ## @var{C1} (@var{x}) ∈ @var{Y1}@}} and @code{S2 = @{@var{x} |
 ## @var{C2} (@var{x}) ∈ @var{Y2}@}}.  The return value is a contractor function
-## for the set @code{S1 ∪ S2 = @{@var{x} | @var{C1} (@var{x}) ∈ @var{Y1} or
+## for the set @code{S1 ∩ S2 = @{@var{x} | @var{C1} (@var{x}) ∈ @var{Y1} and
 ## @var{C2} (@var{x}) ∈ @var{Y2}@}}.
 ##
 ## Parameters @var{C1} and @var{C2} must be function handles and must accept
@@ -32,18 +32,18 @@
 ## how to use this function.
 ##
 ## Instead of solving @code{@var{C1} (@var{x}) ∈ @var{Y1}} and
-## @code{@var{C2} (@var{x}) ∈ @var{Y2}} separately and then compute a union of
-## the result, you can solve @code{ctc_union (@var{C1}, @var{Y1}, @var{C2},
-## @var{Y2}) = 0}.
+## @code{@var{C2} (@var{x}) ∈ @var{Y2}} separately and then compute an
+## intersection union of the result, you can solve
+## @code{ctc_intersect (@var{C1}, @var{Y1}, @var{C2}, @var{Y2}) = 0}.
 ##
-## @seealso{@@infsup/fsolve, ctc_intersect}
+## @seealso{@@infsup/fsolve, ctc_union}
 ## @end defun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
 ## Created: 2015-12-20
 
-function c = ctc_union (ctc1, y1, ctc2, y2)
+function c = ctc_intersect (ctc1, y1, ctc2, y2)
 
 ## Reorder parameters
 switch (nargin)
@@ -74,19 +74,19 @@ endif
 
 if (not (is_function_handle (ctc1)) && not (ischar (ctc1)))
     error ("interval:InvalidOperand", ...
-           "ctc_union: Parameter C1 is no function handle")
+           "ctc_intersect: Parameter C1 is no function handle")
 endif
 if (not (is_function_handle (ctc2)) && not (ischar (ctc2)))
     error ("interval:InvalidOperand", ...
-           "ctc_union: Parameter C2 is no function handle")
+           "ctc_intersect: Parameter C2 is no function handle")
 endif
 
-c = @(varargin) ctc_union_eval (ctc1, y1, ctc2, y2, varargin{:});
+c = @(varargin) ctc_intersect_eval (ctc1, y1, ctc2, y2, varargin{:});
 
 endfunction
 
 
-function varargout = ctc_union_eval (ctc1, y1, ctc2, y2, varargin)
+function varargout = ctc_intersect_eval (ctc1, y1, ctc2, y2, varargin)
 
 y = varargin{1};
 x = varargin(2 : end);
@@ -101,13 +101,13 @@ fval2 = fval_and_contractions2{1};
 fval1 = y + y_dist (y1, fval1);
 fval2 = y + y_dist (y2, fval2);
 varargout{1} = union (fval1, fval2);
-## It suffices, if one contractor is a subset of y.
-varargout{1}(fval1 == y | fval2 == y) = y;
+## Both contractors must produce a subset of y.
+varargout{1}(disjoint (fval1, y) | disjoint (fval2, y)) = infsup ();
 
-## Unite the contractions
+## Combine the contractions
 for i = 2 : nargout
-    varargout{i} = union (fval_and_contractions1{i}, ...
-                          fval_and_contractions2{i});
+    varargout{i} = intersect (fval_and_contractions1{i}, ...
+                              fval_and_contractions2{i});
 endfor
 
 endfunction
@@ -124,46 +124,3 @@ else
     d = sum (sum (d));
 endif
 endfunction
-
-%!function [fval, cx] = ctc_sin (y, x)
-%!  fval = sin (x);
-%!  y = intersect (y, fval);
-%!  cx = sinrev (y, x);
-%!endfunction
-%!function [fval, cx] = ctc_cos (y, x)
-%!  fval = cos (x);
-%!  y = intersect (y, fval);
-%!  cx = cosrev (y, x);
-%!endfunction
-%!shared c
-%!  c = ctc_union (@ctc_sin, 0, @ctc_cos, 0);
-%!test
-%!  x = infsup (0);
-%!  y = infsup (0);
-%!  [fval, cx] = c (y, x);
-%!  assert (fval == 0);
-%!  assert (cx == 0)
-%!test
-%!  x = infsup ("pi") / 2;
-%!  y = infsup (0);
-%!  [fval, cx] = c (y, x);
-%!  assert (subset (fval, infsup (-eps, eps)));
-%!  assert (cx == x);
-%!test
-%!  x = infsup ("pi") / 4;
-%!  y = infsup (0);
-%!  [fval, cx] = c (y, x);
-%!  assert (isempty (fval));
-%!  assert (isempty (cx));
-%!test
-%!  x = infsup (0, eps);
-%!  y = infsup (0);
-%!  [fval, cx] = c (y, x);
-%!  assert (subset (fval, infsup(0, eps)));
-%!  assert (cx == 0);
-%!test
-%!  x = infsup ("[0, pi]") / 2;
-%!  y = infsup (0);
-%!  [fval, cx] = c (y, x);
-%!  assert (fval == "[0, 1]");
-%!  assert (cx == x);

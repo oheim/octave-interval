@@ -1,0 +1,48 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright (C) 2015 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
+@example
+@ifset m-file
+@group
+@c doctest: skip
+## General ring contractor
+function [fval, cx1, cx2] = ctc_ring (y, c1, c2, x1, x2)
+    x1_c1 = x1 - c1;
+    x2_c2 = x2 - c2;
+    sqr_x1_c1 = sqr (x1_c1);
+    sqr_x2_c2 = sqr (x2_c2);
+    fval = hypot (x1_c1, x2_c2);
+    y = intersect (y, fval);
+    sqr_y = sqr (y);
+    sqr_x1_c1 = intersect (sqr_x1_c1, sqr_y - sqr_x2_c2);
+    sqr_x2_c2 = intersect (sqr_x2_c2, sqr_y - sqr_x1_c1);
+    x1_c1 = sqrrev (sqr_x1_c1, x1_c1);
+    x2_c2 = sqrrev (sqr_x2_c2, x2_c2);
+    cx1 = intersect (x1, x1_c1 + c1);
+    cx2 = intersect (x2, x2_c2 + c2);
+endfunction
+@end group
+@group
+## Ring 1 with center at (1, 3)
+## Ring 2 with center at (2, -1)
+ctc_ring1 = @@(y, x1, x2) ctc_ring (y, 1, 3, x1, x2);
+ctc_ring2 = @@(y, x1, x2) ctc_ring (y, 2, -1, x1, x2);
+@end group
+@end ifset
+@group
+## Intersect ring 1 with radius 3..4 and ring 2 with radius 5..6
+ctc_intersection_of_rings = ctc_intersect (ctc_ring1, "[3, 4]", ...
+                                           ctc_ring2, "[5, 6]");
+@end group
+@group
+## Compute a paving to approximate the intersection of rings
+## in the area x, y = -10..10
+[~, paving] = fsolve (ctc_intersection_of_rings, ...
+                      infsup ("[-10, 10] [-10, 10]"), ...
+                      struct ("Contract", true));
+plot (paving(1, :), paving(2, :))
+axis equal
+@end group
+@end example

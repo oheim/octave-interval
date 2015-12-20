@@ -232,3 +232,6 @@ The found range for parameters @var{p1} and @var{p2} looks very wide, but plotti
 
 @include image/contractor-rings-union.m.texinfo
 @myimage{image/contractor-rings-union.m,Set inversion for two rings}
+
+@include image/contractor-rings-intersect.m.texinfo
+@myimage{image/contractor-rings-intersect.m,Set inversion for intersection of two rings}
