@@ -8,11 +8,13 @@
 @c doctest: skip
 ## General ring contractor
 function [fval, cx1, cx2] = ctc_ring (y, c1, c2, x1, x2)
+    ## Forward evaluation
     x1_c1 = x1 - c1;
     x2_c2 = x2 - c2;
     sqr_x1_c1 = sqr (x1_c1);
     sqr_x2_c2 = sqr (x2_c2);
     fval = hypot (x1_c1, x2_c2);
+    ## Reverse evaluation
     y = intersect (y, fval);
     sqr_y = sqr (y);
     sqr_x1_c1 = intersect (sqr_x1_c1, sqr_y - sqr_x2_c2);

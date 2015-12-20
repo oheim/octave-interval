@@ -6,7 +6,7 @@
 @example
 @ifset m-file
 @group
-@c doctest: skip
+@c doctest: +SKIP
 ## General ring contractor
 function [fval, cx1, cx2] = ctc_ring (y, c1, c2, x1, x2)
     x1_c1 = x1 - c1;
@@ -32,6 +32,7 @@ ctc_ring2 = @@(y, x1, x2) ctc_ring (y, 2, -1, x1, x2);
 @end group
 @end ifset
 @group
+@c doctest: +SKIP
 ## Intersect ring 1 with radius 3..4 and ring 2 with radius 5..6
 ctc_intersection_of_rings = ctc_intersect (ctc_ring1, "[3, 4]", ...
                                            ctc_ring2, "[5, 6]");

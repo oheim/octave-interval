@@ -217,15 +217,66 @@ f (p(1), p(2))
 
 @subsection Large Search Space
 
-Consider the function @code{f (x) = @var{p1} ^ (@minus{}@var{p2} * x) * (@var{p3} + @var{p4} * x + @var{p5} * x^2)}.  Let's say we have some known function values (measurements) and want to find matching parameters @var{p1} through @var{p5}.
+Consider the function @code{f (x) = @var{p1} ^ x * (@var{p2} + @var{p3} * x + @var{p4} * x^2)}.  Let's say we have some known function values (measurements) and want to find matching parameters @var{p1} through @var{p4}.
 
-The data sets (@var{x}, @var{y}) can be simulated.  The parameters shall be reconstructed from the observed values on the search range @var{p}.  Using plain @funref{@@infsup/fsolve} would take a long time, because the search range is quite large with 5 dimensions.  Thus we use a contractor for function @var{f}, which in addition to the function value can produce a refinement for its parameter constraints.  Contractors can easily be build using interval reverse operations like @funref{@@infsup/mulrev}, @funref{@@infsup/sqrrev}, etc.
+The data sets (@var{x}, @var{y}) can be simulated.  The parameters shall be reconstructed from the observed values on the search range @var{p}.  Using plain @funref{@@infsup/fsolve} would take a long time, because the search range has 4 dimensions.  Thus we use a contractor for function @var{f}, which in addition to the function value can produce a refinement for its parameter constraints.  Contractors can easily be build using interval reverse operations like @funref{@@infsup/mulrev}, @funref{@@infsup/sqrrev}, etc.
 
-@include image/contractor-example.m.texinfo
+@example
+@group
+## Simulate some data sets and add uncertainty
+x = -6 : 3 : 18;
+f = @@(p1, p2, p3, p4) ...
+    p1 .^ x .* (p2 + p3 .* x + p4 .* x .^ 2);
+y = f (1.5, 1, -3, 0.5) .* infsup ("[0.999, 1.001]");
+@end group
+@group
+function [fval, p1, p2, p3, p4] = ...
+    contractor (y, p1, p2, p3, p4)
+    x = -6 : 3 : 18;
+    ## Forward evaluation
+    a = p1 .^ x;
+    b = p3 .* x;
+    c = p2 + b;
+    d = p4 .* x .^ 2;
+    e = c + d;
+    fval = a .* e;
+    ## Reverse evaluation and
+    ## undo broadcasting of x
+    y = intersect (y, fval);
+    a = mulrev (e, y, a);
+    e = mulrev (a, y, e);
+    p1 = powrev1 (x, a, p1);
+    p1 = intersect (p1, [], 2);
+    c = intersect (c, e - d);
+    d = intersect (d, e - c);
+    p2 = intersect (p2, c - b);
+    p2 = intersect (p2, [], 2);
+    b = intersect (b, c - p2);
+    p3 = mulrev (x, b, p3);
+    p3 = intersect (p3, [], 2);
+    p4 = mulrev (x .^ 2, d, p4);
+    p4 = intersect (p4, [], 2);
+endfunction
+@end group
+@end example
 
-The found range for parameters @var{p1} and @var{p2} looks very wide, but plotting them one against the other shows the functional dependency between the two parameters.
+Now, search for solutions in the range of @code{p} and try to restore the function parameters 1.5, 1, -3, and 0.5 from above.
 
-@myimage{image/contractor-example.m,Plot of the first two parameters}
+@example
+@group
+p = infsup ("[1.1, 2] [1, 5] [-5, -1] [0.1, 5]");
+p = fsolve (@@contractor, ...
+            p, y, ...
+            struct ("Contract", true))'
+  @result{} p ⊂ 4×1 interval vector
+
+         [1.4991, 1.5009]
+              [1, 1.0011]
+       [-3.0117, -2.9915]
+       [0.49772, 0.50578]
+
+@end group
+@end example
 
 
 @subsection Combination of Functions
