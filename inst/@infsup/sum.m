@@ -53,6 +53,12 @@ if (nargin < 2)
     endif
 endif
 
+## Short-circuit
+if (size (x.inf, dim) == 1)
+    result = x;
+    return
+endif
+
 if (dim == 1)
     resultsize = [1, max(1, size (x.inf, 2))];
 elseif (dim == 2)
@@ -81,8 +87,8 @@ for n = 1 : size (x.inf, 3 - dim)
         l (n) = inf;
         u (n) = -inf;
     else
-        l (n) = mpfr_vector_sum_d (-inf, x.inf);
-        u (n) = mpfr_vector_sum_d (+inf, x.sup);
+        l (n) = mpfr_vector_sum_d (-inf, vector.x.inf);
+        u (n) = mpfr_vector_sum_d (+inf, vector.x.sup);
     endif
 endfor
 
