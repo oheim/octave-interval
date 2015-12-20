@@ -18,6 +18,7 @@
 @itemize
 @item postpad, prepad, subsasgn: Implicit new elements during subscript assignment and padding have been initialized with empty intervals before this release.  This behavior has changed.  Now, the implicit new element are initialized with zero to make a correct interval extension of the corresponding built-in function.
 @item fsolve: New function to solve (systems of) equations and compute the inverse of a set under a function
+@item ctc_intersect, ctc_union: Utility functions for contractors and the fsolve function
 @item det, prod, recip: New interval arithmetic functions
 @item diag: New utility function to create diagonal matrices or extract vectors from diagonals of matrices
 @item decorationpart: Choose between different return types with a second parameter

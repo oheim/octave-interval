@@ -154,6 +154,9 @@ Interval solver or optimizer
  @infsup/fzero
  @infsup/gauss
  @infsup/polyval
+Interval contractor arithmetic
+ ctc_intersect
+ ctc_union
 Utility function
  @infsup/cat
  @infsup/columns

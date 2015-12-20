@@ -147,19 +147,19 @@ endfunction
 %!  x = infsup ("pi") / 2;
 %!  y = infsup (0);
 %!  [fval, cx] = c (y, x);
-%!  assert (subset (fval, infsup (-eps, eps)));
+%!  assert (fval == "[0, 1]");
 %!  assert (cx == x);
 %!test
 %!  x = infsup ("pi") / 4;
 %!  y = infsup (0);
 %!  [fval, cx] = c (y, x);
-%!  assert (isempty (fval));
+%!  assert (fval > 0);
 %!  assert (isempty (cx));
 %!test
 %!  x = infsup (0, eps);
 %!  y = infsup (0);
 %!  [fval, cx] = c (y, x);
-%!  assert (subset (fval, infsup(0, eps)));
+%!  assert (fval == "[0, 1]");
 %!  assert (cx == 0);
 %!test
 %!  x = infsup ("[0, pi]") / 2;
