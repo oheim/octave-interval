@@ -183,12 +183,12 @@ A better enclosure of the parameters @var{p1} and @var{p2} can be estimated with
 
 @example
 @group
-# Model
+## Model
 y = @@(p1, p2, t) p1 .* exp (p2 .* t);
-# Observations / Constraints
+## Observations / Constraints
 t = [0.2; 1; 2; 4];
 y_t = infsup ("[1.5, 2]; [0.7, 0.8]; [0.1, 0.3]; [-0.1, 0.03]");
-# Estimate parameters
+## Estimate parameters
 f = @@(p1, p2) y (p1, p2, t);
 p = fsolve (f, infsup ("[-3, 3]; [-3, 3]"), y_t)
   @result{} p ⊂ 2×1 interval vector
@@ -215,11 +215,11 @@ f (p(1), p(2))
 @end example
 
 
-@subsection Large Search Space
+@subsection Larger Search Space
 
-Consider the function @code{f (x) = @var{p1} ^ x * (@var{p2} + @var{p3} * x + @var{p4} * x^2)}.  Let's say we have some known function values (measurements) and want to find matching parameters @var{p1} through @var{p4}.
+Consider the function @code{f (x) = @var{p1} ^ x * (@var{p2} + @var{p3} * x + @var{p4} * x^2)}.  Let's say we have some known function values (measurements) and want to find matching parameters @var{p1} through @var{p4}.  The data sets (@var{x}, @var{y}) can be simulated.  The parameters shall be reconstructed from the observed values on the search range @var{p}.
 
-The data sets (@var{x}, @var{y}) can be simulated.  The parameters shall be reconstructed from the observed values on the search range @var{p}.  Using plain @funref{@@infsup/fsolve} would take a long time, because the search range has 4 dimensions.  Thus we use a contractor for function @var{f}, which in addition to the function value can produce a refinement for its parameter constraints.  Contractors can easily be build using interval reverse operations like @funref{@@infsup/mulrev}, @funref{@@infsup/sqrrev}, etc.
+Using plain @funref{@@infsup/fsolve} would take considerably longer, because the search range has 4 dimensions.  Bisecting intervals requires an exponential number of steps and can easily become inefficient.  Thus we use a contractor for function @var{f}, which in addition to the function value can produce a refinement for its parameter constraints.  Contractors can easily be build using interval reverse operations like @funref{@@infsup/mulrev}, @funref{@@infsup/sqrrev}, @funref{@@infsup/powrev1}, etc.
 
 @example
 @group
@@ -260,7 +260,7 @@ endfunction
 @end group
 @end example
 
-Now, search for solutions in the range of @code{p} and try to restore the function parameters 1.5, 1, -3, and 0.5 from above.
+Now, search for solutions in the range of @code{p} and try to restore the function parameters.
 
 @example
 @group
@@ -278,11 +278,17 @@ p = fsolve (@@contractor, ...
 @end group
 @end example
 
+The function parameters 1.5, 1, @minus{}3, and 0.5 from above could be restored.  The contractor function could significantly improve the convergence speed of the algorithm.
+
 
 @subsection Combination of Functions
 
+Sometimes it is hard to express the search range in terms of a single function and its constraints, when the preimage of the function consists of a union or intersection of different parts.  Several contractor functions can be combined using @funref{ctc_union} or @funref{ctc_intersect} to make a contractor function for more complicated sets.  The combined contractor function allows one to solve for more complicated sets in a single step.
+
 @include image/contractor-rings-union.m.texinfo
 @myimage{image/contractor-rings-union.m,Set inversion for two rings}
+
+Intersections of contractor functions are especially useful to apply several constraints at once.  For example, when it is known that a particular location has a distance of @var{a} ∈ [3, 4] from object A, located at coordinates (1, 3), and a distance of @var{b} ∈ [5, 6] from object B, located at coordinates (2, -1), the intersection of both rings yields all possible locations in the search range.  The combined contractor function enables fast convergence of the search algorithm.
 
 @include image/contractor-rings-intersect.m.texinfo
 @myimage{image/contractor-rings-intersect.m,Set inversion for intersection of two rings}
