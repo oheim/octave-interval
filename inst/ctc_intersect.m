@@ -33,7 +33,7 @@
 ##
 ## Instead of solving @code{@var{C1} (@var{x}) ∈ @var{Y1}} and
 ## @code{@var{C2} (@var{x}) ∈ @var{Y2}} separately and then compute an
-## intersection union of the result, you can solve
+## intersection of the result, you can solve
 ## @code{ctc_intersect (@var{C1}, @var{Y1}, @var{C2}, @var{Y2}) = 0}.
 ##
 ## @seealso{@@infsup/fsolve, ctc_union}

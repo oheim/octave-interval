@@ -14,7 +14,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{1.x.x, 2015-xx-xx}
+@release{1.3.0, 2015-12-22}
 @itemize
 @item postpad, prepad, subsasgn: Implicit new elements during subscript assignment and padding have been initialized with empty intervals before this release.  This behavior has changed.  Now, the implicit new element are initialized with zero to make a correct interval extension of the corresponding built-in function.
 @item fsolve: New function to solve (systems of) equations and compute the inverse of a set under a function
@@ -29,7 +29,7 @@
 @noindent Bugfixes
 @itemize
 @item sum, sumabs, sumsq: Fixed result for matrices of size zero
-@item powrev1, powrev2: Fixed indexing for vectors of various values
+@item powrev1, powrev2: Fixed indexing for vectors
 @end itemize
 
 @release{1.2.0, 2015-10-01}

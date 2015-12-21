@@ -66,6 +66,8 @@
 ##   @result{} ans ⊂ [-3.2968e-161, +3.2968e-161]
 ## @end group
 ## @end example
+##
+## @seealso{@@infsup/fsolve, optimset}
 ## @end deftypemethod
 
 ## Author: Oliver Heimlich

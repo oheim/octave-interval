@@ -142,6 +142,7 @@
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
+## @seealso{@@infsup/fzero, ctc_union, ctc_intersect, optimset}
 ## @end deftypemethod
 
 ## Author: Oliver Heimlich
