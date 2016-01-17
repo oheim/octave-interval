@@ -141,10 +141,10 @@ $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
 
 $(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
 	@echo "Compressing release tarball ..."
-	@(cd "$(BUILD_DIR)" && gzip --best -f -k "../$<")
+	@(cd "$(BUILD_DIR)" && zopfli "../$<" || gzip --best -f -k "../$<")
 	@touch "$@"
 
-$(INSTALLED_PACKAGE): $(RELEASE_TARBALL_COMPRESSED)
+$(INSTALLED_PACKAGE): $(RELEASE_TARBALL)
 	@echo "Installing package in GNU Octave ..."
 	@$(OCTAVE) --no-gui --silent --eval "pkg install $<"
 
@@ -180,6 +180,7 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 
 ## Patch generated stuff into the release tarball
 $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
+$(INSTALLED_PACKAGE): $(TAR_PATCHED)
 $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
 	@echo "Patching generated files into release tarball ..."
 	@# `tar --update --transform` fails to update the files
