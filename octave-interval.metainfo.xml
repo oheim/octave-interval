@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2016 Oliver Heimlich
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
+-->
+<component type="addon">
+	<id>octave-interval</id>
+	<extends>www.octave.org-octave.desktop</extends>
+	<metadata_license>CC0-1.0</metadata_license>
+	<name>Interval</name>
+	<summary>Real-valued interval arithmetic</summary>
+	<summary xml:lang="de">Reellwertige Intervallarithmetik</summary>
+	<description>
+		<p>The interval package for real-valued interval arithmetic allows one to evaluate functions over subsets of their domain.  All results are verified, because interval computations automatically keep track of any errors.</p>
+		<p>These concepts can be used to handle uncertainties, estimate arithmetic errors and produce reliable results.  Also it can be applied to computer-assisted proofs, constraint programming, and verified computing.</p>
+		<p>The implementation is based on interval boundaries represented by binary64 numbers and is conforming to IEEE Std 1788-2015, IEEE standard for interval arithmetic.</p>
+	</description>
+	<description xml:lang="de">
+		<p>Das Intervall-Paket für rellwertige Intervallarithmetik kann Funktionen über Teilmengen ihres Definitionsbereichs auszuwerten.  Alle Ergebnisse werden durch Rechnung mit Intervallschranken nachgewiesen, wobei sämtliche Fehler automatisch mitgeführt werden.</p>
+		<p>Mit diesen Konzepten lassen sich ungewisse Messwerte behandeln, arithmetische Fehler abschätzen und zuverlässige Ergebnisse erzeugen.  Es kann auch für rechnergestützte Beweise, Constraintprogrammierung oder verifiziertes Rechnen angewandt werden.</p>
+		<p>Die Intervallschranken werden im Zahlenformat binary64 geführt und die Umsetzung ist standardkonform zu IEEE Std 1788-2015, dem IEEE-Standard für Intervallarithmetik.</p>
+	</description>
+	<keywords>
+		<keyword>interval arithmetic</keyword>
+		<keyword>interval analysis</keyword>
+		<keyword>interval computation</keyword>
+		<keyword>parameter estimation</keyword>
+		<keyword>rounding error</keyword>
+		<keyword>measurement error</keyword>
+		<keyword>numerical error</keyword>
+		<keyword>scientific computing</keyword>
+		<keyword>result verification</keyword>
+		<keyword>verified result</keyword>
+		<keyword>set arithmetic</keyword>
+		<keyword>finite precision</keyword>
+		<keyword>range</keyword>
+		<keyword>interval</keyword>
+		<keyword>tolerance</keyword>
+		<keyword>uncertainty</keyword>
+		<keyword>preimage</keyword>
+		<keyword>constraint</keyword>
+		<keyword>enclosure</keyword>
+		<keyword>bisection</keyword>
+	</keywords>
+	<url type="homepage">http://octave.sourceforge.net/interval/</url>
+	<url type="bugtracker">https://savannah.gnu.org/bugs/?group=octave</url>
+	<project_license>GPL-3.0+</project_license>
+	<developer_name>Octave-Forge Community</developer_name>
+	<update_contact>octave-maintainers@gnu.org</update_contact>
+</component>
