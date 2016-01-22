@@ -40,6 +40,9 @@ The GNU Octave interval package is build upon great third-party software.
     @ref{Introduction to Interval Arithmetic} is partly based on the documentation for the former SIMP package for Octave by Simone Pernice.
 
 @item
+    A French translation of the package description has been made by Rodéric Moitié.
+
+@item
     In the @ref{Examples} for finding root enclosures a function and code by Helmut Podhaisky has been used.
 
 @item

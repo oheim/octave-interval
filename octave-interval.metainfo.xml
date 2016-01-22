@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 Copyright 2016 Oliver Heimlich
+Copyright 2016 Rodéric Moitié
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -14,6 +15,7 @@ without any warranty.
 	<name>Interval</name>
 	<summary>Real-valued interval arithmetic</summary>
 	<summary xml:lang="de">Reellwertige Intervallarithmetik</summary>
+	<summary xml:lang="fr">Arithmétique d'intervalles à valeurs réelles</summary>
 	<description>
 		<p>The interval package for real-valued interval arithmetic allows one to evaluate functions over subsets of their domain.  All results are verified, because interval computations automatically keep track of any errors.</p>
 		<p>These concepts can be used to handle uncertainties, estimate arithmetic errors and produce reliable results.  Also it can be applied to computer-assisted proofs, constraint programming, and verified computing.</p>
@@ -23,6 +25,11 @@ without any warranty.
 		<p>Das Intervall-Paket für rellwertige Intervallarithmetik kann Funktionen über Teilmengen ihres Definitionsbereichs auszuwerten.  Alle Ergebnisse werden durch Rechnung mit Intervallschranken nachgewiesen, wobei sämtliche Fehler automatisch mitgeführt werden.</p>
 		<p>Mit diesen Konzepten lassen sich ungewisse Messwerte behandeln, arithmetische Fehler abschätzen und zuverlässige Ergebnisse erzeugen.  Es kann auch für rechnergestützte Beweise, Constraintprogrammierung oder verifiziertes Rechnen angewandt werden.</p>
 		<p>Die Intervallschranken werden im Zahlenformat binary64 geführt und die Umsetzung ist standardkonform zu IEEE Std 1788-2015, dem IEEE-Standard für Intervallarithmetik.</p>
+	</description>
+	<description xml:lang="fr">
+		<p>Le paquet arithmétique d'intervalles à valeurs réelles permet d'évaluer des fonctions sur des sous-ensembles de leurs domaines.  Tous les résultats sont garantis car les calculs par intervalles permettent un suivi automatique des erreurs.</p>
+		<p>Ces concepts peuvent être utilisés pour prendre en compte les incertitudes, estimer les erreurs arithmétiques, et générer des résultats fiables.  Ils peuvent également être appliqués à des preuves assistées par ordinateur, à la programmation par contraintes et à des calculs garantis.</p>
+		<p>Cette implantation est basée sur des bornes d'intervalles sous forme de nombres réels 64 bits et se conforme au standard IEEE 1788-2015, standard IEEE pour l'arithmétique d'intervalles.</p>
 	</description>
 	<keywords>
 		<keyword>interval arithmetic</keyword>
