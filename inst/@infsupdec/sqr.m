@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} sqr (@var{X})
 ## 
-## Compute the square.
+## Compute the square for each entry in @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -27,7 +27,7 @@
 ##   @result{} ans = [0, 4]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/realsqrt, @@infsupdec/pown, @@infsupdec/pow}
+## @seealso{@@infsupdec/realsqrt, @@infsupdec/pown, @@infsupdec/powm}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

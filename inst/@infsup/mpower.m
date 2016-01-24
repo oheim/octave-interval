@@ -27,7 +27,7 @@
 ## Warning: This function is not defined by IEEE Std 1788-2015.
 ##
 ## Accuracy: The result is a valid enclosure.  The result is tightest for
-## @var{Y} in @{0, 1, 2@}.
+## @var{Y} in @{0, 1@} and accurate for @var{Y} = 2.
 ##
 ## @example
 ## @group
@@ -56,6 +56,7 @@ if (not (isa (x, "infsup")))
 endif
 
 if (isscalar (x))
+    ## Short-circuit for scalars
     result = power (x, y);
     return
 endif
@@ -65,7 +66,7 @@ if (not (isreal (y)) || fix (y) ~= y)
            "mpower: only integral powers can be computed");
 endif
 
-if (size (x, 1) ~= size (x, 2))
+if (not (issquare (x.inf)))
     error ("interval:InvalidOperand", ...
            "mpower: must be square matrix");
 endif
@@ -78,7 +79,7 @@ endif
 result = infsup (eye (length (x)));
 while (y ~= 0)
     if (rem (y, 2) == 0) # y is even
-        x = mtimes (x, x);
+        x = sqrm (x);
         y /= 2;
     else # y is odd
         result = mtimes (result, x);
@@ -102,5 +103,59 @@ endwhile
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (infsup (magic (3)) ^ 2 == infsup (magic (3) ^ 2));
+function result = sqrm (x)
+## Compute the matrix square of the square matrix @var{X}.
+##
+## Unlike @code{@var{X} * @var{X}} this function avoids the dependency problem
+## during computation and produces a better enclosure.  The algorithm has been
+## implemented after “Feasible algorithm for computing the square of an
+## interval matrix” in O. Kosheleva, V. Kreinovich, G. Mayer, and H. T. Nguyen
+## (2005): Computing the cube of an interval matrix is NP-hard. In SAC '05:
+## Proc. of the 2005 ACM Symposium on Applied Computing, pages 1449–1453, 2005.
+##
+## Accuracy: The result is an accurate enclosure.
+
+result = infsup (zeros (size (x.inf)));
+
+## We compute each column of the result matrix
+idx_result = struct ("type", "()", "subs", {{:, 1}});
+idx_pivot = struct ("type", "()", "subs", {{1, 1}});
+idx_diag = struct ("type", "()", ...
+                   "subs", {{find(eye (size (x.inf)))}});
+diag_x = subsref (x, idx_diag);
+for j = 1 : columns (x.inf)
+    idx_result.subs{2} = j;
+    idx_pivot.subs(:) = j;
+
+    ## Each entry of the result is defined as
+    ##   result(i,j) = sum[k != i,j] x(i,k)*x(k,j) + x(i,j)*(x(i,i), x(j,j))
+    ##                  for i != j
+    ##   result(i,i) = sum[k != i] x(i,k)*x(k,i) + x(i,i)^2
+    ##
+    ## We compute result(:,j) by matrix multiplication of y with x(:,j),
+    ## where y is a matrix made from x such that no entry of x participates in
+    ## each entry of the final result more than once.
+
+    ## For i != j
+    ## Combine x(i,j)*x(i,i) and x(j,j)*x(i,j) into x(i,j)*(x(i,i)+x(j,j)),
+    ## where x(i,j) would appear twice and introduce dependency errors
+    y = subsasgn (x, idx_diag, ...
+        ## Note: This sum may introduce an error, thus the result is not
+        ## guaranteed to be tight.  This could be improved in a new oct-file
+        ## function which uses MPFR for an exact sum.
+        subsref (x, idx_pivot) ... # x(j,j)
+          + diag_x);               # x(i,i)
+    y = subsasgn (y, idx_result, infsup (0));
+
+    ## For i == j
+    ## Make sure that x(j,j)^2 can be computed error free as x(j,j)*x(j,j)
+    y = subsasgn (y, idx_pivot, abs (subsref (x, idx_pivot)));
+
+    result = subsasgn (result, idx_result, ...
+                       mtimes (y, subsref (x, idx_result)));
+endfor
+
+endfunction
+
+%!xtest "from the documentation string";
+%! assert (isequal (infsup (magic (3)) ^ 2, infsup (magic (3) ^ 2)));

@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sqr (@var{X})
 ## 
-## Compute the square.
+## Compute the square for each entry in @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
