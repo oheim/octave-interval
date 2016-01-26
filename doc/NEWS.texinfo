@@ -17,6 +17,7 @@
 @release{1.4.0, 2016-xx-xx}
 @itemize
 @item mpower: Improved accuracy of matrix squares and higher matrix powers
+@item norm: New interval matrix operation
 @item The functions recip and sqr have been deprecated and will be removed in a future release.  Please use @code{1 ./ @var{x}} and @code{@var{x} .^ 2} instead.
 @end itemize
 

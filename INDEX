@@ -81,6 +81,7 @@ Interval matrix operation
  @infsup/mpower
  @infsup/mrdivide
  @infsup/mtimes
+ @infsup/norm
  @infsup/prod
  @infsup/sum
  @infsup/sumabs

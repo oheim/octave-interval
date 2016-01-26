@@ -70,7 +70,7 @@ result = newdec (mpower (intervalpart (x), y));
 
 if (y < 0)
     result.dec(:) = _trv ();
-elseif (y == 1)
+elseif (y < 2)
     result.dec = x.dec;
 elseif (y == 2)
     warning ('off', 'Octave:broadcast', 'local');
