@@ -62,7 +62,8 @@
 ##         [1.5707, 1.5708]
 ##         [4.7123, 4.7124]
 ##          [7.8539, 7.854]
-## fzero ("sqr", infsup ("[Entire]"))
+## sqr = @@(x) x .^ 2;
+## fzero (sqr, infsup ("[Entire]"))
 ##   @result{} ans ⊂ [-3.2968e-161, +3.2968e-161]
 ## @end group
 ## @end example
@@ -222,6 +223,7 @@ endfunction
 %! zeros = fzero (f, infsup ("[-10, 10]"), df);
 %! assert (all (subset (pi * (-2.5:1:2.5)', zeros)));
 %! assert (max (rad (zeros)) < 8 * eps);
-%! zeros = fzero ("sqr", infsup ("[Entire]"));
+%! sqr = @(x) x .^ 2;
+%! zeros = fzero (sqr, infsup ("[Entire]"));
 %! assert (all (subset (0, zeros)));
 %! assert (max (rad (zeros)) < eps);

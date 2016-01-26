@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2014-2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -19,11 +19,14 @@
 ## 
 ## Compute the square for each entry in @var{X}.
 ##
+## THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED IN A FUTURE RELEASE OF THIS
+## SOFTWARE.  PLEASE USE @code{@var{X} .^ 2} INSTEAD.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## sqr (infsup (-2, 1))
+## sqr (infsup (-2, 1)) @c doctest: +SKIP
 ##   @result{} ans = [0, 4]
 ## @end group
 ## @end example
@@ -41,16 +44,9 @@ if (nargin ~= 1)
     return
 endif
 
-l = mpfr_function_d ('sqr', -inf, mig (x));
-u = mpfr_function_d ('sqr', +inf, mag (x));
+warning ("interval:deprecated", ...
+         "sqr: This function is deprecated, please use x .^ 2 instead")
 
-emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
-
-result = infsup (l, u);
+result = power (x, 2);
 
 endfunction
-
-%!test "from the documentation string";
-%! assert (sqr (infsup (-2, 1)) == infsup (0, 4));

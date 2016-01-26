@@ -204,7 +204,7 @@ The hex-form can be set for output with the @command{format hex} command.
 
 @section Reverse Arithmetic Operations
 
-Some arithmetic functions also provide reverse mode operations. That is inverse functions with interval constraints. For example the @funref{@@infsup/sqrrev} function can compute the inverse of the @funref{@@infsup/sqr} function on intervals. The syntax is @code{sqrrev (@var{C}, @var{X})} and will compute the enclosure of all numbers x ∈ @var{X} that fulfill the constraint x² ∈ @var{C}.
+Some arithmetic functions also provide reverse mode operations. That is inverse functions with interval constraints. For example the @funref{@@infsup/sqrrev} function can compute the inverse of the @code{@var{x} .^ 2} function on intervals. The syntax is @code{sqrrev (@var{C}, @var{X})} and will compute the enclosure of all numbers x ∈ @var{X} that fulfill the constraint x² ∈ @var{C}.
 
 In the following example, we compute the constraints for base and exponent of the power function pow as shown in the figure. 
 
@@ -237,7 +237,7 @@ ans + "[0, 2]"
 @end group
 @end example
 
-Interval functions with only one argument can be called by using property syntax, e. g. @code{x.inf}, @code{x.sup} or even @code{x.sqr}.
+Interval functions with only one argument can be called by using property syntax, e. g. @code{x.inf}, @code{x.sup} or even @code{x.sqrt}.
 
 Whilst most functions (@funref{@@infsup/size}, @funref{@@infsup/isvector}, @funref{@@infsup/ismatrix}, …) work as expected on interval data types, the function @funref{@@infsup/isempty} is evaluated element-wise and checks if an interval equals the empty set.
 

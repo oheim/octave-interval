@@ -43,7 +43,7 @@
 ##
 ## @example
 ## @group
-## f = @@(x) sqr (x(1)) - sqr (x(2));
+## f = @@(x) x(1) .^ 2 - x(2) .^ 2;
 ## [x, fval] = fminsearch (f, infsup ("[-1, 1] [-1, 1]"))
 ##   @result{}
 ##     x ⊂ 1×2 interval vector
@@ -273,6 +273,7 @@ function [list, X, fX] = pop_ordered_list (list)
 endfunction
 
 %!test
+%!  sqr = @(x) x .^ 2;
 %!  [x, y] = fminsearch (@sqr, infsup (-inf, inf));
 %!  assert (y == 0);
 
@@ -280,7 +281,7 @@ endfunction
 %!  clf
 %!  hold on
 %!  draw = @(x) plot (x(1), x(2), [238 232 213]/255, [88 110 117]/255);
-%!  f = @(x) sqr (x(1) - 2) - sqr (x(2));
+%!  f = @(x) (x(1) - 2) .^ 2 - x(2) .^ 2;
 %!  fminsearch (f, infsup ("[1, 3] [0, 1]"), ...
 %!              optimset ('OutputFcn', draw));
 %!  hold off

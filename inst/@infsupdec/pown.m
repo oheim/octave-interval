@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2014-2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -60,3 +60,4 @@ endfunction
 
 %!test "from the documentation string";
 %! assert (isequal (pown (infsupdec (5, 6), 2), infsupdec (25, 36)));
+%!assert (pown (infsupdec (-2, 1), 2) == infsupdec (0, 4));

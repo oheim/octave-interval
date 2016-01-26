@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2014-2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 ##   @result{} ans ⊂ [2, 2.0001]
 ## @end group
 ## @end example
-## @seealso{@@infsup/plus, @@infsup/sum, @@infsup/sumabs, @@infsup/sqr}
+## @seealso{@@infsup/plus, @@infsup/sum, @@infsup/sumabs}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

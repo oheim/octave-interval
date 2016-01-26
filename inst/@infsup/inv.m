@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2014-2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 ##        [0]        [0]       [1]
 ## @end group
 ## @end example
-## @seealso{@@infsup/recip, @@infsup/mrdivide}
+## @seealso{@@infsup/mrdivide}
 ## @end defmethod
 
 ## Author: Oliver Heimlich
@@ -51,7 +51,7 @@ endif
 
 n = length (x);
 if (n <= 1)
-    result = recip (x);
+    result = rdivide (1, x);
     return
 endif
 

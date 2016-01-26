@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2014-2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@
 ## 
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
+## For @var{X} = 1 compute the reciprocal of @var{Y}.  Thus this function can
+## compute @code{recip} as defined by IEEE Std 1788-2015.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
@@ -30,7 +33,7 @@
 ##   @result{} ans = [1, 3]
 ## @end group
 ## @end example
-## @seealso{@@infsup/recip, @@infsup/times}
+## @seealso{@@infsup/times}
 ## @end defop
 
 ## Author: Oliver Heimlich
@@ -51,6 +54,17 @@ if (not (isa (y, "infsup")))
 elseif (isa (y, "infsupdec"))
     ## Workaround for bug #42735
     result = rdivide (x, y);
+    return
+endif
+
+## Short-circuit evaluation for 1 ./ x
+if (all (all (x.inf == 1 & x.sup == 1)))
+    result = recip (y);
+    ## Resize, if scalar × matrix
+    if (isscalar (x.inf) ~= isscalar (y.inf))
+        result.inf = ones (size (x.inf)) .* result.inf;
+        result.sup = ones (size (x.inf)) .* result.sup;
+    endif
     return
 endif
 
@@ -113,5 +127,43 @@ result = infsup (l, u);
 
 endfunction
 
+function result = recip (x)
+## Compute the reciprocal of @var{X}.
+##
+## The result is equivalent to @code{1 ./ @var{X}}, but is computed more
+## efficiently.
+##
+## Accuracy: The result is a tight enclosure.
+
+l = inf (size (x.inf));
+u = -l;
+
+## Fix signs to make use of limit values for 1 ./ x.
+x.inf(x.inf == 0) = +0;
+x.sup(x.sup == 0) = -0;
+
+select = (x.inf >= 0 | x.sup <= 0) & ...
+         # undefined for x = [0, 0]
+         not (x.inf == 0 & x.sup == 0) & ...
+         # x is not empty
+         x.inf < inf;
+if (any (any (select)))
+    ## recip is monotonically decreasing
+    l(select) = mpfr_function_d ('rdivide', -inf, 1, x.sup(select));
+    u(select) = mpfr_function_d ('rdivide', +inf, 1, x.inf(select));
+endif
+
+## singularity at x = 0
+select = x.inf < 0 & x.sup > 0;
+if (any (any (select)))
+    l(select) = -inf;
+    u(select) = +inf;
+endif
+
+result = infsup (l, u);
+
+endfunction
+
 %!test "from the documentation string";
 %! assert (infsup (2, 3) ./ infsup (1, 2) == infsup (1, 3));
+%!assert (1 ./ infsup (1, 4) == infsup (0.25, 1));

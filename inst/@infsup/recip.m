@@ -1,4 +1,4 @@
-## Copyright 2015 Oliver Heimlich
+## Copyright 2015-2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -19,14 +19,14 @@
 ## 
 ## Compute the reciprocal of @var{X}.
 ##
-## The result is equivalent to @code{1 ./ @var{X}}, but is computed more
-## efficiently.
+## THIS FUNCTION IS DEPRECATED AND WILL BE REMOVED IN A FUTURE RELEASE OF THIS
+## SOFTWARE.  PLEASE USE @code{1 ./ @var{X}} INSTEAD.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
 ## @group
-## recip (infsup (1, 4))
+## recip (infsup (1, 4)) @c doctest: +SKIP
 ##   @result{} ans = [0.25, 1]
 ## @end group
 ## @end example
@@ -44,34 +44,9 @@ if (nargin ~= 1)
     return
 endif
 
-l = inf (size (x.inf));
-u = -l;
+warning ("interval:deprecated", ...
+         "recip: This function is deprecated, please use 1 ./ x instead")
 
-## Fix signs to make use of limit values for 1 ./ x.
-x.inf(x.inf == 0) = +0;
-x.sup(x.sup == 0) = -0;
-
-select = (x.inf >= 0 | x.sup <= 0) & ...
-         # undefined for x = [0, 0]
-         not (x.inf == 0 & x.sup == 0) & ...
-         # x is not empty
-         x.inf < inf;
-if (any (any (select)))
-    ## recip is monotonically decreasing
-    l(select) = mpfr_function_d ('rdivide', -inf, 1, x.sup(select));
-    u(select) = mpfr_function_d ('rdivide', +inf, 1, x.inf(select));
-endif
-
-## singularity at x = 0
-select = x.inf < 0 & x.sup > 0;
-if (any (any (select)))
-    l(select) = -inf;
-    u(select) = +inf;
-endif
-
-result = infsup (l, u);
+result = rdivide (1, x);
 
 endfunction
-
-%!test "from the documentation string";
-%!  assert (recip (infsup (1, 4)) == infsup (0.25, 1));

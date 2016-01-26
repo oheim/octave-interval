@@ -92,8 +92,8 @@
 ## # but now contractions speed up the algorithm.
 ## function [fval, cx1, cx2] = f (y, x1, x2)
 ##   # Forward evaluation
-##   x1_sqr = sqr (x1);
-##   x2_sqr = sqr (x2);
+##   x1_sqr = x1 .^ 2;
+##   x2_sqr = x2 .^ 2;
 ##   fval = hypot (x1, x2);
 ##
 ##   # Reverse evaluation and contraction

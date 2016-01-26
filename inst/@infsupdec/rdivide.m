@@ -1,4 +1,4 @@
-## Copyright 2014-2015 Oliver Heimlich
+## Copyright 2014-2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -20,6 +20,9 @@
 ## 
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
+## For @var{X} = 1 compute the reciprocal of @var{Y}.  Thus this function can
+## compute @code{recip} as defined by IEEE Std 1788-2015.
+##
 ## Accuracy: The result is a tight enclosure.
 ##
 ## @example
@@ -30,7 +33,7 @@
 ##   @result{} ans = [1, 3]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/recip, @@infsupdec/mtimes}
+## @seealso{@@infsupdec/mtimes}
 ## @end defop
 
 ## Author: Oliver Heimlich
@@ -73,3 +76,4 @@ endfunction
 
 %!test "from the documentation string";
 %! assert (isequal (infsupdec (2, 3) ./ infsupdec (1, 2), infsupdec (1, 3)));
+%!assert (1 ./ infsupdec (1, 4) == infsupdec (0.25, 1));

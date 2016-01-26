@@ -67,7 +67,6 @@ Interval function (most with tightest accuracy)
  @infsup/sign
  @infsup/sin
  @infsup/sinh
- @infsup/sqr
  @infsup/tan
  @infsup/tanh
  @infsup/times

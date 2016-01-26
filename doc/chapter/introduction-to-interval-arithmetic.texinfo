@@ -134,12 +134,12 @@ ceil (cans)
 
 Interval arithmetic, introduced in the 1960s, is a young and powerful technique.  Its first application has been to control errors in computations and simplify error analysis for engineers (rounding errors, truncation errors, and conversion errors).  The range evaluation of functions has soon been exploited for reliably checking for certain function values and for self-verifying algorithms.  Latest usage scenarios comprise root finding, function approximation, and robust pattern recognition.  More useful applications are certainly left to be detected.
 
-The major problem in interval arithmetic is that errors can easily build up, such that the final result is too wide to be useful.  This is especially true when the @emph{dependency problem} applies, that is, a single variable occurs several times within a computation and is represented by an interval in each occurrence.  Then, the variable virtually may take different values independently, which introduces a systematic error. For example, computing @code{sqr (x)} will always yield a subset of @code{times (x, x)}, the latter considers two intervals independent of each other.
+The major problem in interval arithmetic is that errors can easily build up, such that the final result is too wide to be useful.  This is especially true when the @emph{dependency problem} applies, that is, a single variable occurs several times within a computation and is represented by an interval in each occurrence.  Then, the variable virtually may take different values independently, which introduces a systematic error. For example, computing @code{x .^ 2} will always yield a subset of @code{times (x, x)}, the latter considers two intervals independent of each other.
 
 @example
 @group
 x = infsupdec ("[-1, 3]");
-sqr (x)
+x .^ 2
   @result{} ans = [0, 9]_com
 times (x, x)
   @result{} ans = [-3, +9]_com
@@ -152,7 +152,7 @@ After all, it is possible to reduce overestimation errors by subdividing the fun
 @group
 x1 = infsupdec ("[-1, 1]");
 x2 = infsupdec ("[1, 3]");
-hull (sqr (x1), sqr (x2))
+hull (x1 .^ 2, x2 .^ 2)
   @result{} ans = [0, 9]_com
 hull (times (x1, x1), times (x2, x2))
   @result{} ans = [-1, +9]_com

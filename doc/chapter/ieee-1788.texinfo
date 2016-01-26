@@ -69,10 +69,10 @@ The operations textToInterval (@var{S}), numsToInterval (@var{l}, @var{u}), and 
     @tab@funref{@@infsup/rdivide}
     @tab tightest
 @item recip (@var{x})
-    @tab@funref{@@infsup/recip}
+    @tab@code{1 ./ @var{x}}
     @tab tightest
 @item sqr (@var{x})
-    @tab@funref{@@infsup/sqr}
+    @tab@code{@var{x} .^ 2}
     @tab tightest
 @item sqrt (@var{x})
     @tab@funref{@@infsup/realsqrt}
