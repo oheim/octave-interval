@@ -75,6 +75,7 @@ Interval function (most with tightest accuracy)
 Interval matrix operation
  @infsup/det
  @infsup/dot
+ @infsup/expm
  @infsup/inv
  @infsup/lu
  @infsup/mldivide
