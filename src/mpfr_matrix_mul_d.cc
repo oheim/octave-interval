@@ -37,43 +37,47 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
 
   Matrix result_l (dim_vector (n, m));
   Matrix result_u (dim_vector (n, m));
+
+  // Instead of two nested loops (for row = 1 : n / for col = 1 : m), we use
+  // a single loop, which can be parallelized more easily.
   OCTAVE_OMP_PRAGMA (omp parallel for)
-  for (octave_idx_type i = 0; i < n; i++)
+  for (octave_idx_type i = 0; i < n * m; i++)
     {
       mpfr_t accu_l, accu_u;
       mpfr_init2 (accu_l, BINARY64_ACCU_PRECISION);
       mpfr_init2 (accu_u, BINARY64_ACCU_PRECISION);
-      for (octave_idx_type j = 0; j < m; j++)
-        {
-          mpfr_set_zero (accu_l, 0);
-          mpfr_set_zero (accu_u, 0);
+      mpfr_set_zero (accu_l, 0);
+      mpfr_set_zero (accu_u, 0);
 
-          RowVector xl;
-          RowVector xu;
-          ColumnVector yl;
-          ColumnVector yu;
-          OCTAVE_OMP_PRAGMA (omp critical)
-          {
-            // Access to shared memory is critical
-            xl = matrix_xl.row (i);
-            xu = matrix_xu.row (i);
-            yl = matrix_yl.column (j);
-            yu = matrix_yu.column (j);
-          }
+      const octave_idx_type row = i % n;
+      const octave_idx_type col = i / n;
 
-          exact_interval_dot_product (accu_l, accu_u,
-                                      xl, xu,
-                                      yl, yu);
+      RowVector xl;
+      RowVector xu;
+      ColumnVector yl;
+      ColumnVector yu;
+      OCTAVE_OMP_PRAGMA (omp critical)
+      {
+        // Access to shared memory is critical
+        xl = matrix_xl.row (row);
+        xu = matrix_xu.row (row);
+        yl = matrix_yl.column (col);
+        yu = matrix_yu.column (col);
+      }
 
-          const double accu_l_d = mpfr_get_d (accu_l, MPFR_RNDD);
-          const double accu_u_d = mpfr_get_d (accu_u, MPFR_RNDU);
-          OCTAVE_OMP_PRAGMA (omp critical)
-          {
-            // Access to shared memory is critical
-            result_l.elem (i, j) = accu_l_d;
-            result_u.elem (i, j) = accu_u_d;
-          }
-        }
+      exact_interval_dot_product (accu_l, accu_u,
+                                  xl, xu,
+                                  yl, yu);
+
+      const double accu_l_d = mpfr_get_d (accu_l, MPFR_RNDD);
+      const double accu_u_d = mpfr_get_d (accu_u, MPFR_RNDU);
+      OCTAVE_OMP_PRAGMA (omp critical)
+      {
+        // Access to shared memory is critical
+        result_l.elem (row, col) = accu_l_d;
+        result_u.elem (row, col) = accu_u_d;
+      }
+
       mpfr_clear (accu_l);
       mpfr_clear (accu_u);
     }
