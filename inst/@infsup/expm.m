@@ -111,7 +111,8 @@ for k = K : -1 : 1
 endfor
 ## Truncation error for the exponential series
 alpha = norm (A, inf);
-rho = pown (alpha, K + 1) ./ (factorial (K + 1) * (1 - alpha ./ (K + 2)));
+rho = pown (alpha, K + 1) ./ ...
+      (factorial (infsup (K + 1)) * (1 - alpha ./ (K + 2)));
 warning ("off", "interval:ImplicitPromote", "local");
 truncation_error = rho .* infsup (-1, 1);
 result = result + truncation_error;
