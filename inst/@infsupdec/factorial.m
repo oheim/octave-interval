@@ -37,7 +37,7 @@
 ## @example
 ## @group
 ## factorial (infsupdec (6))
-##   @result{} ans ⊂ [720]_dac
+##   @result{} ans = [720]_dac
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/prod, @@infsupdec/gamma, @@infsupdec/gammaln}

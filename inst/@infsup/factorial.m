@@ -37,7 +37,7 @@
 ## @example
 ## @group
 ## factorial (infsup (6))
-##   @result{} ans ⊂ [720]
+##   @result{} ans = [720]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/prod, @@infsup/gamma, @@infsup/gammaln}
