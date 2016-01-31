@@ -34,6 +34,7 @@ Interval function (most with tightest accuracy)
  @infsup/erfc
  @infsup/exp
  @infsup/expm1
+ @infsup/factorial
  @infsup/fix
  @infsup/floor
  @infsup/fma

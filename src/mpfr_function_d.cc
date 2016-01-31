@@ -169,6 +169,25 @@ void nthroot (
   mpfr_clear (mp);
 }
 
+// Evaluate factorial
+void factorial (
+  Matrix &result,          // Result
+  const uint64NDArray arg, // Operand
+  const mpfr_rnd_t rnd)
+{
+  mpfr_t mp;
+  mpfr_init2 (mp, BINARY64_PRECISION);
+
+  const octave_idx_type n = arg.numel ();
+  for (octave_idx_type i = 0; i < n; i ++)
+    {
+      mpfr_fac_ui (mp, arg.elem (i), rnd);
+      result.elem (i) = mpfr_get_d (mp, rnd);
+    }
+
+  mpfr_clear (mp);
+}
+
 DEFUN_DLD (mpfr_function_d, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding UTF-8\n"
@@ -192,6 +211,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@defunx mpfr_function_d ('erfc', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('exp', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('expm1', @var{R}, @var{X})\n"
+  "@defunx mpfr_function_d ('factorial', @var{R}, @var{N})\n"
   "@defunx mpfr_function_d ('fma', @var{R}, @var{X}, @var{Y}, @var{Z})\n"
   "@defunx mpfr_function_d ('gamma', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('gammaln', @var{R}, @var{X})\n"
@@ -325,6 +345,13 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, rnd, &mpfr_exp);
         else if (function == "expm1")
           evaluate (arg1, rnd, &mpfr_expm1);
+        else if (function == "factorial")
+          {
+            const uint64NDArray argInt = args (2).uint64_array_value ();
+            if (error_state)
+              return octave_value_list ();
+            factorial (arg1, argInt, rnd);
+          }
         else if (function == "gamma")
           evaluate (arg1, rnd, &mpfr_gamma);
         else if (function == "gammaln")

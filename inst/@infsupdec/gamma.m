@@ -45,7 +45,7 @@
 ##   @result{} ans ⊂ [0.88622, 0.88623]_com
 ## @end group
 ## @end example
-## @seealso{@@infsupdec/psi, @@infsupdec/gammaln}
+## @seealso{@@infsupdec/psi, @@infsupdec/gammaln, @@infsupdec/factorial}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

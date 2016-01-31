@@ -44,7 +44,7 @@
 ##   @result{} ans ⊂ [-0.12079, -0.12078]
 ## @end group
 ## @end example
-## @seealso{@@infsup/psi, @@infsup/gamma}
+## @seealso{@@infsup/psi, @@infsup/gamma, @@infsup/factorial}
 ## @end defmethod
 
 ## Author: Oliver Heimlich
