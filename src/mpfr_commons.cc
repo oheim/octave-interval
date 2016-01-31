@@ -63,6 +63,10 @@ void exact_interval_dot_product (
       return;
     }
 
+  if (mpfr_cmp (accu_l, accu_u) > 0)
+    // Accu is already [Empty]
+    return;
+
   mpfr_t mp_addend_l, mp_addend_u, mp_temp;
   mpfr_init2 (mp_addend_l, 2 * BINARY64_PRECISION + 1);
   mpfr_init2 (mp_addend_u, 2 * BINARY64_PRECISION + 1);

@@ -27,7 +27,7 @@
 ## Warning: This function is not defined by IEEE Std 1788-2015.
 ##
 ## Accuracy: The result is a valid enclosure.  The result is tightest for
-## @var{Y} in @{0, 1@} and accurate for @var{Y} = 2.
+## @var{Y} in @{0, 1, 2@}.
 ##
 ## @example
 ## @group
