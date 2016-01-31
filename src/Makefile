@@ -18,7 +18,7 @@ SHELL          = /bin/sh
 OBJ            = mpfr_function_d.oct \
                  mpfr_linspace_d.oct \
                  mpfr_matrix_mul_d.oct \
-		 mpfr_matrix_sqr_d.oct \
+                 mpfr_matrix_sqr_d.oct \
                  mpfr_to_string_d.oct \
                  mpfr_vector_sum_d.oct \
                  mpfr_vector_dot_d.oct \
@@ -31,7 +31,7 @@ CFLAG_OPENMP   =$(findstring -fopenmp,$(shell $(MKOCTFILE) -p XTRA_CFLAGS))
 all: $(OBJ)
 
 ## GNU MPFR api oct-files
-mpfr_matrix_mul_d.oct: mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
+mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
 mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
