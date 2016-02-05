@@ -69,6 +69,11 @@ result (target_d) = d;
 endfunction
 
 %!test;
+%!  bigendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 136);
-%!  b ([5, 61, 71, 124, 135]) = 1;
+%!  if (bigendian)
+%!    b([5, 61, 71, 124, 135]) = 1;
+%!  else
+%!    b([5, 15, 21, 79, 84]) = 1;
+%!  endif
 %!  assert (bitunpack (infsupdec (3, 4)), logical (b));

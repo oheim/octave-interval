@@ -76,12 +76,22 @@ endswitch
 
 endfunction
 %!test "bare";
+%!  bigendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 128);
-%!  b ([53, 63, 116, 127]) = 1;
+%!  if (bigendian)
+%!    b([53, 63, 116, 127]) = 1;
+%!  else
+%!    b([7, 13, 71, 76]) = 1;
+%!  endif
 %!  decoded = interval_bitpack (logical (b));
 %!  assert (eq (decoded, infsup (3, 4)));
 %!test "decorated";
+%!  bigendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 136);
-%!  b ([5, 61, 71, 124, 135]) = 1;
+%!  if (bigendian)
+%!    b([5, 61, 71, 124, 135]) = 1;
+%!  else
+%!    b([5, 15, 21, 79, 84]) = 1;
+%!  endif
 %!  decoded = interval_bitpack (logical (b));
 %!  assert (eq (decoded, infsupdec (3, 4)));
