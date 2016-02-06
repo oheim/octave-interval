@@ -21,7 +21,9 @@
 ## Encode bare interval @var{X} in interchange format.
 ##
 ## The result is a raw bit pattern of length 128 that derive from two binary64
-## numbers.  Bits are in increasing order.
+## numbers.  Bits are in increasing order.  Byte order depends on the system's
+## endianness.  First 8 bytes come from the lower interval boundary, last
+## 8 bytes come from the upper interval boundary.
 ##
 ## The result is a row vector if @var{X} is a row vector; otherwise, it is a
 ## column vector.
@@ -57,20 +59,19 @@ if (not (isrow (l)))
 endif
 
 ## Merge 64 bit blocks from l and u (alternating) together into result.
-## Because of increasing bit order, u comes first.
 target = reshape (1 : length (result), 64, numel (x.inf) + numel (x.sup));
 target (:, 2 : 2 : size (target, 2)) = [];
-result (target) = u;
-result (target + 64) = l;
+result (target) = l;
+result (target + 64) = u;
 
 endfunction
 
 %!test;
-%!  bigendian = bitunpack (uint16 (1))(1);
+%!  littleendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 128);
-%!  if (bigendian)
-%!    b([53, 63, 116, 127]) = 1;
+%!  if (littleendian)
+%!    b([52, 63, 117, 127]) = 1;
 %!  else
-%!    b([7, 13, 71, 76]) = 1;
+%!    b([7, 12, 71, 77]) = 1;
 %!  endif
 %!  assert (bitunpack (infsup (3, 4)), logical (b));

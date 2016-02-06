@@ -22,6 +22,11 @@
 @item The functions recip and sqr have been deprecated and will be removed in a future release.  Please use @code{1 ./ @var{x}} and @code{@var{x} .^ 2} instead.
 @end itemize
 
+@noindent Bugfixes
+@itemize
+@item bitunpack, interval_bitpack: The order of inf/sup/dec parts has been fixed.  The function documentation describes how the functions behave on little-endian and big-endian systems.
+@end itemize
+
 @release{1.3.0, 2015-12-22}
 @itemize
 @item postpad, prepad, subsasgn: Implicit new elements during subscript assignment and padding have been initialized with empty intervals before this release.  This behavior has changed.  Now, the implicit new element are initialized with zero to make a correct interval extension of the corresponding built-in function.

@@ -22,6 +22,9 @@
 ##
 ## The result is a raw bit pattern of length 136 that derive from two binary64
 ## numbers plus 8 bit for the decoration.  Bits are in increasing order.
+## Byte order depends on the system's endianness.  First 8 bytes come from the
+## lower interval boundary, next 8 bytes come from the upper interval boundary,
+## last byte comes from the decoration.
 ##
 ## The result is a row vector if @var{X} is a row vector; otherwise, it is a
 ## column vector.
@@ -59,21 +62,21 @@ if (not (isrow (bare)))
 endif
 
 ## Merge alternating 128 bit blocks from bare and 8 bit blocks from d together
-## into result.  Because of increasing bit order, d comes first.
+## into result.
 target_bare = reshape (1 : length (result), 8, length (result) / 8);
-target_d = target_bare (:, 1 : 17 : size (target_bare, 2));
-target_bare (:, 1 : 17 : size (target_bare, 2)) = [];
+target_d = target_bare (:, 17 : 17 : size (target_bare, 2));
+target_bare (:, 17 : 17 : size (target_bare, 2)) = [];
 result (target_bare) = bare;
 result (target_d) = d;
 
 endfunction
 
 %!test;
-%!  bigendian = bitunpack (uint16 (1))(1);
+%!  littleendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 136);
-%!  if (bigendian)
-%!    b([5, 61, 71, 124, 135]) = 1;
+%!  if (littleendian)
+%!    b([52, 63, 117, 127, 133]) = 1;
 %!  else
-%!    b([5, 15, 21, 79, 84]) = 1;
+%!    b([7, 12, 71, 77, 133]) = 1;
 %!  endif
 %!  assert (bitunpack (infsupdec (3, 4)), logical (b));

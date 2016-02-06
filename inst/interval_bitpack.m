@@ -21,7 +21,9 @@
 ##
 ## The input must either be a matrix of n × 128 bits for n bare intervals, or a
 ## matrix of n × 136 bits for n decorated intervals.  Bits are in increasing
-## order.
+## order.  Byte order depends on the system's endianness.  First 8 bytes are
+## used for the lower interval boundary, next 8 bytes are used for the upper
+## interval boundary, (optionally) last byte is used for the decoration.
 ##
 ## The result is a row vector of intervals.
 ##
@@ -50,14 +52,14 @@ endif
 
 switch size (x, 2)
     case 128 # (inf, sup)
-        u = bitpack (x (:, 1 : 64)' (:), 'double');
-        l = bitpack (x (:, 65 : 128)' (:), 'double');
+        l = bitpack (x (:, 1 : 64)' (:), 'double');
+        u = bitpack (x (:, 65 : 128)' (:), 'double');
         result = infsup (l, u);
     
     case 136 # (inf, sup, dec)
-        d = bitpack (x (:, 1 : 8)' (:), 'uint8');
-        u = bitpack (x (:, 9 : 72)' (:), 'double');
-        l = bitpack (x (:, 73 : 136)' (:), 'double');
+        l = bitpack (x (:, 1 : 64)' (:), 'double');
+        u = bitpack (x (:, 65 : 128)' (:), 'double');
+        d = bitpack (x (:, 129 : 136)' (:), 'uint8');
         
         dec = cell (size (x, 1), 1);
         dec (d == 4) = 'trv';
@@ -76,22 +78,22 @@ endswitch
 
 endfunction
 %!test "bare";
-%!  bigendian = bitunpack (uint16 (1))(1);
+%!  littleendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 128);
-%!  if (bigendian)
-%!    b([53, 63, 116, 127]) = 1;
+%!  if (littleendian)
+%!    b([52, 63, 117, 127]) = 1;
 %!  else
-%!    b([7, 13, 71, 76]) = 1;
+%!    b([7, 12, 71, 77]) = 1;
 %!  endif
 %!  decoded = interval_bitpack (logical (b));
 %!  assert (eq (decoded, infsup (3, 4)));
 %!test "decorated";
-%!  bigendian = bitunpack (uint16 (1))(1);
+%!  littleendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 136);
-%!  if (bigendian)
-%!    b([5, 61, 71, 124, 135]) = 1;
+%!  if (littleendian)
+%!    b([52, 63, 117, 127, 133]) = 1;
 %!  else
-%!    b([5, 15, 21, 79, 84]) = 1;
+%!    b([7, 12, 71, 77, 133]) = 1;
 %!  endif
 %!  decoded = interval_bitpack (logical (b));
 %!  assert (eq (decoded, infsupdec (3, 4)));
