@@ -536,11 +536,15 @@ endif
 
 endfunction
 
-%!assert (subset (sqrt (infsup (2)), fsolve (@sqr, infsup (0, 3), 2)));
-%!assert (subset (sqrt (infsup (2)), fsolve (@sqr, infsup (0, 3), 2, struct ("Vectorize", false))));
+%!test
+%!  sqr = @(x) x .^ 2;
+%!  assert (subset (sqrt (infsup (2)), fsolve (sqr, infsup (0, 3), 2)));
+%!test
+%!  sqr = @(x) x .^ 2;
+%!  assert (subset (sqrt (infsup (2)), fsolve (sqr, infsup (0, 3), 2, struct ("Vectorize", false))));
 
 %!function [fval, x] = contractor (y, x)
-%!  fval = sqr (x);
+%!  fval = x .^ 2;
 %!  y = intersect (y, fval);
 %!  x = sqrrev (y, x);
 %!endfunction

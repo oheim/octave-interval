@@ -274,7 +274,7 @@ endfunction
 
 %!test
 %!  sqr = @(x) x .^ 2;
-%!  [x, y] = fminsearch (@sqr, infsup (-inf, inf));
+%!  [x, y] = fminsearch (sqr, infsup (-inf, inf));
 %!  assert (y == 0);
 
 %!demo
