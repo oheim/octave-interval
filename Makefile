@@ -1,6 +1,6 @@
 SHELL   = /bin/sh
 
-## Copyright 2015 Oliver Heimlich
+## Copyright 2015-2016 Oliver Heimlich
 ##
 ## Copying and distribution of this file, with or without modification,
 ## are permitted in any medium without royalty provided the copyright

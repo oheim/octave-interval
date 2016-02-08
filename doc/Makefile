@@ -1,3 +1,7 @@
+## This is part of the GNU Octave Interval Package.
+## Copyright 2015-2016 Oliver Heimlich.
+## See the file COPYING for copying conditions.
+
 SHELL      = /bin/sh
 M_IMAGE    = $(wildcard image/*.m) $(patsubst %.m.texinfo,%.m,$(wildcard image/*.m.texinfo))
 IMAGE_OBJ  = $(patsubst %,%.png,$(M_IMAGE))

@@ -1,5 +1,5 @@
 ## This is part of the GNU Octave Interval Package Manual.
-## Copyright (C) 2015 Oliver Heimlich.
+## Copyright 2015-2016 Oliver Heimlich.
 ## See the file manual.texinfo for copying conditions.
 
 clf

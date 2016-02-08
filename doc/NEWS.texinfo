@@ -4,7 +4,7 @@
 @documentencoding UTF-8
 
 @c This is part of the GNU Octave Interval Package.
-@c Copyright (C) 2015-2016 Oliver Heimlich.
+@c Copyright 2015-2016 Oliver Heimlich.
 @c See the file COPYING for copying conditions.
 
 @macro release{version, date}

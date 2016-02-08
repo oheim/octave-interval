@@ -3,7 +3,7 @@
 ##                     Universität Karlsruhe, Germany
 ## Copyright 2000-2014 Wissenschaftliches Rechnen/Softwaretechnologie,
 ##                     Universität Wuppertal, Germany
-## Copyright 2015      Oliver Heimlich
+## Copyright 2015-2016 Oliver Heimlich
 ##
 ## This program is derived from RPolyEval in CXSC, C++ library for eXtended
 ## Scientific Computing (V 2.5.4), which is distributed under the terms of
