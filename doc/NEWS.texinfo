@@ -14,9 +14,9 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{1.4.0, 2016-xx-xx}
+@release{1.4.0, 2016-02-09}
 @itemize
-@item mpower: Improved accuracy and speed of matrix squares and higher matrix powers
+@item mpower: Improved accuracy and speed.  The interval matrix square can now be computed without dependency errors and with tightest accuracy.
 @item factorial: New interval arithmetic operation
 @item expm, norm: New interval matrix operations
 @item The functions recip and sqr have been deprecated and will be removed in a future release.  Please use @code{1 ./ @var{x}} and @code{@var{x} .^ 2} instead.
