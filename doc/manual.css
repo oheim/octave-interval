@@ -49,9 +49,7 @@ div.alpha-list + ol { list-style-type:lower-alpha; }
 div.zero-list + ol { counter-reset: item -1; }
 div.zero-list + ol > li { display:block; }
 div.zero-list + ol > li:before { content: counter(item) "."; counter-increment: item; display:inline-block; margin-left: -2.5em; min-width: 2em; margin-right: 0.2em; text-align: right; }
-div.logo { text-align: center; }
-div.logo object { height: 4em; }
-div.logo object, div.logo img { padding-bottom: 1em; padding-top: 5em; }
+.sf-logo { display:block; text-align: center; padding-top: 2em; padding-bottom: 2em; }
 code, samp { font-family: 'Fantasque Sans Mono', monospace; padding: 0 0.1em; font-style: italic; }
 pre.example, pre.smallexample, pre.verbatim { font-family: 'Fantasque Sans Mono', monospace; }
 pre.example { background-color: #fdf6e3; color: #657b83; padding: 0.5em; }

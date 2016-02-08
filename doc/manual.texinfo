@@ -68,14 +68,7 @@ Permission is granted to copy, distribute and/or modify this document under the 
 @insertcopying
 @end ifnottex
 
-@ifset octave-forge
-@c For the HTML version at Octave Forge we must fix the up node,
-@c because “../doc/index.html” does not exist.
-@node Top, Preface,, (..)
-@end ifset
-@ifclear octave-forge
 @node Top
-@end ifclear
 @ifnottex
 @top
 @end ifnottex

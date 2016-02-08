@@ -209,7 +209,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 		--eval "set (0, 'defaultaxesfontname', 'Fantasque Sans Mono');" \
 		--eval "set (0, 'defaulttextfontname', 'Roboto Condensed');" \
 		--eval "set (0, 'defaultfigurevisible', 'off');" \
-		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' --init-file=doc/manual.init -D octave-forge --css-include=doc/manual.css');" \
+		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <a class="sf-logo" href=\"http://sourceforge.net/\"><img width=\"120\" height=\"30\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"http://sourceforge.net/sflogo.php?group_id=2888&amp;type=13\" /></a>'' --css-include=doc/manual.css');" \
 		--eval "options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo';" \
 		--eval "generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
@@ -268,7 +268,7 @@ doctest: $(OCT_COMPILED)
 GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.init doc/manual.css $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) | $(GENERATED_IMAGES_PNG)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) | $(GENERATED_IMAGES_PNG)
 	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  VERSION=$(VERSION) \

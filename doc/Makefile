@@ -12,8 +12,8 @@ all: $(OBJ)
 
 images: $(IMAGE_OBJ)
 
-manual.html: manual.texinfo manual.init $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(IMAGE_OBJ)
-	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --init-file manual.init --css-include manual.css "$<"
+manual.html: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(IMAGE_OBJ)
+	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --css-include manual.css "$<"
 
 manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(wildcard image/*.pdf) $(IMAGE_OBJ)
 	$(MAKEINFO) --Xopt=--texinfo='@set version $(VERSION)' --pdf "$<"

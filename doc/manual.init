@@ -1,1 +1,0 @@
-set_from_init_file ('PRE_BODY_CLOSE', '<div class="logo"><object data="image/logo.svg" type="image/svg+xml"><param name="src" value="image/logo.svg" /><img src="image/logo.svg.png" /></object></div>');
