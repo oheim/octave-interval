@@ -14,6 +14,13 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{1.4.1, 2016-02-xx}
+@noindent Bugfixes
+@itemize
+@item
+    Fixed a compile error that could possibly occur during package installation
+@end itemize
+
 @release{1.4.0, 2016-02-09}
 @itemize
 @item mpower: Improved accuracy and speed.  The interval matrix square can now be computed without dependency errors and with tightest accuracy.
