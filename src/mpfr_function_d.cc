@@ -181,7 +181,7 @@ void factorial (
   const octave_idx_type n = arg.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
-      // Compilation on Windows & OS X produces ambiguity errors if the
+      // Compilation on 32-bit systems produces ambiguity errors if the
       // type of arg.elem(i) is not defined explicitly
       const uint64_t current_arg = arg.elem (i);
       mpfr_fac_ui (mp, current_arg, rnd);
