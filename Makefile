@@ -125,8 +125,8 @@ release: $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED) md5
 install: $(INSTALLED_PACKAGE)
 
 clean:
+	make -C src clean
 	rm -rf "$(BUILD_DIR)"
-	rm -f src/*.oct src/*.o
 	rm -f fntests.log
 
 $(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/inst/test:

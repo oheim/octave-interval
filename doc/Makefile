@@ -35,4 +35,5 @@ image/%.m: image/%.m.texinfo
 	$(MAKEINFO) -D m-file --plaintext "$<" > "$@"
 
 clean:
-	rm $(OBJ)
+	$(RM) $(OBJ)
+	$(RM) *.aux *.cp *.fn *.ky *.log *.pg *.toc *.tp *.vr
