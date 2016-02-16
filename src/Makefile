@@ -45,3 +45,8 @@ mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
 ## However, please inform the package maintainer of the error.
 __setround__.oct: __setround__.cc
 	$(MKOCTFILE)  -o $@  $<
+
+clean:
+	rm -f *.oct *.o
+
+.PHONY: all clean
