@@ -16,7 +16,6 @@
 */
 
 #include <octave/oct.h>
-#include <octave/oct-openmp.h>
 #include <mpfr.h>
 #include "mpfr_commons.cc"
 
@@ -33,7 +32,9 @@ std::pair <Matrix, Matrix> interval_matrix_sqr (
   Matrix result_l (dim_vector (n, n));
   Matrix result_u (dim_vector (n, n));
 
-  OCTAVE_OMP_PRAGMA (omp parallel for)
+#if defined (_OPENMP)
+  #pragma omp parallel for
+#endif
   for (octave_idx_type i = 0; i < n; i++)
     {
       mpfr_t accu_l, accu_u;
@@ -45,7 +46,9 @@ std::pair <Matrix, Matrix> interval_matrix_sqr (
 
       RowVector xl;
       RowVector xu;
-      OCTAVE_OMP_PRAGMA (omp critical)
+#if defined (_OPENMP)
+      #pragma omp critical
+#endif
       {
         // Access to shared memory is critical
         xl = matrix_xl.row (i);
@@ -59,7 +62,9 @@ std::pair <Matrix, Matrix> interval_matrix_sqr (
 
           ColumnVector yl;
           ColumnVector yu;
-          OCTAVE_OMP_PRAGMA (omp critical)
+#if defined (_OPENMP)
+          #pragma omp critical
+#endif
           {
             // Access to shared memory is critical
             yl = matrix_xl.column (j);
@@ -257,7 +262,9 @@ std::pair <Matrix, Matrix> interval_matrix_sqr (
 
           const double accu_l_d = mpfr_get_d (accu_l, MPFR_RNDD);
           const double accu_u_d = mpfr_get_d (accu_u, MPFR_RNDU);
-          OCTAVE_OMP_PRAGMA (omp critical)
+#if defined (_OPENMP)
+          #pragma omp critical
+#endif
           {
             // Access to shared memory is critical
             result_l.elem (i, j) = accu_l_d;

@@ -16,7 +16,6 @@
 */
 
 #include <octave/oct.h>
-#include <octave/oct-openmp.h>
 #include <mpfr.h>
 #include "mpfr_commons.cc"
 
@@ -40,7 +39,9 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
 
   // Instead of two nested loops (for row = 1 : n / for col = 1 : m), we use
   // a single loop, which can be parallelized more easily.
-  OCTAVE_OMP_PRAGMA (omp parallel for)
+#if defined (_OPENMP)
+  #pragma omp parallel for
+#endif
   for (octave_idx_type i = 0; i < n * m; i++)
     {
       mpfr_t accu_l, accu_u;
@@ -56,7 +57,9 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
       RowVector xu;
       ColumnVector yl;
       ColumnVector yu;
-      OCTAVE_OMP_PRAGMA (omp critical)
+#if defined (_OPENMP)
+      #pragma omp critical
+#endif
       {
         // Access to shared memory is critical
         xl = matrix_xl.row (row);
@@ -71,7 +74,9 @@ std::pair <Matrix, Matrix> interval_matrix_mul (
 
       const double accu_l_d = mpfr_get_d (accu_l, MPFR_RNDD);
       const double accu_u_d = mpfr_get_d (accu_u, MPFR_RNDU);
-      OCTAVE_OMP_PRAGMA (omp critical)
+#if defined (_OPENMP)
+      #pragma omp critical
+#endif
       {
         // Access to shared memory is critical
         result_l.elem (row, col) = accu_l_d;

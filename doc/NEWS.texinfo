@@ -14,6 +14,12 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{1.4.2, 2016-XX-XX}
+@itemize
+@item
+    Fixed package installation in Octave 4.1.0+ (bug #47288)
+@end itemize
+
 @release{1.4.1, 2016-02-13}
 @itemize
 @item
