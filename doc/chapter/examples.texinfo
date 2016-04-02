@@ -292,3 +292,41 @@ Intersections of contractor functions are especially useful to apply several con
 
 @include image/contractor-rings-intersect.m.texinfo
 @myimage{image/contractor-rings-intersect.m,Set inversion for intersection of two rings}
+
+@section Path Planning
+
+@float Figure,cameleon-problem
+@caption{Cameleon Problem: The polygon has to be moved from the left to the right without touching any obstacles along the path.}
+@shortcaption{Cameleon Problem Description}
+@myimage{image/cameleon-start-end.svg,Cameleon Problem: Start and End Position}
+@end float
+
+The problem presented here is a simplified version from the paper L. Jaulin (2001). @uref{https://www.ensta-bretagne.fr/jaulin/cameleon.html,Path planning using intervals and graphs.} Reliable Computing, issue 1, volume 7, 1–15.
+
+There is an object, a simple polygon in this case, which shall be moved from a starting position to a specified target position.  Along the way there are obstacles which may not be touched by the polygon.  The polygon can be moved in one direction (left to right or right to left) and may be rotated around its lower left corner.
+
+This makes a two dimensional parameter space and any feasible positions can be determined using interval arithmetic like in the examples above.
+
+Then we use a simple path planning algorithm: We move along the centers of adjacent and feasible boxes in the parameter space until we have a closed path from the start position to the end position. The path is guaranteed to be feasible, that is, there will be no collisions if we follow the path.
+
+@include image/cameleon.m.texinfo
+
+The script visualizes the solution in the parameter space.  Unfeasible parameters are white, and uncertain combinations of parameters are red.  The algorithm's accuracy is just good enough to find a closed path, which is drawn in green color.  The uncertain red area is quite big because we have used a very simple check for verification whether the polygon overlaps the obstacles.  This could be improved.
+
+@myimage{image/cameleon.m,Computed feasible path in parameter space}
+
+The solution is not optimal, please refer to Luc Jaulin's paper for more sophisticated approaches.  However, we could find a valid solution that moves the polygon as desired without touching any obstacles.
+
+@float Figure,cameleon-solution
+@caption{Cameleon Problem: A possible solution which moves the polygon from the left to the right without touching obstacles.}
+@shortcaption{Cameleon Problem Solution}
+@html
+<object data="image/cameleon-animation.svgz" type="image/svg+xml">
+<param name="src" value="image/cameleon-animation.svgz" />
+@end html
+@myimage{image/cameleon-transition.svg,Cameleon Problem: Transition from Start to End Position}
+@html
+</object>
+@end html
+@end float
+
