@@ -5,7 +5,7 @@
 
 @example
 @group
-@c doctest: skip
+@c doctest: +SKIP
 hold on
 blue = [38 139 210] ./ 255;
 shade = [238 232 213] ./ 255;

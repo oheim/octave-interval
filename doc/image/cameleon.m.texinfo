@@ -5,7 +5,7 @@
 
 @example
 @group
-@c doctest: skip
+@c doctest: +SKIP
 # We can build the simple polygon from interval boxes
 global polygon_x = ...
   infsup ("[18,20] [0,20] [0, 2] [ 0,14] [12,14] [10,14]")';

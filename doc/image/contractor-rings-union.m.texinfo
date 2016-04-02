@@ -5,7 +5,7 @@
 
 @example
 @group
-@c doctest: skip
+@c doctest: +SKIP
 ## General ring contractor
 function [fval, cx1, cx2] = ctc_ring (y, c1, c2, x1, x2)
     ## Forward evaluation
