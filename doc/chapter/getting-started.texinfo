@@ -21,10 +21,9 @@ pkg install -forge interval
 
 During this kind of installation parts of the interval package are compiled for the target system, which requires development libraries for GNU Octave (version ≥ 3.8.0) and GNU MPFR (version ≥ 3.1.0) to be installed. The official Octave release for Microsoft Windows already includes these dependencies. For other systems it might be necessary to install packages “liboctave-dev” and “libmpfr-dev”, which are provided by most GNU distributions (names may vary).
 
-In order to use the interval package during an Octave session, it must have been loaded, i. e., added to the path.  In the following parts of the manual it is assumed that the package has been loaded, which can be accomplished with the @command{pkg load interval} command.  Automatic loading of the interval package can be activated with the @command{pkg rebuild -auto interval} command and is recommended for regular use.
+In order to use the interval package during an Octave session, it must have been loaded, i. e., added to the path.  In the following parts of the manual it is assumed that the package has been loaded, which can be accomplished with the @command{pkg load interval} command.  Automatic loading of the interval package can be activated by adding the line @command{pkg load interval} to your @emph{.octaverc} file located in your user folder, more information in the @url{http://www.gnu.org/software/octave/doc/v4.0.1/Startup-Files.html, GNU Octave manual}. This is recommended setup for regular use.
 
 That's it.  After only two commands the package is ready to be used within Octave.
-
 
 @section Set-based Interval Arithmetic
 
@@ -43,9 +42,9 @@ More details can be found in @ref{Introduction to Interval Arithmetic}.
 
 @section Input and Output
 
-Before exercising interval arithmetic, interval objects must be created from non-interval data. There are interval constants @funref{empty} and @funref{entire} and the interval constructors @funref{@@infsupdec/infsupdec} (create an interval from boundaries), @funref{midrad} (create an interval from midpoint and radius) and @funref{hull} (create an interval enclosure for a list of mixed arguments: numbers, intervals or interval literals). The constructors are very sophisticated and can be used with several kinds of parameters: Interval boundaries can be given by numeric values or string values with decimal numbers. 
+Before exercising interval arithmetic, interval objects must be created from non-interval data. There are interval constants @funref{empty} and @funref{entire} and the interval constructors @funref{@@infsupdec/infsupdec} (create an interval from boundaries), @funref{midrad} (create an interval from midpoint and radius) and @funref{hull} (create an interval enclosure for a list of mixed arguments: numbers, intervals or interval literals). The constructors are very sophisticated and can be used with several kinds of parameters: Interval boundaries can be given by numeric values or string values with decimal numbers.
 
-Create intervals for performing interval arithmetic 
+Create intervals for performing interval arithmetic
 @example
 @group
 ## Interval with a single number
@@ -112,7 +111,7 @@ hull ("pi", "e")
 
 @strong{Warning:} In above examples decimal fractions are passed as a string to the constructor.  Otherwise it is possible, that GNU Octave introduces conversion errors when the numeric literal is converted into a floating-point number @emph{before} it is passed to the constructor.  The interval construction is a critical process, but after this the interval package takes care of any further conversion errors, representational errors, round-off errors and inaccurate numeric functions.
 
-Beware of the conversion pitfall 
+Beware of the conversion pitfall
 @example
 @group
 ## The numeric constant 0.3 is an approximation of the
@@ -159,7 +158,7 @@ Create interval matrices
 @group
 M = infsupdec (magic (3))
   @result{} M = 3×3 interval matrix
-  
+
     [8]_com   [1]_com   [6]_com
     [3]_com   [5]_com   [7]_com
     [4]_com   [9]_com   [2]_com
@@ -169,7 +168,7 @@ M = infsupdec (magic (3))
 @group
 infsupdec (magic (3), magic (3) + 1)
   @result{} ans = 3×3 interval matrix
-  
+
     [8, 9]_com    [1, 2]_com   [6, 7]_com
     [3, 4]_com    [5, 6]_com   [7, 8]_com
     [4, 5]_com   [9, 10]_com   [2, 3]_com
@@ -179,7 +178,7 @@ infsupdec (magic (3), magic (3) + 1)
 @group
 infsupdec ("0.1; 0.2; 0.3; 0.4; 0.5")
   @result{} ans ⊂ 5×1 interval vector
-  
+
     [0.099999, 0.10001]_com
      [0.19999, 0.20001]_com
      [0.29999, 0.30001]_com
@@ -191,7 +190,7 @@ infsupdec ("0.1; 0.2; 0.3; 0.4; 0.5")
 @group
 infsupdec ("1 [2, 3]; 4, 5, 6")
   @result{} ans = 2×3 interval matrix
-  
+
     [1]_com   [2, 3]_com   [Empty]_trv
     [4]_com      [5]_com       [6]_com
 @end group
@@ -200,7 +199,7 @@ infsupdec ("1 [2, 3]; 4, 5, 6")
 @group
 infsupdec (@{1; eps; "4/7"; "pi"@}, @{2; 1; "e"; "0xff"@})
   @result{} ans ⊂ 4×1 interval vector
-  
+
               [1, 2]_com
      [2.2204e-16, 1]_com
    [0.57142, 2.7183]_com
@@ -215,7 +214,7 @@ The interval package comprises many interval arithmetic operations. A complete l
 
 The interval arithmetic flavor used by this package is the “set-based” interval arithmetic and follows these rules: Intervals are sets. They are subsets of the set of real numbers. The interval version of an elementary function such as sin(x) is essentially the natural extension to sets of the corresponding point-wise function on real numbers. That is, the function is evaluated for each number in the interval where the function is defined and the result must be an enclosure of all possible values that may occur.
 
-By default arithmetic functions are computed with best possible accuracy (which is more than what is guaranteed by GNU Octave core functions). The result will therefore be a tight and very accurate enclosure of the true mathematical value in most cases. Details on each function's accuracy can be found in its documentation, which is accessible with GNU Octave's @command{help} command. 
+By default arithmetic functions are computed with best possible accuracy (which is more than what is guaranteed by GNU Octave core functions). The result will therefore be a tight and very accurate enclosure of the true mathematical value in most cases. Details on each function's accuracy can be found in its documentation, which is accessible with GNU Octave's @command{help} command.
 
 Examples of using interval arithmetic functions
 @example
@@ -240,7 +239,7 @@ atan2 (infsupdec (1), infsupdec (1))
 @group
 midrad (magic (3), 0.5) * pascal (3)
   @result{} ans = 3×3 interval matrix
-  
+
     [13.5, 16.5]_com   [25, 31]_com   [42, 52]_com
     [13.5, 16.5]_com   [31, 37]_com   [55, 65]_com
     [13.5, 16.5]_com   [25, 31]_com   [38, 48]_com
@@ -252,7 +251,7 @@ midrad (magic (3), 0.5) * pascal (3)
 
 Some interval functions do not return an interval enclosure, but a single number (in binary64 precision). Most important are @funref{@@infsup/inf} and @funref{@@infsup/sup}, which return the lower and upper interval boundaries.
 
-More such operations are @funref{@@infsup/mid} (approximation of the interval's midpoint), @funref{@@infsup/wid} (approximation of the interval's width), @funref{@@infsup/rad} (approximation of the interval's radius), @funref{@@infsup/mag} (interval's magnitude) and @funref{@@infsup/mig} (interval's mignitude). 
+More such operations are @funref{@@infsup/mid} (approximation of the interval's midpoint), @funref{@@infsup/wid} (approximation of the interval's width), @funref{@@infsup/rad} (approximation of the interval's radius), @funref{@@infsup/mag} (interval's magnitude) and @funref{@@infsup/mig} (interval's mignitude).
 
 @example
 @group
@@ -280,7 +279,7 @@ infsup (1, 3) <= infsup (2, 4)
 
 Above mentioned operations can also be applied element-wise to interval vectors and matrices. Many operations use vectorization techniques.
 
-In addition, there are matrix operations on interval matrices. These operations comprise: dot product, matrix multiplication, vector sums (all with tightest accuracy), matrix inversion, matrix powers, and solving linear systems (the latter are less accurate). As a result of missing hardware / low-level library support and missing optimizations, these operations are relatively slow compared to familiar operations in floating-point arithmetic. 
+In addition, there are matrix operations on interval matrices. These operations comprise: dot product, matrix multiplication, vector sums (all with tightest accuracy), matrix inversion, matrix powers, and solving linear systems (the latter are less accurate). As a result of missing hardware / low-level library support and missing optimizations, these operations are relatively slow compared to familiar operations in floating-point arithmetic.
 
 Examples of using interval matrix functions
 @example
@@ -288,7 +287,7 @@ Examples of using interval matrix functions
 A = infsupdec ([1, 2, 3; 4, 0, 0; 0, 0, 1]);
 A (2, 3) = "[0, 6]"
   @result{} A = 3×3 interval matrix
-  
+
     [1]_com   [2]_com      [3]_com
     [4]_com   [0]_com   [0, 6]_com
     [0]_com   [0]_com      [1]_com
@@ -298,7 +297,7 @@ A (2, 3) = "[0, 6]"
 @group
 B = inv (A)
   @result{} B = 3×3 interval matrix
-  
+
       [0]_trv     [0.25]_trv       [-1.5, 0]_trv
     [0.5]_trv   [-0.125]_trv   [-1.5, -0.75]_trv
       [0]_trv        [0]_trv             [1]_trv
@@ -308,7 +307,7 @@ B = inv (A)
 @group
 A * B
   @result{} ans = 3×3 interval matrix
-  
+
     [1]_trv   [0]_trv   [-1.5, +1.5]_trv
     [0]_trv   [1]_trv       [-6, +6]_trv
     [0]_trv   [0]_trv            [1]_trv
@@ -318,7 +317,7 @@ A * B
 @group
 A = infsupdec (magic (3))
   @result{} A = 3×3 interval matrix
-  
+
     [8]_com   [1]_com   [6]_com
     [3]_com   [5]_com   [7]_com
     [4]_com   [9]_com   [2]_com
@@ -328,7 +327,7 @@ A = infsupdec (magic (3))
 @group
 c = A \ [3; 4; 5]
   @result{} c ⊂ 3×1 interval vector
-  
+
     [0.18333, 0.18334]_trv
     [0.43333, 0.43334]_trv
     [0.18333, 0.18334]_trv
@@ -338,7 +337,7 @@ c = A \ [3; 4; 5]
 @group
 A * c
   @result{} ans ⊂ 3×1 interval vector
-  
+
     [2.9999, 3.0001]_trv
     [3.9999, 4.0001]_trv
     [4.9999, 5.0001]_trv
@@ -359,7 +358,7 @@ A system of linear equations in the form A@var{x} = b with intervals can be seen
     Wide intervals within the matrix A can easily lead to a superposition of cases, where the rank of A is no longer unique. If the linear interval system contains cases of linear independent equations as well as linear dependent equations, the resulting enclosure of solutions will inevitably be very broad.
 @end itemize
 
-However, solving linear systems with interval arithmetic can produce useful results in many cases and automatically carries a guarantee for error boundaries. Additionally, it can give better information than the floating-point variants for some cases. 
+However, solving linear systems with interval arithmetic can produce useful results in many cases and automatically carries a guarantee for error boundaries. Additionally, it can give better information than the floating-point variants for some cases.
 
 
 Standard floating point arithmetic versus interval arithmetic on ill-conditioned linear systems
@@ -370,7 +369,7 @@ A = [1, 0; 2, 0];
 A \ [3; 0]
   @print{} warning: ...matrix singular to machine precision...
   @result{} ans =
-    
+
        0.60000
        0.00000
 @end group
@@ -380,7 +379,7 @@ A \ [3; 0]
 ## This linear system has many solutions
 A \ [4; 8]
   @result{} ans =
-  
+
        4
        0
 @end group
@@ -391,7 +390,7 @@ A \ [4; 8]
 ## The empty interval vector proves that there is no solution
 infsup (A) \ [3; 0]
   @result{} ans = 2×1 interval vector
-  
+
        [Empty]
        [Empty]
 @end group
@@ -402,7 +401,7 @@ infsup (A) \ [3; 0]
 ## that there may be many solutions
 infsup (A) \ [4; 8]
   @result{} ans = 2×1 interval vector
-  
+
             [4]
        [Entire]
 @end group
