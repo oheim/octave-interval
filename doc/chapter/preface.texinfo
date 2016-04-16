@@ -46,6 +46,12 @@ The GNU Octave interval package is build upon great third-party software.
     In the @ref{Examples} for finding root enclosures a function and code by Helmut Podhaisky has been used.
 
 @item
+    The @uref{http://iamooc.ensta-bretagne.fr/, online course on interval analysis} by Luc Jaulin and Jordan Ninin at ENSTA-Bretagne has inspired me to implement the set inversion algorithms in @funref{@@infsup/fsolve}.
+
+@item
+    I have gained access to scientific literature thanks to the @uref{https://www.hswt.de/about-us/central-facilities/library.html, Weihenstephan-Triesdorf University of Applied Sciences}.
+
+@item
     Most unit tests are written in portable ITL format and converted into GNU Octave test cases with the @uref{https://github.com/nehmeier/ITF1788,Interval Testing Framework for IEEE 1788}. The framework has been developed by Maximilian Kiesner and Marco Nehmeier, Chair of Software Engineering, Department of Computer Science, University of Würzburg, Germany.
 
 @item
