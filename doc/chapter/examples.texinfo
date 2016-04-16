@@ -321,8 +321,8 @@ The solution is not optimal, please refer to Luc Jaulin's paper for more sophist
 @caption{Cameleon Problem: A possible solution which moves the polygon from the left to the right without touching obstacles.}
 @shortcaption{Cameleon Problem Solution}
 @html
-<object data="image/cameleon-animation.svgz" type="image/svg+xml">
-<param name="src" value="image/cameleon-animation.svgz" />
+<object data="image/cameleon-animation.svg" type="image/svg+xml">
+<param name="src" value="image/cameleon-animation.svg" />
 @end html
 @myimage{image/cameleon-transition.svg,Cameleon Problem: Transition from Start to End Position}
 @html

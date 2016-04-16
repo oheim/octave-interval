@@ -82,7 +82,11 @@ GENERATED_COPYING = $(BUILD_DIR)/COPYING
 GENERATED_CITATION = $(BUILD_DIR)/CITATION
 GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
-IMAGE_SOURCES = $(wildcard doc/image/*.svg) $(wildcard doc/image/*.ly)
+IMAGE_SOURCES = \
+	doc/image/cameleon-start-end.svg \
+	doc/image/cameleon-transition.svg \
+	doc/image/inverse-power.svg \
+	doc/image/octave-interval.ly
 GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
@@ -212,6 +216,14 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <a class="sf-logo" href=\"http://sourceforge.net/\"><img width=\"120\" height=\"30\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"http://sourceforge.net/sflogo.php?group_id=2888&amp;type=13\" /></a>'' --css-include=doc/manual.css');" \
 		--eval "options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo';" \
 		--eval "generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
+	@# Documentation will be put on a webserver,
+	@# where .svgz files can save bandwidth and CPU time.
+	@# Locally this doesn't work so well, see https://bugzilla.mozilla.org/show_bug.cgi?id=52282
+	@(cd $(HTML_DIR)/$(PACKAGE)/package_doc/image/; \
+		((zopfli *.svg && rm -f *.svg) || gzip --best -f *.svg); \
+		rename 's!\.svg\.gz!.svgz!' *.svg.gz)
+	@(cd $(HTML_DIR)/$(PACKAGE)/package_doc/; \
+		sed -i 's!"\(image/[^"]*\.svg\)"!"\1z"!g' *.html)
 	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
 
 ## If the src/Makefile changes, recompile all oct-files
@@ -274,6 +286,7 @@ $(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapt
 	  VERSION=$(VERSION) \
 	  make manual.html)
 	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
+	@cp -f --update doc/image/*.svg "$(BUILD_DIR)/doc/image/"
 	@mv doc/manual.html "$@"
 $(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) $(GENERATED_IMAGES_PDF)
 	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true

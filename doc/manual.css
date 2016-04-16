@@ -56,3 +56,4 @@ pre.example, pre.smallexample, pre.verbatim { font-family: 'Fantasque Sans Mono'
 pre.example { background-color: #fdf6e3; color: #657b83; padding: 0.5em; }
 .example { margin-bottom: 1em; }
 .example + .example { margin-top: -0.5em }
+object { max-width: 100% }
