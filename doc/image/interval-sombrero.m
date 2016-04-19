@@ -40,3 +40,5 @@ view ([-37.5, 30])
 zlim ([-.4, 1])
 box off
 set (gca, "xgrid", "on", "ygrid", "on", "zgrid", "on")
+
+%!assert(1);
