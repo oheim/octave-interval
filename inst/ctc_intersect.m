@@ -124,3 +124,30 @@ else
     d = sum (sum (d));
 endif
 endfunction
+
+%!function [fval, x] = ctc_abs (y, x)
+%!    fval = abs (x);
+%!    x = absrev (intersect (fval, y), x);
+%!endfunction
+%!shared c
+%!  c = ctc_intersect (@ctc_abs, "[0, 2]", @ctc_abs, "[1, 3]");
+
+%!test
+%! [fval, x] = c (infsup (0), infsup ("[1, 3]"));
+%! assert (ismember (0, fval) && 0 != fval);
+%! assert (x == infsup ("[1, 2]"));
+
+%!test
+%! [fval, x] = c (infsup (0), infsup ("[1, 2]"));
+%! assert (0 == fval);
+%! assert (x == infsup ("[1, 2]"));
+
+%!test
+%! [fval, x] = c (infsup (0), infsup ("[entire]"));
+%! assert (ismember (0, fval) && 0 != fval);
+%! assert (x == infsup ("[-2, 2]"));
+
+%!test
+%! [fval, x] = c (infsup (0), infsup ("[0, inf]"));
+%! assert (ismember (0, fval) && 0 != fval);
+%! assert (x == infsup ("[1, 2]"));
