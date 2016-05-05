@@ -249,3 +249,19 @@ isempty (empty ())
   @result{} ans =  1
 @end group
 @end example
+
+
+@section Validation
+
+The interval package contains an extensive test suite, which can be run with the command @command{__run_test_suite__ (@{pkg("list", "interval")@{@}.dir@}, @{@})} to verify correct functionality for a particular system.
+
+In addition, examples from the package documentation can be verified using the doctest package:
+
+@example
+@c doctest: +SKIP
+@group
+pkg load doctest
+doctest (pkg ("list", "interval")@{@}.dir)
+@end group
+@end example
+
