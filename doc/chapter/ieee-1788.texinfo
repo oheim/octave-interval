@@ -18,7 +18,7 @@ The interval package for GNU Octave is the first complete implementation that cl
 
 
 @node Function Names
-@appendixsec Function Index
+@appendixsec Function Names
 
 In terms of a better integration into the GNU Octave language, several operations use a function name which is different from the name proposed in the standard document. The following table translates and lists the implemented function names of the IEEE standard for interval arithmetic.
 

@@ -166,17 +166,13 @@ For some interval operations it is not even possible to rely on floating-point r
 It is possible to use faster (BLAS based) routines during computation of the matrix multiplication @funref{@@infsup/mtimes}, because correctly rounded matrix multiplication could be considered too slow for certain applications. However, this is not the default behavior and must be explicitly activated by the user.
 
 @node Distribution and Development
-@section Distribution
+@section Distribution and Development
 
 The interval package is free software: Everyone is encouraged to use it, copy it and redistribute it, as well as to make changes under the terms of the GNU General Public License.
 
 The interval package is part of Octave Forge, a sibling of the GNU Octave project. Official releases are published at @url{http://octave.sourceforge.net/}.
 
-Ports for Mac OS X and FreeBSD are know to exist at @uref{https://trac.macports.org/browser/trunk/dports/math/octave-interval,MacPorts} and @uref{http://www.freshports.org/math/octave-forge-interval/,FreshPorts} respectively.
-
-@section Development
-
-The source code of the interval package is distributed together with its release. The @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,source code repository} is located at Octave Forge and contains the latest development version. The current status of development is tracked on the @uref{http://wiki.octave.org/Interval_package,package's page at Octave wiki}.
+The @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,source code repository} is located at Octave Forge and contains the latest development version. Information for developers can be found on the @uref{http://wiki.octave.org/Interval_package,package's page at Octave wiki}.
 
 Bug reports and feature requests for either the software or this manual may be posted under the @uref{http://savannah.gnu.org/projects/octave,Octave Project at Savannah}.
 

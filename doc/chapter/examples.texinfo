@@ -7,7 +7,63 @@
 
 This chapter presents some more or less exotic use cases for the interval package.
 
+@section Arithmetic with System-independent Accuracy
 
+According to IEEE Std 754 only the most basic floating-point operations must be provided with high accuracy.  This is also true for the arithmetic functions in Octave.  It is no surprise that many arithmetic functions fail to provide perfect results and their output may be system dependent.
+
+We compute the cosecant for 100 different values.
+
+@example
+@group
+x = vec (1 ./ magic (10));
+sum (subset (csc (x), csc (infsupdec (x))))
+  @result{} ans =  98
+@end group
+@end example
+
+Due to the general containment rule of interval arithmetic @code{x ∈ X ⇒ f (x) ∈ f (X)} one would expect the @code{csc (x)} to always be contained in the interval version of the cosecant for the same input.  However, the classic cosecant is not very accurate whereas the interval version is.  In 2 out 100 cases the built-in cosecant is less accurate than 1 ULP.
+
+@section Prove the Existence of a Fixed Point
+
+A weaker formulation of Brower's fixed-point theorem goes: If @var{x} is a bounded interval and function @var{f} is continuous and @var{f} (@var{x}) ⊂ @var{x}, then there exists a point @var{x}₀ ∈ @var{x} such that @var{f} (@var{x}₀) = @var{x}₀.
+
+These properties can be tested automatically.  Decorated intervals can even prove that the function is continuous.
+
+@example
+@group
+x = infsupdec ("[-1, +1]");
+f = @@cos;
+subset (f (x), x)
+  @result{} ans =  1
+iscommoninterval (x)
+  @result{} ans =  1
+continuous = strcmp (decorationpart (f (x)), "com")
+  @result{} continuous =  1
+@end group
+@end example
+
+Furthermore it is sometimes possible to approximate the fixed-point by repetitive evaluation of the function, although there are better methods to do so in general.
+
+@example
+@group
+for i = 1 : 20
+    x = f (x);
+endfor
+display (x)
+  @result{} x ⊂ [0.73893, 0.73919]_com
+@end group
+@end example
+
+@menu
+Further Examples
+* Floating-point Numbers:: Analyze properties of binary64 numbers with intervals
+* Root Finding:: Find guaranteed enclosures for roots of a function
+* Parameter Estimation:: Examples of set inversion via interval analysis
+* Path Planning:: Find a feasible path between two points
+@end menu
+
+
+@node Floating-point Numbers
 @section Floating-point Numbers
 
 Floating-point numbers are most commonly used in binary64 format, a.k.a. double precision.  Internally they are stored in the form @code{± @var{m} * 2 ^ @var{e}} with some integral mantissa @var{m} and exponent @var{e}.  Most decimal fractions can only be stored approximately in this format.
@@ -54,55 +110,7 @@ wid (nextout (infsup ([0, 1, 1e10, 1e100])))
 @end example
 
 
-@section Arithmetic with System-independent Accuracy
-
-According to IEEE Std 754 only the most basic floating-point operations must be provided with high accuracy.  This is also true for the arithmetic functions in Octave.  It is no surprise that many arithmetic functions fail to provide perfect results and their output may be system dependent.
-
-We compute the cosecant for 100 different values.
-
-@example
-@group
-x = vec (1 ./ magic (10));
-sum (subset (csc (x), csc (infsupdec (x))))
-  @result{} ans =  98
-@end group
-@end example
-
-Due to the general containment rule of interval arithmetic @code{x ∈ X ⇒ f (x) ∈ f (X)} one would expect the @code{csc (x)} to always be contained in the interval version of the cosecant for the same input.  However, the classic cosecant is not very accurate whereas the interval version is.  In 2 out 100 cases the built-in cosecant is less accurate than 1 ULP.
-
-
-@section Prove the Existence of a Fixed Point
-
-A weaker formulation of Brower's fixed-point theorem goes: If @var{x} is a bounded interval and function @var{f} is continuous and @var{f} (@var{x}) ⊂ @var{x}, then there exists a point @var{x}₀ ∈ @var{x} such that @var{f} (@var{x}₀) = @var{x}₀.
-
-These properties can be tested automatically.  Decorated intervals can even prove that the function is continuous.
-
-@example
-@group
-x = infsupdec ("[-1, +1]");
-f = @@cos;
-subset (f (x), x)
-  @result{} ans =  1
-iscommoninterval (x)
-  @result{} ans =  1
-continuous = strcmp (decorationpart (f (x)), "com")
-  @result{} continuous =  1
-@end group
-@end example
-
-Furthermore it is sometimes possible to approximate the fixed-point by repetitive evaluation of the function, although there are better methods to do so in general.
-
-@example
-@group
-for i = 1 : 20
-    x = f (x);
-endfor
-display (x)
-  @result{} x ⊂ [0.73893, 0.73919]_com
-@end group
-@end example
-
-
+@node Root Finding
 @section Root Finding
 @subsection Interval Newton Method
 
@@ -164,6 +172,7 @@ By using the derivative, it is possible to reduce overestimation errors and achi
 @myimage{image/poly-example-roots-with-deriv.m,Enclosures of roots for the function @code{f (@var{x}, @var{y})}}
 
 
+@node Parameter Estimation
 @section Parameter Estimation
 @subsection Small Search Space
 
@@ -293,6 +302,8 @@ Intersections of contractor functions are especially useful to apply several con
 @include image/contractor-rings-intersect.m.texinfo
 @myimage{image/contractor-rings-intersect.m,Set inversion for intersection of two rings}
 
+
+@node Path Planning
 @section Path Planning
 
 @float Figure,cameleon-problem
