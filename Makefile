@@ -203,9 +203,9 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@# 2. Replace builtin print function because of various
 	@#    bugs #44181, #45104, #45137
 	@# 3. Set fonts for demo plots and use off-screen rendering
-	@# 4. Use custom CSS and global version number
+	@# 4. Specify path to package manual
+	@# 5. Use custom CSS and global version number
 	@#    (only affects package manual, not function reference)
-	@# 5. Specify path to package manual
 	@# 6. Run the generation
 	@$(OCTAVE) --no-gui --silent \
 		--eval "pkg load generate_html;" \
@@ -213,8 +213,9 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 		--eval "set (0, 'defaultaxesfontname', 'Fantasque Sans Mono');" \
 		--eval "set (0, 'defaulttextfontname', 'Roboto Condensed');" \
 		--eval "set (0, 'defaultfigurevisible', 'off');" \
-		--eval "makeinfo_program ('makeinfo -D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <a class="sf-logo" href=\"http://sourceforge.net/\"><img width=\"120\" height=\"30\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"http://sourceforge.net/sflogo.php?group_id=2888&amp;type=13\" /></a>'' --css-include=doc/manual.css');" \
-		--eval "options = get_html_options ('octave-forge'); options.package_doc = 'manual.texinfo';" \
+		--eval "options = get_html_options ('octave-forge');" \
+		--eval "options.package_doc = 'manual.texinfo';" \
+		--eval "options.package_doc_options = '-D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <a class=\"sf-logo\" href=\"http://sourceforge.net/\"><img width=\"120\" height=\"30\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"http://sourceforge.net/sflogo.php?group_id=2888&amp;type=13\" /></a>'' --css-ref=manual.css';" \
 		--eval "generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
 	@# Documentation will be put on a webserver,
 	@# where .svgz files can save bandwidth and CPU time.
