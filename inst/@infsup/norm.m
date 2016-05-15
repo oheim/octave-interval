@@ -27,21 +27,21 @@
 ## @item @var{P} = inf
 ## Infinity norm, the largest row sum of the absolute values of @var{A}.
 ## @item @var{P} = "fro"
-## Frobenius norm of @var{A}, @code{sqrt (sum (diag (A' * A)))}.
+## Frobenius norm of @var{A}, @code{sqrt (sum (diag (@var{A}' * @var{A})))}.
 ## @end table
 ##
 ## If @var{A} is a vector or a scalar:
 ## @table @asis
 ## @item @var{P} = inf
-## @code{max (abs (A))}.
+## @code{max (abs (@var{A}))}.
 ## @item @var{P} = -inf
-## @code{min (abs (A))}.
+## @code{min (abs (@var{A}))}.
 ## @item @var{P} = "fro"
 ## Frobenius norm of @var{A}, @code{sqrt (sumsq (abs (A)))}.
 ## @item @var{P} = 0
 ## Hamming norm - the number of nonzero elements.
 ## @item other @var{P}, @code{@var{P} > 1}
-## p-norm of @var{A}, @code{(sum (abs (A) .^ P)) ^ (1/P)}.
+## p-norm of @var{A}, @code{(sum (abs (@var{A}) .^ @var{P})) ^ (1/@var{P})}.
 ## @item other @var{P}, @code{@var{P} < 1}
 ## p-pseudonorm defined as above.
 ## @end table
@@ -116,7 +116,7 @@ if (isempty (dim))
     switch (p)
         case 1
             result = max (sum (abs (A), 1));
-        case inf
+        case {inf, "inf"}
             result = max (sum (abs (A), 2));
         case "fro"
             result = sqrt (sumsq (vec (A)));
@@ -126,7 +126,7 @@ if (isempty (dim))
 else
     ## Vector norm
     switch (p)
-        case inf
+        case {inf, "inf"}
             result = max (abs (A), [], dim);
         case -inf
             result = min (abs (A), [], dim);
