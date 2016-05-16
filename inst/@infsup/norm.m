@@ -16,9 +16,10 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} norm (@var{A}, @var{P})
+## @defmethodx {@@infsup} norm (@var{A}, @var{P}, @var{Q})
 ## @defmethodx {@@infsup} norm (@var{A}, @var{P}, @var{OPT})
 ## 
-## Compute the p-norm of the matrix @var{A}.
+## Compute the p-norm (or p,q-norm) of the matrix @var{A}.
 ##
 ## If @var{A} is a matrix:
 ## @table @asis
@@ -45,6 +46,13 @@
 ## @item other @var{P}, @code{@var{P} < 1}
 ## p-pseudonorm defined as above.
 ## @end table
+##
+## It @var{Q} is used, compute the subordinate matrix norm induced by the
+## vector p-norm and vector q-norm. The subordinate p,q-norm is defined as the
+## maximum of @code{norm (@var{A} * @var{x}, @var{Q})}, where @var{x} can be
+## chosen such that @code{norm (@var{x}, @var{P}) = 1}. For @code{@var{P} = 1}
+## and @code{@var{Q} = inf} this is the max norm,
+## @code{max (max (abs (@var{A})))}.
 ##
 ## If @var{OPT} is the value "rows", treat each row as a vector and compute its
 ## norm.  The result returned as a column vector.  Similarly, if @var{OPT} is
@@ -94,6 +102,10 @@ elseif (nargin < 3)
     opt = "";
 endif
 
+if (strcmp (p, "inf"))
+    p = inf;
+endif
+
 switch (opt)
     case "rows"
         dim = 2;
@@ -109,6 +121,47 @@ switch (opt)
         else
             dim = [];
         endif
+    otherwise
+        ## Subordinate p,q matrix norm
+        q = opt;
+        dim = [];
+        if (strcmp (q, "inf"))
+            q = inf;
+        endif
+        if (p == 1 && q == inf)
+            ## Max norm
+            result = max (max (abs (A)));
+            return
+        elseif (p == 1 && q == 1)
+            ## 1-norm, computed below
+        elseif (p == inf && q == inf)
+            ## inf-norm, computed below
+        elseif (p == inf && q == 1)
+            ## inf,1-norm
+            ## Computation via z' * A * y
+            ## with y and z being vectors of -1 and 1 entries.
+            
+            result = 0;
+            ## Unfortunately this is NP-hard
+            # 2^n different logical vectors of length n
+            y = dec2bin ((1 : pow2 (columns (A)))' - 1) == '1';
+            # 2^m different logical vectors of length m
+            z = dec2bin ((1 : pow2 (rows (A)))' - 1) == '1';
+            for i = 1 : rows (y)
+                idx = substruct ("()", {":", y(i, :)});
+                B = subsasgn (A, idx, ...
+                              uminus (subsref (A, idx)));
+                for j = 1 : rows (z)
+                    idx = substruct ("()", {z(j, :), ":"});
+                    C = subsasgn (B, idx, ...
+                                  uminus (subsref (B, idx)));
+                    result = max (result, sum (vec (C)));
+                endfor
+            endfor
+            return
+        else
+            error ("norm: Particular option or p,q-norm is not yet supported")
+        endif
 endswitch
 
 if (isempty (dim))
@@ -116,7 +169,7 @@ if (isempty (dim))
     switch (p)
         case 1
             result = max (sum (abs (A), 1));
-        case {inf, "inf"}
+        case inf
             result = max (sum (abs (A), 2));
         case "fro"
             result = sqrt (sumsq (vec (A)));
@@ -126,7 +179,7 @@ if (isempty (dim))
 else
     ## Vector norm
     switch (p)
-        case {inf, "inf"}
+        case inf
             result = max (abs (A), [], dim);
         case -inf
             result = min (abs (A), [], dim);
@@ -147,3 +200,5 @@ endfunction
 %!xtest
 %! A = infsup ("0 [Empty] [0, 1] 1");
 %! assert (isequal (norm (A, 0, "cols"), infsup ("0 0 [0, 1] 1")));
+%!assert (norm (infsup (magic (3)), inf, 1) == 45);
+%!assert (norm (infsup (-magic (3), magic (3)), inf, 1) == "[0, 45]");
