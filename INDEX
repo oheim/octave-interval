@@ -105,6 +105,7 @@ Interval comparison
  @infsup/overlap
  @infsup/precedes
  @infsup/strictprecedes
+ @infsup/strictsubset
  @infsup/subset
  @infsupdec/isnai
 Set operation
