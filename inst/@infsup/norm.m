@@ -141,6 +141,20 @@ switch (opt)
             ## Computation via z' * A * y
             ## with y and z being vectors of -1 and 1 entries.
             
+            ## Important papers by Jiří Rohn
+            ##
+            ## Computing the Norm || A ||_{inf,1} is NP-Hard
+            ## Linear and Multilinear Algebra 47 (2000), 195-204.
+            ## http://dx.doi.org/10.1080/03081080008818644
+            ## http://uivtx.cs.cas.cz/~rohn/publist/norm.pdf
+            ##
+            ## R. Farhadsefat, J. Rohn and T. Lotfi,
+            ## Norms of Interval Matrices.
+            ## Technical Report No. 1122, Institute of Computer Science,
+            ## Academy of Sciences of the Czech Republic, Prague 2011.
+            ## http://www3.cs.cas.cz/ics/reports/v1122-11.pdf
+            ## http://uivtx.cs.cas.cz/~rohn/publist/normlaa.pdf
+            
             result = 0;
             ## Unfortunately this is NP-hard
             # 2^n different logical vectors of length n

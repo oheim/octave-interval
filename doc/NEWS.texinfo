@@ -14,10 +14,18 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{1.4.2, 2016-XX-XX}
+@release{1.5.0, 2016-05-31}
 @itemize
 @item
-    Fixed package installation in Octave 4.1.0+ (bug #47288)
+    norm: Added subordinate matrix norms and the max norm
+@item
+    strictsubset: New interval comparison function
+@item
+    Package documentation: Added new example (Cameleon problem), and the growing list of examples has been split into several web pages.
+@item
+    Package documentation: Updated recommendations to install and load the package.  The autoload feature will be removed in Octave 4.2.0.  (patch #8981, thanks to juanpi)
+@item
+    Support package installation in Octave 4.1.0+ (bug #47288)
 @end itemize
 
 @release{1.4.1, 2016-02-13}
