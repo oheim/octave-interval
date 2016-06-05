@@ -154,4 +154,23 @@ DEFUN_DLD (mpfr_matrix_mul_d, args, nargout,
 %!  [l, u] = mpfr_matrix_mul_d (magic (3), magic (3)', magic (3) + 1, magic (3)' + 1);
 %!  assert (l, [101, 71, 53; 71, 83, 71; 53, 71, 101]);
 %!  assert (u, [134, 104, 86; 104, 116, 104; 86, 104, 134]);
+
+%!test;
+%!  if (octave_config_info ("features").OPENMP && nproc ("overridable") > 1)
+%!    ## OpenMP is enabled and may use more than one thread.
+%!    ## We should observe speed-ups by that.
+%!    A = vec (magic (2000));
+%!    tic;
+%!    mpfr_matrix_mul_d (A', A, A', A);
+%!    time_per_element = toc;
+%!    A = [A A];
+%!    tic;
+%!    mpfr_matrix_mul_d (A', A, A', A);
+%!    time_per_element_parallel = toc / numel (ans);
+%!
+%!    ## Ideally, the runtime would be cut in half (at least),
+%!    ## however, there is an overhead, so let's be pessimistic and
+%!    ## assume that the parallel execution is at least 20% faster.
+%!    assert (time_per_element > 1.2 * time_per_element_parallel)
+%!  endif
 */
