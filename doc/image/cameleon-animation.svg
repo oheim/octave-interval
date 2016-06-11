@@ -108,19 +108,11 @@
            id="r950"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.083008s"
            from="3.13336 0 162"
            to="3.13336 0 162" />
         <animateTransform
            begin="r950.end"
-           id="r949"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="3.13336 0 162"
-           to="3.13336 0 162" />
-        <animateTransform
-           begin="r949.end"
            id="r948"
            attributeName="transform"
            type="rotate"
@@ -132,75 +124,11 @@
            id="r947"
            attributeName="transform"
            type="rotate"
-           dur="0.0622559s"
+           dur="0.72632s"
            from="-0.537148 0 162"
            to="-0.537148 0 162" />
         <animateTransform
            begin="r947.end"
-           id="r946"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r946.end"
-           id="r945"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r945.end"
-           id="r944"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r944.end"
-           id="r943"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r943.end"
-           id="r942"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r942.end"
-           id="r941"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r941.end"
-           id="r940"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r940.end"
-           id="r939"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r939.end"
            id="r938"
            attributeName="transform"
            type="rotate"
@@ -228,19 +156,11 @@
            id="r935"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.020752s"
            from="-16.1368 0 162"
            to="-16.1368 0 162" />
         <animateTransform
            begin="r935.end"
-           id="r934"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r934.end"
            id="r933"
            attributeName="transform"
            type="rotate"
@@ -268,19 +188,11 @@
            id="r930"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.010376s"
            from="-19.3485 0 162"
            to="-19.3485 0 162" />
         <animateTransform
            begin="r930.end"
-           id="r929"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-19.3485 0 162"
-           to="-19.3485 0 162" />
-        <animateTransform
-           begin="r929.end"
            id="r928"
            attributeName="transform"
            type="rotate"
@@ -292,59 +204,11 @@
            id="r927"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.070038s"
            from="-19.8073 0 162"
            to="-19.8073 0 162" />
         <animateTransform
            begin="r927.end"
-           id="r926"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-19.8073 0 162"
-           to="-19.8073 0 162" />
-        <animateTransform
-           begin="r926.end"
-           id="r925"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-19.8073 0 162"
-           to="-19.8073 0 162" />
-        <animateTransform
-           begin="r925.end"
-           id="r924"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-19.8073 0 162"
-           to="-19.8073 0 162" />
-        <animateTransform
-           begin="r924.end"
-           id="r923"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-19.8073 0 162"
-           to="-19.8073 0 162" />
-        <animateTransform
-           begin="r923.end"
-           id="r922"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-19.8073 0 162"
-           to="-19.8073 0 162" />
-        <animateTransform
-           begin="r922.end"
-           id="r921"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-19.8073 0 162"
-           to="-19.8073 0 162" />
-        <animateTransform
-           begin="r921.end"
            id="r920"
            attributeName="transform"
            type="rotate"
@@ -388,59 +252,11 @@
            id="r915"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.072632s"
            from="-23.4778 0 162"
            to="-23.4778 0 162" />
         <animateTransform
            begin="r915.end"
-           id="r914"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r914.end"
-           id="r913"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r913.end"
-           id="r912"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r912.end"
-           id="r911"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r911.end"
-           id="r910"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r910.end"
-           id="r909"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r909.end"
            id="r908"
            attributeName="transform"
            type="rotate"
@@ -452,19 +268,11 @@
            id="r907"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.036316s"
            from="-24.3955 0 162"
            to="-24.3955 0 162" />
         <animateTransform
            begin="r907.end"
-           id="r906"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r906.end"
            id="r905"
            attributeName="transform"
            type="rotate"
@@ -524,43 +332,11 @@
            id="r898"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.025940s"
            from="-30.36 0 162"
            to="-30.36 0 162" />
         <animateTransform
            begin="r898.end"
-           id="r897"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-30.36 0 162"
-           to="-30.36 0 162" />
-        <animateTransform
-           begin="r897.end"
-           id="r896"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-30.36 0 162"
-           to="-30.36 0 162" />
-        <animateTransform
-           begin="r896.end"
-           id="r895"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-30.36 0 162"
-           to="-30.36 0 162" />
-        <animateTransform
-           begin="r895.end"
-           id="r894"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-30.36 0 162"
-           to="-30.36 0 162" />
-        <animateTransform
-           begin="r894.end"
            id="r893"
            attributeName="transform"
            type="rotate"
@@ -572,59 +348,11 @@
            id="r892"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.072632s"
            from="-30.8189 0 162"
            to="-30.8189 0 162" />
         <animateTransform
            begin="r892.end"
-           id="r891"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-30.8189 0 162"
-           to="-30.8189 0 162" />
-        <animateTransform
-           begin="r891.end"
-           id="r890"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-30.8189 0 162"
-           to="-30.8189 0 162" />
-        <animateTransform
-           begin="r890.end"
-           id="r889"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-30.8189 0 162"
-           to="-30.8189 0 162" />
-        <animateTransform
-           begin="r889.end"
-           id="r888"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-30.8189 0 162"
-           to="-30.8189 0 162" />
-        <animateTransform
-           begin="r888.end"
-           id="r887"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-30.8189 0 162"
-           to="-30.8189 0 162" />
-        <animateTransform
-           begin="r887.end"
-           id="r886"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-30.8189 0 162"
-           to="-30.8189 0 162" />
-        <animateTransform
-           begin="r886.end"
            id="r885"
            attributeName="transform"
            type="rotate"
@@ -652,59 +380,11 @@
            id="r882"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.070038s"
            from="-34.4894 0 162"
            to="-34.4894 0 162" />
         <animateTransform
            begin="r882.end"
-           id="r881"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-34.4894 0 162"
-           to="-34.4894 0 162" />
-        <animateTransform
-           begin="r881.end"
-           id="r880"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-34.4894 0 162"
-           to="-34.4894 0 162" />
-        <animateTransform
-           begin="r880.end"
-           id="r879"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-34.4894 0 162"
-           to="-34.4894 0 162" />
-        <animateTransform
-           begin="r879.end"
-           id="r878"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-34.4894 0 162"
-           to="-34.4894 0 162" />
-        <animateTransform
-           begin="r878.end"
-           id="r877"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-34.4894 0 162"
-           to="-34.4894 0 162" />
-        <animateTransform
-           begin="r877.end"
-           id="r876"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-34.4894 0 162"
-           to="-34.4894 0 162" />
-        <animateTransform
-           begin="r876.end"
            id="r875"
            attributeName="transform"
            type="rotate"
@@ -732,43 +412,11 @@
            id="r872"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.051880s"
            from="-38.1599 0 162"
            to="-38.1599 0 162" />
         <animateTransform
            begin="r872.end"
-           id="r871"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-38.1599 0 162"
-           to="-38.1599 0 162" />
-        <animateTransform
-           begin="r871.end"
-           id="r870"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-38.1599 0 162"
-           to="-38.1599 0 162" />
-        <animateTransform
-           begin="r870.end"
-           id="r869"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-38.1599 0 162"
-           to="-38.1599 0 162" />
-        <animateTransform
-           begin="r869.end"
-           id="r868"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-38.1599 0 162"
-           to="-38.1599 0 162" />
-        <animateTransform
-           begin="r868.end"
            id="r867"
            attributeName="transform"
            type="rotate"
@@ -820,19 +468,11 @@
            id="r861"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.020752s"
            from="-43.6657 0 162"
            to="-43.6657 0 162" />
         <animateTransform
            begin="r861.end"
-           id="r860"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-43.6657 0 162"
-           to="-43.6657 0 162" />
-        <animateTransform
-           begin="r860.end"
            id="r859"
            attributeName="transform"
            type="rotate"
@@ -844,19 +484,11 @@
            id="r858"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.010376s"
            from="-45.0421 0 162"
            to="-45.0421 0 162" />
         <animateTransform
            begin="r858.end"
-           id="r857"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-45.0421 0 162"
-           to="-45.0421 0 162" />
-        <animateTransform
-           begin="r857.end"
            id="r856"
            attributeName="transform"
            type="rotate"
@@ -868,27 +500,11 @@
            id="r855"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.028534s"
            from="-45.5009 0 162"
            to="-45.5009 0 162" />
         <animateTransform
            begin="r855.end"
-           id="r854"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r854.end"
-           id="r853"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r853.end"
            id="r852"
            attributeName="transform"
            type="rotate"
@@ -956,59 +572,11 @@
            id="r844"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.072632s"
            from="-51.0067 0 162"
            to="-51.0067 0 162" />
         <animateTransform
            begin="r844.end"
-           id="r843"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-51.0067 0 162"
-           to="-51.0067 0 162" />
-        <animateTransform
-           begin="r843.end"
-           id="r842"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-51.0067 0 162"
-           to="-51.0067 0 162" />
-        <animateTransform
-           begin="r842.end"
-           id="r841"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-51.0067 0 162"
-           to="-51.0067 0 162" />
-        <animateTransform
-           begin="r841.end"
-           id="r840"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-51.0067 0 162"
-           to="-51.0067 0 162" />
-        <animateTransform
-           begin="r840.end"
-           id="r839"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-51.0067 0 162"
-           to="-51.0067 0 162" />
-        <animateTransform
-           begin="r839.end"
-           id="r838"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-51.0067 0 162"
-           to="-51.0067 0 162" />
-        <animateTransform
-           begin="r838.end"
            id="r837"
            attributeName="transform"
            type="rotate"
@@ -1020,67 +588,11 @@
            id="r836"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.16602s"
            from="-50.089 0 162"
            to="-50.089 0 162" />
         <animateTransform
            begin="r836.end"
-           id="r835"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-50.089 0 162"
-           to="-50.089 0 162" />
-        <animateTransform
-           begin="r835.end"
-           id="r834"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-50.089 0 162"
-           to="-50.089 0 162" />
-        <animateTransform
-           begin="r834.end"
-           id="r833"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-50.089 0 162"
-           to="-50.089 0 162" />
-        <animateTransform
-           begin="r833.end"
-           id="r832"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-50.089 0 162"
-           to="-50.089 0 162" />
-        <animateTransform
-           begin="r832.end"
-           id="r831"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-50.089 0 162"
-           to="-50.089 0 162" />
-        <animateTransform
-           begin="r831.end"
-           id="r830"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-50.089 0 162"
-           to="-50.089 0 162" />
-        <animateTransform
-           begin="r830.end"
-           id="r829"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-50.089 0 162"
-           to="-50.089 0 162" />
-        <animateTransform
-           begin="r829.end"
            id="r828"
            attributeName="transform"
            type="rotate"
@@ -1092,27 +604,11 @@
            id="r827"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.11414s"
            from="-48.2538 0 162"
            to="-48.2538 0 162" />
         <animateTransform
            begin="r827.end"
-           id="r826"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-48.2538 0 162"
-           to="-48.2538 0 162" />
-        <animateTransform
-           begin="r826.end"
-           id="r825"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0311279s"
-           from="-48.2538 0 162"
-           to="-48.2538 0 162" />
-        <animateTransform
-           begin="r825.end"
            id="r824"
            attributeName="transform"
            type="rotate"
@@ -1148,83 +644,11 @@
            id="r820"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.20752s"
            from="-42.748 0 162"
            to="-42.748 0 162" />
         <animateTransform
            begin="r820.end"
-           id="r819"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r819.end"
-           id="r818"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r818.end"
-           id="r817"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r817.end"
-           id="r816"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r816.end"
-           id="r815"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r815.end"
-           id="r814"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r814.end"
-           id="r813"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r813.end"
-           id="r812"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r812.end"
-           id="r811"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-42.748 0 162"
-           to="-42.748 0 162" />
-        <animateTransform
-           begin="r811.end"
            id="r810"
            attributeName="transform"
            type="rotate"
@@ -1236,43 +660,11 @@
            id="r809"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.20752s"
            from="-40.9128 0 162"
            to="-40.9128 0 162" />
         <animateTransform
            begin="r809.end"
-           id="r808"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r808.end"
-           id="r807"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r807.end"
-           id="r806"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r806.end"
-           id="r805"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r805.end"
            id="r804"
            attributeName="transform"
            type="rotate"
@@ -1284,91 +676,11 @@
            id="r803"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.22827s"
            from="-39.0775 0 162"
            to="-39.0775 0 162" />
         <animateTransform
            begin="r803.end"
-           id="r802"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r802.end"
-           id="r801"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r801.end"
-           id="r800"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r800.end"
-           id="r799"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r799.end"
-           id="r798"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r798.end"
-           id="r797"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r797.end"
-           id="r796"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r796.end"
-           id="r795"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r795.end"
-           id="r794"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r794.end"
-           id="r793"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r793.end"
            id="r792"
            attributeName="transform"
            type="rotate"
@@ -1388,67 +700,11 @@
            id="r790"
            attributeName="transform"
            type="rotate"
-           dur="0.0311279s"
+           dur="0.32166s"
            from="-33.5717 0 162"
            to="-33.5717 0 162" />
         <animateTransform
            begin="r790.end"
-           id="r789"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-33.5717 0 162"
-           to="-33.5717 0 162" />
-        <animateTransform
-           begin="r789.end"
-           id="r788"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-33.5717 0 162"
-           to="-33.5717 0 162" />
-        <animateTransform
-           begin="r788.end"
-           id="r787"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-33.5717 0 162"
-           to="-33.5717 0 162" />
-        <animateTransform
-           begin="r787.end"
-           id="r786"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-33.5717 0 162"
-           to="-33.5717 0 162" />
-        <animateTransform
-           begin="r786.end"
-           id="r785"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-33.5717 0 162"
-           to="-33.5717 0 162" />
-        <animateTransform
-           begin="r785.end"
-           id="r784"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-33.5717 0 162"
-           to="-33.5717 0 162" />
-        <animateTransform
-           begin="r784.end"
-           id="r783"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-33.5717 0 162"
-           to="-33.5717 0 162" />
-        <animateTransform
-           begin="r783.end"
            id="r782"
            attributeName="transform"
            type="rotate"
@@ -1460,147 +716,11 @@
            id="r781"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.37354s"
            from="-31.7365 0 162"
            to="-31.7365 0 162" />
         <animateTransform
            begin="r781.end"
-           id="r780"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r780.end"
-           id="r779"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r779.end"
-           id="r778"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r778.end"
-           id="r777"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r777.end"
-           id="r776"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r776.end"
-           id="r775"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r775.end"
-           id="r774"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r774.end"
-           id="r773"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r773.end"
-           id="r772"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r772.end"
-           id="r771"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r771.end"
-           id="r770"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r770.end"
-           id="r769"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r769.end"
-           id="r768"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r768.end"
-           id="r767"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r767.end"
-           id="r766"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r766.end"
-           id="r765"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r765.end"
-           id="r764"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-31.7365 0 162"
-           to="-31.7365 0 162" />
-        <animateTransform
-           begin="r764.end"
            id="r763"
            attributeName="transform"
            type="rotate"
@@ -1620,91 +740,11 @@
            id="r761"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.44617s"
            from="-26.2307 0 162"
            to="-26.2307 0 162" />
         <animateTransform
            begin="r761.end"
-           id="r760"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r760.end"
-           id="r759"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r759.end"
-           id="r758"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r758.end"
-           id="r757"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r757.end"
-           id="r756"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r756.end"
-           id="r755"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r755.end"
-           id="r754"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r754.end"
-           id="r753"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r753.end"
-           id="r752"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r752.end"
-           id="r751"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0311279s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r751.end"
            id="r750"
            attributeName="transform"
            type="rotate"
@@ -1716,123 +756,11 @@
            id="r749"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.31128s"
            from="-24.3955 0 162"
            to="-24.3955 0 162" />
         <animateTransform
            begin="r749.end"
-           id="r748"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r748.end"
-           id="r747"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r747.end"
-           id="r746"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r746.end"
-           id="r745"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r745.end"
-           id="r744"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r744.end"
-           id="r743"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r743.end"
-           id="r742"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r742.end"
-           id="r741"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r741.end"
-           id="r740"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r740.end"
-           id="r739"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r739.end"
-           id="r738"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r738.end"
-           id="r737"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r737.end"
-           id="r736"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r736.end"
-           id="r735"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r735.end"
            id="r734"
            attributeName="transform"
            type="rotate"
@@ -1860,19 +788,11 @@
            id="r731"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.036316s"
            from="-20.725 0 162"
            to="-20.725 0 162" />
         <animateTransform
            begin="r731.end"
-           id="r730"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="-20.725 0 162"
-           to="-20.725 0 162" />
-        <animateTransform
-           begin="r730.end"
            id="r729"
            attributeName="transform"
            type="rotate"
@@ -1900,19 +820,11 @@
            id="r726"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.036316s"
            from="-17.0544 0 162"
            to="-17.0544 0 162" />
         <animateTransform
            begin="r726.end"
-           id="r725"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-17.0544 0 162"
-           to="-17.0544 0 162" />
-        <animateTransform
-           begin="r725.end"
            id="r724"
            attributeName="transform"
            type="rotate"
@@ -1924,27 +836,11 @@
            id="r723"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.031128s"
            from="-16.1368 0 162"
            to="-16.1368 0 162" />
         <animateTransform
            begin="r723.end"
-           id="r722"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r722.end"
-           id="r721"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r721.end"
            id="r720"
            attributeName="transform"
            type="rotate"
@@ -1964,19 +860,11 @@
            id="r718"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.036316s"
            from="-13.3839 0 162"
            to="-13.3839 0 162" />
         <animateTransform
            begin="r718.end"
-           id="r717"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-13.3839 0 162"
-           to="-13.3839 0 162" />
-        <animateTransform
-           begin="r717.end"
            id="r716"
            attributeName="transform"
            type="rotate"
@@ -1988,35 +876,11 @@
            id="r715"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.041504s"
            from="-12.4663 0 162"
            to="-12.4663 0 162" />
         <animateTransform
            begin="r715.end"
-           id="r714"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r714.end"
-           id="r713"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r713.end"
-           id="r712"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r712.end"
            id="r711"
            attributeName="transform"
            type="rotate"
@@ -2036,19 +900,11 @@
            id="r709"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.036316s"
            from="-9.71343 0 162"
            to="-9.71343 0 162" />
         <animateTransform
            begin="r709.end"
-           id="r708"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r708.end"
            id="r707"
            attributeName="transform"
            type="rotate"
@@ -2060,43 +916,11 @@
            id="r706"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.05188s"
            from="-8.7958 0 162"
            to="-8.7958 0 162" />
         <animateTransform
            begin="r706.end"
-           id="r705"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-8.7958 0 162"
-           to="-8.7958 0 162" />
-        <animateTransform
-           begin="r705.end"
-           id="r704"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-8.7958 0 162"
-           to="-8.7958 0 162" />
-        <animateTransform
-           begin="r704.end"
-           id="r703"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-8.7958 0 162"
-           to="-8.7958 0 162" />
-        <animateTransform
-           begin="r703.end"
-           id="r702"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-8.7958 0 162"
-           to="-8.7958 0 162" />
-        <animateTransform
-           begin="r702.end"
            id="r701"
            attributeName="transform"
            type="rotate"
@@ -2116,19 +940,11 @@
            id="r699"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.041504s"
            from="-6.04291 0 162"
            to="-6.04291 0 162" />
         <animateTransform
            begin="r699.end"
-           id="r698"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-6.04291 0 162"
-           to="-6.04291 0 162" />
-        <animateTransform
-           begin="r698.end"
            id="r697"
            attributeName="transform"
            type="rotate"
@@ -2140,43 +956,11 @@
            id="r696"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.05188s"
            from="-5.12529 0 162"
            to="-5.12529 0 162" />
         <animateTransform
            begin="r696.end"
-           id="r695"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-5.12529 0 162"
-           to="-5.12529 0 162" />
-        <animateTransform
-           begin="r695.end"
-           id="r694"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-5.12529 0 162"
-           to="-5.12529 0 162" />
-        <animateTransform
-           begin="r694.end"
-           id="r693"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-5.12529 0 162"
-           to="-5.12529 0 162" />
-        <animateTransform
-           begin="r693.end"
-           id="r692"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-5.12529 0 162"
-           to="-5.12529 0 162" />
-        <animateTransform
-           begin="r692.end"
            id="r691"
            attributeName="transform"
            type="rotate"
@@ -2196,27 +980,11 @@
            id="r689"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.057068s"
            from="-2.3724 0 162"
            to="-2.3724 0 162" />
         <animateTransform
            begin="r689.end"
-           id="r688"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-2.3724 0 162"
-           to="-2.3724 0 162" />
-        <animateTransform
-           begin="r688.end"
-           id="r687"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-2.3724 0 162"
-           to="-2.3724 0 162" />
-        <animateTransform
-           begin="r687.end"
            id="r686"
            attributeName="transform"
            type="rotate"
@@ -2228,51 +996,11 @@
            id="r685"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.062256s"
            from="-1.45478 0 162"
            to="-1.45478 0 162" />
         <animateTransform
            begin="r685.end"
-           id="r684"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-1.45478 0 162"
-           to="-1.45478 0 162" />
-        <animateTransform
-           begin="r684.end"
-           id="r683"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-1.45478 0 162"
-           to="-1.45478 0 162" />
-        <animateTransform
-           begin="r683.end"
-           id="r682"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-1.45478 0 162"
-           to="-1.45478 0 162" />
-        <animateTransform
-           begin="r682.end"
-           id="r681"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-1.45478 0 162"
-           to="-1.45478 0 162" />
-        <animateTransform
-           begin="r681.end"
-           id="r680"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-1.45478 0 162"
-           to="-1.45478 0 162" />
-        <animateTransform
-           begin="r680.end"
            id="r679"
            attributeName="transform"
            type="rotate"
@@ -2292,27 +1020,11 @@
            id="r677"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.057068s"
            from="1.29811 0 162"
            to="1.29811 0 162" />
         <animateTransform
            begin="r677.end"
-           id="r676"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="1.29811 0 162"
-           to="1.29811 0 162" />
-        <animateTransform
-           begin="r676.end"
-           id="r675"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="1.29811 0 162"
-           to="1.29811 0 162" />
-        <animateTransform
-           begin="r675.end"
            id="r674"
            attributeName="transform"
            type="rotate"
@@ -2340,75 +1052,11 @@
            id="r671"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.090790s"
            from="4.05099 0 162"
            to="4.05099 0 162" />
         <animateTransform
            begin="r671.end"
-           id="r670"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r670.end"
-           id="r669"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r669.end"
-           id="r668"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r668.end"
-           id="r667"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r667.end"
-           id="r666"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r666.end"
-           id="r665"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r665.end"
-           id="r664"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r664.end"
-           id="r663"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="4.05099 0 162"
-           to="4.05099 0 162" />
-        <animateTransform
-           begin="r663.end"
            id="r662"
            attributeName="transform"
            type="rotate"
@@ -2420,19 +1068,11 @@
            id="r661"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.036316s"
            from="4.96862 0 162"
            to="4.96862 0 162" />
         <animateTransform
            begin="r661.end"
-           id="r660"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="4.96862 0 162"
-           to="4.96862 0 162" />
-        <animateTransform
-           begin="r660.end"
            id="r659"
            attributeName="transform"
            type="rotate"
@@ -2444,19 +1084,11 @@
            id="r658"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.020752s"
            from="5.88625 0 162"
            to="5.88625 0 162" />
         <animateTransform
            begin="r658.end"
-           id="r657"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="5.88625 0 162"
-           to="5.88625 0 162" />
-        <animateTransform
-           begin="r657.end"
            id="r656"
            attributeName="transform"
            type="rotate"
@@ -2476,83 +1108,11 @@
            id="r654"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.10117s"
            from="7.7215 0 162"
            to="7.7215 0 162" />
         <animateTransform
            begin="r654.end"
-           id="r653"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r653.end"
-           id="r652"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r652.end"
-           id="r651"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r651.end"
-           id="r650"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r650.end"
-           id="r649"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r649.end"
-           id="r648"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r648.end"
-           id="r647"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r647.end"
-           id="r646"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r646.end"
-           id="r645"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="7.7215 0 162"
-           to="7.7215 0 162" />
-        <animateTransform
-           begin="r645.end"
            id="r644"
            attributeName="transform"
            type="rotate"
@@ -2564,19 +1124,11 @@
            id="r643"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.031128s"
            from="8.63913 0 162"
            to="8.63913 0 162" />
         <animateTransform
            begin="r643.end"
-           id="r642"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="8.63913 0 162"
-           to="8.63913 0 162" />
-        <animateTransform
-           begin="r642.end"
            id="r641"
            attributeName="transform"
            type="rotate"
@@ -2588,35 +1140,11 @@
            id="r640"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.041504s"
            from="9.55676 0 162"
            to="9.55676 0 162" />
         <animateTransform
            begin="r640.end"
-           id="r639"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="9.55676 0 162"
-           to="9.55676 0 162" />
-        <animateTransform
-           begin="r639.end"
-           id="r638"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="9.55676 0 162"
-           to="9.55676 0 162" />
-        <animateTransform
-           begin="r638.end"
-           id="r637"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="9.55676 0 162"
-           to="9.55676 0 162" />
-        <animateTransform
-           begin="r637.end"
            id="r636"
            attributeName="transform"
            type="rotate"
@@ -2636,91 +1164,11 @@
            id="r634"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.11154s"
            from="11.392 0 162"
            to="11.392 0 162" />
         <animateTransform
            begin="r634.end"
-           id="r633"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r633.end"
-           id="r632"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r632.end"
-           id="r631"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r631.end"
-           id="r630"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r630.end"
-           id="r629"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r629.end"
-           id="r628"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r628.end"
-           id="r627"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r627.end"
-           id="r626"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r626.end"
-           id="r625"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r625.end"
-           id="r624"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="11.392 0 162"
-           to="11.392 0 162" />
-        <animateTransform
-           begin="r624.end"
            id="r623"
            attributeName="transform"
            type="rotate"
@@ -2804,27 +1252,11 @@
            id="r613"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.062256s"
            from="19.6507 0 162"
            to="19.6507 0 162" />
         <animateTransform
            begin="r613.end"
-           id="r612"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="19.6507 0 162"
-           to="19.6507 0 162" />
-        <animateTransform
-           begin="r612.end"
-           id="r611"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="19.6507 0 162"
-           to="19.6507 0 162" />
-        <animateTransform
-           begin="r611.end"
            id="r610"
            attributeName="transform"
            type="rotate"
@@ -2860,67 +1292,11 @@
            id="r606"
            attributeName="transform"
            type="rotate"
-           dur="0.0830078s"
+           dur="0.66406s"
            from="43.509 0 162"
            to="43.509 0 162" />
         <animateTransform
            begin="r606.end"
-           id="r605"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="43.509 0 162"
-           to="43.509 0 162" />
-        <animateTransform
-           begin="r605.end"
-           id="r604"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="43.509 0 162"
-           to="43.509 0 162" />
-        <animateTransform
-           begin="r604.end"
-           id="r603"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="43.509 0 162"
-           to="43.509 0 162" />
-        <animateTransform
-           begin="r603.end"
-           id="r602"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="43.509 0 162"
-           to="43.509 0 162" />
-        <animateTransform
-           begin="r602.end"
-           id="r601"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="43.509 0 162"
-           to="43.509 0 162" />
-        <animateTransform
-           begin="r601.end"
-           id="r600"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="43.509 0 162"
-           to="43.509 0 162" />
-        <animateTransform
-           begin="r600.end"
-           id="r599"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="43.509 0 162"
-           to="43.509 0 162" />
-        <animateTransform
-           begin="r599.end"
            id="r598"
            attributeName="transform"
            type="rotate"
@@ -2932,91 +1308,11 @@
            id="r597"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.44617s"
            from="47.1795 0 162"
            to="47.1795 0 162" />
         <animateTransform
            begin="r597.end"
-           id="r596"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r596.end"
-           id="r595"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r595.end"
-           id="r594"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r594.end"
-           id="r593"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r593.end"
-           id="r592"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r592.end"
-           id="r591"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r591.end"
-           id="r590"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r590.end"
-           id="r589"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r589.end"
-           id="r588"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r588.end"
-           id="r587"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0311279s"
-           from="47.1795 0 162"
-           to="47.1795 0 162" />
-        <animateTransform
-           begin="r587.end"
            id="r586"
            attributeName="transform"
            type="rotate"
@@ -3028,59 +1324,11 @@
            id="r585"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.14526s"
            from="49.0147 0 162"
            to="49.0147 0 162" />
         <animateTransform
            begin="r585.end"
-           id="r584"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="49.0147 0 162"
-           to="49.0147 0 162" />
-        <animateTransform
-           begin="r584.end"
-           id="r583"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="49.0147 0 162"
-           to="49.0147 0 162" />
-        <animateTransform
-           begin="r583.end"
-           id="r582"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="49.0147 0 162"
-           to="49.0147 0 162" />
-        <animateTransform
-           begin="r582.end"
-           id="r581"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="49.0147 0 162"
-           to="49.0147 0 162" />
-        <animateTransform
-           begin="r581.end"
-           id="r580"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="49.0147 0 162"
-           to="49.0147 0 162" />
-        <animateTransform
-           begin="r580.end"
-           id="r579"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="49.0147 0 162"
-           to="49.0147 0 162" />
-        <animateTransform
-           begin="r579.end"
            id="r578"
            attributeName="transform"
            type="rotate"
@@ -3092,19 +1340,11 @@
            id="r577"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.020752s"
            from="49.9324 0 162"
            to="49.9324 0 162" />
         <animateTransform
            begin="r577.end"
-           id="r576"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="49.9324 0 162"
-           to="49.9324 0 162" />
-        <animateTransform
-           begin="r576.end"
            id="r575"
            attributeName="transform"
            type="rotate"
@@ -3148,91 +1388,11 @@
            id="r570"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.22827s"
            from="56.3558 0 162"
            to="56.3558 0 162" />
         <animateTransform
            begin="r570.end"
-           id="r569"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r569.end"
-           id="r568"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r568.end"
-           id="r567"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r567.end"
-           id="r566"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r566.end"
-           id="r565"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r565.end"
-           id="r564"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r564.end"
-           id="r563"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r563.end"
-           id="r562"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r562.end"
-           id="r561"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r561.end"
-           id="r560"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="56.3558 0 162"
-           to="56.3558 0 162" />
-        <animateTransform
-           begin="r560.end"
            id="r559"
            attributeName="transform"
            type="rotate"
@@ -3252,123 +1412,11 @@
            id="r557"
            attributeName="transform"
            type="rotate"
-           dur="0.124512s"
+           dur="2.4072s"
            from="65.532 0 162"
            to="65.532 0 162" />
         <animateTransform
            begin="r557.end"
-           id="r556"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r556.end"
-           id="r555"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r555.end"
-           id="r554"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r554.end"
-           id="r553"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r553.end"
-           id="r552"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r552.end"
-           id="r551"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r551.end"
-           id="r550"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r550.end"
-           id="r549"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r549.end"
-           id="r548"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r548.end"
-           id="r547"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r547.end"
-           id="r546"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r546.end"
-           id="r545"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r545.end"
-           id="r544"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r544.end"
-           id="r543"
-           attributeName="transform"
-           type="rotate"
-           dur="0.124512s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r543.end"
            id="r542"
            attributeName="transform"
            type="rotate"
@@ -3380,75 +1428,11 @@
            id="r541"
            attributeName="transform"
            type="rotate"
-           dur="0.0830078s"
+           dur="0.74707s"
            from="58.191 0 162"
            to="58.191 0 162" />
         <animateTransform
            begin="r541.end"
-           id="r540"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r540.end"
-           id="r539"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r539.end"
-           id="r538"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r538.end"
-           id="r537"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r537.end"
-           id="r536"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r536.end"
-           id="r535"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r535.end"
-           id="r534"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r534.end"
-           id="r533"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="58.191 0 162"
-           to="58.191 0 162" />
-        <animateTransform
-           begin="r533.end"
            id="r532"
            attributeName="transform"
            type="rotate"
@@ -3460,171 +1444,11 @@
            id="r531"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.87158s"
            from="61.8615 0 162"
            to="61.8615 0 162" />
         <animateTransform
            begin="r531.end"
-           id="r530"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r530.end"
-           id="r529"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r529.end"
-           id="r528"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r528.end"
-           id="r527"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r527.end"
-           id="r526"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r526.end"
-           id="r525"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r525.end"
-           id="r524"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r524.end"
-           id="r523"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r523.end"
-           id="r522"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r522.end"
-           id="r521"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r521.end"
-           id="r520"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r520.end"
-           id="r519"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r519.end"
-           id="r518"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r518.end"
-           id="r517"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r517.end"
-           id="r516"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r516.end"
-           id="r515"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r515.end"
-           id="r514"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r514.end"
-           id="r513"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r513.end"
-           id="r512"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r512.end"
-           id="r511"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="61.8615 0 162"
-           to="61.8615 0 162" />
-        <animateTransform
-           begin="r511.end"
            id="r510"
            attributeName="transform"
            type="rotate"
@@ -3636,99 +1460,11 @@
            id="r509"
            attributeName="transform"
            type="rotate"
-           dur="0.166016s"
+           dur="1.9922s"
            from="65.532 0 162"
            to="65.532 0 162" />
         <animateTransform
            begin="r509.end"
-           id="r508"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r508.end"
-           id="r507"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r507.end"
-           id="r506"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r506.end"
-           id="r505"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r505.end"
-           id="r504"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r504.end"
-           id="r503"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r503.end"
-           id="r502"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r502.end"
-           id="r501"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r501.end"
-           id="r500"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r500.end"
-           id="r499"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r499.end"
-           id="r498"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="65.532 0 162"
-           to="65.532 0 162" />
-        <animateTransform
-           begin="r498.end"
            id="r497"
            attributeName="transform"
            type="rotate"
@@ -3756,19 +1492,11 @@
            id="r494"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.083008s"
            from="17.8154 0 162"
            to="17.8154 0 162" />
         <animateTransform
            begin="r494.end"
-           id="r493"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="17.8154 0 162"
-           to="17.8154 0 162" />
-        <animateTransform
-           begin="r493.end"
            id="r492"
            attributeName="transform"
            type="rotate"
@@ -3780,67 +1508,11 @@
            id="r491"
            attributeName="transform"
            type="rotate"
-           dur="0.0622559s"
+           dur="0.64331s"
            from="14.1449 0 162"
            to="14.1449 0 162" />
         <animateTransform
            begin="r491.end"
-           id="r490"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="14.1449 0 162"
-           to="14.1449 0 162" />
-        <animateTransform
-           begin="r490.end"
-           id="r489"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="14.1449 0 162"
-           to="14.1449 0 162" />
-        <animateTransform
-           begin="r489.end"
-           id="r488"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="14.1449 0 162"
-           to="14.1449 0 162" />
-        <animateTransform
-           begin="r488.end"
-           id="r487"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="14.1449 0 162"
-           to="14.1449 0 162" />
-        <animateTransform
-           begin="r487.end"
-           id="r486"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="14.1449 0 162"
-           to="14.1449 0 162" />
-        <animateTransform
-           begin="r486.end"
-           id="r485"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="14.1449 0 162"
-           to="14.1449 0 162" />
-        <animateTransform
-           begin="r485.end"
-           id="r484"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="14.1449 0 162"
-           to="14.1449 0 162" />
-        <animateTransform
-           begin="r484.end"
            id="r483"
            attributeName="transform"
            type="rotate"
@@ -3852,67 +1524,11 @@
            id="r482"
            attributeName="transform"
            type="rotate"
-           dur="0.166016s"
+           dur="1.3281s"
            from="6.80387 0 162"
            to="6.80387 0 162" />
         <animateTransform
            begin="r482.end"
-           id="r481"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="6.80387 0 162"
-           to="6.80387 0 162" />
-        <animateTransform
-           begin="r481.end"
-           id="r480"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="6.80387 0 162"
-           to="6.80387 0 162" />
-        <animateTransform
-           begin="r480.end"
-           id="r479"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="6.80387 0 162"
-           to="6.80387 0 162" />
-        <animateTransform
-           begin="r479.end"
-           id="r478"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="6.80387 0 162"
-           to="6.80387 0 162" />
-        <animateTransform
-           begin="r478.end"
-           id="r477"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="6.80387 0 162"
-           to="6.80387 0 162" />
-        <animateTransform
-           begin="r477.end"
-           id="r476"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="6.80387 0 162"
-           to="6.80387 0 162" />
-        <animateTransform
-           begin="r476.end"
-           id="r475"
-           attributeName="transform"
-           type="rotate"
-           dur="0.166016s"
-           from="6.80387 0 162"
-           to="6.80387 0 162" />
-        <animateTransform
-           begin="r475.end"
            id="r474"
            attributeName="transform"
            type="rotate"
@@ -3932,75 +1548,11 @@
            id="r472"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.18677s"
            from="-39.0775 0 162"
            to="-39.0775 0 162" />
         <animateTransform
            begin="r472.end"
-           id="r471"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r471.end"
-           id="r470"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r470.end"
-           id="r469"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r469.end"
-           id="r468"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r468.end"
-           id="r467"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r467.end"
-           id="r466"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r466.end"
-           id="r465"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r465.end"
-           id="r464"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-39.0775 0 162"
-           to="-39.0775 0 162" />
-        <animateTransform
-           begin="r464.end"
            id="r463"
            attributeName="transform"
            type="rotate"
@@ -4020,19 +1572,11 @@
            id="r461"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.010376s"
            from="-45.0421 0 162"
            to="-45.0421 0 162" />
         <animateTransform
            begin="r461.end"
-           id="r460"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-45.0421 0 162"
-           to="-45.0421 0 162" />
-        <animateTransform
-           begin="r460.end"
            id="r459"
            attributeName="transform"
            type="rotate"
@@ -4044,67 +1588,11 @@
            id="r458"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.080414s"
            from="-45.5009 0 162"
            to="-45.5009 0 162" />
         <animateTransform
            begin="r458.end"
-           id="r457"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r457.end"
-           id="r456"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r456.end"
-           id="r455"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r455.end"
-           id="r454"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r454.end"
-           id="r453"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r453.end"
-           id="r452"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r452.end"
-           id="r451"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-45.5009 0 162"
-           to="-45.5009 0 162" />
-        <animateTransform
-           begin="r451.end"
            id="r450"
            attributeName="transform"
            type="rotate"
@@ -4116,67 +1604,11 @@
            id="r449"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.16602s"
            from="-46.4185 0 162"
            to="-46.4185 0 162" />
         <animateTransform
            begin="r449.end"
-           id="r448"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-46.4185 0 162"
-           to="-46.4185 0 162" />
-        <animateTransform
-           begin="r448.end"
-           id="r447"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-46.4185 0 162"
-           to="-46.4185 0 162" />
-        <animateTransform
-           begin="r447.end"
-           id="r446"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-46.4185 0 162"
-           to="-46.4185 0 162" />
-        <animateTransform
-           begin="r446.end"
-           id="r445"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-46.4185 0 162"
-           to="-46.4185 0 162" />
-        <animateTransform
-           begin="r445.end"
-           id="r444"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-46.4185 0 162"
-           to="-46.4185 0 162" />
-        <animateTransform
-           begin="r444.end"
-           id="r443"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-46.4185 0 162"
-           to="-46.4185 0 162" />
-        <animateTransform
-           begin="r443.end"
-           id="r442"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-46.4185 0 162"
-           to="-46.4185 0 162" />
-        <animateTransform
-           begin="r442.end"
            id="r441"
            attributeName="transform"
            type="rotate"
@@ -4220,19 +1652,11 @@
            id="r436"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.083008s"
            from="-62.9358 0 162"
            to="-62.9358 0 162" />
         <animateTransform
            begin="r436.end"
-           id="r435"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-62.9358 0 162"
-           to="-62.9358 0 162" />
-        <animateTransform
-           begin="r435.end"
            id="r434"
            attributeName="transform"
            type="rotate"
@@ -4252,27 +1676,11 @@
            id="r432"
            attributeName="transform"
            type="rotate"
-           dur="0.0311279s"
+           dur="0.11414s"
            from="-70.2769 0 162"
            to="-70.2769 0 162" />
         <animateTransform
            begin="r432.end"
-           id="r431"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-70.2769 0 162"
-           to="-70.2769 0 162" />
-        <animateTransform
-           begin="r431.end"
-           id="r430"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-70.2769 0 162"
-           to="-70.2769 0 162" />
-        <animateTransform
-           begin="r430.end"
            id="r429"
            attributeName="transform"
            type="rotate"
@@ -4324,59 +1732,11 @@
            id="r423"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.14526s"
            from="-83.1236 0 162"
            to="-83.1236 0 162" />
         <animateTransform
            begin="r423.end"
-           id="r422"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-83.1236 0 162"
-           to="-83.1236 0 162" />
-        <animateTransform
-           begin="r422.end"
-           id="r421"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-83.1236 0 162"
-           to="-83.1236 0 162" />
-        <animateTransform
-           begin="r421.end"
-           id="r420"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-83.1236 0 162"
-           to="-83.1236 0 162" />
-        <animateTransform
-           begin="r420.end"
-           id="r419"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-83.1236 0 162"
-           to="-83.1236 0 162" />
-        <animateTransform
-           begin="r419.end"
-           id="r418"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-83.1236 0 162"
-           to="-83.1236 0 162" />
-        <animateTransform
-           begin="r418.end"
-           id="r417"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-83.1236 0 162"
-           to="-83.1236 0 162" />
-        <animateTransform
-           begin="r417.end"
            id="r416"
            attributeName="transform"
            type="rotate"
@@ -4388,59 +1748,11 @@
            id="r415"
            attributeName="transform"
            type="rotate"
-           dur="0.0311279s"
+           dur="0.28015s"
            from="-84.9589 0 162"
            to="-84.9589 0 162" />
         <animateTransform
            begin="r415.end"
-           id="r414"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-84.9589 0 162"
-           to="-84.9589 0 162" />
-        <animateTransform
-           begin="r414.end"
-           id="r413"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-84.9589 0 162"
-           to="-84.9589 0 162" />
-        <animateTransform
-           begin="r413.end"
-           id="r412"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-84.9589 0 162"
-           to="-84.9589 0 162" />
-        <animateTransform
-           begin="r412.end"
-           id="r411"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-84.9589 0 162"
-           to="-84.9589 0 162" />
-        <animateTransform
-           begin="r411.end"
-           id="r410"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-84.9589 0 162"
-           to="-84.9589 0 162" />
-        <animateTransform
-           begin="r410.end"
-           id="r409"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-84.9589 0 162"
-           to="-84.9589 0 162" />
-        <animateTransform
-           begin="r409.end"
            id="r408"
            attributeName="transform"
            type="rotate"
@@ -4468,35 +1780,11 @@
            id="r405"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.041504s"
            from="-96.8881 0 162"
            to="-96.8881 0 162" />
         <animateTransform
            begin="r405.end"
-           id="r404"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r404.end"
-           id="r403"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r403.end"
-           id="r402"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r402.end"
            id="r401"
            attributeName="transform"
            type="rotate"
@@ -4508,83 +1796,11 @@
            id="r400"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.20233s"
            from="-97.8057 0 162"
            to="-97.8057 0 162" />
         <animateTransform
            begin="r400.end"
-           id="r399"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r399.end"
-           id="r398"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r398.end"
-           id="r397"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r397.end"
-           id="r396"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r396.end"
-           id="r395"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r395.end"
-           id="r394"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r394.end"
-           id="r393"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r393.end"
-           id="r392"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r392.end"
-           id="r391"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r391.end"
            id="r390"
            attributeName="transform"
            type="rotate"
@@ -4612,59 +1828,11 @@
            id="r387"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.036316s"
            from="-103.77 0 162"
            to="-103.77 0 162" />
         <animateTransform
            begin="r387.end"
-           id="r386"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-103.77 0 162"
-           to="-103.77 0 162" />
-        <animateTransform
-           begin="r386.end"
-           id="r385"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-103.77 0 162"
-           to="-103.77 0 162" />
-        <animateTransform
-           begin="r385.end"
-           id="r384"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-103.77 0 162"
-           to="-103.77 0 162" />
-        <animateTransform
-           begin="r384.end"
-           id="r383"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-103.77 0 162"
-           to="-103.77 0 162" />
-        <animateTransform
-           begin="r383.end"
-           id="r382"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-103.77 0 162"
-           to="-103.77 0 162" />
-        <animateTransform
-           begin="r382.end"
-           id="r381"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-103.77 0 162"
-           to="-103.77 0 162" />
-        <animateTransform
-           begin="r381.end"
            id="r380"
            attributeName="transform"
            type="rotate"
@@ -4684,43 +1852,11 @@
            id="r378"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.049286s"
            from="-106.064 0 162"
            to="-106.064 0 162" />
         <animateTransform
            begin="r378.end"
-           id="r377"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r377.end"
-           id="r376"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r376.end"
-           id="r375"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r375.end"
-           id="r374"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00778198s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r374.end"
            id="r373"
            attributeName="transform"
            type="rotate"
@@ -4740,99 +1876,11 @@
            id="r371"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.24384s"
            from="-108.817 0 162"
            to="-108.817 0 162" />
         <animateTransform
            begin="r371.end"
-           id="r370"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r370.end"
-           id="r369"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r369.end"
-           id="r368"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r368.end"
-           id="r367"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r367.end"
-           id="r366"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r366.end"
-           id="r365"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r365.end"
-           id="r364"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r364.end"
-           id="r363"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r363.end"
-           id="r362"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r362.end"
-           id="r361"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r361.end"
-           id="r360"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r360.end"
            id="r359"
            attributeName="transform"
            type="rotate"
@@ -4852,43 +1900,11 @@
            id="r357"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.10376s"
            from="-112.488 0 162"
            to="-112.488 0 162" />
         <animateTransform
            begin="r357.end"
-           id="r356"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-112.488 0 162"
-           to="-112.488 0 162" />
-        <animateTransform
-           begin="r356.end"
-           id="r355"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-112.488 0 162"
-           to="-112.488 0 162" />
-        <animateTransform
-           begin="r355.end"
-           id="r354"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-112.488 0 162"
-           to="-112.488 0 162" />
-        <animateTransform
-           begin="r354.end"
-           id="r353"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-112.488 0 162"
-           to="-112.488 0 162" />
-        <animateTransform
-           begin="r353.end"
            id="r352"
            attributeName="transform"
            type="rotate"
@@ -4900,27 +1916,11 @@
            id="r351"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.12451s"
            from="-114.323 0 162"
            to="-114.323 0 162" />
         <animateTransform
            begin="r351.end"
-           id="r350"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-114.323 0 162"
-           to="-114.323 0 162" />
-        <animateTransform
-           begin="r350.end"
-           id="r349"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-114.323 0 162"
-           to="-114.323 0 162" />
-        <animateTransform
-           begin="r349.end"
            id="r348"
            attributeName="transform"
            type="rotate"
@@ -4932,19 +1932,11 @@
            id="r347"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.041504s"
            from="-116.158 0 162"
            to="-116.158 0 162" />
         <animateTransform
            begin="r347.end"
-           id="r346"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-116.158 0 162"
-           to="-116.158 0 162" />
-        <animateTransform
-           begin="r346.end"
            id="r345"
            attributeName="transform"
            type="rotate"
@@ -4964,155 +1956,11 @@
            id="r343"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.38910s"
            from="-119.829 0 162"
            to="-119.829 0 162" />
         <animateTransform
            begin="r343.end"
-           id="r342"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r342.end"
-           id="r341"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r341.end"
-           id="r340"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r340.end"
-           id="r339"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r339.end"
-           id="r338"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r338.end"
-           id="r337"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r337.end"
-           id="r336"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r336.end"
-           id="r335"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r335.end"
-           id="r334"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r334.end"
-           id="r333"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r333.end"
-           id="r332"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r332.end"
-           id="r331"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r331.end"
-           id="r330"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r330.end"
-           id="r329"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r329.end"
-           id="r328"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r328.end"
-           id="r327"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r327.end"
-           id="r326"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r326.end"
-           id="r325"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r325.end"
            id="r324"
            attributeName="transform"
            type="rotate"
@@ -5124,19 +1972,11 @@
            id="r323"
            attributeName="transform"
            type="rotate"
-           dur="0.0311279s"
+           dur="0.062256s"
            from="-121.664 0 162"
            to="-121.664 0 162" />
         <animateTransform
            begin="r323.end"
-           id="r322"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0311279s"
-           from="-121.664 0 162"
-           to="-121.664 0 162" />
-        <animateTransform
-           begin="r322.end"
            id="r321"
            attributeName="transform"
            type="rotate"
@@ -5148,123 +1988,11 @@
            id="r320"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.31128s"
            from="-123.499 0 162"
            to="-123.499 0 162" />
         <animateTransform
            begin="r320.end"
-           id="r319"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r319.end"
-           id="r318"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r318.end"
-           id="r317"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r317.end"
-           id="r316"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r316.end"
-           id="r315"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r315.end"
-           id="r314"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r314.end"
-           id="r313"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r313.end"
-           id="r312"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r312.end"
-           id="r311"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r311.end"
-           id="r310"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r310.end"
-           id="r309"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r309.end"
-           id="r308"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r308.end"
-           id="r307"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r307.end"
-           id="r306"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r306.end"
            id="r305"
            attributeName="transform"
            type="rotate"
@@ -5276,179 +2004,11 @@
            id="r304"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.22827s"
            from="-124.417 0 162"
            to="-124.417 0 162" />
         <animateTransform
            begin="r304.end"
-           id="r303"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r303.end"
-           id="r302"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r302.end"
-           id="r301"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r301.end"
-           id="r300"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r300.end"
-           id="r299"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r299.end"
-           id="r298"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r298.end"
-           id="r297"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r297.end"
-           id="r296"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r296.end"
-           id="r295"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r295.end"
-           id="r294"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r294.end"
-           id="r293"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r293.end"
-           id="r292"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r292.end"
-           id="r291"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r291.end"
-           id="r290"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r290.end"
-           id="r289"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r289.end"
-           id="r288"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r288.end"
-           id="r287"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r287.end"
-           id="r286"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r286.end"
-           id="r285"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r285.end"
-           id="r284"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r284.end"
-           id="r283"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-124.417 0 162"
-           to="-124.417 0 162" />
-        <animateTransform
-           begin="r283.end"
            id="r282"
            attributeName="transform"
            type="rotate"
@@ -5460,59 +2020,11 @@
            id="r281"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.14008s"
            from="-123.499 0 162"
            to="-123.499 0 162" />
         <animateTransform
            begin="r281.end"
-           id="r280"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r280.end"
-           id="r279"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r279.end"
-           id="r278"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r278.end"
-           id="r277"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r277.end"
-           id="r276"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r276.end"
-           id="r275"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-123.499 0 162"
-           to="-123.499 0 162" />
-        <animateTransform
-           begin="r275.end"
            id="r274"
            attributeName="transform"
            type="rotate"
@@ -5524,83 +2036,11 @@
            id="r273"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.10376s"
            from="-122.582 0 162"
            to="-122.582 0 162" />
         <animateTransform
            begin="r273.end"
-           id="r272"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r272.end"
-           id="r271"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r271.end"
-           id="r270"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r270.end"
-           id="r269"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r269.end"
-           id="r268"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r268.end"
-           id="r267"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r267.end"
-           id="r266"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r266.end"
-           id="r265"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r265.end"
-           id="r264"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-122.582 0 162"
-           to="-122.582 0 162" />
-        <animateTransform
-           begin="r264.end"
            id="r263"
            attributeName="transform"
            type="rotate"
@@ -5620,51 +2060,11 @@
            id="r261"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.11932s"
            from="-119.829 0 162"
            to="-119.829 0 162" />
         <animateTransform
            begin="r261.end"
-           id="r260"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r260.end"
-           id="r259"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r259.end"
-           id="r258"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r258.end"
-           id="r257"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r257.end"
-           id="r256"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="-119.829 0 162"
-           to="-119.829 0 162" />
-        <animateTransform
-           begin="r256.end"
            id="r255"
            attributeName="transform"
            type="rotate"
@@ -5676,19 +2076,11 @@
            id="r254"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.020752s"
            from="-118.911 0 162"
            to="-118.911 0 162" />
         <animateTransform
            begin="r254.end"
-           id="r253"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-118.911 0 162"
-           to="-118.911 0 162" />
-        <animateTransform
-           begin="r253.end"
            id="r252"
            attributeName="transform"
            type="rotate"
@@ -5716,59 +2108,11 @@
            id="r249"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.036316s"
            from="-116.617 0 162"
            to="-116.617 0 162" />
         <animateTransform
            begin="r249.end"
-           id="r248"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-116.617 0 162"
-           to="-116.617 0 162" />
-        <animateTransform
-           begin="r248.end"
-           id="r247"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-116.617 0 162"
-           to="-116.617 0 162" />
-        <animateTransform
-           begin="r247.end"
-           id="r246"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-116.617 0 162"
-           to="-116.617 0 162" />
-        <animateTransform
-           begin="r246.end"
-           id="r245"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-116.617 0 162"
-           to="-116.617 0 162" />
-        <animateTransform
-           begin="r245.end"
-           id="r244"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-116.617 0 162"
-           to="-116.617 0 162" />
-        <animateTransform
-           begin="r244.end"
-           id="r243"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-116.617 0 162"
-           to="-116.617 0 162" />
-        <animateTransform
-           begin="r243.end"
            id="r242"
            attributeName="transform"
            type="rotate"
@@ -5780,27 +2124,11 @@
            id="r241"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.015564s"
            from="-115.699 0 162"
            to="-115.699 0 162" />
         <animateTransform
            begin="r241.end"
-           id="r240"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-115.699 0 162"
-           to="-115.699 0 162" />
-        <animateTransform
-           begin="r240.end"
-           id="r239"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-115.699 0 162"
-           to="-115.699 0 162" />
-        <animateTransform
-           begin="r239.end"
            id="r238"
            attributeName="transform"
            type="rotate"
@@ -5812,27 +2140,11 @@
            id="r237"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.025940s"
            from="-115.241 0 162"
            to="-115.241 0 162" />
         <animateTransform
            begin="r237.end"
-           id="r236"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-115.241 0 162"
-           to="-115.241 0 162" />
-        <animateTransform
-           begin="r236.end"
-           id="r235"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00778198s"
-           from="-115.241 0 162"
-           to="-115.241 0 162" />
-        <animateTransform
-           begin="r235.end"
            id="r234"
            attributeName="transform"
            type="rotate"
@@ -5844,123 +2156,11 @@
            id="r233"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.07782s"
            from="-114.782 0 162"
            to="-114.782 0 162" />
         <animateTransform
            begin="r233.end"
-           id="r232"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r232.end"
-           id="r231"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r231.end"
-           id="r230"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r230.end"
-           id="r229"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r229.end"
-           id="r228"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r228.end"
-           id="r227"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r227.end"
-           id="r226"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r226.end"
-           id="r225"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r225.end"
-           id="r224"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r224.end"
-           id="r223"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r223.end"
-           id="r222"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r222.end"
-           id="r221"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r221.end"
-           id="r220"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r220.end"
-           id="r219"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-114.782 0 162"
-           to="-114.782 0 162" />
-        <animateTransform
-           begin="r219.end"
            id="r218"
            attributeName="transform"
            type="rotate"
@@ -5980,59 +2180,11 @@
            id="r216"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.072632s"
            from="-113.405 0 162"
            to="-113.405 0 162" />
         <animateTransform
            begin="r216.end"
-           id="r215"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-113.405 0 162"
-           to="-113.405 0 162" />
-        <animateTransform
-           begin="r215.end"
-           id="r214"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-113.405 0 162"
-           to="-113.405 0 162" />
-        <animateTransform
-           begin="r214.end"
-           id="r213"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-113.405 0 162"
-           to="-113.405 0 162" />
-        <animateTransform
-           begin="r213.end"
-           id="r212"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-113.405 0 162"
-           to="-113.405 0 162" />
-        <animateTransform
-           begin="r212.end"
-           id="r211"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-113.405 0 162"
-           to="-113.405 0 162" />
-        <animateTransform
-           begin="r211.end"
-           id="r210"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-113.405 0 162"
-           to="-113.405 0 162" />
-        <animateTransform
-           begin="r210.end"
            id="r209"
            attributeName="transform"
            type="rotate"
@@ -6044,35 +2196,11 @@
            id="r208"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.020752s"
            from="-112.947 0 162"
            to="-112.947 0 162" />
         <animateTransform
            begin="r208.end"
-           id="r207"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-112.947 0 162"
-           to="-112.947 0 162" />
-        <animateTransform
-           begin="r207.end"
-           id="r206"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-112.947 0 162"
-           to="-112.947 0 162" />
-        <animateTransform
-           begin="r206.end"
-           id="r205"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-112.947 0 162"
-           to="-112.947 0 162" />
-        <animateTransform
-           begin="r205.end"
            id="r204"
            attributeName="transform"
            type="rotate"
@@ -6092,99 +2220,11 @@
            id="r202"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.12451s"
            from="-111.57 0 162"
            to="-111.57 0 162" />
         <animateTransform
            begin="r202.end"
-           id="r201"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r201.end"
-           id="r200"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r200.end"
-           id="r199"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r199.end"
-           id="r198"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r198.end"
-           id="r197"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r197.end"
-           id="r196"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r196.end"
-           id="r195"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r195.end"
-           id="r194"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r194.end"
-           id="r193"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r193.end"
-           id="r192"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r192.end"
-           id="r191"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-111.57 0 162"
-           to="-111.57 0 162" />
-        <animateTransform
-           begin="r191.end"
            id="r190"
            attributeName="transform"
            type="rotate"
@@ -6212,51 +2252,11 @@
            id="r187"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.062256s"
            from="-109.735 0 162"
            to="-109.735 0 162" />
         <animateTransform
            begin="r187.end"
-           id="r186"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-109.735 0 162"
-           to="-109.735 0 162" />
-        <animateTransform
-           begin="r186.end"
-           id="r185"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-109.735 0 162"
-           to="-109.735 0 162" />
-        <animateTransform
-           begin="r185.end"
-           id="r184"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-109.735 0 162"
-           to="-109.735 0 162" />
-        <animateTransform
-           begin="r184.end"
-           id="r183"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-109.735 0 162"
-           to="-109.735 0 162" />
-        <animateTransform
-           begin="r183.end"
-           id="r182"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-109.735 0 162"
-           to="-109.735 0 162" />
-        <animateTransform
-           begin="r182.end"
            id="r181"
            attributeName="transform"
            type="rotate"
@@ -6268,27 +2268,11 @@
            id="r180"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.057068s"
            from="-108.817 0 162"
            to="-108.817 0 162" />
         <animateTransform
            begin="r180.end"
-           id="r179"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r179.end"
-           id="r178"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-108.817 0 162"
-           to="-108.817 0 162" />
-        <animateTransform
-           begin="r178.end"
            id="r177"
            attributeName="transform"
            type="rotate"
@@ -6324,75 +2308,11 @@
            id="r173"
            attributeName="transform"
            type="rotate"
-           dur="0.00778198s"
+           dur="0.090790s"
            from="-106.064 0 162"
            to="-106.064 0 162" />
         <animateTransform
            begin="r173.end"
-           id="r172"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r172.end"
-           id="r171"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r171.end"
-           id="r170"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r170.end"
-           id="r169"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r169.end"
-           id="r168"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r168.end"
-           id="r167"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r167.end"
-           id="r166"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r166.end"
-           id="r165"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-106.064 0 162"
-           to="-106.064 0 162" />
-        <animateTransform
-           begin="r165.end"
            id="r164"
            attributeName="transform"
            type="rotate"
@@ -6404,27 +2324,11 @@
            id="r163"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.062256s"
            from="-105.147 0 162"
            to="-105.147 0 162" />
         <animateTransform
            begin="r163.end"
-           id="r162"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-105.147 0 162"
-           to="-105.147 0 162" />
-        <animateTransform
-           begin="r162.end"
-           id="r161"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-105.147 0 162"
-           to="-105.147 0 162" />
-        <animateTransform
-           begin="r161.end"
            id="r160"
            attributeName="transform"
            type="rotate"
@@ -6436,67 +2340,11 @@
            id="r159"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.083008s"
            from="-104.229 0 162"
            to="-104.229 0 162" />
         <animateTransform
            begin="r159.end"
-           id="r158"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-104.229 0 162"
-           to="-104.229 0 162" />
-        <animateTransform
-           begin="r158.end"
-           id="r157"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-104.229 0 162"
-           to="-104.229 0 162" />
-        <animateTransform
-           begin="r157.end"
-           id="r156"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-104.229 0 162"
-           to="-104.229 0 162" />
-        <animateTransform
-           begin="r156.end"
-           id="r155"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-104.229 0 162"
-           to="-104.229 0 162" />
-        <animateTransform
-           begin="r155.end"
-           id="r154"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-104.229 0 162"
-           to="-104.229 0 162" />
-        <animateTransform
-           begin="r154.end"
-           id="r153"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-104.229 0 162"
-           to="-104.229 0 162" />
-        <animateTransform
-           begin="r153.end"
-           id="r152"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-104.229 0 162"
-           to="-104.229 0 162" />
-        <animateTransform
-           begin="r152.end"
            id="r151"
            attributeName="transform"
            type="rotate"
@@ -6516,27 +2364,11 @@
            id="r149"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.062256s"
            from="-101.476 0 162"
            to="-101.476 0 162" />
         <animateTransform
            begin="r149.end"
-           id="r148"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-101.476 0 162"
-           to="-101.476 0 162" />
-        <animateTransform
-           begin="r148.end"
-           id="r147"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-101.476 0 162"
-           to="-101.476 0 162" />
-        <animateTransform
-           begin="r147.end"
            id="r146"
            attributeName="transform"
            type="rotate"
@@ -6548,59 +2380,11 @@
            id="r145"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.072632s"
            from="-100.559 0 162"
            to="-100.559 0 162" />
         <animateTransform
            begin="r145.end"
-           id="r144"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-100.559 0 162"
-           to="-100.559 0 162" />
-        <animateTransform
-           begin="r144.end"
-           id="r143"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-100.559 0 162"
-           to="-100.559 0 162" />
-        <animateTransform
-           begin="r143.end"
-           id="r142"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-100.559 0 162"
-           to="-100.559 0 162" />
-        <animateTransform
-           begin="r142.end"
-           id="r141"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-100.559 0 162"
-           to="-100.559 0 162" />
-        <animateTransform
-           begin="r141.end"
-           id="r140"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-100.559 0 162"
-           to="-100.559 0 162" />
-        <animateTransform
-           begin="r140.end"
-           id="r139"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-100.559 0 162"
-           to="-100.559 0 162" />
-        <animateTransform
-           begin="r139.end"
            id="r138"
            attributeName="transform"
            type="rotate"
@@ -6620,27 +2404,11 @@
            id="r136"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.057068s"
            from="-97.8057 0 162"
            to="-97.8057 0 162" />
         <animateTransform
            begin="r136.end"
-           id="r135"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r135.end"
-           id="r134"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-97.8057 0 162"
-           to="-97.8057 0 162" />
-        <animateTransform
-           begin="r134.end"
            id="r133"
            attributeName="transform"
            type="rotate"
@@ -6652,59 +2420,11 @@
            id="r132"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.072632s"
            from="-96.8881 0 162"
            to="-96.8881 0 162" />
         <animateTransform
            begin="r132.end"
-           id="r131"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r131.end"
-           id="r130"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r130.end"
-           id="r129"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r129.end"
-           id="r128"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r128.end"
-           id="r127"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r127.end"
-           id="r126"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-96.8881 0 162"
-           to="-96.8881 0 162" />
-        <animateTransform
-           begin="r126.end"
            id="r125"
            attributeName="transform"
            type="rotate"
@@ -6724,35 +2444,11 @@
            id="r123"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.072632s"
            from="-94.1352 0 162"
            to="-94.1352 0 162" />
         <animateTransform
            begin="r123.end"
-           id="r122"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-94.1352 0 162"
-           to="-94.1352 0 162" />
-        <animateTransform
-           begin="r122.end"
-           id="r121"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-94.1352 0 162"
-           to="-94.1352 0 162" />
-        <animateTransform
-           begin="r121.end"
-           id="r120"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="-94.1352 0 162"
-           to="-94.1352 0 162" />
-        <animateTransform
-           begin="r120.end"
            id="r119"
            attributeName="transform"
            type="rotate"
@@ -6764,51 +2460,11 @@
            id="r118"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.062256s"
            from="-93.2175 0 162"
            to="-93.2175 0 162" />
         <animateTransform
            begin="r118.end"
-           id="r117"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-93.2175 0 162"
-           to="-93.2175 0 162" />
-        <animateTransform
-           begin="r117.end"
-           id="r116"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-93.2175 0 162"
-           to="-93.2175 0 162" />
-        <animateTransform
-           begin="r116.end"
-           id="r115"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-93.2175 0 162"
-           to="-93.2175 0 162" />
-        <animateTransform
-           begin="r115.end"
-           id="r114"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-93.2175 0 162"
-           to="-93.2175 0 162" />
-        <animateTransform
-           begin="r114.end"
-           id="r113"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-93.2175 0 162"
-           to="-93.2175 0 162" />
-        <animateTransform
-           begin="r113.end"
            id="r112"
            attributeName="transform"
            type="rotate"
@@ -6828,27 +2484,11 @@
            id="r110"
            attributeName="transform"
            type="rotate"
-           dur="0.015564s"
+           dur="0.057068s"
            from="-90.4647 0 162"
            to="-90.4647 0 162" />
         <animateTransform
            begin="r110.end"
-           id="r109"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-90.4647 0 162"
-           to="-90.4647 0 162" />
-        <animateTransform
-           begin="r109.end"
-           id="r108"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-90.4647 0 162"
-           to="-90.4647 0 162" />
-        <animateTransform
-           begin="r108.end"
            id="r107"
            attributeName="transform"
            type="rotate"
@@ -6860,27 +2500,11 @@
            id="r106"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.031128s"
            from="-89.547 0 162"
            to="-89.547 0 162" />
         <animateTransform
            begin="r106.end"
-           id="r105"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-89.547 0 162"
-           to="-89.547 0 162" />
-        <animateTransform
-           begin="r105.end"
-           id="r104"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-89.547 0 162"
-           to="-89.547 0 162" />
-        <animateTransform
-           begin="r104.end"
            id="r103"
            attributeName="transform"
            type="rotate"
@@ -6892,19 +2516,11 @@
            id="r102"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.072632s"
            from="-84.9589 0 162"
            to="-84.9589 0 162" />
         <animateTransform
            begin="r102.end"
-           id="r101"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0311279s"
-           from="-84.9589 0 162"
-           to="-84.9589 0 162" />
-        <animateTransform
-           begin="r101.end"
            id="r100"
            attributeName="transform"
            type="rotate"
@@ -6956,51 +2572,11 @@
            id="r94"
            attributeName="transform"
            type="rotate"
-           dur="0.0830078s"
+           dur="0.49805s"
            from="-44.5833 0 162"
            to="-44.5833 0 162" />
         <animateTransform
            begin="r94.end"
-           id="r93"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-44.5833 0 162"
-           to="-44.5833 0 162" />
-        <animateTransform
-           begin="r93.end"
-           id="r92"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-44.5833 0 162"
-           to="-44.5833 0 162" />
-        <animateTransform
-           begin="r92.end"
-           id="r91"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-44.5833 0 162"
-           to="-44.5833 0 162" />
-        <animateTransform
-           begin="r91.end"
-           id="r90"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-44.5833 0 162"
-           to="-44.5833 0 162" />
-        <animateTransform
-           begin="r90.end"
-           id="r89"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-44.5833 0 162"
-           to="-44.5833 0 162" />
-        <animateTransform
-           begin="r89.end"
            id="r88"
            attributeName="transform"
            type="rotate"
@@ -7012,51 +2588,11 @@
            id="r87"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.24902s"
            from="-40.9128 0 162"
            to="-40.9128 0 162" />
         <animateTransform
            begin="r87.end"
-           id="r86"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r86.end"
-           id="r85"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r85.end"
-           id="r84"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r84.end"
-           id="r83"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r83.end"
-           id="r82"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-40.9128 0 162"
-           to="-40.9128 0 162" />
-        <animateTransform
-           begin="r82.end"
            id="r81"
            attributeName="transform"
            type="rotate"
@@ -7092,51 +2628,11 @@
            id="r77"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
+           dur="0.24902s"
            from="-26.2307 0 162"
            to="-26.2307 0 162" />
         <animateTransform
            begin="r77.end"
-           id="r76"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r76.end"
-           id="r75"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r75.end"
-           id="r74"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r74.end"
-           id="r73"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r73.end"
-           id="r72"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
-           from="-26.2307 0 162"
-           to="-26.2307 0 162" />
-        <animateTransform
-           begin="r72.end"
            id="r71"
            attributeName="transform"
            type="rotate"
@@ -7148,59 +2644,11 @@
            id="r70"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.14526s"
            from="-24.3955 0 162"
            to="-24.3955 0 162" />
         <animateTransform
            begin="r70.end"
-           id="r69"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r69.end"
-           id="r68"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r68.end"
-           id="r67"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r67.end"
-           id="r66"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r66.end"
-           id="r65"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r65.end"
-           id="r64"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-24.3955 0 162"
-           to="-24.3955 0 162" />
-        <animateTransform
-           begin="r64.end"
            id="r63"
            attributeName="transform"
            type="rotate"
@@ -7212,27 +2660,11 @@
            id="r62"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.031128s"
            from="-23.4778 0 162"
            to="-23.4778 0 162" />
         <animateTransform
            begin="r62.end"
-           id="r61"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r61.end"
-           id="r60"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-23.4778 0 162"
-           to="-23.4778 0 162" />
-        <animateTransform
-           begin="r60.end"
            id="r59"
            attributeName="transform"
            type="rotate"
@@ -7252,59 +2684,11 @@
            id="r57"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.14008s"
            from="-17.0544 0 162"
            to="-17.0544 0 162" />
         <animateTransform
            begin="r57.end"
-           id="r56"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-17.0544 0 162"
-           to="-17.0544 0 162" />
-        <animateTransform
-           begin="r56.end"
-           id="r55"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-17.0544 0 162"
-           to="-17.0544 0 162" />
-        <animateTransform
-           begin="r55.end"
-           id="r54"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-17.0544 0 162"
-           to="-17.0544 0 162" />
-        <animateTransform
-           begin="r54.end"
-           id="r53"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-17.0544 0 162"
-           to="-17.0544 0 162" />
-        <animateTransform
-           begin="r53.end"
-           id="r52"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-17.0544 0 162"
-           to="-17.0544 0 162" />
-        <animateTransform
-           begin="r52.end"
-           id="r51"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="-17.0544 0 162"
-           to="-17.0544 0 162" />
-        <animateTransform
-           begin="r51.end"
            id="r50"
            attributeName="transform"
            type="rotate"
@@ -7316,59 +2700,11 @@
            id="r49"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.072632s"
            from="-16.1368 0 162"
            to="-16.1368 0 162" />
         <animateTransform
            begin="r49.end"
-           id="r48"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r48.end"
-           id="r47"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r47.end"
-           id="r46"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r46.end"
-           id="r45"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r45.end"
-           id="r44"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r44.end"
-           id="r43"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-16.1368 0 162"
-           to="-16.1368 0 162" />
-        <animateTransform
-           begin="r43.end"
            id="r42"
            attributeName="transform"
            type="rotate"
@@ -7380,43 +2716,11 @@
            id="r41"
            attributeName="transform"
            type="rotate"
-           dur="0.00518799s"
+           dur="0.025940s"
            from="-15.678 0 162"
            to="-15.678 0 162" />
         <animateTransform
            begin="r41.end"
-           id="r40"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-15.678 0 162"
-           to="-15.678 0 162" />
-        <animateTransform
-           begin="r40.end"
-           id="r39"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-15.678 0 162"
-           to="-15.678 0 162" />
-        <animateTransform
-           begin="r39.end"
-           id="r38"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-15.678 0 162"
-           to="-15.678 0 162" />
-        <animateTransform
-           begin="r38.end"
-           id="r37"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00518799s"
-           from="-15.678 0 162"
-           to="-15.678 0 162" />
-        <animateTransform
-           begin="r37.end"
            id="r36"
            attributeName="transform"
            type="rotate"
@@ -7436,59 +2740,11 @@
            id="r34"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.070038s"
            from="-12.4663 0 162"
            to="-12.4663 0 162" />
         <animateTransform
            begin="r34.end"
-           id="r33"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r33.end"
-           id="r32"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r32.end"
-           id="r31"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r31.end"
-           id="r30"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r30.end"
-           id="r29"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r29.end"
-           id="r28"
-           attributeName="transform"
-           type="rotate"
-           dur="0.00778198s"
-           from="-12.4663 0 162"
-           to="-12.4663 0 162" />
-        <animateTransform
-           begin="r28.end"
            id="r27"
            attributeName="transform"
            type="rotate"
@@ -7508,107 +2764,11 @@
            id="r25"
            attributeName="transform"
            type="rotate"
-           dur="0.020752s"
+           dur="0.26459s"
            from="-9.71343 0 162"
            to="-9.71343 0 162" />
         <animateTransform
            begin="r25.end"
-           id="r24"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r24.end"
-           id="r23"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r23.end"
-           id="r22"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r22.end"
-           id="r21"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r21.end"
-           id="r20"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r20.end"
-           id="r19"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r19.end"
-           id="r18"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r18.end"
-           id="r17"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r17.end"
-           id="r16"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r16.end"
-           id="r15"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r15.end"
-           id="r14"
-           attributeName="transform"
-           type="rotate"
-           dur="0.020752s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r14.end"
-           id="r13"
-           attributeName="transform"
-           type="rotate"
-           dur="0.015564s"
-           from="-9.71343 0 162"
-           to="-9.71343 0 162" />
-        <animateTransform
-           begin="r13.end"
            id="r12"
            attributeName="transform"
            type="rotate"
@@ -7620,35 +2780,11 @@
            id="r11"
            attributeName="transform"
            type="rotate"
-           dur="0.010376s"
+           dur="0.041504s"
            from="-8.7958 0 162"
            to="-8.7958 0 162" />
         <animateTransform
            begin="r11.end"
-           id="r10"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-8.7958 0 162"
-           to="-8.7958 0 162" />
-        <animateTransform
-           begin="r10.end"
-           id="r9"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-8.7958 0 162"
-           to="-8.7958 0 162" />
-        <animateTransform
-           begin="r9.end"
-           id="r8"
-           attributeName="transform"
-           type="rotate"
-           dur="0.010376s"
-           from="-8.7958 0 162"
-           to="-8.7958 0 162" />
-        <animateTransform
-           begin="r8.end"
            id="r7"
            attributeName="transform"
            type="rotate"
@@ -7660,27 +2796,11 @@
            id="r6"
            attributeName="transform"
            type="rotate"
-           dur="0.0830078s"
+           dur="0.24902s"
            from="-0.537148 0 162"
            to="-0.537148 0 162" />
         <animateTransform
            begin="r6.end"
-           id="r5"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r5.end"
-           id="r4"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0830078s"
-           from="-0.537148 0 162"
-           to="-0.537148 0 162" />
-        <animateTransform
-           begin="r4.end"
            id="r3"
            attributeName="transform"
            type="rotate"
@@ -7692,15 +2812,7 @@
            id="r2"
            attributeName="transform"
            type="rotate"
-           dur="0.0415039s"
-           from="3.13336 0 162"
-           to="3.13336 0 162" />
-        <animateTransform
-           begin="r2.end"
-           id="r1"
-           attributeName="transform"
-           type="rotate"
-           dur="0.0415039s"
+           dur="0.083008s"
            from="3.13336 0 162"
            to="3.13336 0 162" />
       </path>
