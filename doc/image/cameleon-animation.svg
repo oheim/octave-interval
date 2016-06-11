@@ -42,8 +42,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="255.14977"
-     inkscape:cy="320.19239"
+     inkscape:cx="331.65997"
+     inkscape:cy="158.56798"
      inkscape:document-units="in"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -102,8 +102,9 @@
          id="rect2985"
          d="m 163.19291,-0.46191177 0,144.00001177 -144.000009,0 0,-90.000019 90.000009,0 0,36 -17.999999,0 0,18.000019 36.000009,0 0,-72.000019 -126.0000262,0 0,126.000009 180.0000162,0 0,-162.00000177 z"
          style="fill:#859900;fill-opacity:1;stroke:none">
+        <set id="playing" begin="svg2.mouseover;svg2.click;svg2.activate" dur="48s" restart="whenNotActive" attributeName="class" to="playing" />
         <animateTransform
-           begin="0;r1.end"
+           begin="playing.begin"
            id="r950"
            attributeName="transform"
            type="rotate"
