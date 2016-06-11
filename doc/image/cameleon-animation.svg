@@ -96,7 +96,7 @@
      style="opacity:0.6;display:inline">
     <g
        id="g3004"
-       style="fill:#859900;fill-opacity:1">
+       style="fill:#859900;fill-opacity:1;visibility:hidden">
       <path
          inkscape:connector-curvature="0"
          id="rect2985"
@@ -5639,6 +5639,12 @@
          dur="0.0830078s"
          from="321.537 117.75"
          to="318.549 117.75" />
+      <set
+         id="show-while-playing"
+         begin="playing.begin"
+         end="t1.end"
+         attributeName="visibility"
+         to="visible" />
     </g>
     <path
        style="fill:none;stroke:#002b36;stroke-width:1.79999995;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
@@ -5653,6 +5659,7 @@
        d="m 389.88954,189.74505 27,0"
        style="fill:none;stroke:#002b36;stroke-width:1.79999995;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
     <text
+       style="fill:#d70000;fill-opacity:1;font-family:'Roboto Condensed',sans-serif;font-weight:bold"
        xml:space="preserve"
        x="0"
        y="436"
@@ -5668,8 +5675,8 @@
            begin="svg2.mouseover;svg2.click;svg2.activate"
            dur="48s"
            restart="whenNotActive"
-           attributeName="opacity"
-           to="0" />
+           attributeName="visibility"
+           to="hidden" />
     </text>
   </g>
 </svg>
