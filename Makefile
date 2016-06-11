@@ -301,6 +301,15 @@ $(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(wildcard
 	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
 	@mv doc/manual.pdf "$@"
 
+## Push the new release to Debian
+## (inspired by https://xkcd.com/1597/ because I always forget the required commands)
+.PHONY: debian
+DEBIAN_WORKSPACE_ROOT = ../Debian
+debian:
+	cp "$(RELEASE_TARBALL_COMPRESSED)" "$(DEBIAN_WORKSPACE_ROOT)/octave-$(PACKAGE)_$(VERSION).orig.tar.gz"
+	(cd $(DEBIAN_WORKSPACE_ROOT)/octave-$(PACKAGE) && \
+	 gbp import-orig ../octave-$(PACKAGE)_$(VERSION).orig.tar.gz --pristine-tar)
+
 ###################################################################
 ## The following rules are required for generation of test files ##
 ###################################################################
