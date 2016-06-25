@@ -16,9 +16,6 @@ Description: The interval package for real-valued interval arithmetic allows
  The implementation is based on interval boundaries represented by binary64
  numbers and is conforming to IEEE Std 1788-2015, IEEE standard for interval
  arithmetic.
-Problems: Comparison with isequal fails for interval matrices in
- Octave 4.0.0 (bug #44334, fixed in Octave 4.0.1).  3D plotting is not possible
- with gnuplot as graphics toolkit (bug #45594).
 Depends: octave (>= 3.8.0)
 SystemRequirements: mpfr (>= 3.1.0) [Debian] libmpfr4 (>= 3.1.0)
 BuildRequires: mpfr (>= 3.1.0) [Debian] libmpfr-dev (>= 3.1.0)
