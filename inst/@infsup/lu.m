@@ -20,12 +20,14 @@
 ## 
 ## Compute the LU decomposition of @var{A}.
 ##
-## @var{A} will be a subset of @var{L} * @var{U}.
+## @var{A} will be a subset of @var{L} * @var{U} with lower triangular matrix
+## @var{L} and upper triangular matrix @var{U}.
 ##
 ## The result is returned in a permuted form, according to the optional return
 ## value @var{P}.
 ##
 ## Accuracy: The result is a valid enclosure.
+## @seealso{@infsup/qr}
 ## @end deftypemethod
 
 ## Author: Oliver Heimlich
