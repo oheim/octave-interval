@@ -23,7 +23,7 @@
 ##
 ## In the result, element with certain indices is equal to the corresponding
 ## element of @var{X} if the indices are within the bounds of @var{X};
-## otherwise, the element is set to the empty interval.
+## otherwise, the element is set to zero.
 ##
 ## If only @var{M} is supplied, and it is a scalar, the dimension of the result
 ## is @var{M}-by-@var{M}.  If @var{M} and @var{N} are all scalars, then the
@@ -35,10 +35,10 @@
 ## @group
 ## resize (infsupdec (magic (3)), 4, 2)
 ##   @result{} ans = 4×2 interval matrix
-##          [8]_com       [1]_com
-##          [3]_com       [5]_com
-##          [4]_com       [9]_com
-##      [Empty]_trv   [Empty]_trv
+##      [8]_com   [1]_com
+##      [3]_com   [5]_com
+##      [4]_com   [9]_com
+##      [0]_com   [0]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/reshape, @@infsup/cat, @@infsupdec/postpad, @@infsupdec/prepad}
@@ -73,9 +73,9 @@ switch nargin
 endswitch
 
 result = newdec (bare);
-dec (dec == 0) = _trv (); # any new elements are [Empty]_trv
+dec (dec == 0) = _com (); # any new elements are [0]_com
 result.dec = dec;
 
 endfunction
 
-%!xtest assert (isequal (resize (infsupdec (magic (3)), 4, 2), [infsupdec([8, 1; 3, 5; 4, 9]); infsupdec([inf, inf], [-inf, -inf])]));
+%!xtest assert (isequal (resize (infsupdec (magic (3)), 4, 2), infsupdec([8, 1; 3, 5; 4, 9; 0, 0])));

@@ -23,7 +23,7 @@
 ##
 ## In the result, element with certain indices is equal to the corresponding
 ## element of @var{X} if the indices are within the bounds of @var{X};
-## otherwise, the element is set to the empty interval.
+## otherwise, the element is set to zero.
 ##
 ## If only @var{M} is supplied, and it is a scalar, the dimension of the result
 ## is @var{M}-by-@var{M}.  If @var{M} and @var{N} are all scalars, then the
@@ -35,10 +35,10 @@
 ## @group
 ## resize (infsup (magic (3)), 4, 2)
 ##   @result{} ans = 4×2 interval matrix
-##          [8]       [1]
-##          [3]       [5]
-##          [4]       [9]
-##      [Empty]   [Empty]
+##      [8]   [1]
+##      [3]   [5]
+##      [4]   [9]
+##      [0]   [0]
 ## @end group
 ## @end example
 ## @seealso{@@infsup/reshape, @@infsup/cat, @@infsup/postpad, @@infsup/prepad}
@@ -82,14 +82,11 @@ u = resize (x.sup, m, n);
 ## in the inf matrix, because zeros in the inf matrix are set to -0 by the
 ## infsup constructor.
 
-newelements = not (signbit (l)) & (l == 0);
-
-## Set the implicit new elements to [Empty].
-l (newelements) = inf;
-u (newelements) = -inf;
+## Set the implicit new elements to [0].
+l (l == 0) = -0;
 
 result = infsup (l, u);
 
 endfunction
 
-%!assert (resize (infsup (magic (3)), 4, 2) == [infsup([8, 1; 3, 5; 4, 9]); infsup([inf, inf], [-inf, -inf])]);
+%!assert (resize (infsup (magic (3)), 4, 2) == infsup([8, 1; 3, 5; 4, 9; 0, 0]));
