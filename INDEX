@@ -160,9 +160,10 @@ Interval solver or optimizer
 Interval contractor arithmetic
  ctc_intersect
  ctc_union
-Verified solver or optimizers
+Verified solver or optimizer
  vereigback
  verlinineqnn
+ verlinprog
 Utility function
  @infsup/cat
  @infsup/columns

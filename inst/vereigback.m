@@ -21,7 +21,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {[@var{lambda}, @var{X}, @var{ep}] =} vereigback (@var{A})
+## @deftypefun {[@var{lambda}, @var{X}, @var{ep}] =} vereigback (@var{A})
 ## Verified backward error analysis of eigenpairs.
 ##
 ## For a square complex (or real) matrix @var{A}, this function computes a
@@ -47,7 +47,7 @@
 ## This work was supported by the Czech Republic National Research
 ## Program “Information Society”, project 1ET400300415. 
 ## @seealso{eig}
-## @end deftypefn
+## @end deftypefun
 
 ## Author: Jiří Rohn
 ## Keywords: interval

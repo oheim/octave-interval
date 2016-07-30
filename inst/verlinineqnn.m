@@ -21,7 +21,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding utf-8
-## @deftypefn {Function File} {[@var{x}, @var{y}] =} verlinineqnn (@var{A}, @var{b})
+## @deftypefun {[@var{x}, @var{y}] =} verlinineqnn (@var{A}, @var{b})
 ## Verified nonnegative solution of a system of linear inequalities.
 ##
 ## For a rectangular real matrix @var{A} and a matching real vector @var{b},
@@ -58,7 +58,7 @@
 ## “Information Society”, project 1ET400300415. 
 ##
 ## @seealso{linprog}
-## @end deftypefn
+## @end deftypefun
 
 ## Author: Jiří Rohn
 ## Keywords: interval
