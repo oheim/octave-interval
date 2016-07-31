@@ -1,5 +1,5 @@
 ## Copyright 2008 Jiří Rohn
-## Copyright 2015 Oliver Heimlich
+## Copyright 2016 Oliver Heimlich
 ##
 ## This program is derived from verlinineqnn in VERSOFT, published on
 ## 2016-07-26, which is distributed under the terms of the Expat license,
