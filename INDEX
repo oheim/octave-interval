@@ -164,6 +164,7 @@ Verified solver or optimizer
  vereigback
  verlinineqnn
  verlinprog
+ verinvnonneg
 Utility function
  @infsup/cat
  @infsup/columns
