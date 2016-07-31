@@ -162,6 +162,7 @@ Interval contractor arithmetic
  ctc_union
 Verified solver or optimizer
  vereigback
+ vereigvec
  verlinineqnn
  verlinprog
  verinvnonneg

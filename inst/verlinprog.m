@@ -98,7 +98,7 @@ if (~(m == p && n == q) || (m > n))
     error ("verlinprog: sizes do not match");
 endif
 if (~isreal (A) || ~isreal (b) || ~isreal (c))
-    error('data not real');
+    error("verlinprog: data not real");
 endif
 if issparse (b)
     b = full (b);
