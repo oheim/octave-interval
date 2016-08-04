@@ -191,6 +191,8 @@ Utility function
  @infsup/subsasgn
  @infsup/subsref
  @infsup/transpose
+ @infsup/tril
+ @infsup/triu
  @infsup/vertcat
  @infsupdec/decorationpart
  @infsupdec/intervalpart

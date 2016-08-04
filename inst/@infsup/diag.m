@@ -36,6 +36,7 @@
 ##        [0]   [0]   [3]
 ## @end group
 ## @end example
+## @seealso{@@infsup/tril, @@infsup/triu}
 ## @end deftypemethod
 
 ## Author: Oliver Heimlich
