@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {[@var{Q}, @var{R}] =} qr (@var{A})
 ## @deftypemethodx {@@infsup} {[@var{Q}, @var{R}, @var{P}] =} qr (@var{A})
 ## Compute the QR decomposition of @var{A}.

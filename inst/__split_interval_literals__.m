@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @defun __split_interval_literals__ (@var{S})
 ##
 ## Split string @var{S} into a cell array of interval literals.

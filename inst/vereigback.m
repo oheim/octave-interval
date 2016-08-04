@@ -20,7 +20,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefun {[@var{lambda}, @var{X}, @var{ep}] =} vereigback (@var{A})
 ## Verified backward error analysis of eigenpairs.
 ##

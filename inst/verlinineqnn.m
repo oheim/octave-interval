@@ -20,7 +20,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefun {[@var{x}, @var{y}] =} verlinineqnn (@var{A}, @var{b})
 ## Verified nonnegative solution of a system of linear inequalities.
 ##

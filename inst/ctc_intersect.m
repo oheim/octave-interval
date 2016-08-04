@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @defun ctc_intersect (@var{C1}, @var{Y1}, @var{C2}, @var{Y2})
 ## @defunx ctc_intersect (@var{C1}, @var{C2})
 ##

@@ -14,7 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} fminsearch (@var{f}, @var{X0})
 ## @deftypemethodx {@@infsup} {[@var{X}, @var{FVAL}] =} fminsearch (@var{f}, @var{X0}, @var{options})
 ##

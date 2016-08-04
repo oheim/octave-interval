@@ -20,7 +20,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
-## @documentencoding utf-8
+## @documentencoding UTF-8
 ## @deftypefun {[@var{evc}, @var{lambda}, @var{As}] =} vereigvec (@var{A}, @var{x})
 ## Verified real eigenvector of an interval matrix.
 ##
