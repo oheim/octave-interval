@@ -62,7 +62,11 @@ endif
 
 ## null matrix input -> null matrix output
 if (isempty (x.dec) || isempty (y.dec))
-    result = infsupdec (zeros (0));
+    if (size (x.dec, 2) ~= size (y.dec, 1))
+        error ("interval:InvalidOperand", ...
+               "operator *: nonconformant arguments");
+    endif
+    result = infsupdec (zeros (rows (x.dec), columns (y.dec)));
     return
 endif
 
