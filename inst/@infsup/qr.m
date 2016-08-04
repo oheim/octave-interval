@@ -30,7 +30,7 @@
 ## value @var{P}.
 ##
 ## Accuracy: The result is a valid enclosure.
-## @seealso{@infsup/lu}
+## @seealso{@@infsup/lu, @@infsup/chol}
 ## @end deftypemethod
 
 ## Author: Oliver Heimlich

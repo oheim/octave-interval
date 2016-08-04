@@ -74,6 +74,7 @@ Interval function (most with tightest accuracy)
  @infsup/uminus
  @infsup/uplus
 Interval matrix operation
+ @infsup/chol
  @infsup/det
  @infsup/dot
  @infsup/expm
@@ -85,6 +86,7 @@ Interval matrix operation
  @infsup/mtimes
  @infsup/norm
  @infsup/prod
+ @infsup/qr
  @infsup/sum
  @infsup/sumabs
  @infsup/sumsq
