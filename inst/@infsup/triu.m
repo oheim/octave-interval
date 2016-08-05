@@ -56,3 +56,8 @@ switch (nargin)
 endswitch
 
 endfunction
+
+%!assert (triu (infsup (magic (10))) == triu (magic (10)));
+%!assert (triu (infsup (magic (10)), 1) == triu (magic (10), 1));
+%!assert (triu (infsup (magic (10)), -1) == triu (magic (10), -1));
+%!assert (triu (infsup (magic (10)), 0, "pack") == triu (magic (10), 0, "pack"));

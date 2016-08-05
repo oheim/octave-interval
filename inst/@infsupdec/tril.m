@@ -59,6 +59,14 @@ switch (nargin)
         print_usage ();
 endswitch
 
-result.dec (result.dec == 0) = _com (); # any new elements are [0]_com
+result.dec(result.dec == 0) = _com (); # any new elements are [0]_com
 
 endfunction
+
+%!assert (tril (infsupdec (magic (10))) == tril (magic (10)));
+%!assert (tril (infsupdec (magic (10)), 1) == tril (magic (10), 1));
+%!assert (tril (infsupdec (magic (10)), -1) == tril (magic (10), -1));
+%!assert (tril (infsupdec (magic (10)), 0, "pack") == tril (magic (10), 0, "pack"));
+%!test
+%! A = infsupdec (zeros (3), "trv");
+%! assert (decorationpart (tril (A)), {"trv", "com", "com"; "trv", "trv", "com"; "trv", "trv", "trv"});

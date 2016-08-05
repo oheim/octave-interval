@@ -25,21 +25,73 @@
 ## @deftypemethodx {@@infsup} {[@var{R}, @var{P}] = } chol (@var{A})
 ## @deftypemethodx {@@infsup} {[@var{R}, @dots{}] = } chol (@dots{}, "upper")
 ## @deftypemethodx {@@infsup} {[@var{L}, @dots{}] = } chol (@dots{}, "lower")
-## Compute the Cholesky factor, @var{R}, of the symmetric positive definite
-## matrix @var{A}.
+## Compute the Cholesky factor, @var{R}, of each symmetric positive definite
+## matrix in @var{A}.
 ##
 ## The Cholsky factor is defined by
 ## @display
 ## @var{R}' * @var{R} = @var{A}.
 ## @end display
 ##
-## Called using the @option{lower} flag, @function{chol} returns the lower
+## @example
+## @group
+## chol (infsup (pascal (3)))
+##   @result{} ans = 3×3 interval matrix
+##
+##        [1]   [1]   [1]
+##        [0]   [1]   [2]
+##        [0]   [0]   [1]
+##
+## @end group
+## @end example
+##
+## Called using the @option{lower} flag, @command{chol} returns the lower
 ## triangular factorization such that
 ## @display
 ## @var{L} * @var{L}' = @var{A}.
 ## @end display
+##
+## @example
+## @group
+## chol (infsup (pascal (3)), "lower")
+##   @result{} ans = 3×3 interval matrix
+##
+##        [1]   [0]   [0]
+##        [1]   [1]   [0]
+##        [1]   [2]   [1]
+##
+## @end group
+## @end example
+##
+## Warning: Output data widths may grow rapidly with increasing dimensions.
+##
+## Called with one output argument this function fails if each symmetric matrix
+## in @var{A} is guaranteed to be not positive definite.  With two output
+## arguments @var{P} flags whether each symmetric matrix was guaranteed to be
+## not positive definite and the function does not fail.  A positive value of
+## @var{P} indicates that each symmetric matrix in A is guaranteed to be not
+## positive definite. Otherwise @var{P} is zero.
+##
+## This function tries to guarantee that each symmetric matrix in @var{A} is
+## positive definite.  If that fails, a warning is triggered.
+## 
+## @example
+## @group
+## A = infsup (pascal (3));
+## A(3, 3) = "[5, 6]";
+## chol (A)
+##   @print{} warning: chol: matrix is not guaranteed to be positive definite
+##   @result{} ans = 3×3 interval matrix
+##
+##        [1]   [1]      [1]
+##        [0]   [1]      [2]
+##        [0]   [0]   [0, 1]
+##
+## @end group
+## @end example
+##
 ## @seealso{@@infsup/lu, @@infsup/qr}
-## @end deftypefun
+## @end deftypemethod
 
 ## Author: Jiří Rohn
 ## Keywords: interval
@@ -54,7 +106,7 @@ elseif (nargin < 2)
     option = "upper";
 endif
 
-if (not (any (strcmp (option, {"upper", "lower"}))))
+if (not (ischar (option) && any (strcmp (option, {"upper", "lower"}))))
     print_usage ();
     return
 endif
@@ -107,3 +159,11 @@ switch (option)
 endswitch
 
 endfunction
+
+%!assert (chol (infsup (pascal (10))) == chol (pascal (10)));
+%!assert (chol (infsupdec (pascal (10))) == chol (pascal (10)));
+%!test
+%! A = infsup ([2, 1; 1, 1]);
+%! R = chol (A);
+%! assert (ismember ([sqrt(2), 1/sqrt(2); 0, 1/sqrt(2)], R));
+%! assert (wid (R) < 1e-15);
