@@ -82,5 +82,5 @@ endif
 
 endfunction
 
-%!xtest "from the documentation string";
+%!test "from the documentation string";
 %! assert (isequal (infsupdec (magic (3)) ^ 2, infsupdec (magic (3) ^ 2)));

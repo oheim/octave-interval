@@ -70,5 +70,5 @@ result = infsupdec (gauss (intervalpart (x), intervalpart (y)), "trv");
 
 endfunction
 
-%!xtest "from the documentation string";
+%!test "from the documentation string";
 %! assert (isequal (gauss (infsupdec ([1, 0; 0, 2]), [2, 0; 0, 4]), infsupdec ([2, 0; 0, 2], "trv")));

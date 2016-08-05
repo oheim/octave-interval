@@ -84,5 +84,5 @@ result.dec = prepad (x.dec, len, c.dec, dim);
 
 endfunction
 
-%!xtest assert (isequal (prepad (infsupdec (2:4), 4, 1), infsupdec (1:4)));
-%!xtest assert (isequal (prepad (infsupdec (0:2), 2, 1), infsupdec (1:2)));
+%!assert (isequal (prepad (infsupdec (2:4), 4, 1), infsupdec (1:4)));
+%!assert (isequal (prepad (infsupdec (0:2), 2, 1), infsupdec (1:2)));

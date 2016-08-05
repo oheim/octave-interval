@@ -60,7 +60,7 @@ result.dec = d;
 
 endfunction
 
-%!xtest assert (isequal (horzcat (infsupdec (1), infsupdec (2)), infsupdec (horzcat (1, 2))));
-%!xtest "from the documentation string";
+%!assert (isequal (horzcat (infsupdec (1), infsupdec (2)), infsupdec (horzcat (1, 2))));
+%!test "from the documentation string";
 %! a = infsupdec (2, 5);
 %! assert (isequal (horzcat (a, a, a), infsupdec ([2, 2, 2], [5, 5, 5])));

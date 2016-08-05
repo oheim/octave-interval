@@ -103,5 +103,5 @@ endwhile
 
 endfunction
 
-%!xtest "from the documentation string";
+%!test "from the documentation string";
 %! assert (isequal (infsup (magic (3)) ^ 2, infsup (magic (3) ^ 2)));

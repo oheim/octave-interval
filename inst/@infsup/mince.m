@@ -76,4 +76,4 @@ result = infsup (l, u);
 
 endfunction
 
-%!xtest assert (isequal (mince (infsup (0, 10), 10), infsup (0 : 9, 1 : 10)));
+%!assert (isequal (mince (infsup (0, 10), 10), infsup (0 : 9, 1 : 10)));

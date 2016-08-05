@@ -70,4 +70,4 @@ result.dec = dec;
 
 endfunction
 
-%!xtest assert (isequal (reshape (infsupdec (1 : 6), 2, 3), infsupdec (reshape (1 : 6, 2, 3))));
+%!assert (isequal (reshape (infsupdec (1 : 6), 2, 3), infsupdec (reshape (1 : 6, 2, 3))));

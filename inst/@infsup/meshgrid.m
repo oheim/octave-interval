@@ -93,7 +93,7 @@ endif
 
 endfunction
 
-%!xtest assert (isequal (meshgrid (infsup (0 : 3)), infsup (meshgrid (0 : 3))));
+%!assert (isequal (meshgrid (infsup (0 : 3)), infsup (meshgrid (0 : 3))));
 
 %!demo
 %!  clf

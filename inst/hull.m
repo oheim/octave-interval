@@ -181,9 +181,9 @@ endfunction
 %!assert (isnai (hull (nai)));
 %!assert (isempty (hull (nan)));
 %!assert (isequal (hull (2, nan, 3, 5), infsupdec (2, 5, "trv")));
-%!xtest assert (isequal (hull ([1, 2, 3], [5; 0; 2]), infsupdec ([1, 2, 3; 0, 0, 0; 1, 2, 2], [5, 5, 5; 1, 2, 3; 2, 2, 3], "com")));
-%!xtest assert (isequal (hull (magic (3), 10), infsupdec (magic (3), 10 (ones (3)), "com")));
-%!xtest assert (isequal (hull (2, magic (3), [nan, 2, 3; nan, 1, 1; 99, 100, nan]), infsupdec ([2, 1, 2; 2, 1, 1; 2, 2, 2], [8, 2, 6; 3, 5, 7; 99, 100, 2], {"trv", "com", "com"; "trv", "com", "com"; "com", "com", "trv"})));
+%!assert (isequal (hull ([1, 2, 3], [5; 0; 2]), infsupdec ([1, 2, 3; 0, 0, 0; 1, 2, 2], [5, 5, 5; 1, 2, 3; 2, 2, 3], "com")));
+%!assert (isequal (hull (magic (3), 10), infsupdec (magic (3), 10 (ones (3)), "com")));
+%!assert (isequal (hull (2, magic (3), [nan, 2, 3; nan, 1, 1; 99, 100, nan]), infsupdec ([2, 1, 2; 2, 1, 1; 2, 2, 2], [8, 2, 6; 3, 5, 7; 99, 100, 2], {"trv", "com", "com"; "trv", "com", "com"; "com", "com", "trv"})));
 %!test "from the documentation string";
 %! assert (isequal (hull (1, 2, 3, 4), infsupdec (1, 4, "com")));
 %! assert (isequal (hull (empty, entire), infsupdec (-inf, inf, "trv")));

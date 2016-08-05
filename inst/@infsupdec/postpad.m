@@ -84,5 +84,5 @@ result.dec = postpad (x.dec, len, c.dec, dim);
 
 endfunction
 
-%!xtest assert (isequal (postpad (infsupdec (1:3), 4, 4), infsupdec (1:4)));
-%!xtest assert (isequal (postpad (infsupdec (1:3), 2, 4), infsupdec (1:2)));
+%!assert (isequal (postpad (infsupdec (1:3), 4, 4), infsupdec (1:4)));
+%!assert (isequal (postpad (infsupdec (1:3), 2, 4), infsupdec (1:2)));

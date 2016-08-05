@@ -65,4 +65,4 @@ result = infsupdec (mince (intervalpart (x), n), "trv");
 
 endfunction
 
-%!xtest assert (isequal (mince (infsupdec (0, 10), 10), infsupdec (0 : 9, 1 : 10, "trv")));
+%!assert (isequal (mince (infsupdec (0, 10), 10), infsupdec (0 : 9, 1 : 10, "trv")));

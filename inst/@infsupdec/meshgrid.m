@@ -108,4 +108,4 @@ endif
 
 endfunction
 
-%!xtest assert (isequal (meshgrid (infsupdec (0 : 3)), infsupdec (meshgrid (0 : 3))));
+%!assert (isequal (meshgrid (infsupdec (0 : 3)), infsupdec (meshgrid (0 : 3))));

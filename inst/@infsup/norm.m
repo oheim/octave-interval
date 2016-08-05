@@ -211,7 +211,7 @@ endif
 
 endfunction
 
-%!xtest
+%!test
 %! A = infsup ("0 [Empty] [0, 1] 1");
 %! assert (isequal (norm (A, 0, "cols"), infsup ("0 0 [0, 1] 1")));
 %!assert (norm (infsup (magic (3)), inf, 1) == 45);

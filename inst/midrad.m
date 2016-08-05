@@ -128,8 +128,8 @@ endfunction
 %!warning assert (isequal (midrad (infsup (2), infsupdec (2)), infsupdec (0, 4)));
 %!assert (isequal (midrad (infsupdec (2), infsup (2)), infsupdec (0, 4)));
 %!assert (isequal (midrad (infsupdec (2), infsupdec (2)), infsupdec (0, 4)));
-%!xtest assert (isequal (midrad (1, magic (3)), infsupdec ([-7, 0, -5; -2, -4, -6; -3, -8, -1], [9, 2, 7; 4, 6, 8; 5, 10, 3])));
-%!xtest assert (isequal (midrad (magic (3), 1), infsupdec ([7, 0, 5; 2, 4, 6; 3, 8, 1], [9, 2, 7; 4, 6, 8; 5, 10, 3])));
+%!assert (isequal (midrad (1, magic (3)), infsupdec ([-7, 0, -5; -2, -4, -6; -3, -8, -1], [9, 2, 7; 4, 6, 8; 5, 10, 3])));
+%!assert (isequal (midrad (magic (3), 1), infsupdec ([7, 0, 5; 2, 4, 6; 3, 8, 1], [9, 2, 7; 4, 6, 8; 5, 10, 3])));
 %!test "from the documentation string";
 %! assert (isequal (midrad (42, 3), infsupdec (39, 45)));
 %! assert (isequal (midrad (0, inf), entire ()));
