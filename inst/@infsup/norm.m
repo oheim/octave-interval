@@ -197,8 +197,8 @@ else
             result = max (abs (A), [], dim);
         case -inf
             result = min (abs (A), [], dim);
-        case "fro"
-            result = sqrt (sumsq (abs (A), dim));
+        case {"fro", 2}
+            result = sqrt (sumsq (A, dim));
         case 0
             result = infsup (sum (not (ismember (0, A)), dim), ...
                              sum (0 != A, dim)) - ...
