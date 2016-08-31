@@ -165,6 +165,7 @@ Interval contractor arithmetic
 Verified solver or optimizer
  vereigback
  vereigvec
+ verintlinineqs
  verlinineqnn
  verlinprog
  verinvnonneg
