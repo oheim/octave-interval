@@ -169,23 +169,54 @@ void nthroot (
   mpfr_clear (mp);
 }
 
-// Evaluate factorial
+// Evaluate factorial.
 void factorial (
-  Matrix &result,          // Result
-  const uint64NDArray arg, // Operand
+  Matrix &arg1, // Operand 1 and result
   const mpfr_rnd_t rnd)
 {
   mpfr_t mp;
   mpfr_init2 (mp, BINARY64_PRECISION);
 
-  const octave_idx_type n = arg.numel ();
+  const octave_idx_type n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
+      if (std::isnan (arg1.elem (i)))
+        continue;
+      
+      if (arg1.elem (i) < 2.0)
+      {
+        arg1.elem (i) = 1.0;
+        continue;
+      }
+      
+      if (arg1.elem (i) >= 171.0)
+      {
+        // Computation can become hard for large numbers,
+        // thus we can short-circuit here.
+        switch (rnd)
+        {
+          case MPFR_RNDZ:
+          case MPFR_RNDD:
+            arg1.elem (i) = std::numeric_limits <double>::max ();
+            continue;
+          case MPFR_RNDA:
+          case MPFR_RNDU:
+          case MPFR_RNDN:
+            arg1.elem (i) = +INFINITY;
+            continue;
+          default:
+            break;
+        }
+      }
+      
       // Compilation on 32-bit systems produces ambiguity errors if the
-      // type of arg.elem(i) is not defined explicitly
-      const uint64_t current_arg = arg.elem (i);
+      // integer type is not defined explicitly.
+      // The factorial function is defined as the product of all positive
+      // integers less than or equal to n.
+      const uint32_t current_arg = floor (arg1.elem (i));
+      
       mpfr_fac_ui (mp, current_arg, rnd);
-      result.elem (i) = mpfr_get_d (mp, rnd);
+      arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
 
   mpfr_clear (mp);
@@ -349,12 +380,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
         else if (function == "expm1")
           evaluate (arg1, rnd, &mpfr_expm1);
         else if (function == "factorial")
-          {
-            const uint64NDArray argInt = args (2).uint64_array_value ();
-            if (error_state)
-              return octave_value_list ();
-            factorial (arg1, argInt, rnd);
-          }
+          factorial (arg1, rnd);
         else if (function == "gamma")
           evaluate (arg1, rnd, &mpfr_gamma);
         else if (function == "gammaln")

@@ -28,7 +28,7 @@
 ## array.
 ##
 ## For non-integers see the generalized factorial function @command{gamma}.
-## Not that the factorial function grows large quite quickly, and the result
+## Note that the factorial function grows large quite quickly, and the result
 ## cannot be represented exactly in binary64 for @var{N} ≥ 23 and will overflow
 ## for @var{N} ≥ 171.
 ##
