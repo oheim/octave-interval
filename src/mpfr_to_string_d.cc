@@ -184,6 +184,8 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
           if (x.elem (i) != 0.0)
             {
               // Precision 16 might not be enough
+              // Note: mpfr_sprintf does not set the inexact flag, so we must
+              // check for precision loss ourself.
               mpfr_nexttoward (mp, zero);
               mpfr_sprintf (buf, str_template.c_str (), rnd, mp);
               mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
