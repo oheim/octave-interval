@@ -1,16 +1,16 @@
 /*
   Copyright 2015-2016 Oliver Heimlich
-  
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 3 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
@@ -40,7 +40,7 @@ void evaluate (
 {
   mpfr_t mp;
   mpfr_init2 (mp, BINARY64_PRECISION);
-  
+
   const octave_idx_type n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
@@ -48,7 +48,7 @@ void evaluate (
       (*f) (mp, mp, rnd);
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
-  
+
   mpfr_clear (mp);
 }
 
@@ -62,20 +62,20 @@ void evaluate (
   mpfr_t mp1, mp2;
   mpfr_init2 (mp1, BINARY64_PRECISION);
   mpfr_init2 (mp2, BINARY64_PRECISION);
-  
+
   // arg1 shall contain the result and must be resized
   if (arg1.rows () == 1 && arg2.rows () != 1)
-    arg1 = arg1.index (idx_vector (ColumnVector (arg2.rows (), 1.0)), 
+    arg1 = arg1.index (idx_vector (ColumnVector (arg2.rows (), 1.0)),
                        idx_vector::colon);
   if (arg1.columns () == 1 && arg2.columns () != 1)
     arg1 = arg1.index (idx_vector::colon,
                        idx_vector (RowVector (arg2.columns (), 1.0)));
-  
+
   const octave_idx_type n = arg1.rows ();
   const octave_idx_type m = arg1.columns ();
   const bool broadcast_r = n != 1 && arg2.rows () == 1;
   const bool broadcast_c = m != 1 && arg2.columns () == 1;
-  
+
   for (octave_idx_type i = 0; i < n; i ++)
     for (octave_idx_type j = 0; j < m; j ++)
       {
@@ -90,7 +90,7 @@ void evaluate (
         (*f) (mp1, mp1, mp2, rnd);
         arg1.elem (i, j) = mpfr_get_d (mp1, rnd);
       }
-  
+
   mpfr_clear (mp1);
   mpfr_clear (mp2);
 }
@@ -107,11 +107,11 @@ void evaluate (
   mpfr_init2 (mp1, BINARY64_PRECISION);
   mpfr_init2 (mp2, BINARY64_PRECISION);
   mpfr_init2 (mp3, BINARY64_PRECISION);
-  
+
   bool scalar1 = arg1.numel () == 1;
   bool scalar2 = arg2.numel () == 1;
   bool scalar3 = arg3.numel () == 1;
-  
+
   if (scalar1)
     {
       // arg1 shall contain the result and must possibly be resized
@@ -143,7 +143,7 @@ void evaluate (
       (*f) (mp1, mp1, mp2, mp3, rnd);
       arg1.elem (i) = mpfr_get_d (mp1, rnd);
     }
-  
+
   mpfr_clear (mp1);
   mpfr_clear (mp2);
   mpfr_clear (mp3);
@@ -157,7 +157,7 @@ void nthroot (
 {
   mpfr_t mp;
   mpfr_init2 (mp, BINARY64_PRECISION);
-  
+
   const octave_idx_type n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
@@ -165,7 +165,7 @@ void nthroot (
       mpfr_root (mp, mp, arg2, rnd);
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
-  
+
   mpfr_clear (mp);
 }
 
@@ -182,37 +182,37 @@ void factorial (
     {
       if (std::isnan (arg1.elem (i)))
         continue;
-      
+
       if (arg1.elem (i) < 2.0)
-      {
-        arg1.elem (i) = 1.0;
-        continue;
-      }
-      
-      if (arg1.elem (i) >= 171.0)
-      {
-        // Computation can become hard for large numbers,
-        // thus we can short-circuit here.
-        switch (rnd)
         {
-          case MPFR_RNDZ:
-          case MPFR_RNDD:
-            arg1.elem (i) = std::numeric_limits <double>::max ();
-            continue;
-          case MPFR_RNDA:
-          case MPFR_RNDU:
-          case MPFR_RNDN:
-            arg1.elem (i) = +INFINITY;
-            continue;
-          default:
-            break;
+          arg1.elem (i) = 1.0;
+          continue;
         }
-      }
-      
+
+      if (arg1.elem (i) >= 171.0)
+        {
+          // Computation can become hard for large numbers,
+          // thus we can short-circuit here.
+          switch (rnd)
+            {
+              case MPFR_RNDZ:
+              case MPFR_RNDD:
+                arg1.elem (i) = std::numeric_limits <double>::max ();
+                continue;
+              case MPFR_RNDA:
+              case MPFR_RNDU:
+              case MPFR_RNDN:
+                arg1.elem (i) = +INFINITY;
+                continue;
+              default:
+                break;
+            }
+        }
+
       // The factorial function is defined as the product of all positive
       // integers less than or equal to n.
       const double current_arg = floor (arg1.elem (i));
-      
+
       mpfr_fac_ui (mp, static_cast <unsigned long int> (current_arg), rnd);
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
@@ -220,7 +220,7 @@ void factorial (
   mpfr_clear (mp);
 }
 
-DEFUN_DLD (mpfr_function_d, args, nargout, 
+DEFUN_DLD (mpfr_function_d, args, nargout,
   "-*- texinfo -*-\n"
   "@documentencoding UTF-8\n"
   "@defun mpfr_function_d ('acos', @var{R}, @var{X})\n"
@@ -307,7 +307,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
       print_usage ();
       return octave_value_list ();
     }
-  
+
   // Read parameters
   const std::string function = args (0).string_value ();
   const mpfr_rnd_t  rnd      = parse_rounding_mode (args (1).scalar_value ());
@@ -334,7 +334,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     }
   if (error_state)
     return octave_value_list ();
-  
+
   // Choose the function to evaluate
   switch (nargin - 2)
     {
@@ -421,7 +421,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
             return octave_value_list ();
           }
         break;
-        
+
       case 2: // binary function
         if      (function == "atan2")
           evaluate (arg1, arg2, rnd, &mpfr_atan2);
@@ -450,7 +450,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
             return octave_value_list ();
           }
         break;
-        
+
       case 3: // ternary function
         if      (function == "fma")
           evaluate (arg1, arg2, arg3, rnd, &mpfr_fma);
