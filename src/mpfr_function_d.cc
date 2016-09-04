@@ -169,7 +169,7 @@ void nthroot (
   mpfr_clear (mp);
 }
 
-// Evaluate factorial.
+// Evaluate factorial
 void factorial (
   Matrix &arg1, // Operand 1 and result
   const mpfr_rnd_t rnd)
@@ -209,13 +209,11 @@ void factorial (
         }
       }
       
-      // Compilation on 32-bit systems produces ambiguity errors if the
-      // integer type is not defined explicitly.
       // The factorial function is defined as the product of all positive
       // integers less than or equal to n.
-      const uint32_t current_arg = floor (arg1.elem (i));
+      const double current_arg = floor (arg1.elem (i));
       
-      mpfr_fac_ui (mp, current_arg, rnd);
+      mpfr_fac_ui (mp, static_cast <unsigned long int> (current_arg), rnd);
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
 

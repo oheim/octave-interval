@@ -55,7 +55,7 @@
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE Std
 ## 1788-2015, IEEE standard for interval arithmetic, however it implements both
-## standard functions numsToInterval and textToInterval.
+## standard functions numsToInterval and textToInterval for bare intervals.
 ## 
 ## @example
 ## @group
