@@ -114,7 +114,7 @@ endif
 endfunction
 
 %!assert (intervaltotext (infsup (1 + eps), "exact decimal"), "[1.0000000000000002220446049250313080847263336181640625]");
-%!assert (intervaltotext (infsup (1 + eps), "exact hexadecimal"), "[0X1.0000000000001P+0]");
+%!assert (intervaltotext (infsup (1 + eps), "exact hexadecimal"), "[0x1.0000000000001p+0]");
 %!test
 %! output_precision (3, 'local');
 %! assert (intervaltotext (infsup (pi), "auto"), "[3.14, 3.15]");

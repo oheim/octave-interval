@@ -66,6 +66,6 @@ endif
 endfunction
 
 %!assert (intervaltotext (infsupdec (1 + eps), "exact decimal"), "[1.0000000000000002220446049250313080847263336181640625]_com");
-%!assert (intervaltotext (infsupdec (1 + eps), "exact hexadecimal"), "[0X1.0000000000001P+0]_com");
+%!assert (intervaltotext (infsupdec (1 + eps), "exact hexadecimal"), "[0x1.0000000000001p+0]_com");
 %!assert (intervaltotext (infsupdec (1 + eps)), "[1.0000000000000002, 1.000000000000001]_com");
 %!assert (intervaltotext (infsupdec (1)), "[1]_com");

@@ -56,7 +56,10 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   "@item exact decimal\n"
   "Varying mantissa length with up to 751 places.\n"
   "@item exact hexadecimal\n"
-  "Mantissa with exactly 13 hexadecimal places.\n"
+  "Fixed mantissa length with 1+13 hexadecimal places.  The digit before the "
+  "point is only zero if the number is denormalized.  For normalized numbers "
+  "the digit before the point should be 1, but this is not guaranteed and "
+  "depends on the C compiler used.\n"
   "@end table"
   "\n\n"
   "@example\n"
@@ -64,15 +67,15 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   "mpfr_to_string_d (-inf, \"exact hexadecimal\", magic (3) / 10)\n"
   "  @result{}\n"
   "    @{\n"
-  "      [1,1] = 0XC.CCCCCCCCCCCD0P-4\n"
-  "      [2,1] = 0X4.CCCCCCCCCCCCCP-4\n"
-  "      [3,1] = 0X6.6666666666668P-4\n"
-  "      [1,2] = 0X1.999999999999AP-4\n"
-  "      [2,2] = 0X8.0000000000000P-4\n"
-  "      [3,2] = 0XE.6666666666668P-4\n"
-  "      [1,3] = 0X9.9999999999998P-4\n"
-  "      [2,3] = 0XB.3333333333330P-4\n"
-  "      [3,3] = 0X3.3333333333334P-4\n"
+  "      [1,1] = 0x1.999999999999ap-1\n"
+  "      [2,1] = 0x1.3333333333333p-2\n"
+  "      [3,1] = 0x1.999999999999ap-2\n"
+  "      [1,2] = 0x1.999999999999ap-4\n"
+  "      [2,2] = 0x1.0000000000000p-1\n"
+  "      [3,2] = 0x1.ccccccccccccdp-1\n"
+  "      [1,3] = 0x1.3333333333333p-1\n"
+  "      [2,3] = 0x1.6666666666666p-1\n"
+  "      [3,3] = 0x1.999999999999ap-3\n"
   "    @}\n"
   "@end group\n"
   "@end example\n"
@@ -113,7 +116,12 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
     // particular number.
     str_template = "%.16R*g";
   else if (format == "exact hexadecimal")
-    str_template = "%.13R*A";
+    // We will not use MPFR below!
+    // precision = 0 should give a varying mantissa length with enough digits
+    // automatically.  Some compilers cannot determine the correct numbers
+    // automatically or fail to do so for subnormal numbers.  Thus we must use
+    // a fixed format here.
+    str_template = "%.13a";
   else if (format == "exact decimal")
     str_template = "%.751R*g";
   else
@@ -144,8 +152,32 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   const octave_idx_type n = x.numel ();
   for (octave_idx_type i = 0; i < n; i++)
     {
-      mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
-      mpfr_sprintf (buf, str_template.c_str (), rnd, mp);
+      if (format == "exact hexadecimal")
+        {
+          // Do not use MPFR for double to hex conversion.
+          //
+          // MPFR would use any of the 16 hex digits before the point, but
+          // IEEE Std 1788-2015 requires the use of either 0 or 1 before the
+          // point, where 1 is used for normal numbers and 0 is used for
+          // subnormal numbers.
+          //
+          // C99's floating-point conversion will use 0 before the point for
+          // subnormal numbers and non-zero before the point for normal
+          // numbers.
+          // https://www.gnu.org/software/libc/manual/html_node/Floating_002dPoint-Conversions.html
+          //
+          // It is not guaranteed that only 1 is used for normal numbers before
+          // the point, however this is the case for my gcc version 4.9.2.
+          // Please report a bug if you know of a compiler with a different
+          // behavior.
+          sprintf (buf, str_template.c_str (), x.elem (i));
+        }
+      else
+        {
+          mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
+          mpfr_sprintf (buf, str_template.c_str (), rnd, mp);
+        }
+      
       str.elem (i) = buf;
       if (format == "decimal")
         {
@@ -187,4 +219,8 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
 %!  [s, isexact] = mpfr_to_string_d (-inf, "decimal", .1);
 %!  assert (s, {"0.1"});
 %!  assert (isexact, false);
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", 0), {"0x0.0000000000000p+0"});
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", 2), {"0x1.0000000000000p+1"});
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", -1), {"-0x1.0000000000000p+0"});
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", pow2 (-1074)), {"0x0.0000000000001p-1022"});
 */
