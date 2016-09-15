@@ -52,7 +52,7 @@
 ## Keywords: interval
 ## Created: 2014-11-02
 
-function result = subsref (A, S)
+function A = subsref (A, S)
 
 if (nargin ~= 2)
     print_usage ();
@@ -61,8 +61,8 @@ endif
 
 switch (S (1).type)
     case "()"
-        result = newdec (subsref (intervalpart (A), S (1)));
-        result.dec = subsref (A.dec, S (1));
+        A.infsup = subsref (A.infsup, S(1));
+        A.dec = subsref (A.dec, S(1));
     case "{}"
         error ("interval cannot be indexed with {}")
     case "."
@@ -76,20 +76,20 @@ switch (S (1).type)
         if (nargin (functionname) ~= 1)
             error (["‘", S(1).subs, "’ is not a valid interval property"])
         endif
-        result = feval (S (1).subs, A);
+        A = feval (S(1).subs, A);
     otherwise
         error ("invalid subscript type")
 endswitch
 
 if (numel (S) > 1)
-    result = subsref (result, S (2:end));
+    A = subsref (A, S(2 : end));
 endif
 
 endfunction
 
-%!assert (isequal (infsupdec (magic (3)) ([1, 2, 3]), infsupdec (magic (3) ([1, 2, 3]))));
+%!assert (isequal (infsupdec (magic (3))([1, 2, 3]), infsupdec (magic (3)([1, 2, 3]))));
 %!test "from the documentation string";
 %! x = infsupdec (magic (3), magic (3) + 1);
-%! assert (x (1) == infsupdec (8, 9)); 
-%! assert (x (:, 2) == infsupdec ([1; 5; 9], [2; 6; 10]));
+%! assert (x(1) == infsupdec (8, 9)); 
+%! assert (x(:, 2) == infsupdec ([1; 5; 9], [2; 6; 10]));
 %! assert (x.inf, magic (3));

@@ -33,10 +33,11 @@ if (nargin ~= 1)
     return
 endif
 
-## NaI is internally stored as a scalar empty interval with ill decoration.
-result = isscalar (interval.dec) && interval.dec == _ill ();
+## NaI is internally stored as an empty interval with ill decoration.
+result = (interval.dec == _ill ());
 
 endfunction
 
 %!assert (isnai (infsupdec ("[nai]")));
 %!assert (not (isnai (infsupdec (2, 3))));
+%!warning assert (isnai (infsupdec ("happy 42 hacking")), logical ([1 0 1]));

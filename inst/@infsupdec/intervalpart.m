@@ -33,13 +33,15 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    error ("interval:IntvlPartOfNaI", "intervalpart: NaI has no interval part")
+if (any (isnai (x)))
+    warning ("interval:IntvlPartOfNaI", ...
+             "intervalpart: NaI has no interval part")
 endif
 
-## This also works for the empty interval
-bare = infsup (inf (x), sup (x));
+bare = x.infsup;
 
 endfunction
 
+%!warning id=interval:IntvlPartOfNaI
+%! assert (intervalpart (nai ()) == infsup ());
 %!assert (intervalpart (infsupdec (2, 3)) == infsup (2, 3));

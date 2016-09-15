@@ -45,18 +45,29 @@
 ## Keywords: interval
 ## Created: 2015-02-22
 
-function result = nai ()
+function result = nai (varargin)
 
-if (nargin ~= 0)
-    print_usage ();
-    return
-endif
+persistent scalar_nai_interval = infsupdec ("[nai]");
 
-result = infsupdec ("[nai]");
+switch nargin
+    case 0
+        result = scalar_nai_interval;
+    
+    case 1
+        result = subsref (scalar_nai_interval, ...
+                          substruct ("()", {ones(varargin{1})}));
+    
+    case 2
+        result = subsref (scalar_nai_interval, ...
+                          substruct ("()", {ones(varargin{1:2})}));
+    
+    otherwise
+        print_usage ();
+endswitch
 
 endfunction
 
 %!assert (isnai (nai ()));
-%!error (nai (1));
-%!error (intervalpart (nai ()));
+%!assert (isnai (nai (2)), true (2));
+%!assert (isnai (nai (3, 4)), true (3, 4));
 %!assert (decorationpart (nai ()), {"ill"});

@@ -32,7 +32,7 @@
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function result = subsasgn (A, S, B)
+function A = subsasgn (A, S, B)
 
 if (nargin ~= 3)
     print_usage ();
@@ -45,21 +45,20 @@ if (not (isa (B, "infsup")))
     B = infsup (B);
 elseif (isa (B, "infsupdec"))
     ## Workaround for bug #42735
-    result = subsasgn (A, S, B);
+    A = subsasgn (A, S, B);
     return
 endif
 
 assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
 
-l = subsasgn (A.inf, S, B.inf);
-u = subsasgn (A.sup, S, B.sup);
+A.inf = subsasgn (A.inf, S, B.inf);
+A.sup = subsasgn (A.sup, S, B.sup);
+A.inf(A.inf == 0) = -0; # any new elements are stored as [-0, +0] internally
 
-result = infsup (l, u);
- 
 endfunction
 
 %!test
 %! A = infsup (magic (3));
-%! A (4, 4) = 42;
+%! A(4, 4) = 42;
 %! assert (inf (A), [magic(3),[0;0;0];0,0,0,42]);
 %! assert (sup (A), [magic(3),[0;0;0];0,0,0,42]);

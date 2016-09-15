@@ -101,176 +101,8 @@
 
 function [x, isexact] = infsupdec (varargin)
 
-## The decorated version must return NaI instead of an error if interval
-## construction failed, so we use a try & catch block.
-try
-    if (nargin >= 1 && ischar (varargin {end}))
-        varargin {end} = __split_interval_literals__ (varargin {end});
-    endif
-    
-    ## The setDec function, as described by IEEE Std 1788-2015,
-    ## may fix decorations
-    fix_illegal_decorations = true ();
-    
-    if (nargin >= 1 && ...
-        iscellstr (varargin {end}) && ...
-        not (isempty (varargin {end})) && ...
-        any (strcmpi (varargin {end} {1}, ...
-                      {"com", "dac", "def", "trv", "ill"})))
-        ## The decoration information has been passed as the last parameter
-        decstr = varargin {end};
-        switch nargin
-            case 1
-                [bare, isexact] = infsup ();
-            case 2
-                if (isa (varargin {1}, "infsup"))
-                    bare = infsup (inf (varargin {1}), sup (varargin {1}));
-                    isexact = true ();
-                else
-                    [bare, isexact] = infsup (varargin {1});
-                endif
-            case 3
-                [bare, isexact] = infsup (varargin {1}, varargin {2});
-            otherwise
-                print_usage ();
-                return
-        endswitch
-    elseif (nargin == 1 && iscell (varargin {1}))
-        ## Parse possibly decorated interval literals
-        chars = cellfun ("ischar", varargin {1});
-        varargin {1} (chars) = cellfun (@strsplit, ...
-                                        varargin {1} (chars), ...
-                                        {"_"}, ...
-                                        "UniformOutput", false);
-        if (any (any (cellfun ("size", varargin {1} (chars), 2) > 2)))
-            ## More than 2 underscores in any literal
-            error ("interval:InvalidOperand", ...
-                   "illegal decorated interval literal")
-        endif
-        ## Extract decoration
-        decstr = cell (size (varargin {1}));
-        hasdec = false (size (varargin {1}));
-        hasdec (chars) = cellfun ("size", varargin {1} (chars), 2) == 2;
-        decstr (hasdec) = cellfun (@(x) x {2}, varargin {1} (hasdec), ...
-                                   "UniformOutput", false);
-        varargin {1} (chars) = cellfun (@(x) x {1}, varargin {1} (chars), ...
-                                        "UniformOutput", false);
-        
-        ## Note: The representation of NaI, will trigger an error in the infsup
-        ## constructor
-        [bare, isexact, overflow] = infsup (varargin {1});
-        
-        ## Silently fix decorated interval literals when overflow occurred
-        decstr (overflow & strcmpi (decstr, "com")) = "dac";
-        
-        ## Interval literals must not carry illegal decorations
-        fix_illegal_decorations = false ();
-    else
-        ## Undecorated interval boundaries
-        decstr = {""};
-        switch nargin
-            case 0
-                [bare, isexact] = infsup ();
-            case 1
-                if (isa (varargin {1}, "infsupdec"))
-                    x = varargin {1};
-                    isexact = true ();
-                    return
-                elseif (isa (varargin {1}, "infsup"))
-                    bare = varargin {1};
-                    isexact = true ();
-                    if (not (all (all (isempty (bare)))))
-                        warning ("interval:ImplicitPromote", ...
-                                ["Implicitly decorated bare interval; ", ...
-                                 "resulting decoration may be wrong"]);
-                    endif
-                else
-                    [bare, isexact] = infsup (varargin {1});
-                endif
-            case 2
-                [bare, isexact] = infsup (varargin {1}, varargin {2});
-            otherwise
-                print_usage ();
-        endswitch
-    endif
-    
-    assert (isa (bare, "infsup"));
-    assert (iscell (decstr));
-
-    ## Convert decoration strings into decoration matrix.
-    ## Initialize the matrix with the ill decoration, which is not allowed to
-    ## be used explicitly as a parameter to this function.
-    dec = _ill () (ones (size (decstr)));
-    
-    ## Missing decorations will later be assigned their final value
-    missingdecoration_value = uint8 (1); # magic value, not used otherwise
-    dec (cellfun ("isempty", decstr)) = missingdecoration_value;
-    
-    dec (strcmpi (decstr, "com")) = _com ();
-    dec (strcmpi (decstr, "dac")) = _dac ();
-    dec (strcmpi (decstr, "def")) = _def ();
-    dec (strcmpi (decstr, "trv")) = _trv ();
-
-    if (any (any (dec == _ill ())))
-        error ("interval:InvalidOperand", "illegal decoration");
-    endif
-
-    ## Broadcast decoration
-    if (isscalar (dec) && not (isscalar (bare)))
-        dec = dec (ones (size (bare)));
-    elseif (not (all (size (dec) == size (bare))))
-        error ("interval:InvalidOperand", "decoration size mismatch")
-    endif
-
-    ## Add missing decoration
-    missingdecoration = dec == missingdecoration_value;
-    dec (missingdecoration) = _dac ();
-    dec (missingdecoration & isempty (bare)) = _trv ();
-    dec (missingdecoration & iscommoninterval (bare)) = _com ();
-    
-    ## Check decoration
-    empty_not_trv = isempty (bare) & dec ~= _trv ();
-    if (any (any (empty_not_trv)))
-        if (not (fix_illegal_decorations))
-            error ("interval:InvalidOperand", ...
-                   "illegal decorated interval literal")
-        endif
-        isexact = false ();
-        dec (empty_not_trv) = _trv ();
-    endif
-    uncommon_com = not (iscommoninterval (bare)) & dec == _com ();
-    if (any (any (uncommon_com)))
-        if (not (fix_illegal_decorations))
-            error ("interval:InvalidOperand", ...
-                   "illegal decorated interval literal")
-        endif
-        isexact = false ();
-        dec (uncommon_com) = _dac ();
-    endif
-catch
-    switch lasterror.identifier
-        case "Octave:invalid-fun-call"
-            print_usage ();
-        case "interval:NaI"
-            ## The bare inverval:NaI error can only occur, if the interval
-            ## literal [NaI] is observed. In that particular case, we must not
-            ## issue a warning.
-        case {"interval:PossiblyUndefined", ...
-              "interval:ImplicitPromote"}
-            ## The user has set these warnings to error, which we must respect
-            rethrow (lasterror)
-        otherwise
-            warning ("interval:NaI", lasterror.message);
-    endswitch
-    ## NaI representation is unique.
-    bare = infsup ();
-    dec = _ill ();
-    isexact = false ();
-end_try_catch
-
-x.dec = dec;
-
-x = class (x, "infsupdec", bare);
+persistent scalar_empty_interval = class (struct ("dec", _trv), ...
+                                          "infsupdec", infsup ());
 
 ## Enable all mixed mode functions to use decorated variants with implicit
 ## conversion from bare to decorated intervals.
@@ -286,77 +118,343 @@ x = class (x, "infsupdec", bare);
 ## results, which is catastrophic for a verified computation package.
 superiorto ("infsup");
 
+if (nargin == 0)
+    x = scalar_empty_interval;
+    isexact = true;
+    return
+endif
+
+if (nargin == 1 && isa (varargin{1}, "infsupdec"))
+    x = varargin{1};
+    isexact = true;
+    return
+endif
+
+for i = 1 : numel (varargin)
+    if (ischar (varargin{i}))
+        varargin{i} = __split_interval_literals__ (varargin{i});
+    endif
+endfor
+
+if (nargin >= 1 && ...
+    iscellstr (varargin{end}) && ...
+    not (isempty (varargin{end})) && ...
+    any (strcmpi (varargin{end}{1}, ...
+                  {"com", "dac", "def", "trv", "ill"})))
+    ## The decoration information has been passed as the last parameter
+    decstr = varargin{end};
+    varargin = varargin(1 : end - 1);
+    
+    ## The setDec function, as described by IEEE Std 1788-2015,
+    ## may fix decorations
+    fix_illegal_decorations = true;
+elseif (nargin == 1 && iscell (varargin{1}))
+    ## Extract decorations from possibly decorated interval literals
+    char_idx = cellfun ("ischar", varargin{1});
+    
+    ## Split bare interval literal and decoration
+    literal_and_decoration = cellfun ("strsplit", ...
+                                      varargin{1}(char_idx), {"_"}, ...
+                                      "UniformOutput", false);
+    
+    number_of_parts = cellfun ("numel", literal_and_decoration);
+    illegal_local_idx = number_of_parts > 2;
+    if (any (illegal_local_idx))
+        ## More than 2 underscores in any literal
+        warning ("interval:UndefinedOperation", ...
+                 "illegal decorated interval literal")
+        literal_and_decoration(illegal_local_idx) = {"[nai]"};
+    endif
+    
+    ## Ignore strings without decoration
+    has_decoration_local_idx = (number_of_parts == 2);
+    literal_and_decoration = literal_and_decoration(has_decoration_local_idx);
+    char_idx(char_idx) = has_decoration_local_idx;
+    
+    ## Extract decoration
+    decstr = cell (size (varargin{1}));
+    decstr(char_idx) = vertcat ({}, ...
+        cellindexmat (literal_and_decoration, 2){:});
+    varargin{1}(char_idx) = vertcat({}, ...
+        cellindexmat (literal_and_decoration, 1){:});
+    
+    ## Interval literals must not carry illegal decorations
+    fix_illegal_decorations = false;
+else
+    ## Undecorated interval boundaries
+    decstr = {""};
+    ## No need to fix illegal decorations
+    fix_illegal_decorations = false;
+endif
+
+switch numel (varargin)
+    case 0
+        [bare, isexact] = infsup ();
+        isnai = overflow = false;
+    
+    case 1
+        switch class (varargin{1})
+            case "infsup"
+                bare = varargin{1};
+                isexact = true;
+                isnai = overflow = false (size (bare));
+                if (nargin == 1 && any (not (isempty (bare))))
+                    warning ("interval:ImplicitPromote", ...
+                            ["Implicitly decorated bare interval; ", ...
+                             "resulting decoration may be wrong"]);
+                endif
+                
+            case "infsupdec"
+                ## setDec and newDec replace the current decoration
+                ## with a new one
+                bare = struct (varargin{1}).infsup;
+                isexact = true;
+                isnai = overflow = false (size (bare));
+                
+            case "cell"
+                ## [nai] is a legal literal, but not allowed in the infsup
+                ## constructor.  Create a silent nai in these cases.
+                nai_literal_idx = not (cellfun ("isempty", ...
+                    regexp (varargin{1}, '^\[\s*nai\s*\]$', ...
+                        "ignorecase")));
+                varargin{1}(nai_literal_idx) = "[]";
+                [bare, isexact, overflow, isnai] = infsup (varargin{1});
+                isnai(nai_literal_idx) = true;
+            
+            otherwise
+                [bare, isexact, overflow, isnai] = infsup (varargin{1});
+                
+        endswitch
+
+    case 2
+        [bare, isexact, overflow, isnai] = infsup (varargin{1}, varargin{2});
+    
+    otherwise
+        print_usage ();
+        return
+endswitch
+
+## Convert decoration strings into decoration matrix.
+## Initialize the matrix with the ill decoration, which is not allowed to
+## be used explicitly as a parameter to this function.
+dec = repmat (_ill, size (decstr));
+
+## Missing decorations will later be assigned their final value
+missingdecoration_value = uint8 (1); # magic value, not used otherwise
+dec(cellfun ("isempty", decstr)) = missingdecoration_value;
+
+dec(strcmpi (decstr, "com")) = _com;
+dec(strcmpi (decstr, "dac")) = _dac;
+dec(strcmpi (decstr, "def")) = _def;
+dec(strcmpi (decstr, "trv")) = _trv;
+
+if (any (dec == _ill))
+    warning ("interval:UndefinedOperation", "illegal decoration");
+endif
+
+## Broadcast decoration and bare interval
+if (not (isequal (size (bare), size (dec))))
+    for dim = 1 : max (ndims (bare), ndims (dec))
+        if (size (bare, dim) != 1 && size (dec, dim) != 1 && ...
+            size (bare, dim) != size (dec, dim))
+            warning ("interval:InvalidOperand", ...
+                     ["infsupdec: Dimensions of decoration and interval ", ...
+                      "are not compatible"]);
+            ## Unable to recover from this kind of error
+            x = scalar_empty_interval;
+            isexact = false;
+            return
+        endif
+    endfor
+    dec = dec + zeros (size (bare), "uint8");
+    bare = bare + zeros (size (dec));
+endif
+
+## If creation failed in infsup constructor, make an illegal interval
+dec(isnai) = _ill;
+
+## Silently fix decoration when overflow occurred
+dec(overflow & (dec == _com)) = _dac;
+
+## Add missing decoration
+missingdecoration = (dec == missingdecoration_value);
+dec(missingdecoration) = _dac;
+dec(missingdecoration & isempty (bare)) = _trv;
+dec(missingdecoration & iscommoninterval (bare)) = _com;
+
+## Check decoration
+empty_not_trv = isempty (bare) & (dec ~= _trv) & (dec ~= _ill);
+if (any (empty_not_trv))
+    if (not (fix_illegal_decorations))
+        warning ("interval:UndefinedOperation", ...
+                 "illegal decorated empty interval literal")
+        dec(empty_not_trv) = _ill;
+    else
+        dec(empty_not_trv) = _trv;
+    endif
+    isexact = false ();
+endif
+uncommon_com = not (iscommoninterval (bare)) & (dec == _com);
+if (any (uncommon_com))
+    if (not (fix_illegal_decorations))
+        warning ("interval:UndefinedOperation", ...
+                 "illegal decorated uncommon interval literal")
+        dec(uncommon_com) = _ill;
+    else
+        dec(uncommon_com) = _dac;
+    endif
+    isexact = false ();
+endif
+
+## Illegal intervals must be empty
+illegal = (dec == _ill);
+if (any (illegal))
+    bare(illegal) = infsup ();
+    isexact = false ();
+endif
+
+x = class (struct ("dec", dec), "infsupdec", bare);
+
 endfunction
 
 %!# [NaI]s
-%!  assert (isnai (infsupdec ("[nai]"))); # quiet [NaI]
-%!warning assert (isnai (infsupdec (3, 2)));
-%!warning assert (isnai (infsupdec ("Flugeldufel")));
-%!warning assert (isnai (infsupdec ("[1, Inf]_com")));
-%!warning assert (isnai (infsupdec ("[Empty]_def")));
-%!test "decoration adjustments, setDec function";
-%!  assert (inf (infsupdec (42, inf, "com")), 42);
-%!  assert (sup (infsupdec (42, inf, "com")), inf);
-%!  assert (strcmp (decorationpart (infsupdec (42, inf, "com")), "dac"));
-%!  assert (inf (infsupdec (-inf, inf, "com")), -inf);
-%!  assert (sup (infsupdec (-inf, inf, "com")), inf);
-%!  assert (strcmp (decorationpart (infsupdec (-inf, inf, "com")), "dac"));
-%!  assert (inf (infsupdec (inf, -inf, "def")), inf);
-%!  assert (sup (infsupdec (inf, -inf, "def")), -inf);
-%!  assert (strcmp (decorationpart (infsupdec (inf, -inf, "def")), "trv"));
-%!test "overflow";
-%!  assert (inf (infsupdec ("[1, 1e999]_com")), 1);
-%!  assert (sup (infsupdec ("[1, 1e999]_com")), inf);
-%!  assert (strcmp (decorationpart (infsupdec ("[1, 1e999]_com")), "dac"));
-%!test "decorated interval literal";
-%!  assert (inf (infsupdec ("[2, 3]_def")), 2);
-%!  assert (sup (infsupdec ("[2, 3]_def")), 3);
-%!  assert (strcmp (decorationpart (infsupdec ("[2, 3]_def")), "def"));
-%!  assert (inf (infsupdec ("trv")), inf);
-%!  assert (sup (infsupdec ("trv")), -inf);
-%!  assert (strcmp (decorationpart (infsupdec ("trv")), "trv"));
-%!test "automatic decoration";
-%!  assert (inf (infsupdec ("[2, 3]")), 2);
-%!  assert (sup (infsupdec ("[2, 3]")), 3);
-%!  assert (strcmp (decorationpart (infsupdec ("[2, 3]")), "com"));
-%!  assert (inf (infsupdec ("[Empty]")), inf);
-%!  assert (sup (infsupdec ("[Empty]")), -inf);
-%!  assert (strcmp (decorationpart (infsupdec ("[Empty]")), "trv"));
-%!  assert (inf (infsupdec ("[Entire]")), -inf);
-%!  assert (sup (infsupdec ("[Entire]")), inf);
-%!  assert (strcmp (decorationpart (infsupdec ("[Entire]")), "dac"));
-%!  assert (inf (infsupdec ("")), -inf);
-%!  assert (sup (infsupdec ("")), +inf);
-%!  assert (strcmp (decorationpart (infsupdec ("")), "dac"));
-%!test "separate decoration information";
-%!  assert (inf (infsupdec ("[2, 3]", "def")), 2);
-%!  assert (sup (infsupdec ("[2, 3]", "def")), 3);
-%!  assert (strcmp (decorationpart (infsupdec ("[2, 3]", "def")), "def"));
-%!test "cell array with decorated intervals";
-%!  assert (inf (infsupdec ({"[2, 3]_def", "[4, 5]_dac"})), [2, 4]);
-%!  assert (sup (infsupdec ({"[2, 3]_def", "[4, 5]_dac"})), [3, 5]);
-%!  assert (all (strcmp (decorationpart (infsupdec ({"[2, 3]_def", "[4, 5]_dac"})), {"def", "dac"})));
-%!test "cell array with separate decoration cell array";
-%!  assert (inf (infsupdec ({"[2, 3]", "[4, 5]"}, {"def", "dac"})), [2, 4]);
-%!  assert (sup (infsupdec ({"[2, 3]", "[4, 5]"}, {"def", "dac"})), [3, 5]);
-%!  assert (all (strcmp (decorationpart (infsupdec ({"[2, 3]", "[4, 5]"}, {"def", "dac"})), {"def", "dac"})));
-%!test "cell array with separate decoration vector";
-%!  assert (inf (infsupdec ({"[2, 3]"; "[4, 5]"}, ["def"; "dac"])), [2; 4]);
-%!  assert (sup (infsupdec ({"[2, 3]"; "[4, 5]"}, ["def"; "dac"])), [3; 5]);
-%!  assert (all (strcmp (decorationpart (infsupdec ({"[2, 3]"; "[4, 5]"}, ["def"; "dac"])), {"def"; "dac"})));
-%!test "cell array with broadcasting decoration";
-%!  assert (inf (infsupdec ({"[2, 3]", "[4, 5]"}, "def")), [2, 4]);
-%!  assert (sup (infsupdec ({"[2, 3]", "[4, 5]"}, "def")), [3, 5]);
-%!  assert (all (strcmp (decorationpart (infsupdec ({"[2, 3]", "[4, 5]"}, "def")), {"def", "def"})));
-%!test "separate boundaries with decoration";
-%!  assert (inf (infsupdec (2, 3, "def")), 2);
-%!  assert (sup (infsupdec (2, 3, "def")), 3);
-%!  assert (strcmp (decorationpart (infsupdec (2, 3, "def")), "def"));
-%!test "matrix boundaries with decoration";
-%!  assert (inf (infsupdec ([3, 16], {"def", "trv"})), [3, 16]);
-%!  assert (sup (infsupdec ([3, 16], {"def", "trv"})), [3, 16]);
-%!  assert (all ( strcmp (decorationpart (infsupdec ([3, 16], {"def", "trv"})), {"def", "trv"})));
-%!test "separate matrix boundaries with broadcasting decoration";
-%!  assert (inf (infsupdec (magic (3), magic (3) + 1, "def")), magic (3));
-%!  assert (sup (infsupdec (magic (3), magic (3) + 1, "def")), magic (3) + 1);
-%!  assert (all ( all (strcmp (decorationpart (infsupdec (magic (3), magic (3) + 1, "def")), {"def", "def", "def"; "def", "def", "def"; "def", "def", "def"}))));
+%!assert (isnai (infsupdec ("[nai]"))); # quiet [NaI]
+%!warning id=interval:UndefinedOperation
+%! assert (isnai (infsupdec (3, 2))); # illegal boundaries
+%!warning id=interval:UndefinedOperation
+%! assert (isnai (infsupdec (inf, -inf))); # illegal boundaries
+%!warning id=interval:UndefinedOperation
+%! assert (isnai (infsupdec ("Flugeldufel"))); # illegal literal
+%!warning id=interval:UndefinedOperation
+%! assert (isnai (infsupdec ("[1, Inf]_com"))); # illegal decorated literal
+%!warning id=interval:UndefinedOperation
+%! assert (isnai (infsupdec ("[Empty]_def"))); # illegal decorated literal
+
+%!# decoration adjustments, setDec function
+%!test 
+%! x = infsupdec (42, inf, "com");
+%! assert (inf (x), 42);
+%! assert (sup (x), inf);
+%! assert (decorationpart (x), {"dac"});
+%!test
+%! x = infsupdec (-inf, inf, {"com"});
+%! assert (inf (x), -inf);
+%! assert (sup (x), inf);
+%! assert (decorationpart (x), {"dac"});
+%!test
+%! x = infsupdec ("def");
+%! assert (inf (x), inf);
+%! assert (sup (x), -inf);
+%! assert (decorationpart (x), {"trv"});
+
+%!# overflow
+%!test
+%! x = infsupdec ("[1, 1e999]_com");
+%! assert (inf (x), 1);
+%! assert (sup (x), inf);
+%! assert (decorationpart (x), {"dac"});
+
+%!# decorated interval literal
+%!test
+%! x = infsupdec ("[2, 3]_def");
+%! assert (inf (x), 2);
+%! assert (sup (x), 3);
+%! assert (decorationpart (x), {"def"});
+%!test
+%! x = infsupdec ("[1, 5]_dac");
+%! assert (inf (x), 1);
+%! assert (sup (x), 5);
+%! assert (decorationpart (x), {"dac"});
+%!test
+%! x = infsupdec ("[1, Infinity]_dac");
+%! assert (inf (x), 1);
+%! assert (sup (x), inf);
+%! assert (decorationpart (x), {"dac"});
+%!test
+%! x = infsupdec ("[Empty]_trv");
+%! assert (inf (x), inf);
+%! assert (sup (x), -inf);
+%! assert (decorationpart (x), {"trv"});
+
+%!# automatic decoration / undecorated interval literal / newDec function
+%!test
+%! x = infsupdec ("[2, 3]");
+%! assert (inf (x), 2);
+%! assert (sup (x), 3);
+%! assert (decorationpart (x), {"com"});
+%!test
+%! x = infsupdec ("[Empty]");
+%! assert (inf (x), inf);
+%! assert (sup (x), -inf);
+%! assert (decorationpart (x), {"trv"});
+%!test
+%! x = infsupdec ("[Entire]");
+%! assert (inf (x), -inf);
+%! assert (sup (x), inf);
+%! assert (decorationpart (x), {"dac"});
+%!test
+%! x = infsupdec ("");
+%! assert (inf (x), -inf);
+%! assert (sup (x), inf);
+%! assert (decorationpart (x), {"dac"});
+
+%!# separate decoration information
+%!test
+%! x = infsupdec ("[2, 3]", "def");
+%! assert (inf (x), 2);
+%! assert (sup (x), 3);
+%! assert (decorationpart (x), {"def"});
+
+%!# cell array with decorated interval literals
+%!test
+%! x = infsupdec ({"[2, 3]_def", "[4, 5]_dac"});
+%! assert (inf (x), [2, 4]);
+%! assert (sup (x), [3, 5]);
+%! assert (decorationpart (x), {"def", "dac"});
+
+%!#cell array with separate decoration cell array
+%!test
+%! x = infsupdec ({"[2, 3]", "[4, 5]"}, {"def", "dac"});
+%! assert (inf (x), [2, 4]);
+%! assert (sup (x), [3, 5]);
+%! assert (decorationpart (x), {"def", "dac"});
+
+%!# cell array with separate decoration vector
+%!test
+%! x = infsupdec ({"[2, 3]"; "[4, 5]"}, ["def"; "dac"]);
+%! assert (inf (x), [2; 4]);
+%! assert (sup (x), [3; 5]);
+%! assert (decorationpart (x), {"def"; "dac"});
+
+%!# cell array with broadcasting decoration
+%!test
+%! x = infsupdec ({"[2, 3]", "[4, 5]"}, "def");
+%! assert (inf (x), [2, 4]);
+%! assert (sup (x), [3, 5]);
+%! assert (decorationpart (x), {"def", "def"});
+%!test
+%! x = infsupdec ({"[2, 3]", "[4, 5]"}, "def; dac");
+%! assert (inf (x), [2, 4; 2, 4]);
+%! assert (sup (x), [3, 5; 3, 5]);
+%! assert (decorationpart (x), {"def", "def"; "dac", "dac"});
+
+%!# separate boundaries with decoration
+%!test
+%! x = infsupdec (2, 3, "def");
+%! assert (inf (x), 2);
+%! assert (sup (x), 3);
+%! assert (decorationpart (x), {"def"});
+
+%!# matrix boundaries with decoration
+%!test
+%! x = infsupdec ([3, 16], {"def", "trv"});
+%! assert (inf (x), [3, 16]);
+%! assert (sup (x), [3, 16]);
+%! assert (decorationpart (x), {"def", "trv"});
+
+%!# separate matrix boundaries with broadcasting decoration
+%!test
+%! x = infsupdec (magic (3), magic (3) + 1, "def");
+%! assert (inf (x), magic (3));
+%! assert (sup (x), magic (3) + 1);
+%! assert (decorationpart (x), {"def", "def", "def"; "def", "def", "def"; "def", "def", "def"});
