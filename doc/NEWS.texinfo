@@ -63,6 +63,9 @@ A second big news is that the interval package comprises functions from VERSOFT,
     New functions which have been ported from Jiří Rohn's VERSOFT: chol, vereigback, vereigvec, verintlinineqs, verinvnonneg, verlinineqnn, verlinprog
 
 @item
+    recip, sqr: The functions have been removed, after they have been deprecated in version 1.4.0.
+
+@item
     plot3: Fixed plotting with gnuplot and fixed an issue where the figure did not switch from 2D to 3D after plotting.
 
 @end itemize
