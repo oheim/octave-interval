@@ -43,15 +43,8 @@ if (nargin ~= 1)
     return
 endif
 
-if (isa (x, "infsupdec"))
-    ## We cannot override this function in infsupdec, because that would create
-    ## an infinite loop.
-    if (isnai (x))
-        error ("interval:NaI", "NaI has no infimum")
-    endif
-endif
-
 result = x.inf;
+
 endfunction
 
 %!test "from the documentation string";

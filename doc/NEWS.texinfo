@@ -14,6 +14,59 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{2.0.0, 2016-XX-XX}
+This major release contains fundamental changes to the interval constructors.  After a discussion on the P1788 mailing list, it has been revealed that this interval package didn't implement exceptions from the standard for interval arithmetic correctly: Operations from IEEE Std 1788-2015 which trigger an “exception” shall return a value nonetheless.  Conformance has been improved in this new version, but may break compatibility with previous versions.
+
+A second big news is that the interval package comprises functions from VERSOFT, a verification software package by Jiří Rohn, who has generously published his work as free software this year.  Unfortunately, some of VERSOFT's functions are encrypted and could not be included yet.
+
+@itemize
+@item
+    nai: With additional arguments, matrices of NaI (not an interval) values can be constructed.  Previously, NaI has been restricted to be a scalar value.
+
+@item
+    infsup: The bare interval constructor merely triggers a warning instead of an error on illegal input, which creates empty intervals.  If input contains legitimate as well as illegal input, only entries with illegal input will carry empty intervals.
+
+@item
+    infsupdec: The decorated interval constructor may create interval matrices which have NaI (not an interval) as entries.  If input contains legitimate as well as illegal input, only entries with illegal input will carry NaI values.
+
+@item
+    Warning and error identifiers of the constructors have been revised.
+    
+    The warning identifier @code{interval:NaI} has been removed.  Illegal input signals an @code{interval:UndefinedOperation} warning.  If the input is of an illegal data type or of illegal size, the constructors signal an @code{interval:InvalidOperand} warning.
+    
+    The warning identifier @code{interval:PossiblyUndefinedOperation} has been renamed to @code{interval:PossiblyUndefined} to better match the wording in the standard document. Also, previous versions failed to trigger this warning in cases where there is a floating point number between boundaries @var{u} < @var{l}, which has been fixed.
+
+@item
+    It is no longer valid to call @code{infsup (+inf, -inf)} to create an empty interval and the constructor will signal a warning in these cases.  This change has been made to better conform to the @command{numsToInterval} function from the interval standard.
+
+@item
+    inf, sup: If the input is NaI (not an interval), these functions return NaN (not a number) values instead of an error.
+
+@item
+    Output of intervals in hexadecimal form discriminates between subnormal boundaries and normal boundaries.  Subnormal numbers start with “0x0.” whereas normal numbers start with “0x1.”.
+    
+    Also, hexadecimal form has been changed to lower case.
+
+@item
+    resize: New interval elements are initialized with zero instead of empty intervals to better match the corresponding Octave function.
+
+@item
+    Interval constructors may broadcast column and row vectors.
+
+@item
+    Performance improvements: factorial on large arguments; plot and plot3 on input that is plotted as a line.
+
+@item:
+    New interval functions: tril, triu, qr
+
+@item
+    New functions which have been ported from Jiří Rohn's VERSOFT: chol, vereigback, vereigvec, verintlinineqs, verinvnonneg, verlinineqnn, verlinprog
+
+@item
+    plot3: Fixed plotting with gnuplot and fixed an issue where the figure did not switch from 2D to 3D after plotting.
+
+@end itemize
+
 @release{1.5.0, 2016-05-31}
 @itemize
 @item

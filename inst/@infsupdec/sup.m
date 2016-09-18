@@ -1,4 +1,4 @@
-## Copyright 2014-2016 Oliver Heimlich
+## Copyright 2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,26 +15,27 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsup} sup (@var{X})
+## @defmethod {@@infsupdec} sup (@var{X})
 ## 
 ## Get the (least) upper boundary for all numbers of interval @var{X}.
 ##
-## If @var{X} is empty, @code{sup (@var{X})} is negative infinity.
+## If @var{X} is empty, @code{sup (@var{X})} is negative infinity.  If @var{X}
+## is NaI, @code{sup (@var{X})} is NaN.
 ##
 ## Accuracy: The result is exact.
 ##
 ## @example
 ## @group
-## sup (infsup (2.5, 3.5))
+## sup (infsupdec (2.5, 3.5))
 ##   @result{} ans = 3.5000
 ## @end group
 ## @end example
-## @seealso{@@infsup/inf, @@infsup/mid}
+## @seealso{@@infsupdec/inf, @@infsup/mid}
 ## @end defmethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2014-09-27
+## Created: 2016-09-18
 
 function result = sup (x)
 
@@ -43,9 +44,13 @@ if (nargin ~= 1)
     return
 endif
 
-result = x.sup;
+result = sup (x.infsup);
+result(isnai (x)) = nan;
 
 endfunction
 
-%!# from the documentation string
 %!assert (sup (infsup (2.5, 3.5)), 3.5);
+%!assert (sup (infsup ()), -inf);
+%!assert (sup (infsup ("[nai]")), nan);
+%!warning id=interval:UndefinedOperation
+%! assert (sup (infsup (3, 2)), nan);
