@@ -543,7 +543,9 @@ for [boundaries, key] = struct ("inf", {l}, "sup", {u})
     todo = char_idx;
     
     ## Hex strings
-    hex_idx = find (todo & strncmp (boundaries, "0x", 2));
+    hex_idx = find (todo & (strncmp (boundaries, "0x", 2) ...
+                            | strncmp (boundaries, "+0x", 3) ...
+                            | strncmp (boundaries, "-0x", 3)));
     switch key
         case "inf"
             direction = -inf;
