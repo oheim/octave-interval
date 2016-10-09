@@ -60,9 +60,9 @@ endif
 
 ## Merge 64 bit blocks from l and u (alternating) together into result.
 target = reshape (1 : length (result), 64, numel (x.inf) + numel (x.sup));
-target (:, 2 : 2 : size (target, 2)) = [];
-result (target) = l;
-result (target + 64) = u;
+target(:, 2 : 2 : size (target, 2)) = [];
+result(target) = l;
+result(target + 64) = u;
 
 endfunction
 

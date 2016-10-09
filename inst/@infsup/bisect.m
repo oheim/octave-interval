@@ -59,15 +59,15 @@ positive = x.inf >= 0 & x.sup > 0;
 if (any (any (positive)))
     idx.subs = {positive};
     bounded = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
-    m (positive) = min (realmax (), pow2 (mid (log2 (bounded))));
+    m(positive) = min (realmax, pow2 (mid (log2 (bounded))));
 endif
 
 negative = x.inf < 0 & x.sup <= 0;
 if (any (any (negative)))
     idx.subs = {negative};
     bounded = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
-    m (negative) = ...
-        uminus (min (realmax (), pow2 (mid (log2 (uminus (bounded))))));
+    m(negative) = ...
+        uminus (min (realmax, pow2 (mid (log2 (uminus (bounded))))));
 endif
 
 both_signs = x.inf < 0 & x.sup > 0;
@@ -76,7 +76,7 @@ if (any (any (both_signs_p)))
     idx.subs = {both_signs_p};
     bounded_n = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     bounded_p = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
-    m (both_signs_p) = min (realmax (), pow2 (
+    m(both_signs_p) = min (realmax, pow2 (
         mid (log2 (bounded_p)) ...
         - mid (log2 (uminus (bounded_n))) ...
         - 1074));
@@ -87,20 +87,25 @@ if (any (any (both_signs_n)))
     idx.subs = {both_signs_n};
     bounded_n = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     bounded_p = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
-    m (both_signs_n) = uminus (min (realmax (), pow2 (
+    m(both_signs_n) = uminus (min (realmax, pow2 (
         mid (log2 (uminus (bounded_n))) ...
         - mid (log2 (bounded_p)) ...
         - 1074)));
 endif
 
-m (isempty (x)) = -inf;
-a = infsup (x.inf, min (m, x.sup));
-m (isempty (x)) = inf;
-b = infsup (max (m, x.inf), x.sup);
+m = min (max (m, x.inf), x.sup);
+
+a = b = x;
+m(isempty (x)) = -inf;
+a.sup = m;
+m(isempty (x)) = inf;
+m(m == 0) = -0;
+b.inf = m;
 
 endfunction
 
-%!test "from the documentation string";
+%!test
+%! # from the documentation string
 %! [a, b] = bisect (infsup (2, 32));
 %! assert (a == infsup (2, 8));
 %! assert (b == infsup (8, 32));
@@ -124,3 +129,10 @@ endfunction
 %! [a, b] = bisect (infsup (-inf, 0));
 %! assert (a == infsup (-inf, -pow2 (-25)));
 %! assert (b == infsup (-pow2 (-25), 0));
+%!# correct use of signed zeros
+%!test
+%! [a, b] = bisect (infsup (0));
+%! assert (signbit (inf (a)));
+%! assert (signbit (inf (b)));
+%! assert (not (signbit (sup (a))));
+%! assert (not (signbit (sup (b))));

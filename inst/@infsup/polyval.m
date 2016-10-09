@@ -74,6 +74,10 @@ if (not (isvector (p)))
     error ('polynomial P must be a vector of coefficients')
 endif
 
+if (isempty (x))
+    result = x;
+endif;
+
 n = numel (p);
 switch (n)
     case 0 # empty sum
@@ -83,13 +87,13 @@ switch (n)
         result = p;
         return
     case 2 # p(1) .* x.^1 + p(2) .* x.^0
-        result = fma (x, subsref (p, struct ('type', '()', 'subs', {{1}})), ...
-                         subsref (p, struct ('type', '()', 'subs', {{2}})));
+        result = fma (x, subsref (p, substruct ("()", {1})), ...
+                         subsref (p, substruct ("()", {2})));
         return
 endswitch
 
 if (x == 0)
-    result = subsref (p, struct ('type', '()', 'subs', {{n}}));
+    result = subsref (p, substruct ("()", {n}));
     return
 elseif (x == 1)
     result = sum (p);
@@ -121,7 +125,7 @@ for k = 1 : kMax
 
     ## Iterative refinement
     ## Store middle of residual as the next correction of y
-    y (:, k) = mid (yy);
+    y(:, k) = mid (yy);
 
     ## Computation of the residual [r] and
     ## evaluation of the interval system A*[y] = [r]

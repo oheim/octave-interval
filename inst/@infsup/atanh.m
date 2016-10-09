@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2014-10-07
 
-function result = atanh (x)
+function x = atanh (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -48,12 +48,21 @@ l = mpfr_function_d ('atanh', -inf, x.inf);
 u = mpfr_function_d ('atanh', +inf, x.sup);
 
 emptyresult = isempty (x) | x.sup <= -1 | x.inf >= 1;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (atanh (infsup (.5)) == "[0x1.193EA7AAD030Ap-1, 0x1.193EA7AAD030Bp-1]");
+%!# from the documentation string
+%!assert (atanh (infsup (.5)) == "[0x1.193EA7AAD030Ap-1, 0x1.193EA7AAD030Bp-1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = atanh (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

@@ -38,7 +38,7 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = pow (x, y)
+function x = pow (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -52,7 +52,7 @@ if (not (isa (y, "infsup")))
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
+if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
     y.inf = ones (size (x.inf)) .* y.inf;
@@ -61,9 +61,9 @@ endif
 
 ## Intersect with domain
 x = intersect (x, infsup (0, inf));
-y.inf (x.sup == 0) = max (0, y.inf (x.sup == 0));
-y.sup (y.inf > y.sup) = -inf;
-y.inf (y.inf > y.sup) = inf;
+y.inf(x.sup == 0) = max (0, y.inf(x.sup == 0));
+y.sup(y.inf > y.sup) = -inf;
+y.inf(y.inf > y.sup) = inf;
 
 ## Simple cases with no limit values, see Table 3.3 in
 ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
@@ -89,15 +89,24 @@ u = max (max (max (...
          mpfr_function_d ('pow', +inf, x.sup, y.sup));
 
 emptyresult = isempty (x) | isempty (y) | (x.sup == 0 & y.sup == 0);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
 ## Fix 0 ^ positive = 0
-u (x.sup == 0 && u == 1) = 0;
+u(x.sup == 0 && u == 1) = 0;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (pow (infsup (5, 6), infsup (2, 3)) == infsup (25, 216));
+%!# from the documentation string
+%!assert (pow (infsup (5, 6), infsup (2, 3)) == infsup (25, 216));
+
+%!# correct use of signed zeros
+%!test
+%! x = pow (infsup (0), infsup (1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

@@ -41,7 +41,7 @@
 ## Keywords: interval
 ## Created: 2014-10-03
 
-function result = fma (x, y, z)
+function x = fma (x, y, z)
 
 if (nargin ~= 3)
     print_usage ();
@@ -58,19 +58,19 @@ if (not (isa (z, "infsup")))
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
+if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
     y.inf = ones (size (x.inf)) .* y.inf;
     y.sup = ones (size (x.inf)) .* y.sup;
 endif
-if (isscalar (y.inf) ~= isscalar (z.inf))
+if (not (size_equal (y.inf, z.inf)))
     y.inf = ones (size (z.inf)) .* y.inf;
     y.sup = ones (size (z.inf)) .* y.sup;
     z.inf = ones (size (y.inf)) .* z.inf;
     z.sup = ones (size (y.inf)) .* z.sup;
 endif
-if (isscalar (x.inf) ~= isscalar (z.inf))
+if (not (size_equal (x.inf, z.inf)))
     x.inf = ones (size (z.inf)) .* x.inf;
     x.sup = ones (size (z.inf)) .* x.sup;
     z.inf = ones (size (x.inf)) .* z.inf;
@@ -84,10 +84,10 @@ endif
 entireproduct = isentire (x) | isentire (y);
 zeroproduct = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
 emptyresult = isempty (x) | isempty (y) | isempty (z);
-x.inf (entireproduct) = y.inf (entireproduct) = -inf;
-x.sup (entireproduct) = y.sup (entireproduct) = inf;
-x.inf (zeroproduct) = x.sup (zeroproduct) = ...
-    y.inf (zeroproduct) = y.sup (zeroproduct) = 0;
+x.inf(entireproduct) = y.inf(entireproduct) = -inf;
+x.sup(entireproduct) = y.sup(entireproduct) = inf;
+x.inf(zeroproduct) = x.sup(zeroproduct) = ...
+    y.inf(zeroproduct) = y.sup(zeroproduct) = 0;
 
 ## It is hard to determine, which boundaries of x and y take part in the
 ## multiplication of fma.  Therefore, we simply compute the fma for each triple
@@ -110,12 +110,29 @@ u = max (max (max (...
          mpfr_function_d ('fma', +inf, x.sup, y.inf, z.sup)), ...
          mpfr_function_d ('fma', +inf, x.sup, y.sup, z.sup));
 
-l (emptyresult) = +inf;
-u (emptyresult) = -inf;
+l(emptyresult) = +inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (fma (infsup (1+eps), infsup (7), infsup ("0.1")) == "[0x1.C666666666668p2, 0x1.C666666666669p2]");
+%!# from the documentation string
+%!assert (fma (infsup (1+eps), infsup (7), infsup ("0.1")) == "[0x1.C666666666668p2, 0x1.C666666666669p2]");
+
+%!# correct use of signed zeros
+%!test
+%! x = fma (infsup (0), 0, 0);
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = fma (infsup (1), 0, 0);
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = fma (infsup (1), 1, -1);
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

@@ -63,15 +63,6 @@ if (not (isa (z, "infsupdec")))
     z = infsupdec (z);
 endif
 
-if (isnai (x) || isnai (y) || isnai (z))
-    error ("interval:NaI", "Cannot plot3 NaIs");
-    return
-else
-    x = intervalpart (x);
-    y = intervalpart (y);
-    z = intervalpart (z);
-endif
-
 if (nargin < 4 || isempty (color))
     color = 'interp';
     if (nargin < 5)
@@ -100,14 +91,14 @@ unwind_protect
     lines = number_of_singletons == 2 & not (empty);
     boxes = number_of_singletons <= 1 & not (empty);
     
-    if (any (any (points)))
+    if (any (points))
         scatter3 (x.inf(points), y.inf(points), z.inf(points), ...
                   pointsize, ...
                   edgecolor, ...
                   'filled');
     endif
     
-    if (any (any (lines)))
+    if (any (lines))
         x_line = [vec(x.inf(lines)), vec(x.sup(lines))]';
         y_line = [vec(y.inf(lines)), vec(y.sup(lines))]';
         z_line = [vec(z.inf(lines)), vec(z.sup(lines))]';
@@ -142,7 +133,7 @@ unwind_protect
                 vec(x.sup(boxes)), vec(y.sup(boxes)), vec(z.inf(boxes)); ...
                 vec(x.sup(boxes)), vec(y.sup(boxes)), vec(z.sup(boxes))];
     
-    if (any (any (boxes)))
+    if (any (boxes))
         ## To support gnuplot as a plotting backend, we have to use
         ## triangular instead of rectangular patches (see bug #45594).
         faces = zeros (0, 3);
@@ -250,7 +241,8 @@ end_unwind_protect
 
 endfunction
 
-%!test "this test is rather pointless";
+%!# this test is rather pointless
+%!test
 %!  clf
 %!  plot3 (empty (), empty (), empty ());
 %!  close

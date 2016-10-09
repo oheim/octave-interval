@@ -43,7 +43,7 @@
 ## Keywords: interval
 ## Created: 2014-10-26
 
-function result = dot (x, y, dim)
+function x = dot (x, y, dim)
 
 if (nargin < 2 || nargin > 3)
     print_usage ();
@@ -75,7 +75,7 @@ endif
 
 ## null matrix input -> null matrix output
 if (isempty (x.inf) || isempty (y.inf))
-    result = infsup (zeros (min (size (x.inf), size (y.inf))));
+    x = infsup (zeros (min (size (x.inf), size (y.inf))));
     return
 endif
 
@@ -89,15 +89,15 @@ if ((min (size (x.inf, 1), size (y.inf, 1)) > 1 && ...
 endif
 
 resultsize = max (size (x.inf), size (y.inf));
-resultsize (dim) = 1;
+resultsize(dim) = 1;
 
 l = u = zeros (resultsize);
 
 for n = 1 : numel (l)
     idx.type = "()";
     idx.subs = cell (1, 2);
-    idx.subs {dim} = ":";
-    idx.subs {3 - dim} = n;
+    idx.subs{dim} = ":";
+    idx.subs{3 - dim} = n;
 
     ## Select current vector in matrix or broadcast scalars and vectors.
     if (size (x.inf, 3 - dim) == 1)
@@ -114,7 +114,10 @@ for n = 1 : numel (l)
     [l(n), u(n)] = vectordot (vector.x, vector.y);
 endfor
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
@@ -134,28 +137,32 @@ endif
 
 endfunction
 
-%!test "matrix × matrix";
-%! assert (dot (infsup (magic (3)), magic (3)) == [89, 107, 89]);
-%! assert (dot (infsup (magic (3)), magic (3), 1) == [89, 107, 89]);
-%! assert (dot (infsup (magic (3)), magic (3), 2) == [101; 83; 101]);
-%!test "matrix × vector";
-%! assert (dot (infsup (magic (3)), [1, 2, 3]) == [15, 30, 45]);
-%! assert (dot (infsup (magic (3)), [1, 2, 3], 1) == [15, 30, 45]);
-%! assert (dot (infsup (magic (3)), [1, 2, 3], 2) == [28; 34; 28]);
-%! assert (dot (infsup (magic (3)), [1; 2; 3]) == [26, 38, 26]);
-%! assert (dot (infsup (magic (3)), [1; 2; 3], 1) == [26, 38, 26]);
-%! assert (dot (infsup (magic (3)), [1; 2; 3], 2) == [15; 30; 45]);
-%!test "matrix × scalar";
-%! assert (dot (infsup (magic (3)), 42) == [630, 630, 630]);
-%! assert (dot (infsup (magic (3)), 42, 1) == [630, 630, 630]);
-%! assert (dot (infsup (magic (3)), 42, 2) == [630; 630; 630]);
-%!test "vector × scalar";
-%! assert (dot (infsup ([1, 2, 3]), 42) == 252);
-%! assert (dot (infsup ([1, 2, 3]), 42, 1) == [42, 84, 126]);
-%! assert (dot (infsup ([1, 2, 3]), 42, 2) == 252);
-%! assert (dot (infsup ([1; 2; 3]), 42) == 252);
-%! assert (dot (infsup ([1; 2; 3]), 42, 1) == 252);
-%! assert (dot (infsup ([1; 2; 3]), 42, 2) == [42; 84; 126]);
-%!test "from the documentation string";
-%! assert (dot ([infsup(1), 2, 3], [infsup(2), 3, 4]) == 20);
-%! assert (dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1) == -realmin);
+%!# matrix × matrix
+%!assert (dot (infsup (magic (3)), magic (3)) == [89, 107, 89]);
+%!assert (dot (infsup (magic (3)), magic (3), 1) == [89, 107, 89]);
+%!assert (dot (infsup (magic (3)), magic (3), 2) == [101; 83; 101]);
+
+%!# matrix × vector
+%!assert (dot (infsup (magic (3)), [1, 2, 3]) == [15, 30, 45]);
+%!assert (dot (infsup (magic (3)), [1, 2, 3], 1) == [15, 30, 45]);
+%!assert (dot (infsup (magic (3)), [1, 2, 3], 2) == [28; 34; 28]);
+%!assert (dot (infsup (magic (3)), [1; 2; 3]) == [26, 38, 26]);
+%!assert (dot (infsup (magic (3)), [1; 2; 3], 1) == [26, 38, 26]);
+%!assert (dot (infsup (magic (3)), [1; 2; 3], 2) == [15; 30; 45]);
+
+%!# matrix × scalar
+%!assert (dot (infsup (magic (3)), 42) == [630, 630, 630]);
+%!assert (dot (infsup (magic (3)), 42, 1) == [630, 630, 630]);
+%!assert (dot (infsup (magic (3)), 42, 2) == [630; 630; 630]);
+
+%!# vector × scalar
+%!assert (dot (infsup ([1, 2, 3]), 42) == 252);
+%!assert (dot (infsup ([1, 2, 3]), 42, 1) == [42, 84, 126]);
+%!assert (dot (infsup ([1, 2, 3]), 42, 2) == 252);
+%!assert (dot (infsup ([1; 2; 3]), 42) == 252);
+%!assert (dot (infsup ([1; 2; 3]), 42, 1) == 252);
+%!assert (dot (infsup ([1; 2; 3]), 42, 2) == [42; 84; 126]);
+
+%!# from the documentation string
+%!assert (dot ([infsup(1), 2, 3], [infsup(2), 3, 4]) == 20);
+%!assert (dot (infsup ([realmax; realmin; realmax]), [1; -1; -1], 1) == -realmin);

@@ -45,5 +45,5 @@ endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (+infsup (2, 3) == infsup (2, 3));
+%!# from the documentation string
+%!assert (+infsup (2, 3) == infsup (2, 3));

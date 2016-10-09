@@ -58,10 +58,10 @@ elseif (isa (y, "infsupdec"))
 endif
 
 ## Short-circuit evaluation for 1 ./ x
-if (all (all (x.inf == 1 & x.sup == 1)))
+if (all (vec (x.inf == 1 & x.sup == 1)))
     result = recip (y);
     ## Resize, if scalar × matrix
-    if (isscalar (x.inf) ~= isscalar (y.inf))
+    if (not (size_equal (x.inf, y.inf)))
         result.inf = ones (size (x.inf)) .* result.inf;
         result.sup = ones (size (x.inf)) .* result.sup;
     endif
@@ -69,7 +69,7 @@ if (all (all (x.inf == 1 & x.sup == 1)))
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
+if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
     y.inf = ones (size (x.inf)) .* y.inf;
@@ -90,40 +90,44 @@ q10 = x.inf < 0 & 0 < x.sup & y.inf > 0;
 
 l = u = zeros (size (x.inf));
 
-l (q1) = mpfr_function_d ('rdivide', -inf, x.sup (q1), y.inf (q1));
-l (q2) = mpfr_function_d ('rdivide', -inf, x.inf (q2), y.inf (q2));
-l (q3) = mpfr_function_d ('rdivide', -inf, x.sup (q3), y.inf (q3));
+l (q1) = mpfr_function_d ('rdivide', -inf, x.sup(q1), y.inf(q1));
+l (q2) = mpfr_function_d ('rdivide', -inf, x.inf(q2), y.inf(q2));
+l (q3) = mpfr_function_d ('rdivide', -inf, x.sup(q3), y.inf(q3));
 l (q4) = -inf;
-l (q5) = mpfr_function_d ('rdivide', -inf, x.sup (q5), y.sup (q5));
-l (q6) = mpfr_function_d ('rdivide', -inf, x.inf (q6), y.sup (q6));
+l (q5) = mpfr_function_d ('rdivide', -inf, x.sup(q5), y.sup(q5));
+l (q6) = mpfr_function_d ('rdivide', -inf, x.inf(q6), y.sup(q6));
 l (q7) = -inf;
-l (q8) = mpfr_function_d ('rdivide', -inf, x.inf (q8), y.sup (q8));
-l (q9) = mpfr_function_d ('rdivide', -inf, x.sup (q9), y.sup (q9));
-l (q10) = mpfr_function_d ('rdivide', -inf, x.inf (q10), y.inf (q10));
-u (q1) = mpfr_function_d ('rdivide', +inf, x.inf (q1), y.sup (q1));
-u (q2) = mpfr_function_d ('rdivide', +inf, x.sup (q2), y.sup (q2));
+l (q8) = mpfr_function_d ('rdivide', -inf, x.inf(q8), y.sup(q8));
+l (q9) = mpfr_function_d ('rdivide', -inf, x.sup(q9), y.sup(q9));
+l (q10) = mpfr_function_d ('rdivide', -inf, x.inf(q10), y.inf(q10));
+u (q1) = mpfr_function_d ('rdivide', +inf, x.inf(q1), y.sup(q1));
+u (q2) = mpfr_function_d ('rdivide', +inf, x.sup(q2), y.sup(q2));
 u (q3) = inf;
-u (q4) = mpfr_function_d ('rdivide', +inf, x.sup (q4), y.sup (q4));
-u (q5) = mpfr_function_d ('rdivide', +inf, x.inf (q5), y.inf (q5));
-u (q6) = mpfr_function_d ('rdivide', +inf, x.sup (q6), y.inf (q6));
-u (q7) = mpfr_function_d ('rdivide', +inf, x.inf (q7), y.inf (q7));
+u (q4) = mpfr_function_d ('rdivide', +inf, x.sup(q4), y.sup(q4));
+u (q5) = mpfr_function_d ('rdivide', +inf, x.inf(q5), y.inf(q5));
+u (q6) = mpfr_function_d ('rdivide', +inf, x.sup(q6), y.inf(q6));
+u (q7) = mpfr_function_d ('rdivide', +inf, x.inf(q7), y.inf(q7));
 u (q8) = inf;
-u (q9) = mpfr_function_d ('rdivide', +inf, x.inf (q9), y.sup (q9));
-u (q10) = mpfr_function_d ('rdivide', +inf, x.sup (q10), y.inf (q10));
+u (q9) = mpfr_function_d ('rdivide', +inf, x.inf(q9), y.sup(q9));
+u (q10) = mpfr_function_d ('rdivide', +inf, x.sup(q10), y.inf(q10));
 
 entireresult = (y.inf < 0 & y.sup > 0) | (x.inf < 0 & x.sup > 0 & ...
                                           (y.inf == 0 | y.sup == 0));
-l (entireresult) = -inf;
-u (entireresult) = inf;
+l(entireresult) = -inf;
+u(entireresult) = inf;
 
 zeroresult = x.inf == 0 & x.sup == 0;
-l (zeroresult) = u (zeroresult) = 0;
+l(zeroresult) = u(zeroresult) = 0;
+
+l(l == 0) = -0;
 
 emptyresult = isempty (x) | isempty (y) | (y.inf == 0 & y.sup == 0);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+result = infsup ();
+result.inf = l;
+result.sup = u;
 
 endfunction
 
@@ -147,7 +151,7 @@ select = (x.inf >= 0 | x.sup <= 0) & ...
          not (x.inf == 0 & x.sup == 0) & ...
          # x is not empty
          x.inf < inf;
-if (any (any (select)))
+if (any (select))
     ## recip is monotonically decreasing
     l(select) = mpfr_function_d ('rdivide', -inf, 1, x.sup(select));
     u(select) = mpfr_function_d ('rdivide', +inf, 1, x.inf(select));
@@ -155,15 +159,20 @@ endif
 
 ## singularity at x = 0
 select = x.inf < 0 & x.sup > 0;
-if (any (any (select)))
+if (any (select))
     l(select) = -inf;
     u(select) = +inf;
 endif
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+result = infsup ();
+result.inf = l;
+result.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (infsup (2, 3) ./ infsup (1, 2) == infsup (1, 3));
+%!# from the documentation string
+%!assert (infsup (2, 3) ./ infsup (1, 2) == infsup (1, 3));
+
 %!assert (1 ./ infsup (1, 4) == infsup (0.25, 1));

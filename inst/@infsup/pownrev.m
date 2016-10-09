@@ -56,18 +56,18 @@ if (not (isnumeric (p)) || fix (p) ~= p)
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (c.inf))
-    x.inf = x.inf (ones (size (c.inf)));
-    x.sup = x.sup (ones (size (c.inf)));
-    c.inf = c.inf (ones (size (x.inf)));
-    c.sup = c.sup (ones (size (x.inf)));
+if (not (size_equal (x.inf, c.inf)))
+    x.inf = ones (size (c.inf)) .* x.inf;
+    x.sup = ones (size (c.inf)) .* x.sup;
+    c.inf = ones (size (x.inf)) .* c.inf;
+    c.sup = ones (size (x.inf)) .* c.sup;
 endif
 
 if (p == 0) # x^p == 1
     result = x;
     emptyresult = c.inf > 1 | c.sup < 1;
-    result.inf (emptyresult) = inf;
-    result.sup (emptyresult) = -inf;
+    result.inf(emptyresult) = inf;
+    result.sup(emptyresult) = -inf;
 else
     even = mod (p, 2) == 0;
     if (even)

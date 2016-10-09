@@ -36,5 +36,7 @@ result = columns (a.inf);
 
 endfunction
 
-%!test;
-%! assert (columns (infsup (zeros (3, 4))), 4);
+%!assert (columns (infsup (zeros (3, 4))), 4);
+%!assert (columns (infsup (zeros (0, 4))), 4);
+%!assert (columns (infsup (zeros (3, 0))), 0);
+%!assert (columns (infsup (zeros (3, 1))), 1);

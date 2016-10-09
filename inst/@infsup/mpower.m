@@ -83,7 +83,7 @@ while (y ~= 0)
         y /= 2;
     else # y is odd
         result = mtimes (result, x);
-        if (all (all (isempty (result))) || all (all (isentire (result))))
+        if (all (vec (isempty (result))) || all (vec (isentire (result))))
             ## We can stop the computation here, this is a fixed point
             break
         endif
@@ -103,5 +103,11 @@ endwhile
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (infsup (magic (3)) ^ 2, infsup (magic (3) ^ 2)));
+%!# from the documentation string
+%!assert (isequal (infsup (magic (3)) ^ 2, infsup (magic (3) ^ 2)));
+
+%!# correct use of signed zeros
+%!test
+%! x = mpower (infsup (eye (2)), 2);
+%! assert (signbit (inf (x(1, 2))));
+%! assert (not (signbit (sup (x(1, 2)))));

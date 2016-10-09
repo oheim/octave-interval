@@ -50,7 +50,7 @@
 ## Keywords: interval
 ## Created: 2015-02-29
 
-function result = ei (x)
+function x = ei (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -62,10 +62,13 @@ u = -l;
 
 ## ei is monotonically increasing and defined for x > 0
 defined = x.sup > 0;
-l (defined) = mpfr_function_d ('ei', -inf, max (0, x.inf (defined)));
-u (defined) = mpfr_function_d ('ei', +inf, x.sup (defined));
+l(defined) = mpfr_function_d ('ei', -inf, max (0, x.inf(defined)));
+u(defined) = mpfr_function_d ('ei', +inf, x.sup(defined));
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
@@ -73,5 +76,5 @@ endfunction
 %!assert (isempty (ei (infsup (-inf, -2))));
 %!assert (isentire (ei (infsup (0, inf))));
 
-%!test "from the documentation string";
-%! assert (ei (infsup (1)) == "[0x1.E52670F350D08, 0x1.E52670F350D09]");
+%!# from the documentation string
+%!assert (ei (infsup (1)) == "[0x1.E52670F350D08, 0x1.E52670F350D09]");

@@ -443,7 +443,7 @@ for [boundaries, key] = struct ("inf", {l}, "sup", {u})
             x = scalar_empty_interval;
             isexact = false;
             overflow = false;
-            isnai = true
+            isnai = true;
             return
         endif
         boundaries = num2cell (boundaries);

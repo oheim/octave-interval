@@ -46,5 +46,5 @@ result = cancelminus (x, -y);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (cancelplus (infsup (2, 3), infsup (1, 1.5)) == infsup (3.5, 4));
+%!# from the documentation string
+%!assert (cancelplus (infsup (2, 3), infsup (1, 1.5)) == infsup (3.5, 4));

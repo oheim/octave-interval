@@ -51,6 +51,7 @@ endif
 
 assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
 
+
 A.inf = subsasgn (A.inf, S, B.inf);
 A.sup = subsasgn (A.sup, S, B.sup);
 A.inf(A.inf == 0) = -0; # any new elements are stored as [-0, +0] internally

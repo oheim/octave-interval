@@ -45,9 +45,9 @@ if (nargin ~= 1)
 endif
 
 result = zeros (size (x.inf));
-result (x.inf > 0) = x.inf;
-result (x.sup < 0) = x.sup;
-result (isempty (x)) = nan ();
+result(x.inf > 0) = x.inf;
+result(x.sup < 0) = x.sup;
+result(isempty (x)) = nan ();
 
 endfunction
 

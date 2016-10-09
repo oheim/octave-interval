@@ -37,38 +37,55 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = roundb (x)
+function x = roundb (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = infsup (roundb (x.inf), roundb (x.sup));
+x.inf = roundb (x.inf);
+x.sup = roundb (x.sup);
+
+x.inf(x.inf == 0) = -0;
+x.sup(x.sup == 0) = +0;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (roundb (infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (roundb (infsup (0)) == infsup (0));
-%! assert (roundb (infsup (0.5)) == infsup (0));
-%! assert (roundb (infsup (0.25)) == infsup (0));
-%! assert (roundb (infsup (0.75)) == infsup (1));
-%! assert (roundb (infsup (1.5)) == infsup (2));
-%! assert (roundb (infsup (-0.5)) == infsup (0));
-%! assert (roundb (infsup (-1.5)) == infsup (-2));
-%!test "Bounded intervals";
-%! assert (roundb (infsup (-0.5, 0)) == infsup (0));
-%! assert (roundb (infsup (0, 0.5)) == infsup (0));
-%! assert (roundb (infsup (0.25, 0.5)) == infsup (0));
-%! assert (roundb (infsup (-1, 0)) == infsup (-1, 0));
-%! assert (roundb (infsup (-1, 1)) == infsup (-1, 1));
-%! assert (roundb (infsup (-realmin, realmin)) == infsup (0));
-%! assert (roundb (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
-%!test "Unbounded intervals";
-%! assert (roundb (infsup (-realmin, inf)) == infsup (0, inf));
-%! assert (roundb (infsup (-realmax, inf)) == infsup (-realmax, inf));
-%! assert (roundb (infsup (-inf, realmin)) == infsup (-inf, 0));
-%! assert (roundb (infsup (-inf, realmax)) == infsup (-inf, realmax));
-%! assert (roundb (infsup (-inf, inf)) == infsup (-inf, inf));
+%!# Empty interval
+%!assert (roundb (infsup ()) == infsup ());
+
+%!# Singleton intervals
+%!assert (roundb (infsup (0)) == infsup (0));
+%!assert (roundb (infsup (0.5)) == infsup (0));
+%!assert (roundb (infsup (0.25)) == infsup (0));
+%!assert (roundb (infsup (0.75)) == infsup (1));
+%!assert (roundb (infsup (1.5)) == infsup (2));
+%!assert (roundb (infsup (-0.5)) == infsup (0));
+%!assert (roundb (infsup (-1.5)) == infsup (-2));
+
+%!# Bounded intervals
+%!assert (roundb (infsup (-0.5, 0)) == infsup (0));
+%!assert (roundb (infsup (0, 0.5)) == infsup (0));
+%!assert (roundb (infsup (0.25, 0.5)) == infsup (0));
+%!assert (roundb (infsup (-1, 0)) == infsup (-1, 0));
+%!assert (roundb (infsup (-1, 1)) == infsup (-1, 1));
+%!assert (roundb (infsup (-realmin, realmin)) == infsup (0));
+%!assert (roundb (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
+
+%!# Unbounded intervals
+%!assert (roundb (infsup (-realmin, inf)) == infsup (0, inf));
+%!assert (roundb (infsup (-realmax, inf)) == infsup (-realmax, inf));
+%!assert (roundb (infsup (-inf, realmin)) == infsup (-inf, 0));
+%!assert (roundb (infsup (-inf, realmax)) == infsup (-inf, realmax));
+%!assert (roundb (infsup (-inf, inf)) == infsup (-inf, inf));
+
+%!# correct use of signed zeros
+%!test
+%! x = roundb (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = roundb (infsup (-0.25, 0.25));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

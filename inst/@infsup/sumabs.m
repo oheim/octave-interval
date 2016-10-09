@@ -51,6 +51,13 @@ endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (sumabs ([infsup(1), pow2(-1074), -1]) == infsup (2, 2+eps*2));
+%!# from the documentation string
+%!assert (sumabs ([infsup(1), pow2(-1074), -1]) == infsup (2, 2+eps*2));
+
 %!assert (sumabs (infsup ([])) == 0);
+
+%!# correct use of signed zeros
+%!test
+%! x = sumabs (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

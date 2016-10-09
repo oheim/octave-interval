@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} expm1 (@var{X})
 ## 
-## Compute @code{exp (@var{X} - 1)} accurately in the neighborhood of zero.
+## Compute @code{exp (@var{X}) - 1} accurately in the neighborhood of zero.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##

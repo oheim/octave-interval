@@ -36,7 +36,7 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = abs (x)
+function x = abs (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -48,42 +48,54 @@ l = x.inf;
 u = x.sup;
 
 ## This is even correct, if the interval(s) are empty.
-notpositive = x.sup <= 0;
-l (notpositive) = -x.sup (notpositive);
-u (notpositive) = -x.inf (notpositive);
+notpositive = (x.sup <= 0);
+l(notpositive) = -x.sup(notpositive);
+u(notpositive) = -x.inf(notpositive);
 
-zerointerior = x.inf < 0 & not (notpositive);
-l (zerointerior) = 0;
-u (zerointerior) = max (-x.inf (zerointerior), x.sup (zerointerior));
+zerointerior = (x.inf < 0 & not (notpositive));
+l(zerointerior) = -0;
+u(zerointerior) = max (-x.inf(zerointerior), x.sup(zerointerior));
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (abs (infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (abs (infsup (1)) == infsup (1));
-%! assert (abs (infsup (0)) == infsup (0));
-%! assert (abs (infsup (-1)) == infsup (1));
-%! assert (abs (infsup (realmax)) == infsup (realmax));
-%! assert (abs (infsup (realmin)) == infsup (realmin));
-%! assert (abs (infsup (-realmin)) == infsup (realmin));
-%! assert (abs (infsup (-realmax)) == infsup (realmax));
-%!test "Bounded intervals";
-%! assert (abs (infsup (1, 2)) == infsup (1, 2));
-%! assert (abs (infsup (0, 1)) == infsup (0, 1));
-%! assert (abs (infsup (-1, 1)) == infsup (0, 1));
-%! assert (abs (infsup (-1, 0)) == infsup (0, 1));
-%! assert (abs (infsup (-2, -1)) == infsup (1, 2));
-%!test "Unbounded intervals";
-%! assert (abs (infsup (0, inf)) == infsup (0, inf));
-%! assert (abs (infsup (-inf, inf)) == infsup (0, inf));
-%! assert (abs (infsup (-inf, 0)) == infsup (0, inf));
-%! assert (abs (infsup (1, inf)) == infsup (1, inf));
-%! assert (abs (infsup (-1, inf)) == infsup (0, inf));
-%! assert (abs (infsup (-inf, -1)) == infsup (1, inf));
-%! assert (abs (infsup (-inf, 1)) == infsup (0, inf));
-%!test "from the documentation string";
-%! assert (abs (infsup (2.5, 3.5)) == infsup (2.5, 3.5));
-%! assert (abs (infsup (-0.5, 5.5)) == infsup (0, 5.5));
+%!# Empty interval
+%!assert (abs (infsup ()) == infsup ());
+
+%!# Singleton intervals
+%!assert (abs (infsup (1)) == infsup (1));
+%!assert (abs (infsup (0)) == infsup (0));
+%!assert (abs (infsup (-1)) == infsup (1));
+%!assert (abs (infsup (realmax)) == infsup (realmax));
+%!assert (abs (infsup (realmin)) == infsup (realmin));
+%!assert (abs (infsup (-realmin)) == infsup (realmin));
+%!assert (abs (infsup (-realmax)) == infsup (realmax));
+
+%!# Bounded intervals
+%!assert (abs (infsup (1, 2)) == infsup (1, 2));
+%!assert (abs (infsup (0, 1)) == infsup (0, 1));
+%!assert (abs (infsup (-1, 1)) == infsup (0, 1));
+%!assert (abs (infsup (-1, 0)) == infsup (0, 1));
+%!assert (abs (infsup (-2, -1)) == infsup (1, 2));
+
+%!# Unbounded intervals
+%!assert (abs (infsup (0, inf)) == infsup (0, inf));
+%!assert (abs (infsup (-inf, inf)) == infsup (0, inf));
+%!assert (abs (infsup (-inf, 0)) == infsup (0, inf));
+%!assert (abs (infsup (1, inf)) == infsup (1, inf));
+%!assert (abs (infsup (-1, inf)) == infsup (0, inf));
+%!assert (abs (infsup (-inf, -1)) == infsup (1, inf));
+%!assert (abs (infsup (-inf, 1)) == infsup (0, inf));
+
+%!# from the documentation string
+%!assert (abs (infsup (2.5, 3.5)) == infsup (2.5, 3.5));
+%!assert (abs (infsup (-0.5, 5.5)) == infsup (0, 5.5));
+
+%!# correct use of signed zeros
+%!assert (signbit (inf (abs (infsup (-1, 0)))));
+%!test
+%! x = abs (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

@@ -57,13 +57,13 @@ l = mpfr_function_d ('rdivide', -inf, x.inf, 2);
 u = mpfr_function_d ('rdivide', +inf, x.sup, 2);
 result = l + u;
 
-result (x.inf == -inf) = -realmax ();
-result (x.sup == inf) = realmax ();
-result (isentire (x)) = 0;
-result (isempty (x)) = nan ();
+result(x.inf == -inf) = -realmax ();
+result(x.sup == inf) = realmax ();
+result(isentire (x)) = 0;
+result(isempty (x)) = nan ();
 
 endfunction
 
 %!assert (mid (infsup (-inf, inf)), 0);
-%!test "from the documentation string";
-%! assert (mid (infsup (2.5, 3.5)), 3);
+%!# from the documentation string
+%!assert (mid (infsup (2.5, 3.5)), 3);

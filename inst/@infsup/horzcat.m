@@ -38,20 +38,12 @@
 
 function result = horzcat (varargin)
 
-## Conversion to interval
-intervals = cellfun ("isclass", varargin, "infsup");
-to_convert = not (intervals);
-varargin (to_convert) = cellfun (@infsup, varargin (to_convert), ...
-                                 "UniformOutput", false ());
-
-l = cell2mat (cellfun (@(x) x.inf, varargin, "UniformOutput", false ()));
-u = cell2mat (cellfun (@(x) x.sup, varargin, "UniformOutput", false ()));
-
-result = infsup (l, u);
+result = cat (2, varargin{:});
 
 endfunction
 
 %!assert (horzcat (infsup (1), infsup (2)) == infsup (horzcat (1, 2)));
-%!test "from the documentation string";
+%!test
+%! # from the documentation string
 %! a = infsup (2, 5);
 %! assert (horzcat (a, a, a) == infsup ([2, 2, 2], [5, 5, 5]));

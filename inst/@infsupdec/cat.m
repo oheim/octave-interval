@@ -1,4 +1,4 @@
-## Copyright 2015-2016 Oliver Heimlich
+## Copyright 2016 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsup} cat (@var{DIM}, @var{MATRIX1}, @var{MATRIX2}, @dots{})
+## @defmethod {@@infsupdec} cat (@var{DIM}, @var{MATRIX1}, @var{MATRIX2}, @dots{})
 ##
 ## Return the concatenation of interval matrices @var{MATRIX1}, @var{MATRIX2}, 
 ## … along dimension @var{DIM}.
@@ -24,12 +24,12 @@
 ##
 ## @example
 ## @group
-## cat (2, infsup (magic (3)), infsup (pascal (3)))
+## cat (2, infsupdec (magic (3)), infsupdec (pascal (3)))
 ##   @result{} 3×6 interval matrix
 ## 
-##      [8]   [1]   [6]   [1]   [1]   [1]
-##      [3]   [5]   [7]   [1]   [2]   [3]
-##      [4]   [9]   [2]   [1]   [3]   [6]
+##      [8]_com   [1]_com   [6]_com   [1]_com   [1]_com   [1]_com
+##      [3]_com   [5]_com   [7]_com   [1]_com   [2]_com   [3]_com
+##      [4]_com   [9]_com   [2]_com   [1]_com   [3]_com   [6]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsup/horzcat, @@infsup/vertcat}
@@ -37,7 +37,7 @@
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
-## Created: 2015-04-19
+## Created: 2016-10-09
 
 function result = cat (dim, varargin)
 
@@ -51,21 +51,31 @@ if (dim > 2)
            "cat: no more than 2 dimensions are supported");
 endif
 
-## Conversion of non-interval parameters to intervals
-interval_idx = cellfun ("isclass", varargin, "infsup");
-to_convert_idx = not (interval_idx);
-varargin(to_convert_idx) = cellfun (@infsup, ...
+## Conversion of non-interval and undecorated parameters to decorated intervals
+decorated_interval_idx = cellfun ("isclass", varargin, "infsupdec");
+to_convert_idx = not (decorated_interval_idx);
+varargin(to_convert_idx) = cellfun (@infsupdec, ...
     varargin(to_convert_idx), ...
     "UniformOutput", false);
 
 ## Stack intervals along dimension dim
 s = cellfun ("struct", varargin); # struct array
-result = infsup ();
-result.inf = cat (dim, s.inf);
-result.sup = cat (dim, s.sup);
+result = infsupdec ();
+result.infsup = cat (dim, s.infsup);
+result.dec = cat (dim, s.dec);
 
 endfunction
 
-%!assert (size (cat (1, infsup ([]), infsup ([]))), [0 0]);
-%!assert (cat (1, infsup (1), infsup (2)) == infsup (cat (1, 1, 2)));
-%!assert (cat (2, infsup (1), infsup (2)) == infsup (cat (2, 1, 2)));
+%!assert (size (cat (1, infsupdec ([]), infsupdec ([]))), [0 0]);
+%!assert (isequal (cat (1, infsupdec (1), infsupdec (2)), infsupdec (cat (1, 1, 2))));
+%!assert (isequal (cat (2, infsupdec (1), infsupdec (2)), infsupdec (cat (2, 1, 2))));
+
+%!assert (isequal (horzcat (infsupdec (1), infsupdec (2)), infsupdec (horzcat (1, 2))));
+%!test
+%! a = infsupdec (2, 5);
+%! assert (isequal (horzcat (a, a, a), infsupdec ([2, 2, 2], [5, 5, 5])));
+
+%!assert (isequal (vertcat (infsupdec (1), infsupdec (2)), infsupdec (vertcat (1, 2))));
+%!test
+%! a = infsupdec (2, 5);
+%! assert (isequal (vertcat (a, a, a), infsupdec ([2; 2; 2], [5; 5; 5])));

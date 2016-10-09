@@ -289,10 +289,10 @@ function [x, verified] = verify_and_refine (x0, C, cfg, accuracy)
     endif
 endfunction
 
-%!test "unique solution";
-%!  assert (infsup ([1, 0; 0, 2]) \ [2, 0; 0, 4] == [2, 0; 0 2]);
-%!test "no solution";
-%!  assert (all (isempty (infsup ([1, 0; 2, 0]) \ [3; 0])));
-%!test "many solutions";
-%!  assert (infsup ([1, 0; 2, 0]) \ [4; 8] == infsup ([4; -inf], [4; inf]));
+%!# unique solution
+%!assert (infsup ([1, 0; 0, 2]) \ [2, 0; 0, 4] == [2, 0; 0 2]);
+%!# no solution
+%!assert (all (isempty (infsup ([1, 0; 2, 0]) \ [3; 0])));
+%!# many solutions
+%!assert (infsup ([1, 0; 2, 0]) \ [4; 8] == infsup ([4; -inf], [4; inf]));
 %!assert (all (subset (infsup ([2, -1; -1, 2], [4, 1; 1, 4]) \ infsup ([-3; .8], [3; .8]), infsup ([-2.3; -1.1], [2.3; 1.6]))));

@@ -83,7 +83,7 @@ unwind_protect
         current_print_indent_level = 0;
     endif
     
-    line_prefix = " " (ones (1, current_print_indent_level));
+    line_prefix = " "(ones (1, current_print_indent_level));
     
     [s, isexact] = disp (x);
     
@@ -126,7 +126,7 @@ unwind_protect
         
         if (current_print_indent_level > 0)
             s = strrep (s, "\n", cstrcat ("\n", line_prefix));
-            s (end - current_print_indent_level + 1 : end) = "";
+            s(end - current_print_indent_level + 1 : end) = "";
         endif
         
         printf (s);
@@ -139,5 +139,6 @@ end_unwind_protect
 
 endfunction
 
-%!## Can't test the display function. Would have to capture console output
+%!# Can't test the display function. Would have to capture console output.
+%!# However, this is largely done with the help of the doctest package.
 %!assert (1);

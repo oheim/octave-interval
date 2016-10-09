@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2014-10-06
 
-function result = sinh (x)
+function x = sinh (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -45,12 +45,21 @@ l = mpfr_function_d ('sinh', -inf, x.inf);
 u = mpfr_function_d ('sinh', +inf, x.sup);
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (sinh (infsup (1)) == "[0x1.2CD9FC44EB982, 0x1.2CD9FC44EB983]");
+%!# from the documentation string
+%!assert (sinh (infsup (1)) == "[0x1.2CD9FC44EB982, 0x1.2CD9FC44EB983]");
+
+%!# correct use of signed zeros
+%!test
+%! x = sinh (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

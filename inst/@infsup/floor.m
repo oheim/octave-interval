@@ -36,37 +36,54 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = floor (x)
+function x = floor (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = infsup (floor (x.inf), floor (x.sup));
+x.inf = floor (x.inf);
+x.sup = floor (x.sup);
+
+x.inf(x.inf == 0) = -0;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (floor (infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (floor (infsup (0)) == infsup (0));
-%! assert (floor (infsup (0.5)) == infsup (0));
-%! assert (floor (infsup (-0.5)) == infsup (-1));
-%!test "Bounded intervals";
-%! assert (floor (infsup (-0.5, 0)) == infsup (-1, 0));
-%! assert (floor (infsup (0, 0.5)) == infsup (0));
-%! assert (floor (infsup (0.25, 0.5)) == infsup (0));
-%! assert (floor (infsup (-1, 0)) == infsup (-1, 0));
-%! assert (floor (infsup (-1, 1)) == infsup (-1, 1));
-%! assert (floor (infsup (-realmin, realmin)) == infsup (-1, 0));
-%! assert (floor (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
-%!test "Unbounded intervals";
-%! assert (floor (infsup (-realmin, inf)) == infsup (-1, inf));
-%! assert (floor (infsup (-realmax, inf)) == infsup (-realmax, inf));
-%! assert (floor (infsup (-inf, realmin)) == infsup (-inf, 0));
-%! assert (floor (infsup (-inf, realmax)) == infsup (-inf, realmax));
-%! assert (floor (infsup (-inf, inf)) == infsup (-inf, inf));
-%!test "from the documentation string";
-%! assert (floor (infsup (2.5, 3.5)) == infsup (2, 3));
-%! assert (floor (infsup (-0.5, 5)) == infsup (-1, 5));
+%!# Empty interval
+%!assert (floor (infsup ()) == infsup ());
+
+%!# Singleton intervals
+%!assert (floor (infsup (0)) == infsup (0));
+%!assert (floor (infsup (0.5)) == infsup (0));
+%!assert (floor (infsup (-0.5)) == infsup (-1));
+
+%!# Bounded intervals
+%!assert (floor (infsup (-0.5, 0)) == infsup (-1, 0));
+%!assert (floor (infsup (0, 0.5)) == infsup (0));
+%!assert (floor (infsup (0.25, 0.5)) == infsup (0));
+%!assert (floor (infsup (-1, 0)) == infsup (-1, 0));
+%!assert (floor (infsup (-1, 1)) == infsup (-1, 1));
+%!assert (floor (infsup (-realmin, realmin)) == infsup (-1, 0));
+%!assert (floor (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
+
+%!# Unbounded intervals
+%!assert (floor (infsup (-realmin, inf)) == infsup (-1, inf));
+%!assert (floor (infsup (-realmax, inf)) == infsup (-realmax, inf));
+%!assert (floor (infsup (-inf, realmin)) == infsup (-inf, 0));
+%!assert (floor (infsup (-inf, realmax)) == infsup (-inf, realmax));
+%!assert (floor (infsup (-inf, inf)) == infsup (-inf, inf));
+
+%!# from the documentation string
+%!assert (floor (infsup (2.5, 3.5)) == infsup (2, 3));
+%!assert (floor (infsup (-0.5, 5)) == infsup (-1, 5));
+
+%!# correct use of signed zeros
+%!test
+%! x = floor (infsup (0.5));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = floor (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

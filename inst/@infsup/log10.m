@@ -36,7 +36,7 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = log10 (x)
+function x = log10 (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -49,12 +49,20 @@ x = intersect (x, infsup (0, inf));
 l = mpfr_function_d ('log10', -inf, x.inf); # this works for empty intervals
 u = mpfr_function_d ('log10', +inf, x.sup); # ... this does not
 
-l (x.sup == 0) = inf;
-u (isempty (x) | x.sup == 0) = -inf;
+l(x.sup == 0) = inf;
+l(l == 0) = -0;
+u(isempty (x) | x.sup == 0) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (log10 (infsup (2)) == "[0x1.34413509F79FEp-2, 0x1.34413509F79FFp-2]");
+%!# from the documentation string
+%!assert (log10 (infsup (2)) == "[0x1.34413509F79FEp-2, 0x1.34413509F79FFp-2]");
+
+%!# correct use of signed zeros
+%!test
+%! x = log10 (infsup (1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

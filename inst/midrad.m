@@ -60,7 +60,7 @@
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/infsupdec, hull, @@infsupdec/mid, @@infsupdec/rad}
-## @end defun
+## @end deftypefun
 
 ## Author: Oliver Heimlich
 ## Keywords: interval

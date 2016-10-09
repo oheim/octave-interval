@@ -38,7 +38,7 @@
 ## Keywords: interval
 ## Created: 2011
 
-function result = powrev1 (b, c, x)
+function x = powrev1 (b, c, x)
 
 if (nargin < 2 || nargin > 3)
     print_usage ();
@@ -61,33 +61,19 @@ x = intersect (x, infsup (0, inf));
 c = intersect (c, infsup (0, inf));
 
 ## Resize, if scalar × matrix or vector × matrix or scalar × vector
-if (rows (b.inf) ~= rows (c.inf))
-    b.inf = ones (rows (c.inf), columns (b.inf)) .* b.inf;
-    b.sup = ones (rows (c.inf), columns (b.inf)) .* b.sup;
-    c.inf = ones (rows (b.inf), columns (c.inf)) .* c.inf;
-    c.sup = ones (rows (b.inf), columns (c.inf)) .* c.sup;
+if (not (size_equal (b.inf, c.inf)))
+    b.inf = ones (size (c.inf)) .* b.inf;
+    b.sup = ones (size (c.inf)) .* b.sup;
+    c.inf = ones (size (b.inf)) .* c.inf;
+    c.sup = ones (size (b.inf)) .* c.sup;
 endif
-if (rows (b.inf) ~= rows (x.inf))
-    b.inf = ones (rows (x.inf), columns (b.inf)) .* b.inf;
-    b.sup = ones (rows (x.inf), columns (b.inf)) .* b.sup;
-    c.inf = ones (rows (x.inf), columns (c.inf)) .* c.inf;
-    c.sup = ones (rows (x.inf), columns (c.inf)) .* c.sup;
-    x.inf = ones (rows (b.inf), columns (x.inf)) .* x.inf;
-    x.sup = ones (rows (b.inf), columns (x.inf)) .* x.sup;
-endif
-if (columns (b.inf) ~= columns (c.inf))
-    b.inf = ones (rows (b.inf), columns (c.inf)) .* b.inf;
-    b.sup = ones (rows (b.inf), columns (c.inf)) .* b.sup;
-    c.inf = ones (rows (c.inf), columns (b.inf)) .* c.inf;
-    c.sup = ones (rows (c.inf), columns (b.inf)) .* c.sup;
-endif
-if (columns (b.inf) ~= columns (x.inf))
-    b.inf = ones (rows (b.inf), columns (x.inf)) .* b.inf;
-    b.sup = ones (rows (b.inf), columns (x.inf)) .* b.sup;
-    c.inf = ones (rows (c.inf), columns (x.inf)) .* c.inf;
-    c.sup = ones (rows (c.inf), columns (x.inf)) .* c.sup;
-    x.inf = ones (rows (x.inf), columns (b.inf)) .* x.inf;
-    x.sup = ones (rows (x.inf), columns (b.inf)) .* x.sup;
+if (not (size_equal (b.inf, x.inf)))
+    b.inf = ones (size (x.inf)) .* b.inf;
+    b.sup = ones (size (x.inf)) .* b.sup;
+    c.inf = ones (size (x.inf)) .* c.inf;
+    c.sup = ones (size (x.inf)) .* c.sup;
+    x.inf = ones (size (b.inf)) .* x.inf;
+    x.sup = ones (size (b.inf)) .* x.sup;
 endif
 
 l = x.inf;
@@ -95,8 +81,8 @@ u = x.sup;
 emptyresult = isempty (b) | isempty (c) | (x.sup == 0 & b.sup <= 0) ...
     | (b.sup <= 0 & ((x.sup <= 1 & c.sup < 1) | (x.inf >= 1 & c.inf > 1))) ...
     | (b.inf >= 0 & ((x.sup <= 1 & c.inf > 1) | (x.inf >= 1 & c.sup < 1)));
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
 ## Implements Table B.1 in
 ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
@@ -107,38 +93,38 @@ u (emptyresult) = -inf;
 y = b.sup < 0;
 z = c.sup < 1;
 select = y & z & l < inf;
-if (any (any (select)))
-    l (select) = max (l (select), ...
-        powrev1rounded (c.sup (select), b.inf (select), -inf));
+if (any (select))
+    l(select) = max (l(select), ...
+        powrev1rounded (c.sup(select), b.inf(select), -inf));
 endif
 
 z = c.sup == 1;
 select = y & z & l < 1;
-l (select) = 1;
+l(select) = 1;
 
 z = c.sup > 1 & c.sup < inf;
 select = y & z & l < 1;
-if (any (any (select)))
-    l (select) = max (l (select), ...
-        powrev1rounded (c.sup (select), b.sup (select), -inf));
+if (any (select))
+    l(select) = max (l(select), ...
+        powrev1rounded (c.sup(select), b.sup(select), -inf));
 endif
 
 z = c.inf > 0 & c.inf < 1;
 select = y & z & u > 1;
-if (any (any (select)))
-    u (select) = min (u (select), ...
-        powrev1rounded (c.inf (select), b.sup (select), +inf));
+if (any (select))
+    u(select) = min (u(select), ...
+        powrev1rounded (c.inf(select), b.sup(select), +inf));
 endif
 
 z = c.inf == 1;
 select = y & z & u > 1;
-u (select) = 1;
+u(select) = 1;
 
 z = c.inf > 1;
 select = y & z & u > 0;
-if (any (any (select)))
-    u (select) = min (u (select), ...
-        powrev1rounded (c.inf (select), b.inf (select), +inf));
+if (any (select))
+    u(select) = min (u(select), ...
+        powrev1rounded (c.inf(select), b.inf(select), +inf));
 endif
 
 ## ismember (0, y) ============================================================
@@ -149,75 +135,78 @@ gap.sup = +inf (size (u));
 
 z = c.sup < 1;
 select = y & z & b.sup > 0;
-if (any (any (select)))
-    gap.inf (select) = powrev1rounded (c.sup (select), b.sup (select), +inf);
+if (any (select))
+    gap.inf(select) = powrev1rounded (c.sup(select), b.sup(select), +inf);
 endif
 select = y & z & b.inf < 0;
-if (any (any (select)))
-    gap.sup (select) = powrev1rounded (c.sup (select), b.inf (select), -inf);
+if (any (select))
+    gap.sup(select) = powrev1rounded (c.sup(select), b.inf(select), -inf);
 endif
 
 z = c.inf > 1;
 select = y & z & b.inf < 0;
-if (any (any (select)))
-    gap.inf (select) = powrev1rounded (c.inf (select), b.inf (select), +inf);
+if (any (select))
+    gap.inf(select) = powrev1rounded (c.inf(select), b.inf(select), +inf);
 endif
 select = y & z & b.sup > 0;
-if (any (any (select)))
-    gap.sup (select) = powrev1rounded (c.inf (select), b.sup (select), -inf);
+if (any (select))
+    gap.sup(select) = powrev1rounded (c.inf(select), b.sup(select), -inf);
 endif
 
 z = c.sup < 1 | c.inf > 1;
 select = y & z & (l > gap.inf | (gap.inf == 1 & l == 1));
-l (select) = max (l (select), gap.sup (select));
+l(select) = max (l(select), gap.sup(select));
 select = y & z & (u < gap.sup | gap.sup == inf | (gap.sup == 1 & u == 1));
-u (select) = min (u (select), gap.inf (select));
+u(select) = min (u(select), gap.inf(select));
 
 ## y after [0, 0] =============================================================
 y = b.inf > 0;
 z = c.sup < 1;
 select = y & z & u > 0;
-if (any (any (select)))
-    u (select) = min (u (select), ...
-        powrev1rounded (c.sup (select), b.sup (select), +inf));
+if (any (select))
+    u(select) = min (u(select), ...
+        powrev1rounded (c.sup(select), b.sup(select), +inf));
 endif
 
 z = c.sup == 1;
 select = y & z & u > 1;
-u (select) = 1;
+u(select) = 1;
 
 z = c.sup > 1 & c.sup < inf;
 select = y & z & u > 1;
-if (any (any (select)))
-    u (select) = min (u (select), ...
-        powrev1rounded (c.sup (select), b.inf (select), +inf));
+if (any (select))
+    u(select) = min (u(select), ...
+        powrev1rounded (c.sup(select), b.inf(select), +inf));
 endif
 
 z = c.inf > 0 & c.inf < 1;
 select = y & z & l < 1;
-if (any (any (select)))
-    l (select) = max (l (select), ...
-        powrev1rounded (c.inf (select), b.inf (select), -inf));
+if (any (select))
+    l(select) = max (l(select), ...
+        powrev1rounded (c.inf(select), b.inf(select), -inf));
 endif
 
 z = c.inf == 1;
 select = y & z & l < 1;
-l (select) = 1;
+l(select) = 1;
 
 z = c.inf > 1;
 select = y & z & l < inf;
-if (any (any (select)))
-    l (select) = max (l (select), ...
-        powrev1rounded (c.inf (select), b.sup (select), -inf));
+if (any (select))
+    l(select) = max (l(select), ...
+        powrev1rounded (c.inf(select), b.sup(select), -inf));
 endif
 
 ## ============================================================================
 
 emptyresult = l > u | l == inf | u == -inf;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
@@ -226,17 +215,17 @@ function x = powrev1rounded (z, y, direction)
 
 x = ones (size (z));
 
-x ((z == inf & y < 0) | (z == 0 & y > 0)) = 0;
-x ((z == inf & y > 0) | (z == 0 & y < 0)) = inf;
+x((z == inf & y < 0) | (z == 0 & y > 0)) = 0;
+x((z == inf & y > 0) | (z == 0 & y < 0)) = inf;
 
 select = z > 1 & z < inf & isfinite (y);
-y (select) = mpfr_function_d ('rdivide', direction, 1, y (select));
+y(select) = mpfr_function_d ('rdivide', direction, 1, y(select));
 select = z < 1 & z > 0 & isfinite (y);
-y (select) = mpfr_function_d ('rdivide', -direction, 1, y (select));
+y(select) = mpfr_function_d ('rdivide', -direction, 1, y(select));
 select = isfinite (y) & z > 0 & z ~= 1 & z < inf;
-x (select) = mpfr_function_d ('pow', direction, z (select), y (select));
+x(select) = mpfr_function_d ('pow', direction, z(select), y(select));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (powrev1 (infsup (2, 5), infsup (3, 6)) == "[0x1.3EE8390D43955, 0x1.3988E1409212Fp1]");
+%!# from the documentation string
+%!assert (powrev1 (infsup (2, 5), infsup (3, 6)) == "[0x1.3EE8390D43955, 0x1.3988E1409212Fp1]");

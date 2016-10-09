@@ -34,41 +34,55 @@
 ## Keywords: interval
 ## Created: 2014-10-07
 
-function result = acosh (x)
+function x = acosh (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-x = intersect (x, infsup (1, inf));
+persistent domain = infsup (1, inf);
+x = intersect (x, domain);
 
 ## acosh is monotonically increasing from (1, 0) to (inf, inf)
 l = mpfr_function_d ('acosh', -inf, x.inf);
 u = mpfr_function_d ('acosh', +inf, x.sup);
+l(l == 0) = -0;
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (acosh (infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (acosh (infsup (0)) == infsup ());
-%! assert (acosh (infsup (1)) == infsup (0));
+%!# Empty interval
+%!assert (acosh (infsup ()) == infsup ());
+
+%!# Singleton intervals
+%!assert (acosh (infsup (0)) == infsup ());
+%!assert (acosh (infsup (1)) == infsup (0));
+%!test
 %! x = infsup (1 : 3 : 100);
 %! assert (min (subset (acosh (x), log (x + sqrt (x + 1) .* sqrt (x - 1)))));
-%!test "Bounded intervals";
-%! assert (acosh (infsup (0, 1)) == infsup (0));
-%!test "Unbounded intervals";
-%! assert (acosh (infsup (-inf, 0)) == infsup ());
-%! assert (acosh (infsup (-inf, 1)) == infsup (0));
-%! assert (acosh (infsup (0, inf)) == infsup (0, inf));
-%! assert (acosh (infsup (1, inf)) == infsup (0, inf));
-%! assert (subset (acosh (infsup (2, inf)), infsup (1, inf)));
-%!test "from the documentation string";
-%! assert (acosh (infsup (2)) == "[0x1.5124271980434, 0x1.5124271980435]");
+
+%!# Bounded intervals
+%!assert (acosh (infsup (0, 1)) == infsup (0));
+
+%!# Unbounded intervals
+%!assert (acosh (infsup (-inf, 0)) == infsup ());
+%!assert (acosh (infsup (-inf, 1)) == infsup (0));
+%!assert (acosh (infsup (0, inf)) == infsup (0, inf));
+%!assert (acosh (infsup (1, inf)) == infsup (0, inf));
+%!assert (subset (acosh (infsup (2, inf)), infsup (1, inf)));
+
+%!# from the documentation string
+%!assert (acosh (infsup (2)) == "[0x1.5124271980434, 0x1.5124271980435]");
+
+%!# correct use of signed zeros
+%!test
+%! x = acosh (infsup (1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

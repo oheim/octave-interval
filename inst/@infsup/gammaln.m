@@ -51,7 +51,7 @@
 ## Keywords: interval
 ## Created: 2015-02-28
 
-function result = gammaln (x)
+function x = gammaln (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -76,25 +76,39 @@ u = -l;
 ## Monotonically decreasing for x1
 x1 = intersect (x, infsup (0, x_min_sup));
 select = not (isempty (x1)) & x1.sup > 0;
-if (any (any (select)))
-    x1.inf (x1.inf == 0) = 0; # fix negative zero
-    l (select) = mpfr_function_d ('gammaln', -inf, x1.sup (select));
-    u (select) = mpfr_function_d ('gammaln', +inf, x1.inf (select));
+if (any (select))
+    x1.inf(x1.inf == 0) = 0; # fix negative zero
+    l(select) = mpfr_function_d ('gammaln', -inf, x1.sup(select));
+    u(select) = mpfr_function_d ('gammaln', +inf, x1.inf(select));
 endif
 
 ## Monotonically increasing for x2
 x2 = intersect (x, infsup (x_min_inf, inf));
 select = not (isempty (x2));
-if (any (any (select)))
-    l (select) = mpfr_function_d ('gammaln', -inf, x2.inf (select));
-    u (select) = max (u (select), ...
-                 mpfr_function_d ('gammaln', +inf, x2.sup (select)));
+if (any (select))
+    l(select) = mpfr_function_d ('gammaln', -inf, x2.inf(select));
+    u(select) = max (u (select), ...
+                mpfr_function_d ('gammaln', +inf, x2.sup(select)));
 endif
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
 %!assert (gammaln (infsup (-inf, inf)) == "[-0x1.F19B9BCC38A42p-4, +Inf]");
-%!test "from the documentation string";
-%! assert (gammaln (infsup (1.5)) == "[-0x1.EEB95B094C192p-4, -0x1.EEB95B094C191p-4]");
+
+%!# from the documentation string
+%!assert (gammaln (infsup (1.5)) == "[-0x1.EEB95B094C192p-4, -0x1.EEB95B094C191p-4]");
+
+%!# correct use of signed zeros
+%!test
+%! x = gammaln (infsup (1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = gammaln (infsup (2));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

@@ -40,7 +40,8 @@ if (nargin ~= 1)
 endif
 
 result = isfinite (x.inf) & isfinite (x.sup);
-return
+
+endfunction
 
 %!assert (iscommoninterval (infsup (2, 3)));
 %!assert (not (iscommoninterval (infsup (2, inf))));

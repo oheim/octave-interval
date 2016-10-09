@@ -45,11 +45,19 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = prepad (x, len, c, dim)
+function x = prepad (x, len, c, dim)
 
 if (nargin < 2 || nargin > 4)
     print_usage ();
     return
+endif
+
+if (not (isa (x, "infsup")))
+    x = infsup (x);
+endif
+
+if (isa (len, "infsup"))
+    error ("interval:InvalidOperand", "prepad: len must not be an interval");
 endif
 
 if (nargin < 3)
@@ -64,11 +72,12 @@ if (nargin < 4)
     else
         dim = 1;
     endif
+elseif (isa (dim, "infsup"))
+    error ("interval:InvalidOperand", "prepad: dim must not be an interval");
 endif
 
-l = prepad (x.inf, len, c.inf, dim);
-u = prepad (x.sup, len, c.sup, dim);
-result = infsup (l, u);
+x.inf = prepad (x.inf, len, c.inf, dim);
+x.sup = prepad (x.sup, len, c.sup, dim);
 
 endfunction
 

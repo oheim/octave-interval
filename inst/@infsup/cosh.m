@@ -34,24 +34,25 @@
 ## Keywords: interval
 ## Created: 2014-10-07
 
-function result = cosh (x)
+function x = cosh (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-## cosh is symmetric and has its global minimum located at (0, 0).
+## cosh is symmetric and has its global minimum located at (0, 1).
 l = mpfr_function_d ('cosh', -inf, mig (x));
 u = mpfr_function_d ('cosh', +inf, mag (x));
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (cosh (infsup (1)) == "[0x1.8B07551D9F55, 0x1.8B07551D9F551]");
+%!# from the documentation string
+%!assert (cosh (infsup (1)) == "[0x1.8B07551D9F55, 0x1.8B07551D9F551]");

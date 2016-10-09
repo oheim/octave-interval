@@ -28,14 +28,14 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function result = isentire (interval)
+function result = isentire (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = (interval.inf == -inf & interval.sup == inf);
+result = (x.inf == -inf & x.sup == inf);
 
 endfunction
 

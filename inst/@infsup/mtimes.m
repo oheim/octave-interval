@@ -73,7 +73,7 @@ if (size (x.inf, 2) ~= size (y.inf, 1))
            "operator *: nonconformant arguments");
 endif
 
-if (nargin == 3)
+if (nargin >= 3)
     switch (accuracy)
         case "valid"
             ## Fast matrix multiplication uses rounding mode switches, which
@@ -155,7 +155,7 @@ end_try_catch
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]) * infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]) == infsup ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375]));
-%!test "matrix multiplication using BLAS routines";
-%! assert (mtimes (infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]), infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]), 'valid') == infsup ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375]));
+%!# from the documentation string
+%!assert (infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]) * infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]) == infsup ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375]));
+%!# matrix multiplication using BLAS routines
+%!assert (mtimes (infsup ([1, 2; 7, 15], [2, 2; 7.5, 15]), infsup ([3, 3; 0, 1], [3, 3.25; 0, 2]), 'valid') == infsup ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375]));

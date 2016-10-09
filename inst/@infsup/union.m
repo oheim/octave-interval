@@ -42,7 +42,7 @@
 ## Keywords: interval
 ## Created: 2014-10-02
 
-function result = union (a, b, dim)
+function a = union (a, b, dim)
 
 if (not (isa (a, "infsup")))
     a = infsup (a);
@@ -69,9 +69,10 @@ switch (nargin)
         return
 endswitch
 
-result = infsup (l, u);
+a.inf = l;
+a.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (union (infsup (1, 3), infsup (2, 4)) == infsup (1, 4));
+%!# from the documentation string
+%!assert (union (infsup (1, 3), infsup (2, 4)) == infsup (1, 4));

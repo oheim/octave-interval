@@ -45,11 +45,19 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = postpad (x, len, c, dim)
+function x = postpad (x, len, c, dim)
 
 if (nargin < 2 || nargin > 4)
     print_usage ();
     return
+endif
+
+if (not (isa (x, "infsup")))
+    x = infsup (x);
+endif
+
+if (isa (len, "infsup"))
+    error ("interval:InvalidOperand", "postpad: len must not be an interval");
 endif
 
 if (nargin < 3)
@@ -64,11 +72,12 @@ if (nargin < 4)
     else
         dim = 1;
     endif
+elseif (isa (dim, "infsup"))
+    error ("interval:InvalidOperand", "postpad: dim must not be an interval");
 endif
 
-l = postpad (x.inf, len, c.inf, dim);
-u = postpad (x.sup, len, c.sup, dim);
-result = infsup (l, u);
+x.inf = postpad (x.inf, len, c.inf, dim);
+x.sup = postpad (x.sup, len, c.sup, dim);
 
 endfunction
 

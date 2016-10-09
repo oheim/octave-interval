@@ -51,7 +51,7 @@
 ## Keywords: interval
 ## Created: 2015-02-28
 
-function result = erf (x)
+function x = erf (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -63,12 +63,21 @@ l = mpfr_function_d ('erf', -inf, x.inf);
 u = mpfr_function_d ('erf', +inf, x.sup);
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (erf (infsup (1)) == "[0x1.AF767A741088Ap-1, 0x1.AF767A741088Bp-1]");
+%!# from the documentation string
+%!assert (erf (infsup (1)) == "[0x1.AF767A741088Ap-1, 0x1.AF767A741088Bp-1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = erf (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

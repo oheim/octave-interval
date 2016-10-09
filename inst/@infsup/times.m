@@ -37,7 +37,7 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = times (x, y)
+function x = times (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -78,18 +78,21 @@ u = max (max (max (...
 ## [Entire] × anything but [0] = [Entire] × [Entire]
 ## This prevents the cases where 0 × inf would produce NaNs.
 entireproduct = isentire (x) | isentire (y);
-l (entireproduct) = -inf;
-u (entireproduct) = inf;
+l(entireproduct) = -inf;
+u(entireproduct) = inf;
 zeroproduct = (x.inf == 0 & x.sup == 0) | (y.inf == 0 & y.sup == 0);
-l (zeroproduct) = 0;
-u (zeroproduct) = 0;
+l(zeroproduct) = -0;
+u(zeroproduct) = +0;
 emptyresult = isempty (x) | isempty (y);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (infsup (2, 3) .* infsup (1, 2) == infsup (2, 6));
+%!# from the documentation string
+%!assert (infsup (2, 3) .* infsup (1, 2) == infsup (2, 6));

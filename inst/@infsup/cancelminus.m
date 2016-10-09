@@ -35,7 +35,7 @@
 ## Keywords: interval
 ## Created: 2014-10-19
 
-function result = cancelminus (x, y)
+function x = cancelminus (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -66,16 +66,19 @@ entireresult = (isempty (y) & not (isempty (x))) | ...
                ## for interior zero, because of rounding errors.
                (iscommoninterval (x) & iscommoninterval (y) & ...
                 (wid_x1 - wid_y1) + (wid_x2 - wid_y2) < 0);
-l (entireresult) = -inf;
-u (entireresult) = inf;
+l(entireresult) = -inf;
+u(entireresult) = inf;
 
 emptyresult = isempty (x) & not (entireresult);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (cancelminus (infsup (2, 3), infsup (1, 1.5)) == infsup (1, 1.5));
+%!# from the documentation string
+%!assert (cancelminus (infsup (2, 3), infsup (1, 1.5)) == infsup (1, 1.5));

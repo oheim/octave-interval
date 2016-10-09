@@ -34,18 +34,23 @@
 ## Keywords: interval
 ## Created: 2015-03-15
 
-function result = cbrt (x)
+function x = cbrt (x)
 
-l = mpfr_function_d ('cbrt', -inf, x.inf);
-u = mpfr_function_d ('cbrt', +inf, x.sup);
+if (nargin ~= 1)
+    print_usage ();
+    return
+endif
 
-emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
-
-result = infsup (l, u);
+x.inf = mpfr_function_d ('cbrt', -inf, x.inf);
+x.sup = mpfr_function_d ('cbrt', +inf, x.sup);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (cbrt (infsup (-27, 27)) == infsup (-3, 3));
+%!# from the documentation string
+%!assert (cbrt (infsup (-27, 27)) == infsup (-3, 3));
+
+%!# correct use of signed zeros
+%!test
+%! x = cbrt (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

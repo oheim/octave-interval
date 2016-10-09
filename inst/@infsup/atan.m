@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2014-10-06
 
-function result = atan (x)
+function x = atan (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -44,14 +44,22 @@ endif
 ## atan is monotonically increasing
 l = mpfr_function_d ('atan', -inf, x.inf);
 u = mpfr_function_d ('atan', +inf, x.sup);
+l(l == 0) = -0;
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (atan (infsup (1)) == "[0x1.921FB54442D18p-1, 0x1.921FB54442D19p-1]");
+%!# from the documentation string
+%!assert (atan (infsup (1)) == "[0x1.921FB54442D18p-1, 0x1.921FB54442D19p-1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = atan (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

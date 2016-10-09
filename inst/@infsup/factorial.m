@@ -17,8 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} factorial (@var{N})
 ## 
-## Compute the factorial of @var{N} where @var{N} is a real non-negative
-## integer.
+## Compute the factorial of @var{N} where @var{N} is a non-negative integer.
 ##
 ## If @var{N} is a scalar, this is equivalent to
 ## @display
@@ -47,7 +46,7 @@
 ## Keywords: interval
 ## Created: 2016-01-31
 
-function result = factorial (x)
+function x = factorial (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -58,20 +57,22 @@ l = max (0, ceil (x.inf));
 u = floor (x.sup);
 
 emptyresult = l > u;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-l (not (emptyresult)) = ...
-    mpfr_function_d ("factorial", -inf, l (not (emptyresult)));
-u (not (emptyresult)) = ...
-    mpfr_function_d ("factorial", +inf, u (not (emptyresult)));
+l(not (emptyresult)) = ...
+    mpfr_function_d ("factorial", -inf, l(not (emptyresult)));
+u(not (emptyresult)) = ...
+    mpfr_function_d ("factorial", +inf, u(not (emptyresult)));
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (factorial (infsup (6)) == 720);
+%!# from the documentation string
+%!assert (factorial (infsup (6)) == 720);
+
 %!assert (factorial (infsup (0)) == 1);
 %!assert (factorial (infsup ("[0, 1.99]")) == 1);
 %!assert (factorial (infsup ("[0, 2]")) == "[1, 2]");

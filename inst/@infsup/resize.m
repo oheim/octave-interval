@@ -48,7 +48,7 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = resize (x, m, n)
+function x = resize (x, m, n)
 
 switch nargin
     case 2
@@ -60,8 +60,8 @@ switch nargin
             error ("interval:InvalidOperand", ...
                    "resize: no more than 2 dimensions are supported")
         else
-            n = m (2);
-            m = m (1);
+            n = m(2);
+            m = m(1);
         endif
     case 3
         ## Nothing to do
@@ -75,18 +75,11 @@ if (not (isa (x, "infsup")))
     return
 endif
 
-l = resize (x.inf, m, n);
-u = resize (x.sup, m, n);
+x.inf = resize (x.inf, m, n);
+x.sup = resize (x.sup, m, n);
 
-## Implicit new elements in the matrices take the value 0. We can detect them
-## in the inf matrix, because zeros in the inf matrix are set to -0 by the
-## infsup constructor.
-
-## Set the implicit new elements to [0].
-l (l == 0) = -0;
-
-result = infsup (l, u);
+x.inf(x.inf == 0) = -0;
 
 endfunction
 
-%!assert (resize (infsup (magic (3)), 4, 2) == infsup([8, 1; 3, 5; 4, 9; 0, 0]));
+%!assert (resize (infsup (magic (3)), 4, 2) == infsup ([8, 1; 3, 5; 4, 9; 0, 0]));

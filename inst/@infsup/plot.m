@@ -63,11 +63,6 @@ if (nargin >= 2 && not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x) || (nargin >= 2 && isnai (y)))
-    error ("interval:NaI", "Cannot plot NaIs");
-    return
-endif
-
 if (nargin < 2)
     y = x;
     ## x = 1 ... n
@@ -102,24 +97,24 @@ unwind_protect
     lines = xor (issingleton (x), issingleton (y)) & not (empty);
     boxes = not (points | lines | empty);
     
-    if (any (any (points)))
-        scatter (x.inf (points), y.inf (points), ...
+    if (any (points))
+        scatter (x.inf(points), y.inf(points), ...
                  pointsize, ...
                  edgecolor, ...
                  'filled');
     endif
     
-    if (any (any (lines)))
-        x_line = [vec(x.inf (lines)), vec(x.sup (lines))]';
-        y_line = [vec(y.inf (lines)), vec(y.sup (lines))]';
+    if (any (lines))
+        x_line = [vec(x.inf(lines)), vec(x.sup(lines))]';
+        y_line = [vec(y.inf(lines)), vec(y.sup(lines))]';
         line (x_line, y_line, ...
               'color', edgecolor, ...
               'linewidth', edgewidth);
     endif
     
-    if (any (any (boxes)))
-        x_box = [vec(x.inf (boxes)), vec(x.sup (boxes))] (:, [1 2 2 1])';
-        y_box = [vec(y.inf (boxes)), vec(y.sup (boxes))] (:, [1 1 2 2])';
+    if (any (boxes))
+        x_box = [vec(x.inf(boxes)), vec(x.sup(boxes))](:, [1 2 2 1])';
+        y_box = [vec(y.inf(boxes)), vec(y.sup(boxes))](:, [1 1 2 2])';
         if (nargin < 4)
             edgecolor = 'none';
         endif
@@ -138,7 +133,8 @@ end_unwind_protect
 
 endfunction
 
-%!test "this test is rather pointless";
+%!# this test is rather pointless
+%!test
 %!  clf
 %!  plot (empty ());
 %!  close

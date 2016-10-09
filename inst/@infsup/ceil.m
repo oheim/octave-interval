@@ -36,37 +36,54 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = ceil (x)
+function x = ceil (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = infsup (ceil (x.inf), ceil (x.sup));
+x.inf = ceil (x.inf);
+x.sup = ceil (x.sup);
+
+x.sup(x.sup == 0) = +0;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (ceil (infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (ceil (infsup (0)) == infsup (0));
-%! assert (ceil (infsup (0.5)) == infsup (1));
-%! assert (ceil (infsup (-0.5)) == infsup (0));
-%!test "Bounded intervals";
-%! assert (ceil (infsup (-0.5, 0)) == infsup (0));
-%! assert (ceil (infsup (0, 0.5)) == infsup (0, 1));
-%! assert (ceil (infsup (0.25, 0.5)) == infsup (1));
-%! assert (ceil (infsup (-1, 0)) == infsup (-1, 0));
-%! assert (ceil (infsup (-1, 1)) == infsup (-1, 1));
-%! assert (ceil (infsup (-realmin, realmin)) == infsup (0, 1));
-%! assert (ceil (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
-%!test "Unbounded intervals";
-%! assert (ceil (infsup (-realmin, inf)) == infsup (0, inf));
-%! assert (ceil (infsup (-realmax, inf)) == infsup (-realmax, inf));
-%! assert (ceil (infsup (-inf, realmin)) == infsup (-inf, 1));
-%! assert (ceil (infsup (-inf, realmax)) == infsup (-inf, realmax));
-%! assert (ceil (infsup (-inf, inf)) == infsup (-inf, inf));
-%!test "from the documentation string";
-%! assert (ceil (infsup (2.5, 3.5)) == infsup (3, 4));
-%! assert (ceil (infsup (-.5, 5)) == infsup (0, 5));
+%!# Empty interval
+%!assert (ceil (infsup ()) == infsup ());
+
+%!# Singleton intervals
+%!assert (ceil (infsup (0)) == infsup (0));
+%!assert (ceil (infsup (0.5)) == infsup (1));
+%!assert (ceil (infsup (-0.5)) == infsup (0));
+
+%!# Bounded intervals
+%!assert (ceil (infsup (-0.5, 0)) == infsup (0));
+%!assert (ceil (infsup (0, 0.5)) == infsup (0, 1));
+%!assert (ceil (infsup (0.25, 0.5)) == infsup (1));
+%!assert (ceil (infsup (-1, 0)) == infsup (-1, 0));
+%!assert (ceil (infsup (-1, 1)) == infsup (-1, 1));
+%!assert (ceil (infsup (-realmin, realmin)) == infsup (0, 1));
+%!assert (ceil (infsup (-realmax, realmax)) == infsup (-realmax, realmax));
+
+%!# Unbounded intervals
+%!assert (ceil (infsup (-realmin, inf)) == infsup (0, inf));
+%!assert (ceil (infsup (-realmax, inf)) == infsup (-realmax, inf));
+%!assert (ceil (infsup (-inf, realmin)) == infsup (-inf, 1));
+%!assert (ceil (infsup (-inf, realmax)) == infsup (-inf, realmax));
+%!assert (ceil (infsup (-inf, inf)) == infsup (-inf, inf));
+
+%!# from the documentation string
+%!assert (ceil (infsup (2.5, 3.5)) == infsup (3, 4));
+%!assert (ceil (infsup (-.5, 5)) == infsup (0, 5));
+
+%!# correct use of signed zeros
+%!test
+%! x = ceil (infsup (-0.5));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = ceil (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

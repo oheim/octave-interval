@@ -37,7 +37,7 @@
 ## Keywords: interval
 ## Created: 2015-02-20
 
-function result = hypot (x, y)
+function x = hypot (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -54,12 +54,21 @@ l = mpfr_function_d ('hypot', -inf, mig (x), mig (y));
 u = mpfr_function_d ('hypot', +inf, mag (x), mag (y));
 
 emptyresult = isempty (x) | isempty (y);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (hypot (infsup (2, 3), infsup (1, 2)) == "[0x1.1E3779B97F4A7p1, 0x1.CD82B446159F4p1]");
+%!# from the documentation string
+%!assert (hypot (infsup (2, 3), infsup (1, 2)) == "[0x1.1E3779B97F4A7p1, 0x1.CD82B446159F4p1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = hypot (infsup (0), infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

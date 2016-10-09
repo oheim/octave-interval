@@ -44,7 +44,7 @@
 ## Keywords: interval
 ## Created: 2015-07-19
 
-function result = mince (x, n)
+function x = mince (x, n)
 
 if (nargin > 2)
     print_usage ();
@@ -65,14 +65,15 @@ idx.subs = {isfinite(x.sup)};
 limit = subsasgn (limit, idx, infsup (subsref (x.sup, idx)));
 
 boundaries = linspace (base, limit, n + 1);
-l = boundaries.inf (:, 1 : end - 1);
-u = boundaries.sup (:, 2 : end);
+l = boundaries.inf(:, 1 : end - 1);
+u = boundaries.sup(:, 2 : end);
 
 empty = vec (isempty (x));
 l(empty, :) = inf;
 u(empty, :) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 

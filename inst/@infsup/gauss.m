@@ -86,23 +86,22 @@ m = columns (y.inf);
 ##         Solve L * s = inv (P) * y
 
 s = permute (inv (P), y);
-curelement.type = prevvars.type = Lrowidx.type =  "()";
+curelement.type = prevvars.type =  "()";
 for i = 1 : m
     ## Special case: k == 1
     ## s (k, i) already is correct
     for k = 2 : n
         curelement.subs = {k, i};
         prevvars.subs = {1 : k, i};
-        Lrowidx.subs = {k, 1 : k};
         
         varcol = subsref (s, prevvars);
-        Lrow = subsref (L, Lrowidx);
+        Lrow = subsref (L, substruct ("()", {k, 1 : k}));
         
         ## We have to subtract varcol (1 : (k - 1)) * Lrow (1 : (k - 1)) from
         ## s (k, i). Since varcol (k) == s (k, i), we can simply set
         ## Lrow (k) = -1 and the dot product will compute the difference for us
         ## with high accurracy.
-        Lrow.inf (k) = Lrow.sup (k) = -1;
+        Lrow.inf(k) = Lrow.sup(k) = -1;
         
         ## Then, we only have to flip the sign afterwards.
         s = subsasgn (s, curelement, -dot (Lrow, varcol));
@@ -130,7 +129,7 @@ for i = 1 : m
         Urow = subsref (U, Urowrest);
         
         ## Use the same trick like above during forward substitution.
-        Urow.inf (1) = Urow.sup (1) = -1;
+        Urow.inf(1) = Urow.sup(1) = -1;
         
         ## Additionally we must divide the element by the current diagonal
         ## element of U.
@@ -158,40 +157,36 @@ endfor
 ## diagonal elements of the matrix we use an arbitrary element that does not
 ## contain zero as an inner element.
 
-xrowidx.type = yidx.type = zcolidx.type = "()";
 migx = mig (x);
 migx (isnan (migx)) = 0;
 for k = 1 : m
-    zcolidx.subs = {1 : n, k};
-    zcol = subsref (z, zcolidx);
+    zcol = subsref (z, substruct ("()", {1 : n, k}));
     for j = n : -1 : 1
-        z_jk = infsup (zcol.inf (j), zcol.sup (j));
+        z_jk = subsref (zcol, substruct ("()", {j}));
         if (isempty (z_jk) || issingleton (z_jk))
             ## No improvement can be achieved.
             continue
         endif
-        i = find (migx (:, j) == max (migx (:, j)), 1);
-        xrowidx.subs = {i, 1 : n};
-        xrow = subsref (x, xrowidx);
-        if (xrow.inf (j) < 0 && xrow.sup (j) > 0)
+        i = find (migx(:, j) == max (migx(:, j)), 1);
+        xrow = subsref (x, substruct ("()", {i, 1 : n}));
+        if (xrow.inf(j) < 0 && xrow.sup(j) > 0)
             ## No improvement can be achieved.
             continue
         endif
-        x_ij = infsup (xrow.inf (j), xrow.sup (j));
-        yidx.subs = {i, k};
-        yelement = subsref (y, yidx);
+        x_ij = subsref (xrow, substruct ("()", {j}));
+        yelement = subsref (y, substruct ("()", {i, k}));
         
-        ## x (i, 1 : n) * z (1 : n, k) shall equal y (i, k).
-        ## 1. Solve this equation for x (i, j) * z (j, k).
-        ## 2. Compute a (possibly better) enclosure for z (j, k).
+        ## x(i, 1 : n) * z(1 : n, k) shall equal y(i, k).
+        ## 1. Solve this equation for x(i, j) * z(j, k).
+        ## 2. Compute a (possibly better) enclosure for z(j, k).
         
-        xrow.inf (j) = yelement.inf;
-        xrow.sup (j) = yelement.sup;
-        zcol.inf (j) = zcol.sup (j) = -1;
+        xrow.inf(j) = yelement.inf;
+        xrow.sup(j) = yelement.sup;
+        zcol.inf(j) = zcol.sup(j) = -1;
         z_jk = mulrev (x_ij, -dot (xrow, zcol), z_jk);
         
-        zcol.inf (j) = z.inf (j, k) = z_jk.inf;
-        zcol.sup (j) = z.sup (j, k) = z_jk.sup;
+        zcol.inf(j) = z.inf(j, k) = z_jk.inf;
+        zcol.sup(j) = z.sup(j, k) = z_jk.sup;
     endfor
 endfor
 
@@ -209,11 +204,11 @@ function B = permute (P, A)
     
     B = A;
     for i = 1 : rows (P)
-        targetrow = find (P (i, :) == 1, 1);
-        B.inf (targetrow, :) = A.inf (i, :);
-        B.sup (targetrow, :) = A.sup (i, :);
+        targetrow = find (P(i, :) == 1, 1);
+        B.inf(targetrow, :) = A.inf(i, :);
+        B.sup(targetrow, :) = A.sup(i, :);
     endfor
 endfunction
 
-%!test "from the documentation string";
-%! assert (gauss (infsup ([1, 0; 0, 2]), [2, 0; 0, 4]) == [2, 0; 0, 2]);
+%!# from the documentation string
+%!assert (gauss (infsup ([1, 0; 0, 2]), [2, 0; 0, 4]) == [2, 0; 0, 2]);

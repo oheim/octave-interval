@@ -34,18 +34,30 @@
 ## Keywords: interval
 ## Created: 2014-10-01
 
-function result = realsqrt (x)
+function x = realsqrt (x)
 
 l = mpfr_function_d ('realsqrt', -inf, max (0, x.inf));
 u = mpfr_function_d ('realsqrt', +inf, max (0, x.sup));
 
 emptyresult = isempty (x) | x.sup < 0;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (realsqrt (infsup (-6, 4)) == infsup (0, 2));
+%!# from the documentation string
+%!assert (realsqrt (infsup (-6, 4)) == infsup (0, 2));
+
+%!# correct use of signed zeros
+%!test
+%! x = realsqrt (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = realsqrt (infsup (0, 2));
+%! assert (signbit (inf (x)));

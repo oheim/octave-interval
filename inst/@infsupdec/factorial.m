@@ -17,8 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} factorial (@var{N})
 ## 
-## Compute the factorial of @var{N} where @var{N} is a real non-negative
-## integer.
+## Compute the factorial of @var{N} where @var{N} is a non-negative integer.
 ##
 ## If @var{N} is a scalar, this is equivalent to
 ## @display

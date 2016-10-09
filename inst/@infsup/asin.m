@@ -34,28 +34,38 @@
 ## Keywords: interval
 ## Created: 2014-10-06
 
-function result = asin (x)
+function x = asin (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-x = intersect (x, infsup (-1, 1));
+persistent domain = infsup (-1, 1);
+x = intersect (x, domain);
 
 ## asin is monotonically increasing from (-1, -pi/2) to (1, pi/2)
 l = mpfr_function_d ('asin', -inf, x.inf);
 u = mpfr_function_d ('asin', +inf, x.sup);
+l(l == 0) = -0;
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (asin (infsup ()) == infsup ());
-%!test "from the documentation string";
-%! assert (asin (infsup (.5)) == "[0x1.0C152382D7365p-1, 0x1.0C152382D7366p-1]");
+%!# Empty interval
+%!assert (asin (infsup ()) == infsup ());
+
+%!# from the documentation string
+%!assert (asin (infsup (.5)) == "[0x1.0C152382D7365p-1, 0x1.0C152382D7366p-1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = asin (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

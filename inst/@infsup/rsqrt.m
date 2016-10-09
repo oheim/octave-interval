@@ -34,18 +34,26 @@
 ## Keywords: interval
 ## Created: 2015-03-15
 
-function result = rsqrt (x)
+function x = rsqrt (x)
 
 l = mpfr_function_d ('rsqrt', -inf, max (0, x.sup));
 u = mpfr_function_d ('rsqrt', +inf, max (0, x.inf));
 
 emptyresult = isempty (x) | x.sup <= 0;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (rsqrt (infsup (-6, 4)) == infsup (.5, inf));
+%!# from the documentation string
+%!assert (rsqrt (infsup (-6, 4)) == infsup (.5, inf));
+
+%!# correct use of signed zeros
+%!test
+%! x = rsqrt (infsup (0, inf));
+%! assert (signbit (inf (x)));

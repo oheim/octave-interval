@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = pow2 (x)
+function x = pow2 (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -45,11 +45,18 @@ endif
 l = mpfr_function_d ('pow2', -inf, x.inf); # this works for empty intervals
 u = mpfr_function_d ('pow2', +inf, x.sup); # ... this does not
 
-u (isempty (x)) = -inf;
+l(l == 0) = -0;
+u(isempty (x)) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
+%!# from the documentation string
 %! assert (pow2 (infsup (5)) == infsup (32));
+
+%!# correct use of signed zeros
+%!test
+%! x = pow2 (infsup (-inf, -realmax));
+%! assert (signbit (inf (x)));

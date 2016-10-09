@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2015-03-15
 
-function result = csch (x)
+function x = csch (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -44,25 +44,34 @@ endif
 l = u = zeros (size (x.inf));
 
 select = x.inf >= 0 | x.sup <= 0;
-if (any (any (select)))
-    l (select) = mpfr_function_d ('csch', -inf, x.sup (select));
-    l (select & x.sup == 0) = -inf;
-    u (select) = mpfr_function_d ('csch', +inf, x.inf (select));
-    u (select & x.inf == 0) = inf;
+if (any (select))
+    l(select) = mpfr_function_d ('csch', -inf, x.sup(select));
+    l(select & x.sup == 0) = -inf;
+    u(select) = mpfr_function_d ('csch', +inf, x.inf(select));
+    u(select & x.inf == 0) = inf;
 endif
 select = x.inf < 0 & x.sup > 0;
-if (any (any (select)))
-    l (select) = -inf;
-    u (select) = inf;
+if (any (select))
+    l(select) = -inf;
+    u(select) = inf;
 endif
 
 emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (csch (infsup (1)) == "[0x1.B3AB8A78B90Cp-1, 0x1.B3AB8A78B90C1p-1]");
+%!# from the documentation string
+%!assert (csch (infsup (1)) == "[0x1.B3AB8A78B90Cp-1, 0x1.B3AB8A78B90C1p-1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = csch (infsup (0, inf));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

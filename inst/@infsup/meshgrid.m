@@ -77,7 +77,7 @@ endswitch
 
 if (nargout >= 3 || nargin >= 3)
     ## Reshape 3 dimensions into 2 dimensions
-    f = @(A) reshape (A, [size(A,1), prod(size (A)(2 : end))]);
+    f = @(A) reshape (A, [size(A, 1), prod(size (A)(2 : end))]);
     lxx = f (lxx);
     uxx = f (uxx);
     lyy = f (lyy);
@@ -85,10 +85,16 @@ if (nargout >= 3 || nargin >= 3)
     lzz = f (lzz);
     uzz = f (uzz);
 endif
-xx = infsup (lxx, uxx);
-yy = infsup (lyy, uyy);
+
+xx = yy = x;
+xx.inf = lxx;
+xx.sup = uxx;
+yy.inf = lyy;
+yy.sup = uyy;
 if (nargout >= 3)
-    zz = infsup (lzz, uzz);
+    zz = x;
+    zz.inf = lzz;
+    zz.sup = uzz;
 endif
 
 endfunction

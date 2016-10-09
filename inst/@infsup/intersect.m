@@ -42,7 +42,7 @@
 ## Keywords: interval
 ## Created: 2014-10-02
 
-function result = intersect (a, b, dim)
+function a = intersect (a, b, dim)
 
 if (not (isa (a, "infsup")))
     a = infsup (a);
@@ -71,33 +71,56 @@ endswitch
 
 ## If the intervals do not intersect, the result must be empty.
 emptyresult = l > u;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+a.inf = l;
+a.sup = u;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (intersect (infsup (), infsup ()) == infsup ());
-%! assert (intersect (infsup (), infsup (1)) == infsup ());
-%! assert (intersect (infsup (0), infsup ()) == infsup ());
-%! assert (intersect (infsup (-inf, inf), infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (intersect (infsup (0), infsup (1)) == infsup ());
-%! assert (intersect (infsup (0), infsup (0)) == infsup (0));
-%!test "Bounded intervals";
-%! assert (intersect (infsup (1, 2), infsup (3, 4)) == infsup ());
-%! assert (intersect (infsup (1, 2), infsup (2, 3)) == infsup (2));
-%! assert (intersect (infsup (1, 2), infsup (1.5, 2.5)) == infsup (1.5, 2));
-%! assert (intersect (infsup (1, 2), infsup (1, 2)) == infsup (1, 2));
-%!test "Unbounded intervals";
-%! assert (intersect (infsup (0, inf), infsup (-inf, 0)) == infsup (0));
-%! assert (intersect (infsup (1, inf), infsup (-inf, -1)) == infsup ());
-%! assert (intersect (infsup (-1, inf), infsup (-inf, 1)) == infsup (-1, 1));
-%! assert (intersect (infsup (-inf, inf), infsup (42)) == infsup (42));
-%! assert (intersect (infsup (42), infsup (-inf, inf)) == infsup (42));
-%! assert (intersect (infsup (-inf, 0), infsup (-inf, inf)) == infsup (-inf, 0));
-%! assert (intersect (infsup (-inf, inf), infsup (-inf, inf)) == infsup (-inf, inf));
-%!test "from the documentation string";
-%! assert (intersect (infsup (1, 3), infsup (2, 4)) == infsup (2, 3));
+%!# Empty interval
+%!assert (intersect (infsup (), infsup ()) == infsup ());
+%!assert (intersect (infsup (), infsup (1)) == infsup ());
+%!assert (intersect (infsup (0), infsup ()) == infsup ());
+%!assert (intersect (infsup (-inf, inf), infsup ()) == infsup ());
+
+%!# Singleton intervals
+%!assert (intersect (infsup (0), infsup (1)) == infsup ());
+%!assert (intersect (infsup (0), infsup (0)) == infsup (0));
+
+%!# Bounded intervals
+%!assert (intersect (infsup (1, 2), infsup (3, 4)) == infsup ());
+%!assert (intersect (infsup (1, 2), infsup (2, 3)) == infsup (2));
+%!assert (intersect (infsup (1, 2), infsup (1.5, 2.5)) == infsup (1.5, 2));
+%!assert (intersect (infsup (1, 2), infsup (1, 2)) == infsup (1, 2));
+
+%!# Unbounded intervals
+%!assert (intersect (infsup (0, inf), infsup (-inf, 0)) == infsup (0));
+%!assert (intersect (infsup (1, inf), infsup (-inf, -1)) == infsup ());
+%!assert (intersect (infsup (-1, inf), infsup (-inf, 1)) == infsup (-1, 1));
+%!assert (intersect (infsup (-inf, inf), infsup (42)) == infsup (42));
+%!assert (intersect (infsup (42), infsup (-inf, inf)) == infsup (42));
+%!assert (intersect (infsup (-inf, 0), infsup (-inf, inf)) == infsup (-inf, 0));
+%!assert (intersect (infsup (-inf, inf), infsup (-inf, inf)) == infsup (-inf, inf));
+
+%!# from the documentation string
+%!assert (intersect (infsup (1, 3), infsup (2, 4)) == infsup (2, 3));
+
+%!# correct use of signed zeros
+%!test
+%! x = intersect (infsup (0), infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = intersect (infsup (0), infsup (0, 1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = intersect (infsup (0, 1), infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = intersect (infsup (-1, 0), infsup (0, 1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

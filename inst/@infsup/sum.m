@@ -72,8 +72,8 @@ l = u = zeros (resultsize);
 for n = 1 : size (x.inf, 3 - dim)
     idx.type = "()";
     idx.subs = cell (1, 2);
-    idx.subs {dim} = ":";
-    idx.subs {3 - dim} = n;
+    idx.subs{dim} = ":";
+    idx.subs{3 - dim} = n;
 
     ## Select current vector in matrix
     if (size (x.inf, 3 - dim) == 1)
@@ -84,18 +84,27 @@ for n = 1 : size (x.inf, 3 - dim)
     
     if (any (isempty (vector.x)))
         ## One of the intervals is empty
-        l (n) = inf;
-        u (n) = -inf;
+        l(n) = inf;
+        u(n) = -inf;
     else
-        l (n) = mpfr_vector_sum_d (-inf, vector.x.inf);
-        u (n) = mpfr_vector_sum_d (+inf, vector.x.sup);
+        l(n) = mpfr_vector_sum_d (-inf, vector.x.inf);
+        u(n) = mpfr_vector_sum_d (+inf, vector.x.sup);
     endif
 endfor
 
-result = infsup (l, u);
+result = infsup ();
+result.inf = l;
+result.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (sum ([infsup(1), pow2(-1074), -1]) == infsup (pow2 (-1074)));
+%!# from the documentation string
+%!assert (sum ([infsup(1), pow2(-1074), -1]) == infsup (pow2 (-1074)));
+
 %!assert (sum (infsup ([])) == 0);
+
+%!# correct use of signed zeros
+%!test
+%! x = sum (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

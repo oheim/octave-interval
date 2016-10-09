@@ -48,5 +48,5 @@ result = realsqrt (x);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (sqrt (infsup (-6, 4)) == infsup (0, 2));
+%!# from the documentation string
+%!assert (sqrt (infsup (-6, 4)) == infsup (0, 2));

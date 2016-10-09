@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2015-03-15
 
-function result = sech (x)
+function x = sech (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -45,12 +45,20 @@ l = mpfr_function_d ('sech', -inf, mag (x));
 u = mpfr_function_d ('sech', +inf, mig (x));
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (sech (infsup (1)) == "[0x1.4BCDC50ED6BE7p-1, 0x1.4BCDC50ED6BE8p-1]");
+%!# from the documentation string
+%!assert (sech (infsup (1)) == "[0x1.4BCDC50ED6BE7p-1, 0x1.4BCDC50ED6BE8p-1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = sech (infsup (0, inf));
+%! assert (signbit (inf (x)));

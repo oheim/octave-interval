@@ -29,7 +29,7 @@
 ## Keywords: interval
 ## Created: 2015-02-20
 
-function result = nthroot (x, n)
+function x = nthroot (x, n)
 
 if (nargin ~= 2)
     print_usage ();
@@ -54,10 +54,13 @@ switch sign (n)
         l = mpfr_function_d ('nthroot', -inf, x.inf, n);
         u = mpfr_function_d ('nthroot', +inf, x.sup, n);
         
-        l (emptyresult) = inf;
-        u (emptyresult) = -inf;
+        l(emptyresult) = inf;
+        u(emptyresult) = -inf;
         
-        result = infsup (l, u);
+        l(l == 0) = -0;
+        
+        x.inf = l;
+        x.sup = u;
         
     case -1
         emptyresult = isempty (x) ...
@@ -68,54 +71,64 @@ switch sign (n)
             u = inf (size (x.inf));
             
             select = x.inf > 0 & isfinite (x.inf);
-            if (any (any (select)))
-                u (select) = invrootrounded (x.inf (select), -n, +inf);
+            if (any (select))
+                u(select) = invrootrounded (x.inf(select), -n, +inf);
             endif
             select = x.sup > 0 & isfinite (x.sup);
-            if (any (any (select)))
-                l (select) = invrootrounded (x.sup (select), -n, -inf);
+            if (any (select))
+                l(select) = invrootrounded (x.sup(select), -n, -inf);
             endif
             
-            l (emptyresult) = inf;
-            u (emptyresult) = -inf;
+            l(emptyresult) = inf;
+            u(emptyresult) = -inf;
             
-            result = infsup (l, u);
+            l(l == 0) = -0;
+            
+            x.inf = l;
+            x.sup = u;
         else # uneven
             l = zeros (size (x.inf));
             u = inf (size (x.inf));
             
             select = x.inf > 0 & isfinite (x.inf);
-            if (any (any (select)))
-                u (select) = invrootrounded (x.inf (select), -n, +inf);
+            if (any (select))
+                u(select) = invrootrounded (x.inf(select), -n, +inf);
             endif
             select = x.sup > 0 & isfinite (x.sup);
-            if (any (any (select)))
-                l (select) = invrootrounded (x.sup (select), -n, -inf);
+            if (any (select))
+                l(select) = invrootrounded (x.sup(select), -n, -inf);
             endif
             
             notpositive = x.sup <= 0;
-            l (emptyresult | notpositive) = inf;
-            u (emptyresult | notpositive) = -inf;
+            l(emptyresult | notpositive) = inf;
+            u(emptyresult | notpositive) = -inf;
             
-            result = infsup (l, u); # this is only the positive part
+            # this is only the positive part
+            pos = x;
+            pos.inf = l;
+            pos.sup = u;
             
             l = zeros (size (x.inf));
             u = inf (size (x.inf));
             
             select = x.sup < 0 & isfinite (x.sup);
-            if (any (any (select)))
-                u (select) = invrootrounded (-x.sup (select), -n, +inf);
+            if (any (select))
+                u(select) = invrootrounded (-x.sup(select), -n, +inf);
             endif
             select = x.inf < 0 & isfinite (x.inf);
-            if (any (any (select)))
-                l (select) = invrootrounded (-x.inf (select), -n, -inf);
+            if (any (select))
+                l(select) = invrootrounded (-x.inf(select), -n, -inf);
             endif
             
             notnegative = x.inf >= 0;
-            l (emptyresult | notnegative) = inf;
-            u (emptyresult | notnegative) = -inf;
+            l(emptyresult | notnegative) = inf;
+            u(emptyresult | notnegative) = -inf;
             
-            result = union (result, infsup (-u, -l));
+            neg = x;
+            neg.inf = -u;
+            neg.sup = -l;
+            
+            x = union (pos, neg);
         endif
     
     otherwise
@@ -141,15 +154,15 @@ inv_n = 1 ./ infsup (n);
 if (direction > 0)
     x1 = z;
     select = z > 1;
-    x1 (select) = mpfr_function_d ('pow', direction, z (select), -inv_n.inf);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.inf);
     select = z < 1;
-    x1 (select) = mpfr_function_d ('pow', direction, z (select), -inv_n.sup);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.sup);
 else
     x1 = z;
     select = z > 1;
-    x1 (select) = mpfr_function_d ('pow', direction, z (select), -inv_n.sup);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.sup);
     select = z < 1;
-    x1 (select) = mpfr_function_d ('pow', direction, z (select), -inv_n.inf);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.inf);
 endif
 
 if (issingleton (inv_n))
@@ -173,3 +186,15 @@ endif
 endfunction
 
 %!assert (nthroot (infsup (25, 36), 2) == infsup (5, 6));
+
+%!# correct use of signed zeros
+%!test
+%! x = nthroot (infsup (0), 2);
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+%!test
+%! x = nthroot (infsup (0, inf), -2);
+%! assert (signbit (inf (x)));
+%!test
+%! x = nthroot (infsup (0, inf), -3);
+%! assert (signbit (inf (x)));

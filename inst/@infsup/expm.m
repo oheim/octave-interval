@@ -122,6 +122,7 @@ result = mpower (result, pow2 (L));
 
 endfunction
 
-%!test "from the paper";
+%!# from the paper
+%!test
 %! A = infsup ([0 1; 0 -3], [0 1; 0 -2]);
-%! assert (all (all (subset (infsup ([1, 0.316738; 0, 0.0497871], [1, 0.432332; 0 0.135335]), expm (A)))));
+%! assert (all (all (subset (infsup ([1, 0.316738; 0, 0.0497871], [1, 0.432332; 0, 0.135335]), expm (A)))));

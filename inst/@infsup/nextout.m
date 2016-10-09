@@ -34,22 +34,34 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = nextout (x)
+function x = nextout (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-delta = pow2 (-1074);
+persistent delta = pow2 (-1074);
 l = mpfr_function_d ('minus', -inf, x.inf, delta);
 u = mpfr_function_d ('plus',  +inf, x.sup, delta);
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
+%!# from the documentation string
+%!test
 %! x = nextout (infsup (1));
 %! assert (inf (x), 1 - eps / 2);
 %! assert (sup (x), 1 + eps);
+
+%!# correct use of signed zeros
+%!test
+%! x = nextout (infsup (pow2 (-1074)));
+%! assert (signbit (inf (x)));
+%!test
+%! x = nextout (infsup (-pow2 (-1074)));
+%! assert (not (signbit (sup (x))));

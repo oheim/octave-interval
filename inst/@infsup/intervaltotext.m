@@ -77,38 +77,38 @@ if (nargin < 2)
 endif
 
 s = l = u = cell (size (x.inf));
-s (isempty (x)) = "[Empty]";
-s (isentire (x)) = "[Entire]";
+s(isempty (x)) = "[Empty]";
+s(isentire (x)) = "[Entire]";
 
 select = not (isempty (x) | isentire (x));
-if (any (any (select)))
-    x.inf (x.inf == 0) = 0; # no sign for zero
-    [l(select), lexact] = mpfr_to_string_d (-inf, format, x.inf (select));
-    [u(select), uexact] = mpfr_to_string_d (+inf, format, x.sup (select));
+if (any (select))
+    x.inf(x.inf == 0) = 0; # no sign for zero
+    [l(select), lexact] = mpfr_to_string_d (-inf, format, x.inf(select));
+    [u(select), uexact] = mpfr_to_string_d (+inf, format, x.sup(select));
     isexact = lexact && uexact;
     
     ## Normalize case of +-Inf
-    l (select & x.inf == -inf) = "-Inf";
-    u (select & x.sup == inf) = "Inf";
+    l(select & x.inf == -inf) = "-Inf";
+    u(select & x.sup == inf) = "Inf";
     
     ## If l is negative, then u shall also carry a sign (not zero)
     change_of_sign = select & x.inf < 0 & x.sup > 0;
-    u (change_of_sign) = strcat ("+", u (change_of_sign));
+    u(change_of_sign) = strcat ("+", u(change_of_sign));
     
     singleton_string = strcmp (l, u);
-    s (select & singleton_string) = strcat ("[", ...
-                                            l (select & singleton_string), ...
-                                            "]");
-    s (select & not (singleton_string)) = strcat (...
-                                       "[", ...
-                                       l (select & not (singleton_string)), ...
-                                       {", "}, ...
-                                       u (select & not (singleton_string)), ...
-                                       "]");
+    s(select & singleton_string) = strcat ("[", ...
+                                           l(select & singleton_string), ...
+                                           "]");
+    s(select & not (singleton_string)) = strcat (...
+                                        "[", ...
+                                        l(select & not (singleton_string)), ...
+                                        {", "}, ...
+                                        u(select & not (singleton_string)), ...
+                                        "]");
 endif
 
 if (isscalar (s))
-    s = s {1};
+    s = s{1};
 endif
 
 endfunction
@@ -120,7 +120,7 @@ endfunction
 %! assert (intervaltotext (infsup (pi), "auto"), "[3.14, 3.15]");
 %! output_precision (4, 'local');
 %! assert (intervaltotext (infsup (pi), "auto"), "[3.141, 3.142]");
-%!test "from the documentation string";
-%! assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.000000000000001]");
-%! assert (intervaltotext (nextout (infsup (1 + eps))), "[1, 1.0000000000000005]");
-%! assert (intervaltotext (infsup (1)), "[1]");
+%!# from the documentation string
+%!assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.000000000000001]");
+%!assert (intervaltotext (nextout (infsup (1 + eps))), "[1, 1.0000000000000005]");
+%!assert (intervaltotext (infsup (1)), "[1]");

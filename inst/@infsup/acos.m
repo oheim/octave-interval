@@ -34,43 +34,56 @@
 ## Keywords: interval
 ## Created: 2014-10-06
 
-function result = acos (x)
+function x = acos (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-x = intersect (x, infsup (-1, 1));
+persistent domain = infsup (-1, 1);
+x = intersect (x, domain);
 
 ## acos is monotonically decreasing from (-1, pi) to (+1, 0)
 l = mpfr_function_d ('acos', -inf, x.sup);
 u = mpfr_function_d ('acos', +inf, x.inf);
+l(l == 0) = -0;
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "Empty interval";
-%! assert (acos (infsup ()) == infsup ());
-%!test "Singleton intervals";
-%! assert (acos (infsup (-1)) == infsup ("pi"));
-%! assert (subset (acos (infsup (-.5)), union ((infsup ("pi") / 2), infsup ("pi"))));
-%! assert (acos (infsup (0)) == infsup ("pi") / 2);
-%! assert (subset (acos (infsup (.5)), union ((infsup ("pi") / 2), infsup (0))));
-%! assert (acos (infsup (1)) == infsup (0));
-%!test "Bounded intervals";
-%! assert (acos (infsup (-1, 0)) == union ((infsup ("pi") / 2), infsup ("pi")));
-%! assert (acos (infsup (0, 1)) == union ((infsup ("pi") / 2), infsup (0)));
-%! assert (acos (infsup (-1, 1)) == infsup (0, "pi"));
-%! assert (acos (infsup (-2, 2)) == infsup (0, "pi"));
-%!test "Unbounded intervals";
-%! assert (acos (infsup (0, inf)) == union ((infsup ("pi") / 2), infsup (0)));
-%! assert (acos (infsup (-inf, 0)) == union ((infsup ("pi") / 2), infsup ("pi")));
-%! assert (acos (infsup (-inf, inf)) == infsup (0, "pi"));
-%!test "from the documentation string";
-%! assert (acos (infsup (.5)) == "[0x1.0C152382D7365, 0x1.0C152382D7366]");
+%!# Empty interval
+%!assert (acos (infsup ()) == infsup ());
+
+%!# Singleton intervals
+%!assert (acos (infsup (-1)) == infsup ("pi"));
+%!assert (subset (acos (infsup (-.5)), union ((infsup ("pi") / 2), infsup ("pi"))));
+%!assert (acos (infsup (0)) == infsup ("pi") / 2);
+%!assert (subset (acos (infsup (.5)), union ((infsup ("pi") / 2), infsup (0))));
+%!assert (acos (infsup (1)) == infsup (0));
+
+%!# Bounded intervals
+%!assert (acos (infsup (-1, 0)) == union ((infsup ("pi") / 2), infsup ("pi")));
+%!assert (acos (infsup (0, 1)) == union ((infsup ("pi") / 2), infsup (0)));
+%!assert (acos (infsup (-1, 1)) == infsup (0, "pi"));
+%!assert (acos (infsup (-2, 2)) == infsup (0, "pi"));
+
+%!# Unbounded intervals
+%!assert (acos (infsup (0, inf)) == union ((infsup ("pi") / 2), infsup (0)));
+%!assert (acos (infsup (-inf, 0)) == union ((infsup ("pi") / 2), infsup ("pi")));
+%!assert (acos (infsup (-inf, inf)) == infsup (0, "pi"));
+
+%!# from the documentation string
+%!assert (acos (infsup (.5)) == "[0x1.0C152382D7365, 0x1.0C152382D7366]");
+
+%!# correct use of signed zeros
+%!test
+%! x = acos (infsup (1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

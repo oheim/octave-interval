@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} erfc (@var{X})
 ## 
-## Compute the complementary error function.
+## Compute the complementary error function @code{1 - erf (@var{X})}.
 ##
 ## @tex
 ## $$
@@ -51,7 +51,7 @@
 ## Keywords: interval
 ## Created: 2015-02-28
 
-function result = erfc (x)
+function x = erfc (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -63,12 +63,21 @@ l = mpfr_function_d ('erfc', -inf, x.sup);
 u = mpfr_function_d ('erfc', +inf, x.inf);
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (erfc (infsup (1)) == "[0x1.4226162FBDDD4p-3, 0x1.4226162FBDDD5p-3]");
+%!# from the documentation string
+%!assert (erfc (infsup (1)) == "[0x1.4226162FBDDD4p-3, 0x1.4226162FBDDD5p-3]");
+
+%!# correct use of signed zeros
+%!test
+%! x = erfc (infsup (realmax));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

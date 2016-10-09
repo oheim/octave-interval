@@ -35,25 +35,19 @@
 ## Keywords: interval
 ## Created: 2016-08-04
 
-function result = tril (A, k, pack)
+function A = tril (A, varargin)
 
-if (nargin >= 2 && isa (k, 'infsup'))
+if (nargin >= 2 && isa (varargin{1}, 'infsup'))
     error ('tril: invalid second argument; it must not be an interval');
 endif
-if (nargin >= 3 && isa (pack, 'infsup'))
+if (nargin >= 3 && isa (varargin{2}, 'infsup'))
     error ('tril: invalid third argument; it must not be an interval');
 endif
 
-switch (nargin)
-    case 1
-        result = infsup (tril (A.inf), tril (A.sup));
-    case 2
-        result = infsup (tril (A.inf, k), tril (A.sup, k));
-    case 3
-        result = infsup (tril (A.inf, k, pack), tril (A.sup, k, pack));
-    otherwise
-        print_usage ();
-endswitch
+A.inf = tril (A.inf, varargin{:});
+A.sup = tril (A.sup, varargin{:});
+
+A.inf(A.inf == 0) = -0;
 
 endfunction
 

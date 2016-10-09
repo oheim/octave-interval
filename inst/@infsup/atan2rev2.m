@@ -59,33 +59,19 @@ if (not (isa (x, "infsup")))
 endif
 
 ## Resize, if scalar × matrix or vector × matrix or scalar × vector
-if (rows (a.inf) ~= rows (c.inf))
-    a.inf = ones (rows (c.inf), columns (a.inf)) .* a.inf;
-    a.sup = ones (rows (c.inf), columns (a.inf)) .* a.sup;
-    c.inf = ones (rows (a.inf), columns (c.inf)) .* c.inf;
-    c.sup = ones (rows (a.inf), columns (c.inf)) .* c.sup;
+if (not (size_equal (a.inf, c.inf)))
+    a.inf = ones (size (c.inf)) .* a.inf;
+    a.sup = ones (size (c.inf)) .* a.sup;
+    c.inf = ones (size (a.inf)) .* c.inf;
+    c.sup = ones (size (a.inf)) .* c.sup;
 endif
-if (rows (a.inf) ~= rows (x.inf))
-    a.inf = ones (rows (x.inf), columns (a.inf)) .* a.inf;
-    a.sup = ones (rows (x.inf), columns (a.inf)) .* a.sup;
-    c.inf = ones (rows (x.inf), columns (c.inf)) .* c.inf;
-    c.sup = ones (rows (x.inf), columns (c.inf)) .* c.sup;
-    x.inf = ones (rows (a.inf), columns (x.inf)) .* x.inf;
-    x.sup = ones (rows (a.inf), columns (x.inf)) .* x.sup;
-endif
-if (columns (a.inf) ~= columns (c.inf))
-    a.inf = ones (rows (a.inf), columns (c.inf)) .* a.inf;
-    a.sup = ones (rows (a.inf), columns (c.inf)) .* a.sup;
-    c.inf = ones (rows (c.inf), columns (a.inf)) .* c.inf;
-    c.sup = ones (rows (c.inf), columns (a.inf)) .* c.sup;
-endif
-if (columns (a.inf) ~= columns (x.inf))
-    a.inf = ones (rows (a.inf), columns (x.inf)) .* a.inf;
-    a.sup = ones (rows (a.inf), columns (x.inf)) .* a.sup;
-    c.inf = ones (rows (c.inf), columns (x.inf)) .* c.inf;
-    c.sup = ones (rows (c.inf), columns (x.inf)) .* c.sup;
-    x.inf = ones (rows (x.inf), columns (a.inf)) .* x.inf;
-    x.sup = ones (rows (x.inf), columns (a.inf)) .* x.sup;
+if (not (size_equal (a.inf, x.inf)))
+    a.inf = ones (size (x.inf)) .* a.inf;
+    a.sup = ones (size (x.inf)) .* a.sup;
+    c.inf = ones (size (x.inf)) .* c.inf;
+    c.sup = ones (size (x.inf)) .* c.sup;
+    x.inf = ones (size (a.inf)) .* x.inf;
+    x.sup = ones (size (a.inf)) .* x.sup;
 endif
 
 pi = infsup ("pi");
@@ -94,7 +80,7 @@ idx.type = '()';
 emptyresult = isempty (x) | isempty (a) | isempty (c) | ...
     c.inf >= sup (pi) | c.sup <= inf (-pi);
 
-result = infsup (inf (size (x.inf)), -inf (size (x.inf)));
+result = repmat (infsup (), size (x.inf));
 
 ## c1 is the part of c where y >= 0 and x <= 0
 c1 = intersect (c, infsup (inf (pi) / 2, sup (pi)));
@@ -196,5 +182,5 @@ endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (atan2rev2 (infsup (1, 2), infsup ("pi") / 4) == "[0x1.FFFFFFFFFFFFEp-1, 0x1.0000000000001p1]");
+%!# from the documentation string
+%!assert (atan2rev2 (infsup (1, 2), infsup ("pi") / 4) == "[0x1.FFFFFFFFFFFFEp-1, 0x1.0000000000001p1]");

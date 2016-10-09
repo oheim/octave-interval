@@ -48,7 +48,7 @@ if (not (isnumeric (p)) || any (any (fix (p) ~= p)))
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (p))
+if (not (size_equal (x.inf, p)))
     x.inf = ones (size (p)) .* x.inf;
     x.sup = ones (size (p)) .* x.sup;
     p = ones (size (x.inf)) .* p;
@@ -61,17 +61,17 @@ result.inf(select) = result.sup(select) = 1;
 
 idx.type = "()";
 idx.subs = {(p == 2)}; # x^2
-if (any (any (idx.subs{1})))
+if (any (idx.subs{1}))
     result = subsasgn (result, idx, sqr (subsref (x, idx)));
 endif
 
 idx.subs = {(p == -1)}; # x^-1 = 1./x
-if (any (any (idx.subs{1})))
+if (any (idx.subs{1}))
     result = subsasgn (result, idx, 1 ./ subsref (x, idx));
 endif
 
 idx.subs = {(rem (p, 2) == 0 & p ~= 2 & p ~= 0)};
-if (any (any (idx.subs{1}))) # p even
+if (any (idx.subs{1})) # p even
     x_mig = mig (subsref (x, idx));
     x_mig(isnan (x_mig)) = inf;
 
@@ -85,7 +85,7 @@ if (any (any (idx.subs{1}))) # p even
 endif
 
 idx.subs = {(rem (p, 2) ~= 0 & p ~= -1)};
-if (any (any (idx.subs{1}))) # p odd
+if (any (idx.subs{1})) # p odd
     x_idx = subsref (x, idx);
     p_idx = infsup (subsref (p, idx));
     result = subsasgn (result, idx, ...
@@ -100,7 +100,7 @@ result.sup(select) = +0;
 
 endfunction
 
-function result = sqr (x)
+function x = sqr (x)
 ## Compute the square for each entry in @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -109,13 +109,17 @@ l = mpfr_function_d ('sqr', -inf, mig (x));
 u = mpfr_function_d ('sqr', +inf, mag (x));
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (pown (infsup (5, 6), 2) == infsup (25, 36));
+%!# from the documentation string
+%!assert (pown (infsup (5, 6), 2) == infsup (25, 36));
+
 %!assert (pown (infsup (-2, 1), 2) == infsup (0, 4));

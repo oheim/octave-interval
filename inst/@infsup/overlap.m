@@ -108,19 +108,19 @@ comparison = {...
     "after", (notempty & b.sup < a.inf)};
 
 if (nargout >= 2)
-    bitmask = zeros (size (comparison {1, 2}), "uint16");
+    bitmask = zeros (size (comparison{1, 2}), "uint16");
     for i = 1 : rows (comparison)
-        bitmask (comparison {i, 2}) = pow2 (16 - i);
+        bitmask(comparison{i, 2}) = pow2 (16 - i);
     endfor
 endif
 
-state = cell (size (comparison {1, 2}));
+state = cell (size (comparison{1, 2}));
 for i = 1 : rows (comparison)
-    state (comparison {i, 2}) = comparison {i, 1};
+    state(comparison{i, 2}) = comparison{i, 1};
 endfor
 
 if (numel (state) == 1)
-    state = state {1};
+    state = state{1};
 endif
 
 endfunction

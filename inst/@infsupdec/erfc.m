@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} erfc (@var{X})
 ## 
-## Compute the complementary error function.
+## Compute the complementary error function @code{1 - erf (@var{X})}.
 ##
 ## @tex
 ## $$

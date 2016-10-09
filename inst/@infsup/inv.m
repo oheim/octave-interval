@@ -59,12 +59,13 @@ result = mldivide (x, eye (n));
 
 endfunction
 
-%!test "from the wiki";
+%!# from the wiki
+%!test
 %!  A = infsup ([1, 2, 3; 4, 0, 0; 0, 0, 1]);
 %!  A (2, 3) = "[0, 6]";
 %!  B = inv (A);
 %!  assert (inf (B) == [0, .25, -1.5; .5, -.125, -1.5; 0, 0, 1]);
 %!  assert (sup (B) == [0, .25,    0; .5, -.125, -.75; 0, 0, 1]);
-%!test "from the documentation string";
-%!  assert (inv (infsup ([2, 1, 1; 0, 1, 0; 1, 0, 0])) == [0, 0, 1; 0, 1, 0; 1, -1, -2]);
-%!  assert (inv (infsup ([1, 2, 3; 4, 0, 6; 0, 0, 1])) == [0, .25, -1.5; .5, -.125, -.75; 0, 0, 1]);
+%!# from the documentation string
+%!assert (inv (infsup ([2, 1, 1; 0, 1, 0; 1, 0, 0])) == [0, 0, 1; 0, 1, 0; 1, -1, -2]);
+%!assert (inv (infsup ([1, 2, 3; 4, 0, 6; 0, 0, 1])) == [0, .25, -1.5; .5, -.125, -.75; 0, 0, 1]);

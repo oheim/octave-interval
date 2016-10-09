@@ -51,7 +51,7 @@ if (isscalar (x))
 endif
 
 ## x must be square
-assert (size (x.inf, 1) == size (x.inf, 2), ...
+assert (issquare (x.inf), ...
         "operator \: nonconformant arguments, X is not square");
 
 n = rows (x.inf);
@@ -73,22 +73,22 @@ else
         ## Choose next pivot in one of the columns with the fewest mig (U) > 0.
         columnrating = sum (migU > 0, 1);
         ## Don't choose used columns
-        columnrating (max (migU, [], 1) == inf) = inf;
+        columnrating(max (migU, [], 1) == inf) = inf;
         
         ## Use first possible column
         possiblecolumns = columnrating == min (columnrating);
         column = find (possiblecolumns, 1);
         
-        if (columnrating (column) >= 1)
+        if (columnrating(column) >= 1)
             ## Greedy: Use only intervals that do not contain zero.
-            possiblerows = migU (:, column) > 0;
+            possiblerows = migU(:, column) > 0;
         else
             ## Only intervals left which contain zero. Try to use an interval
             ## that additionally contains other numbers.
-            possiblerows = migU (:, column) >= 0 & magU (:, column) > 0;
+            possiblerows = migU(:, column) >= 0 & magU(:, column) > 0;
             if (not (max (possiblerows)))
                 ## All possible intervals contain only zero.
-                possiblerows = migU (:, column) >= 0;
+                possiblerows = migU(:, column) >= 0;
             endif
         endif
     
@@ -104,21 +104,21 @@ else
             ## We weight the rating in the columns with few mig (U) > 0 in
             ## order to prevent problems during the choice of pivots in the
             ## near future.
-            rowrating += 0.5 * sum (migU (:, possiblecolumns) > 0, 2);
+            rowrating += 0.5 * sum (migU(:, possiblecolumns) > 0, 2);
             rowrating (not (possiblerows)) = inf;
             row = find (rowrating == min (rowrating), 1);
         endif
         
         # assert (0 <= migU (row, column) && migU (row, column) < inf);
     
-        P (row, column) = 1;
+        P(row, column) = 1;
         
         ## In mig (U), for the choice of further pivots:
         ##  - mark used columns with inf
         ##  - mark used rows in unused columns with -inf
-        migU (row, :) -= inf;
-        migU (isnan (migU)) = inf;
-        migU (:, column) = inf;
+        migU(row, :) -= inf;
+        migU(isnan (migU)) = inf;
+        migU(:, column) = inf;
     endfor
 endif
 
@@ -163,9 +163,9 @@ function B = permute (P, A)
     
     B = A;
     for i = 1 : rows (P)
-        targetrow = find (P (i, :) == 1, 1);
-        B.inf (targetrow, :) = A.inf (i, :);
-        B.sup (targetrow, :) = A.sup (i, :);
+        targetrow = find (P(i, :) == 1, 1);
+        B.inf(targetrow, :) = A.inf(i, :);
+        B.sup(targetrow, :) = A.sup(i, :);
     endfor
 endfunction
 
@@ -174,8 +174,9 @@ endfunction
 %! assert (l == infsup ({1, 0, 0; .375, 1, 0; .5, "68/37", 1}));, ...
 %! assert (subset (u, infsup ({8, 1, 6; 0, 4.625, 4.75; 0, 0, "-0x1.3759F2298375Bp3"}, ...
 %!                            {8, 1, 6; 0, 4.625, 4.75; 0, 0, "-0x1.3759F22983759p3"})));
+%!test
 %! A = magic (3);
-%! A ([1, 5, 9]) = 0;
+%! A([1, 5, 9]) = 0;
 %! [l, u, p] = lu (infsup (A));
 %! assert (p, [0, 0, 1; 1, 0, 0; 0, 1, 0]);
 %! assert (l == infsup ({1, 0, 0; "4/3", 1, 0; 0, "1/9", 1}));

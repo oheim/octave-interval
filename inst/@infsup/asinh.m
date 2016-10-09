@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2014-10-07
 
-function result = asinh (x)
+function x = asinh (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -45,10 +45,18 @@ endif
 ## This also works for empty intervals!
 l = mpfr_function_d ('asinh', -inf, x.inf);
 u = mpfr_function_d ('asinh', +inf, x.sup);
+l(l == 0) = -0;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (asinh (infsup (1)) == "[0x1.C34366179D426p-1, 0x1.C34366179D427p-1]");
+%!# from the documentation string
+%!assert (asinh (infsup (1)) == "[0x1.C34366179D426p-1, 0x1.C34366179D427p-1]");
+
+%!# correct use of signed zeros
+%!test
+%! x = asinh (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

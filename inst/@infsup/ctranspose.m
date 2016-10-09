@@ -41,5 +41,4 @@ result = transpose (x);
 
 endfunction
 
-%!test
-%! assert (ctranspose (infsup (magic (3))) == infsup (magic (3)'));
+%!assert (ctranspose (infsup (magic (3))) == infsup (magic (3)'));

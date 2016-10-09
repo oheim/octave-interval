@@ -48,5 +48,5 @@ result = rdivide (y, x);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (ldivide (infsup (2, 3), infsup (1, 2)) == "[1/3, 1]");
+%!# from the documentation string
+%!assert (ldivide (infsup (2, 3), infsup (1, 2)) == "[1/3, 1]");

@@ -58,7 +58,7 @@ if (not (isa (b, "infsup")))
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (a.inf) ~= isscalar (b.inf))
+if (not (size_equal (a.inf, b.inf)))
     a.inf = ones (size (b.inf)) .* a.inf;
     a.sup = ones (size (b.inf)) .* a.sup;
     b.inf = ones (size (a.inf)) .* b.inf;
@@ -78,37 +78,54 @@ l = b1;
 u = b4;
 
 select = a.inf == b.inf;
-l (select) = b3 (select);
+l(select) = b3(select);
 
 select = a.sup == b.sup;
-u (select) = b2 (select);
+u(select) = b2(select);
 
 select = a.inf == b.inf & a.sup == b.sup;
-l (select) = inf;
-u (select) = -inf;
+l(select) = inf;
+u(select) = -inf;
 
-c = infsup (l, u);
+l(l == 0) = -0;
+u(u == 0) = +0;
+
+c = infsup ();
+c.inf = l;
+c.sup = u;
 
 if (nargout > 1)
     select = isempty (a) | isempty (b);
-    b1 (select) = a.inf (select);
-    b2 (select) = a.sup (select);
-    b3 (select) = b.inf (select);
-    b4 (select) = b.sup (select);
+    b1(select) = a.inf(select);
+    b2(select) = a.sup(select);
+    b3(select) = b.inf(select);
+    b4(select) = b.sup(select);
 
     l1 = b1;
     u1 = b2;
     select = a.inf == b.inf;
-    l1 (select) = inf;
-    u1 (select) = -inf;
-    c1 = infsup (l1, u1);
+    l1(select) = inf;
+    u1(select) = -inf;
+    
+    l1(l1 == 0) = -0;
+    u1(u1 == 0) = +0;
+    
+    c1 = infsup ();
+    c1.inf = l1;
+    c1.sup = u1;
     
     l2 = b3;
     u2 = b4;
     select = a.sup == b.sup;
-    l2 (select) = inf;
-    u2 (select) = -inf;
-    c2 = infsup (l2, u2);
+    l2(select) = inf;
+    u2(select) = -inf;
+    
+    l2(l2 == 0) = -0;
+    u2(u2 == 0) = +0;
+    
+    c2 = infsup ();
+    c2.inf = l2;
+    c2.sup = u2;
 endif
 
 endfunction
@@ -138,7 +155,9 @@ endfunction
 %! assert (z == infsup (2.5, 3));
 %! assert (z1 == infsup ());
 %! assert (z2 == infsup (2.5, 3));
-%!test "from the documentation string";
+
+%!# from the documentation string
+%!test
 %! [z, z1, z2] = setxor (infsup (1, 3), infsup (2, 4));
 %! assert (z == infsup (1, 4));
 %! assert (z1 == infsup (1, 2));

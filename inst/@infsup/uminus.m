@@ -36,7 +36,7 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = uminus (x)
+function x = uminus (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -44,12 +44,15 @@ if (nargin ~= 1)
 endif
 
 ## This also works for empty / entire intervals
-l = -x.sup;
-u = -x.inf;
-
-result = infsup (l, u);
+[x.inf, x.sup] = deal (-x.sup, -x.inf);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (-infsup (2, 3) == infsup (-3, -2));
+%!# from the documentation string
+%!assert (-infsup (2, 3) == infsup (-3, -2));
+
+%!# correct use of signed zeros
+%!test
+%! x = uminus (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

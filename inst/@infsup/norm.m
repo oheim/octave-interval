@@ -88,13 +88,6 @@ if (nargin > 3 || not (isa (A, "infsup")))
     return
 endif
 
-if (isa (A, "infsupdec"))
-    if (isnai (A))
-        result = A;
-        return
-    endif
-endif
-
 if (nargin < 2)
     p = 2;
     opt = "";
@@ -200,9 +193,12 @@ else
         case {"fro", 2}
             result = sqrt (sumsq (A, dim));
         case 0
-            result = infsup (sum (not (ismember (0, A)), dim), ...
-                             sum (0 != A, dim)) - ...
-                             sum (isempty (A), dim);
+            ## Hamming norm: the number of non-zero elements
+            result = sum (subsasgn (subsasgn (subsasgn (A, ...
+                substruct ("()", {ismember(0, A)}), "[0, 1]"), ...
+                substruct ("()", {A == 0}), 0), ...
+                substruct ("()", {A > 0 | A < 0}), 1), ...
+                dim);
         otherwise
             warning ("off", "interval:ImplicitPromote", "local");
             result = (sum (abs (A) .^ p, dim)) .^ (1 ./ infsup (p));
@@ -213,6 +209,6 @@ endfunction
 
 %!test
 %! A = infsup ("0 [Empty] [0, 1] 1");
-%! assert (isequal (norm (A, 0, "cols"), infsup ("0 0 [0, 1] 1")));
+%! assert (isequal (norm (A, 0, "cols"), infsup ("0 [Empty] [0, 1] 1")));
 %!assert (norm (infsup (magic (3)), inf, 1) == 45);
 %!assert (norm (infsup (-magic (3), magic (3)), inf, 1) == "[0, 45]");

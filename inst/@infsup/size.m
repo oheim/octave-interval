@@ -42,15 +42,14 @@ endif
 
 if (nargin == 1)
     if (nargout <= 1)
-        varargout {1} = size (a.inf);
+        varargout{1} = size (a.inf);
     else
-        varargout = mat2cell (size (a.inf) (1 : nargout)', ones (nargout, 1));
+        varargout = mat2cell (size (a.inf)(1 : nargout)', ones (nargout, 1));
     endif
 else
-    varargout {1} = size (a.inf, dim);
+    varargout{1} = size (a.inf, dim);
 endif
 
 endfunction
 
-%!test;
-%! assert (size (infsup (zeros (3, 4))), [3 4]);
+%!assert (size (infsup (zeros (3, 4))), [3 4]);

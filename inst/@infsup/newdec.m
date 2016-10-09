@@ -51,7 +51,8 @@ xd = infsupdec (x);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (newdec (infsup (2, 3)), infsupdec (2, 3)));
+%!# from the documentation string
+%!assert (isequal (newdec (infsup (2, 3)), infsupdec (2, 3)));
+
 %!assert (isequal (newdec (infsupdec (2, 3)), infsupdec (2, 3)));
 %!assert (isequal (newdec (infsupdec (1, "trv")), infsupdec (1, "trv")));

@@ -31,15 +31,16 @@
 ## Keywords: interval
 ## Created: 2014-09-27
 
-function result = isempty (interval)
+function result = isempty (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = (interval.inf > interval.sup);
-return
+result = (x.inf > x.sup);
 
-%!assert (isempty (infsup (inf, -inf)));
+endfunction
+
+%!assert (isempty (infsup ()));
 %!assert (not (isempty (infsup (1, 2))));

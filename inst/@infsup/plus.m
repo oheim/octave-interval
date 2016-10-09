@@ -37,7 +37,7 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = plus (x, y)
+function x = plus (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -61,9 +61,18 @@ emptyresult = isempty (x) | isempty (y);
 l (emptyresult) = inf;
 u (emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
+%!# from the documentation string
 %! assert (infsup (2, 3) + infsup (1, 2) == infsup (3, 5));
+
+%!# correct use of signed zeros
+%!test
+%! x = plus (infsup (0), infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

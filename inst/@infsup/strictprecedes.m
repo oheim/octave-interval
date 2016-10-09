@@ -45,7 +45,7 @@ endif
 
 result = (a.sup < b.inf);
 
-result (isempty (a) | isempty (b)) = true ();
+result(isempty (a) | isempty (b)) = true ();
 
 endfunction
 

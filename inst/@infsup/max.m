@@ -48,7 +48,7 @@
 ## Keywords: interval
 ## Created: 2014-10-04
 
-function result = max (x, y, dim)
+function x = max (x, y, dim)
 
 if (not (isa (x, "infsup")))
     x = infsup (x);
@@ -58,29 +58,30 @@ switch (nargin)
     case 1
         l = max (x.inf);
         u = max (x.sup);
-        u (any (isempty (x))) = -inf;
+        u(any (isempty (x))) = -inf;
     case 2
         if (not (isa (y, "infsup")))
             y = infsup (y);
         endif
         l = max (x.inf, y.inf);
         u = max (x.sup, y.sup);
-        u (isempty (x) | isempty (y)) = -inf;
+        u(isempty (x) | isempty (y)) = -inf;
     case 3
         if (not (builtin ("isempty", y)))
             warning ("max: second argument is ignored");
         endif
         l = max (x.inf, [], dim);
         u = max (x.sup, [], dim);
-        u (any (isempty (x), dim)) = -inf;
+        u(any (isempty (x), dim)) = -inf;
     otherwise
         print_usage ();
         return
 endswitch
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (max (infsup (2, 3), infsup (1, 2)) == infsup (2, 3));
+%!# from the documentation string
+%!assert (max (infsup (2, 3), infsup (1, 2)) == infsup (2, 3));

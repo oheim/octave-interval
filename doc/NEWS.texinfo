@@ -21,7 +21,7 @@ A second big news is that the interval package comprises functions from VERSOFT,
 
 @itemize
 @item
-    nai: With additional arguments, matrices of NaI (not an interval) values can be constructed.  Previously, NaI has been restricted to be a scalar value.
+    nai: With additional arguments, matrices of NaI (not an interval) values can be constructed.  Previously, NaI has been restricted to be of scalar value.
 
 @item
     infsup: The bare interval constructor merely triggers a warning instead of an error on illegal input, which creates empty intervals.  If input contains legitimate as well as illegal input, only entries with illegal input will carry empty intervals.
@@ -38,6 +38,8 @@ A second big news is that the interval package comprises functions from VERSOFT,
 
 @item
     It is no longer valid to call @code{infsup (+inf, -inf)} to create an empty interval and the constructor will signal a warning in these cases.  This change has been made to better conform to the @command{numsToInterval} function from the interval standard.
+    
+    You may create empty intervals with either @code{infsup ()} or @code{infsupdec ()} or @code{empty ()}.
 
 @item
     inf, sup: If the input is NaI (not an interval), these functions return NaN (not a number) values instead of an error.
@@ -56,7 +58,7 @@ A second big news is that the interval package comprises functions from VERSOFT,
 @item
     Performance improvements: factorial on large arguments; plot and plot3 on input that is plotted as a line.
 
-@item:
+@item
     New interval functions: tril, triu, qr
 
 @item
@@ -67,6 +69,12 @@ A second big news is that the interval package comprises functions from VERSOFT,
 
 @item
     plot3: Fixed plotting with gnuplot and fixed an issue where the figure did not switch from 2D to 3D after plotting.
+
+@item
+    expm1: Fixed documentation, the function computes exp (X) - 1 instead of exp (X - 1).
+
+@item
+    norm: Fixed an error where the Hamming norm of empty intervals was non-empty.
 
 @end itemize
 

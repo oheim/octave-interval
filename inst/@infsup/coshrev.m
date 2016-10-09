@@ -56,11 +56,11 @@ if (not (isa (x, "infsup")))
 endif
 
 p = acosh (c);
-n = - p;
+n = uminus (p);
 
 result = union (intersect (p, x), intersect (n, x));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (coshrev (infsup (-2, 1)) == 0);
+%!# from the documentation string
+%!assert (coshrev (infsup (-2, 1)) == 0);

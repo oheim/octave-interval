@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} expm1 (@var{X})
 ## 
-## Compute @code{exp (@var{X} - 1)} accurately in the neighborhood of zero.
+## Compute @code{exp (@var{X}) - 1} accurately in the neighborhood of zero.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2015-02-20
 
-function result = expm1 (x)
+function x = expm1 (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -45,11 +45,19 @@ endif
 l = mpfr_function_d ('expm1', -inf, x.inf); # this also works for [Empty]
 u = mpfr_function_d ('expm1', +inf, x.sup); # ... this does not
 
-u (isempty (x)) = -inf;
+l(l == 0) = -0;
+u(isempty (x)) = -inf;
 
-result = infsup (l, u);
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (expm1 (infsup (eps)) == "[0x1p-52, 0x1.0000000000001p-52]");
+%!# from the documentation string
+%!assert (expm1 (infsup (eps)) == "[0x1p-52, 0x1.0000000000001p-52]");
+
+%!# correct use of signed zeros
+%!test
+%! x = expm1 (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

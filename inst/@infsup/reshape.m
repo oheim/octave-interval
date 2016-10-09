@@ -41,7 +41,7 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = reshape (a, m, n)
+function a = reshape (a, m, n)
 
 switch nargin
     case 2
@@ -49,8 +49,8 @@ switch nargin
             error ("interval:InvalidOperand", ...
                    "reshape: SIZE must have 2 dimensions")
         else
-            n = m (2);
-            m = m (1);
+            n = m(2);
+            m = m(1);
         endif
     case 3
         ## Nothing to do
@@ -64,10 +64,8 @@ if (not (isa (a, "infsup")))
     return
 endif
 
-l = reshape (a.inf, m, n);
-u = reshape (a.sup, m, n);
-
-result = infsup (l, u);
+a.inf = reshape (a.inf, m, n);
+a.sup = reshape (a.sup, m, n);
 
 endfunction
 

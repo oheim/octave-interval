@@ -38,7 +38,7 @@
 ## Keywords: interval
 ## Created: 2011
 
-function result = powrev2 (a, c, y)
+function y = powrev2 (a, c, y)
 
 if (nargin < 2 || nargin > 3)
     print_usage ();
@@ -61,33 +61,19 @@ a = intersect (a, infsup (0, inf));
 c = intersect (c, infsup (0, inf));
 
 ## Resize, if scalar × matrix or vector × matrix or scalar × vector
-if (rows (a.inf) ~= rows (c.inf))
-    a.inf = ones (rows (c.inf), columns (a.inf)) .* a.inf;
-    a.sup = ones (rows (c.inf), columns (a.inf)) .* a.sup;
-    c.inf = ones (rows (a.inf), columns (c.inf)) .* c.inf;
-    c.sup = ones (rows (a.inf), columns (c.inf)) .* c.sup;
+if (not (size_equal (a.inf, c.inf)))
+    a.inf = ones (size (c.inf)) .* a.inf;
+    a.sup = ones (size (c.inf)) .* a.sup;
+    c.inf = ones (size (a.inf)) .* c.inf;
+    c.sup = ones (size (a.inf)) .* c.sup;
 endif
-if (rows (a.inf) ~= rows (y.inf))
-    a.inf = ones (rows (y.inf), columns (a.inf)) .* a.inf;
-    a.sup = ones (rows (y.inf), columns (a.inf)) .* a.sup;
-    c.inf = ones (rows (y.inf), columns (c.inf)) .* c.inf;
-    c.sup = ones (rows (y.inf), columns (c.inf)) .* c.sup;
-    y.inf = ones (rows (a.inf), columns (y.inf)) .* y.inf;
-    y.sup = ones (rows (a.inf), columns (y.inf)) .* y.sup;
-endif
-if (columns (a.inf) ~= columns (c.inf))
-    a.inf = ones (rows (a.inf), columns (c.inf)) .* a.inf;
-    a.sup = ones (rows (a.inf), columns (c.inf)) .* a.sup;
-    c.inf = ones (rows (c.inf), columns (a.inf)) .* c.inf;
-    c.sup = ones (rows (c.inf), columns (a.inf)) .* c.sup;
-endif
-if (columns (a.inf) ~= columns (y.inf))
-    a.inf = ones (rows (a.inf), columns (y.inf)) .* a.inf;
-    a.sup = ones (rows (a.inf), columns (y.inf)) .* a.sup;
-    c.inf = ones (rows (c.inf), columns (y.inf)) .* c.inf;
-    c.sup = ones (rows (c.inf), columns (y.inf)) .* c.sup;
-    y.inf = ones (rows (y.inf), columns (a.inf)) .* y.inf;
-    y.sup = ones (rows (y.inf), columns (a.inf)) .* y.sup;
+if (not (size_equal (a.inf, y.inf)))
+    a.inf = ones (size (y.inf)) .* a.inf;
+    a.sup = ones (size (y.inf)) .* a.sup;
+    c.inf = ones (size (y.inf)) .* c.inf;
+    c.sup = ones (size (y.inf)) .* c.sup;
+    y.inf = ones (size (a.inf)) .* y.inf;
+    y.sup = ones (size (a.inf)) .* y.sup;
 endif
 
 l = y.inf;
@@ -118,7 +104,7 @@ l(select) = 0;
 
 z = c.sup > 1 & c.sup < inf;
 select = x & z & l < 0;
-if (any (any (select)))
+if (any (select))
     l(select) = max (l(select), ...
         powrev2rounded (a.sup(select), c.sup(select), -inf));
 endif
@@ -129,7 +115,7 @@ u(select) = 0;
 
 z = c.inf > 0 & c.inf < 1;
 select = x & z & u > 0;
-if (any (any (select)))
+if (any (select))
     u (select) = min (u (select), powrev2rounded (a.sup, c.inf, +inf));
 endif
 
@@ -138,14 +124,14 @@ x = a.inf > 0 & a.inf < 1 & a.sup <= 1;
 
 z = c.sup < 1 & c.sup > 0;
 select = x & z & l < inf;
-if (any (any (select)))
+if (any (select))
     l(select) = max (l(select), ...
         powrev2rounded (a.inf(select), c.sup(select), -inf));
 endif
 
 z = c.inf > 1 & c.sup < inf;
 select = x & z & u > -inf;
-if (any (any (select)))
+if (any (select))
     u(select) = min (u(select), ...
         powrev2rounded (a.inf(select), c.inf (select), +inf));
 endif
@@ -168,11 +154,11 @@ z = c.sup < 1;
 select = x & z & a.inf == 0;
 gap.sup(select) = 0;
 select = x & z & a.sup > 1;
-if (any (any (select)))
+if (any (select))
     gap.inf(select) = powrev2rounded (a.sup(select), c.sup(select), +inf);
 endif
 select = x & z & a.inf > 0 & a.inf < 1 & a.sup > 1;
-if (any (any (select)))
+if (any (select))
     gap.sup(select) = powrev2rounded(a.inf(select), c.sup(select), -inf);
 endif
 
@@ -180,11 +166,11 @@ z = c.inf > 1;
 select = x & z & a.inf == 0;
 gap.inf(select) = 0;
 select = x & z & a.sup > 1;
-if (any (any (select)))
+if (any (select))
     gap.sup(select) = powrev2rounded (a.sup(select), c.inf(select), -inf);
 endif
 select = x & z & a.inf > 0 & a.inf < 1 & a.sup > 1;
-if (any (any (select)))
+if (any (select))
     gap.inf(select) = powrev2rounded (a.inf(select), c.inf(select), +inf);
 endif
 
@@ -201,14 +187,14 @@ x = a.inf > 1;
 
 z = c.sup < 1;
 select = x & z & u > -inf;
-if (any (any (select)))
+if (any (select))
     u(select) = min (u(select), ...
         powrev2rounded (a.sup(select), c.sup(select), +inf));
 endif
 
 z = c.inf > 0 & c.inf < 1;
 select = x & z & l < 0;
-if (any (any (select)))
+if (any (select))
     l(select) = max (l(select), ...
         powrev2rounded (a.inf(select), c.inf(select), -inf));
 endif
@@ -219,18 +205,18 @@ l(select) = 0;
 
 z = c.inf > 1;
 select = x & z & l < inf;
-if (any (any (select)))
+if (any (select))
     l(select) = max (l(select), ...
         powrev2rounded (a.sup(select), c.inf(select), -inf));
 endif
 
 z = c.sup == 1;
 select = x & z & u > 0;
-u (select) = 0;
+u(select) = 0;
 
 z = c.sup > 1 & c.sup < inf;
 select = x & z & u > 0;
-if (any (any (select)))
+if (any (select))
     u(select) = min (u(select), ...
         powrev2rounded (a.inf(select), c.sup(select), +inf));
 endif
@@ -241,7 +227,10 @@ emptyresult = l > u | l == inf | u == -inf;
 l(emptyresult) = inf;
 u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+y.inf = l;
+y.sup = u;
 
 endfunction
 
@@ -250,31 +239,31 @@ function y = powrev2rounded (x, z, direction)
 
 y = nominator = denominator = zeros (size (x));
 
-y (z == inf & x < 1) = -inf;
-y (z == inf & x > 1 & x < inf) = inf;
+y(z == inf & x < 1) = -inf;
+y(z == inf & x > 1 & x < inf) = inf;
 
 ## We do not use log here, because log2 is able to produce some results without
 ## rounding errors.
 
 rnd_log_numerator_up = (direction > 0) == (sign (x - 1) == sign (z - 1));
 select = isfinite (x) & isfinite (z) & rnd_log_numerator_up;
-if (any (any (select)))
-    denominator (select) = mpfr_function_d ('log2', -inf, x (select));
-    nominator (select) = mpfr_function_d ('log2', +inf, z (select));
+if (any (select))
+    denominator(select) = mpfr_function_d ('log2', -inf, x(select));
+    nominator(select) = mpfr_function_d ('log2', +inf, z(select));
 endif
 select = isfinite (x) & isfinite (z) & not (rnd_log_numerator_up);
-if (any (any (select)))
-    denominator (select) = mpfr_function_d ('log2', +inf, x (select));
-    nominator (select) = mpfr_function_d ('log2', -inf, z (select));
+if (any (select))
+    denominator(select) = mpfr_function_d ('log2', +inf, x(select));
+    nominator(select) = mpfr_function_d ('log2', -inf, z(select));
 endif
 select = isfinite (x) & isfinite (z);
-if (any (any (select)))
-    y (select) = mpfr_function_d ('rdivide', direction, ...
-        nominator (select), ...
-        denominator (select));
+if (any (select))
+    y(select) = mpfr_function_d ('rdivide', direction, ...
+        nominator(select), ...
+        denominator(select));
 endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (powrev2 (infsup (2, 5), infsup (3, 6)) == "[0x1.5D7E8F22BA886p-1, 0x1.4AE00D1CFDEB5p1]");
+%!# from the documentation string
+%!assert (powrev2 (infsup (2, 5), infsup (3, 6)) == "[0x1.5D7E8F22BA886p-1, 0x1.4AE00D1CFDEB5p1]");

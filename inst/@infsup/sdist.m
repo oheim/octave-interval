@@ -61,7 +61,7 @@ if (not (isa (y, "infsup")))
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (x.inf) ~= isscalar (y.inf))
+if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
     y.inf = ones (size (x.inf)) .* y.inf;
@@ -70,20 +70,20 @@ endif
 
 result = zeros (size (x.inf));
 select = x.sup < y.inf;
-if (any (any (select)))
-    result (select) = ...
-        mpfr_function_d ('minus', -inf, x.sup (select), y.inf (select));
+if (any (select))
+    result(select) = ...
+        mpfr_function_d ('minus', -inf, x.sup(select), y.inf(select));
 endif
 select = x.inf > y.sup;
-if (any (any (select)))
-    result (select) = max (result (select), ...
-        mpfr_function_d ('minus', +inf, x.inf (select), y.sup (select)));
+if (any (select))
+    result(select) = max (result(select), ...
+        mpfr_function_d ('minus', +inf, x.inf(select), y.sup(select)));
 endif
 
-result (isempty (x) | isempty (y)) = nan ();
+result(isempty (x) | isempty (y)) = nan ();
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (sdist (infsup (0, 6), infsup (7, 20)), -1);
-%! assert (sdist (infsup (3, 5), infsup (0, 1)), 2);
+%!# from the documentation string
+%!assert (sdist (infsup (0, 6), infsup (7, 20)), -1);
+%!assert (sdist (infsup (3, 5), infsup (0, 1)), 2);

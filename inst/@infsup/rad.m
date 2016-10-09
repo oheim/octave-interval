@@ -70,5 +70,6 @@ endfunction
 %! [m, r] = rad (infsup (2.5, 3.5));
 %! assert (m, 3);
 %! assert (r, .5);
-%!test "from the documentation string";
-%! assert (rad (infsup (2.5, 3.5)), .5);
+
+%!# from the documentation string
+%!assert (rad (infsup (2.5, 3.5)), .5);

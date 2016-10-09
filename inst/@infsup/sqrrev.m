@@ -56,11 +56,11 @@ if (not (isa (x, "infsup")))
 endif
 
 p = sqrt (c);
-n = - p;
+n = -p;
 
 result = union (intersect (p, x), intersect (n, x));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (sqrrev (infsup (-2, 1)) == infsup (-1, 1));
+%!# from the documentation string
+%!assert (sqrrev (infsup (-2, 1)) == infsup (-1, 1));

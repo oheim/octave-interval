@@ -36,7 +36,7 @@
 ## Keywords: interval
 ## Created: 2015-04-03
 
-function result = setdiff (a, b)
+function a = setdiff (a, b)
 
 if (nargin ~= 2)
     print_usage ();
@@ -50,7 +50,7 @@ if (not (isa (b, "infsup")))
 endif
 
 ## Resize, if scalar × matrix
-if (isscalar (a.inf) ~= isscalar (b.inf))
+if (not (size_equal (a.inf, b.inf)))
     a.inf = ones (size (b.inf)) .* a.inf;
     a.sup = ones (size (b.inf)) .* a.sup;
     b.inf = ones (size (a.inf)) .* b.inf;
@@ -61,16 +61,20 @@ l = a.inf;
 u = a.sup;
 
 select = b.sup >= a.sup & b.inf > a.inf;
-u (select) = min (u (select), b.inf (select));
+u(select) = min (u(select), b.inf(select));
 
 select = b.inf <= a.inf & b.sup < a.sup;
-l (select) = max (l (select), b.sup (select));
+l(select) = max (l(select), b.sup(select));
 
 emptyresult = b.inf <= a.inf & b.sup >= a.sup;
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+u(u == 0) = +0;
+
+a.inf = l;
+a.sup = u;
 
 endfunction
 
@@ -79,5 +83,6 @@ endfunction
 %!assert (isempty (setdiff (infsup (1, 3), infsup (-inf, inf))));
 %!assert (isempty (setdiff (infsup (1, 3), infsup (1, 4))));
 %!assert (setdiff (infsup (-inf, inf), infsup (1, 4)) == infsup (-inf, inf));
-%!test "from the documentation string";
+
+%!# from the documentation string
 %! assert (setdiff (infsup (1, 3), infsup (2, 4)) == infsup (1, 2));

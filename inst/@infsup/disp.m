@@ -66,8 +66,8 @@ if (not (iscell (s)))
     if (nargout == 0)
         disp (s);
     else
-        varargout {1} = cstrcat (s, "\n");
-        varargout {2} = isexact;
+        varargout{1} = cstrcat (s, "\n");
+        varargout{2} = isexact;
     endif
     return
 endif
@@ -78,25 +78,25 @@ columnwidth += 3; # add 3 spaces between columns
 
 ## Print all columns
 buffer = "";
-if (rows (x) > 0)
+if (rows (x.inf) > 0)
     ## FIXME: See display.m for how current_print_indent_level is used
     global current_print_indent_level;
-    maxwidth = terminal_size () (2) - current_print_indent_level;
+    maxwidth = terminal_size ()(2) - current_print_indent_level;
     cstart = uint32 (1);
     cend = cstart - 1;
-    while (cstart <= columns (x))
+    while (cstart <= columns (x.inf))
         ## Determine number of columns to print, print at least one column
         usedwidth = 0;
         submatrix = "";
         do
             cend ++;
             submatrix = strcat (submatrix, ...
-                prepad (strjust (char (s (:, cend))), columnwidth (cend), " ", 2));
-            usedwidth += columnwidth (cend);
-        until (cend == columns (x) || ...
+                prepad (strjust (char (s(:, cend))), columnwidth(cend), " ", 2));
+            usedwidth += columnwidth(cend);
+        until (cend == columns (x.inf) || ...
                (split_long_rows () && ...
-                 usedwidth + columnwidth (cend + 1) > maxwidth))
-        if (cstart > 1 || cend < columns (x))
+                 usedwidth + columnwidth(cend + 1) > maxwidth))
+        if (cstart > 1 || cend < columns (x.inf))
             if (cstart > 1)
                 buffer = cstrcat (buffer, "\n");
             endif
@@ -120,11 +120,15 @@ if (rows (x) > 0)
 endif
 
 if (nargout > 0)
-    varargout {1} = buffer;
-    varargout {2} = isexact;
+    varargout{1} = buffer;
+    varargout{2} = isexact;
 endif
 
 endfunction
 
-%!## Can't test the disp function. Would have to capture console output
-%!assert (1);
+%!assert (disp (infsup([])), "");
+%!assert (disp (infsup(0)), "[0]\n");
+%!assert (disp (infsup(0, 1)), "[0, 1]\n");
+%!assert (disp (infsup([0 0])), "   [0]   [0]\n");
+%!assert (disp (infsup([0 0; 0 0])), "   [0]   [0]\n   [0]   [0]\n");
+%!assert (disp (infsup([0; 0])), "   [0]\n   [0]\n");

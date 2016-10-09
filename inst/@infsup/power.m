@@ -67,24 +67,23 @@ elseif (isa (y, "infsupdec"))
 endif
 
 ## Short circuit integral powers, e.g., x.^2
-if (not (any (any (y.inf == 0))) && ... # can't use pown, because 0^0 = [Empty]
-    all (all (y.inf == y.sup & isfinite (y.inf) & fix (y.inf) == y.inf)))
+if (any (y.inf == 0))
+    ## can't use pown, because 0^0 must evaluate to [Empty]
+elseif (any (y.inf ~= y.sup) || ...
+        any (not (isfinite (y.inf))) || ...
+        any (fix (y.inf) ~= y.inf))
+    ## can't use pown, because y is no integer
+else
     z = pown (x, y.inf);
     return
 endif
 
 ## Resize, if scalar × matrix or vector × matrix or scalar × vector
-if (rows (x.inf) ~= rows (y.inf))
-    x.inf = ones (rows (y.inf), columns (x.inf)) .* x.inf;
-    x.sup = ones (rows (y.inf), columns (x.inf)) .* x.sup;
-    y.inf = ones (rows (x.inf), columns (y.inf)) .* y.inf;
-    y.sup = ones (rows (x.inf), columns (y.inf)) .* y.sup;
-endif
-if (columns (x.inf) ~= columns (y.inf))
-    x.inf = ones (rows (x.inf), columns (y.inf)) .* x.inf;
-    x.sup = ones (rows (x.inf), columns (y.inf)) .* x.sup;
-    y.inf = ones (rows (y.inf), columns (x.inf)) .* y.inf;
-    y.sup = ones (rows (y.inf), columns (x.inf)) .* y.sup;
+if (not (size_equal (x.inf, y.inf)))
+    x.inf = ones (size (y.inf)) .* x.inf;
+    x.sup = ones (size (y.inf)) .* x.sup;
+    y.inf = ones (size (x.inf)) .* y.inf;
+    y.sup = ones (size (x.inf)) .* y.sup;
 endif
 
 idx.type = "()";
@@ -94,21 +93,19 @@ emptyresult = x.inf == inf | y.inf == inf | ...
 
 zPlus = pow (x, y); # pow is only defined for x > 0
 zContainsZero = y.inf > 0 & x.inf <= 0 & x.sup >= 0;
-zMinus = infsup ();
-zMinus.inf = zMinus.inf (ones (size (x.inf)));
-zMinus.sup = zMinus.sup (ones (size (x.sup)));
+zMinus = infsup (ones (size (x.inf)));
 
 xMinusWithIntegerY = not (emptyresult) & x.inf < 0 & ...
                      not (isfinite (y.inf) & isfinite (y.sup) & ...
                           ceil (y.inf) > floor (y.sup));
 
-if (any (any (xMinusWithIntegerY)))
+if (any (xMinusWithIntegerY))
     ySingleInteger = isfinite (y.inf) & isfinite (y.sup) & ...
                      ceil (y.inf) == floor (y.sup);
     
     ## y contains a single integer
     idx.subs = {xMinusWithIntegerY & ySingleInteger};
-    if (any (any (idx.subs {1})))
+    if (any (idx.subs{1}))
         xMinus = intersect (subsref (x, idx), ... # intersect to 
                             infsup (-inf, 0));    # speed up computation
         zMinus = subsasgn (zMinus, idx, ...
@@ -117,7 +114,7 @@ if (any (any (xMinusWithIntegerY)))
     
     ## y contains several integers
     idx.subs = {xMinusWithIntegerY & not(ySingleInteger)};
-    if (any (any (idx.subs {1})))
+    if (any (idx.subs{1}))
         zMinus = subsasgn (zMinus, idx, ...
                            multipleintegers (subsref (x, idx), ...
                                              subsref (y, idx)));
@@ -145,33 +142,32 @@ assert (all (all (y.inf < y.sup & x.inf < 0)));
 ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
 ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
 ## http://exp.ln0.de/heimlich-power-2011.htm.
-z = infsup ();
-z.inf = z.inf(ones (size (x.inf)));
-z.sup = z.sup(ones (size (x.sup)));
+z = repmat (infsup (), size (x.inf));
+
 idx.type = "()";
 
 idx.subs = {(x.sup <= -1 & y.sup <= 0)};
-if (any (any (idx.subs {1})))
+if (any (idx.subs{1}))
     xsup_idx = subsref (x.sup, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xsup_idx, goe (y_idx), gee (y_idx)));
 endif
 idx.subs = {(-1 <= x.inf & 0 <= y.inf)};
-if (any (any (idx.subs {1})))
+if (any (idx.subs{1}))
     xinf_idx = subsref (x.inf, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xinf_idx, loe (y_idx), lee (y_idx)));
 endif
 idx.subs = {((x.sup <= -1 | (x.inf < -1 & -1 < x.sup)) & ...
              ((0 <= y.inf & not (-1 <= x.inf)) | (y.inf <= -1 & 1 <= y.sup)))};
-if (any (any (idx.subs {1})))
+if (any (idx.subs{1}))
     xinf_idx = subsref (x.inf, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xinf_idx, goe (y_idx), gee (y_idx)));
 endif
 idx.subs = {(((x.inf < -1 & -1 < x.sup) | -1 <= x.inf) & ...
              ((y.inf <= -1 & 1 <= y.sup) | (y.sup <= 0 & not (x.sup <= -1))))};
-if (any (any (idx.subs {1})))
+if (any (idx.subs{1}))
     xsup_idx = subsref (x.sup, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, union (subsref (z, idx), ...
@@ -200,7 +196,7 @@ assert (all (all (oddexponent ~= 0)));
 assert (all (all (not (isfinite (oddexponent) & isfinite (evenexponent)) | ...
                   abs (oddexponent - evenexponent) <= 1)));
 base = abs (base);
-z.inf = z.sup = zeros (size (base));
+z = infsup (zeros (size (base)));
 z.inf(base == 0 & oddexponent < 0) = -inf;
 z.sup(base == 0 & evenexponent < 0) = inf;
 z.sup(base == 0 & evenexponent == 0) = 1;
@@ -213,7 +209,7 @@ z.sup(base == 1) = 1;
 z.sup(0 < base & base < 1 & evenexponent <= 0) = inf;
 z.sup(1 < base & base < inf & evenexponent >= 0) = inf;
 select = 0 < base & base < inf & isfinite (evenexponent);
-if (any (any (select)))
+if (any (select))
     z.sup(select) = sup (pown (infsup (base(select)), evenexponent(select)));
 endif
 
@@ -226,11 +222,10 @@ select = 0 < base & base < inf & bigexponent;
 z.inf(select) = -z.sup(select);
 
 select = 0 < base & base < inf & isfinite (oddexponent) & not (bigexponent);
-if (any (any (select)))
+if (any (select))
     z.inf(select) = -sup (pown (infsup (base(select)), oddexponent(select)));
 endif
 
-z = infsup (z.inf, z.sup);
 endfunction
 
 function e = goe (y)
@@ -265,6 +260,13 @@ e(odd) = mpfr_function_d ('plus', -inf, e(odd), 1);
 e(e > y.sup) = nan (); # no odd number in interval
 endfunction
 
-%!test "from the documentation string";
-%! assert (infsup (-5, 6) .^ infsup (2, 3) == infsup (-125, 216));
+%!# from the documentation string
+%!assert (infsup (-5, 6) .^ infsup (2, 3) == infsup (-125, 216));
+
 %!assert (infsup (-10, 0) .^ infsup (0, 1:8) == infsup ([-1e1, -1e1, -1e3, -1e3, -1e5, -1e5, -1e7, -1e7], [1e0, 1e2, 1e2, 1e4, 1e4, 1e6, 1e6, 1e8]));
+
+%!# correct use of signed zeros
+%!test
+%! x = power (infsup (0), infsup (1));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

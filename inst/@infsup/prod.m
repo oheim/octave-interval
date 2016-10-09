@@ -63,14 +63,14 @@ endswitch
 
 ## Short circuit in simple cases
 emptyresult = any (isempty (x), dim);
-result.inf (emptyresult) = +inf;
-result.sup (emptyresult) = -inf;
+result.inf(emptyresult) = +inf;
+result.sup(emptyresult) = -inf;
 zeroresult = not (emptyresult) & any (x.inf == 0 & x.sup == 0, dim);
-result.inf (zeroresult) = -0;
-result.sup (zeroresult) = +0;
+result.inf(zeroresult) = -0;
+result.sup(zeroresult) = +0;
 entireresult = not (emptyresult | zeroresult) & any (isentire (x), dim);
-result.inf (entireresult) = -inf;
-result.sup (entireresult) = +inf;
+result.inf(entireresult) = -inf;
+result.sup(entireresult) = +inf;
 
 idx.type = "()";
 idx.subs = {":", ":"};
@@ -88,6 +88,7 @@ endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (prod (infsup (1 : 4)) == 24);
+%!# from the documentation string
+%!assert (prod (infsup (1 : 4)) == 24);
+
 %!assert (prod (infsup ([])) == 1);

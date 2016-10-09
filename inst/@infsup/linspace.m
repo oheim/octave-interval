@@ -46,7 +46,7 @@
 ## Keywords: interval
 ## Created: 2015-07-19
 
-function result = linspace (base, limit, n)
+function base = linspace (base, limit, n)
 
 if (nargin < 2 || nargin > 3)
     print_usage ();
@@ -69,8 +69,17 @@ empty = vec (isempty (base) | isempty (limit));
 l(empty, :) = inf;
 u(empty, :) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+base.inf = l;
+base.sup = u;
 
 endfunction
 
 %!assert (isequal (linspace (infsup (0), infsup (10), 9), infsup (linspace (0, 10, 9))));
+
+%!# correct use of signed zeros
+%!test
+%! x = linspace (infsup (0), infsup (0));
+%! assert (all (signbit (inf (x))));
+%! assert (all (not (signbit (sup (x)))));

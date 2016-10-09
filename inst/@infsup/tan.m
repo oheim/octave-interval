@@ -34,7 +34,7 @@
 ## Keywords: interval
 ## Created: 2014-10-06
 
-function result = tan (x)
+function x = tan (x)
 
 if (nargin ~= 1)
     print_usage ();
@@ -46,12 +46,12 @@ l = u = zeros (size (x));
 ## Check, if wid (x) is certainly greater than pi. This may save computation of
 ## some tangent values.
 width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
-pi.sup = 0x6487ED5 * pow2 (-25) + 0x442D190 * pow2 (-55);
-certainlyfullperiod = width >= pi.sup;
+persistent pi = infsup ("pi");
+certainlyfullperiod = width >= sup (pi);
 
 possiblynotfullperiod = not (certainlyfullperiod);
-l (possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf (possiblynotfullperiod));
-u (possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup (possiblynotfullperiod));
+l(possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf(possiblynotfullperiod));
+u(possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup(possiblynotfullperiod));
 
 singularity = certainlyfullperiod | ...
               l > u | (...
@@ -59,16 +59,25 @@ singularity = certainlyfullperiod | ...
                       sign (l) == sign (u) | ...
                       max (abs (l), abs (u)) < 1));
 
-l (singularity) = -inf;
-u (singularity) = inf;
+l(singularity) = -inf;
+u(singularity) = inf;
 
 emptyresult = isempty (x);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (tan (infsup (1)) == "[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]");
+%!# from the documentation string
+%!assert (tan (infsup (1)) == "[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]");
+
+%!# correct use of signed zeros
+%!test
+%! x = tan (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

@@ -43,7 +43,7 @@
 ## Keywords: interval
 ## Created: 2015-10-23
 
-function result = diag (x, m, n)
+function x = diag (x, varargin)
 
 if (nargin >= 2 && isa (m, 'infsup'))
     error ('diag: invalid second argument; it must not be an interval');
@@ -51,17 +51,18 @@ endif
 if (nargin >= 3 && isa (n, 'infsup'))
     error ('diag: invalid third argument; it must not be an interval');
 endif
+if (nargin > 3)
+    print_usage ();
+    return
+endif
 
-switch (nargin)
-    case 1
-        result = infsup (diag (x.inf), diag (x.sup));
-    case 2
-        result = infsup (diag (x.inf, m), diag (x.sup, m));
-    case 3
-        result = infsup (diag (x.inf, m, n), diag (x.sup, m, n));
-    otherwise
-        print_usage ();
-endswitch
+l = diag (x.inf, varargin{:});
+u = diag (x.sup, varargin{:});
+
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 

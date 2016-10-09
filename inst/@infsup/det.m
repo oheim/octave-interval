@@ -48,7 +48,7 @@ if (not (issquare (x.inf)))
     error ("det: argument must be a square matrix");
 endif
 
-if (any (any (isempty (x))))
+if (any (isempty (x)))
     result = infsup ();
     return
 endif
@@ -91,5 +91,5 @@ endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (det (infsup (magic (3))) == -360);
+%!# from the documentation string
+%!assert (det (infsup (magic (3))) == -360);
