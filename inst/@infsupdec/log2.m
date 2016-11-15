@@ -43,18 +43,15 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (log2 (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (log2 (x.infsup));
 
 ## log2 is continuous everywhere, but defined for x > 0 only
-result.dec (not (interior (x, infsupdec (0, inf)))) = _trv ();
+persistent domain_hull = infsup (0, inf);
+result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (log2 (infsupdec (2)), infsupdec (1)));
+%!# from the documentation string
+%!assert (isequal (log2 (infsupdec (2)), infsupdec (1)));

@@ -51,12 +51,12 @@ if (nargin < 2)
     endif
 endif
 
-result = newdec (prod (intervalpart (x), dim));
+result = newdec (prod (x.infsup, dim));
 if (not (isempty (x.dec)))
     result.dec = min (result.dec, min (x.dec, [], dim));
 endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (prod (infsupdec (1 : 4)) == 24);
+%!# from the documentation string
+%!assert (prod (infsupdec (1 : 4)) == 24);

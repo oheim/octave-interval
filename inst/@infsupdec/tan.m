@@ -41,20 +41,16 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (tan (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (tan (x.infsup));
 
 ## Because tan (nextdown (pi / 2)) < realmax, we can simple check for
 ## a singularity by comparing the result with entire.
 domain = not (isentire (result));
-result.dec (not (domain)) = _trv ();
+result.dec(not (domain)) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (tan (infsupdec (1)), infsupdec ("[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]")));
+%!# from the documentation string
+%!assert (isequal (tan (infsupdec (1)), infsupdec ("[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]")));

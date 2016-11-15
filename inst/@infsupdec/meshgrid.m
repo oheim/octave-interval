@@ -53,46 +53,34 @@ if (nargin >= 3 && not (isa (z, "infsupdec")))
     z = infsupdec (z);
 endif
 
-if (isnai (x))
-    xx = yy = zz = x;
-    return
-endif
-if (nargin >= 2 && isnai (y))
-    xx = yy = zz = y;
-    return
-endif
-if (nargin >= 3 && isnai (z))
-    xx = yy = zz = z;
-    return
-endif
-
 switch (nargin)
     case 1
         if (nargout >= 3)
-            [xx, yy, zz] = meshgrid (intervalpart (x));
+            [xx, yy, zz] = meshgrid (x.infsup);
             [dxx, dyy, dzz] = meshgrid (x.dec);
         else
-            [xx, yy] = meshgrid (intervalpart (x));
+            [xx, yy] = meshgrid (x.infsup);
             [dxx, dyy] = meshgrid (x.dec);
         endif
     case 2
         if (nargout >= 3)
-            [xx, yy, zz] = meshgrid (intervalpart (x), intervalpart (y));
+            [xx, yy, zz] = meshgrid (x.infsup, y.infsup);
             [dxx, dyy, dzz] = meshgrid (x.dec, y.dec);
         else
-            [xx, yy] = meshgrid (intervalpart (x), intervalpart (y));
+            [xx, yy] = meshgrid (x.infsup, y.infsup);
             [dxx, dyy] = meshgrid (x.dec, y.dec);
         endif
     case 3
-        [xx, yy, zz] = meshgrid (intervalpart (x), ...
-                                 intervalpart (y), ...
-                                 intervalpart (z));
+        [xx, yy, zz] = meshgrid (x.infsup, ...
+                                 y.infsup, ...
+                                 z.infsup);
         [dxx, dyy, dzz] = meshgrid (x.dec, y.dec, z.dec);
 endswitch
 
 if (nargout >= 3 || nargin >= 3)
     ## Reshape 3 dimensions into 2 dimensions
     f = @(A) reshape (A, [size(A,1), prod(size (A)(2 : end))]);
+    ## No need to reshape xx, yy, and zz (already happens in @infsup/meshgrid)
     dxx = f (dxx);
     dyy = f (dyy);
     dzz = f (dzz);

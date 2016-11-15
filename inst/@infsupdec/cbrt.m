@@ -41,15 +41,10 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (cbrt (intervalpart (x)));
+result = newdec (cbrt (x.infsup));
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (cbrt (infsupdec (-27, 27)), infsupdec (-3, 3)));
+%!# from the documentation string
+%!assert (isequal (cbrt (infsupdec (-27, 27)), infsupdec (-3, 3)));

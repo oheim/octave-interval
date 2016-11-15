@@ -41,16 +41,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (expm1 (intervalpart (x)));
+result = newdec (expm1 (x.infsup));
 ## expm1 is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (expm1 (infsupdec (eps)), infsupdec ("[0x1p-52, 0x1.0000000000001p-52]")));
+%!# from the documentation string
+%!assert (isequal (expm1 (infsupdec (eps)), infsupdec ("[0x1p-52, 0x1.0000000000001p-52]")));

@@ -53,12 +53,12 @@ if (nargin < 2)
     endif
 endif
 
-result = newdec (sum (intervalpart (x), dim));
+result = newdec (sum (x.infsup, dim));
 if (not (isempty (x.dec)))
     result.dec = min (result.dec, min (x.dec, [], dim));
 endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (sum ([infsupdec(1), pow2(-1074), -1]), infsupdec (pow2 (-1074))));
+%!# from the documentation string
+%!assert (isequal (sum ([infsupdec(1), pow2(-1074), -1]), infsupdec (pow2 (-1074))));

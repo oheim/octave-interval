@@ -54,16 +54,8 @@ if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif
 
-if (isnai (a))
-    result = a;
-    return
-endif
-if (isnai (b))
-    result = b;
-    return
-endif
-
-result = infsupdec (setdiff (intervalpart (a), intervalpart (b)), "trv");
+result = infsupdec (setdiff (a.infsup, b.infsup), "trv");
+result.dec(isnai (a) | isnai (b)) = _ill ();
 
 endfunction
 
@@ -72,5 +64,6 @@ endfunction
 %!assert (isempty (setdiff (infsupdec (1, 3), infsupdec (-inf, inf))));
 %!assert (isempty (setdiff (infsupdec (1, 3), infsupdec (1, 4))));
 %!assert (setdiff (infsupdec (-inf, inf), infsupdec (1, 4)) == infsupdec (-inf, inf));
-%!test "from the documentation string";
-%! assert (setdiff (infsupdec (1, 3), infsupdec (2, 4)) == infsupdec (1, 2));
+
+%!# from the documentation string
+%!assert (setdiff (infsupdec (1, 3), infsupdec (2, 4)) == infsupdec (1, 2));

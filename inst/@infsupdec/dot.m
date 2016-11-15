@@ -86,12 +86,12 @@ if ((min (size (x.dec, 1), size (y.dec, 1)) > 1 && ...
     error ("interval:InvalidOperand", "dot: sizes of X and Y must match")
 endif
 
-result = newdec (dot (intervalpart (x), intervalpart (y), dim));
+result = newdec (dot (x.infsup, y.infsup, dim));
 result.dec = min (result.dec, ...
                   min (min (x.dec, [], dim), min (y.dec, [], dim)));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (dot ([infsupdec(1), 2, 3], [infsupdec(2), 3, 4]), infsupdec (20)));
-%! assert (isequal (dot (infsupdec ([realmax; realmin; realmax]), [1; -1; -1], 1), infsupdec (-realmin)));
+%!# from the documentation string
+%!assert (isequal (dot ([infsupdec(1), 2, 3], [infsupdec(2), 3, 4]), infsupdec (20)));
+%!assert (isequal (dot (infsupdec ([realmax; realmin; realmax]), [1; -1; -1], 1), infsupdec (-realmin)));

@@ -76,9 +76,9 @@ if (isscalar (x) || isscalar (y))
 endif
 
 if (nargin == 2)
-    result = newdec (mtimes (intervalpart (x), intervalpart (y)));
+    result = newdec (mtimes (x.infsup, y.infsup));
 else
-    result = newdec (mtimes (intervalpart (x), intervalpart (y), accuracy));
+    result = newdec (mtimes (x.infsup, y.infsup, accuracy));
 endif
 
 dec_x = min (x.dec, [], 2);
@@ -89,5 +89,6 @@ result.dec = min (result.dec, min (dec_x, dec_y));
 endfunction
 
 %!assert (isequal (infsupdec ([1, 2; 7, 15], [2, 2; 7.5, 15], {"com", "def"; "dac", "com"}) * infsupdec ([3, 3; 0, 1], [3, 3.25; 0, 2]), infsupdec ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375], {"def", "def"; "dac", "dac"})));
-%!test "from the documentation string";
-%! assert (isequal (infsupdec ([1, 2; 7, 15], [2, 2; 7.5, 15]) * infsupdec ([3, 3; 0, 1], [3, 3.25; 0, 2]), infsupdec ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375])));
+
+%!# from the documentation string
+%!assert (isequal (infsupdec ([1, 2; 7, 15], [2, 2; 7.5, 15]) * infsupdec ([3, 3; 0, 1], [3, 3.25; 0, 2]), infsupdec ([3, 5; 21, 36], [6, 10.5; 22.5, 54.375])));

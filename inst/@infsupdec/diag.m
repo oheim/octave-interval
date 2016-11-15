@@ -42,31 +42,25 @@
 ## Keywords: interval
 ## Created: 2015-10-24
 
-function result = diag (x, m, n)
+function x = diag (x, varargin)
 
-if (not (isa (x, 'infsupdec')))
-    error ('diag: invalid argument; only the first may be an interval');
-endif
-if (isnai (x))
-    result = x;
+if (nargin > 3)
+    print_usage ();
     return
 endif
 
-switch (nargin)
-    case 1
-        result = newdec (diag (intervalpart (x)));
-        result.dec = diag (x.dec);
-    case 2
-        result = newdec (diag (intervalpart (x), m));
-        result.dec = diag (x.dec, m);
-    case 3
-        result = newdec (diag (intervalpart (x), m, n));
-        result.dec = diag (x.dec, m, n);
-    otherwise
-        print_usage ();
-endswitch
+if ((nargin >= 2 && isa (varargin{1}, 'infsup')) || ...
+    (nargin >= 3 && isa (varargin{2}, 'infsup')))
+    error ('diag: invalid argument; only the first may be an interval');
+endif
 
-result.dec (result.dec == 0) = _com (); # any new elements are [0]_com
+x.dec(x.dec == 0) = uint8 (255);
+
+x.infsup = diag (x.infsup, varargin{:});
+x.dec = diag (x.dec, varargin{:});
+
+x.dec(x.dec == uint8 (0)) = _com (); # any new elements are [0]_com
+x.dec(x.dec == uint8 (255)) = uint8 (0);
 
 endfunction
 

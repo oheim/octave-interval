@@ -41,16 +41,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (pow10 (intervalpart (x)));
+result = newdec (pow10 (x.infsup));
 ## pow10 is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (pow10 (infsupdec (5)), infsupdec (100000)));
+%!# from the documentation string
+%!assert (isequal (pow10 (infsupdec (5)), infsupdec (100000)));

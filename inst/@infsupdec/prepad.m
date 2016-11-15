@@ -45,7 +45,7 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = prepad (x, len, c, dim)
+function x = prepad (x, len, c, dim)
 
 if (nargin < 2 || nargin > 4)
     print_usage ();
@@ -70,17 +70,8 @@ if (nargin < 4)
     endif
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (c))
-    result = c;
-    return
-endif
-
-result = newdec (prepad (intervalpart (x), len, intervalpart (c), dim));
-result.dec = prepad (x.dec, len, c.dec, dim);
+x.infsup = prepad (x.infsup, len, c.infsup, dim);
+x.dec = prepad (x.dec, len, c.dec, dim);
 
 endfunction
 

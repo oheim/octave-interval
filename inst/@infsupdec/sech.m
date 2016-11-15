@@ -41,16 +41,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (sech (intervalpart (x)));
+result = newdec (sech (x.infsup));
 ## sech is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (sech (infsupdec (1)), infsupdec ("[0x1.4BCDC50ED6BE7p-1, 0x1.4BCDC50ED6BE8p-1]_com")));
+%!# from the documentation string
+%!assert (isequal (sech (infsupdec (1)), infsupdec ("[0x1.4BCDC50ED6BE7p-1, 0x1.4BCDC50ED6BE8p-1]_com")));

@@ -77,43 +77,39 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (x))
-    u = v = x;
-    return
-endif
-if (isnai (b))
-    u = v = b;
-    return
-endif
-if (isnai (c))
-    u = v = c;
-    return
-endif
-
 if (nargout < 2)
-    u = mulrev (intervalpart (b), intervalpart (c), intervalpart (x));
+    u = mulrev (b.infsup, c.infsup, x.infsup);
     u = infsupdec (u, "trv");
+    u.dec(isnai (x) | isnai (b) | isnai (c)) = _ill ();
 else
-    [u, v] = mulrev (intervalpart (b), intervalpart (c), intervalpart (x));
+    [u, v] = mulrev (b.infsup, c.infsup, x.infsup);
     u = newdec (u);
+    u.dec(isempty (b) | isempty (c) | ismember (0, b)) = _trv ();
     u.dec = min (u.dec, min (b.dec, c.dec));
-    u.dec (isempty (b) | isempty (c) | ismember (0, b)) = _trv ();
+    u.dec(isnai (x)) = _ill ();
     
     v = infsupdec (v, "trv");
+    v.dec(isnai (x) | isnai (b) | isnai (c)) = _ill ();
 endif
 
 endfunction
 
-%!test "IEEE Std 1788-2015 mulRevToPair examples";
+%!# IEEE Std 1788-2015 mulRevToPair examples
+%!test
 %!  [u, v] = mulrev (infsupdec (0), infsupdec (1, 2));
 %!  assert (isempty (u) & isempty (v));
+%!test
 %!  [u, v] = mulrev (infsupdec (0), infsupdec (0, 1));
 %!  assert (isentire (u) & isempty (v));
+%!test
 %!  [u, v] = mulrev (infsupdec (1), infsupdec (1, 2));
 %!  assert (isequal (u, infsupdec (1, 2)) & isempty (v));
+%!test
 %!  [u, v] = mulrev (infsupdec (1, inf), infsupdec (1));
 %!  assert (isequal (u, infsupdec (0, 1, "dac")) & isempty (v));
+%!test
 %!  [u, v] = mulrev (infsupdec (-1, 1), infsupdec (1, 2));
 %!  assert (isequal (u, infsupdec (-inf, -1, "trv")) & isequal (v, infsupdec (1, inf, "trv")));
+%!test
 %!  [u, v] = mulrev (infsupdec (-inf, inf), infsupdec (1));
 %!  assert (isequal (u, infsupdec (-inf, 0, "trv")) & isequal (v, infsupdec (0, inf, "trv")));

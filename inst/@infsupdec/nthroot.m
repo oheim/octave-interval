@@ -38,20 +38,17 @@ endif
 if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
-if (isnai (x))
-    result = x;
-    return
-endif
 
 result = newdec (nthroot (intervalpart (x), n));
-result.dec = min (result.dec, x.dec);
 
 ## nthroot is continuous everywhere, but not defined everywhere
 even = mod (n, 2) == 0;
 defined = (not (even) & (n > 0 | inf (x) > 0 | sup (x) < 0)) ...
         | (even       & ((n > 0 & inf (x) >= 0) ...
                        | (n < 0 & inf (x) > 0)));
-result.dec (not (defined)) = _trv ();
+result.dec(not (defined)) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 

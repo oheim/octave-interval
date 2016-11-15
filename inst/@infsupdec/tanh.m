@@ -41,12 +41,7 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (tanh (intervalpart (x)));
+result = newdec (tanh (x.infsup));
 ## tanh is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 

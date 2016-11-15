@@ -48,33 +48,29 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = resize (x, m, n)
+function x = resize (x, m, n)
 
 if (not (isa (x, "infsupdec")))
     print_usage ();
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
+x.dec(x.dec == 0) = uint8 (255);
 
 switch nargin
     case 2
-        bare = resize (intervalpart (x), m);
-        dec = resize (x.dec, m);
+        x.infsup = resize (x.infsup, m);
+        x.dec = resize (x.dec, m);
     case 3
-        bare = resize (intervalpart (x), m, n);
-        dec = resize (x.dec, m, n);
+        x.infsup = resize (x.infsup, m, n);
+        x.dec = resize (x.dec, m, n);
     otherwise
         print_usage ();
         return
 endswitch
 
-result = newdec (bare);
-dec (dec == 0) = _com (); # any new elements are [0]_com
-result.dec = dec;
+x.dec(x.dec == 0) = _com (); # any new elements are [0]_com
+x.dec(x.dec == uint8 (255)) = uint8 (0);
 
 endfunction
 

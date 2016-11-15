@@ -41,17 +41,15 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
+result = newdec (atanh (x.infsup));
 
-result = newdec (atanh (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
 ## atanh is continuous everywhere, but defined for ]-1, 1[ only
-result.dec (not (interior (x, infsupdec (-1, 1)))) = _trv ();
+persistent domain_hull = infsup (-1, 1);
+result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (atanh (infsupdec (.5)), infsupdec ("[0x1.193EA7AAD030Ap-1, 0x1.193EA7AAD030Bp-1]")));
+%!# from the documentation string
+%!assert (isequal (atanh (infsupdec (.5)), infsupdec ("[0x1.193EA7AAD030Ap-1, 0x1.193EA7AAD030Bp-1]")));

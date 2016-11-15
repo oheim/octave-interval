@@ -44,26 +44,22 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (sign (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (sign (x.infsup));
 
 ## sign is defined everywhere and continuous for x ~= 0
 discontinuous = not (issingleton (result));
-result.dec (discontinuous) = min (result.dec (discontinuous), _def ());
+result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
 
 onlyrestrictioncontinuous = inf (x) == 0 & sup (x) == 0;
-result.dec (onlyrestrictioncontinuous) = ...
-    min (result.dec (onlyrestrictioncontinuous), _dac ());
+result.dec(onlyrestrictioncontinuous) = ...
+    min (result.dec(onlyrestrictioncontinuous), _dac ());
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (sign (infsupdec (2, 3)), infsupdec (1)));
-%! assert (isequal (sign (infsupdec (0)), infsupdec (0, "dac")));
-%! assert (isequal (sign (infsupdec (0, 5)), infsupdec (0, 1, "def")));
-%! assert (isequal (sign (infsupdec (-17)), infsupdec (-1)));
+%!# from the documentation string
+%!assert (isequal (sign (infsupdec (2, 3)), infsupdec (1)));
+%!assert (isequal (sign (infsupdec (0)), infsupdec (0, "dac")));
+%!assert (isequal (sign (infsupdec (0, 5)), infsupdec (0, 1, "def")));
+%!assert (isequal (sign (infsupdec (-17)), infsupdec (-1)));

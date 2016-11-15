@@ -59,18 +59,10 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (c))
-    result = c;
-    return
-endif
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = infsupdec (sinrev (intervalpart (c), intervalpart (x)), "trv");
+result = infsupdec (sinrev (c.infsup, x.infsup), "trv");
+result.dec(isnai (c) | isnai (x)) = _ill ();
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (sinrev (infsupdec (-1), infsupdec (0, 6)), infsupdec ("[0x1.2D97C7F3321D2p2, 0x1.2D97C7F3321D3p2]_trv")));
+%!# from the documentation string
+%!assert (isequal (sinrev (infsupdec (-1), infsupdec (0, 6)), infsupdec ("[0x1.2D97C7F3321D2p2, 0x1.2D97C7F3321D3p2]_trv")));

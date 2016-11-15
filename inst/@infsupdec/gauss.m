@@ -57,18 +57,10 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = infsupdec (gauss (intervalpart (x), intervalpart (y)), "trv");
+result = infsupdec (gauss (x.infsup, y.infsup), "trv");
+result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (gauss (infsupdec ([1, 0; 0, 2]), [2, 0; 0, 4]), infsupdec ([2, 0; 0, 2], "trv")));
+%!# from the documentation string
+%!assert (isequal (gauss (infsupdec ([1, 0; 0, 2]), [2, 0; 0, 4]), infsupdec ([2, 0; 0, 2], "trv")));

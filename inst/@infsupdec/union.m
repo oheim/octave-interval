@@ -52,37 +52,29 @@ if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
 
-if (isnai (a))
-    result = a;
-    return
-endif
-
 switch (nargin)
     case 1
-        bare = union (intervalpart (a));
+        result = infsupdec (union (a.infsup), "trv");
+        result.dec = min (result.dec, min (a.dec));
+        
     case 2
         if (not (isa (b, "infsupdec")))
             b = infsupdec (b);
         endif
-        if (isnai (b))
-            result = b;
-            return
-        endif
-        bare = union (intervalpart (a), intervalpart (b));
+        result = infsupdec (union (a.infsup, b.infsup), "trv");
+        result.dec = min (result.dec, min (a.dec, b.dec));
     case 3
         if (not (builtin ("isempty", b)))
             warning ("union: second argument is ignored");
         endif
-        bare = union (intervalpart (a), [], dim);
+        result = infsupdec (union (a.infsup, [], dim), "trv");
+        result.dec = min (result.dec, min (a.dec, [], dim));
     otherwise
         print_usage ();
         return
 endswitch
 
-## convexHull must not retain any useful decoration
-result = infsupdec (bare, "trv");
-
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (union (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (1, 4, "trv")));
+%!# from the documentation string
+%!assert (isequal (union (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (1, 4, "trv")));

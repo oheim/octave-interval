@@ -59,21 +59,17 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (gamma (intervalpart (x)));
+result = newdec (gamma (x.infsup));
 ## gamma is continuous where it is defined
-result.dec = min (result.dec, x.dec);
 
 undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
             (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
             (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
-result.dec (undefined) = min (result.dec (undefined), _trv ());
+result.dec(undefined) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (gamma (infsupdec (1.5)), infsupdec ("[0x1.C5BF891B4EF6Ap-1, 0x1.C5BF891B4EF6Bp-1]_com")));
+%!# from the documentation string
+%!assert (isequal (gamma (infsupdec (1.5)), infsupdec ("[0x1.C5BF891B4EF6Ap-1, 0x1.C5BF891B4EF6Bp-1]_com")));

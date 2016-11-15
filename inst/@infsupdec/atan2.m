@@ -48,31 +48,23 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (atan2 (intervalpart (y), intervalpart (x)));
-result.dec = min (result.dec, min (y.dec, x.dec));
+result = newdec (atan2 (y.infsup, x.infsup));
 
 ## The function is discontinuous for x <= 0 and y == 0
 discontinuos = inf (y) < 0 & sup (y) >= 0 & inf (x) < 0;
-result.dec (discontinuos) = min (result.dec (discontinuos), _def ());
+result.dec(discontinuos) = min (result.dec(discontinuos), _def ());
 
 ## For y = [0, y.sup] the function is discontinuous, but its restriction is not
 onlyrestrictioncontinuous = inf (y) == 0 & inf (x) < 0;
-result.dec (onlyrestrictioncontinuous) = ...
-    min (result.dec (onlyrestrictioncontinuous), _dac ());
+result.dec(onlyrestrictioncontinuous) = ...
+    min (result.dec(onlyrestrictioncontinuous), _dac ());
 
 ## The only undefined input is <0,0>
-result.dec (ismember (0, y) & ismember (0, x)) = _trv ();
+result.dec(ismember (0, y) & ismember (0, x)) = _trv ();
+
+result.dec = min (result.dec, min (y.dec, x.dec));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (atan2 (infsupdec (1), infsupdec (-1)), infsupdec ("[0x1.2D97C7F3321D2p1, 0x1.2D97C7F3321D3p1]")));
+%!# from the documentation string
+%!assert (isequal (atan2 (infsupdec (1), infsupdec (-1)), infsupdec ("[0x1.2D97C7F3321D2p1, 0x1.2D97C7F3321D3p1]")));

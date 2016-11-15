@@ -41,17 +41,13 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (coth (intervalpart (x)));
+result = newdec (coth (x.infsup));
 ## coth is defined and continuous for x ~= 0
-result.dec = min (result.dec, x.dec);
 result.dec (inf (x) <= 0 & sup (x) >= 0) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (coth (infsupdec (1)), infsupdec ("[0x1.50231499B6B1D, 0x1.50231499B6B1E]_com")));
+%!# from the documentation string
+%!assert (isequal (coth (infsupdec (1)), infsupdec ("[0x1.50231499B6B1D, 0x1.50231499B6B1E]_com")));

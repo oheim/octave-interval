@@ -54,28 +54,19 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
 switch (nargin)
     case 1
-        bare = min (intervalpart (x));
+        bare = min (x.infsup);
     case 2
         if (not (isa (y, "infsupdec")))
             y = infsupdec (y);
         endif
-        if (isnai (y))
-            result = y;
-            return
-        endif
-        bare = min (intervalpart (x), intervalpart (y));
+        bare = min (x.infsup, y.infsup);
     case 3
         if (not (builtin ("isempty", y)))
             warning ("min: second argument is ignored");
         endif
-        bare = min (intervalpart (x), [], dim);
+        bare = min (x.infsup, [], dim);
     otherwise
         print_usage ();
         return
@@ -94,5 +85,5 @@ endswitch
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (min (infsupdec (2, 3), infsupdec (1, 2)), infsupdec (1, 2)));
+%!# from the documentation string
+%!assert (isequal (min (infsupdec (2, 3), infsupdec (1, 2)), infsupdec (1, 2)));

@@ -90,7 +90,7 @@ if (isnai (a) || isnai (b))
     error ("interval:InvalidOperand", "interval comparison with NaI")
 endif
 
-[state, bitmask] = overlap (intervalpart (a), intervalpart (b));
+[state, bitmask] = overlap (a.infsup, b.infsup);
 
 endfunction
 

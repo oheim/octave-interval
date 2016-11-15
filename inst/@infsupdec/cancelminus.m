@@ -52,20 +52,12 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return;
-endif
-
-result = cancelminus (intervalpart (x), intervalpart (y));
 ## cancelMinus must not retain any useful decoration
-result = infsupdec (result, "trv");
+result = infsupdec (cancelminus (x.infsup, y.infsup), "trv");
+
+result.dec(isnai (x) | isnai (y)) = _ill ();
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (cancelminus (infsupdec (2, 3), infsupdec (1, 1.5)), infsupdec (1, 1.5, "trv")));
+%!# from the documentation string
+%!assert (isequal (cancelminus (infsupdec (2, 3), infsupdec (1, 1.5)), infsupdec (1, 1.5, "trv")));

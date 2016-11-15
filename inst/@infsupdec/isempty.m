@@ -38,13 +38,10 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = false ();
-else
-    result = isempty (intervalpart (x));
-endif
+result = isempty (x.infsup);
+result(isnai (x)) = false;
 
 endfunction
 
-%!assert (isempty (infsupdec (inf, -inf)));
+%!assert (isempty (infsupdec ()));
 %!assert (not (isempty (infsupdec (1, 2))));

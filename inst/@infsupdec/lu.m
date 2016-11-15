@@ -43,14 +43,14 @@ endif
 
 P = eye (size (x.dec));
 if (isnai (x))
-    L = U = x;
+    L = U = nai ();
     return
 endif
 
 if (nargout >= 3)
-    [L, U, P] = lu (intervalpart (x));
+    [L, U, P] = lu (x.infsup);
 else
-    [L, U] = lu (intervalpart (x));
+    [L, U] = lu (x.infsup);
 endif    
 
 ## Reverse operations should not carry decoration

@@ -66,7 +66,7 @@ if (not (isreal (y)) || fix (y) ~= y)
            "mpower: only integral powers can be computed");
 endif
 
-result = newdec (mpower (intervalpart (x), y));
+result = newdec (mpower (x.infsup, y));
 
 if (y < 0)
     result.dec(:) = _trv ();
@@ -77,10 +77,10 @@ elseif (y == 2)
     result.dec = min (result.dec, min (min (x.dec, [], 1), ...
                                        min (x.dec, [], 2)));
 elseif (y > 2)
-    result.dec = min (result.dec, min (min (x.dec)));
+    result.dec = min (result.dec, min (vec (x.dec)));
 endif
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (infsupdec (magic (3)) ^ 2, infsupdec (magic (3) ^ 2)));
+%!# from the documentation string
+%!assert (isequal (infsupdec (magic (3)) ^ 2, infsupdec (magic (3) ^ 2)));

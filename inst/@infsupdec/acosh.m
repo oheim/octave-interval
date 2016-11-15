@@ -41,17 +41,15 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
+result = newdec (acosh (x.infsup));
 
-result = newdec (acosh (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
 ## acosh is continuous everywhere, but defined for [1, Inf] only
-result.dec (not (subset (x, infsupdec (1, inf)))) = _trv ();
+persistent domain = infsup (1, inf);
+result.dec(not (subset (x.infsup, domain))) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (acosh (infsupdec (2)), infsupdec ("[0x1.5124271980434, 0x1.5124271980435]")));
+%!# from the documentation string
+%!assert (isequal (acosh (infsupdec (2)), infsupdec ("[0x1.5124271980434, 0x1.5124271980435]")));

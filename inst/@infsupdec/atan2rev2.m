@@ -62,24 +62,12 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (a))
-    result = b;
-    return
-endif
-if (isnai (c))
-    result = c;
-    return
-endif
-
-result = atan2rev2 (intervalpart (a), intervalpart (c), intervalpart (x));
 ## inverse atan2 is not a point function
-result = infsupdec (result, "trv");
+result = infsupdec (atan2rev2 (a.infsup, c.infsup, x.infsup), "trv");
+
+result.dec(isnai (x) | isnai (a) | isnai (c)) = _ill ();
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (atan2rev2 (infsupdec (1, 2), infsupdec ("pi") / 4), infsupdec ("[0x1.FFFFFFFFFFFFEp-1, 0x1.0000000000001p1]_trv")));
+%!# from the documentation string
+%!assert (isequal (atan2rev2 (infsupdec (1, 2), infsupdec ("pi") / 4), infsupdec ("[0x1.FFFFFFFFFFFFEp-1, 0x1.0000000000001p1]_trv")));

@@ -44,15 +44,10 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (det (intervalpart (x)));
+result = newdec (det (x.infsup));
 result.dec = min (result.dec, min (min (x.dec)));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (det (infsupdec (magic (3))) == -360);
+%!# from the documentation string
+%!assert (det (infsupdec (magic (3))) == -360);

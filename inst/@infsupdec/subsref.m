@@ -88,7 +88,9 @@ endif
 endfunction
 
 %!assert (isequal (infsupdec (magic (3))([1, 2, 3]), infsupdec (magic (3)([1, 2, 3]))));
-%!test "from the documentation string";
+
+%!# from the documentation string
+%!test
 %! x = infsupdec (magic (3), magic (3) + 1);
 %! assert (x(1) == infsupdec (8, 9)); 
 %! assert (x(:, 2) == infsupdec ([1; 5; 9], [2; 6; 10]));

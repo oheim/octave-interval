@@ -41,32 +41,24 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function result = reshape (x, m, n)
+function x = reshape (x, m, n)
 
 if (not (isa (x, "infsupdec")))
     print_usage ();
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
 switch nargin
     case 2
-        bare = reshape (intervalpart (x), m);
-        dec = reshape (x.dec, m);
+        x.infsup = reshape (x.infsup, m);
+        x.dec = reshape (x.dec, m);
     case 3
-        bare = reshape (intervalpart (x), m, n);
-        dec = reshape (x.dec, m, n);
+        x.infsup = reshape (x.infsup, m, n);
+        x.dec = reshape (x.dec, m, n);
     otherwise
         print_usage ();
         return
 endswitch
-
-result = newdec (bare);
-result.dec = dec;
 
 endfunction
 

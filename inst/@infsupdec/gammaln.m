@@ -58,19 +58,17 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (gammaln (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (gammaln (x.infsup));
 
 ## gammaln is continuous everywhere, but defined for x > 0 only
-result.dec (not (interior (x, infsupdec (0, inf)))) = _trv ();
+persistent domain_hull = infsup (0, inf);
+result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
 %!assert (isequal (gammaln (infsupdec (-inf, inf)), infsupdec ("[-0x1.F19B9BCC38A42p-4, +Inf]_trv")));
-%!test "from the documentation string";
-%! assert (isequal (gammaln (infsupdec (1.5)), infsupdec ("[-0x1.EEB95B094C192p-4, -0x1.EEB95B094C191p-4]_com")));
+
+%!# from the documentation string
+%!assert (isequal (gammaln (infsupdec (1.5)), infsupdec ("[-0x1.EEB95B094C192p-4, -0x1.EEB95B094C191p-4]_com")));

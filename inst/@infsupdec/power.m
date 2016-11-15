@@ -63,17 +63,7 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (power (intervalpart (x), intervalpart (y)));
-result.dec = min (result.dec, min (x.dec, y.dec));
+result = newdec (power (x.infsup, y.infsup));
 
 ## The general power function is continuous where it is defined
 domain = not (isempty (result)) & (...
@@ -82,9 +72,11 @@ domain = not (isempty (result)) & (...
             # defined for x < 0 only where y is integral
             (issingleton (y) & fix (inf (y)) == inf (y) & ... 
                 (inf (y) > 0 | not (ismember (0, x))))); # not defined for 0^0
-result.dec (not (domain)) = _trv ();
+result.dec(not (domain)) = _trv ();
+
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (infsupdec (-5, 6) .^ infsupdec (2, 3), infsupdec (-125, 216, "trv")));
+%!# from the documentation string
+%!assert (isequal (infsupdec (-5, 6) .^ infsupdec (2, 3), infsupdec (-125, 216, "trv")));

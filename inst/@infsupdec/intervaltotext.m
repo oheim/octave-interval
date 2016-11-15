@@ -51,16 +51,11 @@ if (nargin < 2)
     format = "decimal";
 endif
 
-if (isnai (x))
-    s = "[NaI]";
-    isexact = true ();
-    return
-endif
-
-[s, isexact] = intervaltotext (intervalpart (x), format);
+[s, isexact] = intervaltotext (x.infsup, format);
 s = strcat (s, {"_"}, decorationpart (x));
+s(isnai (x)) = "[NaI]";
 if (isscalar (s))
-    s = s {1};
+    s = s{1};
 endif
 
 endfunction

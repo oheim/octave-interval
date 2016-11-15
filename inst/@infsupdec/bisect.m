@@ -56,20 +56,17 @@ if (nargin > 1)
     return
 endif
 
-if (isnai (x))
-    a = x;
-    b = x;
-    return
-endif
-
 ## bisect must not retain any useful decoration
-[a, b] = bisect (intervalpart (x));
+[a, b] = bisect (x.infsup);
 a = infsupdec (a, "trv");
 b = infsupdec (b, "trv");
 
+a.dec(isnai (x)) = b.dec(isnai (x)) = _ill ();
+
 endfunction
 
-%!test "from the documentation string";
+%!# from the documentation string
+%!test
 %! [a, b] = bisect (infsupdec (2, 32));
 %! assert (a == infsupdec (2, 8, "trv"));
 %! assert (b == infsupdec (8, 32, "trv"));

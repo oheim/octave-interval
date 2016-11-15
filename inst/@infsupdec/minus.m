@@ -51,20 +51,11 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (minus (intervalpart (x), intervalpart (y)));
+result = newdec (minus (x.infsup, y.infsup));
 ## minus is defined and continuous everywhere
 result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (infsupdec (2, 3) - infsupdec (1, 2), infsupdec (0, 2)));
+%!# from the documentation string
+%!assert (isequal (infsupdec (2, 3) - infsupdec (1, 2), infsupdec (0, 2)));

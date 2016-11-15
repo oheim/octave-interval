@@ -62,14 +62,14 @@ if (isnai (x))
     return
 endif
 
-result = newdec (psi (intervalpart (x)));
+result = newdec (psi (x.infsup));
 ## psi is continuous where it is defined
-result.dec = min (result.dec, x.dec);
-
 undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
             (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
             (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
-result.dec (undefined) = _trv ();
+result.dec(undefined) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
@@ -86,5 +86,5 @@ endfunction
 %!assert (isequal (psi (infsupdec (-1-eps, -1+eps)), infsupdec ("[Entire]_trv")));
 %!assert (isequal (psi (infsupdec (-4.1, -3.9)), infsupdec ("[Entire]_trv")));
 
-%!test "from the documentation string";
-%! assert (isequal (psi (infsupdec (1)), infsupdec ("[-0x1.2788CFC6FB619p-1, -0x1.2788CFC6FB618p-1]_com")));
+%!# from the documentation string
+%!assert (isequal (psi (infsupdec (1)), infsupdec ("[-0x1.2788CFC6FB619p-1, -0x1.2788CFC6FB618p-1]_com")));

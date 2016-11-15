@@ -58,25 +58,11 @@ if (not (isa (z, "infsupdec")))
     z = infsupdec (z);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-if (isnai (z))
-    result = z;
-    return
-endif
-
-result = newdec (...
-        fma (intervalpart (x), intervalpart (y), intervalpart (z)));
+result = newdec (fma (x.infsup, y.infsup, z.infsup));
 ## fma is defined and continuous everywhere
 result.dec = min (result.dec, min (x.dec, min (y.dec, z.dec)));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (fma (infsupdec (1+eps), infsupdec (7), infsupdec ("0.1")), infsupdec ("[0x1.C666666666668p2, 0x1.C666666666669p2]")));
+%!# from the documentation string
+%!assert (isequal (fma (infsupdec (1+eps), infsupdec (7), infsupdec ("0.1")), infsupdec ("[0x1.C666666666668p2, 0x1.C666666666669p2]")));

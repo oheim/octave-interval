@@ -36,18 +36,19 @@
 ## Keywords: interval
 ## Created: 2014-11-02
 
-function result = transpose (x)
+function x = transpose (x)
 
 if (nargin ~= 1)
     print_usage ();
     return
 endif
 
-result = newdec (transpose (intervalpart (x)));
-result.dec = transpose (x.dec);
+x.infsup = transpose (x.infsup);
+x.dec = transpose (x.dec);
 
 endfunction
 
 %!assert (isequal (transpose (infsupdec (magic (3))), infsupdec (magic (3).')));
-%!test "from the documentation string";
-%! assert (isequal (transpose (infsupdec (zeros (1, 3), ones (1, 3))), infsupdec (zeros (3, 1), ones (3, 1))));
+
+%!# from the documentation string
+%!assert (isequal (transpose (infsupdec (zeros (1, 3), ones (1, 3))), infsupdec (zeros (3, 1), ones (3, 1))));

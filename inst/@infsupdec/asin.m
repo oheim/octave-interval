@@ -41,17 +41,15 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
+result = newdec (asin (x.infsup));
 
-result = newdec (asin (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
 ## asin is continuous everywhere, but defined for [-1, 1] only
-result.dec (not (subset (x, infsupdec (-1, 1)))) = _trv ();
+persistent domain = infsup (-1, 1);
+result.dec(not (subset (x.infsup, domain))) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (asin (infsupdec (.5)), infsupdec ("[0x1.0C152382D7365p-1, 0x1.0C152382D7366p-1]")));
+%!# from the documentation string
+%!assert (isequal (asin (infsupdec (.5)), infsupdec ("[0x1.0C152382D7365p-1, 0x1.0C152382D7366p-1]")));

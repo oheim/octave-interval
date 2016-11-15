@@ -43,24 +43,20 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (ceil (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (ceil (x.infsup));
 
 ## Between two integral numbers the function is constant, thus continuous
 discontinuos = not (issingleton (result));
-result.dec (discontinuos) = min (result.dec (discontinuos), _def ());
+result.dec(discontinuos) = min (result.dec(discontinuos), _def ());
 
 onlyrestrictioncontinuous = issingleton (result) & fix (sup (x)) == sup (x);
-result.dec (onlyrestrictioncontinuous) = ...
-    min (result.dec (onlyrestrictioncontinuous), _dac ());
+result.dec(onlyrestrictioncontinuous) = ...
+    min (result.dec(onlyrestrictioncontinuous), _dac ());
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (ceil (infsupdec (2.5, 3.5)), infsupdec (3, 4, "def")));
-%! assert (isequal (ceil (infsupdec (-.5, 5)), infsupdec (0, 5, "def")));
+%!# from the documentation string
+%!assert (isequal (ceil (infsupdec (2.5, 3.5)), infsupdec (3, 4, "def")));
+%!assert (isequal (ceil (infsupdec (-.5, 5)), infsupdec (0, 5, "def")));

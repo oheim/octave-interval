@@ -44,11 +44,8 @@ if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif
 
-if (isnai (a) || isnai (b))
-    result = false ();
-else
-    result = precedes (intervalpart (a), intervalpart (b));
-endif
+result = precedes (a.infsup, b.infsup);
+result(isnai (a) | isnai (b)) = false;
 
 endfunction
 

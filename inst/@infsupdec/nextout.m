@@ -45,16 +45,12 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = infsupdec (nextout (intervalpart (x)), "trv");
+result = infsupdec (nextout (x.infsup), "trv");
+result.dec(isnai (x)) = _ill ();
 
 endfunction
 
-%!test "from the documentation string";
+%!# from the documentation string
 %! x = nextout (infsupdec (1));
 %! assert (inf (x), 1 - eps / 2);
 %! assert (sup (x), 1 + eps);

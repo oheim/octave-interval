@@ -41,19 +41,16 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (realsqrt (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (realsqrt (x.infsup));
 
 ## realsqrt is continuous everywhere, but defined for x >= 0 only
-defined = subset (x, infsupdec (0, inf));
-result.dec (not (defined)) = _trv ();
+persistent domain = infsup (0, inf);
+defined = subset (x.infsup, domain);
+result.dec(not (defined)) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (realsqrt (infsupdec (-6, 4)), infsupdec (0, 2, "trv")));
+%!# from the documentation string
+%!assert (isequal (realsqrt (infsupdec (-6, 4)), infsupdec (0, 2, "trv")));

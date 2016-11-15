@@ -57,17 +57,13 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (dilog (intervalpart (x)));
+result = newdec (dilog (x.infsup));
 ## dilog is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
 %!assert (isequal (dilog (infsupdec (-inf, inf)), infsupdec ("[-Inf, +0x1.3BD3CC9BE45DFp1]_dac")));
-%!test "from the documentation string";
-%! assert (isequal (dilog (infsupdec (1)), infsupdec ("[0x1.A51A6625307D3, 0x1.A51A6625307D4]_com")));
+
+%!# from the documentation string
+%!assert (isequal (dilog (infsupdec (1)), infsupdec ("[0x1.A51A6625307D3, 0x1.A51A6625307D4]_com")));

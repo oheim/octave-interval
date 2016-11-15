@@ -46,12 +46,13 @@ if (isnai (x))
     return
 endif
 
-result = newdec (csch (intervalpart (x)));
+result = newdec (csch (x.infsup));
 ## csch is defined and continuous for x ~= 0
-result.dec = min (result.dec, x.dec);
 result.dec (inf (x) <= 0 & sup (x) >= 0) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (csch (infsupdec (1)), infsupdec ("[0x1.B3AB8A78B90Cp-1, 0x1.B3AB8A78B90C1p-1]_com")));
+%!# from the documentation string
+%!assert (isequal (csch (infsupdec (1)), infsupdec ("[0x1.B3AB8A78B90Cp-1, 0x1.B3AB8A78B90C1p-1]_com")));

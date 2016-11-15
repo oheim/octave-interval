@@ -51,20 +51,11 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (hypot (intervalpart (x), intervalpart (y)));
+result = newdec (hypot (x.infsup, y.infsup));
 ## hypot is continuous and defined everywhere
 result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (hypot (infsupdec (2, 3), infsupdec (1, 2)), infsupdec ("[0x1.1E3779B97F4A7p1, 0x1.CD82B446159F4p1]")));
+%!# from the documentation string
+%!assert (isequal (hypot (infsupdec (2, 3), infsupdec (1, 2)), infsupdec ("[0x1.1E3779B97F4A7p1, 0x1.CD82B446159F4p1]")));

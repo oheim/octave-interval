@@ -54,26 +54,19 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (rdivide (intervalpart (x), intervalpart (y)));
-result.dec = min (result.dec, min (x.dec, y.dec));
+result = newdec (rdivide (x.infsup, y.infsup));
 
 divisionbyzero = ismember (0, y);
-if (isscalar (y) && not (isscalar (x)))
-    divisionbyzero = divisionbyzero (ones (size (x)));
+if (not (size_equal (x.dec, y.dec)))
+    divisionbyzero = divisionbyzero & true (size (x.dec));
 endif
-result.dec (divisionbyzero) = _trv ();
+result.dec(divisionbyzero) = _trv ();
+
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (infsupdec (2, 3) ./ infsupdec (1, 2), infsupdec (1, 3)));
+%!# from the documentation string
+%!assert (isequal (infsupdec (2, 3) ./ infsupdec (1, 2), infsupdec (1, 3)));
+
 %!assert (1 ./ infsupdec (1, 4) == infsupdec (0.25, 1));

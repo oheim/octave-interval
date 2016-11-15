@@ -52,37 +52,29 @@ if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
 endif
 
-if (isnai (a))
-    result = a;
-    return
-endif
-
 switch (nargin)
     case 1
-        bare = intersect (intervalpart (a));
+        result = infsupdec (intersect (a.infsup), "trv");
+        result.dec = min (result.dec, min (a.dec));
+        
     case 2
         if (not (isa (b, "infsupdec")))
             b = infsupdec (b);
         endif
-        if (isnai (b))
-            result = b;
-            return
-        endif
-        bare = intersect (intervalpart (a), intervalpart (b));
+        result = infsupdec (intersect (a.infsup, b.infsup), "trv");
+        result.dec = min (result.dec, min (a.dec, b.dec));
     case 3
         if (not (builtin ("isempty", b)))
             warning ("intersect: second argument is ignored");
         endif
-        bare = intersect (intervalpart (a), [], dim);
+        result = infsupdec (intersect (a.infsup, [], dim), "trv");
+        result.dec = min (result.dec, min (a.dec, [], dim));
     otherwise
         print_usage ();
         return
 endswitch
 
-## intersection must not retain any useful decoration
-result = infsupdec (bare, "trv");
-
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (intersect (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (2, 3, "trv")));
+%!# from the documentation string
+%!assert (isequal (intersect (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (2, 3, "trv")));

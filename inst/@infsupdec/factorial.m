@@ -53,24 +53,21 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
 ## The function is not continuous, since it is defined for non-negative
 ## integrals only.  Thus the best possible decoration can be “dac”.
-result = infsupdec (factorial (intervalpart (x)), "dac");
-result.dec = min (result.dec, x.dec);
+result = infsupdec (factorial (x.infsup), "dac");
 
 ## The function is defined for non-negative integrals only
 defined = issingleton (x) & fix (sup (x)) == sup (x);
-result.dec (not (defined)) = _trv ();
+result.dec(not (defined)) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (factorial (infsupdec (6)) == infsupdec (720, "dac"));
+%!# from the documentation string
+%!assert (factorial (infsupdec (6)) == infsupdec (720, "dac"));
+
 %!assert (factorial (infsupdec (0)) == infsupdec (1, "dac"));
 %!assert (factorial (infsupdec ("[0, 1.99]")) == infsupdec (1, "trv"));
 %!assert (factorial (infsupdec ("[0, 2]")) == "[1, 2]_trv");

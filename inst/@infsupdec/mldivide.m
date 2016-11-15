@@ -50,23 +50,17 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
 ## Reverse operations should not carry decoration
-result = infsupdec (mldivide (intervalpart (x), intervalpart (y)), "trv");
+result = infsupdec (mldivide (x.infsup, y.infsup), "trv");
+result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
 
 endfunction
 
-%!test "unique solution";
-%!  assert (isequal (infsupdec ([1, 0; 0, 2]) \ [2, 0; 0, 4], infsupdec ([2, 0; 0 2], "trv")));
-%!test "no solution";
-%!  assert (all (isempty (infsupdec ([1, 0; 2, 0]) \ [3; 0])));
-%!test "many solutions";
-%!  assert (isequal (infsupdec ([1, 0; 2, 0]) \ [4; 8], infsupdec ([4; -inf], [4; inf], "trv")));
+%!# unique solution
+%!assert (isequal (infsupdec ([1, 0; 0, 2]) \ [2, 0; 0, 4], infsupdec ([2, 0; 0 2], "trv")));
+
+%!# no solution
+%!assert (all (isempty (infsupdec ([1, 0; 2, 0]) \ [3; 0])));
+
+%!# many solutions
+%!assert (isequal (infsupdec ([1, 0; 2, 0]) \ [4; 8], infsupdec ([4; -inf], [4; inf], "trv")));

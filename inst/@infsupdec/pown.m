@@ -44,20 +44,17 @@ if (nargin ~= 2)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (pown (intervalpart (x), p));
-result.dec = min (result.dec, x.dec);
+result = newdec (pown (x.infsup, p));
 
 ## x^P is undefined for x == 0 and P < 0
 domain = p >= 0 | not (ismember (0, x));
-result.dec (not (domain)) = _trv ();
+result.dec(not (domain)) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (pown (infsupdec (5, 6), 2), infsupdec (25, 36)));
+%!# from the documentation string
+%!assert (isequal (pown (infsupdec (5, 6), 2), infsupdec (25, 36)));
+
 %!assert (pown (infsupdec (-2, 1), 2) == infsupdec (0, 4));

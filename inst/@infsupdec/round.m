@@ -44,47 +44,46 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (round (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (round (x.infsup));
 
 ## Round is like a scaled fix function
 discontinuous = not (issingleton (result));
-result.dec (discontinuous) = min (result.dec (discontinuous), _def ());
+result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
 
 onlyrestrictioncontinuous = issingleton (result) & not (...
     (sup (x) >= 0 | ...
             fix (sup (x)) == sup (x) | fix (sup (x) * 2) / 2 ~= sup (x)) & ...
     (inf (x) <= 0 | ...
             fix (inf (x)) == inf (x) | fix (inf (x) * 2) / 2 ~= inf (x)));
-result.dec (onlyrestrictioncontinuous) = ...
-    min (result.dec (onlyrestrictioncontinuous), _dac ());
+result.dec(onlyrestrictioncontinuous) = ...
+    min (result.dec(onlyrestrictioncontinuous), _dac ());
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "Empty interval";
-%! assert (isequal (round (infsupdec ()), infsupdec ()));
-%!test "Singleton intervals";
-%! assert (isequal (round (infsupdec (0)), infsupdec (0)));
-%! assert (isequal (round (infsupdec (0.5)), infsupdec (1, "dac")));
-%! assert (isequal (round (infsupdec (0.25)), infsupdec (0)));
-%! assert (isequal (round (infsupdec (0.75)), infsupdec (1)));
-%! assert (isequal (round (infsupdec (-0.5)), infsupdec (-1, "dac")));
-%!test "Bounded intervals";
-%! assert (isequal (round (infsupdec (-0.5, 0)), infsupdec (-1, 0, "def")));
-%! assert (isequal (round (infsupdec (0, 0.5)), infsupdec (0, 1, "def")));
-%! assert (isequal (round (infsupdec (0.25, 0.5)), infsupdec (0, 1, "def")));
-%! assert (isequal (round (infsupdec (-1, 0)), infsupdec (-1, 0, "def")));
-%! assert (isequal (round (infsupdec (-1, 1)), infsupdec (-1, 1, "def")));
-%! assert (isequal (round (infsupdec (-realmin, realmin)), infsupdec (0)));
-%! assert (isequal (round (infsupdec (-realmax, realmax)), infsupdec (-realmax, realmax, "def")));
-%!test "Unbounded intervals";
-%! assert (isequal (round (infsupdec (-realmin, inf)), infsupdec (0, inf, "def")));
-%! assert (isequal (round (infsupdec (-realmax, inf)), infsupdec (-realmax, inf, "def")));
-%! assert (isequal (round (infsupdec (-inf, realmin)), infsupdec (-inf, 0, "def")));
-%! assert (isequal (round (infsupdec (-inf, realmax)), infsupdec (-inf, realmax, "def")));
-%! assert (isequal (round (infsupdec (-inf, inf)), infsupdec (-inf, inf, "def")));
+%!# Empty interval
+%!assert (isequal (round (infsupdec ()), infsupdec ()));
+
+%!# Singleton intervals
+%!assert (isequal (round (infsupdec (0)), infsupdec (0)));
+%!assert (isequal (round (infsupdec (0.5)), infsupdec (1, "dac")));
+%!assert (isequal (round (infsupdec (0.25)), infsupdec (0)));
+%!assert (isequal (round (infsupdec (0.75)), infsupdec (1)));
+%!assert (isequal (round (infsupdec (-0.5)), infsupdec (-1, "dac")));
+
+%!# Bounded intervals
+%!assert (isequal (round (infsupdec (-0.5, 0)), infsupdec (-1, 0, "def")));
+%!assert (isequal (round (infsupdec (0, 0.5)), infsupdec (0, 1, "def")));
+%!assert (isequal (round (infsupdec (0.25, 0.5)), infsupdec (0, 1, "def")));
+%!assert (isequal (round (infsupdec (-1, 0)), infsupdec (-1, 0, "def")));
+%!assert (isequal (round (infsupdec (-1, 1)), infsupdec (-1, 1, "def")));
+%!assert (isequal (round (infsupdec (-realmin, realmin)), infsupdec (0)));
+%!assert (isequal (round (infsupdec (-realmax, realmax)), infsupdec (-realmax, realmax, "def")));
+
+%!# Unbounded intervals
+%!assert (isequal (round (infsupdec (-realmin, inf)), infsupdec (0, inf, "def")));
+%!assert (isequal (round (infsupdec (-realmax, inf)), infsupdec (-realmax, inf, "def")));
+%!assert (isequal (round (infsupdec (-inf, realmin)), infsupdec (-inf, 0, "def")));
+%!assert (isequal (round (infsupdec (-inf, realmax)), infsupdec (-inf, realmax, "def")));
+%!assert (isequal (round (infsupdec (-inf, inf)), infsupdec (-inf, inf, "def")));

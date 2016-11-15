@@ -56,12 +56,9 @@ endif
 if (nargin < 2)
     n = 100;
 endif
-if (isnai (x))
-    result = x;
-    return
-endif
 
-result = infsupdec (mince (intervalpart (x), n), "trv");
+result = infsupdec (mince (x.infsup, n), "trv");
+result.dec = min (result.dec, x.dec);
 
 endfunction
 

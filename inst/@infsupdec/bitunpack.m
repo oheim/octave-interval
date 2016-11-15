@@ -46,14 +46,14 @@ if (nargin ~= 1)
     return
 endif
 
-## The exchange representation of [NaI] is (NaN, NaN, ill).
-if (isnai (x))
-    result = [bitunpack(zeros (1, 'uint8')), bitunpack(nan (1, 2))];
-    return
-endif
-
-bare = bitunpack (intervalpart (x));
+bare = bitunpack (x.infsup);
 d = bitunpack (x.dec);
+
+## The exchange representation of [NaI] is (NaN, NaN, ill).
+if (any (isnai (x)))
+    bare(vec (1:128) + 128 .* vec (find (isnai (x)) - 1, 2)) = ...
+        [bitunpack(nan (sum (isnai (x)), 2))];
+endif
 
 ## Initialize result vector
 result = zeros (1, length (bare) + length (d), 'logical');
@@ -65,13 +65,13 @@ endif
 ## into result.
 target_bare = reshape (1 : length (result), 8, length (result) / 8);
 target_d = target_bare (:, 17 : 17 : size (target_bare, 2));
-target_bare (:, 17 : 17 : size (target_bare, 2)) = [];
-result (target_bare) = bare;
-result (target_d) = d;
+target_bare(:, 17 : 17 : size (target_bare, 2)) = [];
+result(target_bare) = bare;
+result(target_d) = d;
 
 endfunction
 
-%!test;
+%!test
 %!  littleendian = bitunpack (uint16 (1))(1);
 %!  b = zeros (1, 136);
 %!  if (littleendian)

@@ -56,16 +56,8 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (c))
-    result = c;
-    return
-endif
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = infsupdec (pownrev (intervalpart (c), intervalpart (x), p), "trv");
+result = infsupdec (pownrev (c.infsup, x.infsup, p), "trv");
+result.dec(isnai (c) | isnai (x)) = _ill ();
 
 endfunction
 

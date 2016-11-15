@@ -57,16 +57,13 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (ei (intervalpart (x)));
-result.dec = min (result.dec, x.dec);
+result = newdec (ei (x.infsup));
 
 ## ei is continuous everywhere, but defined for x > 0 only
-result.dec (not (interior (x, infsupdec (0, inf)))) = _trv ();
+persistent domain_hull = infsup (0, inf);
+result.dec (not (interior (x.infsup, domain_hull))) = _trv ();
+
+result.dec = min (result.dec, x.dec);
 
 endfunction
 
@@ -75,5 +72,5 @@ endfunction
 %!assert (isequal (ei (infsupdec (0, inf)), infsupdec ("[Entire]_trv")));
 %!assert (isequal (ei (infsupdec (1, inf)), infsupdec ("[0x1.E52670F350D08, Inf]_dac")));
 
-%!test "from the documentation string";
-%! assert (isequal (ei (infsupdec (1)), infsupdec ("[0x1.E52670F350D08, 0x1.E52670F350D09]_com")));
+%!# from the documentation string
+%!assert (isequal (ei (infsupdec (1)), infsupdec ("[0x1.E52670F350D08, 0x1.E52670F350D09]_com")));

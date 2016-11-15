@@ -59,18 +59,10 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (c))
-    result = c;
-    return
-endif
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = infsupdec (sqrrev (intervalpart (c), intervalpart (x)), "trv");
+result = infsupdec (sqrrev (c.infsup, x.infsup), "trv");
+result.dec(isnai (c) | isnai (x)) = _ill ();
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (sqrrev (infsupdec (-2, 1)), infsupdec (-1, 1, "trv")));
+%!# from the documentation string
+%!assert (isequal (sqrrev (infsupdec (-2, 1)), infsupdec (-1, 1, "trv")));

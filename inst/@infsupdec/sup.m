@@ -49,8 +49,8 @@ result(isnai (x)) = nan;
 
 endfunction
 
-%!assert (sup (infsup (2.5, 3.5)), 3.5);
-%!assert (sup (infsup ()), -inf);
-%!assert (sup (infsup ("[nai]")), nan);
+%!assert (sup (infsupdec (2.5, 3.5)), 3.5);
+%!assert (sup (infsupdec ()), -inf);
+%!assert (sup (infsupdec ("[nai]")), nan);
 %!warning id=interval:UndefinedOperation
-%! assert (sup (infsup (3, 2)), nan);
+%! assert (sup (infsupdec (3, 2)), nan);

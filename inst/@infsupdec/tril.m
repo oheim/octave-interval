@@ -35,31 +35,26 @@
 ## Keywords: interval
 ## Created: 2016-08-04
 
-function result = tril (A, k, pack)
+function A = tril (A, varargin)
 
-if (not (isa (A, 'infsupdec')))
-    error ('tril: invalid argument; only the first may be an interval');
-endif
-if (isnai (A))
-    result = A;
+if (nargin > 3)
+    print_usage ();
     return
 endif
 
-switch (nargin)
-    case 1
-        result = newdec (tril (intervalpart (A)));
-        result.dec = tril (A.dec);
-    case 2
-        result = newdec (tril (intervalpart (A), k));
-        result.dec = tril (A.dec, k);
-    case 3
-        result = newdec (tril (intervalpart (A), k, pack));
-        result.dec = tril (A.dec, k, pack);
-    otherwise
-        print_usage ();
-endswitch
+if (nargin >= 2 && isa (varargin{1}, 'infsup'))
+    error ('tril: invalid second argument; it must not be an interval');
+endif
+if (nargin >= 3 && isa (varargin{2}, 'infsup'))
+    error ('tril: invalid third argument; it must not be an interval');
+endif
 
-result.dec(result.dec == 0) = _com (); # any new elements are [0]_com
+A.infsup = tril (A.infsup, varargin{:});
+
+A.dec(A.dec == 0) = uint8 (255);
+A.dec = tril (A.dec, varargin{:});
+A.dec(A.dec == 0) = _com (); # any new elements are [0]_com
+A.dec(A.dec == uint8 (255)) = uint8 (0);
 
 endfunction
 

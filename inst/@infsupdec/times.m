@@ -50,20 +50,11 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (times (intervalpart (x), intervalpart (y)));
+result = newdec (times (x.infsup, y.infsup));
 ## times is defined and continuous everywhere
 result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (infsupdec (2, 3) .* infsupdec (1, 2), infsupdec (2, 6)));
+%!# from the documentation string
+%!assert (isequal (infsupdec (2, 3) .* infsupdec (1, 2), infsupdec (2, 6)));

@@ -41,16 +41,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (asinh (intervalpart (x)));
+result = newdec (asinh (x.infsup));
 ## asinh is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (asinh (infsupdec (1)), infsupdec ("[0x1.C34366179D426p-1, 0x1.C34366179D427p-1]")));
+%!# from the documentation string
+%!assert (isequal (asinh (infsupdec (1)), infsupdec ("[0x1.C34366179D426p-1, 0x1.C34366179D427p-1]")));

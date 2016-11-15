@@ -41,16 +41,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (sin (intervalpart (x)));
+result = newdec (sin (x.infsup));
 ## sin is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (sin (infsupdec (1)), infsupdec ("[0x1.AED548F090CEEp-1, 0x1.AED548F090CEFp-1]")));
+%!# from the documentation string
+%!assert (isequal (sin (infsupdec (1)), infsupdec ("[0x1.AED548F090CEEp-1, 0x1.AED548F090CEFp-1]")));

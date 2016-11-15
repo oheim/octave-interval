@@ -62,16 +62,7 @@ if (nargin < 3)
     n = 100;
 endif
 
-if (isnai (base))
-    result = base;
-    return
-endif
-if (isnai (limit))
-    result = limit;
-    return
-endif
-
-result = newdec (linspace (intervalpart (base), intervalpart (limit), n));
+result = newdec (linspace (base.infsup, limit.infsup, n));
 ## linspace is defined and continuous everywhere
 result.dec = min (result.dec, min (base.dec, limit.dec));
 

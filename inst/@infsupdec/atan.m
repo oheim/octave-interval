@@ -41,16 +41,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (atan (intervalpart (x)));
+result = newdec (atan (x.infsup));
 ## atan is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (atan (infsupdec (1)), infsupdec ("[0x1.921FB54442D18p-1, 0x1.921FB54442D19p-1]")));
+%!# from the documentation string
+%!assert (isequal (atan (infsupdec (1)), infsupdec ("[0x1.921FB54442D18p-1, 0x1.921FB54442D19p-1]")));

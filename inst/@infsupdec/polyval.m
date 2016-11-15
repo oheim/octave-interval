@@ -57,16 +57,7 @@ if (not (isa (p, "infsupdec")))
     p = infsupdec (p);
 endif
 
-if (isnai (p))
-    result = p;
-    return
-endif
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (polyval (intervalpart (p), intervalpart (x)));
+result = newdec (polyval (p.infsup, x.infsup));
 result.dec = min (result.dec, min (min (p.dec), x.dec));
 
 endfunction

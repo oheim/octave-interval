@@ -54,28 +54,19 @@ if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
 switch (nargin)
     case 1
-        bare = max (intervalpart (x));
+        bare = max (x.infsup);
     case 2
         if (not (isa (y, "infsupdec")))
             y = infsupdec (y);
         endif
-        if (isnai (y))
-            result = y;
-            return
-        endif
-        bare = max (intervalpart (x), intervalpart (y));
+        bare = max (x.infsup, y.infsup);
     case 3
         if (not (builtin ("isempty", y)))
             warning ("max: second argument is ignored");
         endif
-        bare = max (intervalpart (x), [], dim);
+        bare = max (x.infsup, [], dim);
     otherwise
         print_usage ();
         return
@@ -94,5 +85,5 @@ endswitch
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (max (infsupdec (2, 3), infsupdec (1, 2)), infsupdec (2, 3)));
+%!# from the documentation string
+%!assert (isequal (max (infsupdec (2, 3), infsupdec (1, 2)), infsupdec (2, 3)));

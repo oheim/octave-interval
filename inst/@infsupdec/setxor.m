@@ -61,24 +61,17 @@ if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
 endif
 
-if (isnai (a))
-    c = c1 = c2 = a;
-    return
-endif
-if (isnai (b))
-    c = c1 = c2 = b;
-    return
-endif
-
 if (nargout > 1)
-    [c, c1, c2] = setxor (intervalpart (a), intervalpart (b));
+    [c, c1, c2] = setxor (a.infsup, b.infsup);
     c1 = infsupdec (c1, "trv");
     c2 = infsupdec (c2, "trv");
+    c1.dec(isnai (a) | isnai (b)) = c2.dec(isnai (a) | isnai (b)) = _ill ();
 else
-    c = setxor (intervalpart (a), intervalpart (b));
+    c = setxor (a.infsup, b.infsup);
 endif
 
 c = infsupdec (c, "trv");
+c.dec(isnai (a) | isnai (b)) = _ill ();
 
 endfunction
 
@@ -107,7 +100,8 @@ endfunction
 %! assert (z == infsupdec (2.5, 3));
 %! assert (z1 == infsupdec ());
 %! assert (z2 == infsupdec (2.5, 3));
-%!test "from the documentation string";
+%!test
+%! # from the documentation string
 %! [z, z1, z2] = setxor (infsupdec (1, 3), infsupdec (2, 4));
 %! assert (z == infsupdec (1, 4));
 %! assert (z1 == infsupdec (1, 2));

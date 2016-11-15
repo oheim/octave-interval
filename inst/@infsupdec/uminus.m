@@ -42,16 +42,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
 ## uminus is defined and continuous everywhere
-result = newdec (uminus (intervalpart (x)));
+result = newdec (uminus (x.infsup));
 result.dec = x.dec;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (-infsupdec (2, 3), infsupdec (-3, -2)));
+%!# from the documentation string
+%!assert (isequal (-infsupdec (2, 3), infsupdec (-3, -2)));

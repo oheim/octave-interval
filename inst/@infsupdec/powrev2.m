@@ -62,24 +62,11 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (y))
-    result = y;
-    return
-endif
-if (isnai (a))
-    result = b;
-    return
-endif
-if (isnai (c))
-    result = c;
-    return
-endif
-
-result = powrev2 (intervalpart (a), intervalpart (c), intervalpart (y));
 ## inverse power is not a point function
-result = infsupdec (result, "trv");
+result = infsupdec (powrev2 (a.infsup, c.infsup, y.infsup), "trv");
+result.dec(isnai (y) | isnai (a) | isnai (c)) = _ill ();
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (powrev2 (infsupdec (2, 5), infsupdec (3, 6)), infsupdec ("[0x1.5D7E8F22BA886p-1, 0x1.4AE00D1CFDEB5p1]_trv")));
+%!# from the documentation string
+%!assert (isequal (powrev2 (infsupdec (2, 5), infsupdec (3, 6)), infsupdec ("[0x1.5D7E8F22BA886p-1, 0x1.4AE00D1CFDEB5p1]_trv")));

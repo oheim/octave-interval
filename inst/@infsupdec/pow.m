@@ -52,27 +52,19 @@ if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-if (isnai (y))
-    result = y;
-    return
-endif
-
-result = newdec (pow (intervalpart (x), intervalpart (y)));
-result.dec = min (result.dec, min (x.dec, y.dec));
+result = newdec (pow (x.infsup, y.infsup));
 
 ## pow is continuous everywhere (where it is defined),
 ## but defined for x > 0 or (x = 0 and y > 0) only
-nonnegative = infsupdec (0, inf);
-domain = interior (x, nonnegative) | ...
-        (subset (x, nonnegative) & interior (y, nonnegative));
+persistent nonnegative = infsup (0, inf);
+domain = interior (x.infsup, nonnegative) | ...
+        (subset (x.infsup, nonnegative) & interior (y.infsup, nonnegative));
 
-result.dec (not (domain)) = _trv ();
+result.dec(not (domain)) = _trv ();
+
+result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (isequal (pow (infsupdec (5, 6), infsupdec (2, 3)), infsupdec (25, 216)));
+%!# from the documentation string
+%!assert (isequal (pow (infsupdec (5, 6), infsupdec (2, 3)), infsupdec (25, 216)));

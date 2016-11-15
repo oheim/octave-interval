@@ -47,8 +47,11 @@ if (not (isa (B, "infsupdec")))
 endif
 
 A.infsup = subsasgn (A.infsup, S, B.infsup);
+
+A.dec(A.dec == 0) = uint8 (255);
 A.dec = subsasgn (A.dec, S, B.dec);
 A.dec(A.dec == 0) = _com (); # any new elements are [0]_com
+A.dec(A.dec == uint8 (255)) = uint8 (0);
 
 endfunction
 

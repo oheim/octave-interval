@@ -58,16 +58,11 @@ if (nargin ~= 1)
     return
 endif
 
-if (isnai (x))
-    result = x;
-    return
-endif
-
-result = newdec (erf (intervalpart (x)));
+result = newdec (erf (x.infsup));
 ## erf is defined and continuous everywhere
 result.dec = min (result.dec, x.dec);
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (erf (infsupdec (1)) == "[0x1.AF767A741088Ap-1, 0x1.AF767A741088Bp-1]");
+%!# from the documentation string
+%!assert (erf (infsupdec (1)) == "[0x1.AF767A741088Ap-1, 0x1.AF767A741088Bp-1]");

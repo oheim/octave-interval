@@ -92,7 +92,7 @@ persistent dec_translation = {...
     "com"};
 
 dec = cell (size (x.dec));
-dec (:) = dec_translation (x.dec (:) + 1);
+dec(:) = dec_translation(x.dec(:) + 1);
 
 endfunction
 
