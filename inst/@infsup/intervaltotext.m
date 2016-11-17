@@ -82,10 +82,11 @@ s(isentire (x)) = "[Entire]";
 
 select = not (isempty (x) | isentire (x));
 if (any (select))
-    x.inf(x.inf == 0) = 0; # no sign for zero
     [l(select), lexact] = mpfr_to_string_d (-inf, format, x.inf(select));
     [u(select), uexact] = mpfr_to_string_d (+inf, format, x.sup(select));
     isexact = lexact && uexact;
+    
+    l(x.inf == 0) = "0"; # no sign for zero
     
     ## Normalize case of +-Inf
     l(select & x.inf == -inf) = "-Inf";

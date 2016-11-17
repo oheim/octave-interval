@@ -103,6 +103,8 @@ switch sign (n)
             l(emptyresult | notpositive) = inf;
             u(emptyresult | notpositive) = -inf;
             
+            l(l == 0) = -0;
+            
             # this is only the positive part
             pos = x;
             pos.inf = l;
@@ -123,6 +125,8 @@ switch sign (n)
             notnegative = x.inf >= 0;
             l(emptyresult | notnegative) = inf;
             u(emptyresult | notnegative) = -inf;
+            
+            u(u == 0) = +0;
             
             neg = x;
             neg.inf = -u;

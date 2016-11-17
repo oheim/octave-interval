@@ -57,19 +57,22 @@
 
 function result = entire (varargin)
 
-switch nargin
-    case 0
-        result = infsupdec (-inf, inf);
-    case 1
-        result = infsupdec (-inf (varargin {1}), inf (varargin {1}));
-    case 2
-        result = infsupdec (-inf (varargin {1}, varargin {2}), ...
-                            +inf (varargin {1}, varargin {2}));
-    otherwise
-        print_usage();
-endswitch
+if (nargin > 2)
+    print_usage ();
+    return
+endif
+
+persistent scalar_entire_interval = infsupdec (-inf, inf);
+
+if (nargin == 0)
+    result = scalar_entire_interval;
+else
+    result = subsref (scalar_entire_interval, ...
+                      substruct ("()", {ones(varargin{:})}));
+endif
 
 endfunction
+
 %!assert (inf (entire ()), -inf);
 %!assert (sup (entire ()), inf);
 %!assert (decorationpart (entire ()), {"dac"});

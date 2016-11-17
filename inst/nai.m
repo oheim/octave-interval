@@ -47,23 +47,19 @@
 
 function result = nai (varargin)
 
+if (nargin > 2)
+    print_usage ();
+    return
+endif
+
 persistent scalar_nai_interval = infsupdec ("[nai]");
 
-switch nargin
-    case 0
-        result = scalar_nai_interval;
-    
-    case 1
-        result = subsref (scalar_nai_interval, ...
-                          substruct ("()", {ones(varargin{1})}));
-    
-    case 2
-        result = subsref (scalar_nai_interval, ...
-                          substruct ("()", {ones(varargin{1:2})}));
-    
-    otherwise
-        print_usage ();
-endswitch
+if (nargin == 0)
+    result = scalar_nai_interval;
+else
+    result = subsref (scalar_nai_interval, ...
+                      substruct ("()", {ones(varargin{:})}));
+endif
 
 endfunction
 
