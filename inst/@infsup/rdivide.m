@@ -151,7 +151,7 @@ select = (x.inf >= 0 | x.sup <= 0) & ...
          not (x.inf == 0 & x.sup == 0) & ...
          # x is not empty
          x.inf < inf;
-if (any (select))
+if (any (select(:)))
     ## recip is monotonically decreasing
     l(select) = mpfr_function_d ('rdivide', -inf, 1, x.sup(select));
     u(select) = mpfr_function_d ('rdivide', +inf, 1, x.inf(select));
@@ -159,7 +159,7 @@ endif
 
 ## singularity at x = 0
 select = x.inf < 0 & x.sup > 0;
-if (any (select))
+if (any (select(:)))
     l(select) = -inf;
     u(select) = +inf;
 endif

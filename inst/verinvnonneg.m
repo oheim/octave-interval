@@ -74,7 +74,7 @@ if (~isa (A, "infsup"))
     A = infsup (A); # allows for real input
 endif
 
-if (any (any (isempty (A))))
+if (any (isempty (A)(:)))
     # matrix is empty interval: no inverse
     nonneg = 0;
     return
@@ -90,7 +90,7 @@ else
     Bu = inv (Au);
 endif
 
-if (any (any (isempty (Bl) | isempty (Bu))))
+if (any ((isempty (Bl) | isempty (Bu))(:)))
     # empty inverse: no inverse exists
     nonneg = 0;
     return
@@ -100,12 +100,12 @@ if (all (all (Bl.inf >= 0)) && all (all (Bu.inf >= 0)))
     nonneg = 1;
     return
 endif
-if (any (any (Bl.sup < 0)))
+if (any ((Bl.sup < 0)(:)))
     nonneg = 0;
     As=Al; # A.inf verified not inverse nonnegative
     return 
 endif
-if (any (any (Bu.sup < 0)))
+if (any ((Bu.sup < 0)(:)))
     nonneg = 0;
     As = Au; # A.sup verified not inverse nonnegative
     return 

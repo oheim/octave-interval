@@ -95,7 +95,7 @@ left = Tz * (ac - Tz * Delta * Tz) * x1 * x1' * Tz; # left-hand side of the ineq
 right = Tz * x1 * x1' * (ac + Tz * Delta * Tz)' * Tz; # right-hand side of the inequality
 
 ## inequality verified not to be satisfied
-if (any (any (right.sup < left.inf)))
+if (any ((right.sup < left.inf)(:)))
     ## verified not to be an eigenvector
     evc = 0; 
     lambda = infsup ();

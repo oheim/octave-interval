@@ -65,12 +65,12 @@ endif
 
 result = zeros (size (x.inf));
 select = x.sup < y.inf;
-if (any (select))
+if (any (select(:)))
     result(select) = ...
         mpfr_function_d ('minus', +inf, y.inf(select), x.sup(select));
 endif
 select = x.inf > y.sup;
-if (any (select))
+if (any (select(:)))
     result(select) = max (result(select), ...
         mpfr_function_d ('minus', +inf, x.inf(select), y.sup(select)));
 endif

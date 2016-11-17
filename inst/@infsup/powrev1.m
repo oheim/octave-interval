@@ -93,7 +93,7 @@ u(emptyresult) = -inf;
 y = b.sup < 0;
 z = c.sup < 1;
 select = y & z & l < inf;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev1rounded (c.sup(select), b.inf(select), -inf));
 endif
@@ -104,14 +104,14 @@ l(select) = 1;
 
 z = c.sup > 1 & c.sup < inf;
 select = y & z & l < 1;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev1rounded (c.sup(select), b.sup(select), -inf));
 endif
 
 z = c.inf > 0 & c.inf < 1;
 select = y & z & u > 1;
-if (any (select))
+if (any (select(:)))
     u(select) = min (u(select), ...
         powrev1rounded (c.inf(select), b.sup(select), +inf));
 endif
@@ -122,7 +122,7 @@ u(select) = 1;
 
 z = c.inf > 1;
 select = y & z & u > 0;
-if (any (select))
+if (any (select(:)))
     u(select) = min (u(select), ...
         powrev1rounded (c.inf(select), b.inf(select), +inf));
 endif
@@ -135,21 +135,21 @@ gap.sup = +inf (size (u));
 
 z = c.sup < 1;
 select = y & z & b.sup > 0;
-if (any (select))
+if (any (select(:)))
     gap.inf(select) = powrev1rounded (c.sup(select), b.sup(select), +inf);
 endif
 select = y & z & b.inf < 0;
-if (any (select))
+if (any (select(:)))
     gap.sup(select) = powrev1rounded (c.sup(select), b.inf(select), -inf);
 endif
 
 z = c.inf > 1;
 select = y & z & b.inf < 0;
-if (any (select))
+if (any (select(:)))
     gap.inf(select) = powrev1rounded (c.inf(select), b.inf(select), +inf);
 endif
 select = y & z & b.sup > 0;
-if (any (select))
+if (any (select(:)))
     gap.sup(select) = powrev1rounded (c.inf(select), b.sup(select), -inf);
 endif
 
@@ -163,7 +163,7 @@ u(select) = min (u(select), gap.inf(select));
 y = b.inf > 0;
 z = c.sup < 1;
 select = y & z & u > 0;
-if (any (select))
+if (any (select(:)))
     u(select) = min (u(select), ...
         powrev1rounded (c.sup(select), b.sup(select), +inf));
 endif
@@ -174,14 +174,14 @@ u(select) = 1;
 
 z = c.sup > 1 & c.sup < inf;
 select = y & z & u > 1;
-if (any (select))
+if (any (select(:)))
     u(select) = min (u(select), ...
         powrev1rounded (c.sup(select), b.inf(select), +inf));
 endif
 
 z = c.inf > 0 & c.inf < 1;
 select = y & z & l < 1;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev1rounded (c.inf(select), b.inf(select), -inf));
 endif
@@ -192,7 +192,7 @@ l(select) = 1;
 
 z = c.inf > 1;
 select = y & z & l < inf;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev1rounded (c.inf(select), b.sup(select), -inf));
 endif

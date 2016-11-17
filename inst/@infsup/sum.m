@@ -82,7 +82,7 @@ for n = 1 : size (x.inf, 3 - dim)
         vector.x = subsref (x, idx);
     endif
     
-    if (any (isempty (vector.x)))
+    if (any (isempty (vector.x)(:)))
         ## One of the intervals is empty
         l(n) = inf;
         u(n) = -inf;

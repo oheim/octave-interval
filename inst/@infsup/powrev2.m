@@ -104,7 +104,7 @@ l(select) = 0;
 
 z = c.sup > 1 & c.sup < inf;
 select = x & z & l < 0;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev2rounded (a.sup(select), c.sup(select), -inf));
 endif
@@ -115,7 +115,7 @@ u(select) = 0;
 
 z = c.inf > 0 & c.inf < 1;
 select = x & z & u > 0;
-if (any (select))
+if (any (select(:)))
     u (select) = min (u (select), powrev2rounded (a.sup, c.inf, +inf));
 endif
 
@@ -124,14 +124,14 @@ x = a.inf > 0 & a.inf < 1 & a.sup <= 1;
 
 z = c.sup < 1 & c.sup > 0;
 select = x & z & l < inf;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev2rounded (a.inf(select), c.sup(select), -inf));
 endif
 
 z = c.inf > 1 & c.sup < inf;
 select = x & z & u > -inf;
-if (any (select))
+if (any (select(:)))
     u(select) = min (u(select), ...
         powrev2rounded (a.inf(select), c.inf (select), +inf));
 endif
@@ -154,11 +154,11 @@ z = c.sup < 1;
 select = x & z & a.inf == 0;
 gap.sup(select) = 0;
 select = x & z & a.sup > 1;
-if (any (select))
+if (any (select(:)))
     gap.inf(select) = powrev2rounded (a.sup(select), c.sup(select), +inf);
 endif
 select = x & z & a.inf > 0 & a.inf < 1 & a.sup > 1;
-if (any (select))
+if (any (select(:)))
     gap.sup(select) = powrev2rounded(a.inf(select), c.sup(select), -inf);
 endif
 
@@ -166,11 +166,11 @@ z = c.inf > 1;
 select = x & z & a.inf == 0;
 gap.inf(select) = 0;
 select = x & z & a.sup > 1;
-if (any (select))
+if (any (select(:)))
     gap.sup(select) = powrev2rounded (a.sup(select), c.inf(select), -inf);
 endif
 select = x & z & a.inf > 0 & a.inf < 1 & a.sup > 1;
-if (any (select))
+if (any (select(:)))
     gap.inf(select) = powrev2rounded (a.inf(select), c.inf(select), +inf);
 endif
 
@@ -187,14 +187,14 @@ x = a.inf > 1;
 
 z = c.sup < 1;
 select = x & z & u > -inf;
-if (any (select))
+if (any (select(:)))
     u(select) = min (u(select), ...
         powrev2rounded (a.sup(select), c.sup(select), +inf));
 endif
 
 z = c.inf > 0 & c.inf < 1;
 select = x & z & l < 0;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev2rounded (a.inf(select), c.inf(select), -inf));
 endif
@@ -205,7 +205,7 @@ l(select) = 0;
 
 z = c.inf > 1;
 select = x & z & l < inf;
-if (any (select))
+if (any (select(:)))
     l(select) = max (l(select), ...
         powrev2rounded (a.sup(select), c.inf(select), -inf));
 endif
@@ -216,7 +216,7 @@ u(select) = 0;
 
 z = c.sup > 1 & c.sup < inf;
 select = x & z & u > 0;
-if (any (select))
+if (any (select(:)))
     u(select) = min (u(select), ...
         powrev2rounded (a.inf(select), c.sup(select), +inf));
 endif
@@ -247,17 +247,17 @@ y(z == inf & x > 1 & x < inf) = inf;
 
 rnd_log_numerator_up = (direction > 0) == (sign (x - 1) == sign (z - 1));
 select = isfinite (x) & isfinite (z) & rnd_log_numerator_up;
-if (any (select))
+if (any (select(:)))
     denominator(select) = mpfr_function_d ('log2', -inf, x(select));
     nominator(select) = mpfr_function_d ('log2', +inf, z(select));
 endif
 select = isfinite (x) & isfinite (z) & not (rnd_log_numerator_up);
-if (any (select))
+if (any (select(:)))
     denominator(select) = mpfr_function_d ('log2', +inf, x(select));
     nominator(select) = mpfr_function_d ('log2', -inf, z(select));
 endif
 select = isfinite (x) & isfinite (z);
-if (any (select))
+if (any (select(:)))
     y(select) = mpfr_function_d ('rdivide', direction, ...
         nominator(select), ...
         denominator(select));

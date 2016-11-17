@@ -75,7 +75,7 @@ persistent pi = infsup ("pi");
 select = not (isempty (result)) ...
     & not (subset (infsup (-pi.sup / 2, pi.sup / 2), arctangent));
 
-if (any (select))
+if (any (select(:)))
     ## Find a smaller upper bound for x, if the restriction from c allows it
     u = inf (size (result.inf));
     select_u = select & result.sup < inf;

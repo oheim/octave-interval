@@ -61,17 +61,17 @@ result.inf(select) = result.sup(select) = 1;
 
 idx.type = "()";
 idx.subs = {(p == 2)}; # x^2
-if (any (idx.subs{1}))
+if (any (idx.subs{1}(:)))
     result = subsasgn (result, idx, sqr (subsref (x, idx)));
 endif
 
 idx.subs = {(p == -1)}; # x^-1 = 1./x
-if (any (idx.subs{1}))
+if (any (idx.subs{1}(:)))
     result = subsasgn (result, idx, 1 ./ subsref (x, idx));
 endif
 
 idx.subs = {(rem (p, 2) == 0 & p ~= 2 & p ~= 0)};
-if (any (idx.subs{1})) # p even
+if (any (idx.subs{1}(:))) # p even
     x_mig = mig (subsref (x, idx));
     x_mig(isnan (x_mig)) = inf;
 
@@ -85,7 +85,7 @@ if (any (idx.subs{1})) # p even
 endif
 
 idx.subs = {(rem (p, 2) ~= 0 & p ~= -1)};
-if (any (idx.subs{1})) # p odd
+if (any (idx.subs{1}(:))) # p odd
     x_idx = subsref (x, idx);
     p_idx = infsup (subsref (p, idx));
     result = subsasgn (result, idx, ...

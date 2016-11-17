@@ -63,22 +63,22 @@ endif
 
 result = zeros (size (x.inf));
 select = x.inf < y.inf;
-if (any (select))
+if (any (select(:)))
     result(select) = ...
         mpfr_function_d ('minus', +inf, y.inf(select), x.inf(select));
 endif
 select = x.inf > y.inf;
-if (any (select))
+if (any (select(:)))
     result(select) = max (result(select), ...
         mpfr_function_d ('minus', +inf, x.inf(select), y.inf(select)));
 endif
 select = x.sup < y.sup;
-if (any (select))
+if (any (select(:)))
     result(select) = max (result(select), ...
         mpfr_function_d ('minus', +inf, y.sup(select), x.sup(select)));
 endif
 select = x.sup > y.sup;
-if (any (select))
+if (any (select(:)))
     result(select) = max (result(select), ...
         mpfr_function_d ('minus', +inf, x.sup(select), y.sup(select)));
 endif

@@ -381,7 +381,7 @@ switch nargin
                     not (cellfun ("isempty", ...
                                   strfind (current_arg(uncertain_idx), "?")));
                 illegal_literal_idx = (square_bracket_idx | uncertain_idx);
-                if (any (illegal_literal_idx))
+                if (any (illegal_literal_idx(:)))
                     switch argument
                         case "l"
                             warning ("interval:UndefinedOperation", ...
@@ -470,7 +470,7 @@ for [boundaries, key] = struct ("inf", {l}, "sup", {u})
     ## In the cell array each entry must represent a scalar value.
     non_scalar_entry_idx = todo & not (...
         cellfun ("isscalar", boundaries) | cellfun ("ischar", boundaries));
-    if (any (non_scalar_entry_idx))
+    if (any (non_scalar_entry_idx(:)))
         warning ("interval:UndefinedOperation", ...
                  "Cell arrays of matrix entries do not contain scalar values");
         # Use default value of [empty] for these entries and continue
@@ -485,7 +485,7 @@ for [boundaries, key] = struct ("inf", {l}, "sup", {u})
     integers = vertcat (boundaries{integer_idx});
     converted_integers = double (integers);
     exact_integer_local_idx = (converted_integers == integers);
-    if (any (not (exact_integer_local_idx)))
+    if (any (not (exact_integer_local_idx(:))))
         isexact = false;
         possiblyundefined.(key)(integer_idx(not (exact_integer_local_idx))) ...
             = true;
@@ -526,7 +526,7 @@ for [boundaries, key] = struct ("inf", {l}, "sup", {u})
     
     ## Complex numbers: not allowed, will be mapped to [empty].
     complex_idx = todo & cellfun ("iscomplex", boundaries);
-    if (any (complex_idx))
+    if (any (complex_idx(:)))
         warning ("interval:InvalidOperand", ...
                  "infsup: Complex arguments are not permitted");
         todo(complex_idx) = false;
@@ -535,7 +535,7 @@ for [boundaries, key] = struct ("inf", {l}, "sup", {u})
     
     ## Other kinds of parameters that are not strings
     char_idx = todo & cellfun ("ischar", boundaries);
-    if (any (todo & not (char_idx)))
+    if (any ((todo & not (char_idx))(:)))
         warning ("interval:InvalidOperand", ...
                  "infsup: Illegal boundary: must be numeric or string");
         illegal_boundary.(key)(todo & not (char_idx)) = true;
@@ -745,7 +745,7 @@ endfor
 ## NaNs are illegal values
 for [boundary, key] = struct ("inf", {x.inf}, "sup", {x.sup})
     nanvalue = isnan (boundary);
-    if (any (nanvalue))
+    if (any (nanvalue(:)))
         warning ("interval:UndefinedOperation", ...
                  "input contains NaN values");
         illegal_boundary.(key)(nanvalue) = true;
@@ -770,7 +770,7 @@ x.inf = x.inf - zeros (size (x.sup));
 x.sup = x.sup + zeros (size (x.inf));
 
 possiblyundefined = possiblyundefined.inf & possiblyundefined.sup;
-if (any (possiblyundefined))
+if (any (possiblyundefined(:)))
     if (not (iscell (l)) && not (iscell (u)))
         ## infsup (x, x) or infsup (x) is not possibly undefined
         possiblyundefined(l == u) = false;
@@ -791,7 +791,7 @@ isnai(x.inf <= x.sup) = false;
 
 ## Check for illegal boundaries [inf,inf] and [-inf,-inf].
 illegal_inf_idx = not (isfinite (x.inf (x.inf == x.sup)));
-if (any (illegal_inf_idx))
+if (any (illegal_inf_idx(:)))
     warning ("interval:UndefinedOperation", ...
              "illegal interval boundaries: infimum = supremum = +/- infinity");
     isnai(illegal_inf_idx) = true;
@@ -807,7 +807,7 @@ isnai(illegal_boundary.inf | illegal_boundary.sup) = true;
 ## have been set to +1.  Any intervals with inf > sup still have their initial
 ## value of -1.
 wrong_boundary_order_idx = signbit (isnai);
-if (any (wrong_boundary_order_idx))
+if (any (wrong_boundary_order_idx(:)))
     warning ("interval:UndefinedOperation", ...
              "illegal interval boundaries: infimum greater than supremum");
     isnai(wrong_boundary_order_idx) = true;
@@ -818,10 +818,10 @@ isnai = logical(isnai);
 x.inf(isnai) = +inf;
 x.sup(isnai) = -inf;
 possiblyundefined(isnai) = false;
-isexact = isexact && not (any (isnai));
+isexact = isexact && not (any (isnai(:)));
 
 ## Check for possibly wrong boundary order.
-if (any (possiblyundefined))
+if (any (possiblyundefined(:)))
     ## Let a, b, and c be three consecutive floating point numbers.
     ##
     ## If a < u < b < l < c, then u and l will both be mapped to the same
@@ -829,13 +829,13 @@ if (any (possiblyundefined))
     ##
     ## If a < u < l < b, then u and l will both be mapped to consecutive
     ## floating point numbers a and b.
-    if (any (x.inf(possiblyundefined) == x.sup(possiblyundefined)) ...
+    if (any ((x.inf(possiblyundefined) == x.sup(possiblyundefined))(:)) ...
         || ...
-        any (max (-realmax, ...
+        any ((max (-realmax, ...
         mpfr_function_d ('plus',...
                          +inf, ...
                          x.inf(possiblyundefined), ...
-                         pow2 (-1074))) == x.sup(possiblyundefined)))
+                         pow2 (-1074))) == x.sup(possiblyundefined))(:)))
         warning ("interval:PossiblyUndefinedOperation", ...
                  "infimum may be greater than supremum");
     endif

@@ -87,7 +87,7 @@ c1 = intersect (c, infsup (inf (pi) / 2, sup (pi)));
 select = not (emptyresult | isempty (c1) | ...
     b.inf > 0 | y.sup < 0 | c1.sup == inf (pi) / 2 | ...
     (b.inf >= 0 & y.sup <= 0) | (b.inf >= 0 & c1.inf > inf (pi) / 2));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.sup, c.sup
     ## maximum is located at b.inf, c.inf
@@ -111,7 +111,7 @@ c2 = intersect (c, infsup (0, sup (pi) / 2));
 select = not (emptyresult | isempty (c2) | b.sup < 0 | y.sup < 0 | ...
     c2.inf == sup (pi) / 2 | ...
     (b.sup <= 0 & y.sup <= 0) | (b.sup <= 0 & c2.sup < sup (pi) / 2));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.inf, c.inf
     ## maximum is located at b.sup, c.sup
@@ -137,7 +137,7 @@ c3 = intersect (c, infsup (inf (-pi) / 2, 0));
 select = not (emptyresult | isempty (c3) | b.sup < 0 | y.inf > 0 | ...
     c3.sup == inf (-pi) / 2 | (b.sup <= 0 & y.inf >= 0) | ...
     (b.sup <= 0 & c2.inf > inf (-pi) / 2));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.sup, c.inf
     ## maximum is located at b.inf, c.sup
@@ -162,7 +162,7 @@ c4 = intersect (c, infsup (inf (-pi), sup (-pi) / 2));
 select = not (emptyresult | isempty (c4) | b.inf > 0 | y.inf > 0 | ...
     c4.inf == sup (-pi) / 2 | (b.inf >= 0 & y.inf >= 0) | ...
     (b.inf >= 0 & c4.sup < sup (-pi) / 2));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.inf, c.sup
     ## maximum is located at b.sup, c.inf

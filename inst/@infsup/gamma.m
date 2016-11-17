@@ -75,7 +75,7 @@ u = -l;
 ## Monotonically decreasing for x1
 x1 = intersect (x, infsup (0, x_min_sup));
 select = not (isempty (x1)) & x1.sup > 0;
-if (any (any (select)))
+if (any (select(:)))
     x1.inf(x1.inf == 0) = 0; # fix negative zero
     l(select) = mpfr_function_d ('gamma', -inf, x1.sup(select));
     u(select) = mpfr_function_d ('gamma', +inf, x1.inf(select));
@@ -84,7 +84,7 @@ endif
 ## Monotonically increasing for x2
 x2 = intersect (x, infsup (x_min_inf, inf));
 select = not (isempty (x2));
-if (any (any (select)))
+if (any (select(:)))
     l(select) = mpfr_function_d ('gamma', -inf, x2.inf(select));
     u(select) = max (u(select), ...
                 mpfr_function_d ('gamma', +inf, x2.sup(select)));
@@ -102,7 +102,7 @@ u = inf (size (x.inf));
 l = -u;
 
 nosingularity = floor (x.inf) + 1 == ceil (x.sup);
-if (any (nosingularity))
+if (any (nosingularity(:)))
     negative_value = nosingularity & mod (ceil (x.sup), 2) == 0;
     positive_value = nosingularity & not (negative_value);
     
@@ -121,13 +121,13 @@ if (any (nosingularity))
     
     select = encloses_extremum & negative_value & ...
              fix (x.inf) ~= x.inf & fix (x.sup) ~= x.sup;
-    if (any (select))
+    if (any (select(:)))
         l(select) = min (mpfr_function_d ('gamma', -inf, x.inf(select)), ...
                          mpfr_function_d ('gamma', -inf, x.sup(select)));
     endif
     select = encloses_extremum & positive_value & ...
              fix (x.inf) ~= x.inf & fix (x.sup) ~= x.sup;
-    if (any (select))
+    if (any (select(:)))
         u(select) = max (mpfr_function_d ('gamma', +inf, x.inf(select)), ...
                          mpfr_function_d ('gamma', +inf, x.sup(select)));
     endif
@@ -138,7 +138,7 @@ if (any (nosingularity))
     l(select) = inf;
     
     select = nosingularity & not (encloses_extremum);
-    if (any (select))
+    if (any (select(:)))
         l(select) = min (l(select), ...
                     min (mpfr_function_d ('gamma', -inf, x.inf(select)), ...
                          mpfr_function_d ('gamma', -inf, x.sup(select))));
@@ -148,11 +148,11 @@ if (any (nosingularity))
     endif
     
     select = encloses_extremum & negative_value;
-    if (any (select))
+    if (any (select(:)))
         u(select) = find_extremum (x.inf(select), x.sup(select));
     endif
     select = encloses_extremum & positive_value;
-    if (any (select))
+    if (any (select(:)))
         l(select) = find_extremum (x.inf(select), x.sup(select));
     endif
 endif
@@ -204,7 +204,7 @@ y(n == -10) = 2.1574161045228504e-6;
 ## for n <= -10
 
 remaining_estimates = n < -10;
-if (any (remaining_estimates))
+if (any (remaining_estimates(:)))
     y(remaining_estimates) = ...
         (-1) .^ (rem (n(remaining_estimates), 2) == -1) * ...
         mpfr_function_d ('rdivide', -inf, 3.88, ...

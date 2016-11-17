@@ -159,7 +159,7 @@ elseif (nargin == 1 && iscell (varargin{1}))
     
     number_of_parts = cellfun ("numel", literal_and_decoration);
     illegal_local_idx = number_of_parts > 2;
-    if (any (illegal_local_idx))
+    if (any (illegal_local_idx(:)))
         ## More than 2 underscores in any literal
         warning ("interval:UndefinedOperation", ...
                  "illegal decorated interval literal")
@@ -198,7 +198,7 @@ switch numel (varargin)
                 bare = varargin{1};
                 isexact = true;
                 isnai = overflow = false (size (bare));
-                if (nargin == 1 && any (not (isempty (bare))))
+                if (nargin == 1 && any (not (isempty (bare)(:))))
                     warning ("interval:ImplicitPromote", ...
                             ["Implicitly decorated bare interval; ", ...
                              "resulting decoration may be wrong"]);
@@ -248,7 +248,7 @@ dec(strcmpi (decstr, "dac")) = _dac;
 dec(strcmpi (decstr, "def")) = _def;
 dec(strcmpi (decstr, "trv")) = _trv;
 
-if (any (dec == _ill))
+if (any ((dec == _ill)(:)))
     warning ("interval:UndefinedOperation", "illegal decoration");
 endif
 
@@ -284,7 +284,7 @@ dec(missingdecoration & iscommoninterval (bare)) = _com;
 
 ## Check decoration
 empty_not_trv = isempty (bare) & (dec ~= _trv) & (dec ~= _ill);
-if (any (empty_not_trv))
+if (any (empty_not_trv(:)))
     if (not (fix_illegal_decorations))
         warning ("interval:UndefinedOperation", ...
                  "illegal decorated empty interval literal")
@@ -295,7 +295,7 @@ if (any (empty_not_trv))
     isexact = false ();
 endif
 uncommon_com = not (iscommoninterval (bare)) & (dec == _com);
-if (any (uncommon_com))
+if (any (uncommon_com(:)))
     if (not (fix_illegal_decorations))
         warning ("interval:UndefinedOperation", ...
                  "illegal decorated uncommon interval literal")
@@ -308,7 +308,7 @@ endif
 
 ## Illegal intervals must be empty
 illegal = (dec == _ill);
-if (any (illegal))
+if (any (illegal(:)))
     bare(illegal) = infsup ();
     isexact = false ();
 endif

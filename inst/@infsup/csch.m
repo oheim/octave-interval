@@ -44,14 +44,14 @@ endif
 l = u = zeros (size (x.inf));
 
 select = x.inf >= 0 | x.sup <= 0;
-if (any (select))
+if (any (select(:)))
     l(select) = mpfr_function_d ('csch', -inf, x.sup(select));
     l(select & x.sup == 0) = -inf;
     u(select) = mpfr_function_d ('csch', +inf, x.inf(select));
     u(select & x.inf == 0) = inf;
 endif
 select = x.inf < 0 & x.sup > 0;
-if (any (select))
+if (any (select(:)))
     l(select) = -inf;
     u(select) = inf;
 endif

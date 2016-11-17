@@ -87,7 +87,7 @@ c1 = intersect (c, infsup (inf (pi) / 2, sup (pi)));
 select = not (emptyresult | isempty (c1) | x.inf > 0 | a.sup < 0 | ...
     c1.sup == inf (pi) / 2 | ...
     (x.inf >= 0 & a.sup <= 0) | (a.sup <= 0 & c1.inf > inf (pi) / 2));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is x = a / tan (c)
     ## minimum is located at a.sup, c.sup
     ## maximum is located at a.inf, c.inf
@@ -111,7 +111,7 @@ select = not (emptyresult | isempty (c2) | x.sup < 0 | a.sup < 0 | ...
     c2.inf == sup (pi) / 2 | ...
     (x.sup <= 0 & a.sup <= 0) | (c2.sup <= 0 & a.inf > 0) | ...
     (a.sup <= 0 & c2.inf > 0));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is x = a / tan (c)
     ## minimum is located at a.inf, c.sup
     ## maximum is located at a.sup, c.inf
@@ -136,7 +136,7 @@ c3 = intersect (c, infsup (inf (-pi) / 2, 0));
 select = not (emptyresult | isempty (c3) | x.sup < 0 | a.inf > 0 | ...
     c3.sup == inf (-pi) / 2 | (x.sup <= 0 & a.inf >= 0) | ...
     (c3.inf >= 0 & a.sup < 0) | (a.inf >= 0 & c3.sup < 0));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is x = a / tan (c)
     ## minimum is located at a.sup, c.inf
     ## maximum is located at a.inf, c.sup
@@ -161,7 +161,7 @@ c4 = intersect (c, infsup (inf (-pi), sup (-pi) / 2));
 select = not (emptyresult | isempty (c4) | x.inf > 0 | a.inf > 0 | ...
     c4.inf == sup (-pi) / 2 | (x.inf >= 0 & a.inf >= 0) | ...
     (a.inf >= 0 & c4.inf > inf (-pi)));
-if (any (any (select)))
+if (any (select(:)))
     ## The inverse function is x = a / tan (c)
     ## minimum is located at a.inf, c.inf
     ## maximum is located at a.sup, c.sup

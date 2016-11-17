@@ -97,14 +97,14 @@ unwind_protect
     lines = xor (issingleton (x), issingleton (y)) & not (empty);
     boxes = not (points | lines | empty);
     
-    if (any (points))
+    if (any (points(:)))
         scatter (x.inf(points), y.inf(points), ...
                  pointsize, ...
                  edgecolor, ...
                  'filled');
     endif
     
-    if (any (lines))
+    if (any (lines(:)))
         x_line = [vec(x.inf(lines)), vec(x.sup(lines))]';
         y_line = [vec(y.inf(lines)), vec(y.sup(lines))]';
         line (x_line, y_line, ...
@@ -112,7 +112,7 @@ unwind_protect
               'linewidth', edgewidth);
     endif
     
-    if (any (boxes))
+    if (any (boxes(:)))
         x_box = [vec(x.inf(boxes)), vec(x.sup(boxes))](:, [1 2 2 1])';
         y_box = [vec(y.inf(boxes)), vec(y.sup(boxes))](:, [1 1 2 2])';
         if (nargin < 4)

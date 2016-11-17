@@ -33,7 +33,7 @@ if (nargin ~= 1)
     return
 endif
 
-if (any (isnai (x)))
+if (any (isnai (x)(:)))
     warning ("interval:IntvlPartOfNaI", ...
              "intervalpart: NaI has no interval part")
 endif

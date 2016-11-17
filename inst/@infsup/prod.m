@@ -75,7 +75,7 @@ result.sup(entireresult) = +inf;
 idx.type = "()";
 idx.subs = {":", ":"};
 idx.subs{3 - dim} = not (emptyresult | zeroresult | entireresult);
-if (any (idx.subs{3 - dim}))
+if (any (idx.subs{3 - dim}(:)))
     idx.subs{dim} = 1;
     result2 = subsref (result, idx);
     for i = 1 : size (x.inf, dim)

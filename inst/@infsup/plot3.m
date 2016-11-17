@@ -91,14 +91,14 @@ unwind_protect
     lines = number_of_singletons == 2 & not (empty);
     boxes = number_of_singletons <= 1 & not (empty);
     
-    if (any (points))
+    if (any (points(:)))
         scatter3 (x.inf(points), y.inf(points), z.inf(points), ...
                   pointsize, ...
                   edgecolor, ...
                   'filled');
     endif
     
-    if (any (lines))
+    if (any (lines(:)))
         x_line = [vec(x.inf(lines)), vec(x.sup(lines))]';
         y_line = [vec(y.inf(lines)), vec(y.sup(lines))]';
         z_line = [vec(z.inf(lines)), vec(z.sup(lines))]';
@@ -133,7 +133,7 @@ unwind_protect
                 vec(x.sup(boxes)), vec(y.sup(boxes)), vec(z.inf(boxes)); ...
                 vec(x.sup(boxes)), vec(y.sup(boxes)), vec(z.sup(boxes))];
     
-    if (any (boxes))
+    if (any (boxes(:)))
         ## To support gnuplot as a plotting backend, we have to use
         ## triangular instead of rectangular patches (see bug #45594).
         faces = zeros (0, 3);

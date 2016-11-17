@@ -48,7 +48,7 @@ if (not (issquare (x.inf)))
     error ("det: argument must be a square matrix");
 endif
 
-if (any (isempty (x)))
+if (any (isempty (x)(:)))
     result = infsup ();
     return
 endif

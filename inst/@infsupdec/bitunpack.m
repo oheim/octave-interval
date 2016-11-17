@@ -50,7 +50,7 @@ bare = bitunpack (x.infsup);
 d = bitunpack (x.dec);
 
 ## The exchange representation of [NaI] is (NaN, NaN, ill).
-if (any (isnai (x)))
+if (any (isnai (x)(:)))
     bare(vec (1:128) + 128 .* vec (find (isnai (x)) - 1, 2)) = ...
         [bitunpack(nan (sum (isnai (x)), 2))];
 endif

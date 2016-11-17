@@ -63,7 +63,7 @@ u = -l;
 ## Monotonically increasing for x1
 x1 = intersect (x, infsup (-inf, 2));
 select = not (isempty (x1));
-if (any (select))
+if (any (select(:)))
     l(select) = mpfr_function_d ('dilog', -inf, x1.inf(select));
     u(select) = mpfr_function_d ('dilog', +inf, x1.sup(select));
 endif
@@ -71,7 +71,7 @@ endif
 ## Monotonically decreasing for x2
 x2 = intersect (x, infsup (2, inf));
 select = not (isempty (x2));
-if (any (select))
+if (any (select(:)))
     l(select) = min (l(select), ...
                 mpfr_function_d ('dilog', -inf, x2.sup(select)));
     u(select) = mpfr_function_d ('dilog', +inf, x2.inf(select));

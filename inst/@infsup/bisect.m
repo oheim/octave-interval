@@ -56,14 +56,14 @@ m = zeros (size (x.inf));
 idx.type = '()';
 
 positive = x.inf >= 0 & x.sup > 0;
-if (any (any (positive)))
+if (any (positive(:)))
     idx.subs = {positive};
     bounded = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
     m(positive) = min (realmax, pow2 (mid (log2 (bounded))));
 endif
 
 negative = x.inf < 0 & x.sup <= 0;
-if (any (any (negative)))
+if (any (negative(:)))
     idx.subs = {negative};
     bounded = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     m(negative) = ...
@@ -72,7 +72,7 @@ endif
 
 both_signs = x.inf < 0 & x.sup > 0;
 both_signs_p = both_signs & x.sup > -x.inf;
-if (any (any (both_signs_p)))
+if (any (both_signs_p(:)))
     idx.subs = {both_signs_p};
     bounded_n = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     bounded_p = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
@@ -83,7 +83,7 @@ if (any (any (both_signs_p)))
 endif
 
 both_signs_n = both_signs & x.sup < -x.inf;
-if (any (any (both_signs_n)))
+if (any (both_signs_n(:)))
     idx.subs = {both_signs_n};
     bounded_n = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     bounded_p = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));

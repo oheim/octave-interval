@@ -67,11 +67,11 @@ elseif (isa (y, "infsupdec"))
 endif
 
 ## Short circuit integral powers, e.g., x.^2
-if (any (y.inf == 0))
+if (any ((y.inf == 0)(:)))
     ## can't use pown, because 0^0 must evaluate to [Empty]
-elseif (any (y.inf ~= y.sup) || ...
-        any (not (isfinite (y.inf))) || ...
-        any (fix (y.inf) ~= y.inf))
+elseif (any ((y.inf ~= y.sup)(:)) || ...
+        any ((not (isfinite (y.inf)))(:)) || ...
+        any ((fix (y.inf) ~= y.inf))(:))
     ## can't use pown, because y is no integer
 else
     z = pown (x, y.inf);
@@ -99,13 +99,13 @@ xMinusWithIntegerY = not (emptyresult) & x.inf < 0 & ...
                      not (isfinite (y.inf) & isfinite (y.sup) & ...
                           ceil (y.inf) > floor (y.sup));
 
-if (any (xMinusWithIntegerY))
+if (any (xMinusWithIntegerY(:)))
     ySingleInteger = isfinite (y.inf) & isfinite (y.sup) & ...
                      ceil (y.inf) == floor (y.sup);
     
     ## y contains a single integer
     idx.subs = {xMinusWithIntegerY & ySingleInteger};
-    if (any (idx.subs{1}))
+    if (any (idx.subs{1}(:)))
         xMinus = intersect (subsref (x, idx), ... # intersect to 
                             infsup (-inf, 0));    # speed up computation
         zMinus = subsasgn (zMinus, idx, ...
@@ -114,7 +114,7 @@ if (any (xMinusWithIntegerY))
     
     ## y contains several integers
     idx.subs = {xMinusWithIntegerY & not(ySingleInteger)};
-    if (any (idx.subs{1}))
+    if (any (idx.subs{1}(:)))
         zMinus = subsasgn (zMinus, idx, ...
                            multipleintegers (subsref (x, idx), ...
                                              subsref (y, idx)));
@@ -147,27 +147,27 @@ z = repmat (infsup (), size (x.inf));
 idx.type = "()";
 
 idx.subs = {(x.sup <= -1 & y.sup <= 0)};
-if (any (idx.subs{1}))
+if (any (idx.subs{1}(:)))
     xsup_idx = subsref (x.sup, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xsup_idx, goe (y_idx), gee (y_idx)));
 endif
 idx.subs = {(-1 <= x.inf & 0 <= y.inf)};
-if (any (idx.subs{1}))
+if (any (idx.subs{1}(:)))
     xinf_idx = subsref (x.inf, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xinf_idx, loe (y_idx), lee (y_idx)));
 endif
 idx.subs = {((x.sup <= -1 | (x.inf < -1 & -1 < x.sup)) & ...
              ((0 <= y.inf & not (-1 <= x.inf)) | (y.inf <= -1 & 1 <= y.sup)))};
-if (any (idx.subs{1}))
+if (any (idx.subs{1}(:)))
     xinf_idx = subsref (x.inf, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xinf_idx, goe (y_idx), gee (y_idx)));
 endif
 idx.subs = {(((x.inf < -1 & -1 < x.sup) | -1 <= x.inf) & ...
              ((y.inf <= -1 & 1 <= y.sup) | (y.sup <= 0 & not (x.sup <= -1))))};
-if (any (idx.subs{1}))
+if (any (idx.subs{1}(:)))
     xsup_idx = subsref (x.sup, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, union (subsref (z, idx), ...
@@ -209,7 +209,7 @@ z.sup(base == 1) = 1;
 z.sup(0 < base & base < 1 & evenexponent <= 0) = inf;
 z.sup(1 < base & base < inf & evenexponent >= 0) = inf;
 select = 0 < base & base < inf & isfinite (evenexponent);
-if (any (select))
+if (any (select(:)))
     z.sup(select) = sup (pown (infsup (base(select)), evenexponent(select)));
 endif
 
@@ -222,7 +222,7 @@ select = 0 < base & base < inf & bigexponent;
 z.inf(select) = -z.sup(select);
 
 select = 0 < base & base < inf & isfinite (oddexponent) & not (bigexponent);
-if (any (select))
+if (any (select(:)))
     z.inf(select) = -sup (pown (infsup (base(select)), oddexponent(select)));
 endif
 

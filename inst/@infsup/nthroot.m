@@ -71,11 +71,11 @@ switch sign (n)
             u = inf (size (x.inf));
             
             select = x.inf > 0 & isfinite (x.inf);
-            if (any (select))
+            if (any (select(:)))
                 u(select) = invrootrounded (x.inf(select), -n, +inf);
             endif
             select = x.sup > 0 & isfinite (x.sup);
-            if (any (select))
+            if (any (select(:)))
                 l(select) = invrootrounded (x.sup(select), -n, -inf);
             endif
             
@@ -91,11 +91,11 @@ switch sign (n)
             u = inf (size (x.inf));
             
             select = x.inf > 0 & isfinite (x.inf);
-            if (any (select))
+            if (any (select(:)))
                 u(select) = invrootrounded (x.inf(select), -n, +inf);
             endif
             select = x.sup > 0 & isfinite (x.sup);
-            if (any (select))
+            if (any (select(:)))
                 l(select) = invrootrounded (x.sup(select), -n, -inf);
             endif
             
@@ -114,11 +114,11 @@ switch sign (n)
             u = inf (size (x.inf));
             
             select = x.sup < 0 & isfinite (x.sup);
-            if (any (select))
+            if (any (select(:)))
                 u(select) = invrootrounded (-x.sup(select), -n, +inf);
             endif
             select = x.inf < 0 & isfinite (x.inf);
-            if (any (select))
+            if (any (select(:)))
                 l(select) = invrootrounded (-x.inf(select), -n, -inf);
             endif
             
