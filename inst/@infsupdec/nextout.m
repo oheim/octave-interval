@@ -51,6 +51,7 @@ result.dec(isnai (x)) = _ill ();
 endfunction
 
 %!# from the documentation string
+%!test
 %! x = nextout (infsupdec (1));
 %! assert (inf (x), 1 - eps / 2);
 %! assert (sup (x), 1 + eps);
