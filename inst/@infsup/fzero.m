@@ -75,7 +75,7 @@
 ## Keywords: interval
 ## Created: 2015-02-01
 
-function result = fzero (f, x0, df, options)
+function x = fzero (f, x0, df, options)
 
 if (nargin > 4 || nargin < 2)
     print_usage ();
@@ -128,7 +128,9 @@ endif
 
 [l, u] = findroots (f, df, x0, 0, options);
 
-result = infsup (l, u);
+x = infsup ();
+x.inf = l;
+x.sup = u;
 
 endfunction
 

@@ -37,7 +37,7 @@
 ## Keywords: interval
 ## Created: 2014-09-30
 
-function result = minus (x, y)
+function x = minus (x, y)
 
 if (nargin ~= 2)
     print_usage ();
@@ -58,12 +58,21 @@ l = mpfr_function_d ('minus', -inf, x.inf, y.sup);
 u = mpfr_function_d ('minus', +inf, x.sup, y.inf);
 
 emptyresult = isempty (x) | isempty (y);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+l(emptyresult) = inf;
+u(emptyresult) = -inf;
 
-result = infsup (l, u);
+l(l == 0) = -0;
+
+x.inf = l;
+x.sup = u;
 
 endfunction
 
-%!test "from the documentation string";
-%! assert (infsup (2, 3) - infsup (1, 2) == infsup (0, 2));
+%!# from the documentation string
+%!assert (infsup (2, 3) - infsup (1, 2) == infsup (0, 2));
+
+%!# correct use of signed zeros
+%!test
+%! x = minus (infsup (0), infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));

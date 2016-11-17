@@ -148,8 +148,10 @@ dom = onecomponent & b.inf <= 0 & b.sup >= 0 & c.inf <= 0 & c.sup >= 0;
 u.inf(dom) = -inf;
 u.sup(dom) = inf;
 
-v.inf(u.inf == 0) = -0;
+u.inf(u.inf == 0) = -0;
+u.sup(u.sup == 0) = +0;
 v.inf(v.inf == 0) = -0;
+v.sup(v.sup == 0) = +0;
 
 ## Intersect u and v with x
 u.inf = max (u.inf, x.inf);
