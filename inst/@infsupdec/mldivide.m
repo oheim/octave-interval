@@ -52,6 +52,7 @@ endif
 
 ## Reverse operations should not carry decoration
 result = infsupdec (mldivide (x.infsup, y.infsup), "trv");
+warning ("off", "Octave:broadcast", "local");
 result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
 
 endfunction

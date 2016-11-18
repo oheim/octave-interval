@@ -53,6 +53,7 @@ endif
 
 result = newdec (prod (x.infsup, dim));
 if (not (isempty (x.dec)))
+    warning ("off", "Octave:broadcast", "local");
     result.dec = min (result.dec, min (x.dec, [], dim));
 endif
 

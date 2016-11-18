@@ -78,6 +78,7 @@ switch (nargin)
     case 1
         result.dec = min (result.dec, min (x.dec));
     case 2
+        warning ("off", "Octave:broadcast", "local");
         result.dec = min (result.dec, min (x.dec, y.dec));
     case 3
         result.dec = min (result.dec, min (x.dec, [], dim));

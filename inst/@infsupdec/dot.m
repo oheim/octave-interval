@@ -87,6 +87,7 @@ if ((min (size (x.dec, 1), size (y.dec, 1)) > 1 && ...
 endif
 
 result = newdec (dot (x.infsup, y.infsup, dim));
+warning ("off", "Octave:broadcast", "local");
 result.dec = min (result.dec, ...
                   min (min (x.dec, [], dim), min (y.dec, [], dim)));
 

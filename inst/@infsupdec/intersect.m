@@ -62,6 +62,7 @@ switch (nargin)
             b = infsupdec (b);
         endif
         result = infsupdec (intersect (a.infsup, b.infsup), "trv");
+        warning ("off", "Octave:broadcast", "local");
         result.dec = min (result.dec, min (a.dec, b.dec));
     case 3
         if (not (builtin ("isempty", b)))

@@ -58,6 +58,7 @@ if (not (isa (y, "infsupdec")))
 endif
 
 result = infsupdec (gauss (x.infsup, y.infsup), "trv");
+warning ("off", "Octave:broadcast", "local");
 result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
 
 endfunction
