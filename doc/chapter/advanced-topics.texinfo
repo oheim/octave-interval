@@ -9,7 +9,7 @@
 
 Due to the nature of set-based interval arithmetic, one should not observe errors (in the sense of raised GNU Octave error messages) during computation unless operations are evaluated for incompatible data types. Arithmetic operations which are not defined for (parts of) their input, simply ignore anything that is outside of their domain.
 
-However, the interval constructors can produce errors depending on the input. The @funref{@@infsup/infsup} constructor will fail if the interval boundaries are invalid. Contrariwise, the (preferred) @funref{@@infsupdec/infsupdec}, @funref{midrad} and @funref{hull} constructors will only issue a warning and return a [NaI] object, which will propagate and survive through computations. NaI stands for “not an interval”. 
+However, the interval constructors can produce warnings depending on the input. The @funref{@@infsup/infsup} constructor will warn if the interval boundaries are invalid and returns empty intervals in these cases. Contrariwise, the (preferred) @funref{@@infsupdec/infsupdec}, @funref{midrad} and @funref{hull} constructors will only issue a warning and return [NaI] objects, which will propagate and survive through computations. NaI stands for “not an interval”. 
 
 Effects of set-based interval arithmetic on partial functions and the NaI object 
 @example
@@ -63,13 +63,13 @@ An interval operation has been evaluated on both, a bare and a decorated interva
 The implicit conversion applies the best possible decoration for the bare interval. If the bare interval has been produced from an interval arithmetic computation, this branch of computation is not covered by the decoration information and the final decoration could be considered wrong. For example,  @code{infsupdec (1, 2) + infsup (0, 1) ^ 0} would ignore that 0^0 is undefined. 
 
 @end table
-@item interval:NaI 
+@item interval:UndefinedOperation 
 @table @asis
 @item Reason
-An error has occurred during interval construction and the NaI object has been produced. The warning text contains further details. A NaI can be explicitly created with the @funref{nai} function. 
+An error has occurred during interval construction and the NaI object has been produced (an empty interval in case of the bare interval constructor). The warning text contains further details. A NaI can be explicitly created with the @funref{nai} function. 
 
 @item Possible consequences
-Nothing bad is going to happen, because the semantics of NaI are well defined by IEEE Std 1788-2015. However, the user might choose to cancel the algorithm immediately when the NaI is encountered for the first time. 
+Nothing bad is going to happen, because the semantics of NaI and empty intervals are well defined by IEEE Std 1788-2015. However, the user might choose to cancel the algorithm immediately when the NaI is encountered for the first time. 
 
 @end table
 @end table

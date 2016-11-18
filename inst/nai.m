@@ -16,6 +16,8 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defun nai ()
+## @defunx nai (@var{N})
+## @defunx nai (@var{N}, @var{M})
 ## 
 ## Return the ill-formed decorated interval, called NaI (Not an Interval).
 ##
@@ -26,9 +28,9 @@
 ## is false.
 ##
 ## The interval part of NaI is undefined.  The decoration part of NaI is
-## @code{ill}.  The size of NaI is one in each dimension.
+## @code{ill}.
 ##
-## The infsup constructor will not produce NaIs, but an error instead.
+## The infsup constructor will not produce NaIs, but a warning instead.
 ##
 ## @example
 ## @group
