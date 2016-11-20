@@ -16,6 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} sup (@var{X})
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
 ## 
 ## Get the (least) upper boundary for all numbers of interval @var{X}.
 ##

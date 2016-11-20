@@ -512,7 +512,7 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 @item
     What mechanisms of exception handling are used in exception handlers provided by the implementation?  What additional exception handling is provided by the implementation?
 
-    The exceptions described by IEEE Std 1788-2015 raise an error, which can be handled with GNU Octave's error mechanism.  The implementation provides no additional exception handling.
+    The exceptions described by IEEE Std 1788-2015 raise a warning, which can be handled with GNU Octave's warning mechanism.  The warning may be customized to produce an error instead and interrupt computation.  The implementation provides no additional exception handling.
 
 @item
     [Question does not apply to IEEE 754 conforming types.]
@@ -549,7 +549,7 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 
     If at least one input is a decorated interval, bare interval inputs are implicitly decorated as described by @command{newDec} in the standard document. Implicit promotion from a bare interval to a decorated interval is signaled with GNU Octave's warning mechanism.
 
-    If implicit conversion fails (e.g., illegal interval literals), bare interval operations raise an error, whereas the decorated interval operations continue on NaI inputs.
+    If implicit conversion fails (e.g., illegal interval literals), bare interval operations produce empty intervals, whereas the decorated interval operations continue on NaI inputs.
 
 @item
     [Question does not apply to IEEE 754 conforming types.]

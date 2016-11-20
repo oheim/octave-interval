@@ -16,6 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} inf (@var{X})
+## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
 ## 
 ## Get the (greatest) lower boundary for all numbers of interval @var{X}.
 ##
