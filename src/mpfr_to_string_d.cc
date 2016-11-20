@@ -117,11 +117,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
     str_template = "%.16R*g";
   else if (format == "exact hexadecimal")
     // We will not use MPFR below!
-    // precision = 0 should give a varying mantissa length with enough digits
-    // automatically.  Some compilers cannot determine the correct numbers
-    // automatically or fail to do so for subnormal numbers.  Thus we must use
-    // a fixed format here.
-    str_template = "%.13a";
+    str_template = "%R*a";
   else if (format == "exact decimal")
     str_template = "%.751R*g";
   else
@@ -152,30 +148,97 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   const octave_idx_type n = x.numel ();
   for (octave_idx_type i = 0; i < n; i++)
     {
-      if (format == "exact hexadecimal")
+      mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
+      if (format != "exact hexadecimal")
+        {
+          mpfr_sprintf (buf, str_template.c_str (), rnd, mp);
+        }
+      else
         {
           // Do not use MPFR for double to hex conversion.
           //
           // MPFR would use any of the 16 hex digits before the point, but
           // IEEE Std 1788-2015 requires the use of either 0 or 1 before the
           // point, where 1 is used for normal numbers and 0 is used for
-          // subnormal numbers.
-          //
+          // subnormal numbers.  MPFR doesn't handle subnormal numbers.
+          
           // C99's floating-point conversion will use 0 before the point for
           // subnormal numbers and non-zero before the point for normal
           // numbers.
           // https://www.gnu.org/software/libc/manual/html_node/Floating_002dPoint-Conversions.html
           //
-          // It is not guaranteed that only 1 is used for normal numbers before
-          // the point, however this is the case for my gcc version 4.9.2.
-          // Please report a bug if you know of a compiler with a different
-          // behavior.
-          sprintf (buf, str_template.c_str (), x.elem (i));
-        }
-      else
-        {
-          mpfr_set_d (mp, x.elem (i), MPFR_RNDZ);
-          mpfr_sprintf (buf, str_template.c_str (), rnd, mp);
+          // However, it is not guaranteed that only 1 is used for normal
+          // numbers before the point (although this is the case for my gcc
+          // version 4.9.2).
+          //
+          // Also sprintf (... "%.13a" ...) is completely broken on Windows,
+          // where it either returns wrong values, or creates an infinite loop.
+          
+          long exponent;
+          double mantissa = mpfr_get_d_2exp (&exponent, mp, rnd);
+          
+          if (mpfr_number_p (mp) == 0)
+            {
+              // NaN or infinity
+              if (std::isnan (mantissa))
+                {
+                  // The NaN returned by MPFR might produce a sign,
+                  // so let's use the implementation's default NaN.
+                  mantissa = std::numeric_limits <double>::quiet_NaN ();
+                }
+              
+              sprintf (buf, "%f", mantissa);
+            }
+          else
+            {
+              // Use normal representation of numbers 1.xxx * 2 ^ e
+              // with hidden mantissa bit before the point
+              if (mantissa != 0.0)
+                {
+                  exponent --;
+                  mantissa *= 2.0; // 1.0 <= mantissa < 2.0
+                }
+              // Make subnormal numbers use the exponent -1022
+              if (exponent < std::numeric_limits <double>::min_exponent)
+                {
+                  mantissa /= std::pow (2.0, 
+                                        std::numeric_limits
+                                          <double>::min_exponent - 1
+                                        - exponent);
+                  exponent = std::numeric_limits <double>::min_exponent - 1;
+                }
+            
+              // Extract sign
+              bool sign = std::signbit (mantissa);
+              mantissa = std::abs (mantissa);
+            
+              // Extract hidden bit
+              bool hiddenbit = (mantissa >= 1.0);
+              if (hiddenbit)
+                mantissa -= 1.0;
+              
+              // shift mantissa by 32 bits to format the first part
+              // sprintf (... "%x" ...) requires an unsigned 4-byte int 
+              mantissa *= std::pow (2.0, sizeof (uint32_t) * 8);
+              uint32_t first_part = static_cast <uint32_t> (mantissa);
+              
+              // remove first mantissa part
+              mantissa -= first_part;
+              
+              // shift mantissa by remaining 20 bits such that
+              // it is an integer
+              mantissa *= std::pow (2.0,
+                                    std::numeric_limits
+                                      <double>::digits - 1 - 32);
+              uint32_t second_part = static_cast <uint32_t> (mantissa);
+              
+              // Format hexadecimal number from individual parts
+              sprintf (buf, "%s0x%u.%08x%05xp%+d",
+                sign ? "-" : "",
+                static_cast <uint8_t> (hiddenbit),
+                first_part, second_part,
+                static_cast <int32_t> (exponent));
+            }
         }
       
       str.elem (i) = buf;
@@ -221,8 +284,12 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
 %!  [s, isexact] = mpfr_to_string_d (-inf, "decimal", .1);
 %!  assert (s, {"0.1"});
 %!  assert (isexact, false);
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", inf), {"inf"});
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", -inf), {"-inf"});
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", nan), {"nan"});
 %!assert (mpfr_to_string_d (0, "exact hexadecimal", 0), {"0x0.0000000000000p+0"});
 %!assert (mpfr_to_string_d (0, "exact hexadecimal", 2), {"0x1.0000000000000p+1"});
 %!assert (mpfr_to_string_d (0, "exact hexadecimal", -1), {"-0x1.0000000000000p+0"});
+%!assert (mpfr_to_string_d (0, "exact hexadecimal", pow2 (-1022)), {"0x1.0000000000000p-1022"});
 %!assert (mpfr_to_string_d (0, "exact hexadecimal", pow2 (-1074)), {"0x0.0000000000001p-1022"});
 */
