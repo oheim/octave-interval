@@ -95,7 +95,7 @@ endfunction
 %!test
 %! [lambda, X, ep] = vereigback ([2 1; 1 2]);
 %! assert (lambda, [1; 3]);
-%! assert (X, [-1 1; 1 1] ./ sqrt (2));
+%! assert (X, [-1 1; 1 1] ./ sqrt (2), eps);
 %! assert (ep, zeros (2, 1));
 
 %!test
