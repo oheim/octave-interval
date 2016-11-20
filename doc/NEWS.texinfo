@@ -14,7 +14,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{2.0.0, 2016-XX-XX}
+@release{2.0.0, 2016-11-20}
 This major release contains fundamental changes to the interval constructors.  After a discussion on the P1788 mailing list, it has been revealed that this interval package didn't implement exceptions from the standard for interval arithmetic correctly: Operations from IEEE Std 1788-2015 which trigger an “exception” shall return a value nonetheless.  Conformance has been improved in this new version, but may break compatibility with previous versions.
 
 A second big news is that the interval package comprises functions from VERSOFT, a verification software package by Jiří Rohn, who has generously published his work as free software this year.  Unfortunately, some of VERSOFT's functions are encrypted and could not be included yet.
