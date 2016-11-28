@@ -14,6 +14,13 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{2.0.1, 2016-xx-xx}
+Bugfixes
+@itemize
+@item Fixed indexing expression in interval constructor for illegal intervals of the form @code{[-inf, -inf]} or @code{[inf, inf]}.
+@end itemize
+
+
 @release{2.0.0, 2016-11-20}
 This major release contains fundamental changes to the interval constructors.  After a discussion on the P1788 mailing list, it has been revealed that this interval package didn't implement exceptions from the standard for interval arithmetic correctly: Operations from IEEE Std 1788-2015 which trigger an “exception” shall return a value nonetheless.  Conformance has been improved in this new version, but may break compatibility with previous versions.
 

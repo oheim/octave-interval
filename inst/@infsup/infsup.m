@@ -794,7 +794,7 @@ illegal_inf_idx = not (isfinite (x.inf (x.inf == x.sup)));
 if (any (illegal_inf_idx(:)))
     warning ("interval:UndefinedOperation", ...
              "illegal interval boundaries: infimum = supremum = +/- infinity");
-    isnai(illegal_inf_idx) = true;
+    isnai(find (x.inf == x.sup)(illegal_inf_idx)) = true;
 endif
 
 ## Illegal boundaries make illegal intervals,
@@ -1293,3 +1293,6 @@ endfunction
 %!warning
 %! [~, ~, ~, isnai] = infsup ("1 2 xxx 4");
 %! assert (isnai, [false, false, true, false]);
+%!warning
+%! [~, ~, ~, isnai] = infsup ("[-inf, inf] [inf, inf]");
+%! assert (isnai, [false, true]);
