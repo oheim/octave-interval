@@ -23,24 +23,16 @@ CFLAGS_C99     =$(shell $(MKOCTFILE) -p CFLAGS) -std=c99
 all: $(OBJ)
 
 ## crlibm api oct-file
-CRLIBM_SRC = crlibm_private exp-td exp-td-standalone expm1 expm1-standalone log-td log1p log10-td log2-td trigo_accurate trigo_fast asin-td acos-td atan_fast atan_accurate csh_fast rem_pio2_accurate
-SCSLIB_SRC = scs_private scs2double double2scs multiplication_scs addition_scs zero_scs division_scs
-CRLIBM_OBJ = $(patsubst %,crlibm_%.o,$(CRLIBM_SRC))
-SCSLIB_OBJ = $(patsubst %,scslib_%.o,$(SCSLIB_SRC))
-crlibm_function.oct: crlibm_api.o $(CRLIBM_OBJ) $(SCSLIB_OBJ)
-	$(MKOCTFILE)  -o $@  $^
-crlibm_api.o: crlibm_api.cc
+crlibm_function.oct: crlibm_function.o crlibm/crlibm_private.o
+	$(MKOCTFILE)  -o $@  $< crlibm/*.o crlibm/scs_lib/*.o
+crlibm_function.o: crlibm_function.cc
 	$(MKOCTFILE)  --compile -o $@  $<
-$(CRLIBM_OBJ): crlibm_%.o: crlibm_bundle.c crlibm/%.c
-	(cat $<; echo "#include \"crlibm/$*.c\"") > "_crlibm_$*.c"
-	CFLAGS="$(CFLAGS_C99) -msse2 -mfpmath=sse" $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_crlibm_$*.c" || \
-	CFLAGS="$(CFLAGS_C99) -O3"                 $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_crlibm_$*.c"
-	$(RM) "_crlibm_$*.c"
-$(SCSLIB_OBJ): scslib_%.o: crlibm_bundle.c crlibm/scs_lib/%.c
-	(cat $<; echo "#include \"crlibm/scs_lib/$*.c\"") > "_scslib_$*.c"
-	CFLAGS="$(CFLAGS_C99) -msse2 -mfpmath=sse" $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_scslib_$*.c" || \
-	CFLAGS="$(CFLAGS_C99) -O3"                 $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_scslib_$*.c"
-	$(RM) "_scslib_$*.c"
+
+## bundled crlibm library
+crlibm/crlibm_private.o: crlibm/crlibm_config.h
+	$(MAKE) -C crlibm CFLAGS+="$(shell $(MKOCTFILE) -p CPICFLAG) -Wno-div-by-zero -Wno-unused-variable -Wno-unused-but-set-variable"
+crlibm/crlibm_config.h:
+	(cd crlibm && ./configure --disable-dependency-tracking)
 
 ## GNU MPFR api oct-files
 mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
@@ -59,6 +51,7 @@ __setround__.oct: __setround__.cc
 	$(MKOCTFILE)  -o $@  $<
 
 clean:
+	$(MAKE) -C crlibm $@
 	$(RM) *.oct *.o
 
 .PHONY: all clean
