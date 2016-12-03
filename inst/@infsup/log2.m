@@ -46,8 +46,8 @@ endif
 x = intersect (x, infsup (0, inf));
 
 ## log2 is monotonically increasing from (0, -inf) to (inf, inf)
-l = mpfr_function_d ('log2', -inf, x.inf); # this works for empty intervals
-u = mpfr_function_d ('log2', +inf, x.sup); # ... this does not
+l = crlibm_function ('log2', -inf, x.inf); # this works for empty intervals
+u = crlibm_function ('log2', +inf, x.sup); # ... this does not
 
 l(x.sup == 0) = inf;
 l(l == 0) = -0;

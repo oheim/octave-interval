@@ -41,8 +41,8 @@ if (nargin ~= 1)
     return
 endif
 
-l = mpfr_function_d ('sinh', -inf, x.inf);
-u = mpfr_function_d ('sinh', +inf, x.sup);
+l = crlibm_function ('sinh', -inf, x.inf);
+u = crlibm_function ('sinh', +inf, x.sup);
 
 emptyresult = isempty (x);
 l(emptyresult) = inf;

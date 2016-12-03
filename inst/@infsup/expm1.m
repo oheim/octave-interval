@@ -42,8 +42,8 @@ if (nargin ~= 1)
 endif
 
 ## expm1 is monotonically increasing from (-inf, 0) to (inf, inf)
-l = mpfr_function_d ('expm1', -inf, x.inf); # this also works for [Empty]
-u = mpfr_function_d ('expm1', +inf, x.sup); # ... this does not
+l = crlibm_function ('expm1', -inf, x.inf); # this also works for [Empty]
+u = crlibm_function ('expm1', +inf, x.sup); # ... this does not
 
 l(l == 0) = -0;
 u(isempty (x)) = -inf;

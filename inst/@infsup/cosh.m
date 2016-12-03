@@ -42,8 +42,8 @@ if (nargin ~= 1)
 endif
 
 ## cosh is symmetric and has its global minimum located at (0, 1).
-l = mpfr_function_d ('cosh', -inf, mig (x));
-u = mpfr_function_d ('cosh', +inf, mag (x));
+l = crlibm_function ('cosh', -inf, mig (x));
+u = crlibm_function ('cosh', +inf, mag (x));
 
 emptyresult = isempty (x);
 l(emptyresult) = inf;
