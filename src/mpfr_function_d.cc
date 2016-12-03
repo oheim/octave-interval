@@ -296,7 +296,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "  @result{} 1\n"
   "@end group\n"
   "@end example\n"
-  "@seealso{fesetround}\n"
+  "@seealso{crlibm_function}\n"
   "@end defun"
   )
 {

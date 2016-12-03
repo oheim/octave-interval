@@ -199,7 +199,8 @@ Utility function
  @infsup/vertcat
  @infsupdec/decorationpart
  @infsupdec/intervalpart
-API function to the MPFR library
+API function to the MPFR and crlibm libraries
+ crlibm_function
  mpfr_function_d
  mpfr_linspace_d
  mpfr_matrix_mul_d
