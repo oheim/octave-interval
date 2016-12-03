@@ -17,8 +17,6 @@ OBJ            = crlibm_function.oct \
 LDFLAGS_MPFR   =-lmpfr
 ## Use important flags in XTRA_CFLAGS for OpenMP (workaround for bug #45280)
 CFLAG_OPENMP   =$(findstring -fopenmp,$(shell $(MKOCTFILE) -p XTRA_CFLAGS))
-## Pass -std=c99 to mkoctfile pre version 4.0.0
-CFLAGS_C99     =$(shell $(MKOCTFILE) -p CFLAGS) -std=c99
 
 all: $(OBJ)
 

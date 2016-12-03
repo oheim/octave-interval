@@ -91,7 +91,8 @@ GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
 GENERATED_IMAGES = $(GENERATED_IMAGES_EPS) $(GENERATED_IMAGES_PDF) $(GENERATED_IMAGES_PNG)
-GENERATED_CRLIBM_CONFIGURE = \
+GENERATED_CRLIBM_AUTOMAKE = \
+	src/crlibm/aclocal.m4 \
 	src/crlibm/configure \
 	src/crlibm/config.guess \
 	src/crlibm/config.sub \
@@ -99,12 +100,12 @@ GENERATED_CRLIBM_CONFIGURE = \
 	src/crlibm/Makefile.in \
 	src/crlibm/scs_lib/Makefile.in \
 	src/crlibm/crlibm_config.h.in \
+	src/crlibm/depcomp \
 	src/crlibm/missing \
-	src/crlibm/test-driver \
 	src/crlibm/INSTALL \
 	src/crlibm/compile
 EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/inst/test/%.cc-tst,$(CC_WITH_TESTS))
-GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CRLIBM_CONFIGURE) $(EXTRACTED_CC_TESTS)
+GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CRLIBM_AUTOMAKE) $(EXTRACTED_CC_TESTS)
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
@@ -194,7 +195,7 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
 		"$<" > /dev/null
 
-$(GENERATED_CRLIBM_CONFIGURE):
+$(GENERATED_CRLIBM_AUTOMAKE):
 	(cd src/crlibm && aclocal && autoheader && autoconf && automake --add-missing -c --ignore-deps && autoconf)
 
 ## Patch generated stuff into the release tarball
@@ -202,6 +203,11 @@ $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
 $(INSTALLED_PACKAGE): $(TAR_PATCHED)
 $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
 	@echo "Patching generated files into release tarball ..."
+	@# make tries to re-run automake on the target system (during installation
+	@# of the Octave package) if automake artefacts are older than their source
+	@# files.  Prevent this by touching these files, so they will be newer than
+	@# the files that have been added by “hg archive”.
+	@touch $(GENERATED_CRLIBM_AUTOMAKE)
 	@# `tar --update --transform` fails to update the files
 	@# The following line is a workaroung that removes duplicates
 	@tar --delete --file "$|" $(patsubst $(BUILD_DIR)/%,$(PACKAGE)-$(VERSION)/%,$?) 2> /dev/null || true
@@ -251,7 +257,7 @@ $(CC_SOURCES): src/Makefile
 ## Compilation of oct-files happens in a separate Makefile,
 ## which is bundled in the release and will be used during
 ## package installation by Octave.
-$(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR) $(GENERATED_CRLIBM_CONFIGURE)
+$(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR) $(GENERATED_CRLIBM_AUTOMAKE)
 	@echo "Compiling OCT-files ..."
 	@(cd src; MKOCTFILE="$(MKOCTFILE)" make)
 	@touch "$@"
