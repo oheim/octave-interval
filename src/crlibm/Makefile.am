@@ -50,7 +50,7 @@ libcrlibm_a_LIBADD = scs_lib/scs_private.o scs_lib/addition_scs.o  \
 
 include_HEADERS = crlibm.h
 
-SUBDIRS = scs_lib . tests
+SUBDIRS = scs_lib .
 
 # Add your compiler here. Default is assumed to be gcc.
 if COMPILER_ICC

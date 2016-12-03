@@ -98,7 +98,6 @@ GENERATED_CRLIBM_CONFIGURE = \
 	src/crlibm/install-sh \
 	src/crlibm/Makefile.in \
 	src/crlibm/scs_lib/Makefile.in \
-	src/crlibm/tests/Makefile.in \
 	src/crlibm/crlibm_config.h.in \
 	src/crlibm/missing \
 	src/crlibm/test-driver \
@@ -151,7 +150,7 @@ $(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/inst/test:
 
 $(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
 	@echo "Creating package release ..."
-	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" "$@"
+	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" --exclude "src/crlibm/tests" "$@"
 	@# build/.tar* files are used for incremental updates
 	@# to the tarball and must be cleared
 	@rm -f $(BUILD_DIR)/.tar*

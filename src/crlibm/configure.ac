@@ -413,7 +413,7 @@ fi
 
 
 
-AC_CONFIG_FILES([Makefile tests/Makefile scs_lib/Makefile])
+AC_CONFIG_FILES([Makefile scs_lib/Makefile])
 AC_OUTPUT
 
 
