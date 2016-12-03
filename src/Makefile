@@ -17,6 +17,8 @@ OBJ            = crlibm_function.oct \
 LDFLAGS_MPFR   =-lmpfr
 ## Use important flags in XTRA_CFLAGS for OpenMP (workaround for bug #45280)
 CFLAG_OPENMP   =$(findstring -fopenmp,$(shell $(MKOCTFILE) -p XTRA_CFLAGS))
+## Pass -std=c99 to mkoctfile pre version 4.0.0
+CFLAGS_C99     =$(shell $(MKOCTFILE) -p CFLAGS) -std=c99
 
 all: $(OBJ)
 
@@ -31,13 +33,13 @@ crlibm_api.o: crlibm_api.cc
 	$(MKOCTFILE)  --compile -o $@  $<
 $(CRLIBM_OBJ): crlibm_%.o: crlibm_bundle.c crlibm/%.c
 	(cat $<; echo "#include \"crlibm/$*.c\"") > "_crlibm_$*.c"
-	$(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable -std=c99 -msse2 -mfpmath=sse "_crlibm_$*.c" || \
-	$(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable -std=c99 -O3 "_crlibm_$*.c"
+	CFLAGS="$(CFLAGS_C99) -msse2 -mfpmath=sse" $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_crlibm_$*.c" || \
+	CFLAGS="$(CFLAGS_C99) -O3"                 $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_crlibm_$*.c"
 	$(RM) "_crlibm_$*.c"
 $(SCSLIB_OBJ): scslib_%.o: crlibm_bundle.c crlibm/scs_lib/%.c
 	(cat $<; echo "#include \"crlibm/scs_lib/$*.c\"") > "_scslib_$*.c"
-	$(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable -std=c99 -msse2 -mfpmath=sse "_scslib_$*.c" || \
-	$(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable -std=c99 -O3 "_scslib_$*.c"
+	CFLAGS="$(CFLAGS_C99) -msse2 -mfpmath=sse" $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_scslib_$*.c" || \
+	CFLAGS="$(CFLAGS_C99) -O3"                 $(MKOCTFILE)  --compile -o $@ -Wno-div-by-zero -Wno-unused-variable "_scslib_$*.c"
 	$(RM) "_scslib_$*.c"
 
 ## GNU MPFR api oct-files
