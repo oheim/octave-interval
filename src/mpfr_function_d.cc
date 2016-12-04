@@ -40,16 +40,24 @@ void evaluate (
 {
   mpfr_t mp;
   mpfr_init2 (mp, BINARY64_PRECISION);
+  mpfr_exp_t old_emin = mpfr_get_emin ();
+  mpfr_set_emin (BINARY64_EMIN);
 
   const octave_idx_type n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp, arg1.elem (i), MPFR_RNDZ);
-      (*f) (mp, mp, rnd);
+      int rnd_error = (*f) (mp, mp, rnd);
+      if (rnd == MPFR_RNDN)
+        {
+          // Prevent double-rounding errors
+          mpfr_subnormalize (mp, rnd_error, rnd);
+        }
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
 
   mpfr_clear (mp);
+  mpfr_set_emin (old_emin);
 }
 
 // Evaluate a binary MPFR function on two binary64 matrices
@@ -62,6 +70,8 @@ void evaluate (
   mpfr_t mp1, mp2;
   mpfr_init2 (mp1, BINARY64_PRECISION);
   mpfr_init2 (mp2, BINARY64_PRECISION);
+  mpfr_exp_t old_emin = mpfr_get_emin ();
+  mpfr_set_emin (BINARY64_EMIN);
 
   // arg1 shall contain the result and must be resized
   if (arg1.rows () == 1 && arg2.rows () != 1)
@@ -87,12 +97,18 @@ void evaluate (
                       : ((broadcast_c) ? arg2.elem (i, 0)
                                        : arg2.elem (i, j))
                     , MPFR_RNDZ);
-        (*f) (mp1, mp1, mp2, rnd);
+        int rnd_error = (*f) (mp1, mp1, mp2, rnd);
+        if (rnd == MPFR_RNDN)
+          {
+            // Prevent double-rounding errors
+            mpfr_subnormalize (mp1, rnd_error, rnd);
+          }
         arg1.elem (i, j) = mpfr_get_d (mp1, rnd);
       }
 
   mpfr_clear (mp1);
   mpfr_clear (mp2);
+  mpfr_set_emin (old_emin);
 }
 
 // Evaluate a ternary MPFR function on three binary64 matrices
@@ -107,6 +123,8 @@ void evaluate (
   mpfr_init2 (mp1, BINARY64_PRECISION);
   mpfr_init2 (mp2, BINARY64_PRECISION);
   mpfr_init2 (mp3, BINARY64_PRECISION);
+  mpfr_exp_t old_emin = mpfr_get_emin ();
+  mpfr_set_emin (BINARY64_EMIN);
 
   bool scalar1 = arg1.numel () == 1;
   bool scalar2 = arg2.numel () == 1;
@@ -140,13 +158,19 @@ void evaluate (
                   (scalar3) ? arg3.elem (0) // broadcast
                             : arg3.elem (i),
                   MPFR_RNDZ);
-      (*f) (mp1, mp1, mp2, mp3, rnd);
+      int rnd_error = (*f) (mp1, mp1, mp2, mp3, rnd);
+      if (rnd == MPFR_RNDN)
+        {
+          // Prevent double-rounding errors
+          mpfr_subnormalize (mp1, rnd_error, rnd);
+        }
       arg1.elem (i) = mpfr_get_d (mp1, rnd);
     }
 
   mpfr_clear (mp1);
   mpfr_clear (mp2);
   mpfr_clear (mp3);
+  mpfr_set_emin (old_emin);
 }
 
 // Evaluate nthroot

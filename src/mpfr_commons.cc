@@ -19,6 +19,7 @@
 #include <mpfr.h>
 
 #define BINARY64_PRECISION 53
+#define BINARY64_EMIN -1073
 #define BINARY64_ACCU_PRECISION 2134 + 2150
 
 mpfr_rnd_t parse_rounding_mode (const double octave_rounding_direction)
