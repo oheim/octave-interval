@@ -30,7 +30,7 @@ crlibm_function.o: crlibm_function.cc
 crlibm/crlibm_private.o: crlibm/crlibm_config.h
 	$(MAKE) -C crlibm CFLAGS+="$(shell $(MKOCTFILE) -p CPICFLAG) -Wno-div-by-zero -Wno-unused-variable -Wno-unused-but-set-variable"
 crlibm/crlibm_config.h:
-	(cd crlibm && ./configure --disable-dependency-tracking)
+	(cd crlibm && ./configure --disable-dependency-tracking --enable-sse2)
 
 ## GNU MPFR api oct-files
 mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
