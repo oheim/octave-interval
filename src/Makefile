@@ -27,6 +27,13 @@ crlibm_function.o: crlibm_function.cc
 	$(MKOCTFILE)  --compile -o $@  $<
 
 ## bundled crlibm library
+##
+## Note to redistributors:
+## If you can't compile this library for a particular platform
+## or `__check_crlibm__` throws a warning in Octave, you can safely
+## omit the crlibm library from a redistributed binary package,
+## (you must keep __check_crlibm__.m).
+## However, please inform the package maintainer of the error.
 crlibm/crlibm_private.o: crlibm/crlibm_config.h
 	$(MAKE) -C crlibm CFLAGS+="$(shell $(MKOCTFILE) -p CPICFLAG) -Wno-div-by-zero -Wno-unused-variable -Wno-unused-but-set-variable"
 crlibm/crlibm_config.h:

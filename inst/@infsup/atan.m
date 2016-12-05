@@ -42,8 +42,13 @@ if (nargin ~= 1)
 endif
 
 ## atan is monotonically increasing
-l = crlibm_function ('atan', -inf, x.inf);
-u = crlibm_function ('atan', +inf, x.sup);
+if (__check_crlibm__ ())
+    l = crlibm_function ('atan', -inf, x.inf);
+    u = crlibm_function ('atan', +inf, x.sup);
+else
+    l = mpfr_function_d ('atan', -inf, x.inf);
+    u = mpfr_function_d ('atan', +inf, x.sup);
+endif
 l(l == 0) = -0;
 
 emptyresult = isempty (x);

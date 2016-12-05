@@ -45,8 +45,13 @@ persistent domain = infsup (-1, 1);
 x = intersect (x, domain);
 
 ## acos is monotonically decreasing from (-1, pi) to (+1, 0)
-l = crlibm_function ('acos', -inf, x.sup);
-u = crlibm_function ('acos', +inf, x.inf);
+if (__check_crlibm__ ())
+    l = crlibm_function ('acos', -inf, x.sup);
+    u = crlibm_function ('acos', +inf, x.inf);
+else
+    l = mpfr_function_d ('acos', -inf, x.sup);
+    u = mpfr_function_d ('acos', +inf, x.inf);
+endif
 l(l == 0) = -0;
 
 emptyresult = isempty (x);

@@ -45,8 +45,13 @@ persistent domain = infsup (-1, 1);
 x = intersect (x, domain);
 
 ## asin is monotonically increasing from (-1, -pi/2) to (1, pi/2)
-l = crlibm_function ('asin', -inf, x.inf);
-u = crlibm_function ('asin', +inf, x.sup);
+if (__check_crlibm__ ())
+    l = crlibm_function ('asin', -inf, x.inf);
+    u = crlibm_function ('asin', +inf, x.sup);
+else
+    l = mpfr_function_d ('asin', -inf, x.inf);
+    u = mpfr_function_d ('asin', +inf, x.sup);
+endif
 l(l == 0) = -0;
 
 emptyresult = isempty (x);

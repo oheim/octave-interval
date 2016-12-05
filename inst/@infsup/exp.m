@@ -42,8 +42,13 @@ if (nargin ~= 1)
 endif
 
 ## exp is monotonically increasing from (-inf, 0) to (inf, inf)
-l = crlibm_function ('exp', -inf, x.inf); # this also works for empty intervals
-u = crlibm_function ('exp', +inf, x.sup); # ... this does not
+if (__check_crlibm__ ())
+    l = crlibm_function ('exp', -inf, x.inf); # this also works for empty intervals
+    u = crlibm_function ('exp', +inf, x.sup); # ... this does not
+else
+    l = mpfr_function_d ('exp', -inf, x.inf); # this also works for empty intervals
+    u = mpfr_function_d ('exp', +inf, x.sup); # ... this does not
+endif
 
 l(l == 0) = -0;
 u(isempty (x)) = -inf;

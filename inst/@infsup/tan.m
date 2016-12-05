@@ -50,8 +50,13 @@ persistent pi = infsup ("pi");
 certainlyfullperiod = width >= sup (pi);
 
 possiblynotfullperiod = not (certainlyfullperiod);
-l(possiblynotfullperiod) = crlibm_function ('tan', -inf, x.inf(possiblynotfullperiod));
-u(possiblynotfullperiod) = crlibm_function ('tan', inf, x.sup(possiblynotfullperiod));
+if (__check_crlibm__ ())
+    l(possiblynotfullperiod) = crlibm_function ('tan', -inf, x.inf(possiblynotfullperiod));
+    u(possiblynotfullperiod) = crlibm_function ('tan', inf, x.sup(possiblynotfullperiod));
+else
+    l(possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf(possiblynotfullperiod));
+    u(possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup(possiblynotfullperiod));
+endif
 
 singularity = certainlyfullperiod | ...
               l > u | (...
