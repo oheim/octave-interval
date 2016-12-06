@@ -24,10 +24,7 @@
 %!   "crlibm.mat"));
 
 %!function verify (fname, rnd, data)
-%!  # Check correctness of crlibm function
 %!  assert (crlibm_function (fname, rnd, data.input), data.output);
-%!  # Cross-check against the MPFR library
-%!  assert (mpfr_function_d (fname, rnd, data.input), data.output);
 %!endfunction
 
 %!test verify ("acos", -inf, testdata.acos_rd);
