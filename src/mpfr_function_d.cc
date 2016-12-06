@@ -290,8 +290,6 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@defunx mpfr_function_d ('sech', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('sin', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('sinh', @var{R}, @var{X})\n"
-  "@defunx mpfr_function_d ('sinh', @var{R}, @var{X})\n"
-  "@defunx mpfr_function_d ('sinh', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('sqr', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('tan', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('tanh', @var{R}, @var{X})\n"
