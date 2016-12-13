@@ -31,7 +31,13 @@ The GNU Octave interval package is build upon great third-party software.
 
 @itemize
 @item
-    Correctly rounded arithmetic operations are based on the @uref{http://www.mpfr.org/,GNU MPFR library} by Guillaume Hanrot, Vincent Lefèvre, Patrick Pélissier, Philippe Théveny and Paul Zimmermann.
+    Most correctly rounded arithmetic operations are based on the @uref{http://www.mpfr.org/,GNU MPFR library} by Guillaume Hanrot, Vincent Lefèvre, Patrick Pélissier, Philippe Théveny and Paul Zimmermann.
+
+@item
+    Several correctly rounded arithmetic operations are based on the @uref{http://lipforge.ens-lyon.fr/www/crlibm/,correctly rounded math library} by Jean-Michel Muller, Florent de Dinechin, Christoph Lauter, David Defour, Catherine Daramy-Loirat, Matthieu Gallet, and Nicolas Gast.
+
+@item
+    Jiří Rohn has published his comprehensive verification toolbox @uref{http://uivtx.cs.cas.cz/~rohn/matlab/,VERSOFT} as free software on July 26, 2016.  On November 24 he has fully disclosed the source code and several high-level functions could be included in the interval package with minor adjustments, e. g., @funref{@@infsup/chol}, @funref{vereigvec}, and @funref{verlinprog}.  Also, many thanks to Vladik Kreinovich who has helped to clear the licensing issue with VERSOFT.
 
 @item
     A linear system solver @funref{@@infsup/mldivide} and a polynomial evaluation algorithm @funref{@@infsup/polyval} for bare intervals are derived from routines developed for @uref{http://www2.math.uni-wuppertal.de/~xsc/,C-XSC} at University of Wuppertal, Germany.
