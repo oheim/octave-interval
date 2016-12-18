@@ -23,6 +23,7 @@
 Bugfixes
 @itemize
 @item Fixed indexing expression in interval constructor for illegal intervals of the form @code{[-inf, -inf]} or @code{[inf, inf]}.
+@item Fixed compilation errors on FreeBSD 9.3.
 @end itemize
 
 
