@@ -100,7 +100,6 @@ GENERATED_CRLIBM_AUTOMAKE = \
 	src/crlibm/Makefile.in \
 	src/crlibm/scs_lib/Makefile.in \
 	src/crlibm/crlibm_config.h.in \
-	src/crlibm/depcomp \
 	src/crlibm/missing \
 	src/crlibm/INSTALL \
 	src/crlibm/compile
