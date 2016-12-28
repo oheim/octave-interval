@@ -14,7 +14,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{2.1.0, 2016-xx-xx}
+@release{2.1.0, 2016-12-28}
 @itemize
 @item
 	The speed of some arithmetic operations has been greatly improved.  They have previously been computed by multi-precision arithmetic which simulates binary64 floating-point arithmetic (MPFR library).  Now, a specialized correctly rounded mathematical library (crlibm) computes identical results 30–100 times faster.  There is no accuracy drawback, arithmetic operations will compute tight interval enclosures as before.  The following functions benefit from this: acos, asin, atan, cos, cosh, exp, expm1, log, log10, log1p, log2, sin, sinh, tan.
