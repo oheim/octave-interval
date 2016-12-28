@@ -123,6 +123,10 @@ y = zeros (n, kMax);
 for k = 1 : kMax
     lastresult = result;
 
+    if (isempty (result))
+        break
+    endif
+
     ## Iterative refinement
     ## Store middle of residual as the next correction of y
     y(:, k) = mid (yy);
