@@ -13,7 +13,7 @@ The creation of the interval package has been straightforward, although the auth
 
 Originally it was intended to only implement the operations required by the standard document, but support for fundamental concepts of Octave as well as interval vectors and interval matrices have soon been added. Today the package contains many useful interval analysis algorithms and solvers, which, together with basic arithmetic functions, form a powerful and versatile library.
 
-@myimage{image/octave-interval.ly,GNU Octave Interval Pun}
+@myimage{image/octave-interval.svg,GNU Octave Interval Pun}
 
 Like Octave, the interval package has nothing to do with music. Above picture is a pun and shows an “octave interval” between the notes d' and d''. The frequencies of these notes can be enclosed by an interval which is a subset of [293, 588] Hz.
 

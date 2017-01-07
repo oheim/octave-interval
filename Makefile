@@ -39,9 +39,9 @@ SHELL   = /bin/sh
 ##     The Octave Forge package is used to generate the HTML documentation
 ##     for publication of this package on Octave Forge.
 ##
-##   * GNU LilyPond and Inkscape
+##   * Inkscape
 ##
-##     These are used to generate or convert images for the manual.
+##     Is used to generate or convert images for the manual.
 ##
 ##     The package repository contains only source code for the images, whereas
 ##     the release tarball additionally contains .PNG, .EPS and .PDF versions
@@ -57,7 +57,7 @@ SHELL   = /bin/sh
 ##     [this should be the branch with the latest Octave specific extensions]
 ##     Set the environment variable ITF1788_HOME to the local git workspace,
 ##     e. g. in .bashrc:
-##	 export ITF1788_HOME=/home/oliver/Dokumente/ITF1788
+##        export ITF1788_HOME=/home/oliver/Dokumente/ITF1788
 ##
 ##     It is important to have a local git workspace, because the generated
 ##     files will be tagged with the generator version.
@@ -68,6 +68,9 @@ SHELL   = /bin/sh
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 DATE = $(shell grep "^Date: " DESCRIPTION | cut -f2 -d" ")
+HG_DATETIME_LOCAL = $(shell hg log --rev . --template {date\|isodate})
+HG_DATETIME_UTC = $(shell date --utc --rfc-3339=seconds --date="$(HG_DATETIME_LOCAL)")
+TAR_REPRODUCIBLE_OPTIONS = --mtime="$(HG_DATETIME_UTC)" --owner=root --group=root --numeric-owner
 CC_SOURCES = $(wildcard src/*.cc)
 CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
 BUILD_DIR = build
@@ -86,7 +89,7 @@ IMAGE_SOURCES = \
 	doc/image/cameleon-start-end.svg \
 	doc/image/cameleon-transition.svg \
 	doc/image/inverse-power.svg \
-	doc/image/octave-interval.ly
+	doc/image/octave-interval.svg
 GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
@@ -108,7 +111,7 @@ GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(G
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
-
+LILYPOND ?= $(shell which lilypond)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
@@ -170,15 +173,20 @@ $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.tex
 	@makeinfo --plaintext -D "version $(VERSION)" -D "date $(DATE)" --output="$@" "$<"
 
 ## GNU LilyPond graphics
-$(GENERATED_IMAGE_DIR)/%.ly.pdf: $(GENERATED_IMAGE_DIR)/%.ly.eps
-	@epstopdf "$<"
-	@# The eps produced by LilyPond is quite big
-	@# and can be optimized via conversion eps -> pdf -> eps
-	@pdftops -eps "$@" "$<"
-	@touch "$@"
-$(GENERATED_IMAGE_DIR)/%.ly.png $(GENERATED_IMAGE_DIR)/%.ly.eps: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
+## This is an exotic dependency for an Octave package, so the generated SVG
+## is under version control and only gets recreated when LilyPond is installed.
+ifdef LILYPOND
+doc/image/%.svg: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
-	@lilypond --png --output "$(GENERATED_IMAGE_DIR)/$(shell basename "$<")" --silent "$<"
+	@# .ly -> .eps
+	@$(LILYPOND) --ps --output "$(BUILD_DIR)/$<" --silent "$<"
+	@# .eps -> .pdf (with size optimizations)
+	@epstopdf "$(BUILD_DIR)/$<.eps"
+	@# .pdf -> .ps (convert font glyphs to outline shapes)
+	@gs -q -o "$(BUILD_DIR))/$<.ps" -dNOCACHE -sDEVICE=pswrite "$(BUILD_DIR)/$<.pdf"
+	@# .ps -> .svg
+	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" "$(BUILD_DIR)/$<.ps"
+endif
 
 ## Inkscape SVG graphics
 $(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
@@ -193,6 +201,9 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 		--export-eps="$(BUILD_DIR)/$<.eps" \
 		--export-pdf="$(BUILD_DIR)/$<.pdf" \
 		"$<" > /dev/null
+	@# Make the build reproducible and remove timestamp metadata
+	@grep --invert-match "^%% CreationDate: " "$(BUILD_DIR)/$<.eps" > "$(BUILD_DIR)/$<.eps_"
+	@mv "$(BUILD_DIR)/$<.eps_" "$(BUILD_DIR)/$<.eps"
 
 $(GENERATED_CRLIBM_AUTOMAKE):
 	(cd src/crlibm && aclocal && autoheader && autoconf && automake --add-missing -c --ignore-deps && autoconf)
@@ -202,15 +213,14 @@ $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
 $(INSTALLED_PACKAGE): $(TAR_PATCHED)
 $(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
 	@echo "Patching generated files into release tarball ..."
-	@# make tries to re-run automake on the target system (during installation
-	@# of the Octave package) if automake artefacts are older than their source
-	@# files.  Prevent this by touching these files, so they will be newer than
-	@# the files that have been added by “hg archive”.
-	@touch $(GENERATED_CRLIBM_AUTOMAKE)
 	@# `tar --update --transform` fails to update the files
 	@# The following line is a workaroung that removes duplicates
 	@tar --delete --file "$|" $(patsubst $(BUILD_DIR)/%,$(PACKAGE)-$(VERSION)/%,$?) 2> /dev/null || true
-	@tar --update --file "$|" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" --transform="s!^src/!$(PACKAGE)-$(VERSION)/src/!" $?
+	@# make tries to re-run automake on the target system (during installation
+	@# of the Octave package) if automake artefacts are older than their source
+	@# files.  Prevent this by applying the timestamp of the source code
+	@# revision, which is the same that is used by “hg archive”.
+	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$|" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" --transform="s!^src/!$(PACKAGE)-$(VERSION)/src/!" $?
 	@touch "$@"
 
 ## HTML Documentation for Octave Forge
@@ -358,7 +368,7 @@ $(TST_PATCHED): $(TST_GENERATED) | $(RELEASE_TARBALL)
 	@# `tar --update --transform` fails to update the files
 	@# The following line is a workaroung that removes duplicates
 	@tar --delete --file "$|" $(patsubst $(TST_GENERATED_DIR)/%,$(PACKAGE)-$(VERSION)/inst/test/%,$?) 2> /dev/null || true
-	@tar --update --file "$|" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $?
+	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$|" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $?
 	@touch "$@"
 
 else
