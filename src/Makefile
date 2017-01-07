@@ -56,7 +56,7 @@ __setround__.oct: __setround__.cc
 	$(MKOCTFILE)  -o $@  $<
 
 clean:
-	$(MAKE) -C crlibm $@
+	test ! -e crlibm/Makefile || $(MAKE) -C crlibm $@
 	$(RM) *.oct *.o
 
 .PHONY: all clean
