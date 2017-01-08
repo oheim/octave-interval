@@ -17,7 +17,7 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
-#include "mpfr_commons.cc"
+#include "mpfr_commons.h"
 
 std::pair <Matrix, Matrix> interval_matrix_mul (
   const Matrix matrix_xl, const Matrix matrix_yl,

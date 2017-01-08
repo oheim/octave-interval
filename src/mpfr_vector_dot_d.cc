@@ -17,7 +17,7 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
-#include "mpfr_commons.cc"
+#include "mpfr_commons.h"
 
 std::pair <double, double> interval_vector_dot (
   Matrix vector_xl, Matrix vector_yl,

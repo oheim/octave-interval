@@ -17,7 +17,7 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
-#include "mpfr_commons.cc"
+#include "mpfr_commons.h"
 
 DEFUN_DLD (mpfr_vector_sum_d, args, nargout, 
   "-*- texinfo -*-\n"

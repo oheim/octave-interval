@@ -17,7 +17,7 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
-#include "mpfr_commons.cc"
+#include "mpfr_commons.h"
 
 typedef int (*mpfr_unary_fun)
             (mpfr_t rop, const mpfr_t op,

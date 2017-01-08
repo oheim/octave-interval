@@ -21,7 +21,7 @@
 #include <octave/parse.h>
 #include <octave/ov-uint8.h>
 #include <mpfr.h>
-#include "mpfr_commons.cc"
+#include "mpfr_commons.h"
 
 std::string inttostring (const int number)
 {

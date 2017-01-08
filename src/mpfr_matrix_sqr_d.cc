@@ -17,7 +17,7 @@
 
 #include <octave/oct.h>
 #include <mpfr.h>
-#include "mpfr_commons.cc"
+#include "mpfr_commons.h"
 
 std::pair <Matrix, Matrix> interval_matrix_sqr (
   const Matrix matrix_xl, const Matrix matrix_xu)
@@ -342,3 +342,11 @@ DEFUN_DLD (mpfr_matrix_sqr_d, args, nargout,
   
   return result;
 }
+
+/*
+%!test
+%! m = magic (3);
+%! [l, u] = mpfr_matrix_sqr_d (m, m + 1);
+%! assert (l, [91, 67, 67; 67, 91, 67; 67, 67, 91]);
+%! assert (u, [124, 100, 100; 100, 124, 100; 100, 100, 124]);
+*/

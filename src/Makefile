@@ -40,9 +40,9 @@ crlibm/crlibm_config.h:
 	(cd crlibm && ./configure --disable-dependency-tracking --enable-sse2)
 
 ## GNU MPFR api oct-files
-mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
+mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
-mpfr_%.oct: mpfr_%.cc mpfr_commons.cc
+mpfr_%.oct: mpfr_%.cc mpfr_commons.h
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
 ## <cfenv> api oct-file

@@ -115,7 +115,7 @@ LILYPOND ?= $(shell which lilypond)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
-.PHONY: help dist release html run check test doctest install info clean md5
+.PHONY: help dist release html run check test-bist doctest install info clean md5
 
 help:
 	@echo
@@ -131,7 +131,7 @@ help:
 	@echo "   make clean    Cleanup"
 	@echo
 
-check: doctest test
+check: doctest test-bist
 dist: $(RELEASE_TARBALL_COMPRESSED)
 html: $(HTML_TARBALL_COMPRESSED)
 md5:  $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED)
@@ -286,12 +286,16 @@ run: $(OCT_COMPILED)
 	@echo
 
 ## Validate unit tests
-test: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
+test-bist: $(OCT_COMPILED)
 	@echo "Testing package in GNU Octave ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
-		--eval "__run_test_suite__ ({'.'}, {})"
-	@! grep '!!!!! test failed' fntests.log
-	@echo
+		--eval 'success = true;' \
+		--eval 'for file = {dir("./src/*.cc").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/*.m").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/test/*.tst").name}, success &= test (strcat ("test/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/@infsup/*.m").name}, success &= test (strcat ("@infsup/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/@infsupdec/*.m").name}, success &= test (strcat ("@infsupdec/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'exit (not (success));'
 
 ## Validate code examples
 doctest: $(OCT_COMPILED)
@@ -361,7 +365,15 @@ $(TST_GENERATED_DIR)/%.tst: test/%.itl
 
 ifdef ITF1788_HOME
 
-test: $(TST_GENERATED)
+check: test-itl
+.PHONY: test-itl
+test-itl: $(TST_GENERATED)
+	@echo "Running ITF1788 test suite in GNU Octave ..."
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
+		--eval 'success = true;' \
+		--eval 'for file = strsplit ("$(TST_GENERATED)"), success &= test (file{1}, "quiet", stdout); endfor;' \
+		--eval 'exit (not (success));'
+
 $(RELEASE_TARBALL_COMPRESSED): $(TST_PATCHED)
 $(TST_PATCHED): $(TST_GENERATED) | $(RELEASE_TARBALL)
 	@echo "Patching generated tests into release tarball ..."
