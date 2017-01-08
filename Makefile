@@ -247,7 +247,7 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 		--eval "rand ('state', double ('reproducible')');" \
 		--eval "options = get_html_options ('octave-forge');" \
 		--eval "options.package_doc = 'manual.texinfo';" \
-		--eval "options.package_doc_options = '-D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <div id="sf_logo"><a href=\"http://sourceforge.net/\"><img width=\"88\" height=\"31\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"http://sourceforge.net/sflogo.php?group_id=2888&amp;type=1\" /></a></div>'' --css-ref=''https://www.gnu.org/software/octave/doc/interpreter/octave.css'' --css-ref=manual.css';" \
+		--eval "options.package_doc_options = '-D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <div id="sf_logo"><a href=\"https://sourceforge.net/\"><img width=\"88\" height=\"31\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"//sourceforge.net/sflogo.php?group_id=2888&amp;type=1\" /></a></div>'' --css-ref=''https://www.gnu.org/software/octave/doc/interpreter/octave.css'' --css-ref=manual.css';" \
 		--eval "generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
 	@# Documentation will be put on a webserver,
 	@# where .svgz files can save bandwidth and CPU time.
