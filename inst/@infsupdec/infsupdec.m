@@ -214,9 +214,11 @@ switch numel (varargin)
             case "cell"
                 ## [nai] is a legal literal, but not allowed in the infsup
                 ## constructor.  Create a silent nai in these cases.
-                nai_literal_idx = not (cellfun ("isempty", ...
-                    regexp (varargin{1}, '^\[\s*nai\s*\]$', ...
+                char_idx = cellfun ("ischar", varargin{1});
+                nai_literal_local_idx = not (cellfun ("isempty", ...
+                    regexp (varargin{1}(char_idx), '^\s*\[\s*nai\s*\]\s*$', ...
                         "ignorecase")));
+                nai_literal_idx = find (char_idx)(nai_literal_local_idx);
                 varargin{1}(nai_literal_idx) = "[]";
                 [bare, isexact, overflow, isnai] = infsup (varargin{1});
                 isnai(nai_literal_idx) = true;
@@ -319,6 +321,8 @@ endfunction
 
 %!# [NaI]s
 %!assert (isnai (infsupdec ("[nai]"))); # quiet [NaI]
+%!assert (isnai (infsupdec (" [ nai ] "))); # quiet [NaI]
+%!assert (isnai (infsupdec ({0, "[nai]"})), [false, true]); # quiet [NaI]
 %!warning id=interval:UndefinedOperation
 %! assert (isnai (infsupdec (3, 2))); # illegal boundaries
 %!warning id=interval:UndefinedOperation
