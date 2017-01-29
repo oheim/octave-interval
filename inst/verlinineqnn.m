@@ -108,20 +108,24 @@ bo = [b' zeros(n, 1)']'; # Ao*x<=bo is equivalent to A*x<=b, x>=0
 bo = bo - ep .* ones (m + n, 1);
 x = lpprocedure (e, Ao, bo); # solves min e'*x subject to Ao*x<=bo
 
-left = A * infsup (x); # interval quantity
-if (all (left.sup <= b) && all (x >= 0))
-    # verified solution
-    return
+if (not (any (isnan (x)(:))))
+    left = A * infsup (x); # interval quantity
+    if (all (left.sup <= b) && all (x >= 0))
+        # verified solution
+        return
+    endif
 endif
 
 # multiplicative perturbation
 bo = bo - ep .* abs (bo) - ep .* (bo == 0);
 x = lpprocedure (e, Ao, bo); # solves min e'*x subject to Ao*x<=bo
 
-left = A * infsup (x); # interval quantity
-if (all (left.sup <= b) && all (x >= 0))
-    # verified solution
-    return
+if (not (any (isnan (x)(:))))
+    left = A * infsup (x); # interval quantity
+    if (all (left.sup <= b) && all (x >= 0))
+        # verified solution
+        return
+    endif
 endif
 
 # no verified solution
