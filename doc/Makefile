@@ -17,7 +17,7 @@ all: $(OBJ)
 images: $(IMAGE_OBJ)
 
 manual.html: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(IMAGE_OBJ)
-	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --css-ref='https://www.gnu.org/software/octave/doc/interpreter/octave.css' --css-include manual.css "$<"
+	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --css-include manual.css "$<"
 
 manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(wildcard image/*.pdf) $(IMAGE_OBJ)
 	$(MAKEINFO) --Xopt=--texinfo='@set version $(VERSION)' --pdf "$<"

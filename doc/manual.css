@@ -4,6 +4,71 @@ Copyright 2015-2016 Oliver Heimlich.
 See the file manual.texinfo for copying conditions.
 */
 
+/* Use custom fonts */
+code, kbd, samp, tt, pre { font-family: 'Fantasque Sans Mono', 'Consolas', monospace; }
+code, kbd, samp, tt { font-style: italic; padding: 0 0.1ex; /* slightly increase margin to surrounding text */ }
+body, span.sansserif { font-family: 'Lato', 'Roboto Condensed', 'Calibri', sans-serif; }
+h1, h2, h3, h4, h5,  span.roman, pre.menu-comment, pre.menu-preformatted { font-family: 'Lato', 'Roboto Condensed', 'Calibri', serif; }
+
+/*
+Use colors from the solarized color theme (sparsely),
+the main text will remain in default colors for optimal readability (black on white).
+*/
+pre.example, .header, .float-caption, hr
+{
+  /* base00 ~ body text in light solarized theme */
+  color: #657b83;
+  border-color: #657b83;
+}
+pre.example
+{
+  /* base3 ~ background color in light solarized theme */
+  background-color: #fdf6e3;
+  padding: 0.5em;
+}
+a { color: #268bd2; /* blue */ }
+a:visited { color: #d33682; /* magenta */ }
+
+/* Center floating tables and images */
+.float table, .float img, .float object { margin-left: auto; margin-right: auto; }
+
+/* Decrease table width, but not on small screens */
+.float table { max-width: 38em; }
+
+/* Use horizontal lines: above/below tables and after table headers (Chicago Style) */
+.float table, .float th { border-collapse: collapse; border-top: 1px solid black; border-bottom: 1px solid black; }
+.float th, .float td { padding: 0.5em; }
+
+/* Use horizontal ruler with double lines */
+hr { border-width: 0; border-top-width: 3px; border-style: double; }
+
+/* Smaller gap between subsequent @group blocks */
+.example { margin-bottom: 1em; }
+.example + .example { margin-top: -0.5em }
+
+/* Smaller gap between definition and its description */
+dd > p:first-child { margin-top: 0.5em; }
+
+/* Limit maximum body width such that text is easier to read */
+body { max-width: 42em; margin-left: 0.5em; margin-right: 0.5em; }
+
+/* On small screens don't indent the code examples to prevent overflow */
+div.example { margin-left: auto; max-width: 38.8em; }
+
+/*
+Use left margin such that text is easier to read,
+but don't sacrifice space on small screens.
+*/
+@media screen and (min-width: 43em)
+{
+  /* Smooth transition for screens between 43em and 57em */
+  body { margin-left: auto; margin-right: auto; }
+  @media (min-width: 57em)
+  {
+    body { margin-left: 7.5em; }
+  }
+}
+
 /*
 Workaround for missing support of alpha lists and lists starting from zero in Texinfo's HTML output.
 FIXME: This should be fixed upstream.
@@ -17,5 +82,5 @@ div.zero-list + ol > li:before { content: counter(item) "."; counter-increment: 
 Improve display of large graphics.
 FIXME: This should go into Octave's CSS file.
 */
-div.float img { display: block; max-width: 42em; }
+div.float img, body > img { display: block; max-width: 42em; }
 object { max-width: 100% }
