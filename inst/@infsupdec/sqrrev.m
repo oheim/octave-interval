@@ -21,7 +21,7 @@
 ## Compute the reverse square function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
-## @code{sqr (x) ∈ @var{C}}.
+## @code{x .^ 2 ∈ @var{C}}.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
