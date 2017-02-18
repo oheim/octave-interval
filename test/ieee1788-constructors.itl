@@ -57,7 +57,7 @@ testcase IEEE1788.d {
 
 // Example from Section 11.3
 testcase IEEE1788.e {
-    d-numsToInterval 2 1 = [nai];
+    d-numsToInterval 2 1 = [nai] signal UndefinedOperation;
 }
 
 // Examples from Table 12.1

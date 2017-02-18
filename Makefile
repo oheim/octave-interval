@@ -358,7 +358,7 @@ $(TST_GENERATED_DIR)/%.tst: test/%.itl
 	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(BUILD_DIR)" -s "test"
 	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
 		echo "## by the Interval Testing Framework for IEEE 1788."; \
-		echo -n "## https://github.com/nehmeier/ITF1788/tree/"; \
+		echo -n "## https://github.com/oheim/ITF1788/tree/"; \
 		echo $(shell cd "$(ITF1788_HOME)" && git log --max-count=1 | head -1 | cut -f2 -d" "); \
 		cat "$@") > "$@_"
 	@mv "$@_" "$@"
@@ -392,7 +392,7 @@ ITF1788WARNING:
 	@echo "WARNING: ITF1788 not installed properly. The release will not contain"
 	@echo "generated tests."
 	@echo
-	@echo "Download ITF1788 from https://github.com/nehmeier/ITF1788"
+	@echo "Download ITF1788 from https://github.com/oheim/ITF1788"
 	@echo "and set the environment variable ITF1788_HOME accordingly."
 	@echo
 
