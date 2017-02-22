@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
-testcase minimal_cancelPlus_test {
+testcase minimal_cancel_plus_test {
     cancelPlus [-infinity, -1.0] [empty] = [entire];
     cancelPlus [-1.0, infinity] [empty] = [entire];
     cancelPlus [entire] [empty] = [entire];
@@ -89,24 +89,24 @@ testcase minimal_cancelPlus_test {
     cancelPlus [-0X1P+0,0X1.FFFFFFFFFFFFEP-53] [-0X1P+0,0X1.FFFFFFFFFFFFFP-53] = [entire];
 }
 
-testcase minimal_cancelPlus_dec_test {
+testcase minimal_cancel_plus_dec_test {
     cancelPlus [-infinity, -1.0]_dac [empty]_trv = [entire]_trv;
     cancelPlus [-1.0, infinity]_def [empty]_trv = [entire]_trv;
     cancelPlus [entire]_def [empty]_trv = [entire]_trv;
     cancelPlus [-infinity, -1.0]_dac [-5.0,1.0]_com = [entire]_trv;
     cancelPlus [-1.0, infinity]_trv [-5.0,1.0]_def = [entire]_trv;
-    cancelPlus [entire]_def [-5.0,1.0]_def = [entire]_trv;
-    cancelPlus [-infinity, -1.0]_dac [entire]_def = [entire]_trv;
-    cancelPlus [-1.0, infinity]_def [entire]_def = [entire]_trv;
+    cancelPlus [entire]_dac [-5.0,1.0]_def = [entire]_trv;
+    cancelPlus [-infinity, -1.0]_dac [entire]_dac = [entire]_trv;
+    cancelPlus [-1.0, infinity]_def [entire]_dac = [entire]_trv;
     cancelPlus [empty]_trv [1.0, infinity]_def = [entire]_trv;
     cancelPlus [empty]_trv [-infinity,1.0]_trv = [entire]_trv;
-    cancelPlus [empty]_trv [entire]_def = [entire]_trv;
+    cancelPlus [empty]_trv [entire]_dac = [entire]_trv;
     cancelPlus [-1.0,5.0]_dac [1.0,infinity]_dac = [entire]_trv;
     cancelPlus [-1.0,5.0]_def [-infinity,1.0]_dac = [entire]_trv;
-    cancelPlus [-1.0,5.0]_com [entire]_def = [entire]_trv;
-    cancelPlus [entire]_def [1.0,infinity]_dac = [entire]_trv;
-    cancelPlus [entire]_def [-infinity,1.0]_def = [entire]_trv;
-    cancelPlus [entire]_def [entire]_def = [entire]_trv;
+    cancelPlus [-1.0,5.0]_com [entire]_dac = [entire]_trv;
+    cancelPlus [entire]_dac [1.0,infinity]_dac = [entire]_trv;
+    cancelPlus [entire]_dac [-infinity,1.0]_def = [entire]_trv;
+    cancelPlus [entire]_dac [entire]_dac = [entire]_trv;
 
     cancelPlus [-5.0, -1.0]_com [1.0,5.1]_def = [entire]_trv;
     cancelPlus [-5.0, -1.0]_dac [0.9,5.0]_def = [entire]_trv;
@@ -158,7 +158,7 @@ testcase minimal_cancelPlus_dec_test {
     cancelPlus [-0X1P+0,0X1.FFFFFFFFFFFFEP-53]_def [-0X1P+0,0X1.FFFFFFFFFFFFFP-53]_com = [entire]_trv;
 }
 
-testcase minimal_cancelMinus_test {
+testcase minimal_cancel_minus_test {
     cancelMinus [-infinity, -1.0] [empty] = [entire];
     cancelMinus [-1.0, infinity] [empty] = [entire];
     cancelMinus [entire] [empty] = [entire];
@@ -234,24 +234,24 @@ testcase minimal_cancelMinus_test {
     cancelMinus [-0X1P+0,0X1.FFFFFFFFFFFFEP-53] [-0X1.FFFFFFFFFFFFFP-53,0X1P+0] = [entire];
 }
 
-testcase minimal_cancelMinus_dec_test {
+testcase minimal_cancel_minus_dec_test {
     cancelMinus [-infinity, -1.0]_dac [empty]_trv = [entire]_trv;
     cancelMinus [-1.0, infinity]_def [empty]_trv = [entire]_trv;
-    cancelMinus [entire]_def [empty]_trv = [entire]_trv;
+    cancelMinus [entire]_dac [empty]_trv = [entire]_trv;
     cancelMinus [-infinity, -1.0]_trv [-1.0,5.0]_dac = [entire]_trv;
     cancelMinus [-1.0, infinity]_dac [-1.0,5.0]_com = [entire]_trv;
-    cancelMinus [entire]_def [-1.0,5.0]_def = [entire]_trv;
-    cancelMinus [-infinity, -1.0]_def [entire]_def = [entire]_trv;
-    cancelMinus [-1.0, infinity]_trv [entire]_def = [entire]_trv;
+    cancelMinus [entire]_dac [-1.0,5.0]_def = [entire]_trv;
+    cancelMinus [-infinity, -1.0]_def [entire]_dac = [entire]_trv;
+    cancelMinus [-1.0, infinity]_trv [entire]_dac = [entire]_trv;
     cancelMinus [empty]_trv [-infinity, -1.0]_dac = [entire]_trv;
     cancelMinus [empty]_trv [-1.0, infinity]_dac = [entire]_trv;
     cancelMinus [empty]_trv [entire]_def = [entire]_trv;
     cancelMinus [-1.0,5.0]_dac [-infinity, -1.0]_def = [entire]_trv;
     cancelMinus [-1.0,5.0]_def [-1.0, infinity]_trv = [entire]_trv;
-    cancelMinus [-1.0,5.0]_com [entire]_def = [entire]_trv;
-    cancelMinus [entire]_def [-infinity, -1.0]_dac = [entire]_trv;
-    cancelMinus [entire]_def [-1.0, infinity]_def = [entire]_trv;
-    cancelMinus [entire]_def [entire]_def = [entire]_trv;
+    cancelMinus [-1.0,5.0]_com [entire]_dac = [entire]_trv;
+    cancelMinus [entire]_dac [-infinity, -1.0]_dac = [entire]_trv;
+    cancelMinus [entire]_dac [-1.0, infinity]_def = [entire]_trv;
+    cancelMinus [entire]_dac [entire]_def = [entire]_trv;
 
     cancelMinus [-5.0, -1.0]_com [-5.1,-1.0]_trv = [entire]_trv;
     cancelMinus [-5.0, -1.0]_dac [-5.0,-0.9]_def = [entire]_trv;

@@ -211,10 +211,13 @@ testcase minimal_mulRevToPair_test {
 }
 
 testcase minimal_mulRevToPair_dec_test {
+    mulRevToPair [nai] [1.0,2.0]_def = [nai] [nai];
+    mulRevToPair [1.0,2.0]_com [nai] = [nai] [nai];
+    mulRevToPair [nai] [nai] = [nai] [nai];
+
     mulRevToPair [empty]_trv [1.0, 2.0]_def = [empty]_trv [empty]_trv;
     mulRevToPair [1.0, 2.0]_com [empty]_trv = [empty]_trv [empty]_trv;
     mulRevToPair [empty]_trv [empty]_trv = [empty]_trv [empty]_trv;
-
 
     mulRevToPair [-2.0, -0.1]_com [-2.1, -0.4]_com = [0X1.999999999999AP-3, 0X1.5P+4]_com [empty]_trv;
     mulRevToPair [-2.0, 0.0]_dac [-2.1, -0.4]_com = [0X1.999999999999AP-3, infinity]_trv [empty]_trv;
