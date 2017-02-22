@@ -125,4 +125,67 @@ endif
 
 endfunction
 
-%!assert (overlap (infsup (1, 2), infsup (3, 4)), "before");
+%!test
+%! [s, n] = overlap (infsup (), infsup ());
+%! assert (s, "bothEmpty");
+%! assert (n, uint16 (32768));
+%!test
+%! [s, n] = overlap (infsup (), infsup (0));
+%! assert (s, "firstEmpty");
+%! assert (n, uint16 (16384));
+%!test
+%! [s, n] = overlap (infsup (0), infsup ());
+%! assert (s, "secondEmpty");
+%! assert (n, uint16 (8192));
+%!test
+%! [s, n] = overlap (infsup (1, 2), infsup (3, 4));
+%! assert (s, "before");
+%! assert (n, uint16 (4096));
+%!test
+%! [s, n] = overlap (infsup (1, 2), infsup (2, 3));
+%! assert (s, "meets");
+%! assert (n, uint16 (2048));
+%!test
+%! [s, n] = overlap (infsup (1, 3), infsup (2, 4));
+%! assert (s, "overlaps");
+%! assert (n, uint16 (1024));
+%!test
+%! [s, n] = overlap (infsup (1, 2), infsup (1, 3));
+%! assert (s, "starts");
+%! assert (n, uint16 (512));
+%!test
+%! [s, n] = overlap (infsup (2, 3), infsup (1, 4));
+%! assert (s, "containedBy");
+%! assert (n, uint16 (256));
+%!test
+%! [s, n] = overlap (infsup (2, 3), infsup (1, 3));
+%! assert (s, "finishes");
+%! assert (n, uint16 (128));
+%!test
+%! [s, n] = overlap (infsup (1, 2), infsup (1, 2));
+%! assert (s, "equals");
+%! assert (n, uint16 (64));
+%!test
+%! [s, n] = overlap (infsup (1, 3), infsup (2, 3));
+%! assert (s, "finishedBy");
+%! assert (n, uint16 (32));
+%!test
+%! [s, n] = overlap (infsup (1, 4), infsup (2, 3));
+%! assert (s, "contains");
+%! assert (n, uint16 (16));
+%!test
+%! [s, n] = overlap (infsup (1, 3), infsup (1, 2));
+%! assert (s, "startedBy");
+%! assert (n, uint16 (8));
+%!test
+%! [s, n] = overlap (infsup (2, 4), infsup (1, 3));
+%! assert (s, "overlappedBy");
+%! assert (n, uint16 (4));
+%!test
+%! [s, n] = overlap (infsup (2, 3), infsup (1, 2));
+%! assert (s, "metBy");
+%! assert (n, uint16 (2));
+%!test
+%! [s, n] = overlap (infsup (3, 4), infsup (1, 2));
+%! assert (s, "after");
+%! assert (n, uint16 (1));

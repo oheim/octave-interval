@@ -124,4 +124,26 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
 %!assert (mpfr_vector_sum_d (0, [eps, realmax, realmax, -realmax, -realmax]), eps)
 %!assert (mpfr_vector_sum_d (-inf, [eps/2, 1]), 1)
 %!assert (mpfr_vector_sum_d (+inf, [eps/2, 1]), 1 + eps)
+%!test
+%!  a = inf (infsup ("0X1.1111111111111P+100"));
+%!  b = inf (infsup ("0X1.1111111111111P+1"));
+%!  [s, e] = mpfr_vector_sum_d (0.5, [a, b]);
+%!  assert (s, a);
+%!  assert (e, b);
+%!test
+%!  a = inf (infsup ("0X1.1111111111111P+53"));
+%!  b = inf (infsup ("0X1.1111111111111P+1"));
+%!  c = inf (infsup ("0X1.1111111111112P+53"));
+%!  d = inf (infsup ("0X1.111111111111P-3"));
+%!  [s, e] = mpfr_vector_sum_d (0.5, [a, b]);
+%!  assert (s, c);
+%!  assert (e, d);
+%!test
+%!  a = inf (infsup ("0X1.1111111111111P+2"));
+%!  b = inf (infsup ("0X1.1111111111111P+1"));
+%!  c = inf (infsup ("0X1.999999999999AP+2"));
+%!  d = inf (infsup ("-0X1P-51"));
+%!  [s, e] = mpfr_vector_sum_d (0.5, [a, b]);
+%!  assert (s, c);
+%!  assert (e, d);
 */

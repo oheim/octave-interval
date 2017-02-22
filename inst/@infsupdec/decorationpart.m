@@ -98,4 +98,16 @@ endfunction
 
 %!assert (decorationpart (infsupdec (3, 4)), {"com"});
 %!assert (decorationpart (infsupdec (3, inf)), {"dac"});
+%!assert (decorationpart (infsupdec ("[3, 4]_def")), {"def"});
 %!assert (decorationpart (infsupdec ()), {"trv"});
+%!assert (decorationpart (nai), {"ill"});
+
+%!assert (decorationpart (nai, "uint8") ...
+%!      < decorationpart (infsupdec ("[3, 4]_trv"), "uint8"));
+%!assert (decorationpart (infsupdec ("[3, 4]_trv"), "uint8") ...
+%!      < decorationpart (infsupdec ("[3, 4]_def"), "uint8"));
+%!assert (decorationpart (infsupdec ("[3, 4]_def"), "uint8") ...
+%!      < decorationpart (infsupdec ("[3, 4]_dac"), "uint8"));
+%!assert (decorationpart (infsupdec ("[3, 4]_dac"), "uint8") ...
+%!      < decorationpart (infsupdec ("[3, 4]_com"), "uint8"));
+
