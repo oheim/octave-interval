@@ -367,7 +367,7 @@ ifdef ITF1788_HOME
 
 check: test-itl
 .PHONY: test-itl
-test-itl: $(TST_GENERATED)
+test-itl: $(TST_GENERATED) $(OCT_COMPILED)
 	@echo "Running ITF1788 test suite in GNU Octave ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
 		--eval 'success = true;' \
