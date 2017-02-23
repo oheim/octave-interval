@@ -1,9 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT
-
-crlibm_version=`cat $srcdir/VERSION`
-dnl For Automake
-AM_INIT_AUTOMAKE(crlibm, $crlibm_version)
+AC_INIT(crlibm, 1.0beta5)
+AM_INIT_AUTOMAKE
 
 AC_CONFIG_HEADERS([crlibm_config.h])
 

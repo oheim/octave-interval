@@ -2,7 +2,7 @@
 
 
 lib_LIBRARIES = libscs.a
-INCLUDES=-I$(top_srcdir)
+AM_CPPFLAGS=-I$(top_srcdir)
 
 
 libscs_a_SOURCES = scs.h scs_private.h scs_private.c \
