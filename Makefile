@@ -48,21 +48,20 @@ SHELL   = /bin/sh
 ##     of all images. The .PNG versions are also used in the HTML manual, which
 ##     is published at Octave Forge.
 ##
-##   * Interval Testing Framework for IEEE 1788
+##   * Python 3 / Interval Testing Framework for IEEE 1788
 ##
 ##     The tool is used to convert test/*.itl into GNU Octave *.tst files
 ##     for validation of the package.
 ##
-##     Check out with git from https://github.com/oheim/ITF1788
-##     [this should be the branch with the latest Octave specific extensions]
-##     Set the environment variable ITF1788_HOME to the local git workspace,
-##     e. g. in .bashrc:
-##        export ITF1788_HOME=/home/oliver/Dokumente/ITF1788
-##
-##     It is important to have a local git workspace, because the generated
-##     files will be tagged with the generator version.
+##     The tool is automatically cloned from Github.  It is important to have
+##     a local git workspace, because the generated files will be tagged with
+##     the generator version.
 ##
 ##     See its requirements.txt file for required python packages.
+##
+##   * Zopfli
+##
+##     Is used to produce a smaller release tarball than is possible with gzip.
 ##
 
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
@@ -352,8 +351,12 @@ TST_SOURCES = $(wildcard test/*.itl)
 TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/interval
 TST_GENERATED = $(TST_SOURCES:test/%.itl=$(TST_GENERATED_DIR)/%.tst)
 TST_PATCHED = $(BUILD_DIR)/.tar.tests
+ITF1788_HOME ?= $(BUILD_DIR)/ITF1788
 
-$(TST_GENERATED_DIR)/%.tst: test/%.itl
+$(ITF1788_HOME):
+	git clone https://github.com/oheim/ITF1788.git "$@"
+
+$(TST_GENERATED_DIR)/%.tst: test/%.itl | $(ITF1788_HOME)
 	@echo "Compiling $< ..."
 	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(BUILD_DIR)" -s "test"
 	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
@@ -362,8 +365,6 @@ $(TST_GENERATED_DIR)/%.tst: test/%.itl
 		echo $(shell cd "$(ITF1788_HOME)" && git log --max-count=1 | head -1 | cut -f2 -d" "); \
 		cat "$@") > "$@_"
 	@mv "$@_" "$@"
-
-ifdef ITF1788_HOME
 
 check: test-itl
 .PHONY: test-itl
@@ -382,18 +383,3 @@ $(TST_PATCHED): $(TST_GENERATED) | $(RELEASE_TARBALL)
 	@tar --delete --file "$|" $(patsubst $(TST_GENERATED_DIR)/%,$(PACKAGE)-$(VERSION)/inst/test/%,$?) 2> /dev/null || true
 	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$|" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $?
 	@touch "$@"
-
-else
-
-$(RELEASE_TARBALL_COMPRESSED): ITF1788WARNING
-.PHONY: ITF1788WARNING
-ITF1788WARNING:
-	@echo
-	@echo "WARNING: ITF1788 not installed properly. The release will not contain"
-	@echo "generated tests."
-	@echo
-	@echo "Download ITF1788 from https://github.com/oheim/ITF1788"
-	@echo "and set the environment variable ITF1788_HOME accordingly."
-	@echo
-
-endif
