@@ -32,11 +32,11 @@ testcase minimal_intersection_dec_test {
     intersection [1.0,3.0]_com [2.1,4.0]_com = [2.1,3.0]_trv;
     intersection [1.0,3.0]_dac [3.0,4.0]_def = [3.0,3.0]_trv;
     intersection [1.0,3.0]_def [empty]_trv = [empty]_trv;
-    intersection [entire]_def [empty]_trv = [empty]_trv;
-    intersection [1.0,3.0]_dac [entire]_def = [1.0,3.0]_trv;
+    intersection [entire]_dac [empty]_trv = [empty]_trv;
+    intersection [1.0,3.0]_dac [entire]_dac = [1.0,3.0]_trv;
 }
 
-testcase minimal_convexHull_test {
+testcase minimal_convex_hull_test {
     convexHull [1.0,3.0] [2.1,4.0] = [1.0,4.0];
     convexHull [1.0,1.0] [2.1,4.0] = [1.0,4.0];
     convexHull [1.0,3.0] [empty] = [1.0,3.0];
@@ -44,10 +44,10 @@ testcase minimal_convexHull_test {
     convexHull [1.0,3.0] [entire] = [entire];
 }
 
-testcase minimal_convexHull_dec_test {
+testcase minimal_convex_hull_dec_test {
     convexHull [1.0,3.0]_trv [2.1,4.0]_trv = [1.0,4.0]_trv;
     convexHull [1.0,1.0]_trv [2.1,4.0]_trv = [1.0,4.0]_trv;
     convexHull [1.0,3.0]_trv [empty]_trv = [1.0,3.0]_trv;
     convexHull [empty]_trv [empty]_trv = [empty]_trv;
-    convexHull [1.0,3.0]_trv [entire]_def = [entire]_trv;
+    convexHull [1.0,3.0]_trv [entire]_dac = [entire]_trv;
 }
