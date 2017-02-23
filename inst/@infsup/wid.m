@@ -47,7 +47,7 @@ endif
 
 result = mpfr_function_d ('minus', +inf, x.sup, x.inf);
 
-result(isempty (x)) = nan ();
+result(x.inf > x.sup) = nan ();
 
 endfunction
 

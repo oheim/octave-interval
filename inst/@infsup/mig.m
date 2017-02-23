@@ -46,7 +46,7 @@ endif
 
 result = min (abs (x.inf), abs (x.sup));
 result(sign (x.inf) ~= sign (x.sup)) = 0;
-result(isempty (x)) = nan ();
+result(x.inf > x.sup) = nan ();
 
 endfunction
 

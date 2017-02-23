@@ -18,6 +18,7 @@
 @noindent Bugfixes
 @itemize
 @item infsupdec: Fixed unnecessary warnings with mixed parameters, strings and numerics.
+@item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.
 @end itemize
 
 @release{2.1.0, 2016-12-28}

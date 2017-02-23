@@ -45,7 +45,7 @@ if (nargin ~= 1)
 endif
 
 result = max (abs (x.inf), abs (x.sup));
-result(isempty (x)) = nan ();
+result(x.inf > x.sup) = nan ();
 
 endfunction
 
