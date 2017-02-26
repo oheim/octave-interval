@@ -70,7 +70,7 @@ DATE = $(shell grep "^Date: " DESCRIPTION | cut -f2 -d" ")
 HG_DATETIME_LOCAL = $(shell hg log --rev . --template {date\|isodate})
 HG_DATETIME_UTC = $(shell date --utc --rfc-3339=seconds --date="$(HG_DATETIME_LOCAL)")
 TAR_REPRODUCIBLE_OPTIONS = --mtime="$(HG_DATETIME_UTC)" --owner=root --group=root --numeric-owner
-CC_SOURCES = $(wildcard src/*.cc)
+CC_SOURCES = $(sort $(wildcard src/*.cc))
 CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
 BUILD_DIR = build
 RELEASE_DIR = $(BUILD_DIR)/$(PACKAGE)-$(VERSION)
@@ -347,7 +347,7 @@ debian:
 ## The following rules are required for generation of test files ##
 ###################################################################
 
-TST_SOURCES = $(wildcard test/*.itl)
+TST_SOURCES = $(sort $(wildcard test/*.itl))
 TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/interval
 TST_GENERATED = $(TST_SOURCES:test/%.itl=$(TST_GENERATED_DIR)/%.tst)
 TST_PATCHED = $(BUILD_DIR)/.tar.tests
