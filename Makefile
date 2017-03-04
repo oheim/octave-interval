@@ -69,7 +69,7 @@ VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 DATE = $(shell grep "^Date: " DESCRIPTION | cut -f2 -d" ")
 HG_DATETIME_LOCAL = $(shell hg log --rev . --template {date\|isodate})
 HG_DATETIME_UTC = $(shell date --utc --rfc-3339=seconds --date="$(HG_DATETIME_LOCAL)")
-TAR_REPRODUCIBLE_OPTIONS = --mtime="$(HG_DATETIME_UTC)" --owner=root --group=root --numeric-owner
+TAR_REPRODUCIBLE_OPTIONS = --mtime="$(HG_DATETIME_UTC)" --mode=a+r,g-w,o-w --owner=root --group=root --numeric-owner
 CC_SOURCES = $(sort $(wildcard src/*.cc))
 CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
 BUILD_DIR = build
