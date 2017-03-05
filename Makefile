@@ -110,7 +110,7 @@ GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(G
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
-LILYPOND ?= $(shell which lilypond)
+LILYPOND ?= $(shell which lilypond 2> /dev/null)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
