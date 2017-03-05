@@ -174,7 +174,7 @@ $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.tex
 ## GNU LilyPond graphics
 ## This is an exotic dependency for an Octave package, so the generated SVG
 ## is under version control and only gets recreated when LilyPond is installed.
-ifdef LILYPOND
+ifneq ($(LILYPOND),)
 doc/image/%.svg: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
 	@# .ly -> .eps
