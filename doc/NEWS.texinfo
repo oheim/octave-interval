@@ -19,6 +19,7 @@
 @itemize
 @item infsupdec: Fixed unnecessary warnings with mixed parameters, strings and numerics.
 @item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.
+@item dot: Fixed error in identification of dimensions when broadcasting (thanks to Joel Dahne).
 @end itemize
 
 @release{2.1.0, 2016-12-28}
@@ -52,14 +53,14 @@ A second big news is that the interval package comprises functions from VERSOFT,
 
 @item
     Warning and error identifiers of the constructors have been revised.
-    
+
     The warning identifier @code{interval:NaI} has been removed.  Illegal input signals an @code{interval:UndefinedOperation} warning.  If the input is of an illegal data type or of illegal size, the constructors signal an @code{interval:InvalidOperand} warning.
-    
+
     The warning identifier @code{interval:PossiblyUndefinedOperation} has been renamed to @code{interval:PossiblyUndefined} to better match the wording in the standard document. Also, previous versions failed to trigger this warning in cases where there is a floating point number between boundaries @var{u} < @var{l}, which has been fixed.
 
 @item
     It is no longer valid to call @code{infsup (+inf, -inf)} to create an empty interval and the constructor will signal a warning in these cases.  This change has been made to better conform to the @command{numsToInterval} function from the interval standard.
-    
+
     You may create empty intervals with either @code{infsup ()} or @code{infsupdec ()} or @code{empty ()}.
 
 @item
@@ -67,7 +68,7 @@ A second big news is that the interval package comprises functions from VERSOFT,
 
 @item
     Output of intervals in hexadecimal form discriminates between subnormal boundaries and normal boundaries.  Subnormal numbers start with “0x0.” whereas normal numbers start with “0x1.”.
-    
+
     Also, hexadecimal form has been changed to lower case.
 
 @item
@@ -223,7 +224,7 @@ A second big news is that the interval package comprises functions from VERSOFT,
 @release{0.2.1, 2015-05-30}
 @itemize
 @item
-    plot, plot3: New interval plotting functions.    
+    plot, plot3: New interval plotting functions.
     Pay attention to the included examples, which can be executed with @code{demo @@infsup/plot} and @code{demo @@infsup/plot3} respectively.
 @item
     polyval: New interval arithmetic algorithm

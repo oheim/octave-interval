@@ -66,7 +66,7 @@ if (nargin < 3)
         y.sup = vec (y.sup, dim);
     else
         ## Try to find non-singleton dimension
-        dim = find (any (size (x.inf), size (y.inf)) > 1, 1);
+        dim = find (and (size (x.inf) ~= 1, size (y.inf) ~= 1), 1);
         if (isempty (dim))
             dim = 1;
         endif
@@ -143,7 +143,7 @@ endfunction
 %!assert (dot (infsup (magic (3)), magic (3), 2) == [101; 83; 101]);
 
 %!# matrix × vector
-%!assert (dot (infsup (magic (3)), [1, 2, 3]) == [15, 30, 45]);
+%!assert (dot (infsup (magic (3)), [1, 2, 3]) == [28; 34; 28]);
 %!assert (dot (infsup (magic (3)), [1, 2, 3], 1) == [15, 30, 45]);
 %!assert (dot (infsup (magic (3)), [1, 2, 3], 2) == [28; 34; 28]);
 %!assert (dot (infsup (magic (3)), [1; 2; 3]) == [26, 38, 26]);
@@ -154,6 +154,14 @@ endfunction
 %!assert (dot (infsup (magic (3)), 42) == [630, 630, 630]);
 %!assert (dot (infsup (magic (3)), 42, 1) == [630, 630, 630]);
 %!assert (dot (infsup (magic (3)), 42, 2) == [630; 630; 630]);
+
+%!# vector x vector
+%!assert (dot (infsup([1, 2, 3]), [4, 5, 6]) == 32);
+%!assert (dot (infsup([1, 2, 3]), [4, 5, 6], 1) == [4, 10, 18]);
+%!assert (dot (infsup([1, 2, 3]), [4, 5, 6], 2) == 32);
+%!assert (dot (infsup([1; 2; 3]), [4; 5; 6]) == 32);
+%!assert (dot (infsup([1; 2; 3]), [4; 5; 6], 1) == 32);
+%!assert (dot (infsup([1; 2; 3]), [4; 5; 6], 2) == [4; 10; 18]);
 
 %!# vector × scalar
 %!assert (dot (infsup ([1, 2, 3]), 42) == 252);

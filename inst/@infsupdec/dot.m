@@ -64,7 +64,7 @@ if (nargin < 3)
         y = vec (y, dim);
     else
         ## Try to find non-singleton dimension
-        dim = find (any (size (x.dec), size (y.dec)) > 1, 1);
+        dim = find (and (size (x.dec) ~= 1, size (y.dec) ~= 1), 1);
         if (isempty (dim))
             dim = 1;
         endif
@@ -92,6 +92,40 @@ result.dec = min (result.dec, ...
                   min (min (x.dec, [], dim), min (y.dec, [], dim)));
 
 endfunction
+
+%!# matrix × matrix
+%!assert (isequal (dot (infsupdec (magic (3)), magic (3)), infsupdec([89, 107, 89])));
+%!assert (isequal (dot (infsupdec (magic (3)), magic (3), 1), infsupdec([89, 107, 89])));
+%!assert (isequal (dot (infsupdec (magic (3)), magic (3), 2), infsupdec([101; 83; 101])));
+
+%!# matrix × vector
+%!assert (isequal (dot (infsupdec (magic (3)), [1, 2, 3]), infsupdec([28; 34; 28])));
+%!assert (isequal (dot (infsupdec (magic (3)), [1, 2, 3], 1), infsupdec([15, 30, 45])));
+%!assert (isequal (dot (infsupdec (magic (3)), [1, 2, 3], 2), infsupdec([28; 34; 28])));
+%!assert (isequal (dot (infsupdec (magic (3)), [1; 2; 3]), infsupdec([26, 38, 26])));
+%!assert (isequal (dot (infsupdec (magic (3)), [1; 2; 3], 1), infsupdec([26, 38, 26])));
+%!assert (isequal (dot (infsupdec (magic (3)), [1; 2; 3], 2), infsupdec([15; 30; 45])));
+
+%!# matrix × scalar
+%!assert (isequal (dot (infsupdec (magic (3)), 42), infsupdec([630, 630, 630])));
+%!assert (isequal (dot (infsupdec (magic (3)), 42, 1), infsupdec([630, 630, 630])));
+%!assert (isequal (dot (infsupdec (magic (3)), 42, 2), infsupdec([630; 630; 630])));
+
+%!# vector x vector
+%!assert (isequal (dot (infsupdec([1, 2, 3]), [4, 5, 6]), infsupdec(32)));
+%!assert (isequal (dot (infsupdec([1, 2, 3]), [4, 5, 6], 1), infsupdec([4, 10, 18])));
+%!assert (isequal (dot (infsupdec([1, 2, 3]), [4, 5, 6], 2), infsupdec(32)));
+%!assert (isequal (dot (infsupdec([1; 2; 3]), [4; 5; 6]), infsupdec(32)));
+%!assert (isequal (dot (infsupdec([1; 2; 3]), [4; 5; 6], 1), infsupdec(32)));
+%!assert (isequal (dot (infsupdec([1; 2; 3]), [4; 5; 6], 2), infsupdec([4; 10; 18])));
+
+%!# vector × scalar
+%!assert (isequal (dot (infsupdec ([1, 2, 3]), 42), infsupdec(252)));
+%!assert (isequal (dot (infsupdec ([1, 2, 3]), 42, 1), infsupdec([42, 84, 126])));
+%!assert (isequal (dot (infsupdec ([1, 2, 3]), 42, 2), infsupdec(252)));
+%!assert (isequal (dot (infsupdec ([1; 2; 3]), 42), infsupdec(252)));
+%!assert (isequal (dot (infsupdec ([1; 2; 3]), 42, 1), infsupdec(252)));
+%!assert (isequal (dot (infsupdec ([1; 2; 3]), 42, 2), infsupdec([42; 84; 126])));
 
 %!# from the documentation string
 %!assert (isequal (dot ([infsupdec(1), 2, 3], [infsupdec(2), 3, 4]), infsupdec (20)));
