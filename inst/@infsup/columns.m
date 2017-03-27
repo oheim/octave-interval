@@ -18,7 +18,7 @@
 ## @defmethod {@@infsup} columns (@var{A})
 ##
 ## Return the number of columns of @var{A}.
-## @seealso{@@infsup/numel, @@infsup/size, @@infsup/length, @@infsup/rows}
+## @seealso{@@infsup/numel, @@infsup/size, @@infsup/length, @@infsup/rows, @@infsup/end}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

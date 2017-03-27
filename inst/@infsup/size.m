@@ -26,7 +26,7 @@
 ##
 ## If given a second argument, @code{size} will return the size of the
 ## corresponding dimension.
-## @seealso{@@infsup/length, @@infsup/numel, @@infsup/rows, @@infsup/columns}
+## @seealso{@@infsup/length, @@infsup/numel, @@infsup/rows, @@infsup/columns, @@infsup/end}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

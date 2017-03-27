@@ -18,7 +18,7 @@
 ## @defmethod {@@infsup} numel (@var{A})
 ##
 ## Return the number of elements in the interval object @var{A}.
-## @seealso{@@infsup/length, @@infsup/size, @@infsup/rows, @@infsup/columns}
+## @seealso{@@infsup/length, @@infsup/size, @@infsup/rows, @@infsup/columns, @@infsup/end}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

@@ -20,6 +20,7 @@
 @item infsupdec: Fixed unnecessary warnings with mixed parameters, strings and numerics.
 @item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.
 @item dot: Fixed error in identification of dimensions when broadcasting (thanks to Joel Dahne).
+@item Fixed indexing operations on intervals with the use of @code{end} (bug #50626, thanks to Joel Dahne).
 @end itemize
 
 @release{2.1.0, 2016-12-28}

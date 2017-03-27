@@ -18,7 +18,7 @@
 ## @defmethod {@@infsup} rows (@var{A})
 ##
 ## Return the number of rows of @var{A}.
-## @seealso{@@infsup/numel, @@infsup/size, @@infsup/length, @@infsup/columns}
+## @seealso{@@infsup/numel, @@infsup/size, @@infsup/length, @@infsup/columns, @@infsup/end}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

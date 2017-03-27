@@ -44,7 +44,7 @@
 ##      4   9   2
 ## @end group
 ## @end example
-## @seealso{@@infsup/subsasgn}
+## @seealso{@@infsup/subsasgn, @@infsup/end}
 ## @end defop
 
 ## Author: Oliver Heimlich

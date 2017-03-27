@@ -22,7 +22,7 @@
 ## The length is 0 for empty objects, 1 for scalars, and the number of elements
 ## for vectors.  For matrix objects, the length is the number of rows or
 ## columns, whichever is greater.
-## @seealso{@@infsup/numel, @@infsup/size, @@infsup/rows, @@infsup/columns}
+## @seealso{@@infsup/numel, @@infsup/size, @@infsup/rows, @@infsup/columns, @@infsup/end}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

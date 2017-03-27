@@ -25,7 +25,7 @@
 ## @code{type} and @code{subs}.  Only valid value for @var{type} is
 ## @code{"()"}.  The @code{subs} field may be either @code{":"} or a cell array
 ## of index values.
-## @seealso{@@infsup/subsref}
+## @seealso{@@infsup/subsref, @@infsup/end}
 ## @end defop
 
 ## Author: Oliver Heimlich
