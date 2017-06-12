@@ -78,48 +78,69 @@ function varargout = disp (x)
 
   ## Print all columns
   buffer = "";
-  if (rows (x.inf) > 0)
-    ## FIXME: See display.m for how current_print_indent_level is used
-    global current_print_indent_level;
-    maxwidth = terminal_size ()(2) - current_print_indent_level;
-    cstart = uint32 (1);
-    cend = cstart - 1;
-    while (cstart <= columns (x.inf))
-      ## Determine number of columns to print, print at least one column
-      usedwidth = 0;
-      submatrix = "";
-      do
-        cend ++;
-        submatrix = strcat (submatrix, ...
-                            prepad (strjust (char (s(:, cend))), ...
-                                    columnwidth(cend), " ", 2));
-        usedwidth += columnwidth(cend);
-      until (cend == columns (x.inf) || ...
-             (split_long_rows () && ...
-              usedwidth + columnwidth(cend + 1) > maxwidth))
-      if (cstart > 1 || cend < columns (x.inf))
-        if (cstart > 1)
-          buffer = cstrcat (buffer, "\n");
-        endif
-        if (cend > cstart)
-          buffer = cstrcat (buffer, ...
-                            sprintf(" Columns %d through %d:\n\n", ...
-                                    cstart, cend)); ...
-        else
-          buffer = cstrcat (buffer, ...
-                            sprintf(" Column %d:\n\n", cstart));
-        endif
-      endif
-      ## Convert string matrix into string with newlines
-      buffer = cstrcat (buffer, strjoin (cellstr (submatrix), "\n"), "\n");
-      if (nargout == 0)
-        printf (buffer);
-        buffer = "";
-      endif
-      cstart = cend + 1;
-    endwhile
-  endif
+  for matrixpart = 1:prod (size (x.inf)(3:end))
+    if (rows (x.inf) > 0)
+      ## FIXME: See display.m for how current_print_indent_level is used
+      global current_print_indent_level;
+      maxwidth = terminal_size ()(2) - current_print_indent_level;
 
+      if (ndims (x) > 2)
+        ## Print the index for the current matrix in the array
+        buffer = cstrcat (buffer, sprintf(" ans(:,:"));
+        matrixpartsubscript = cell (1, ndims (x) - 2);
+        [matrixpartsubscript{:}] = ind2sub (size (x), matrixpart);
+        for i=1:ndims (x) - 2
+          buffer = cstrcat (buffer, sprintf(",%d", ...
+                                            char(matrixpartsubscript(i))));
+        endfor
+        ## FIXME: How should we handle the equal sign, "=", when the
+        ## representation is not exact?
+        buffer = cstrcat (buffer, sprintf(") ="));
+        if (rows (x.inf) > 1 || columns (x.inf) > 1)
+          buffer = cstrcat (buffer, "\n\n");
+        endif
+      endif
+
+      cstart = uint32 (1);
+      cend = cstart - 1;
+      while (cstart <= columns (x.inf))
+        ## Determine number of columns to print, print at least one column
+        usedwidth = 0;
+        submatrix = "";
+        do
+          cend ++;
+          submatrix = strcat (submatrix, ...
+                              prepad (strjust (char (s(:, cend, ...
+                                                       matrixpart))), ...
+                                      columnwidth(1, cend, matrixpart), ...
+                                      " ", 2));
+          usedwidth += columnwidth(cend);
+        until (cend == columns (x.inf) || ...
+               (split_long_rows () && ...
+                usedwidth + columnwidth(cend + 1) > maxwidth))
+        if (cstart > 1 || cend < columns (x.inf))
+          if (cstart > 1)
+            buffer = cstrcat (buffer, "\n");
+          endif
+          if (cend > cstart)
+            buffer = cstrcat (buffer, ...
+                              sprintf(" Columns %d through %d:\n\n", ...
+                                      cstart, cend)); ...
+          else
+            buffer = cstrcat (buffer, ...
+                              sprintf(" Column %d:\n\n", cstart));
+          endif
+        endif
+        ## Convert string matrix into string with newlines
+        buffer = cstrcat (buffer, strjoin (cellstr (submatrix), "\n"), "\n");
+        if (nargout == 0)
+          printf (buffer);
+          buffer = "";
+        endif
+        cstart = cend + 1;
+      endwhile
+    endif
+  endfor
   if (nargout > 0)
     varargout{1} = buffer;
     varargout{2} = isexact;
@@ -133,3 +154,4 @@ endfunction
 %!assert (disp (infsup([0 0])), "   [0]   [0]\n");
 %!assert (disp (infsup([0 0; 0 0])), "   [0]   [0]\n   [0]   [0]\n");
 %!assert (disp (infsup([0; 0])), "   [0]\n   [0]\n");
+%!assert (disp (infsup(zeros(2, 2, 2))), " ans(:,:,1) =\n\n   [0]   [0]\n   [0]   [0]\n ans(:,:,2) =\n\n   [0]   [0]\n   [0]   [0]\n")
