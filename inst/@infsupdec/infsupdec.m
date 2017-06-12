@@ -183,7 +183,9 @@ function [x, isexact] = infsupdec (varargin)
     fix_illegal_decorations = false;
   else
     ## Undecorated interval boundaries
-    decstr = {""};
+    ## FIXME: Workaround while plus is not implemented for higher
+    ## dimensions
+    decstr = cell (size (varargin{1}));
     ## No need to fix illegal decorations
     fix_illegal_decorations = false;
   endif
