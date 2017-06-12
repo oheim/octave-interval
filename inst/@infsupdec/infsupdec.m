@@ -22,7 +22,7 @@
 ## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U})
 ## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{L}, @var{U}, @var{D})
 ## @deftypeopx Constructor {@@infsupdec} {[@var{X}, @var{ISEXACT}] =} infsupdec (@var{I}, @var{D})
-## 
+##
 ## Create a decorated interval from boundaries.  Convert boundaries to double
 ## precision.
 ##
@@ -36,7 +36,7 @@
 ## equivalent to @code{infsupdec ("S1", "S2")} and, if [S1, S2]_D is a valid
 ## interval literal,
 ## @code{infsupdec ("[S1, S2]_D")} is equivalent to
-## @code{infsupdec ("S1", "S2", "D")}.  The syntax 
+## @code{infsupdec ("S1", "S2", "D")}.  The syntax
 ## @code{infsupdec (@var{I}, @var{D})} overrides an interval @var{I}'s
 ## decoration with a new decoration @var{D}.  A second, logical output
 ## @var{ISEXACT} indicates if @var{X}'s boundaries both have been converted
@@ -60,7 +60,7 @@
 ## second @code{?} character for unbounded intervals, @code{u} is
 ## empty or a direction character (u: up, d: down), and @code{E} is an
 ## exponential field.
-## 
+##
 ## If decimal or hexadecimal numbers are no binary64 floating point numbers, a
 ## tight enclosure will be computed.  int64 and uint64 numbers of high
 ## magnitude (> 2^53) can also be affected from precision loss.
@@ -70,14 +70,14 @@
 ## will produce NaIs, whereas illegal decorations provided as an additional
 ## function parameter will be automatically adjusted.
 ##
-## For the creation of interval matrices, arguments may be provided as (1) cell 
+## For the creation of interval matrices, arguments may be provided as (1) cell
 ## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.
 ## Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE Std
 ## 1788-2015, however it implements the standard functions setDec,
 ## numsToInterval, and textToInterval.
-## 
+##
 ## @example
 ## @group
 ## v = infsupdec ()
@@ -101,221 +101,223 @@
 
 function [x, isexact] = infsupdec (varargin)
 
-persistent scalar_empty_interval = class (struct ("dec", _trv), ...
-                                          "infsupdec", infsup ());
+  persistent scalar_empty_interval = class (struct ("dec", _trv), ...
+                                            "infsupdec", infsup ());
 
-## Enable all mixed mode functions to use decorated variants with implicit
-## conversion from bare to decorated intervals.
-##
-## There is bug #42735 in GNU Octave core, which makes this a little
-## complicated: When [infsup] [operator] [infsupdec] syntax is used, the
-## decoration from the second argument would be lost, because the bare
-## implementation for the operator is evaluated. However, sufficient runtime
-## checks have been placed in the overloaded class operator implementations of
-## the infsup class as a workaround.
-##
-## The workaround is necessary, because otherwise this could lead to wrong
-## results, which is catastrophic for a verified computation package.
-superiorto ("infsup");
+  ## Enable all mixed mode functions to use decorated variants with implicit
+  ## conversion from bare to decorated intervals.
+  ##
+  ## There is bug #42735 in GNU Octave core, which makes this a little
+  ## complicated: When [infsup] [operator] [infsupdec] syntax is used, the
+  ## decoration from the second argument would be lost, because the bare
+  ## implementation for the operator is evaluated. However, sufficient runtime
+  ## checks have been placed in the overloaded class operator implementations of
+  ## the infsup class as a workaround.
+  ##
+  ## The workaround is necessary, because otherwise this could lead to wrong
+  ## results, which is catastrophic for a verified computation package.
+  superiorto ("infsup");
 
-if (nargin == 0)
+  if (nargin == 0)
     x = scalar_empty_interval;
     isexact = true;
     return
-endif
+  endif
 
-if (nargin == 1 && isa (varargin{1}, "infsupdec"))
+  if (nargin == 1 && isa (varargin{1}, "infsupdec"))
     x = varargin{1};
     isexact = true;
     return
-endif
+  endif
 
-for i = 1 : numel (varargin)
+  for i = 1 : numel (varargin)
     if (ischar (varargin{i}))
-        varargin{i} = __split_interval_literals__ (varargin{i});
+      varargin{i} = __split_interval_literals__ (varargin{i});
     endif
-endfor
+  endfor
 
-if (nargin >= 1 && ...
-    iscellstr (varargin{end}) && ...
-    not (isempty (varargin{end})) && ...
-    any (strcmpi (varargin{end}{1}, ...
-                  {"com", "dac", "def", "trv", "ill"})))
+  if (nargin >= 1 && ...
+      iscellstr (varargin{end}) && ...
+      not (isempty (varargin{end})) && ...
+      any (strcmpi (varargin{end}{1}, ...
+                    {"com", "dac", "def", "trv", "ill"})))
     ## The decoration information has been passed as the last parameter
     decstr = varargin{end};
     varargin = varargin(1 : end - 1);
-    
+
     ## The setDec function, as described by IEEE Std 1788-2015,
     ## may fix decorations
     fix_illegal_decorations = true;
-elseif (nargin == 1 && iscell (varargin{1}))
+  elseif (nargin == 1 && iscell (varargin{1}))
     ## Extract decorations from possibly decorated interval literals
     char_idx = cellfun ("ischar", varargin{1});
-    
+
     ## Split bare interval literal and decoration
     literal_and_decoration = cellfun ("strsplit", ...
                                       varargin{1}(char_idx), {"_"}, ...
                                       "UniformOutput", false);
-    
+
     number_of_parts = cellfun ("numel", literal_and_decoration);
     illegal_local_idx = number_of_parts > 2;
     if (any (illegal_local_idx(:)))
-        ## More than 2 underscores in any literal
-        warning ("interval:UndefinedOperation", ...
-                 "illegal decorated interval literal")
-        literal_and_decoration(illegal_local_idx) = {"[nai]"};
+      ## More than 2 underscores in any literal
+      warning ("interval:UndefinedOperation", ...
+               "illegal decorated interval literal")
+      literal_and_decoration(illegal_local_idx) = {"[nai]"};
     endif
-    
+
     ## Ignore strings without decoration
     has_decoration_local_idx = (number_of_parts == 2);
     literal_and_decoration = literal_and_decoration(has_decoration_local_idx);
     char_idx(char_idx) = has_decoration_local_idx;
-    
+
     ## Extract decoration
     decstr = cell (size (varargin{1}));
     decstr(char_idx) = vertcat ({}, ...
-        cellindexmat (literal_and_decoration, 2){:});
+                                cellindexmat (literal_and_decoration, 2){:});
     varargin{1}(char_idx) = vertcat({}, ...
-        cellindexmat (literal_and_decoration, 1){:});
-    
+                                    cellindexmat (literal_and_decoration, ...
+                                                  1){:});
+
     ## Interval literals must not carry illegal decorations
     fix_illegal_decorations = false;
-else
+  else
     ## Undecorated interval boundaries
     decstr = {""};
     ## No need to fix illegal decorations
     fix_illegal_decorations = false;
-endif
+  endif
 
-switch numel (varargin)
+  switch numel (varargin)
     case 0
-        [bare, isexact] = infsup ();
-        isnai = overflow = false;
-    
+      [bare, isexact] = infsup ();
+      isnai = overflow = false;
+
     case 1
-        switch class (varargin{1})
-            case "infsup"
-                bare = varargin{1};
-                isexact = true;
-                isnai = overflow = false (size (bare));
-                if (nargin == 1 && any (not (isempty (bare)(:))))
-                    warning ("interval:ImplicitPromote", ...
-                            ["Implicitly decorated bare interval; ", ...
-                             "resulting decoration may be wrong"]);
-                endif
-                
-            case "infsupdec"
-                ## setDec and newDec replace the current decoration
-                ## with a new one
-                bare = struct (varargin{1}).infsup;
-                isexact = true;
-                isnai = overflow = false (size (bare));
-                
-            case "cell"
-                ## [nai] is a legal literal, but not allowed in the infsup
-                ## constructor.  Create a silent nai in these cases.
-                char_idx = cellfun ("ischar", varargin{1});
-                nai_literal_local_idx = not (cellfun ("isempty", ...
-                    regexp (varargin{1}(char_idx), '^\s*\[\s*nai\s*\]\s*$', ...
-                        "ignorecase")));
-                nai_literal_idx = find (char_idx)(nai_literal_local_idx);
-                varargin{1}(nai_literal_idx) = "[]";
-                [bare, isexact, overflow, isnai] = infsup (varargin{1});
-                isnai(nai_literal_idx) = true;
-            
-            otherwise
-                [bare, isexact, overflow, isnai] = infsup (varargin{1});
-                
-        endswitch
+      switch class (varargin{1})
+        case "infsup"
+          bare = varargin{1};
+          isexact = true;
+          isnai = overflow = false (size (bare));
+          if (nargin == 1 && any (not (isempty (bare)(:))))
+            warning ("interval:ImplicitPromote", ...
+                     ["Implicitly decorated bare interval; ", ...
+                      "resulting decoration may be wrong"]);
+          endif
+
+        case "infsupdec"
+          ## setDec and newDec replace the current decoration
+          ## with a new one
+          bare = struct (varargin{1}).infsup;
+          isexact = true;
+          isnai = overflow = false (size (bare));
+
+        case "cell"
+          ## [nai] is a legal literal, but not allowed in the infsup
+          ## constructor.  Create a silent nai in these cases.
+          char_idx = cellfun ("ischar", varargin{1});
+          nai_literal_local_idx = not (cellfun ("isempty", ...
+                                                regexp (varargin{1}(char_idx), ...
+                                                        '^\s*\[\s*nai\s*\]\s*$', ...
+                                                        "ignorecase")));
+          nai_literal_idx = find (char_idx)(nai_literal_local_idx);
+          varargin{1}(nai_literal_idx) = "[]";
+          [bare, isexact, overflow, isnai] = infsup (varargin{1});
+          isnai(nai_literal_idx) = true;
+
+        otherwise
+          [bare, isexact, overflow, isnai] = infsup (varargin{1});
+
+      endswitch
 
     case 2
-        [bare, isexact, overflow, isnai] = infsup (varargin{1}, varargin{2});
-    
+      [bare, isexact, overflow, isnai] = infsup (varargin{1}, varargin{2});
+
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-## Convert decoration strings into decoration matrix.
-## Initialize the matrix with the ill decoration, which is not allowed to
-## be used explicitly as a parameter to this function.
-dec = repmat (_ill, size (decstr));
+  ## Convert decoration strings into decoration matrix.
+  ## Initialize the matrix with the ill decoration, which is not allowed to
+  ## be used explicitly as a parameter to this function.
+  dec = repmat (_ill, size (decstr));
 
-## Missing decorations will later be assigned their final value
-missingdecoration_value = uint8 (1); # magic value, not used otherwise
-dec(cellfun ("isempty", decstr)) = missingdecoration_value;
+  ## Missing decorations will later be assigned their final value
+  missingdecoration_value = uint8 (1); # magic value, not used otherwise
+  dec(cellfun ("isempty", decstr)) = missingdecoration_value;
 
-dec(strcmpi (decstr, "com")) = _com;
-dec(strcmpi (decstr, "dac")) = _dac;
-dec(strcmpi (decstr, "def")) = _def;
-dec(strcmpi (decstr, "trv")) = _trv;
+  dec(strcmpi (decstr, "com")) = _com;
+  dec(strcmpi (decstr, "dac")) = _dac;
+  dec(strcmpi (decstr, "def")) = _def;
+  dec(strcmpi (decstr, "trv")) = _trv;
 
-if (any ((dec == _ill)(:)))
+  if (any ((dec == _ill)(:)))
     warning ("interval:UndefinedOperation", "illegal decoration");
-endif
+  endif
 
-## Broadcast decoration and bare interval
-if (not (isequal (size (bare), size (dec))))
+  ## Broadcast decoration and bare interval
+  if (not (isequal (size (bare), size (dec))))
     for dim = 1 : max (ndims (bare), ndims (dec))
-        if (size (bare, dim) != 1 && size (dec, dim) != 1 && ...
-            size (bare, dim) != size (dec, dim))
-            warning ("interval:InvalidOperand", ...
-                     ["infsupdec: Dimensions of decoration and interval ", ...
-                      "are not compatible"]);
-            ## Unable to recover from this kind of error
-            x = scalar_empty_interval;
-            isexact = false;
-            return
-        endif
+      if (size (bare, dim) != 1 && size (dec, dim) != 1 && ...
+          size (bare, dim) != size (dec, dim))
+        warning ("interval:InvalidOperand", ...
+                 ["infsupdec: Dimensions of decoration and interval ", ...
+                  "are not compatible"]);
+        ## Unable to recover from this kind of error
+        x = scalar_empty_interval;
+        isexact = false;
+        return
+      endif
     endfor
     dec = dec + zeros (size (bare), "uint8");
     bare = bare + zeros (size (dec));
-endif
+  endif
 
-## If creation failed in infsup constructor, make an illegal interval
-dec(isnai) = _ill;
+  ## If creation failed in infsup constructor, make an illegal interval
+  dec(isnai) = _ill;
 
-## Silently fix decoration when overflow occurred
-dec(overflow & (dec == _com)) = _dac;
+  ## Silently fix decoration when overflow occurred
+  dec(overflow & (dec == _com)) = _dac;
 
-## Add missing decoration
-missingdecoration = (dec == missingdecoration_value);
-dec(missingdecoration) = _dac;
-dec(missingdecoration & isempty (bare)) = _trv;
-dec(missingdecoration & iscommoninterval (bare)) = _com;
+  ## Add missing decoration
+  missingdecoration = (dec == missingdecoration_value);
+  dec(missingdecoration) = _dac;
+  dec(missingdecoration & isempty (bare)) = _trv;
+  dec(missingdecoration & iscommoninterval (bare)) = _com;
 
-## Check decoration
-empty_not_trv = isempty (bare) & (dec ~= _trv) & (dec ~= _ill);
-if (any (empty_not_trv(:)))
+  ## Check decoration
+  empty_not_trv = isempty (bare) & (dec ~= _trv) & (dec ~= _ill);
+  if (any (empty_not_trv(:)))
     if (not (fix_illegal_decorations))
-        warning ("interval:UndefinedOperation", ...
-                 "illegal decorated empty interval literal")
-        dec(empty_not_trv) = _ill;
+      warning ("interval:UndefinedOperation", ...
+               "illegal decorated empty interval literal")
+      dec(empty_not_trv) = _ill;
     else
-        dec(empty_not_trv) = _trv;
+      dec(empty_not_trv) = _trv;
     endif
     isexact = false ();
-endif
-uncommon_com = not (iscommoninterval (bare)) & (dec == _com);
-if (any (uncommon_com(:)))
+  endif
+  uncommon_com = not (iscommoninterval (bare)) & (dec == _com);
+  if (any (uncommon_com(:)))
     if (not (fix_illegal_decorations))
-        warning ("interval:UndefinedOperation", ...
-                 "illegal decorated uncommon interval literal")
-        dec(uncommon_com) = _ill;
+      warning ("interval:UndefinedOperation", ...
+               "illegal decorated uncommon interval literal")
+      dec(uncommon_com) = _ill;
     else
-        dec(uncommon_com) = _dac;
+      dec(uncommon_com) = _dac;
     endif
     isexact = false ();
-endif
+  endif
 
-## Illegal intervals must be empty
-illegal = (dec == _ill);
-if (any (illegal(:)))
+  ## Illegal intervals must be empty
+  illegal = (dec == _ill);
+  if (any (illegal(:)))
     bare(illegal) = infsup ();
     isexact = false ();
-endif
+  endif
 
-x = class (struct ("dec", dec), "infsupdec", bare);
+  x = class (struct ("dec", dec), "infsupdec", bare);
 
 endfunction
 
@@ -335,7 +337,7 @@ endfunction
 %! assert (isnai (infsupdec ("[Empty]_def"))); # illegal decorated literal
 
 %!# decoration adjustments, setDec function
-%!test 
+%!test
 %! x = infsupdec (42, inf, "com");
 %! assert (inf (x), 42);
 %! assert (sup (x), inf);
