@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} display (@var{X})
-## 
+##
 ## Display the variable name and value of interval @var{X}.
 ##
 ## Interval boundaries are approximated with faithful decimal numbers.
@@ -64,78 +64,90 @@
 
 function display (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-global current_print_indent_level;
-save_current_print_indent_level = current_print_indent_level;
-unwind_protect
+  global current_print_indent_level;
+  save_current_print_indent_level = current_print_indent_level;
+  unwind_protect
     label = inputname (1);
     if (isempty (label) && regexp(argn, '^\[\d+,\d+\]$'))
-        ## During output of cell array contents
-        label = argn;
-        ## FIXME: Need access to octave_value::current_print_indent_level
-        ## for correctly formatted nested cell array output
-        current_print_indent_level = 2;
+      ## During output of cell array contents
+      label = argn;
+      ## FIXME: Need access to octave_value::current_print_indent_level
+      ## for correctly formatted nested cell array output
+      current_print_indent_level = 2;
     else
-        current_print_indent_level = 0;
+      current_print_indent_level = 0;
     endif
-    
+
     line_prefix = " "(ones (1, current_print_indent_level));
-    
+
     [s, isexact] = disp (x);
-    
+
     printf (line_prefix);
     if (not (isempty (label)))
-        printf (label);
-        if (isexact || ispc ())
-            printf (" = ");
-        else
-            ## The Microsoft Windows console does not support this multibyte
-            ## character.
-            printf (" ⊂ ");
-        endif
+      printf (label);
+      if (isexact || ispc ())
+        printf (" = ");
+      else
+        ## The Microsoft Windows console does not support this multibyte
+        ## character.
+        printf (" ⊂ ");
+      endif
     endif
-    
+
     if (isscalar (x))
-        ## Scalar interval
-        printf (s);
-        if (isempty (label))
-            printf ("\n");
-        endif
-        return
+      ## Scalar interval
+      printf (s);
+      if (isempty (label))
+        printf ("\n");
+      endif
+      return
     endif
-    
+
     if (ispc ())
-        printf ("%dx%d interval ", size (x, 1), size (x, 2));
+      printf ("%dx%d", size (x, 1), size (x, 2));
     else
-        ## The Microsoft Windows console does not support multibyte characters.
-        printf ("%d×%d interval ", size (x, 1), size (x, 2));
+      ## The Microsoft Windows console does not support multibyte characters.
+      printf ("%d×%d", size (x, 1), size (x, 2));
     endif
+
+    for n=3:ndims(x)
+      if (ispc ())
+        printf ("x%d", size (x, n));
+      else
+        ## The Microsoft Windows console does not support multibyte characters.
+        printf ("×%d", size (x, n));
+      endif
+    endfor
+
     if (isvector (x))
-        printf ("vector");
+      printf (" interval vector");
+    elseif (ismatrix (x))
+      printf (" interval matrix");
     else
-        printf ("matrix");
+      printf (" interval array")
     endif
     printf ("\n\n");
-    
+
     if (not (isempty (s)))
-        printf (line_prefix);
-        
-        if (current_print_indent_level > 0)
-            s = strrep (s, "\n", cstrcat ("\n", line_prefix));
-            s(end - current_print_indent_level + 1 : end) = "";
-        endif
-        
-        printf (s);
-        
-        printf ("\n");
+      printf (line_prefix);
+
+      if (current_print_indent_level > 0)
+        s = strrep (s, "\n", cstrcat ("\n", line_prefix));
+        s(end - current_print_indent_level + 1 : end) = "";
+      endif
+
+      printf (s);
+
+      printf ("\n");
     endif
-unwind_protect_cleanup
+  unwind_protect_cleanup
     current_print_indent_level = save_current_print_indent_level;
-end_unwind_protect
+  end_unwind_protect
 
 endfunction
 
