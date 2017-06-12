@@ -18,7 +18,7 @@
 ## @defun entire ()
 ## @defunx entire (@var{N})
 ## @defunx entire (@var{N}, @var{M})
-## 
+##
 ## Return the entire set of real numbers.
 ##
 ## With additional parameters, create an interval vector/matrix, which
@@ -57,19 +57,10 @@
 
 function result = entire (varargin)
 
-if (nargin > 2)
-    print_usage ();
-    return
-endif
+  persistent scalar_entire_interval = infsupdec (-inf, inf);
 
-persistent scalar_entire_interval = infsupdec (-inf, inf);
-
-if (nargin == 0)
-    result = scalar_entire_interval;
-else
-    result = subsref (scalar_entire_interval, ...
-                      substruct ("()", {ones(varargin{:})}));
-endif
+  result = subsref (scalar_entire_interval, ...
+                    substruct ("()", {ones(varargin{:})}));
 
 endfunction
 
@@ -82,3 +73,6 @@ endfunction
 %!assert (inf (entire (5, 6)), -inf (5, 6));
 %!assert (sup (entire (5, 6)), inf (5, 6));
 %!assert (strcmp (decorationpart (entire (5, 6)), "dac"), true (5, 6));
+%!assert (inf (entire (5, 6, 7)), -inf (5, 6, 7));
+%!assert (sup (entire (5, 6, 7)), inf (5, 6, 7));
+%!assert (strcmp (decorationpart (entire (5, 6, 7)), "dac"), true (5, 6, 7));

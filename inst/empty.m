@@ -18,10 +18,12 @@
 ## @defun empty ()
 ## @defunx empty (@var{N})
 ## @defunx empty (@var{N}, @var{M})
-## 
+## @defunx empty (@var{N}, @var{M}, @var{K}, ...)
+## @defunx empty ([@var{N} @var{M} ...])
+##
 ## Return the empty interval.
 ##
-## With additional parameters, create an interval vector/matrix, which
+## With additional parameters, create an interval vector/matrix/array, which
 ## comprises empty interval entries.
 ##
 ## The empty interval [Empty] contains no real numbers.  All interval functions
@@ -53,19 +55,10 @@
 
 function result = empty (varargin)
 
-if (nargin > 2)
-    print_usage ();
-    return
-endif
+  persistent scalar_empty_interval = infsupdec ();
 
-persistent scalar_empty_interval = infsupdec ();
-
-if (nargin == 0)
-    result = scalar_empty_interval;
-else
-    result = subsref (scalar_empty_interval, ...
-                      substruct ("()", {ones(varargin{:})}));
-endif
+  result = subsref (scalar_empty_interval, ...
+                    substruct ("()", {ones(varargin{:})}));
 
 endfunction
 
@@ -78,3 +71,6 @@ endfunction
 %!assert (inf (empty (5, 6)), inf (5, 6));
 %!assert (sup (empty (5, 6)), -inf (5, 6));
 %!assert (strcmp (decorationpart (empty (5, 6)), "trv"), true (5, 6));
+%!assert (inf (empty (5, 6, 7)), inf (5, 6, 7));
+%!assert (sup (empty (5, 6, 7)), -inf (5, 6, 7));
+%!assert (strcmp (decorationpart (empty (5, 6, 7)), "trv"), true (5, 6, 7));
