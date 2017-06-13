@@ -31,6 +31,9 @@
 ##
 ## If the optional argument DIM is given, operate along this dimension.
 ##
+## If DIM is larger than the dimension of X, the result will have DIM
+## dimensions.
+##
 ## @example
 ## @group
 ## prepad (infsup (1 : 3), 5, 42)
@@ -47,39 +50,40 @@
 
 function x = prepad (x, len, c, dim)
 
-if (nargin < 2 || nargin > 4)
+  if (nargin < 2 || nargin > 4)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsup")))
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-if (isa (len, "infsup"))
+  if (isa (len, "infsup"))
     error ("interval:InvalidOperand", "prepad: len must not be an interval");
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     c = infsup (0);
-elseif (not (isa (c, "infsup")))
+  elseif (not (isa (c, "infsup")))
     c = infsup (c);
-endif
+  endif
 
-if (nargin < 4)
+  if (nargin < 4)
     if (isvector (x.inf) && not (isscalar (x.inf)))
-        dim = find (size (x.inf) ~= 1, 1);
+      dim = find (size (x.inf) ~= 1, 1);
     else
-        dim = 1;
+      dim = 1;
     endif
-elseif (isa (dim, "infsup"))
+  elseif (isa (dim, "infsup"))
     error ("interval:InvalidOperand", "prepad: dim must not be an interval");
-endif
+  endif
 
-x.inf = prepad (x.inf, len, c.inf, dim);
-x.sup = prepad (x.sup, len, c.sup, dim);
+  x.inf = prepad (x.inf, len, c.inf, dim);
+  x.sup = prepad (x.sup, len, c.sup, dim);
 
 endfunction
 
 %!assert (prepad (infsup (2:4), 4, 1) == infsup (1:4));
 %!assert (prepad (infsup (0:2), 2, 1) == infsup (1:2));
+%!assert (prepad (infsup (0), 10, 0, 3) == infsup (zeros (1, 1, 10)))
