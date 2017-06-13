@@ -19,17 +19,12 @@
 ## @deftypemethodx {@@infsup} {[@var{XX}, @var{YY}, @var{ZZ}] =} meshgrid (@var{X}, @var{Y}, @var{Z})
 ## @deftypemethodx {@@infsup} {[@var{XX}, @var{YY}] =} meshgrid (@var{X})
 ## @deftypemethodx {@@infsup} {[@var{XX}, @var{YY}, @var{ZZ}] =} meshgrid (@var{X})
-## 
+##
 ## Given vectors of @var{X} and @var{Y} coordinates, return matrices @var{XX}
 ## and @var{YY} corresponding to a full 2-D grid.
 ##
 ## If the optional @var{Z} input is given, or @var{ZZ} is requested, then the
 ## output will be a full 3-D grid.
-##
-## Please note that this function does not produce multidimensional arrays in
-## the case of 3-D grids like the built-in @code{meshgrid} function.  This is
-## because interval matrices currently only support two dimensions.  The 3-D
-## grid is reshaped to fit into two dimensions accordingly.
 ##
 ## @end deftypemethod
 
@@ -39,67 +34,63 @@
 
 function [xx, yy, zz] = meshgrid (x, y, z)
 
-if (nargin > 3)
+  if (nargin > 3)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (nargin >= 2 && not (isa (y, "infsup")))
+  endif
+  if (nargin >= 2 && not (isa (y, "infsup")))
     y = infsup (y);
-endif
-if (nargin >= 3 && not (isa (z, "infsup")))
+  endif
+  if (nargin >= 3 && not (isa (z, "infsup")))
     z = infsup (z);
-endif
+  endif
 
-switch (nargin)
+  switch (nargin)
     case 1
-        if (nargout >= 3)
-            [lxx, lyy, lzz] = meshgrid (x.inf);
-            [uxx, uyy, uzz] = meshgrid (x.sup);
-        else
-            [lxx, lyy] = meshgrid (x.inf);
-            [uxx, uyy] = meshgrid (x.sup);
-        endif
+      if (nargout >= 3)
+        [lxx, lyy, lzz] = meshgrid (x.inf);
+        [uxx, uyy, uzz] = meshgrid (x.sup);
+      else
+        [lxx, lyy] = meshgrid (x.inf);
+        [uxx, uyy] = meshgrid (x.sup);
+      endif
     case 2
-        if (nargout >= 3)
-            [lxx, lyy, lzz] = meshgrid (x.inf, y.inf);
-            [uxx, uyy, uzz] = meshgrid (x.sup, y.sup);
-        else
-            [lxx, lyy] = meshgrid (x.inf, y.inf);
-            [uxx, uyy] = meshgrid (x.sup, y.sup);
-        endif
+      if (nargout >= 3)
+        [lxx, lyy, lzz] = meshgrid (x.inf, y.inf);
+        [uxx, uyy, uzz] = meshgrid (x.sup, y.sup);
+      else
+        [lxx, lyy] = meshgrid (x.inf, y.inf);
+        [uxx, uyy] = meshgrid (x.sup, y.sup);
+      endif
     case 3
-            [lxx, lyy, lzz] = meshgrid (x.inf, y.inf, z.inf);
-            [uxx, uyy, uzz] = meshgrid (x.sup, y.sup, z.sup);
-endswitch
+      [lxx, lyy, lzz] = meshgrid (x.inf, y.inf, z.inf);
+      [uxx, uyy, uzz] = meshgrid (x.sup, y.sup, z.sup);
+  endswitch
 
-if (nargout >= 3 || nargin >= 3)
-    ## Reshape 3 dimensions into 2 dimensions
-    f = @(A) reshape (A, [size(A, 1), prod(size (A)(2 : end))]);
-    lxx = f (lxx);
-    uxx = f (uxx);
-    lyy = f (lyy);
-    uyy = f (uyy);
-    lzz = f (lzz);
-    uzz = f (uzz);
-endif
-
-xx = yy = x;
-xx.inf = lxx;
-xx.sup = uxx;
-yy.inf = lyy;
-yy.sup = uyy;
-if (nargout >= 3)
+  xx = yy = x;
+  xx.inf = lxx;
+  xx.sup = uxx;
+  yy.inf = lyy;
+  yy.sup = uyy;
+  if (nargout >= 3)
     zz = x;
     zz.inf = lzz;
     zz.sup = uzz;
-endif
+  endif
 
 endfunction
 
 %!assert (isequal (meshgrid (infsup (0 : 3)), infsup (meshgrid (0 : 3))));
+%!test
+%! [XX, YY, ZZ] = meshgrid (0:3, 0:3, 0:3);
+%! [iXX, iYY, iZZ] = meshgrid (infsup (0:3), 0:3, 0:3);
+%! assert (isequal (iXX, infsup (XX)));
+%! assert (isequal (iYY, infsup (YY)));
+%! assert (isequal (iZZ, infsup (ZZ)));
+
 
 %!demo
 %!  clf
