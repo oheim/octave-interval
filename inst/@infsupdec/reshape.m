@@ -15,8 +15,9 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsupdec} reshape (@var{A}, @var{M}, @var{N})
-## @defmethodx {@@infsupdec} reshape (@var{X}, [@var{M} @var{N}])
+## @defmethod {@@infsupdec} reshape (@var{A}, @var{M}, @var{N}, ...)
+## @defmethodx {@@infsupdec} reshape (@var{X}, [@var{M} @var{N}, ...])
+## @defmethodx {@@infsupdec} reshape (@var{X}, ..., @var{[]}, ...)
 ##
 ## Return an interval matrix with the specified dimensions (M, N) whose
 ## elements are taken from the interval matrix @var{A}.  The elements of the
@@ -25,6 +26,10 @@
 ## Note that the total number of elements in the original matrix
 ## (@code{prod (size (@var{A}))}) must match the total number of elements in
 ## the new matrix (@code{prod ([@var{M} @var{N}])}).
+##
+## A single dimension of the return matrix may be left unspecified and
+## Octave will determine its size automatically.  An empty matrix ([])
+## is used to flag the unspecified dimension.
 ##
 ## @example
 ## @group
@@ -41,25 +46,17 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function x = reshape (x, m, n)
+function x = reshape (x, varargin)
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     print_usage ();
     return
-endif
+  endif
 
-switch nargin
-    case 2
-        x.infsup = reshape (x.infsup, m);
-        x.dec = reshape (x.dec, m);
-    case 3
-        x.infsup = reshape (x.infsup, m, n);
-        x.dec = reshape (x.dec, m, n);
-    otherwise
-        print_usage ();
-        return
-endswitch
+  x.infsup = reshape (x.infsup, varargin{:});
+  x.dec = reshape (x.dec, varargin{:});
 
 endfunction
 
 %!assert (isequal (reshape (infsupdec (1 : 6), 2, 3), infsupdec (reshape (1 : 6, 2, 3))));
+%!assert (isequal (reshape (infsupdec (1 : 24), 2, [], 4), infsupdec (reshape (1 : 24, 2, 3, 4))));
