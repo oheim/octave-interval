@@ -15,18 +15,16 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsupdec} cat (@var{DIM}, @var{MATRIX1}, @var{MATRIX2}, @dots{})
+## @defmethod {@@infsupdec} cat (@var{DIM}, @var{ARRAY1}, @var{ARRAY2}, @dots{})
 ##
-## Return the concatenation of interval matrices @var{MATRIX1}, @var{MATRIX2}, 
+## Return the concatenation of N-D interval arrays @var{ARRAY1}, @var{ARRAY2},
 ## … along dimension @var{DIM}.
-##
-## Interval matrices support no more than 2 dimensions.
 ##
 ## @example
 ## @group
 ## cat (2, infsupdec (magic (3)), infsupdec (pascal (3)))
 ##   @result{} 3×6 interval matrix
-## 
+##
 ##      [8]_com   [1]_com   [6]_com   [1]_com   [1]_com   [1]_com
 ##      [3]_com   [5]_com   [7]_com   [1]_com   [2]_com   [3]_com
 ##      [4]_com   [9]_com   [2]_com   [1]_com   [3]_com   [6]_com
@@ -41,28 +39,23 @@
 
 function result = cat (dim, varargin)
 
-if (isa (dim, "infsup"))
+  if (isa (dim, "infsup"))
     print_usage ();
     return
-endif
+  endif
 
-if (dim > 2)
-    error ("interval:InvalidOperand", ...
-           "cat: no more than 2 dimensions are supported");
-endif
+  ## Conversion of non-interval and undecorated parameters to decorated intervals
+  decorated_interval_idx = cellfun ("isclass", varargin, "infsupdec");
+  to_convert_idx = not (decorated_interval_idx);
+  varargin(to_convert_idx) = cellfun (@infsupdec, ...
+                                      varargin(to_convert_idx), ...
+                                      "UniformOutput", false);
 
-## Conversion of non-interval and undecorated parameters to decorated intervals
-decorated_interval_idx = cellfun ("isclass", varargin, "infsupdec");
-to_convert_idx = not (decorated_interval_idx);
-varargin(to_convert_idx) = cellfun (@infsupdec, ...
-    varargin(to_convert_idx), ...
-    "UniformOutput", false);
-
-## Stack intervals along dimension dim
-s = cellfun ("struct", varargin); # struct array
-result = infsupdec ();
-result.infsup = cat (dim, s.infsup);
-result.dec = cat (dim, s.dec);
+  ## Stack intervals along dimension dim
+  s = cellfun ("struct", varargin); # struct array
+  result = infsupdec ();
+  result.infsup = cat (dim, s.infsup);
+  result.dec = cat (dim, s.dec);
 
 endfunction
 
@@ -79,3 +72,6 @@ endfunction
 %!test
 %! a = infsupdec (2, 5);
 %! assert (isequal (vertcat (a, a, a), infsupdec ([2; 2; 2], [5; 5; 5])));
+
+%!assert (isequal (cat (5, infsupdec (1), infsupdec (2)), infsupdec (cat (5, 1, 2))));
+%!assert (isequal (cat (1, infsupdec (zeros (2, 2, 2)), infsupdec (ones (2, 2, 2))), infsupdec (cat (1, zeros (2, 2, 2), ones (2, 2, 2)))));

@@ -15,18 +15,16 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsup} cat (@var{DIM}, @var{MATRIX1}, @var{MATRIX2}, @dots{})
+## @defmethod {@@infsup} cat (@var{DIM}, @var{ARRAY1}, @var{ARRAY2}, @dots{})
 ##
-## Return the concatenation of interval matrices @var{MATRIX1}, @var{MATRIX2}, 
+## Return the concatenation of N-D interval arrays @var{ARRAY1}, @var{ARRAY2},
 ## … along dimension @var{DIM}.
-##
-## Interval matrices support no more than 2 dimensions.
 ##
 ## @example
 ## @group
 ## cat (2, infsup (magic (3)), infsup (pascal (3)))
 ##   @result{} 3×6 interval matrix
-## 
+##
 ##      [8]   [1]   [6]   [1]   [1]   [1]
 ##      [3]   [5]   [7]   [1]   [2]   [3]
 ##      [4]   [9]   [2]   [1]   [3]   [6]
@@ -41,31 +39,28 @@
 
 function result = cat (dim, varargin)
 
-if (isa (dim, "infsup"))
+  if (isa (dim, "infsup"))
     print_usage ();
     return
-endif
+  endif
 
-if (dim > 2)
-    error ("interval:InvalidOperand", ...
-           "cat: no more than 2 dimensions are supported");
-endif
+  ## Conversion of non-interval parameters to intervals
+  interval_idx = cellfun ("isclass", varargin, "infsup");
+  to_convert_idx = not (interval_idx);
+  varargin(to_convert_idx) = cellfun (@infsup, ...
+                                      varargin(to_convert_idx), ...
+                                      "UniformOutput", false);
 
-## Conversion of non-interval parameters to intervals
-interval_idx = cellfun ("isclass", varargin, "infsup");
-to_convert_idx = not (interval_idx);
-varargin(to_convert_idx) = cellfun (@infsup, ...
-    varargin(to_convert_idx), ...
-    "UniformOutput", false);
-
-## Stack intervals along dimension dim
-s = cellfun ("struct", varargin); # struct array
-result = infsup ();
-result.inf = cat (dim, s.inf);
-result.sup = cat (dim, s.sup);
+  ## Stack intervals along dimension dim
+  s = cellfun ("struct", varargin); # struct array
+  result = infsup ();
+  result.inf = cat (dim, s.inf);
+  result.sup = cat (dim, s.sup);
 
 endfunction
 
 %!assert (size (cat (1, infsup ([]), infsup ([]))), [0 0]);
 %!assert (cat (1, infsup (1), infsup (2)) == infsup (cat (1, 1, 2)));
 %!assert (cat (2, infsup (1), infsup (2)) == infsup (cat (2, 1, 2)));
+%!assert (cat (5, infsup (1), infsup (2)) == infsup (cat (5, 1, 2)));
+%!assert (cat (1, infsup (zeros (2, 2, 2)), infsup (ones (2, 2, 2))) == infsup (cat (1, zeros (2, 2, 2), ones (2, 2, 2))));
