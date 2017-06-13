@@ -31,6 +31,9 @@
 ##
 ## If the optional argument DIM is given, operate along this dimension.
 ##
+## If DIM is larger than the dimension of X, the result will have DIM
+## dimensions.
+##
 ## @example
 ## @group
 ## postpad (infsup (1 : 3), 5, 42)
@@ -47,39 +50,40 @@
 
 function x = postpad (x, len, c, dim)
 
-if (nargin < 2 || nargin > 4)
+  if (nargin < 2 || nargin > 4)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsup")))
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-if (isa (len, "infsup"))
+  if (isa (len, "infsup"))
     error ("interval:InvalidOperand", "postpad: len must not be an interval");
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     c = infsup (0);
-elseif (not (isa (c, "infsup")))
+  elseif (not (isa (c, "infsup")))
     c = infsup (c);
-endif
+  endif
 
-if (nargin < 4)
+  if (nargin < 4)
     if (isvector (x.inf) && not (isscalar (x.inf)))
-        dim = find (size (x.inf) ~= 1, 1);
+      dim = find (size (x.inf) ~= 1, 1);
     else
-        dim = 1;
+      dim = 1;
     endif
-elseif (isa (dim, "infsup"))
+  elseif (isa (dim, "infsup"))
     error ("interval:InvalidOperand", "postpad: dim must not be an interval");
-endif
+  endif
 
-x.inf = postpad (x.inf, len, c.inf, dim);
-x.sup = postpad (x.sup, len, c.sup, dim);
+  x.inf = postpad (x.inf, len, c.inf, dim);
+  x.sup = postpad (x.sup, len, c.sup, dim);
 
 endfunction
 
 %!assert (postpad (infsup (1:3), 4, 4) == infsup (1:4));
 %!assert (postpad (infsup (1:3), 2, 4) == infsup (1:2));
+%!assert (postpad (infsup (0), 10, 0, 3) == infsup (zeros (1, 1, 10)))

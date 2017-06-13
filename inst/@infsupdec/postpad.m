@@ -31,6 +31,9 @@
 ##
 ## If the optional argument DIM is given, operate along this dimension.
 ##
+## If DIM is larger than the dimension of X, the result will have DIM
+## dimensions.
+##
 ## @example
 ## @group
 ## postpad (infsupdec (1 : 3), 5, 42)
@@ -47,33 +50,34 @@
 
 function x = postpad (x, len, c, dim)
 
-if (nargin < 2 || nargin > 4)
+  if (nargin < 2 || nargin > 4)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     c = infsupdec (0);
-elseif (not (isa (c, "infsupdec")))
+  elseif (not (isa (c, "infsupdec")))
     c = infsupdec (c);
-endif
+  endif
 
-if (nargin < 4)
+  if (nargin < 4)
     if (isvector (x.dec) && not (isscalar (x.dec)))
-        dim = find (size (x.dec) ~= 1, 1);
+      dim = find (size (x.dec) ~= 1, 1);
     else
-        dim = 1;
+      dim = 1;
     endif
-endif
+  endif
 
-x.infsup = postpad (x.infsup, len, c.infsup, dim);
-x.dec = postpad (x.dec, len, c.dec, dim);
+  x.infsup = postpad (x.infsup, len, c.infsup, dim);
+  x.dec = postpad (x.dec, len, c.dec, dim);
 
 endfunction
 
 %!assert (isequal (postpad (infsupdec (1:3), 4, 4), infsupdec (1:4)));
 %!assert (isequal (postpad (infsupdec (1:3), 2, 4), infsupdec (1:2)));
+%!assert (postpad (infsupdec (0), 10, 0, 3) == infsupdec (zeros (1, 1, 10)))
