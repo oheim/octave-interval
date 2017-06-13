@@ -16,20 +16,24 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} resize (@var{X}, @var{M})
-## @defmethodx {@@infsup} resize (@var{X}, @var{M}, @var{N})
-## @defmethodx {@@infsup} resize (@var{X}, [@var{M} @var{N}])
+## @defmethodx {@@infsup} resize (@var{X}, @var{M}, @var{N}, ...)
+## @defmethodx {@@infsup} resize (@var{X}, [@var{M} @var{N}, ...])
 ##
-## Resize interval matrix @var{X} cutting off elements as necessary.
+## Resize interval array @var{X} cutting off elements as necessary.
 ##
 ## In the result, element with certain indices is equal to the corresponding
 ## element of @var{X} if the indices are within the bounds of @var{X};
 ## otherwise, the element is set to zero.
 ##
 ## If only @var{M} is supplied, and it is a scalar, the dimension of the result
-## is @var{M}-by-@var{M}.  If @var{M} and @var{N} are all scalars, then the
-## dimensions of the result are @var{M}-by-@var{N}.  If given a vector as
+## is @var{M}-by-@var{M}.  If @var{M}, @var{N}, ... are all scalars, then the
+## dimensions of the result are @var{M}-by-@var{N}-by-....  If given a vector as
 ## input, then the dimensions of the result are given by the elements of that
 ## vector.
+##
+## An object can be resized to more dimensions than it has; in such
+## case the missing dimensions are assumed to be 1.  Resizing an
+## object to fewer dimensions is not possible.
 ##
 ## @example
 ## @group
@@ -48,38 +52,19 @@
 ## Keywords: interval
 ## Created: 2015-04-19
 
-function x = resize (x, m, n)
+function x = resize (x, varargin)
 
-switch nargin
-    case 2
-        if (isempty (m))
-            m = n = 0;
-        elseif (isscalar (m))
-            n = m;
-        elseif (numel (m) > 2)
-            error ("interval:InvalidOperand", ...
-                   "resize: no more than 2 dimensions are supported")
-        else
-            n = m(2);
-            m = m(1);
-        endif
-    case 3
-        ## Nothing to do
-    otherwise
-        print_usage ();
-        return
-endswitch
-
-if (not (isa (x, "infsup")))
+  if (not (isa (x, "infsup")))
     print_usage ();
     return
-endif
+  endif
 
-x.inf = resize (x.inf, m, n);
-x.sup = resize (x.sup, m, n);
+  x.inf = resize (x.inf, varargin{:});
+  x.sup = resize (x.sup, varargin{:});
 
-x.inf(x.inf == 0) = -0;
+  x.inf(x.inf == 0) = -0;
 
 endfunction
 
 %!assert (resize (infsup (magic (3)), 4, 2) == infsup ([8, 1; 3, 5; 4, 9; 0, 0]));
+%!assert (resize (infsup (ones (2, 2, 2)), 4, 1, 2) == infsup (resize (ones (2, 2, 2), 4, 1, 2)))
