@@ -18,7 +18,9 @@
 ## @defun nai ()
 ## @defunx nai (@var{N})
 ## @defunx nai (@var{N}, @var{M})
-## 
+## @defunx nai (@var{N}, @var{M}, @var{K}, ...)
+## @defunx nai ([@var{N}, @var{M}, ...])
+##
 ## Return the ill-formed decorated interval, called NaI (Not an Interval).
 ##
 ## Ill-formed intervals are the result of an illegal interval creation, e.g.
@@ -49,19 +51,14 @@
 
 function result = nai (varargin)
 
-if (nargin > 2)
-    print_usage ();
-    return
-endif
+  persistent scalar_nai_interval = infsupdec ("[nai]");
 
-persistent scalar_nai_interval = infsupdec ("[nai]");
-
-if (nargin == 0)
+  if (nargin == 0)
     result = scalar_nai_interval;
-else
+  else
     result = subsref (scalar_nai_interval, ...
                       substruct ("()", {ones(varargin{:})}));
-endif
+  endif
 
 endfunction
 
@@ -69,3 +66,4 @@ endfunction
 %!assert (isnai (nai (2)), true (2));
 %!assert (isnai (nai (3, 4)), true (3, 4));
 %!assert (decorationpart (nai ()), {"ill"});
+%!assert (isnai (nai (2, 2, 2)))
