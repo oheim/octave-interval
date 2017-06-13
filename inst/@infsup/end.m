@@ -44,11 +44,11 @@
 
 function ret = end (a, k, n)
 
-if (n == 1)
-    ret = numel (a.inf);
-else
+  if (n == k)
+    ret = prod (size (a.inf)(n:ndims (a.inf)));
+  else
     ret = size (a.inf, k);
-endif
+  endif
 
 endfunction
 
@@ -56,3 +56,4 @@ endfunction
 %!assert (infsup (magic (3))(end, 2) == 9);
 %!assert (infsup (magic (3))(2, end) == 7);
 %!assert (infsup ([1 2; 3 4; 5 6])(end:-1:1, :) == [5 6; 3 4; 1 2]);
+%!assert (reshape (infsup (1:24), 2, 3, 4)(end, end) == 24)
