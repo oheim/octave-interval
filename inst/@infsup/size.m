@@ -15,17 +15,25 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsup} size (@var{A})
-## @defmethodx {@@infsup} size (@var{A}, @var{DIM})
+## @defmethod {@@infsup} @var{SZ} = size (@var{A})
+## @defmethodx {@@infsup} @var{DIM_SZ} = size (@var{A}, @var{DIM})
+## @defmethodx {@@infsup} [@var{ROWS, COLS, ..., DIM_N_SZ}] = size (...)
 ##
-## Return the number of rows and columns of @var{A}.
+## Return a row vector with the size (number of elements) of each
+## dimension for the interval array @var{A}.
 ##
-## With one input argument and one output argument, the result is returned in a
-## row vector.  If there are multiple output arguments, the number of rows is
-## assigned to the first, and the number of columns to the second, etc.
-##
-## If given a second argument, @code{size} will return the size of the
+## When given a second argument, DIM, return the size of the
 ## corresponding dimension.
+##
+## With a single output argument, 'size' returns a row vector.  When
+## called with multiple output arguments, 'size' returns the size of
+## dimension N in the Nth argument.  The number of rows, dimension 1,
+## is returned in the first argument, the number of columns, dimension
+## 2, is returned in the second argument, etc.  If there are more
+## dimensions in A then there are output arguments, 'size' returns the
+## total number of elements in the remaining dimensions in the final
+## output argument.
+##
 ## @seealso{@@infsup/length, @@infsup/numel, @@infsup/rows, @@infsup/columns, @@infsup/end}
 ## @end defmethod
 
@@ -35,21 +43,28 @@
 
 function varargout = size (a, dim)
 
-if (nargin == 0 || nargin > 2)
+  if (nargin == 0 || nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin == 1)
-    if (nargout <= 1)
-        varargout{1} = size (a.inf);
-    else
-        varargout = mat2cell (size (a.inf)(1 : nargout)', ones (nargout, 1));
+  if (nargin == 1)
+    varargout = cell (1, max (1, nargout));
+    [varargout{:}] = size (a.inf);
+  else
+    if (nargout > 1)
+      print_usage ();
+      return
     endif
-else
     varargout{1} = size (a.inf, dim);
-endif
+  endif
 
 endfunction
 
 %!assert (size (infsup (zeros (3, 4))), [3 4]);
+%!assert (size (infsup (zeros (2, 3, 4))), [2, 3, 4]);
+%!test
+%! [x y z] = size (infsup (magic (3)));
+%! assert (x, 3);
+%! assert (y, 3);
+%! assert (z, 1);
