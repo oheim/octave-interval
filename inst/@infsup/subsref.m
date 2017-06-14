@@ -53,33 +53,33 @@
 
 function A = subsref (A, S)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-switch S(1).type
+  switch S(1).type
     case "()"
-        A.inf = subsref (A.inf, S(1));
-        A.sup = subsref (A.sup, S(1));
+      A.inf = subsref (A.inf, S(1));
+      A.sup = subsref (A.sup, S(1));
     case "{}"
-        error ("interval cannot be indexed with {}")
+      error ("interval cannot be indexed with {}")
     case "."
-        if (not (any (strcmp (S(1).subs, methods (A)))))
-            error (["interval property ‘", S(1).subs, "’ is unknown"])
-        endif
-        functionname = ["@infsup", filesep(), S(1).subs];
-        if (nargin (functionname) ~= 1)
-            error (["‘", S(1).subs, "’ is not a valid interval property"])
-        endif
-        A = feval (S(1).subs, A);
+      if (not (any (strcmp (S(1).subs, methods (A)))))
+        error (["interval property ‘", S(1).subs, "’ is unknown"])
+      endif
+      functionname = ["@infsup", filesep(), S(1).subs];
+      if (nargin (functionname) ~= 1)
+        error (["‘", S(1).subs, "’ is not a valid interval property"])
+      endif
+      A = feval (S(1).subs, A);
     otherwise
-        error ("invalid subscript type")
-endswitch
+      error ("invalid subscript type")
+  endswitch
 
-if (numel (S) > 1)
+  if (numel (S) > 1)
     A = subsref (A, S(2 : end));
-endif
+  endif
 
 endfunction
 
@@ -88,6 +88,9 @@ endfunction
 %!# from the documentation string
 %!test
 %! x = infsup (magic (3), magic (3) + 1);
-%! assert (x(1) == infsup (8, 9)); 
+%! assert (x(1) == infsup (8, 9));
 %! assert (x(:, 2) == infsup ([1; 5; 9], [2; 6; 10]));
 %! assert (x.inf, magic (3));
+
+%!assert (reshape (infsup (1:16), 2, 2, 2, 2)(2, 7) == infsup (14))
+%!assert (reshape (infsup (1:16), 2, 2, 2, 2)(:, 2, 2, 2) == infsup ([15; 16]))

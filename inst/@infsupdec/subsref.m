@@ -54,36 +54,36 @@
 
 function A = subsref (A, S)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-switch (S (1).type)
+  switch (S (1).type)
     case "()"
-        A.infsup = subsref (A.infsup, S(1));
-        A.dec = subsref (A.dec, S(1));
+      A.infsup = subsref (A.infsup, S(1));
+      A.dec = subsref (A.dec, S(1));
     case "{}"
-        error ("interval cannot be indexed with {}")
+      error ("interval cannot be indexed with {}")
     case "."
-        if (any (strcmp (S(1).subs, methods ("infsupdec"))))
-            functionname = ["@infsupdec", filesep(),  S(1).subs];
-        elseif (any (strcmp (S(1).subs, methods ("infsup"))))
-            functionname = ["@infsup", filesep(), S(1).subs];
-        else
-            error (["interval property ‘", S(1).subs, "’ is unknown"])
-        endif
-        if (nargin (functionname) ~= 1)
-            error (["‘", S(1).subs, "’ is not a valid interval property"])
-        endif
-        A = feval (S(1).subs, A);
+      if (any (strcmp (S(1).subs, methods ("infsupdec"))))
+        functionname = ["@infsupdec", filesep(),  S(1).subs];
+      elseif (any (strcmp (S(1).subs, methods ("infsup"))))
+        functionname = ["@infsup", filesep(), S(1).subs];
+      else
+        error (["interval property ‘", S(1).subs, "’ is unknown"])
+      endif
+      if (nargin (functionname) ~= 1)
+        error (["‘", S(1).subs, "’ is not a valid interval property"])
+      endif
+      A = feval (S(1).subs, A);
     otherwise
-        error ("invalid subscript type")
-endswitch
+      error ("invalid subscript type")
+  endswitch
 
-if (numel (S) > 1)
+  if (numel (S) > 1)
     A = subsref (A, S(2 : end));
-endif
+  endif
 
 endfunction
 
@@ -92,6 +92,9 @@ endfunction
 %!# from the documentation string
 %!test
 %! x = infsupdec (magic (3), magic (3) + 1);
-%! assert (x(1) == infsupdec (8, 9)); 
+%! assert (x(1) == infsupdec (8, 9));
 %! assert (x(:, 2) == infsupdec ([1; 5; 9], [2; 6; 10]));
 %! assert (x.inf, magic (3));
+
+%!assert (isequal (reshape (infsupdec (1:16), 2, 2, 2, 2)(2, 7), infsupdec (14)))
+%!assert (isequal (reshape (infsupdec (1:16), 2, 2, 2, 2)(:, 2, 2, 2), infsupdec ([15; 16])))
