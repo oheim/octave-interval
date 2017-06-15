@@ -21,7 +21,7 @@
 ## Build an approximate representation of the interval @var{X}.
 ##
 ## Output @var{S} is a simple string for scalar intervals, and a cell array of
-## strings for interval matrices.
+## strings for interval arrays.
 ##
 ## The interval boundaries are stored in binary floating point format and are
 ## converted to decimal or hexadecimal format with possible precision loss.  If
@@ -126,3 +126,4 @@ endfunction
 %!assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.000000000000001]");
 %!assert (intervaltotext (nextout (infsup (1 + eps))), "[1, 1.0000000000000005]");
 %!assert (intervaltotext (infsup (1)), "[1]");
+%!assert (reshape (intervaltotext (infsup (reshape (1:120, 2, 3, 4, 5))), 1, 120), intervaltotext (infsup (1:120)));

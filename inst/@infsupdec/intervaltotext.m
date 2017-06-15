@@ -17,22 +17,22 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{S} =} intervaltotext (@var{X})
 ## @deftypemethodx {@@infsupdec} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
-## 
+##
 ## Build an approximate representation of the interval @var{X}.
 ##
 ## Output @var{S} is a simple string for scalar intervals, and a cell array of
-## strings for interval matrices.
-## 
+## strings for interval arrays.
+##
 ## The interval boundaries are stored in binary floating point format and are
 ## converted to decimal or hexadecimal format with possible precision loss.  If
 ## output is not exact, the boundaries are rounded accordingly (e. g. the upper
 ## boundary is rounded towards infinite for output representation).
-## 
+##
 ## The exact decimal format may produce a lot of digits.
 ##
 ## Possible values for @var{FORMAT} are: @code{decimal} (default),
 ## @code{exact decimal}, @code{exact hexadecimal}, @code{auto}
-## 
+##
 ## Accuracy: For all intervals @var{X} is an accurate subset of
 ## @code{infsupdec (intervaltotext (@var{X}))}.
 ## @end deftypemethod
@@ -43,20 +43,20 @@
 
 function [s, isexact] = intervaltotext (x, format)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
-if (nargin < 2)
+  endif
+  if (nargin < 2)
     format = "decimal";
-endif
+  endif
 
-[s, isexact] = intervaltotext (x.infsup, format);
-s = strcat (s, {"_"}, decorationpart (x));
-s(isnai (x)) = "[NaI]";
-if (isscalar (s))
+  [s, isexact] = intervaltotext (x.infsup, format);
+  s = strcat (s, {"_"}, decorationpart (x));
+  s(isnai (x)) = "[NaI]";
+  if (isscalar (s))
     s = s{1};
-endif
+  endif
 
 endfunction
 
@@ -64,3 +64,4 @@ endfunction
 %!assert (intervaltotext (infsupdec (1 + eps), "exact hexadecimal"), "[0x1.0000000000001p+0]_com");
 %!assert (intervaltotext (infsupdec (1 + eps)), "[1.0000000000000002, 1.000000000000001]_com");
 %!assert (intervaltotext (infsupdec (1)), "[1]_com");
+%!assert (reshape (intervaltotext (infsupdec (reshape (1:120, 2, 3, 4, 5))), 1, 120), intervaltotext (infsupdec (1:120)));
