@@ -49,9 +49,9 @@
 ## tight enclosure will be computed.  int64 and uint64 numbers of high
 ## magnitude (> 2^53) can also be affected from precision loss.
 ##
-## For the creation of interval matrices, arguments may be provided as (1) cell
-## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.
-## Scalar values do broadcast.
+## For the creation of interval arrays, arguments may be provided as (1) cell
+## arrays with arbitrary/mixed types, (2) numeric arrays, or for matrices (3)
+## strings. Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE Std
 ## 1788-2015, IEEE standard for interval arithmetic, however it implements both
@@ -1312,3 +1312,23 @@ endfunction
 %!warning
 %! [~, ~, ~, isnai] = infsup ("[-inf, inf] [inf, inf]");
 %! assert (isnai, [false, true]);
+
+%!# N-dimensional arrays
+%!test
+%! x = infsup (zeros (2, 2, 2));
+%! assert (x.inf, zeros (2, 2, 2));
+%! assert (x.sup, zeros (2, 2, 2));
+%!test
+%! x = infsup (zeros (2, 2, 2), ones (2, 2, 2));
+%! assert (x.inf, zeros (2, 2, 2));
+%! assert (x.sup, ones (2, 2, 2));
+%!test
+%! x = infsup (zeros (2, 1, 2, 1, 2, 1), ones (1, 3, 1, 3, 1, 3));
+%! assert (x.inf, zeros (2, 3, 2, 3, 2, 3));
+%! assert (x.sup, ones (2, 3, 2, 3, 2, 3));
+%!test
+%! c1 = reshape ({1, 2, 3, 4, 5, 6, 7, 8}, 2, 2, 2);
+%! c2 = reshape ({2, 3, 4, 5, 6, 7, 8, 9}, 2, 2, 2);
+%! x = infsup (c1, c2);
+%! assert (x.inf, reshape (1:8, 2, 2, 2));
+%! assert (x.sup, reshape (2:9, 2, 2, 2));
