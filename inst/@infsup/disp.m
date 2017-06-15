@@ -21,8 +21,8 @@
 ##
 ## Interval boundaries are approximated with faithful decimal numbers.
 ##
-## Interval matrices with many rows are wrapped according to the terminal
-## width.  @code{disp} prints nothing when @var{X} is an interval matrix
+## Interval arrays with many rows are wrapped according to the terminal
+## width. @code{disp} prints nothing when @var{X} is an interval array
 ## without elements.
 ##
 ## Note that the output from @code{disp} always ends with a newline.
@@ -154,4 +154,11 @@ endfunction
 %!assert (disp (infsup([0 0])), "   [0]   [0]\n");
 %!assert (disp (infsup([0 0; 0 0])), "   [0]   [0]\n   [0]   [0]\n");
 %!assert (disp (infsup([0; 0])), "   [0]\n   [0]\n");
+%!assert (disp (infsup (zeros (1, 1, 1, 0))), "");
 %!assert (disp (infsup(zeros(2, 2, 2))), " ans(:,:,1) =\n\n   [0]   [0]\n   [0]   [0]\n ans(:,:,2) =\n\n   [0]   [0]\n   [0]   [0]\n")
+%!test
+%! i = infsupdec (reshape (1:24, 2, 3, 4));
+%! i(1, 1, 2) = entire ();
+%! i(1, 1, 3) = empty ();
+%! i(1, 1, 4) = nai ();
+%! assert (disp (i(1,1,:)), " ans(:,:,1) =   [1]_com\n ans(:,:,2) =   [Entire]_dac\n ans(:,:,3) =   [Empty]_trv\n ans(:,:,4) =   [NaI]\n")
