@@ -18,7 +18,7 @@
 ## @defun exacttointerval (@var{S})
 ## @defunx exacttointerval (@var{L}, @var{U})
 ## @defunx exacttointerval (@var{M})
-## 
+##
 ## Create a bare interval.  Fail, if the interval cannot exactly represent the
 ## input.
 ##
@@ -26,9 +26,11 @@
 ## possible to pass lower and upper boundaries @var{L} and @var{U}, or create a
 ## point-interval with a midpoint @var{M}.
 ##
-## All valid input formats of the @code{infsup} class constructor are allowed.
-## If this function creates an interval matrix, all interval boundaries must be
-## representable with binary64 numbers.
+## All valid input formats of the @code{infsup} class constructor are
+## allowed.  By giving a cell as input it is possible to create
+## N-dimensional interval arrays.  If this function creates an
+## interval array, all interval boundaries must be representable with
+## binary64 numbers.
 ##
 ## Accuracy: The equation
 ## @code{@var{X} == exacttointerval (intervaltoexact (@var{X}))} holds for all
@@ -55,22 +57,22 @@
 
 function result = exacttointerval (varargin)
 
-switch (nargin)
+  switch (nargin)
     case 0
-        [result, exactconversion] = infsup ();
+      [result, exactconversion] = infsup ();
     case 1
-        [result, exactconversion] = infsup (varargin {1});
+      [result, exactconversion] = infsup (varargin {1});
     case 2
-        [result, exactconversion] = infsup (varargin {1}, varargin {2});
+      [result, exactconversion] = infsup (varargin {1}, varargin {2});
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-if (not (exactconversion))
+  if (not (exactconversion))
     error ("interval:UndefinedOperation", ...
            "exacttointerval: interval wouldn't be exact")
-endif
+  endif
 
 endfunction
 %!assert (isempty (exacttointerval ("[Empty]")));
@@ -89,3 +91,6 @@ endfunction
 %! assert (sup (y), inf);
 %!error exacttointerval ("[0, 0.1]");
 %!error exacttointerval ("[1, 0]");
+%!test "N-dimensional array";
+%! i = infsup (reshape (1:24, 2, 3, 4));
+%! assert (exacttointerval (intervaltoexact (i)) == i);
