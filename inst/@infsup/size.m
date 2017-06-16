@@ -15,22 +15,22 @@
 
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
-## @defmethod {@@infsup} @var{SZ} = size (@var{A})
-## @defmethodx {@@infsup} @var{DIM_SZ} = size (@var{A}, @var{DIM})
-## @defmethodx {@@infsup} [@var{ROWS, COLS, ..., DIM_N_SZ}] = size (...)
+## @deftypemethod {@@infsup} {@var{SZ} =} size (@var{A})
+## @deftypemethodx {@@infsup} {@var{DIM_SZ} =} size (@var{A}, @var{DIM})
+## @deftypemethodx {@@infsup} {[@var{ROWS, COLS, ..., DIM_N_SZ}] =} size (...)
 ##
 ## Return a row vector with the size (number of elements) of each
 ## dimension for the interval array @var{A}.
 ##
-## When given a second argument, DIM, return the size of the
+## When given a second argument, @var{DIM}, return the size of the
 ## corresponding dimension.
 ##
-## With a single output argument, 'size' returns a row vector.  When
-## called with multiple output arguments, 'size' returns the size of
+## With a single output argument, @command{size} returns a row vector.  When
+## called with multiple output arguments, @command{size} returns the size of
 ## dimension N in the Nth argument.  The number of rows, dimension 1,
 ## is returned in the first argument, the number of columns, dimension
 ## 2, is returned in the second argument, etc.  If there are more
-## dimensions in A then there are output arguments, 'size' returns the
+## dimensions in A then there are output arguments, @command{size} returns the
 ## total number of elements in the remaining dimensions in the final
 ## output argument.
 ##
