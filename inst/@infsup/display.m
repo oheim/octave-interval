@@ -108,21 +108,13 @@ function display (x)
       return
     endif
 
+    printf ("%d", size (x, 1))
     if (ispc ())
-      printf ("%dx%d", size (x, 1), size (x, 2));
+      printf ("x%d", size (x)(2:end))
     else
       ## The Microsoft Windows console does not support multibyte characters.
-      printf ("%d×%d", size (x, 1), size (x, 2));
+      printf ("×%d", size (x)(2:end))
     endif
-
-    for n=3:ndims(x)
-      if (ispc ())
-        printf ("x%d", size (x, n));
-      else
-        ## The Microsoft Windows console does not support multibyte characters.
-        printf ("×%d", size (x, n));
-      endif
-    endfor
 
     if (isvector (x))
       printf (" interval vector");
