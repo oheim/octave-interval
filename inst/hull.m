@@ -95,8 +95,9 @@ function result = hull (varargin)
     sizes(dim, :) = cellfun("size", l, dim);
   endfor
   targetsize = max (sizes, [], 2);
+  warning ("off", "Octave:broadcast", "local");
   if (!all (all (or (targetsize == sizes, sizes == 1))))
-    disp("hull: dimensions mismatch")
+    error ("hull: dimensions mismatch")
   endif
   for dim = 1:numberofdimensions
     if (targetsize(dim) ~= 1)
