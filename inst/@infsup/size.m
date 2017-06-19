@@ -35,7 +35,7 @@
 ## output argument.
 ##
 ## @seealso{@@infsup/length, @@infsup/numel, @@infsup/rows, @@infsup/columns, @@infsup/end}
-## @end defmethod
+## @end deftypemethod
 
 ## Author: Oliver Heimlich
 ## Keywords: interval
