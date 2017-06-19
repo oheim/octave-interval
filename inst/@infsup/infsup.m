@@ -51,7 +51,7 @@
 ##
 ## For the creation of interval arrays, arguments may be provided as (1) cell
 ## arrays with arbitrary/mixed types, (2) numeric arrays, or for matrices (3)
-## strings. Scalar values do broadcast.
+## strings.  Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE Std
 ## 1788-2015, IEEE standard for interval arithmetic, however it implements both
@@ -274,8 +274,8 @@ function [x, isexact, overflow, isnai] = infsup (l, u)
         ## Remove directed down/up uncertainty.
         for direction = ["d", "u"]
           direction_local_idx = strcmp (...
-                                         vertcat ({},
-                                                  cellindexmat (groups,
+                                         vertcat ({}, ...
+                                                  cellindexmat (groups, ...
                                                                 4){:}), ...
                                          direction);
           direction_idx = directed_uncertain_idx;
