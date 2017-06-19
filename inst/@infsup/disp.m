@@ -22,7 +22,7 @@
 ## Interval boundaries are approximated with faithful decimal numbers.
 ##
 ## Interval arrays with many rows are wrapped according to the terminal
-## width. @code{disp} prints nothing when @var{X} is an interval array
+## width.  @code{disp} prints nothing when @var{X} is an interval array
 ## without elements.
 ##
 ## Note that the output from @code{disp} always ends with a newline.
