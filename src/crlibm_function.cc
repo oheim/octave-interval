@@ -23,7 +23,7 @@ typedef double (*crlibm_unary_fun)
 
 // Evaluate an unary crlibm function on a binary64 matrix
 void evaluate (
-  Matrix &arg1,           // Operand 1 and result
+  NDArray &arg1,           // Operand 1 and result
   const crlibm_unary_fun f) // The crlibm function to evaluate (element-wise)
 {
   uint64_t old_state = crlibm_init ();
@@ -81,11 +81,11 @@ DEFUN_DLD (crlibm_function, args, nargout,
 
   const std::string function = args(0).string_value ();
   const double      rnd      = args(1).scalar_value ();
-  Matrix            arg1     = args(2).matrix_value ();
-  
+  NDArray           arg1     = args(2).array_value ();
+
   if (error_state)
     return octave_value_list ();
-    
+
   if (rnd == INFINITY)
     {
       // Round upwards
@@ -234,7 +234,7 @@ DEFUN_DLD (crlibm_function, args, nargout,
           return octave_value_list ();
         }
     }
-    
+
   return octave_value (arg1);
 }
 
@@ -246,4 +246,3 @@ DEFUN_DLD (crlibm_function, args, nargout,
 %!    endfor
 %!  endfor
 */
-
