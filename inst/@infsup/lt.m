@@ -17,14 +17,14 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} lt (@var{A}, @var{B})
 ## @defopx Operator {@@infsup} {@var{A} < @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for strictly less.
 ##
 ## True, if all numbers from @var{A} are strict less than at least one number
 ## in @var{B}.  False, if @var{A} contains a number which is greater than all
 ## numbers in @var{B} or is equal to the greatest number of @var{B}.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/le, @@infsup/gt, @@infsup/subset, @@infsup/interior, @@infsup/disjoint}
 ## @end defop
@@ -35,25 +35,25 @@
 
 function result = lt (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-elseif (isa (b, "infsupdec"))
+  elseif (isa (b, "infsupdec"))
     ## Workaround for bug #42735
     result = lt (a, b);
     return
-endif
+  endif
 
-result = ((a.inf < b.inf | (a.inf == -inf & b.inf == -inf)) & ...
-          (a.sup < b.sup | (a.sup == inf & b.sup == inf)));
+  result = ((a.inf < b.inf | (a.inf == -inf & b.inf == -inf)) & ...
+            (a.sup < b.sup | (a.sup == inf & b.sup == inf)));
 
-result (isempty (a) & isempty (b)) = true ();
+  result (isempty (a) & isempty (b)) = true ();
 
 endfunction
 
