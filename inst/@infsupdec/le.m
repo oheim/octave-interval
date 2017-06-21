@@ -17,14 +17,14 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} le (@var{A}, @var{B})
 ## @defopx Operator {@@infsupdec} {@var{A} <= @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for weakly less.
 ##
 ## True, if all numbers from @var{A} are weakly less than any number in
 ## @var{B}.  False, if @var{A} contains a number which is strictly greater than
 ## all numbers in @var{B}.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/lt, @@infsupdec/ge, @@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}
 ## @end defop
@@ -35,20 +35,20 @@
 
 function result = le (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-result = le (a.infsup, b.infsup);
-result (isnai (a) | isnai (b)) = false;
+  result = le (a.infsup, b.infsup);
+  result (isnai (a) | isnai (b)) = false;
 
 endfunction
 
