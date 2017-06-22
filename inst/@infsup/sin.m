@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sin (@var{X})
-## 
+##
 ## Compute the sine in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,73 +36,74 @@
 
 function x = sin (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = u = cossignl = cossignu = zeros (size (x.inf));
+  l = u = cossignl = cossignu = zeros (size (x.inf));
 
-## Check, if wid (x) is certainly greater than 2*pi. This can save the
-## computation if some sine values.
-width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
-persistent pi = infsup ("pi");
-persistent twopi = 2 .* pi;
-certainlyfullperiod = width >= sup (twopi);
-l(certainlyfullperiod) = -1;
-u(certainlyfullperiod) = 1;
+  ## Check, if wid (x) is certainly greater than 2*pi. This can save the
+  ## computation if some sine values.
+  width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
+  persistent pi = infsup ("pi");
+  persistent twopi = 2 .* pi;
+  certainlyfullperiod = width >= sup (twopi);
+  l(certainlyfullperiod) = -1;
+  u(certainlyfullperiod) = 1;
 
-possiblynotfullperiod = not (certainlyfullperiod);
-if (__check_crlibm__ ())
+  possiblynotfullperiod = not (certainlyfullperiod);
+  if (__check_crlibm__ ())
     l(possiblynotfullperiod) = min (...
-        crlibm_function ('sin', -inf, x.inf(possiblynotfullperiod)), ...
-        crlibm_function ('sin', -inf, x.sup(possiblynotfullperiod)));
+                                     crlibm_function ('sin', -inf, x.inf(possiblynotfullperiod)), ...
+                                     crlibm_function ('sin', -inf, x.sup(possiblynotfullperiod)));
     u(possiblynotfullperiod) = max (...
-        crlibm_function ('sin', inf, x.inf(possiblynotfullperiod)), ...
-        crlibm_function ('sin', inf, x.sup(possiblynotfullperiod)));
+                                     crlibm_function ('sin', inf, x.inf(possiblynotfullperiod)), ...
+                                     crlibm_function ('sin', inf, x.sup(possiblynotfullperiod)));
 
     ## We use sign (cos) to know the gradient at the boundaries.
     cossignl(possiblynotfullperiod) = sign (...
-        crlibm_function ('cos', .5, x.inf(possiblynotfullperiod)));
+                                             crlibm_function ('cos', .5, x.inf(possiblynotfullperiod)));
     cossignu(possiblynotfullperiod) = sign (...
-        crlibm_function ('cos', .5, x.sup(possiblynotfullperiod)));
-else
+                                             crlibm_function ('cos', .5, x.sup(possiblynotfullperiod)));
+  else
     l(possiblynotfullperiod) = min (...
-        mpfr_function_d ('sin', -inf, x.inf(possiblynotfullperiod)), ...
-        mpfr_function_d ('sin', -inf, x.sup(possiblynotfullperiod)));
+                                     mpfr_function_d ('sin', -inf, x.inf(possiblynotfullperiod)), ...
+                                     mpfr_function_d ('sin', -inf, x.sup(possiblynotfullperiod)));
     u(possiblynotfullperiod) = max (...
-        mpfr_function_d ('sin', inf, x.inf(possiblynotfullperiod)), ...
-        mpfr_function_d ('sin', inf, x.sup(possiblynotfullperiod)));
+                                     mpfr_function_d ('sin', inf, x.inf(possiblynotfullperiod)), ...
+                                     mpfr_function_d ('sin', inf, x.sup(possiblynotfullperiod)));
 
     ## We use sign (cos) to know the gradient at the boundaries.
     cossignl(possiblynotfullperiod) = sign (...
-        mpfr_function_d ('cos', .5, x.inf(possiblynotfullperiod)));
+                                             mpfr_function_d ('cos', .5, x.inf(possiblynotfullperiod)));
     cossignu(possiblynotfullperiod) = sign (...
-        mpfr_function_d ('cos', .5, x.sup(possiblynotfullperiod)));
-endif
+                                             mpfr_function_d ('cos', .5, x.sup(possiblynotfullperiod)));
+  endif
 
-## In case of sign (cos) == 0, we conservatively use sign (cos) of nextout.
-cossignl(cossignl == 0) = sign (l(cossignl == 0));
-cossignu(cossignu == 0) = (-1) * sign (u(cossignu == 0));
+  ## In case of sign (cos) == 0, we conservatively use sign (cos) of nextout.
+  cossignl(cossignl == 0) = sign (l(cossignl == 0));
+  cossignu(cossignu == 0) = (-1) * sign (u(cossignu == 0));
 
-containsinf = possiblynotfullperiod & ((cossignl == -1 & cossignu == 1) | ...
-                                       (cossignl == cossignu & ...
-                                            width >= sup (pi)));
-l(containsinf) = -1;
+  containsinf = possiblynotfullperiod & ((cossignl == -1 & cossignu == 1) | ...
+                                         (cossignl == cossignu & ...
+                                          width >= sup (pi)));
+  l(containsinf) = -1;
 
-containssup = possiblynotfullperiod & ((cossignl == 1 & cossignu == -1) | ...
-                                       (cossignl == cossignu & ...
-                                            width >= sup (pi)));
-u(containssup) = 1;
+  containssup = possiblynotfullperiod & ((cossignl == 1 & cossignu == -1) | ...
+                                         (cossignl == cossignu & ...
+                                          width >= sup (pi)));
+  u(containssup) = 1;
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
+  u(u == 0) = +0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 
@@ -112,5 +113,11 @@ endfunction
 %!# correct use of signed zeros
 %!test
 %! x = sin (infsup (0));
+%! assert (signbit (inf (x)));
+%! assert (not (signbit (sup (x))));
+
+%!# test fix for bug #51283
+%!test
+%! x = sin (infsup ([0, 0]));
 %! assert (signbit (inf (x)));
 %! assert (not (signbit (sup (x))));
