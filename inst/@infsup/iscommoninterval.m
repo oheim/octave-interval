@@ -16,14 +16,14 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} iscommoninterval (@var{X})
-## 
+##
 ## Check if the interval is a common interval, that is a nonemty, closed
 ## bounded real interval.
 ##
 ## Common intervals are used in class Moore interval arithmetic and are
 ## flavor-independent in IEEE Std 1788-2015 interval arithmetic.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/isempty, @@infsup/issingleton}
 ## @end defmethod
@@ -34,12 +34,12 @@
 
 function result = iscommoninterval (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = isfinite (x.inf) & isfinite (x.sup);
+  result = isfinite (x.inf) & isfinite (x.sup);
 
 endfunction
 
@@ -52,6 +52,6 @@ endfunction
 %!assert (iscommoninterval (infsupdec (2, 3, "trv")));
 %!assert (not (iscommoninterval (infsupdec (2, inf, "trv"))));
 %!assert (not (iscommoninterval (empty ())));
-%!assert (not (iscommoninterval (entire ()))); 
+%!assert (not (iscommoninterval (entire ())));
 
 %!warning assert (not (iscommoninterval (infsupdec (2, 1))));

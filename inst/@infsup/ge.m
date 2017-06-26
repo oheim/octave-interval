@@ -17,10 +17,10 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} ge (@var{A}, @var{B})
 ## @defopx Operator {@@infsup} {@var{A} >= @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for weakly greater.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/le, @@infsup/gt}
 ## @end defop
@@ -31,12 +31,12 @@
 
 function result = ge (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-result = le (b, a);
+  result = le (b, a);
 
 endfunction
 

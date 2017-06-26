@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} strictsubset (@var{A}, @var{B})
-## 
+##
 ## Evaluate strict subset comparison on intervals.
 ##
 ## True, if all numbers from @var{A} are also contained in @var{B} and @var{B}
@@ -24,7 +24,7 @@
 ## False, if @var{A} contains a number which is not a member in @var{B} or if
 ## @var{A} and @var{B} are equal.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/subset, @@infsupdec/eq, @@infsupdec/interior}
 ## @end defmethod
@@ -35,20 +35,20 @@
 
 function result = strictsubset (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-result = strictsubset (a.infsup, b.infsup);
-result(isnai (a) | isnai (b)) = false;
+  result = strictsubset (a.infsup, b.infsup);
+  result(isnai (a) | isnai (b)) = false;
 
 endfunction
 
@@ -62,4 +62,3 @@ endfunction
 %!assert (strictsubset (infsupdec (0, inf), infsupdec (-inf, inf)));
 %!assert (strictsubset (infsupdec (-inf, 0), infsupdec (-inf, inf)));
 %!assert (not (strictsubset (infsupdec (-inf, inf), infsupdec (-inf, inf))));
-

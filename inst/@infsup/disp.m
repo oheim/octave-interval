@@ -22,8 +22,8 @@
 ##
 ## Interval boundaries are approximated with faithful decimal numbers.
 ##
-## Interval matrices with many rows are wrapped according to the terminal
-## width.  @code{disp} prints nothing when @var{X} is an interval matrix
+## Interval arrays with many rows are wrapped according to the terminal
+## width.  @code{disp} prints nothing when @var{X} is an interval array
 ## without elements.
 ##
 ## Note that the output from @code{disp} always ends with a newline.
@@ -79,7 +79,8 @@ function varargout = disp (x)
 
   ## Print all columns
   buffer = "";
-  for matrixpart = 1:prod (size (x.inf)(3:end))
+  numberofmatrixparts = prod (size (x.inf)(3:end));
+  for matrixpart = 1:numberofmatrixparts
     if (rows (x.inf) > 0)
       ## FIXME: See display.m for how current_print_indent_level is used
       global current_print_indent_level;
@@ -87,13 +88,12 @@ function varargout = disp (x)
 
       if (ndims (x) > 2)
         ## Print the index for the current matrix in the array
-        buffer = cstrcat (buffer, sprintf(" ans(:,:"));
+        buffer = cstrcat (buffer, sprintf("ans(:,:"));
         matrixpartsubscript = cell (1, ndims (x) - 2);
-        [matrixpartsubscript{:}] = ind2sub (size (x), matrixpart);
-        for i=1:ndims (x) - 2
-          buffer = cstrcat (buffer, sprintf(",%d", ...
-                                            char(matrixpartsubscript(i))));
-        endfor
+        [matrixpartsubscript{:}] = ind2sub (size (x.inf), matrixpart);
+        buffer = cstrcat (buffer, ...
+                          sprintf(",%d", ...
+                                  matrixpartsubscript{1:ndims (x.inf) - 2}));
         ## FIXME: How should we handle the equal sign, "=", when the
         ## representation is not exact?
         buffer = cstrcat (buffer, sprintf(") ="));
@@ -134,6 +134,11 @@ function varargout = disp (x)
         endif
         ## Convert string matrix into string with newlines
         buffer = cstrcat (buffer, strjoin (cellstr (submatrix), "\n"), "\n");
+        ## If not on the last line output an extra newline, unless
+        ## the size of the submatrix is 1x1
+        if (matrixpart ~= numberofmatrixparts && (rows (x.inf) > 1 || columns (x.inf) > 1))
+          buffer = cstrcat (buffer, "\n");
+        endif
         if (nargout == 0)
           printf (buffer);
           buffer = "";
@@ -155,4 +160,11 @@ endfunction
 %!assert (disp (infsup([0 0])), "   [0]   [0]\n");
 %!assert (disp (infsup([0 0; 0 0])), "   [0]   [0]\n   [0]   [0]\n");
 %!assert (disp (infsup([0; 0])), "   [0]\n   [0]\n");
-%!assert (disp (infsup(zeros(2, 2, 2))), " ans(:,:,1) =\n\n   [0]   [0]\n   [0]   [0]\n ans(:,:,2) =\n\n   [0]   [0]\n   [0]   [0]\n")
+%!assert (disp (infsup (zeros (1, 1, 1, 0))), "");
+%!assert (disp (infsup(zeros(2, 2, 2))), "ans(:,:,1) =\n\n   [0]   [0]\n   [0]   [0]\n\nans(:,:,2) =\n\n   [0]   [0]\n   [0]   [0]\n")
+%!test
+%! i = infsupdec (reshape (1:24, 2, 3, 4));
+%! i(1, 1, 2) = entire ();
+%! i(1, 1, 3) = empty ();
+%! i(1, 1, 4) = nai ();
+%! assert (disp (i(1,1,:)), "ans(:,:,1) =   [1]_com\nans(:,:,2) =   [Entire]_dac\nans(:,:,3) =   [Empty]_trv\nans(:,:,4) =   [NaI]\n")

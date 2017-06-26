@@ -16,13 +16,13 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} disjoint (@var{A}, @var{B})
-## 
+##
 ## Evaluate disjoint comparison on intervals.
 ##
 ## True, if all numbers from @var{A} are not contained in @var{B} and vice
 ## versa.  False, if @var{A} and @var{B} have at least one element in common.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/subset, @@infsup/interior}
 ## @end defmethod
@@ -33,20 +33,20 @@
 
 function result = disjoint (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
+  endif
 
-result = (a.sup < b.inf | b.sup < a.inf);
+  result = (a.sup < b.inf | b.sup < a.inf);
 
-result(isempty (a) | isempty (b)) = true;
+  result(isempty (a) | isempty (b)) = true;
 
 endfunction
 

@@ -67,4 +67,4 @@ endfunction
 %!assert (isnai (nai (2)), true (2));
 %!assert (isnai (nai (3, 4)), true (3, 4));
 %!assert (decorationpart (nai ()), {"ill"});
-%!assert (isnai (nai (2, 2, 2)))
+%!assert (isnai (nai (2, 2, 2)), true (2, 2, 2))

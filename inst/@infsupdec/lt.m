@@ -17,14 +17,14 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} lt (@var{A}, @var{B})
 ## @defopx Operator {@@infsupdec} {@var{A} < @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for strictly less.
 ##
 ## True, if all numbers from @var{A} are strict less than at least one number
 ## in @var{B}.  False, if @var{A} contains a number which is greater than all
 ## numbers in @var{B} or is equal to the greatest number of @var{B}.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/le, @@infsupdec/gt, @@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}
 ## @end defop
@@ -35,20 +35,20 @@
 
 function result = lt (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-result = lt (a.infsup, b.infsup);
-result(isnai (a) | isnai (b)) = false;
+  result = lt (a.infsup, b.infsup);
+  result(isnai (a) | isnai (b)) = false;
 
 endfunction
 

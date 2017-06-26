@@ -34,7 +34,7 @@ typedef int (*mpfr_ternary_fun)
 
 // Evaluate an unary MPFR function on a binary64 matrix
 void evaluate (
-  Matrix &arg1,           // Operand 1 and result
+  NDArray &arg1,          // Operand 1 and result
   const mpfr_rnd_t rnd,   // Rounding direction
   const mpfr_unary_fun f) // The MPFR function to evaluate (element-wise)
 {
@@ -62,8 +62,8 @@ void evaluate (
 
 // Evaluate a binary MPFR function on two binary64 matrices
 void evaluate (
-  Matrix &arg1,            // Operand 1 and result
-  const Matrix &arg2,      // Operand 2
+  NDArray &arg1,           // Operand 1 and result
+  const NDArray &arg2,     // Operand 2
   const mpfr_rnd_t rnd,    // Rounding direction
   const mpfr_binary_fun f) // The MPFR function to evaluate (element-wise)
 {
@@ -73,38 +73,79 @@ void evaluate (
   mpfr_exp_t old_emin = mpfr_get_emin ();
   mpfr_set_emin (BINARY64_EMIN);
 
-  // arg1 shall contain the result and must be resized
-  if (arg1.rows () == 1 && arg2.rows () != 1)
-    arg1 = arg1.index (idx_vector (ColumnVector (arg2.rows (), 1.0)),
-                       idx_vector::colon);
-  if (arg1.columns () == 1 && arg2.columns () != 1)
-    arg1 = arg1.index (idx_vector::colon,
-                       idx_vector (RowVector (arg2.columns (), 1.0)));
+  int dimensions = std::max (arg1.ndims (), arg2.ndims ());
+  dim_vector arg1_dims = arg1.dims().redim (dimensions);
+  dim_vector arg2_dims = arg2.dims().redim (dimensions);
+  dim_vector arg1_cdims = arg1_dims.cumulative ();
+  dim_vector arg2_cdims = arg2_dims.cumulative ();
 
-  const octave_idx_type n = arg1.rows ();
-  const octave_idx_type m = arg1.columns ();
-  const bool broadcast_r = n != 1 && arg2.rows () == 1;
-  const bool broadcast_c = m != 1 && arg2.columns () == 1;
+  // Create result array of right size
+  dim_vector result_dims;
+  result_dims.resize (dimensions);
 
-  for (octave_idx_type i = 0; i < n; i ++)
-    for (octave_idx_type j = 0; j < m; j ++)
+  for (int i = 0; i < dimensions; i ++)
+    {
+      result_dims(i) = std::max (arg1_dims(i), arg2_dims(i));
+    }
+
+  NDArray result (result_dims);
+
+  // Find the first dimension that needs broadcasting
+  octave_idx_type start;
+  octave_idx_type step = 1;
+  for (start = 0; start < dimensions; start++)
+  {
+    if (arg1_dims(start) != arg2_dims(start))
+      break;
+    step = arg1_cdims (start);
+  }
+
+  // Fix broadcasting along all singleton dimensions
+  for (int i = std::max (start, 1); i < dimensions; i++)
+  {
+    if (arg1_dims(i) == 1)
+      arg1_cdims(i-1) = 0;
+    if (arg2_dims(i) == 1)
+      arg2_cdims(i-1) = 0;
+  }
+
+  // Perform the operation
+  octave_idx_type arg1_idx;
+  octave_idx_type arg2_idx;
+  OCTAVE_LOCAL_BUFFER_INIT (octave_idx_type, idx_base, dimensions, 0);
+
+  octave_idx_type n = result.numel ();
+
+  for (octave_idx_type iter = 0; iter < n; iter += step)
+  {
+    // Take broadcasting into account
+    arg1_idx = arg1_cdims.cum_compute_index (idx_base);
+    arg2_idx = arg2_cdims.cum_compute_index (idx_base);
+    if (start == 0)
       {
-        mpfr_set_d (mp1, arg1.elem (i, j), MPFR_RNDZ);
-        mpfr_set_d (mp2,
-                    (broadcast_r)
-                      ? ((broadcast_c) ? arg2.elem (0, 0)
-                                       : arg2.elem (0, j))
-                      : ((broadcast_c) ? arg2.elem (i, 0)
-                                       : arg2.elem (i, j))
-                    , MPFR_RNDZ);
+        if (arg1_dims(0) == 1)
+          arg1_idx -= idx_base[0];
+        else
+          arg2_idx -= idx_base[0];
+      }
+
+    for (octave_idx_type i = 0; i < step; i++)
+      {
+        mpfr_set_d (mp1, arg1.elem (arg1_idx + i), MPFR_RNDZ);
+        mpfr_set_d (mp2, arg2.elem (arg2_idx + i), MPFR_RNDZ);
         int rnd_error = (*f) (mp1, mp1, mp2, rnd);
         if (rnd == MPFR_RNDN)
           {
             // Prevent double-rounding errors
             mpfr_subnormalize (mp1, rnd_error, rnd);
           }
-        arg1.elem (i, j) = mpfr_get_d (mp1, rnd);
+        result.elem (iter + i) = mpfr_get_d (mp1, rnd);
       }
+
+    result_dims.increment_index (idx_base + start, start);
+  }
+
+  arg1 = result;
 
   mpfr_clear (mp1);
   mpfr_clear (mp2);
@@ -112,10 +153,11 @@ void evaluate (
 }
 
 // Evaluate a ternary MPFR function on three binary64 matrices
+// FIXME: How to handle broadcasting here?
 void evaluate (
-  Matrix &arg1,             // Operand 1 and result
-  const Matrix &arg2,       // Operand 2
-  const Matrix &arg3,       // Operand 3
+  NDArray &arg1,            // Operand 1 and result
+  const NDArray &arg2,      // Operand 2
+  const NDArray &arg3,      // Operand 3
   const mpfr_rnd_t rnd,     // Rounding direction
   const mpfr_ternary_fun f) // The MPFR function to evaluate (element-wise)
 {
@@ -175,7 +217,7 @@ void evaluate (
 
 // Evaluate nthroot
 void nthroot (
-  Matrix &arg1,             // Operand 1 and result
+  NDArray &arg1,       // Operand 1 and result
   const uint64_t arg2, // Operand 2
   const mpfr_rnd_t rnd)
 {
@@ -195,7 +237,7 @@ void nthroot (
 
 // Evaluate factorial
 void factorial (
-  Matrix &arg1, // Operand 1 and result
+  NDArray &arg1, // Operand 1 and result
   const mpfr_rnd_t rnd)
 {
   mpfr_t mp;
@@ -333,26 +375,28 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   // Read parameters
   const std::string function = args (0).string_value ();
   const mpfr_rnd_t  rnd      = parse_rounding_mode (args (1).scalar_value ());
-  Matrix            arg1     = args (2).matrix_value ();
-  Matrix            arg2;
-  Matrix            arg3;
+  NDArray           arg1     = args (2).array_value ();
+  NDArray           arg2;
+  NDArray           arg3;
   if (nargin >= 4)
     {
-      arg2                   = args (3).matrix_value ();
-      if (arg1.rows () != 1 && arg2.rows () != 1 &&
-          arg1.rows () != arg2.rows ())
-        error ("mpfr_function_d: Matrix dimensions must agree!");
-      if (arg1.columns () != 1 && arg2.columns () != 1 &&
-          arg1.columns () != arg2.columns ())
-        error ("mpfr_function_d: Matrix dimensions must agree!");
+      arg2                   = args (3).array_value ();
+      // Check if broadcasting can be performed
+      for (int dim = 0; dim < std::max (arg1.ndims (), arg2.ndims ()); dim ++)
+        {
+          if (arg1.size (dim) != 1 && arg2.size (dim) != 1 &&
+              arg1.size (dim) != arg2.size (dim))
+            error ("mpfr_function_d: Array dimensions must agree!");
+        }
     }
   if (nargin >= 5)
     {
-      arg3                   = args (4).matrix_value ();
+      arg3                   = args (4).array_value ();
+      // FIXME: How to handle broadcasting here?
       if (arg3.numel () != 1 && (
           (arg1.numel () != 1 && arg1.numel () != arg3.numel ()) ||
           (arg2.numel () != 1 && arg2.numel () != arg3.numel ())))
-        error ("mpfr_function_d: Matrix dimensions must agree!");
+        error ("mpfr_function_d: Array dimensions must agree!");
     }
   if (error_state)
     return octave_value_list ();

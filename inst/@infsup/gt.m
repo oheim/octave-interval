@@ -17,10 +17,10 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} gt (@var{A}, @var{B})
 ## @defopx Operator {@@infsup} {@var{A} > @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for strict greater.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/lt, @@infsup/ge}
 ## @end defop
@@ -31,12 +31,12 @@
 
 function result = gt (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-result = lt (b, a);
+  result = lt (b, a);
 
 endfunction
 

@@ -16,13 +16,13 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} ismember (@var{M}, @var{X})
-## 
+##
 ## Check if the interval @var{X} contains the number @var{M}.
 ##
-## The number can be a numerical data type or a string representation of a 
+## The number can be a numerical data type or a string representation of a
 ## decimal number.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/issingleton, @@infsup/isempty}
 ## @end defmethod
@@ -33,22 +33,22 @@
 
 function result = ismember (real, interval)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (interval, "infsup")))
+  endif
+  if (not (isa (interval, "infsup")))
     interval = infsup (interval);
-endif
+  endif
 
-if (isreal (real) && isfloat (real))
+  if (isreal (real) && isfloat (real))
     ## Simple checking is only possible with floating point numbers
     result = isfinite (real) & interval.inf <= real & real <= interval.sup;
-else
+  else
     ## Mixed mode comparison between integers and floats can be problematic
     ## as well as comparison with decimal numbers
     result = subset (infsup (real), interval);
-endif
+  endif
 
 endfunction
 

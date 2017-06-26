@@ -17,22 +17,22 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{S} =} intervaltotext (@var{X})
 ## @deftypemethodx {@@infsup} {@var{S} =} intervaltotext (@var{X}, @var{FORMAT})
-## 
+##
 ## Build an approximate representation of the interval @var{X}.
 ##
 ## Output @var{S} is a simple string for scalar intervals, and a cell array of
-## strings for interval matrices.
-## 
+## strings for interval arrays.
+##
 ## The interval boundaries are stored in binary floating point format and are
 ## converted to decimal or hexadecimal format with possible precision loss.  If
 ## output is not exact, the boundaries are rounded accordingly (e. g. the upper
 ## boundary is rounded towards infinite for output representation).
-## 
+##
 ## The exact decimal format may produce a lot of digits.
 ##
 ## Possible values for @var{FORMAT} are: @code{decimal} (default),
 ## @code{exact decimal}, @code{exact hexadecimal}, @code{auto}
-## 
+##
 ## Accuracy: For all intervals @var{X} is an accurate subset of
 ## @code{infsup (intervaltotext (@var{X}))}.
 ## @example
@@ -65,52 +65,53 @@
 
 function [s, isexact] = intervaltotext (x, format)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-isexact = true ();
+  isexact = true ();
 
-if (nargin < 2)
+  if (nargin < 2)
     format = "decimal";
-endif
+  endif
 
-s = l = u = cell (size (x.inf));
-s(isempty (x)) = "[Empty]";
-s(isentire (x)) = "[Entire]";
+  s = l = u = cell (size (x.inf));
+  s(isempty (x)) = "[Empty]";
+  s(isentire (x)) = "[Entire]";
 
-select = not (isempty (x) | isentire (x));
-if (any (select(:)))
+  select = not (isempty (x) | isentire (x));
+  if (any (select(:)))
     [l(select), lexact] = mpfr_to_string_d (-inf, format, x.inf(select));
     [u(select), uexact] = mpfr_to_string_d (+inf, format, x.sup(select));
     isexact = lexact && uexact;
-    
+
     l(x.inf == 0) = "0"; # no sign for zero
-    
+
     ## Normalize case of +-Inf
     l(select & x.inf == -inf) = "-Inf";
     u(select & x.sup == inf) = "Inf";
-    
+
     ## If l is negative, then u shall also carry a sign (not zero)
     change_of_sign = select & x.inf < 0 & x.sup > 0;
     u(change_of_sign) = strcat ("+", u(change_of_sign));
-    
+
     singleton_string = strcmp (l, u);
     s(select & singleton_string) = strcat ("[", ...
                                            l(select & singleton_string), ...
                                            "]");
-    s(select & not (singleton_string)) = strcat (...
-                                        "[", ...
-                                        l(select & not (singleton_string)), ...
-                                        {", "}, ...
-                                        u(select & not (singleton_string)), ...
-                                        "]");
-endif
+    s(select &
+      not (singleton_string)) = strcat (...
+                                         "[", ...
+                                         l(select & not (singleton_string)), ...
+                                         {", "}, ...
+                                         u(select & not (singleton_string)), ...
+                                         "]");
+  endif
 
-if (isscalar (s))
+  if (isscalar (s))
     s = s{1};
-endif
+  endif
 
 endfunction
 
@@ -125,3 +126,4 @@ endfunction
 %!assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.000000000000001]");
 %!assert (intervaltotext (nextout (infsup (1 + eps))), "[1, 1.0000000000000005]");
 %!assert (intervaltotext (infsup (1)), "[1]");
+%!assert (reshape (intervaltotext (infsup (reshape (1:120, 2, 3, 4, 5))), 1, 120), intervaltotext (infsup (1:120)));

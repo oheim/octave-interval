@@ -16,14 +16,14 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} interior (@var{A}, @var{B})
-## 
+##
 ## Evaluate interior comparison on intervals.
 ##
 ## True, if all numbers from @var{A} are also contained in @var{B}, but are no
 ## boundaries of @var{B}.  False, if @var{A} contains a number which is not a
 ## member in @var{B} or which is a boundary of @var{B}.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/subset, @@infsup/disjoint}
 ## @end defmethod
@@ -34,21 +34,21 @@
 
 function result = interior (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
+  endif
 
-result = ((b.inf < a.inf | (b.inf == -inf & a.inf == -inf)) & ...
-          (a.sup < b.sup | (a.sup == inf & b.sup == inf)));
+  result = ((b.inf < a.inf | (b.inf == -inf & a.inf == -inf)) & ...
+            (a.sup < b.sup | (a.sup == inf & b.sup == inf)));
 
-result(isempty (a) & isempty (b)) = true ();
+  result(isempty (a) & isempty (b)) = true ();
 
 endfunction
 

@@ -19,7 +19,7 @@
 ## @deftypefunx {@var{I} =} midrad (@var{M})
 ## @deftypefunx {@var{I} =} midrad ()
 ## @deftypefunx {[@var{M}, @var{R}] =} midrad (@var{I})
-## 
+##
 ## Create an interval enclosure @var{I} for [@var{M}-@var{R}, @var{M}+@var{R}].
 ##
 ## With two output arguments, compute a rigorous midpoint @var{M} and
@@ -68,74 +68,74 @@
 
 function [m, r] = midrad (m, r)
 
-if (nargout > 1)
+  if (nargout > 1)
     warning ("off", "id=interval:ImplicitPromote", "local");
-endif
+  endif
 
-switch nargin
+  switch nargin
     case 0
-        i = infsupdec ();
-    
-    case 1
-        if (nargout == 2 && isa (m, "infsup"))
-            i = m;
-        else
-            i = infsupdec (m);
-        endif
-    
-    case 2
-        if (isfloat (m) && isreal (m) && ...
-            isfloat (r) && isreal (r))
-            ## Simple case: m and r are binary64 numbers
-            l = mpfr_function_d ('minus', -inf, m, r);
-            u = mpfr_function_d ('plus', +inf, m, r);
-            i = infsupdec (l, u);
-        else
-            ## Complicated case: m and r are strings or other types
-            m = infsupdec (m);
-            if (not (isa (r, "infsup")))
-                ## [-inf, r] should make a valid interval, unless r == -inf
-                ## Intersection with non-negative numbers ensures that we
-                ## return [Empty] if r < 0.
-                if (isfloat (r))
-                    r(r == -inf) = nan;
-                endif
-                r = intersect (infsupdec (-inf, r), infsupdec (0, inf));
-                ## Fix decoration, since intersect would return “trv” at best.
-                legal_radius = not (isempty (r));
-                r(legal_radius) = newdec (intervalpart (r(legal_radius)));
-            endif
-            if (isa (r, "infsupdec"))
-                dec_r = decorationpart (r);
-            else
-                dec_r = {"com"};
-            endif
-            sup_r = sup (r);
-            sup_r(sup_r < 0) = -inf;
-            r = infsupdec (-sup_r, sup_r, dec_r);
-            
-            i = m + r;
-        endif
-        
-    otherwise
-        print_usage ();
-endswitch
+      i = infsupdec ();
 
-switch nargout
-    case {0, 1}
-        m = i;
-        
+    case 1
+      if (nargout == 2 && isa (m, "infsup"))
+        i = m;
+      else
+        i = infsupdec (m);
+      endif
+
     case 2
-        m = mid (i);
-        ## The midpoint is rounded to nearest and the radius
-        ## must cover both boundaries
-        r1 = mpfr_function_d ('minus', +inf, m, inf (i));
-        r2 = mpfr_function_d ('minus', +inf, sup (i), m);
-        r = max (r1, r2);
-        
+      if (isfloat (m) && isreal (m) && ...
+          isfloat (r) && isreal (r))
+        ## Simple case: m and r are binary64 numbers
+        l = mpfr_function_d ('minus', -inf, m, r);
+        u = mpfr_function_d ('plus', +inf, m, r);
+        i = infsupdec (l, u);
+      else
+        ## Complicated case: m and r are strings or other types
+        m = infsupdec (m);
+        if (not (isa (r, "infsup")))
+          ## [-inf, r] should make a valid interval, unless r == -inf
+          ## Intersection with non-negative numbers ensures that we
+          ## return [Empty] if r < 0.
+          if (isfloat (r))
+            r(r == -inf) = nan;
+          endif
+          r = intersect (infsupdec (-inf, r), infsupdec (0, inf));
+          ## Fix decoration, since intersect would return “trv” at best.
+          legal_radius = not (isempty (r));
+          r(legal_radius) = newdec (intervalpart (r(legal_radius)));
+        endif
+        if (isa (r, "infsupdec"))
+          dec_r = decorationpart (r);
+        else
+          dec_r = {"com"};
+        endif
+        sup_r = sup (r);
+        sup_r(sup_r < 0) = -inf;
+        r = infsupdec (-sup_r, sup_r, dec_r);
+
+        i = m + r;
+      endif
+
     otherwise
-        print_usage ();
-endswitch
+      print_usage ();
+  endswitch
+
+  switch nargout
+    case {0, 1}
+      m = i;
+
+    case 2
+      m = mid (i);
+      ## The midpoint is rounded to nearest and the radius
+      ## must cover both boundaries
+      r1 = mpfr_function_d ('minus', +inf, m, inf (i));
+      r2 = mpfr_function_d ('minus', +inf, sup (i), m);
+      r = max (r1, r2);
+
+    otherwise
+      print_usage ();
+  endswitch
 
 endfunction
 
@@ -166,3 +166,12 @@ endfunction
 %!assert (isequal (midrad (42, 3), infsupdec (39, 45)));
 %!assert (isequal (midrad (0, inf), entire ()));
 %!assert (isequal (midrad ("1.1", "0.1"), infsupdec (1 - eps, "1.2")));
+
+%!# N-dimensional arrays
+%!assert (isequal (midrad (zeros (2, 2, 2), ones (2, 2, 2)), infsupdec (-ones (2, 2, 2), ones (2, 2, 2))));
+%!assert (isequal (midrad (zeros (2, 2, 2), 1), infsupdec (-ones (2, 2, 2), ones (2, 2, 2))));
+%!assert (isequal (midrad (0, ones (2, 2, 2)), infsupdec (-ones (2, 2, 2), ones (2, 2, 2))));
+%!test
+%! [M, R] = midrad (infsupdec (-ones (2, 2, 2), ones (2, 2, 2)));
+%! assert (M, zeros (2, 2, 2));
+%! assert (R, ones (2, 2, 2));

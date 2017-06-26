@@ -19,7 +19,7 @@
 ## @deftypeopx Constructor {@@infsup} {[@var{X}, @var{ISEXACT}] =} infsup (@var{M})
 ## @deftypeopx Constructor {@@infsup} {[@var{X}, @var{ISEXACT}] =} infsup (@var{S})
 ## @deftypeopx Constructor {@@infsup} {[@var{X}, @var{ISEXACT}] =} infsup (@var{L}, @var{U})
-## 
+##
 ## Create an interval (from boundaries).  Convert boundaries to double
 ## precision.
 ##
@@ -44,19 +44,19 @@
 ## second @code{?} character for unbounded intervals, @code{u} is
 ## empty or a direction character (u: up, d: down), and @code{E} is an
 ## exponential field.
-## 
+##
 ## If decimal or hexadecimal numbers are no binary64 floating point numbers, a
 ## tight enclosure will be computed.  int64 and uint64 numbers of high
 ## magnitude (> 2^53) can also be affected from precision loss.
 ##
-## For the creation of interval matrices, arguments may be provided as (1) cell 
-## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.  
-## Scalar values do broadcast.
+## For the creation of interval arrays, arguments may be provided as (1) cell
+## arrays with arbitrary/mixed types, (2) numeric arrays, or for matrices (3)
+## strings.  Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE Std
 ## 1788-2015, IEEE standard for interval arithmetic, however it implements both
 ## standard functions numsToInterval and textToInterval for bare intervals.
-## 
+##
 ## @example
 ## @group
 ## infsup ()
@@ -94,734 +94,749 @@
 
 function [x, isexact, overflow, isnai] = infsup (l, u)
 
-persistent scalar_empty_interval = class (struct ("inf", inf, ...
-                                                  "sup", -inf), ...
-                                          "infsup");
+  persistent scalar_empty_interval = class (struct ("inf", inf, ...
+                                                    "sup", -inf), ...
+                                            "infsup");
 
-## Part 1
-##
-## Split any arguments into l and u, where l and u denote lower and upper
-## boundaries.  l and u shall be either numeric arrays or cell arrays with
-## strings or numeric entries.  The size of l and u will equal the interval
-## matrix size of the final result (unless broadcasting is going to be applied
-## as a very last step).
-##
-## Strings in l and u will be normalized, that is, trimmed and converted to
-## lower case.
+  ## Part 1
+  ##
+  ## Split any arguments into l and u, where l and u denote lower and upper
+  ## boundaries.  l and u shall be either numeric arrays or cell arrays with
+  ## strings or numeric entries.  The size of l and u will equal the interval
+  ## matrix size of the final result (unless broadcasting is going to be applied
+  ## as a very last step).
+  ##
+  ## Strings in l and u will be normalized, that is, trimmed and converted to
+  ## lower case.
 
-switch nargin
+  switch nargin
     case 0
-        ## empty interval
-        x = scalar_empty_interval;
-        isexact = true;
-        isnai = overflow = false;
-        return
-    
+      ## empty interval
+      x = scalar_empty_interval;
+      isexact = true;
+      isnai = overflow = false;
+      return
+
     case 1
-        if (isa (l, "infsup"))
-            ## already an interval—nothing to be done
-            x = l;
-            isexact = true ();
-            isnai = overflow = false (size (l.inf));
-            return
-        endif
-        if (ischar (l))
-            ## Character string may contain a vector or a matrix of intervals,
-            ## split the interval literals into a cell array of strings.
-            ## Interval literals will be trimmed by the split function.
-            l = __split_interval_literals__ (lower (l));
-            char_idx = true (size (l));
-        elseif (iscell (l))
-            ## Make sure that in a cell array (with possibly mixed types) all
-            ## strings are trimmed.  This is required during splitting of
-            ## interval literals into lower and upper bounds.
-            char_idx = cellfun ("ischar", l);
-            l(char_idx) = lower (strtrim (l(char_idx)));
-        else
-            ## Not cell or char, e. g. numeric matrix.
-            ## Syntax infsup (x) has to be equivalent with infsup (x, x).
-            ## No need to trim or normalize character case.
-            u = l;
-        endif
-        
-        ## Correct construction of empty intervals is only possible by calling
-        ## this constructor without arguments (see above), or by using one of
-        ## the two interval literals [] or [empty].
-        ## Otherwise, construction of empty intervals must signal
-        ## “UndefinedOperation”.
-        ## In particular, the interval literal [+inf, -inf] is illegal and
-        ## “numsToInterval (+inf, -inf)” would be an illegal function call,
-        ## according to IEEE Std 1788-2015.
+      if (isa (l, "infsup"))
+        ## already an interval—nothing to be done
+        x = l;
+        isexact = true ();
+        isnai = overflow = false (size (l.inf));
+        return
+      endif
+      if (ischar (l))
+        ## Character string may contain a vector or a matrix of intervals,
+        ## split the interval literals into a cell array of strings.
+        ## Interval literals will be trimmed by the split function.
+        l = __split_interval_literals__ (lower (l));
+        char_idx = true (size (l));
+      elseif (iscell (l))
+        ## Make sure that in a cell array (with possibly mixed types) all
+        ## strings are trimmed.  This is required during splitting of
+        ## interval literals into lower and upper bounds.
+        char_idx = cellfun ("ischar", l);
+        l(char_idx) = lower (strtrim (l(char_idx)));
+      else
+        ## Not cell or char, e. g. numeric matrix.
+        ## Syntax infsup (x) has to be equivalent with infsup (x, x).
+        ## No need to trim or normalize character case.
+        u = l;
+      endif
+
+      ## Correct construction of empty intervals is only possible by calling
+      ## this constructor without arguments (see above), or by using one of
+      ## the two interval literals [] or [empty].
+      ## Otherwise, construction of empty intervals must signal
+      ## “UndefinedOperation”.
+      ## In particular, the interval literal [+inf, -inf] is illegal and
+      ## “numsToInterval (+inf, -inf)” would be an illegal function call,
+      ## according to IEEE Std 1788-2015.
+      ##
+      ##  1. isnai defaults to -1 (unknown).
+      ##  2. any non-empty interval (l <= u) is legal and we set isnai to
+      ##     false for those in the end.
+      ##  3. for legal empty interval literals we set isnai = false
+      ##     explicitly.
+      ##  4. for certain illegal interval literals we give a special warning
+      ##     and set isnai = true explicitly.
+      ##  5. it remains isnai = -1 for any illegal intervals which have not
+      ##     been handled with, we give a warning and we return an empty
+      ##     interval in these cases.
+      isnai = -ones (size (l), "int8");
+      illegal_boundary = struct ("inf", false (size (l)), ...
+                                 "sup", false (size (l)));
+
+      if (iscell (l))
+        ## At this point, only a cell array can contain interval literals
+        ## as string.  Split intervals and interval literals into lower and
+        ## upper bounds.  Except for empty intervals, strings are not
+        ## converted into numeric values yet.
         ##
-        ##  1. isnai defaults to -1 (unknown).
-        ##  2. any non-empty interval (l <= u) is legal and we set isnai to
-        ##     false for those in the end.
-        ##  3. for legal empty interval literals we set isnai = false
-        ##     explicitly.
-        ##  4. for certain illegal interval literals we give a special warning
-        ##     and set isnai = true explicitly.
-        ##  5. it remains isnai = -1 for any illegal intervals which have not
-        ##     been handled with, we give a warning and we return an empty
-        ##     interval in these cases.
-        isnai = -ones (size (l), "int8");
-        illegal_boundary = struct ("inf", false (size (l)), ...
-                                   "sup", false (size (l)));
-        
-        if (iscell (l))
-            ## At this point, only a cell array can contain interval literals
-            ## as string.  Split intervals and interval literals into lower and
-            ## upper bounds.  Except for empty intervals, strings are not
-            ## converted into numeric values yet.
-            ##
-            ## []       -> (+inf, -inf)
-            ## [empty]  -> (+inf, -inf)
-            ## [entire] -> (, )
-            ## [,]      -> (, )
-            ## [l, u]   -> (l, u)
-            ## [m]      -> (m, m)
-            ## m        -> (m, m)
-            ## m?r      -> (m?r, m?r)
-            ## m?ru     -> (m, m?r)
-            ## m?rd     -> (m?r, m)
-            ## m??      -> (, )
-            ## m??u     -> (m, )
-            ## m??d     -> (, m)
-            
-            ## Initialize u such that the syntax infsup (x) is equivalent with
-            ## infsup (x, x) unless interval literals are used.
-            u = l;
-            
-            ## Find interval literals with square brackets.  The strings are
-            ## trimmed already, so they will start at the first character.
-            square_bracket_idx = strncmp (l, "[", 1);
-%!# Verify correct behaviour of strncmp for empty strings and non-string
-%!# values within the cell array.
-%!assert (strncmp ({"[", double("["), ""}, "[", 1), logical ([1 0 0]));
-            
-            ## A bare interval literal which starts with a square bracket
-            ## must end with a square bracket as well.
-            square_bracket_idx = ...
-                find (square_bracket_idx)(...
-                    cellfun (@(s) s(end) == "]", ...
-                             l(square_bracket_idx)));
-            
-            ## Strip square brackets and white space within square brackets.
-            nobrackets = strtrim (cellfun (@(s) s([2 : (end - 1)]), ...
-                                           l(square_bracket_idx), ...
-                                           "UniformOutput", false));
-            
-            ## Construction of empty intervals with the correct literal either
-            ## [empty] or [] is legit.
-            empty_interval_local_idx = strcmp (nobrackets, "empty") ...
-                                     | cellfun ("isempty", nobrackets);
-            empty_interval_idx = square_bracket_idx(empty_interval_local_idx);
-            isnai(empty_interval_idx) = false;
-            
-            ## We remove the empty interval cases from the current work basket
-            ## and don't need special handling of comma-less strings below
-            ## ([] represents the empty interval, whereas [,] represents the
-            ## set of all real numbers).
-            square_bracket_idx = ...
-                square_bracket_idx(not (empty_interval_local_idx));
-            nobrackets = nobrackets(not (empty_interval_local_idx));
-            char_idx(empty_interval_idx) = false;
-            l(empty_interval_idx) = +inf;
-            u(empty_interval_idx) = -inf;
-            
-            ## [entire] is equivalent to [,]
-            nobrackets(strcmp (nobrackets, "entire")) = {""};
-            
-            ## Split [l, u] literals into l and u strings at the comma.
-            nobrackets = cellfun ("strsplit", nobrackets, {","}, ...
-                                  "UniformOutput", false);
-            nobrackets_parts = cellfun ("numel", nobrackets);
-            
-            ## For point intervals [m] we have removed the square brackets,
-            ## trimmed any white space inside the square brackets and must
-            ## store m into both l and u for further parsing below.
-            ## Each boundary will be parsed individually with opposite rounding
-            ## direction.
-            point_interval_local_idx = (nobrackets_parts == 1);
-            point_interval_idx = square_bracket_idx(point_interval_local_idx);
-            l(point_interval_idx) = u(point_interval_idx) = ...
-                vertcat ({}, nobrackets(point_interval_local_idx){:});
-            
-            ## For infsup intervals [l, u] we can store the trimmed l and u
-            ## strings for further parsing below.
-            infsup_interval_local_idx = (nobrackets_parts == 2);
-            infsup_interval_idx = square_bracket_idx(infsup_interval_local_idx);
-            l(infsup_interval_idx) = strtrim (vertcat ({}, ...
-                cellindexmat (nobrackets(infsup_interval_local_idx), 1){:}));
-            u(infsup_interval_idx) = strtrim (vertcat ({}, ...
-                cellindexmat (nobrackets(infsup_interval_local_idx), 2){:}));
-            
-            ## Find interval literals in uncertain form.
-            uncertain_idx = char_idx;
-            uncertain_idx(square_bracket_idx) = false; # already processed
-            
-            ## Find uncertain form with directed uncertainty (down or up)
-            [~, ~, ~, ~, groups] = regexp (l(uncertain_idx), ...
-                                              ["([^?]+)", ... # 1: mantissa
-                                               "([?])", ...   # 2: ?
-                                               "(.*)", ...    # 3: uncertainty
-                                               "([du])", ...  # 4: direction
-                                               "(.*)"]);      # 5: exponent
-            directed_local_idx = not (cellfun ("isempty", groups));
-            directed_uncertain_idx = uncertain_idx;
-            directed_uncertain_idx(uncertain_idx) = directed_local_idx;
-            groups = vertcat ({}, groups(directed_local_idx){:});
-            
-            ## Remove directed down/up uncertainty.
-            for direction = ["d", "u"]
-                direction_local_idx = strcmp (...
-                    vertcat ({}, cellindexmat (groups, 4){:}), ...
-                    direction);
-                direction_idx = directed_uncertain_idx;
-                direction_idx(directed_uncertain_idx) = direction_local_idx;
-                
-                ## Remove direction character
-                persistent join_groups = @(parts) strcat (parts{:});
-                undirected_uncertain_form = ...
-                    cellfun (...
-                        join_groups, ...
-                        cellindexmat (groups(direction_local_idx), ...
-                            [1 2 3 5]), ...
-                        "UniformOutput", false);
-                ## Also remove uncertainty
-                undirected_certain_form = ...
-                    cellfun (...
-                        join_groups, ...
-                        cellindexmat (groups(direction_local_idx), ...
-                            [1 5]), ...
-                        "UniformOutput", false);
-                
-                ## Store uncertain boundaries without directed uncertainty
-                switch direction
-                    case "d"
-                        l(direction_idx) = undirected_uncertain_form;
-                        u(direction_idx) = undirected_certain_form;
-                    case "u"
-                        l(direction_idx) = undirected_certain_form;
-                        u(direction_idx) = undirected_uncertain_form;
-                endswitch
-                
-                ## Remove parsed uncertain form from work basket to prevent
-                ## double parsing (strings with both d and u uncertainty).
-                directed_uncertain_idx(direction_idx) = false;
-                groups = groups(not (direction_local_idx));
-            endfor
-            
-            ## Remove unbound uncertainty ??
-            ## FIXME We should verify correctness of the interval literal more
-            ## thoroughly.  Otherwise we would ignore illegal literals which
-            ## contain the double question mark.
-            l_unbound_idx = uncertain_idx;
-            l_unbound_idx(uncertain_idx) = ...
-                not (cellfun ("isempty", strfind (l(uncertain_idx), "??")));
-            l(l_unbound_idx) = {""};
-            u_unbound_idx = uncertain_idx;
-            u_unbound_idx(uncertain_idx) = ...
-                not (cellfun ("isempty", strfind (u(uncertain_idx), "??")));
-            u(u_unbound_idx) = {""};
-        endif
+        ## []       -> (+inf, -inf)
+        ## [empty]  -> (+inf, -inf)
+        ## [entire] -> (, )
+        ## [,]      -> (, )
+        ## [l, u]   -> (l, u)
+        ## [m]      -> (m, m)
+        ## m        -> (m, m)
+        ## m?r      -> (m?r, m?r)
+        ## m?ru     -> (m, m?r)
+        ## m?rd     -> (m?r, m)
+        ## m??      -> (, )
+        ## m??u     -> (m, )
+        ## m??d     -> (, m)
+
+        ## Initialize u such that the syntax infsup (x) is equivalent with
+        ## infsup (x, x) unless interval literals are used.
+        u = l;
+
+        ## Find interval literals with square brackets.  The strings are
+        ## trimmed already, so they will start at the first character.
+        square_bracket_idx = strncmp (l, "[", 1);
+        %!# Verify correct behaviour of strncmp for empty strings and non-string
+        %!# values within the cell array.
+        %!assert (strncmp ({"[", double("["), ""}, "[", 1), logical ([1 0 0]));
+
+        ## A bare interval literal which starts with a square bracket
+        ## must end with a square bracket as well.
+        square_bracket_idx = ...
+        find (square_bracket_idx)(...
+                                   cellfun (@(s) s(end) == "]", ...
+                                            l(square_bracket_idx)));
+
+        ## Strip square brackets and white space within square brackets.
+        nobrackets = strtrim (cellfun (@(s) s([2 : (end - 1)]), ...
+                                       l(square_bracket_idx), ...
+                                       "UniformOutput", false));
+
+        ## Construction of empty intervals with the correct literal either
+        ## [empty] or [] is legit.
+        empty_interval_local_idx = strcmp (nobrackets, "empty") ...
+                                   | cellfun ("isempty", nobrackets);
+        empty_interval_idx = square_bracket_idx(empty_interval_local_idx);
+        isnai(empty_interval_idx) = false;
+
+        ## We remove the empty interval cases from the current work basket
+        ## and don't need special handling of comma-less strings below
+        ## ([] represents the empty interval, whereas [,] represents the
+        ## set of all real numbers).
+        square_bracket_idx = ...
+        square_bracket_idx(not (empty_interval_local_idx));
+        nobrackets = nobrackets(not (empty_interval_local_idx));
+        char_idx(empty_interval_idx) = false;
+        l(empty_interval_idx) = +inf;
+        u(empty_interval_idx) = -inf;
+
+        ## [entire] is equivalent to [,]
+        nobrackets(strcmp (nobrackets, "entire")) = {""};
+
+        ## Split [l, u] literals into l and u strings at the comma.
+        nobrackets = cellfun ("strsplit", nobrackets, {","}, ...
+                              "UniformOutput", false);
+        nobrackets_parts = cellfun ("numel", nobrackets);
+
+        ## For point intervals [m] we have removed the square brackets,
+        ## trimmed any white space inside the square brackets and must
+        ## store m into both l and u for further parsing below.
+        ## Each boundary will be parsed individually with opposite rounding
+        ## direction.
+        point_interval_local_idx = (nobrackets_parts == 1);
+        point_interval_idx = square_bracket_idx(point_interval_local_idx);
+        l(point_interval_idx) = u(point_interval_idx) = ...
+        vertcat ({}, nobrackets(point_interval_local_idx){:});
+
+        ## For infsup intervals [l, u] we can store the trimmed l and u
+        ## strings for further parsing below.
+        infsup_interval_local_idx = (nobrackets_parts == 2);
+        infsup_interval_idx = square_bracket_idx(infsup_interval_local_idx);
+        l(infsup_interval_idx) = strtrim (vertcat ({}, ...
+                                                   cellindexmat (nobrackets(infsup_interval_local_idx), 1){:}));
+        u(infsup_interval_idx) = strtrim (vertcat ({}, ...
+                                                   cellindexmat (nobrackets(infsup_interval_local_idx), 2){:}));
+
+        ## Find interval literals in uncertain form.
+        uncertain_idx = char_idx;
+        uncertain_idx(square_bracket_idx) = false; # already processed
+
+        ## Find uncertain form with directed uncertainty (down or up)
+        [~, ~, ~, ~, groups] = regexp (l(uncertain_idx), ...
+                                       ["([^?]+)", ... # 1: mantissa
+                                        "([?])", ...   # 2: ?
+                                        "(.*)", ...    # 3: uncertainty
+                                        "([du])", ...  # 4: direction
+                                        "(.*)"]);      # 5: exponent
+        directed_local_idx = not (cellfun ("isempty", groups));
+        directed_uncertain_idx = uncertain_idx;
+        directed_uncertain_idx(uncertain_idx) = directed_local_idx;
+        groups = vertcat ({}, groups(directed_local_idx){:});
+
+        ## Remove directed down/up uncertainty.
+        for direction = ["d", "u"]
+          direction_local_idx = strcmp (...
+                                         vertcat ({}, ...
+                                                  cellindexmat (groups, ...
+                                                                4){:}), ...
+                                         direction);
+          direction_idx = directed_uncertain_idx;
+          direction_idx(directed_uncertain_idx) = direction_local_idx;
+
+          ## Remove direction character
+          persistent join_groups = @(parts) strcat (parts{:});
+          undirected_uncertain_form = ...
+          cellfun (...
+                    join_groups, ...
+                    cellindexmat (groups(direction_local_idx), ...
+                                  [1 2 3 5]), ...
+                    "UniformOutput", false);
+          ## Also remove uncertainty
+          undirected_certain_form = ...
+          cellfun (...
+                    join_groups, ...
+                    cellindexmat (groups(direction_local_idx), ...
+                                  [1 5]), ...
+                    "UniformOutput", false);
+
+          ## Store uncertain boundaries without directed uncertainty
+          switch direction
+            case "d"
+              l(direction_idx) = undirected_uncertain_form;
+              u(direction_idx) = undirected_certain_form;
+            case "u"
+              l(direction_idx) = undirected_certain_form;
+              u(direction_idx) = undirected_uncertain_form;
+          endswitch
+
+          ## Remove parsed uncertain form from work basket to prevent
+          ## double parsing (strings with both d and u uncertainty).
+          directed_uncertain_idx(direction_idx) = false;
+          groups = groups(not (direction_local_idx));
+        endfor
+
+        ## Remove unbound uncertainty ??
+        ## FIXME We should verify correctness of the interval literal more
+        ## thoroughly.  Otherwise we would ignore illegal literals which
+        ## contain the double question mark.
+        l_unbound_idx = uncertain_idx;
+        l_unbound_idx(uncertain_idx) = ...
+        not (cellfun ("isempty", strfind (l(uncertain_idx), "??")));
+        l(l_unbound_idx) = {""};
+        u_unbound_idx = uncertain_idx;
+        u_unbound_idx(uncertain_idx) = ...
+        not (cellfun ("isempty", strfind (u(uncertain_idx), "??")));
+        u(u_unbound_idx) = {""};
+      endif
 
     case 2
-        ## Split interval vectors if supplied as strings.
-        if (ischar (l))
-            l = __split_interval_literals__ (l);
+      ## Split interval vectors if supplied as strings.
+      if (ischar (l))
+        l = __split_interval_literals__ (l);
+      endif
+      if (ischar (u))
+        u = __split_interval_literals__ (u);
+      endif
+
+      ## Check dimensions and whether broadcasting is possible
+      for dim = 1 : max (ndims (l), ndims (u))
+        if (size (l, dim) != 1 && size (u, dim) != 1 && ...
+            size (l, dim) != size (u, dim))
+          warning ("interval:InvalidOperand", ...
+                   ["infsup: Dimensions of lower and upper ", ...
+                    "boundaries are not compatible"]);
+          ## Unable to recover from this kind of error
+          x = scalar_empty_interval;
+          isexact = false;
+          overflow = false;
+          isnai = true;
+          return
         endif
-        if (ischar (u))
-            u = __split_interval_literals__ (u);
-        endif
-        
-        ## Check dimensions and whether broadcasting is possible
-        for dim = 1 : max (ndims (l), ndims (u))
-            if (size (l, dim) != 1 && size (u, dim) != 1 && ...
-                size (l, dim) != size (u, dim))
-                warning ("interval:InvalidOperand", ...
-                         ["infsup: Dimensions of lower and upper ", ...
-                          "boundaries are not compatible"]);
-                ## Unable to recover from this kind of error
-                x = scalar_empty_interval;
-                isexact = false;
-                overflow = false;
-                isnai = true;
-                return
-            endif
-        endfor
-        
-        ## Compute result size after broadcasting and mark any empty intervals
-        ## as illegal (will trigger “UndefinedOperation” signal later on).
-        ## Construction of silent empty intervals is impossible with two args.
-        isnai = zeros (size (l), "int8") - ones (size (u), "int8"); #-1=unknown
-        illegal_boundary = struct ("inf", false (size (l)), ...
-                                   "sup", false (size (u)));
-        
-        for argument = ["l", "u"]
+      endfor
+
+      ## Compute result size after broadcasting and mark any empty intervals
+      ## as illegal (will trigger “UndefinedOperation” signal later on).
+      ## Construction of silent empty intervals is impossible with two args.
+      isnai = zeros (size (l), "int8") - ones (size (u), "int8"); #-1=unknown
+      illegal_boundary = struct ("inf", false (size (l)), ...
+                                 "sup", false (size (u)));
+
+      for argument = ["l", "u"]
+        switch argument
+          case "l"
+            current_arg = l;
+          case "u"
+            current_arg = u;
+        endswitch
+        if (iscell (current_arg))
+          ## Normalize strings: trim and convert to lower case
+          ## (as is done in the nargin == 1 case).
+          char_idx = cellfun ("ischar", current_arg);
+          current_arg(char_idx) = ...
+          lower (strtrim (current_arg(char_idx)));
+
+          ## In contrast to the nargin == 1 case we cannot allow interval
+          ## literals here.  Only simple boundaries are allowed if two
+          ## arguments are given.
+          square_bracket_idx = strncmp (current_arg, "[", 1);
+          uncertain_idx = char_idx;
+          uncertain_idx(square_bracket_idx) = false;
+          uncertain_idx(uncertain_idx) = ...
+          not (cellfun ("isempty", ...
+                        strfind (current_arg(uncertain_idx), "?")));
+          illegal_literal_idx = (square_bracket_idx | uncertain_idx);
+          if (any (illegal_literal_idx(:)))
             switch argument
-                case "l"
-                    current_arg = l;
-                case "u"
-                    current_arg = u;
+              case "l"
+                warning ("interval:UndefinedOperation", ...
+                         "Lower boundary contains an interval literal");
+                current_arg(illegal_literal_idx) = +inf;
+                illegal_boundary.inf(illegal_literal_idx) = true;
+              case "u"
+                warning ("interval:UndefinedOperation", ...
+                         "Upper boundary contains an interval literal");
+                current_arg(illegal_literal_idx) = -inf;
+                illegal_boundary.sup(illegal_literal_idx) = true;
             endswitch
-            if (iscell (current_arg))
-                ## Normalize strings: trim and convert to lower case
-                ## (as is done in the nargin == 1 case).
-                char_idx = cellfun ("ischar", current_arg);
-                current_arg(char_idx) = ...
-                    lower (strtrim (current_arg(char_idx)));
-            
-                ## In contrast to the nargin == 1 case we cannot allow interval
-                ## literals here.  Only simple boundaries are allowed if two
-                ## arguments are given.
-                square_bracket_idx = strncmp (current_arg, "[", 1);
-                uncertain_idx = char_idx;
-                uncertain_idx(square_bracket_idx) = false;
-                uncertain_idx(uncertain_idx) = ...
-                    not (cellfun ("isempty", ...
-                                  strfind (current_arg(uncertain_idx), "?")));
-                illegal_literal_idx = (square_bracket_idx | uncertain_idx);
-                if (any (illegal_literal_idx(:)))
-                    switch argument
-                        case "l"
-                            warning ("interval:UndefinedOperation", ...
-                                "Lower boundary contains an interval literal");
-                            current_arg(illegal_literal_idx) = +inf;
-                            illegal_boundary.inf(illegal_literal_idx) = true;
-                        case "u"
-                            warning ("interval:UndefinedOperation", ...
-                                "Upper boundary contains an interval literal");
-                            current_arg(illegal_literal_idx) = -inf;
-                            illegal_boundary.sup(illegal_literal_idx) = true;
-                    endswitch
-                endif
-                switch argument
-                    case "l"
-                        l = current_arg;
-                    case "u"
-                        u = current_arg;
-                endswitch
-            endif
-        endfor
-    
-    otherwise # nargin >= 3
-        print_usage ();
-        return
-endswitch
-
-## Part 2
-##
-## Boundaries have been split into lower and upper boundaries and shall be
-## converted to binary64 matrices with string parsing and outward rounding.
-##
-## l contains a cell array or a matrix of lower boundaries.
-## u contains a cell array or a matrix of upper boundaries.
-##
-## Each of l and u will be converted into binary64 individually and will be
-## stored in x.inf and x.sup respectively.
-
-isexact = true ();
-x = struct ("inf", inf (size (l)), ...
-            "sup", -inf (size (u)));
-for [boundaries, key] = struct ("inf", {l}, "sup", {u})
-    if (isfloat (boundaries) && isreal (boundaries))
-        ## Simple case: the boundaries already are binary floating point
-        ## numbers in single or double precision.
-        ## This kind of operation is often used in internal functions and shall
-        ## be fast.  We check for NaNs later.
-        x.(key) = double (boundaries);
-        possiblyundefined.(key) = overflow.(key) = false (size (boundaries));
-        continue
-    endif
-    
-    if (not (iscell (boundaries)))
-        if (not (isnumeric (boundaries)))
-            warning ("interval:InvalidOperand", ...
-                     ["infsup: Invalid argument type, only strings, ", ...
-                      "numerics, and cell arrays thereof are allowed"]);
-            ## Unable to recover from this kind of error
-            x = scalar_empty_interval;
-            isexact = false;
-            overflow = false;
-            isnai = true;
-            return
+          endif
+          switch argument
+            case "l"
+              l = current_arg;
+            case "u"
+              u = current_arg;
+          endswitch
         endif
-        boundaries = num2cell (boundaries);
+      endfor
+
+    otherwise # nargin >= 3
+      print_usage ();
+      return
+  endswitch
+
+  ## Part 2
+  ##
+  ## Boundaries have been split into lower and upper boundaries and shall be
+  ## converted to binary64 matrices with string parsing and outward rounding.
+  ##
+  ## l contains a cell array or a matrix of lower boundaries.
+  ## u contains a cell array or a matrix of upper boundaries.
+  ##
+  ## Each of l and u will be converted into binary64 individually and will be
+  ## stored in x.inf and x.sup respectively.
+
+  isexact = true ();
+  x = struct ("inf", inf (size (l)), ...
+              "sup", -inf (size (u)));
+  for [boundaries, key] = struct ("inf", {l}, "sup", {u})
+    if (isfloat (boundaries) && isreal (boundaries))
+      ## Simple case: the boundaries already are binary floating point
+      ## numbers in single or double precision.
+      ## This kind of operation is often used in internal functions and shall
+      ## be fast.  We check for NaNs later.
+      x.(key) = double (boundaries);
+      possiblyundefined.(key) = overflow.(key) = false (size (boundaries));
+      continue
     endif
-    
+
+    if (not (iscell (boundaries)))
+      if (not (isnumeric (boundaries)))
+        warning ("interval:InvalidOperand", ...
+                 ["infsup: Invalid argument type, only strings, ", ...
+                  "numerics, and cell arrays thereof are allowed"]);
+        ## Unable to recover from this kind of error
+        x = scalar_empty_interval;
+        isexact = false;
+        overflow = false;
+        isnai = true;
+        return
+      endif
+      boundaries = num2cell (boundaries);
+    endif
+
     overflow.(key) = true (size (boundaries));
     possiblyundefined.(key) = false (size (boundaries));
-    
+
     ## Track the entries in cell array boundaries, which haven't been
     ## converted yet.
     todo = true (size (boundaries));
-    
+
     ## [,] = [-inf, +inf]
     unbound_idx = cellfun ("isempty", boundaries);
     switch key
-        case "inf"
-            x.inf(unbound_idx) = -inf;
-        case "sup"
-            x.sup(unbound_idx) = +inf;
+      case "inf"
+        x.inf(unbound_idx) = -inf;
+      case "sup"
+        x.sup(unbound_idx) = +inf;
     endswitch
     overflow.(key)(unbound_idx) = false;
     todo(unbound_idx) = false;
-    
+
     ## In the cell array each entry must represent a scalar value.
     non_scalar_entry_idx = todo & not (...
-        cellfun ("isscalar", boundaries) | cellfun ("ischar", boundaries));
+                                        cellfun ("isscalar", boundaries) |...
+                                        cellfun ("ischar", boundaries));
     if (any (non_scalar_entry_idx(:)))
-        warning ("interval:UndefinedOperation", ...
-                 "Cell arrays of matrix entries do not contain scalar values");
-        # Use default value of [empty] for these entries and continue
-        todo(non_scalar_entry_idx) = false;
-        illegal_boundary.(key)(non_scalar_entry_idx) = true;
+      warning ("interval:UndefinedOperation", ...
+               "Cell arrays of matrix entries do not contain scalar values");
+         # Use default value of [empty] for these entries and continue
+      todo(non_scalar_entry_idx) = false;
+      illegal_boundary.(key)(non_scalar_entry_idx) = true;
     endif
-    
+
     ## 64 bit integers: approximate in double precision.
     integer_idx = find (todo & ( ...
-        cellfun ("isa", boundaries, {"uint64"}) ...
-            | cellfun ("isa", boundaries, {"int64"})));
+                                 cellfun ("isa", boundaries, {"uint64"}) ...
+                                 | cellfun ("isa", boundaries, {"int64"})));
     integers = vertcat (boundaries{integer_idx});
     converted_integers = double (integers);
     exact_integer_local_idx = (converted_integers == integers);
     if (any (not (exact_integer_local_idx(:))))
-        isexact = false;
-        possiblyundefined.(key)(integer_idx(not (exact_integer_local_idx))) ...
-            = true;
+      isexact = false;
+      possiblyundefined.(key)(integer_idx(not (exact_integer_local_idx))) ...
+      = true;
     endif
     ## Fix conversion in cases where rounding to nearest has resulted in the
     ## wrong value, i. e., in a value that has not been rounded outward,
     ## but inward.
     switch key
-        case "inf"
-            wrong_round_local_idx = (converted_integers > integers);
-            converted_integers(wrong_round_local_idx) = ...
-                mpfr_function_d ('minus', -inf, ...
-                    converted_integers(wrong_round_local_idx), pow2 (-1074));
-        case "sup"
-            wrong_round_local_idx = (converted_integers < integers);
-            converted_integers(wrong_round_local_idx) = ...
-                mpfr_function_d ('plus', +inf, ...
-                    converted_integers(wrong_round_local_idx), pow2 (-1074));
+      case "inf"
+        wrong_round_local_idx = (converted_integers > integers);
+        converted_integers(wrong_round_local_idx) = ...
+        mpfr_function_d ('minus', -inf, ...
+                         converted_integers(wrong_round_local_idx), ...
+                         pow2 (-1074));
+      case "sup"
+        wrong_round_local_idx = (converted_integers < integers);
+        converted_integers(wrong_round_local_idx) = ...
+        mpfr_function_d ('plus', +inf, ...
+                         converted_integers(wrong_round_local_idx), ...
+                         pow2 (-1074));
     endswitch
     x.(key)(integer_idx) = converted_integers;
     overflow.(key)(integer_idx) = false;
     todo(integer_idx) = false;
-    
+
     ## Lossless conversion from binary32, binary64, (u)int8, (u)int16, (u)int32
     ## and logicals.
     real_idx = todo & ...
-        ( ...
-            ( ...
-               cellfun ("isreal", boundaries) ...
+               ( ...
+                 ( ...
+                   cellfun ("isreal", boundaries) ...
                    & cellfun ("isfloat", boundaries) ...
-            ) ...
-        |   cellfun ("isinteger", boundaries) ...
-        |   cellfun ("islogical", boundaries)
-        );
+                 ) ...
+                 |   cellfun ("isinteger", boundaries) ...
+                 |   cellfun ("islogical", boundaries)
+               );
     x.(key)(real_idx) = double (vertcat (boundaries{real_idx}));
     overflow.(key)(real_idx) = false;
     todo(real_idx) = false;
-    
+
     ## Complex numbers: not allowed, will be mapped to [empty].
     complex_idx = todo & cellfun ("iscomplex", boundaries);
     if (any (complex_idx(:)))
-        warning ("interval:InvalidOperand", ...
-                 "infsup: Complex arguments are not permitted");
-        todo(complex_idx) = false;
-        illegal_boundary.(key)(complex_idx) = true;
+      warning ("interval:InvalidOperand", ...
+               "infsup: Complex arguments are not permitted");
+      todo(complex_idx) = false;
+      illegal_boundary.(key)(complex_idx) = true;
     endif
-    
+
     ## Other kinds of parameters that are not strings
     char_idx = todo & cellfun ("ischar", boundaries);
     if (any ((todo & not (char_idx))(:)))
-        warning ("interval:InvalidOperand", ...
-                 "infsup: Illegal boundary: must be numeric or string");
-        illegal_boundary.(key)(todo & not (char_idx)) = true;
+      warning ("interval:InvalidOperand", ...
+               "infsup: Illegal boundary: must be numeric or string");
+      illegal_boundary.(key)(todo & not (char_idx)) = true;
     endif
     todo = char_idx;
-    
+
     ## Hex strings
     hex_idx = find (todo & (strncmp (boundaries, "0x", 2) ...
                             | strncmp (boundaries, "+0x", 3) ...
                             | strncmp (boundaries, "-0x", 3)));
     switch key
-        case "inf"
-            direction = -inf;
-        case "sup"
-            direction = inf;
+      case "inf"
+        direction = -inf;
+      case "sup"
+        direction = inf;
     endswitch
     for i = vec (hex_idx, 2)
-        try
-            [x.(key)(i), exact_conversion] = ...
-                hex2double (boundaries{i}, direction);
-            possiblyundefined.(key)(i) = not (exact_conversion);
-            isexact = isexact && exact_conversion;
-        catch
-            warning ("interval:UndefinedOperation", lasterr ());
-            illegal_boundary.(key)(i) = true;
-        end_try_catch
+      try
+        [x.(key)(i), exact_conversion] = ...
+        hex2double (boundaries{i}, direction);
+        possiblyundefined.(key)(i) = not (exact_conversion);
+        isexact = isexact && exact_conversion;
+      catch
+        warning ("interval:UndefinedOperation", lasterr ());
+        illegal_boundary.(key)(i) = true;
+      end_try_catch
     endfor
     overflow.(key)(hex_idx) = false;
     todo(hex_idx) = false;
-    
+
     ## Selected boundary literals
     persistent boundary_const = struct (...
-        "inf", struct (...
-            "-inf", -inf, ...
-            "-infinity", -inf, ...
-            "inf", inf, ...
-            "+inf", inf, ...
-            "infinity", inf, ...
-            "+infinity", inf, ...
-            "e",  0x56FC2A2 * pow2 (-25) ...
-                + 0x628AED2 * pow2 (-52), ...
-            "pi", 0x6487ED5 * pow2 (-25) ...
-                + 0x442D180 * pow2 (-55)), ...
-        "sup", struct (...
-            "-inf", -inf, ...
-            "-infinity", -inf, ...
-            "inf", inf, ...
-            "+inf", inf, ...
-            "infinity", inf, ...
-            "+infinity", inf, ...
-            "e",  0x56FC2A2 * pow2 (-25) ...
-                + 0x628AED4 * pow2 (-52), ...
-            "pi", 0x6487ED5 * pow2 (-25) ...
-                + 0x442D190 * pow2 (-55)));
+                                         "inf", ...
+                                         struct (...
+                                                  "-inf", -inf, ...
+                                                  "-infinity", -inf, ...
+                                                  "inf", inf, ...
+                                                  "+inf", inf, ...
+                                                  "infinity", inf, ...
+                                                  "+infinity", inf, ...
+                                                  "e",  0x56FC2A2 ...
+                                                        * pow2 (-25) ...
+                                                        + 0x628AED2 ...
+                                                          * pow2 (-52), ...
+                                                  "pi", 0x6487ED5 ...
+                                                        * pow2 (-25) ...
+                                                        + 0x442D180 ...
+                                                          * pow2 (-55)), ...
+                                         "sup", ...
+                                         struct (...
+                                                  "-inf", -inf, ...
+                                                  "-infinity", -inf, ...
+                                                  "inf", inf, ...
+                                                  "+inf", inf, ...
+                                                  "infinity", inf, ...
+                                                  "+infinity", inf, ...
+                                                  "e",  0x56FC2A2 ...
+                                                        * pow2 (-25) ...
+                                                        + 0x628AED4 ...
+                                                          * pow2 (-52), ...
+                                                  "pi", 0x6487ED5 ...
+                                                        * pow2 (-25) ...
+                                                        + 0x442D190 ....
+                                                          * pow2 (-55)));
     for [val, lit] = boundary_const.(key)
-        const_idx = todo & strcmp (boundaries, lit);
-        x.(key)(const_idx) = val;
-        overflow.(key)(const_idx) = false;
-        possiblyundefined.(key)(const_idx) = isfinite (val);
-        todo(const_idx) = false;
+      const_idx = todo & strcmp (boundaries, lit);
+      x.(key)(const_idx) = val;
+      overflow.(key)(const_idx) = false;
+      possiblyundefined.(key)(const_idx) = isfinite (val);
+      todo(const_idx) = false;
     endfor
 
     ## It remains the decimal boundary strings
     for i = vec (find (todo), 2)
-        try
-            boundary = boundaries{i};
-            
-            ## We have to parse a decimal string boundary and round the
-            ## result up or down depending on the boundary
-            ## (inf = down, sup = up).
-            ## str2double will produce the correct answer in 50 % of
-            ## all cases, because it uses rounding mode “to nearest”.
-            ## The input and a double format approximation can be
-            ## compared in a decimal floating point format without
-            ## precision loss.
-            
-            if (strfind (boundary, "?"))
-                ## Special case: uncertain-form
-                [boundary, uncertain] = uncertainsplit (boundary);
-            else
-                uncertain = [];
-            endif
-            
-            if (strfind (boundary, "/"))
-                ## Special case: rational form
-                boundary = strsplit (boundary, "/");
-                if (length (boundary) ~= 2)
-                    warning ("interval:UndefinedOperation", ...
-                            ["illegal " key " boundary: ", ...
-                             "rational form must have single slash"]);
-                    illegal_boundary.(key)(i) = true;
-                    continue;
-                endif
-                [decimal, remainder] = decimaldivide (...
-                        str2decimal (boundary{1}), ...
-                        str2decimal (boundary{2}), 18);
-                if (not (isempty (remainder.m)))
-                    ## This will guarantee the enclosure of the exact
-                    ## value
-                    decimal.m(19, 1) = 1;
-                    isexact = false ();
-                    if (key == "inf")
-                        possiblyundefined.(key)(i) = true;
-                    endif
-                endif
-                ## Write result back into boundary for conversion to
-                ## double
-                boundary = ["0.", num2str(decimal.m)', ...
-                            "e", num2str(decimal.e)];
-                if (decimal.s)
-                    boundary = ["-", boundary];
-                endif
-            else
-                decimal = str2decimal (boundary);
-            endif
-            
-            ## Parse and add uncertainty
-            if (not (isempty (uncertain)))
-                uncertain = str2decimal (uncertain);
-                if ((key == "inf") == decimal.s)
-                    uncertain.s = decimal.s;
-                else
-                    uncertain.s = not (decimal.s);
-                endif
-                decimal = decimaladd (decimal, uncertain);
-                ## Write result back into boundary for conversion to
-                ## double
-                boundary = ["0.", num2str(decimal.m)', ...
-                            "e", num2str(decimal.e)];
-                if (decimal.s)
-                    boundary = ["-", boundary];
-                endif
-            endif
-            clear uncertain;
-            
-            ## Check if number is outside of range
-            ## Realmax == 1.7...e308 == 0.17...e309
-            if (decimal.e > 309 || ...
-                (decimal.e == 309 && ...
-                    decimal.s && ...
-                    decimalcompare (double2decimal (-realmax ()), ...
-                                    decimal) > 0) || ...
-                (decimal.e == 309 && ...
-                    not (decimal.s) && ...
-                    decimalcompare (double2decimal (realmax ()), ...
-                                    decimal) < 0))
-                switch key
-                    case "inf"
-                        if (decimal.s) # -inf ... -realmax
-                            x.inf(i) = -inf;
-                        else # realmax ... inf
-                            x.inf(i) = realmax ();
-                            overflow.inf(i) = false;
-                        endif
-                    case "sup"
-                        if (decimal.s) # -inf ... -realmax
-                            x.sup(i) = -realmax ();
-                            overflow.sup(i) = false;
-                        else # realmax ... inf
-                            x.sup(i) = inf;
-                        endif
-                endswitch
-                possiblyundefined.(key)(i) = true;
-                isexact = false;
-                continue
-            endif
-            overflow.(key)(i) = false;
-            
-            ## Compute approximation, this only works between ± realmax
-            binary = str2double (strrep (boundary, ",", "."));
-            
-            ## Check approximation value
-            comparison = decimalcompare (double2decimal (binary), ...
-                                         decimal);
-            if (comparison ~= 0)
-                possiblyundefined.(key)(i) = true;
-                isexact = false;
-            endif
-            if (comparison == 0 || ... # approximation is exact
-                (comparison < 0 && key == "inf") || ... # lower bound
-                (comparison > 0 && key == "sup")) # upper bound
-                x.(key)(i) = binary;
-            else
-                ## Approximation is not exact and not rounded as needed
-                ## However, because of faithful rounding the
-                ## approximation is right next to the desired number.
-                switch key
-                    case "inf"
-                        x.inf(i) = mpfr_function_d ('minus', -inf, ...
-                                        binary, pow2 (-1074));
-                    case "sup"
-                        x.sup(i) = mpfr_function_d ('plus', +inf, ...
-                                        binary, pow2 (-1074));
-                endswitch
-            endif
-        catch
-            warning ("interval:UndefinedOperation", lasterr ());
+      try
+        boundary = boundaries{i};
+
+        ## We have to parse a decimal string boundary and round the
+        ## result up or down depending on the boundary
+        ## (inf = down, sup = up).
+        ## str2double will produce the correct answer in 50 % of
+        ## all cases, because it uses rounding mode “to nearest”.
+        ## The input and a double format approximation can be
+        ## compared in a decimal floating point format without
+        ## precision loss.
+
+        if (strfind (boundary, "?"))
+          ## Special case: uncertain-form
+          [boundary, uncertain] = uncertainsplit (boundary);
+        else
+          uncertain = [];
+        endif
+
+        if (strfind (boundary, "/"))
+          ## Special case: rational form
+          boundary = strsplit (boundary, "/");
+          if (length (boundary) ~= 2)
+            warning ("interval:UndefinedOperation", ...
+                     ["illegal " key " boundary: ", ...
+                      "rational form must have single slash"]);
             illegal_boundary.(key)(i) = true;
-        end_try_catch
+            continue;
+          endif
+          [decimal, remainder] = decimaldivide (...
+                                                 str2decimal (boundary{1}), ...
+                                                 str2decimal (boundary{2}), 18);
+          if (not (isempty (remainder.m)))
+            ## This will guarantee the enclosure of the exact
+            ## value
+            decimal.m(19, 1) = 1;
+            isexact = false ();
+            if (key == "inf")
+              possiblyundefined.(key)(i) = true;
+            endif
+          endif
+          ## Write result back into boundary for conversion to
+          ## double
+          boundary = ["0.", num2str(decimal.m)', ...
+                      "e", num2str(decimal.e)];
+          if (decimal.s)
+            boundary = ["-", boundary];
+          endif
+        else
+          decimal = str2decimal (boundary);
+        endif
+
+        ## Parse and add uncertainty
+        if (not (isempty (uncertain)))
+          uncertain = str2decimal (uncertain);
+          if ((key == "inf") == decimal.s)
+            uncertain.s = decimal.s;
+          else
+            uncertain.s = not (decimal.s);
+          endif
+          decimal = decimaladd (decimal, uncertain);
+          ## Write result back into boundary for conversion to
+          ## double
+          boundary = ["0.", num2str(decimal.m)', ...
+                      "e", num2str(decimal.e)];
+          if (decimal.s)
+            boundary = ["-", boundary];
+          endif
+        endif
+        clear uncertain;
+
+        ## Check if number is outside of range
+        ## Realmax == 1.7...e308 == 0.17...e309
+        if (decimal.e > 309 || ...
+            (decimal.e == 309 && ...
+             decimal.s && ...
+             decimalcompare (double2decimal (-realmax ()), ...
+                             decimal) > 0) || ...
+            (decimal.e == 309 && ...
+             not (decimal.s) && ...
+             decimalcompare (double2decimal (realmax ()), ...
+                             decimal) < 0))
+          switch key
+            case "inf"
+              if (decimal.s) # -inf ... -realmax
+                x.inf(i) = -inf;
+              else # realmax ... inf
+                x.inf(i) = realmax ();
+                overflow.inf(i) = false;
+              endif
+            case "sup"
+              if (decimal.s) # -inf ... -realmax
+                x.sup(i) = -realmax ();
+                overflow.sup(i) = false;
+              else # realmax ... inf
+                x.sup(i) = inf;
+              endif
+          endswitch
+          possiblyundefined.(key)(i) = true;
+          isexact = false;
+          continue
+        endif
+        overflow.(key)(i) = false;
+
+        ## Compute approximation, this only works between ± realmax
+        binary = str2double (strrep (boundary, ",", "."));
+
+        ## Check approximation value
+        comparison = decimalcompare (double2decimal (binary), ...
+                                     decimal);
+        if (comparison ~= 0)
+          possiblyundefined.(key)(i) = true;
+          isexact = false;
+        endif
+        if (comparison == 0 || ... # approximation is exact
+            (comparison < 0 && key == "inf") || ... # lower bound
+            (comparison > 0 && key == "sup")) # upper bound
+          x.(key)(i) = binary;
+        else
+          ## Approximation is not exact and not rounded as needed
+          ## However, because of faithful rounding the
+          ## approximation is right next to the desired number.
+          switch key
+            case "inf"
+              x.inf(i) = mpfr_function_d ('minus', -inf, ...
+                                          binary, pow2 (-1074));
+            case "sup"
+              x.sup(i) = mpfr_function_d ('plus', +inf, ...
+                                          binary, pow2 (-1074));
+          endswitch
+        endif
+      catch
+        warning ("interval:UndefinedOperation", lasterr ());
+        illegal_boundary.(key)(i) = true;
+      end_try_catch
     endfor
-endfor
+  endfor
 
-## Part 3
-##
-## Check boundaries individually after conversion to double
+  ## Part 3
+  ##
+  ## Check boundaries individually after conversion to double
 
-## NaNs are illegal values
-for [boundary, key] = struct ("inf", {x.inf}, "sup", {x.sup})
+  ## NaNs are illegal values
+  for [boundary, key] = struct ("inf", {x.inf}, "sup", {x.sup})
     nanvalue = isnan (boundary);
     if (any (nanvalue(:)))
-        warning ("interval:UndefinedOperation", ...
-                 "input contains NaN values");
-        illegal_boundary.(key)(nanvalue) = true;
+      warning ("interval:UndefinedOperation", ...
+               "input contains NaN values");
+      illegal_boundary.(key)(nanvalue) = true;
     endif
-endfor
+  endfor
 
-## normalize boundaries:
-## representation of the set containing only zero is always [-0,+0]
-x.inf(x.inf == 0) = -0;
-x.sup(x.sup == 0) = +0;
+  ## normalize boundaries:
+  ## representation of the set containing only zero is always [-0,+0]
+  x.inf(x.inf == 0) = -0;
+  x.sup(x.sup == 0) = +0;
 
-## Part 4
-##
-## Broadcast boundaries and final checks
+  ## Part 4
+  ##
+  ## Broadcast boundaries and final checks
 
-if (nargout >= 3)
+  if (nargout >= 3)
     overflow = overflow.inf | overflow.sup;
     overflow(x.inf > -inf & x.sup < inf) = false;
-endif
+  endif
 
-x.inf = x.inf - zeros (size (x.sup));
-x.sup = x.sup + zeros (size (x.inf));
+  x.inf = x.inf - zeros (size (x.sup));
+  x.sup = x.sup + zeros (size (x.inf));
 
-possiblyundefined = possiblyundefined.inf & possiblyundefined.sup;
-if (any (possiblyundefined(:)))
+  possiblyundefined = possiblyundefined.inf & possiblyundefined.sup;
+  if (any (possiblyundefined(:)))
     if (not (iscell (l)) && not (iscell (u)))
-        ## infsup (x, x) or infsup (x) is not possibly undefined
-        possiblyundefined(l == u) = false;
+      ## infsup (x, x) or infsup (x) is not possibly undefined
+      possiblyundefined(l == u) = false;
     else
-        ## infsup ("x", "x") or infsup ("x") is not possibly undefined
-        if (not (iscell (l)))
-            l = num2cell (l);
-        endif
-        if (not (iscell (u)))
-            u = num2cell (u);
-        endif
-        possiblyundefined(cellfun ("isequal", l, u)) = false;
+      ## infsup ("x", "x") or infsup ("x") is not possibly undefined
+      if (not (iscell (l)))
+        l = num2cell (l);
+      endif
+      if (not (iscell (u)))
+        u = num2cell (u);
+      endif
+      possiblyundefined(cellfun ("isequal", l, u)) = false;
     endif
-endif
+  endif
 
-## Non-empty intervals are always legal.
-isnai(x.inf <= x.sup) = false;
+  ## Non-empty intervals are always legal.
+  isnai(x.inf <= x.sup) = false;
 
-## Check for illegal boundaries [inf,inf] and [-inf,-inf].
-illegal_inf_idx = not (isfinite (x.inf (x.inf == x.sup)));
-if (any (illegal_inf_idx(:)))
+  ## Check for illegal boundaries [inf,inf] and [-inf,-inf].
+  illegal_inf_idx = not (isfinite (x.inf (x.inf == x.sup)));
+  if (any (illegal_inf_idx(:)))
     warning ("interval:UndefinedOperation", ...
              "illegal interval boundaries: infimum = supremum = +/- infinity");
     isnai(find (x.inf == x.sup)(illegal_inf_idx)) = true;
-endif
+  endif
 
-## Illegal boundaries make illegal intervals,
-## we have triggered a warning already (see above).
-isnai(illegal_boundary.inf | illegal_boundary.sup) = true;
+  ## Illegal boundaries make illegal intervals,
+  ## we have triggered a warning already (see above).
+  isnai(illegal_boundary.inf | illegal_boundary.sup) = true;
 
-## Check boundary order
-## isnai has been initialized with -1.  Any non-empty or legal empty intervals
-## have been set to 0.  Any illegal interval literals or illegal boundaries
-## have been set to +1.  Any intervals with inf > sup still have their initial
-## value of -1.
-wrong_boundary_order_idx = signbit (isnai);
-if (any (wrong_boundary_order_idx(:)))
+  ## Check boundary order
+  ## isnai has been initialized with -1.  Any non-empty or legal empty intervals
+  ## have been set to 0.  Any illegal interval literals or illegal boundaries
+  ## have been set to +1.  Any intervals with inf > sup still have their initial
+  ## value of -1.
+  wrong_boundary_order_idx = signbit (isnai);
+  if (any (wrong_boundary_order_idx(:)))
     warning ("interval:UndefinedOperation", ...
              "illegal interval boundaries: infimum greater than supremum");
     isnai(wrong_boundary_order_idx) = true;
-endif
-isnai = logical(isnai);
+  endif
+  isnai = logical(isnai);
 
-## Return [empty] for any illegal intervals.
-x.inf(isnai) = +inf;
-x.sup(isnai) = -inf;
-possiblyundefined(isnai) = false;
-isexact = isexact && not (any (isnai(:)));
+  ## Return [empty] for any illegal intervals.
+  x.inf(isnai) = +inf;
+  x.sup(isnai) = -inf;
+  possiblyundefined(isnai) = false;
+  isexact = isexact && not (any (isnai(:)));
 
-## Check for possibly wrong boundary order.
-if (any (possiblyundefined(:)))
+  ## Check for possibly wrong boundary order.
+  if (any (possiblyundefined(:)))
     ## Let a, b, and c be three consecutive floating point numbers.
     ##
     ## If a < u < b < l < c, then u and l will both be mapped to the same
@@ -832,16 +847,17 @@ if (any (possiblyundefined(:)))
     if (any ((x.inf(possiblyundefined) == x.sup(possiblyundefined))(:)) ...
         || ...
         any ((max (-realmax, ...
-        mpfr_function_d ('plus',...
-                         +inf, ...
-                         x.inf(possiblyundefined), ...
-                         pow2 (-1074))) == x.sup(possiblyundefined))(:)))
-        warning ("interval:PossiblyUndefinedOperation", ...
-                 "infimum may be greater than supremum");
+                   mpfr_function_d ('plus',...
+                                    +inf, ...
+                                    x.inf(possiblyundefined), ...
+                                    pow2 (-1074))) ...
+              == x.sup(possiblyundefined))(:)))
+      warning ("interval:PossiblyUndefinedOperation", ...
+               "infimum may be greater than supremum");
     endif
-endif
+  endif
 
-x = class (x, "infsup");
+  x = class (x, "infsup");
 endfunction
 
 %!# Empty intervals
@@ -1296,3 +1312,23 @@ endfunction
 %!warning
 %! [~, ~, ~, isnai] = infsup ("[-inf, inf] [inf, inf]");
 %! assert (isnai, [false, true]);
+
+%!# N-dimensional arrays
+%!test
+%! x = infsup (zeros (2, 2, 2));
+%! assert (x.inf, zeros (2, 2, 2));
+%! assert (x.sup, zeros (2, 2, 2));
+%!test
+%! x = infsup (zeros (2, 2, 2), ones (2, 2, 2));
+%! assert (x.inf, zeros (2, 2, 2));
+%! assert (x.sup, ones (2, 2, 2));
+%!test
+%! x = infsup (zeros (2, 1, 2, 1, 2, 1), ones (1, 3, 1, 3, 1, 3));
+%! assert (x.inf, zeros (2, 3, 2, 3, 2, 3));
+%! assert (x.sup, ones (2, 3, 2, 3, 2, 3));
+%!test
+%! c1 = reshape ({1, 2, 3, 4, 5, 6, 7, 8}, 2, 2, 2);
+%! c2 = reshape ({2, 3, 4, 5, 6, 7, 8, 9}, 2, 2, 2);
+%! x = infsup (c1, c2);
+%! assert (x.inf, reshape (1:8, 2, 2, 2));
+%! assert (x.sup, reshape (2:9, 2, 2, 2));

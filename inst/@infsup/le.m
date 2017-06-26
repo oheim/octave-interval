@@ -17,14 +17,14 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} le (@var{A}, @var{B})
 ## @defopx Operator {@@infsup} {@var{A} <= @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for weakly less.
 ##
 ## True, if all numbers from @var{A} are weakly less than any number in
 ## @var{B}.  False, if @var{A} contains a number which is strictly greater than
 ## all numbers in @var{B}.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/lt, @@infsup/ge, @@infsup/subset, @@infsup/interior, @@infsup/disjoint}
 ## @end defop
@@ -35,22 +35,22 @@
 
 function result = le (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-elseif (isa (b, "infsupdec"))
+  elseif (isa (b, "infsupdec"))
     ## Workaround for bug #42735
     result = le (a, b);
     return
-endif
+  endif
 
-result = (a.inf <= b.inf & a.sup <= b.sup);
+  result = (a.inf <= b.inf & a.sup <= b.sup);
 
 endfunction
 

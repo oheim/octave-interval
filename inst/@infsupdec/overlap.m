@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {[@var{STATE}, @var{BITMASK}] =} overlap(@var{A}, @var{B})
-## 
+##
 ## Extensively compare the positions of intervals @var{A} and @var{B} on the
 ## real number line.
 ##
@@ -24,7 +24,7 @@
 ## uint16 number, which represents one of the 16 possible states by taking a
 ## value 2^i (i = 0 … 15).
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @table @asis
 ## @item @code{bothEmpty}, 2^0
@@ -74,23 +74,23 @@
 
 function [state, bitmask] = overlap (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-if (isnai (a) || isnai (b))
+  if (isnai (a) || isnai (b))
     error ("interval:InvalidOperand", "interval comparison with NaI")
-endif
+  endif
 
-[state, bitmask] = overlap (a.infsup, b.infsup);
+  [state, bitmask] = overlap (a.infsup, b.infsup);
 
 endfunction
 
