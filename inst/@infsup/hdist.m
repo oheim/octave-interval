@@ -16,13 +16,13 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} hdist (@var{X}, @var{Y})
-## 
+##
 ## Compute the Hausdorff distance between two intervals as sets.
 ##
 ## The Hausdorff distance for closed real intervals is the maximum distance
 ## between both pairs of interval boundaries.
 ##
-## If any interval is empty, the result is NaN.  For interval matrices the
+## If any interval is empty, the result is NaN.  For interval arrays the
 ## result is computed entry-wise.
 ##
 ## Accuracy: The result is correctly-rounded (towards infinity).
@@ -42,48 +42,51 @@
 
 function result = hdist (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     y = infsup (y);
-endif
+  endif
 
-## Resize, if scalar × matrix
-if (not (size_equal (x.inf, y.inf)))
+  ## Resize, if scalar × matrix
+  if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
     y.inf = ones (size (x.inf)) .* y.inf;
     y.sup = ones (size (x.inf)) .* y.sup;
-endif
+  endif
 
-result = zeros (size (x.inf));
-select = x.inf < y.inf;
-if (any (select(:)))
+  result = zeros (size (x.inf));
+  select = x.inf < y.inf;
+  if (any (select(:)))
     result(select) = ...
-        mpfr_function_d ('minus', +inf, y.inf(select), x.inf(select));
-endif
-select = x.inf > y.inf;
-if (any (select(:)))
+    mpfr_function_d ('minus', +inf, y.inf(select), x.inf(select));
+  endif
+  select = x.inf > y.inf;
+  if (any (select(:)))
     result(select) = max (result(select), ...
-        mpfr_function_d ('minus', +inf, x.inf(select), y.inf(select)));
-endif
-select = x.sup < y.sup;
-if (any (select(:)))
+                          mpfr_function_d ('minus', +inf, x.inf(select), ...
+                                           y.inf(select)));
+  endif
+  select = x.sup < y.sup;
+  if (any (select(:)))
     result(select) = max (result(select), ...
-        mpfr_function_d ('minus', +inf, y.sup(select), x.sup(select)));
-endif
-select = x.sup > y.sup;
-if (any (select(:)))
+                          mpfr_function_d ('minus', +inf, y.sup(select), ...
+                                           x.sup(select)));
+  endif
+  select = x.sup > y.sup;
+  if (any (select(:)))
     result(select) = max (result(select), ...
-        mpfr_function_d ('minus', +inf, x.sup(select), y.sup(select)));
-endif
+                          mpfr_function_d ('minus', +inf, x.sup(select), ...
+                                           y.sup(select)));
+  endif
 
-result(isempty (x) | isempty (y)) = nan ();
+  result(isempty (x) | isempty (y)) = nan ();
 
 endfunction
 
