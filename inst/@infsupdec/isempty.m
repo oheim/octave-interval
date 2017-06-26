@@ -16,10 +16,10 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} isempty (@var{X})
-## 
+##
 ## Check if the interval represents the empty set.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## Warning: This function is not compatible with the builtin @code{isempty}
 ## function.
@@ -33,13 +33,13 @@
 
 function result = isempty (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = isempty (x.infsup);
-result(isnai (x)) = false;
+  result = isempty (x.infsup);
+  result(isnai (x)) = false;
 
 endfunction
 
