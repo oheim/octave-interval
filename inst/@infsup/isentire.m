@@ -16,10 +16,10 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} isentire (@var{X})
-## 
+##
 ## Check if the interval represents the entire set of real numbers.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{entire, @@infsup/eq, @@infsup/isempty, @@infsup/issingleton}
 ## @end defmethod
@@ -30,12 +30,12 @@
 
 function result = isentire (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = (x.inf == -inf & x.sup == inf);
+  result = (x.inf == -inf & x.sup == inf);
 
 endfunction
 
