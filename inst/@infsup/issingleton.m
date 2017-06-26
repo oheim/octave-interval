@@ -16,10 +16,10 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} issingleton (@var{X})
-## 
+##
 ## Check if the interval represents a set that contains a single real only.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/isentire, @@infsup/isempty}
 ## @end defmethod
@@ -30,13 +30,13 @@
 
 function result = issingleton (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## This check also works for empty intervals (-inf ~= +inf)
-result = (x.inf == x.sup);
+  ## This check also works for empty intervals (-inf ~= +inf)
+  result = (x.inf == x.sup);
 
 endfunction
 
