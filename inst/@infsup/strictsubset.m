@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} strictsubset (@var{A}, @var{B})
-## 
+##
 ## Evaluate strict subset comparison on intervals.
 ##
 ## True, if all numbers from @var{A} are also contained in @var{B} and @var{B}
@@ -24,7 +24,7 @@
 ## False, if @var{A} contains a number which is not a member in @var{B} or if
 ## @var{A} and @var{B} are equal.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/subset, @@infsup/eq, @@infsup/interior}
 ## @end defmethod
@@ -35,18 +35,19 @@
 
 function result = strictsubset (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
+  endif
 
-result = (b.inf <= a.inf & a.sup <= b.sup) & (b.inf != a.inf | a.sup != b.sup);
+  result = (b.inf <= a.inf & a.sup <= b.sup) ...
+           & (b.inf != a.inf | a.sup != b.sup);
 
 endfunction
 
