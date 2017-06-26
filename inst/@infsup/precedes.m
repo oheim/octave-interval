@@ -16,12 +16,12 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} precedes (@var{A}, @var{B})
-## 
+##
 ## Evaluate precedes comparison on intervals.
 ##
 ## True, if @var{A} is left of @var{B}. The intervals may touch.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/le, @@infsup/lt, @@infsup/gt, @@infsup/strictprecedes, @@infsup/subset, @@infsup/interior, @@infsup/disjoint}
 ## @end defmethod
@@ -32,20 +32,20 @@
 
 function result = precedes (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
+  endif
 
-## This comparison also works for empty intervels, where the comparison must
-## always return true.
-result = (a.sup <= b.inf);
+  ## This comparison also works for empty intervels, where the comparison must
+  ## always return true.
+  result = (a.sup <= b.inf);
 
 endfunction
 
