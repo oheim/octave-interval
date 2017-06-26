@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} idist (@var{X}, @var{Y})
-## 
+##
 ## Compute the inner distance between two intervals as sets.
 ##
 ## The inner distance for closed real intervals is the minimum distance
@@ -24,7 +24,7 @@
 ## a number can be found in both intervals.  Otherwise the inner distance is
 ## the size of the gap between both intervals on the real number lane.
 ##
-## If any interval is empty, the result is NaN.  For interval matrices the
+## If any interval is empty, the result is NaN.  For interval arrays the
 ## result is computed entry-wise.
 ##
 ## Accuracy: The result is correctly-rounded (towards infinity).
