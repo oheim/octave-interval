@@ -16,12 +16,12 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} strictprecedes (@var{A}, @var{B})
-## 
+##
 ## Evaluate strict precedes comparison on intervals.
 ##
 ## True, if @var{A} is strictly left of @var{B}. The intervals may not touch.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/le, @@infsupdec/lt, @@infsupdec/gt, @@infsupdec/precedes, @@infsupdec/subset, @@infsupdec/interior, @@infsupdec/disjoint}
 ## @end defmethod
@@ -32,20 +32,20 @@
 
 function result = strictprecedes (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-result = strictprecedes (a.infsup, b.infsup);
-result(isnai(a) | isnai (b)) = false;
+  result = strictprecedes (a.infsup, b.infsup);
+  result(isnai(a) | isnai (b)) = false;
 
 endfunction
 
