@@ -16,13 +16,13 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} subset (@var{A}, @var{B})
-## 
+##
 ## Evaluate subset comparison on intervals.
 ##
 ## True, if all numbers from @var{A} are also contained in @var{B}.
 ## False, if @var{A} contains a number which is not a member in @var{B}.
 ##
-## Evaluated on interval matrices, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsup/eq, @@infsup/interior, @@infsup/disjoint}
 ## @end defmethod
@@ -33,18 +33,18 @@
 
 function result = subset (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
+  endif
 
-result = (b.inf <= a.inf & a.sup <= b.sup);
+  result = (b.inf <= a.inf & a.sup <= b.sup);
 
 endfunction
 
