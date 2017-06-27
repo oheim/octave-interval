@@ -32,7 +32,7 @@ typedef int (*mpfr_ternary_fun)
                          const mpfr_t op3,
                          mpfr_rnd_t rnd);
 
-// Evaluate an unary MPFR function on a binary64 matrix
+// Evaluate an unary MPFR function on a binary64 array
 void evaluate (
   NDArray &arg1,          // Operand 1 and result
   const mpfr_rnd_t rnd,   // Rounding direction
@@ -60,7 +60,7 @@ void evaluate (
   mpfr_set_emin (old_emin);
 }
 
-// Evaluate a binary MPFR function on two binary64 matrices
+// Evaluate a binary MPFR function on two binary64 arrays
 void evaluate (
   NDArray &arg1,           // Operand 1 and result
   const NDArray &arg2,     // Operand 2
@@ -93,7 +93,7 @@ void evaluate (
   // Find the first dimension that needs broadcasting
   octave_idx_type start;
   octave_idx_type step = 1;
-  for (start = 0; start < dimensions; start++)
+  for (start = 0; start < dimensions; start ++)
   {
     if (arg1_dims(start) != arg2_dims(start))
       break;
@@ -101,7 +101,8 @@ void evaluate (
   }
 
   // Fix broadcasting along all singleton dimensions
-  for (int i = std::max (start, 1); i < dimensions; i++)
+  // Does not work for broadcasting along the first dimension
+  for (int i = std::max (start, 1); i < dimensions; i ++)
   {
     if (arg1_dims(i) == 1)
       arg1_cdims(i-1) = 0;
@@ -121,6 +122,8 @@ void evaluate (
     // Take broadcasting into account
     arg1_idx = arg1_cdims.cum_compute_index (idx_base);
     arg2_idx = arg2_cdims.cum_compute_index (idx_base);
+    // Broadcasting along the first dimension needs to be handled
+    // separately
     if (start == 0)
       {
         if (arg1_dims(0) == 1)
@@ -129,7 +132,7 @@ void evaluate (
           arg2_idx -= idx_base[0];
       }
 
-    for (octave_idx_type i = 0; i < step; i++)
+    for (octave_idx_type i = 0; i < step; i ++)
       {
         mpfr_set_d (mp1, arg1.elem (arg1_idx + i), MPFR_RNDZ);
         mpfr_set_d (mp2, arg2.elem (arg2_idx + i), MPFR_RNDZ);
@@ -152,8 +155,7 @@ void evaluate (
   mpfr_set_emin (old_emin);
 }
 
-// Evaluate a ternary MPFR function on three binary64 matrices
-// FIXME: How to handle broadcasting here?
+// Evaluate a ternary MPFR function on three binary64 arrays
 void evaluate (
   NDArray &arg1,            // Operand 1 and result
   const NDArray &arg2,      // Operand 2
@@ -168,38 +170,16 @@ void evaluate (
   mpfr_exp_t old_emin = mpfr_get_emin ();
   mpfr_set_emin (BINARY64_EMIN);
 
-  bool scalar1 = arg1.numel () == 1;
-  bool scalar2 = arg2.numel () == 1;
-  bool scalar3 = arg3.numel () == 1;
+  // Note that no broadcasting is performed here, this is because
+  // currently no ternary functions needs broadcasting
 
-  if (scalar1)
-    {
-      // arg1 shall contain the result and must possibly be resized
-      if (!scalar2)
-        {
-          arg1 = Matrix (arg2.dims (), arg1.elem (0));
-          scalar1 = false;
-        }
-      else if (!scalar3)
-        {
-          arg1 = Matrix (arg3.dims (), arg1.elem (0));
-          scalar1 = false;
-        }
-    }
+  const octave_idx_type n = arg1.numel ();
 
-  const octave_idx_type n = std::max (std::max (arg1.numel (), arg2.numel ()),
-                                   arg3.numel ());
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp1, arg1.elem (i), MPFR_RNDZ);
-      mpfr_set_d (mp2,
-                  (scalar2) ? arg2.elem (0) // broadcast
-                            : arg2.elem (i),
-                  MPFR_RNDZ);
-      mpfr_set_d (mp3,
-                  (scalar3) ? arg3.elem (0) // broadcast
-                            : arg3.elem (i),
-                  MPFR_RNDZ);
+      mpfr_set_d (mp2, arg2.elem (i), MPFR_RNDZ);
+      mpfr_set_d (mp3, arg3.elem (i), MPFR_RNDZ);
       int rnd_error = (*f) (mp1, mp1, mp2, mp3, rnd);
       if (rnd == MPFR_RNDN)
         {
@@ -345,8 +325,9 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@option{-inf}: towards negative infinity).  "
   "Parameters 3 and (possibly) 4 and 5 are operands to the function."
   "\n\n"
-  "Evaluated on matrices, the function will be applied element-wise.  Scalar "
-  "operands do broadcast for functions with more than one operand."
+  "Evaluated on arrays, the function will be applied element-wise.  "
+  "For binary functions broadcasting is performed where needed.  "
+  "For ternary functions no broadcasting is performed.  "
   "\n\n"
   "The result is guaranteed to be correctly rounded.  That is, the function "
   "is evaluated with (virtually) infinite precision and the exact result is "
@@ -382,20 +363,22 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
     {
       arg2                   = args (3).array_value ();
       // Check if broadcasting can be performed
-      for (int dim = 0; dim < std::max (arg1.ndims (), arg2.ndims ()); dim ++)
+      int dimensions = std::max (arg1.ndims (), arg2.ndims ());
+      dim_vector arg1_dims = arg1.dims().redim (dimensions);
+      dim_vector arg2_dims = arg2.dims().redim (dimensions);
+      for (int dim = 0; dim < dimensions; dim ++)
         {
-          if (arg1.size (dim) != 1 && arg2.size (dim) != 1 &&
-              arg1.size (dim) != arg2.size (dim))
+          if (arg1_dims (dim) != 1 && arg2_dims (dim) != 1 &&
+              arg1_dims (dim) != arg2_dims (dim))
             error ("mpfr_function_d: Array dimensions must agree!");
         }
     }
   if (nargin >= 5)
     {
       arg3                   = args (4).array_value ();
-      // FIXME: How to handle broadcasting here?
-      if (arg3.numel () != 1 && (
-          (arg1.numel () != 1 && arg1.numel () != arg3.numel ()) ||
-          (arg2.numel () != 1 && arg2.numel () != arg3.numel ())))
+      // We never perform broadcasting for ternary functions so all
+      // dimensions must be equal
+      if (arg1.dims () != arg2.dims () || arg2.dims () != arg3.dims ())
         error ("mpfr_function_d: Array dimensions must agree!");
     }
   if (error_state)
