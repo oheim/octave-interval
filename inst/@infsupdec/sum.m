@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} sum (@var{X})
 ## @defmethodx {@@infsupdec} sum (@var{X}, @var{DIM})
-## 
+##
 ## Sum of elements along dimension @var{DIM}.  If @var{DIM} is omitted, it
 ## defaults to the first non-singleton dimension.
 ##
@@ -40,24 +40,25 @@
 
 function result = sum (x, dim)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     ## Try to find non-singleton dimension
-    dim = find (size (x.dec) > 1, 1);
+    dim = find (size (x.dec) ~= 1, 1);
     if (isempty (dim))
-        dim = 1;
+      dim = 1;
     endif
-endif
+  endif
 
-result = newdec (sum (x.infsup, dim));
-if (not (isempty (x.dec)))
+  result = newdec (sum (x.infsup, dim));
+
+  if (not (isempty (x.dec)))
     warning ("off", "Octave:broadcast", "local");
     result.dec = min (result.dec, min (x.dec, [], dim));
-endif
+  endif
 
 endfunction
 

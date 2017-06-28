@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sum (@var{X})
 ## @defmethodx {@@infsup} sum (@var{X}, @var{DIM})
-## 
+##
 ## Sum of elements along dimension @var{DIM}.  If @var{DIM} is omitted, it
 ## defaults to the first non-singleton dimension.
 ##
@@ -40,61 +40,31 @@
 
 function result = sum (x, dim)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     ## Try to find non-singleton dimension
-    dim = find (size (x.inf) > 1, 1);
+    dim = find (size (x.inf) ~= 1, 1);
     if (isempty (dim))
-        dim = 1;
+      dim = 1;
     endif
-endif
+  endif
 
-## Short-circuit
-if (size (x.inf, dim) == 1)
+  ## Short-circuit
+  if (size (x.inf, dim) == 1)
     result = x;
     return
-endif
+  endif
 
-if (dim == 1)
-    resultsize = [1, max(1, size (x.inf, 2))];
-elseif (dim == 2)
-    resultsize = [max(1, size (x.inf, 1)), 1];
-else
-    error ("interval:InvalidOperand", "sum: DIM must be a valid dimension")
-endif
+  l = mpfr_vector_sum_d (-inf, x.inf, dim);
+  u = mpfr_vector_sum_d (+inf, x.sup, dim);
 
-l = u = zeros (resultsize);
-
-for n = 1 : size (x.inf, 3 - dim)
-    idx.type = "()";
-    idx.subs = cell (1, 2);
-    idx.subs{dim} = ":";
-    idx.subs{3 - dim} = n;
-
-    ## Select current vector in matrix
-    if (size (x.inf, 3 - dim) == 1)
-        vector.x = x;
-    else
-        vector.x = subsref (x, idx);
-    endif
-    
-    if (any (isempty (vector.x)(:)))
-        ## One of the intervals is empty
-        l(n) = inf;
-        u(n) = -inf;
-    else
-        l(n) = mpfr_vector_sum_d (-inf, vector.x.inf);
-        u(n) = mpfr_vector_sum_d (+inf, vector.x.sup);
-    endif
-endfor
-
-result = infsup ();
-result.inf = l;
-result.sup = u;
+  result = infsup ();
+  result.inf = l;
+  result.sup = u;
 
 endfunction
 
@@ -108,3 +78,7 @@ endfunction
 %! x = sum (infsup (0));
 %! assert (signbit (inf (x)));
 %! assert (not (signbit (sup (x))));
+
+%!# N-dimensional arrays
+%!assert (sum (infsup (ones (1, 1, 10))) == infsup (10));
+%!assert (sum (infsup (ones (1, 1, 10))) == infsup (10));
