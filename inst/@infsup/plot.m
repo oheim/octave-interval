@@ -19,7 +19,7 @@
 ## @defmethodx {@@infsup} plot (@var{Y})
 ## @defmethodx {@@infsup} plot (@var{X}, @var{Y}, @var{COLOR})
 ## @defmethodx {@@infsup} plot (@var{X}, @var{Y}, @var{COLOR}, @var{EDGECOLOR})
-## 
+##
 ## Create a 2D-plot of intervals.
 ##
 ## If either of @var{X} or @var{Y} is an empty interval, nothing is plotted.
@@ -28,7 +28,7 @@
 ## single line is plotted.  If neither of @var{X} and @var{Y} is a singleton
 ## interval, a filled rectangle is plotted.
 ##
-## If @var{X} or @var{Y} are matrices, each pair of elements is plotted
+## If @var{X} or @var{Y} are arrays, each pair of elements is plotted
 ## separately.  No connection of the interval areas is plotted, because that
 ## kind of interpolation would be wrong in general (in the sense that the
 ## actual values are enclosed by the plot).
@@ -50,86 +50,86 @@
 
 function plot (x, y, color, edgecolor)
 
-if (nargin > 4)
+  if (nargin > 4)
     print_usage ();
     return
-endif
+  endif
 
-warning ("off", "interval:ImplicitPromote", "local");
-if (not (isa (x, "infsupdec")))
+  warning ("off", "interval:ImplicitPromote", "local");
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (nargin >= 2 && not (isa (y, "infsupdec")))
+  endif
+  if (nargin >= 2 && not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     y = x;
     ## x = 1 ... n
     x = infsupdec (reshape (1 : numel (y.inf), size (y.inf)));
-endif
+  endif
 
-if (nargin < 3 || isempty (color))
-    # don't use last row of colormap, which would often be just white
+  if (nargin < 3 || isempty (color))
+     # don't use last row of colormap, which would often be just white
     color = colormap ()(ceil (rows (colormap ()) / 2), :);
     if (nargin < 4)
-        # will only be used for lines and dots
-        edgecolor = colormap ()(1, :);
+                                # will only be used for lines and dots
+      edgecolor = colormap ()(1, :);
     endif
-elseif (nargin < 4)
-    # will only be used for lines and dots
+  elseif (nargin < 4)
+                                # will only be used for lines and dots
     edgecolor = color;
-endif
+  endif
 
-oldhold = ishold ();
-if (not (oldhold))
+  oldhold = ishold ();
+  if (not (oldhold))
     clf
     hold on
-endif
+  endif
 
-pointsize = 3;
-edgewidth = 2;
+  pointsize = 3;
+  edgewidth = 2;
 
-unwind_protect
+  unwind_protect
 
     empty = isempty (x) | isempty (y);
     points = issingleton (x) & issingleton (y);
     lines = xor (issingleton (x), issingleton (y)) & not (empty);
     boxes = not (points | lines | empty);
-    
+
     if (any (points(:)))
-        scatter (x.inf(points), y.inf(points), ...
-                 pointsize, ...
-                 edgecolor, ...
-                 'filled');
-    endif
-    
-    if (any (lines(:)))
-        x_line = [vec(x.inf(lines)), vec(x.sup(lines))]';
-        y_line = [vec(y.inf(lines)), vec(y.sup(lines))]';
-        line (x_line, y_line, ...
-              'color', edgecolor, ...
-              'linewidth', edgewidth);
-    endif
-    
-    if (any (boxes(:)))
-        x_box = [vec(x.inf(boxes)), vec(x.sup(boxes))](:, [1 2 2 1])';
-        y_box = [vec(y.inf(boxes)), vec(y.sup(boxes))](:, [1 1 2 2])';
-        if (nargin < 4)
-            edgecolor = 'none';
-        endif
-        fill (x_box, y_box, [], ...
-              'linewidth', edgewidth, ...
-              'edgecolor', edgecolor, ...
-              'facecolor', color);
+      scatter (x.inf(points), y.inf(points), ...
+               pointsize, ...
+               edgecolor, ...
+               'filled');
     endif
 
-unwind_protect_cleanup
+    if (any (lines(:)))
+      x_line = [vec(x.inf(lines)), vec(x.sup(lines))]';
+      y_line = [vec(y.inf(lines)), vec(y.sup(lines))]';
+      line (x_line, y_line, ...
+            'color', edgecolor, ...
+            'linewidth', edgewidth);
+    endif
+
+    if (any (boxes(:)))
+      x_box = [vec(x.inf(boxes)), vec(x.sup(boxes))](:, [1 2 2 1])';
+      y_box = [vec(y.inf(boxes)), vec(y.sup(boxes))](:, [1 1 2 2])';
+      if (nargin < 4)
+        edgecolor = 'none';
+      endif
+      fill (x_box, y_box, [], ...
+            'linewidth', edgewidth, ...
+            'edgecolor', edgecolor, ...
+            'facecolor', color);
+    endif
+
+  unwind_protect_cleanup
     ## Reset hold state
     if (not (oldhold))
-        hold off
+      hold off
     endif
-end_unwind_protect
+  end_unwind_protect
 
 endfunction
 
