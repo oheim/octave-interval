@@ -14,6 +14,12 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{2.2.0, 2017-xx-xx}
+@itemize
+@item
+        Removed interval implementation of meshgrid, it now falls back on the standard implementation. The difference is that it does not automatically convert all input to intervals and it can now output a 3-d grid properly.
+@end itemize
+
 @release{2.1.1, 2017-xx-xx}
 @noindent Bugfixes
 @itemize

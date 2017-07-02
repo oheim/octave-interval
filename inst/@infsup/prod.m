@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} prod (@var{X})
 ## @defmethodx {@@infsup} prod (@var{X}, @var{DIM})
-## 
+##
 ## Product of elements along dimension @var{DIM}.  If @var{DIM} is omitted, it
 ## defaults to the first non-singleton dimension.
 ##
@@ -36,55 +36,42 @@
 ## Keywords: interval
 ## Created: 2015-10-23
 
-function result = prod (x, dim)
+function [result] = prod (x, dim)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     ## Try to find non-singleton dimension
-    dim = find (size (x.inf) > 1, 1);
+    dim = find (size (x.inf) ~= 1, 1);
     if (isempty (dim))
-        dim = 1;
+      dim = 1;
     endif
-endif
+  endif
 
-switch (dim)
-    case 1
-        result = infsup (ones (1, max (1, size (x.inf, 2))));
-    case 2
-        result = infsup (ones (max (1, size (x.inf, 1)), 1));
-    otherwise
-        error ("interval:InvalidOperand", ...
-               "prod: DIM must be a valid dimension");
-endswitch
+  if (dim > ndims (x))
+    ## Nothing to do
+    result = x;
+    return
+  endif
 
-## Short circuit in simple cases
-emptyresult = any (isempty (x), dim);
-result.inf(emptyresult) = +inf;
-result.sup(emptyresult) = -inf;
-zeroresult = not (emptyresult) & any (x.inf == 0 & x.sup == 0, dim);
-result.inf(zeroresult) = -0;
-result.sup(zeroresult) = +0;
-entireresult = not (emptyresult | zeroresult) & any (isentire (x), dim);
-result.inf(entireresult) = -inf;
-result.sup(entireresult) = +inf;
+  if (ndims (x) == 2 && size (x) == [0 0])
+    ## Inconsistency: prod ([]) = 1
+    x = infsup(ones (0, 1));
+  endif
 
-idx.type = "()";
-idx.subs = {":", ":"};
-idx.subs{3 - dim} = not (emptyresult | zeroresult | entireresult);
-if (any (idx.subs{3 - dim}(:)))
-    idx.subs{dim} = 1;
-    result2 = subsref (result, idx);
-    for i = 1 : size (x.inf, dim)
-        idx.subs{dim} = i;
-        result2 = times (result2, subsref (x, idx));
-    endfor
-    idx.subs{dim} = 1;
-    result = subsasgn (result, idx, result2);
-endif
+  resultsize = size (x);
+  resultsize (dim) = 1;
+  result = infsup (ones (resultsize));
+
+  idx.type = "()";
+  idx.subs = repmat ({":"}, ndims (x));
+  for i = 1:size (x, dim)
+    idx.subs{dim} = i;
+    result = result .* subsref (x, idx);
+  endfor
 
 endfunction
 
@@ -92,3 +79,9 @@ endfunction
 %!assert (prod (infsup (1 : 4)) == 24);
 
 %!assert (prod (infsup ([])) == 1);
+
+%!assert (prod (infsup (magic (3))) == [96, 45, 84]);
+%!assert (prod (infsup (magic (3)), 2) == [48; 105; 72]);
+%!assert (prod (infsup (magic (3)), 3) == magic (3));
+
+%!assert (prod (prod (reshape (infsup (1:24), 1, 2, 3, 4))) == reshape ([720, 665280, 13366080, 96909120], 1, 1, 1, 4))

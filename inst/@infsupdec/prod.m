@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} prod (@var{X})
 ## @defmethodx {@@infsupdec} prod (@var{X}, @var{DIM})
-## 
+##
 ## Product of elements along dimension @var{DIM}.  If @var{DIM} is omitted, it
 ## defaults to the first non-singleton dimension.
 ##
@@ -38,26 +38,34 @@
 
 function result = prod (x, dim)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     ## Try to find non-singleton dimension
-    dim = find (size (x.dec) > 1, 1);
+    dim = find (size (x.dec) ~= 1, 1);
     if (isempty (dim))
-        dim = 1;
+      dim = 1;
     endif
-endif
+  endif
 
-result = newdec (prod (x.infsup, dim));
-if (not (isempty (x.dec)))
+  result = newdec (prod (x.infsup, dim));
+  if (not (isempty (x.dec)))
     warning ("off", "Octave:broadcast", "local");
     result.dec = min (result.dec, min (x.dec, [], dim));
-endif
+  endif
 
 endfunction
 
 %!# from the documentation string
 %!assert (prod (infsupdec (1 : 4)) == 24);
+
+%!assert (prod (infsupdec ([])) == 1);
+
+%!assert (isequal (prod (infsupdec (magic (3))), infsupdec ([96, 45, 84])));
+%!assert (isequal (prod (infsupdec (magic (3)), 2), infsupdec ([48; 105; 72])));
+%!assert (isequal (prod (infsupdec (magic (3)), 3), infsupdec (magic (3))));
+
+%!assert (isequal (prod (prod (reshape (infsup (1:24), 1, 2, 3, 4))), infsup (reshape ([720, 665280, 13366080, 96909120], 1, 1, 1, 4))));

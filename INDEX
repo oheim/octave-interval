@@ -183,7 +183,6 @@ Utility function
  @infsup/issquare
  @infsup/isvector
  @infsup/length
- @infsup/meshgrid
  @infsup/ndims
  @infsup/numel
  @infsup/postpad
