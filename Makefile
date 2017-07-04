@@ -284,18 +284,6 @@ run: $(OCT_COMPILED)
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/"
 	@echo
 
-## Validate unit tests
-test-bist: $(OCT_COMPILED)
-	@echo "Testing package in GNU Octave ..."
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
-		--eval 'success = true;' \
-		--eval 'for file = {dir("./src/*.cc").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/*.m").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/test/*.tst").name}, success &= test (strcat ("test/", file{1}), "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/@infsup/*.m").name}, success &= test (strcat ("@infsup/", file{1}), "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/@infsupdec/*.m").name}, success &= test (strcat ("@infsupdec/", file{1}), "quiet", stdout); endfor;' \
-		--eval 'exit (not (success));'
-
 ## Validate code examples
 doctest: $(OCT_COMPILED)
 	@# Workaround for OctSymPy issue 273, we must pre-initialize the package
@@ -383,3 +371,43 @@ $(TST_PATCHED): $(TST_GENERATED) | $(RELEASE_TARBALL)
 	@tar --delete --file "$|" $(patsubst $(TST_GENERATED_DIR)/%,$(PACKAGE)-$(VERSION)/inst/test/%,$?) 2> /dev/null || true
 	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$|" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $?
 	@touch "$@"
+
+## TODO: Migrate all tests for dictionary test suite
+TST_DICT_GENERATED_DIR = $(BUILD_DIR)/octave/dictionary/interval-dictionary
+TST_DICT_GENERATED_SRC = $(TST_SOURCES:test/%.itl=$(TST_DICT_GENERATED_DIR)/%.tst)
+TST_DICT_GENERATED = $(TST_DICT_GENERATED_DIR)/itl.mat
+TST_DICT_PATCHED = $(BUILD_DIR)/.tar.tests-dictionary
+
+$(TST_DICT_GENERATED_DIR)/%.tst: test/%.itl | $(ITF1788_HOME)
+	@echo "Compiling $< ..."
+	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, dictionary, interval-dictionary)" -o "$(BUILD_DIR)" -s "test"
+
+$(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC)
+	@echo "Regenerating interval test library ..."
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
+		--eval 'for file = strsplit ("$^"), source (file); endfor;' \
+		--eval 'save ("-binary", "-zip", "$@", "-struct", "tests", "NoSignal", "UndefinedOperation", "PossiblyUndefinedOperation", "InvalidOperand", "IntvlPartOfNaI", "IntvlOverflow");'
+
+$(RELEASE_TARBALL_COMPRESSED): $(TST_DICT_PATCHED)
+$(TST_DICT_PATCHED): $(TST_DICT_GENERATED) | $(RELEASE_TARBALL)
+	@echo "Patching generated interval test library into release tarball ..."
+	@# `tar --update --transform` fails to update the files
+	@# The following line is a workaroung that removes duplicates
+	@tar --delete --file "$|" $(patsubst $(TST_DICT_GENERATED_DIR)/%,$(PACKAGE)-$(VERSION)/inst/test/%,$?) 2> /dev/null || true
+	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$|" --transform="s!^$(TST_DICT_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $?
+	@touch "$@"
+
+
+## Validate unit tests
+test-bist: $(OCT_COMPILED) $(TST_DICT_GENERATED)
+	@echo "Testing package in GNU Octave ..."
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
+	    --path "$(TST_DICT_GENERATED_DIR)" \
+		--eval 'success = true;' \
+		--eval 'for file = {dir("./src/*.cc").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/*.m").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/test/*.tst").name}, success &= test (strcat ("test/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/@infsup/*.m").name}, success &= test (strcat ("@infsup/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/@infsupdec/*.m").name}, success &= test (strcat ("@infsupdec/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'exit (not (success));'
+
