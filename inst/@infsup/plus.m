@@ -76,3 +76,27 @@ endfunction
 %! x = plus (infsup (0), infsup (0));
 %! assert (signbit (inf (x)));
 %! assert (not (signbit (sup (x))));
+
+%!shared testdata
+%! # Load test/itl.mat (contains test data from src/*.itl)
+%! addpath (file_in_loadpath ("test/"));
+%! warning ("off", "Octave:data-file-in-path", "local");
+%! testdata = load ("itl.mat");
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.add;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     plus (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.add;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (plus (in1, in2), out));
+
