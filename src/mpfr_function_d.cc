@@ -1,6 +1,8 @@
 /*
   Copyright 2015-2016 Oliver Heimlich
   Copyright 2017 Joel Dahne
+  Copyright 2009-2017 Jaroslav Hajek
+  Copyright 2009 VZLU Prague  
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
