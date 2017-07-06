@@ -89,7 +89,7 @@ function varargout = disp (x)
         ## Print the index for the current matrix in the array
         buffer = cstrcat (buffer, sprintf("ans(:,:"));
         matrixpartsubscript = cell (1, ndims (x) - 2);
-        [matrixpartsubscript{:}] = ind2sub (size (x.inf), matrixpart);
+        [matrixpartsubscript{:}] = ind2sub (size (x.inf)(3:end), matrixpart);
         buffer = cstrcat (buffer, ...
                           sprintf(",%d", ...
                                   matrixpartsubscript{1:ndims (x.inf) - 2}));
