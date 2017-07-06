@@ -23,6 +23,7 @@
 Bugfixes
 @itemize
 @item diag: Fixed error when called with more than one argument.
+@end itemize
 
 @release{2.1.1, 2017-xx-xx}
 @noindent Bugfixes
