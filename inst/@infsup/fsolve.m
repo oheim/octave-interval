@@ -20,7 +20,7 @@
 ## @deftypemethodx {@@infsup} {@var{X} =} fsolve (@var{F}, @var{X0}, @var{Y})
 ## @deftypemethodx {@@infsup} {@var{X} =} fsolve (@dots{}, @var{OPTIONS})
 ## @deftypemethodx {@@infsup} {[@var{X}, @var{X_PAVING}, @var{X_INNER_IDX}] =} fsolve (@dots{})
-## 
+##
 ## Compute the preimage of the set @var{Y} under function @var{F}.
 ##
 ## Parameter @var{Y} is optional and without it solve
@@ -29,7 +29,7 @@
 ## searched among all real numbers.
 ##
 ## The function must be an interval arithmetic function and may be
-## multivariate, that is, @var{X0} and @var{Y} may be vectors or matrices of
+## multivariate, that is, @var{X0} and @var{Y} may be vectors or arrays of
 ## intervals.  The computational complexity largely depends on the dimension of
 ## @var{X0}.
 ##
@@ -68,7 +68,7 @@
 ## @group
 ## # Solve x1 ^ 2 + x2 ^ 2 = 1 for -3 ≤ x1, x2 ≤ 3,
 ## # the exact solution is a unit circle
-## x = fsolve (@@hypot, infsup ([-3; -3], [3; 3]), 1)
+## x = fsolve (@@(x1, x2) x1.^2 + x2.^2, infsup ([-3; -3], [3; 3]), 1)
 ##   @result{} x ⊂ 2×1 interval vector
 ##
 ##         [-1.002, +1.002]
@@ -94,7 +94,7 @@
 ##   # Forward evaluation
 ##   x1_sqr = x1 .^ 2;
 ##   x2_sqr = x2 .^ 2;
-##   fval = hypot (x1, x2);
+##   fval = x1_sqr + x2_sqr;
 ##
 ##   # Reverse evaluation and contraction
 ##   y = intersect (y, fval);
@@ -151,154 +151,154 @@
 
 function [x, x_paving, x_inner_idx] = fsolve (f, x0, y, options)
 
-## Set default parameters
-warning ("off", "", "local") # disable optimset warning
-defaultoptions = optimset (optimset, ...
-                           'MaxIter',    20, ...
-                           'MaxFunEval', 3000, ...
-                           'TolX',       1e-2, ...
-                           'TolFun',     1e-2, ...
-                           'Vectorize',  [], ...
-                           'Contract',   false);
+  ## Set default parameters
+  warning ("off", "", "local") # disable optimset warning
+  defaultoptions = optimset (optimset, ...
+                             'MaxIter',    20, ...
+                             'MaxFunEval', 3000, ...
+                             'TolX',       1e-2, ...
+                             'TolFun',     1e-2, ...
+                             'Vectorize',  [], ...
+                             'Contract',   false);
 
-switch (nargin)
+  switch (nargin)
     case 1
-        x0 = infsup (-inf, inf);
-        y = infsup (0);
-        options = defaultoptions;
+      x0 = infsup (-inf, inf);
+      y = infsup (0);
+      options = defaultoptions;
     case 2
-        y = infsup (0);
-        if (isstruct (x0))
-            options = optimset (defaultoptions, x0);
-            x0 = infsup (-inf, inf);
-        else
-            options = defaultoptions;
-        endif
+      y = infsup (0);
+      if (isstruct (x0))
+        options = optimset (defaultoptions, x0);
+        x0 = infsup (-inf, inf);
+      else
+        options = defaultoptions;
+      endif
     case 3
-        if (isstruct (y))
-            options = optimset (defaultoptions, y);
-            y = infsup (0);
-        else
-            options = defaultoptions;
-        endif
+      if (isstruct (y))
+        options = optimset (defaultoptions, y);
+        y = infsup (0);
+      else
+        options = defaultoptions;
+      endif
     case 4
-        options = optimset (defaultoptions, options);
+      options = optimset (defaultoptions, options);
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-## Convert x0 and y to intervals
-if (not (isa (x0, "infsup")))
+  ## Convert x0 and y to intervals
+  if (not (isa (x0, "infsup")))
     if (isa (y, "infsupdec"))
-        x0 = infsupdec (x0);
+      x0 = infsupdec (x0);
     else
-        x0 = infsup (x0);
+      x0 = infsup (x0);
     endif
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     if (isa (x0, "infsupdec"))
-        y = infsupdec (y);
+      y = infsupdec (y);
     else
-        y = infsup (y);
+      y = infsup (y);
     endif
-endif
+  endif
 
-## Check parameters
-if (isempty (x0) || isempty (y) || numel (x0) == 0 || numel (y) == 0)
+  ## Check parameters
+  if (isempty (x0) || isempty (y) || numel (x0) == 0 || numel (y) == 0)
     error ("interval:InvalidOperand", ...
            "fsolve: Initial interval is empty, nothing to do")
-elseif (not (is_function_handle (f)) && not (ischar (f)))
+  elseif (not (is_function_handle (f)) && not (ischar (f)))
     error ("interval:InvalidOperand", ...
            "fsolve: Parameter F is no function handle")
-endif
+  endif
 
-## Strip decoration part
-if (isa (x0, "infsupdec"))
+  ## Strip decoration part
+  if (isa (x0, "infsupdec"))
     if (isnai (x0))
-        x = x0;
-        x_paving = {x0};
-        x_inner_idx = false;
-        return
+      x = x0;
+      x_paving = {x0};
+      x_inner_idx = false;
+      return
     endif
     x0 = intervalpart (x0);
-endif
-if (isa (y, "infsupdec"))
+  endif
+  if (isa (y, "infsupdec"))
     if (isnai (y))
-        x = y;
-        x_paving = {y};
-        x_inner_idx = false;
-        return
+      x = y;
+      x_paving = {y};
+      x_inner_idx = false;
+      return
     endif
     y = intervalpart (y);
-endif
+  endif
 
-## Try to vectorize function evaluation
-if (isempty (options.Vectorize) && isvector (y))
+  ## Try to vectorize function evaluation
+  if (isempty (options.Vectorize) && isvector (y))
     try
-        f_argn = nargin (f);
-        if (options.Contract)
-            options.Vectorize = (f_argn > 2 || f_argn < 0 || numel (x0) == 1);
-        else
-            options.Vectorize = (f_argn > 1 || f_argn < 0 || numel (x0) == 1);
-        endif
+      f_argn = nargin (f);
+      if (options.Contract)
+        options.Vectorize = (f_argn > 2 || f_argn < 0 || numel (x0) == 1);
+      else
+        options.Vectorize = (f_argn > 1 || f_argn < 0 || numel (x0) == 1);
+      endif
     catch
-        ## nargin doesn't work for built-in functions, which happen to agree
-        ## with infsup methods.  Try to vectorize these.
-        options.Vectorize = true;
+      ## nargin doesn't work for built-in functions, which happen to agree
+      ## with infsup methods.  Try to vectorize these.
+      options.Vectorize = true;
     end_try_catch
-endif
-if (options.Vectorize)
+  endif
+  if (options.Vectorize)
     if (nargout >= 2)
-        [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
+      [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options);
     else
-        x = vectorized (f, x0, y, options);
+      x = vectorized (f, x0, y, options);
     endif
     return
-endif
+  endif
 
-warning ("off", "interval:ImplicitPromote", "local");
-x = empty (size (x0));
-x_paving = {};
-x_inner_idx = false (0);
-queue = {x0};
-x_scalar = isscalar (x0);
+  warning ("off", "interval:ImplicitPromote", "local");
+  x = empty (size (x0));
+  x_paving = {};
+  x_inner_idx = false (0);
+  queue = {x0};
+  x_scalar = isscalar (x0);
 
-## Test functions
-verify_subset = @(fval) all (all (subset (fval, y)));
-verify_disjoint = @(fval) any (any (disjoint (fval, y)));
-check_contradiction = @(x) any (any (isempty (x)));
-max_wid = @(interval) max (max (wid (interval)));
+  ## Test functions
+  verify_subset = @(fval) all (subset (fval, y)(:));
+  verify_disjoint = @(fval) any (disjoint (fval, y)(:));
+  check_contradiction = @(x) any (isempty (x)(:));
+  max_wid = @(interval) max (wid (interval)(:));
 
-## Utility functions for bisection
-if (x_scalar)
+  ## Utility functions for bisection
+  if (x_scalar)
     bisect_coord = {1};
     exchange_coordinate = @(interval, coord, l, u) infsup (l, u);
-else
+  else
     largest_coordinate = @(interval, max_wid) ...
-                         find (wid (interval) == max_wid, 1);
+                          find (wid (interval) == max_wid, 1);
     exchange_coordinate = @replace_coordinate;
-endif
+  endif
 
-while (not (isempty (queue)))
+  while (not (isempty (queue)))
     ## Evaluate f(x)
     options.MaxFunEvals -= numel (queue);
     options.MaxIter --;
     if (options.Contract)
-        [fval, contractions] = cellfun (f, {y}, queue, ...
-                                        "UniformOutput", false);
-        ## Sanitize the contractions returned by the function
-        queue = cellfun (@intersect, queue, contractions, ...
-                         "UniformOutput", false);
-        ## Utilize contradictions to discard candidates
-        contradiction = cellfun (check_contradiction, queue);
-        queue = queue(not (contradiction));
-        if (isempty (queue))
-            break
-        endif
-        fval = fval(not (contradiction));
+      [fval, contractions] = cellfun (f, {y}, queue, ...
+                                      "UniformOutput", false);
+      ## Sanitize the contractions returned by the function
+      queue = cellfun (@intersect, queue, contractions, ...
+                       "UniformOutput", false);
+      ## Utilize contradictions to discard candidates
+      contradiction = cellfun (check_contradiction, queue);
+      queue = queue(not (contradiction));
+      if (isempty (queue))
+        break
+      endif
+      fval = fval(not (contradiction));
     else
-        fval = cellfun (f, queue, "UniformOutput", false);
+      fval = cellfun (f, queue, "UniformOutput", false);
     endif
     ## Check whether x is outside of the preimage of y
     ## or x is inside the preimage of y
@@ -312,18 +312,18 @@ while (not (isempty (queue)))
     queue = queue(not (is_inside | is_outside));
     ## Stop after MaxIter or MaxFunEvals
     if (options.MaxIter <= 0 || options.MaxFunEvals <= 0)
-        x = hull (x, queue{:});
-        x_paving = vertcat (x_paving, queue);
-        x_inner_idx = vertcat (x_inner_idx, false (numel (queue), 1));
-        break
+      x = hull (x, queue{:});
+      x_paving = vertcat (x_paving, queue);
+      x_inner_idx = vertcat (x_inner_idx, false (numel (queue), 1));
+      break
     endif
     ## Stop iteration for small intervals
     if (not (isempty (options.TolFun)))
-        fval = fval(not (is_inside | is_outside));
-        widths = cellfun (max_wid, fval);
-        is_small = widths < options.TolFun;
+      fval = fval(not (is_inside | is_outside));
+      widths = cellfun (max_wid, fval);
+      is_small = widths < options.TolFun;
     else
-        is_small = false (size (queue));
+      is_small = false (size (queue));
     endif
     widths = cellfun (max_wid, queue);
     is_small = is_small | (widths < options.TolX);
@@ -342,115 +342,117 @@ while (not (isempty (queue)))
     ## [l_coord, m_coord] and [m_coord, u_coord]. These are used to replace the
     ## largest coordinate from each original interval matrix.
     if (x_scalar)
-        [l_coord, u_coord] = ...
-            cellfun (@(interval) ...
-                     deal (interval.inf, interval.sup), ...
-                     queue);
+      [l_coord, u_coord] = ...
+      cellfun (@(interval) ...
+                deal (interval.inf, interval.sup), ...
+               queue);
     else
-        bisect_coord = cellfun (largest_coordinate, ...
-                                queue, num2cell (widths), ...
-                                "UniformOutput", false);
-        [l_coord, u_coord] = ...
-            cellfun (@(interval, coord) ...
-                     deal (interval.inf(coord), interval.sup(coord)), ...
-                     queue, bisect_coord);
+      bisect_coord = cellfun (largest_coordinate, ...
+                              queue, num2cell (widths), ...
+                              "UniformOutput", false);
+      [l_coord, u_coord] = ...
+      cellfun (@(interval, coord) ...
+                deal (interval.inf(coord), interval.sup(coord)), ...
+               queue, bisect_coord);
     endif
     m_coord = mid (infsup (l_coord, u_coord));
     l_coord = num2cell (l_coord);
     m_coord = num2cell (m_coord);
     u_coord = num2cell (u_coord);
     queue = vertcat (...
-        cellfun (exchange_coordinate, ...
-                 queue, bisect_coord, l_coord, m_coord, ...
-                 "UniformOutput", false), ...
-        cellfun (exchange_coordinate, ...
-                 queue, bisect_coord, m_coord, u_coord, ...
-                 "UniformOutput", false));
+                      cellfun (exchange_coordinate, ...
+                               queue, bisect_coord, l_coord, m_coord, ...
+                               "UniformOutput", false), ...
+                      cellfun (exchange_coordinate, ...
+                               queue, bisect_coord, m_coord, u_coord, ...
+                               "UniformOutput", false));
     ## Short-circuit if no paving must be computed and remaining intervals
     ## are subsets of the already computed interval enclosure.
     if (isempty (queue))
-        break
+      break
     endif
     if (nargout < 2)
-        x_bare = intervalpart (x);
-        queue = queue(not (cellfun (@(q) all (all (subset (q, x_bare))), ...
-                                    queue)));
+      x_bare = intervalpart (x);
+      queue = queue(not (cellfun (@(q) all (subset (q, x_bare)(:)), ...
+                                  queue)));
     endif
-endwhile
+  endwhile
 
-x = intervalpart (x);
-if (nargout >= 2)
+  x = intervalpart (x);
+  if (nargout >= 2)
     x_paving = cellfun (@vec, x_paving, "UniformOutput", false);
     x_paving = horzcat (x_paving{:});
-endif
+  endif
 
 endfunction
 
 function interval = replace_coordinate (interval, coord, l, u)
-interval.inf(coord) = l;
-interval.sup(coord) = u;
+  interval.inf(coord) = l;
+  interval.sup(coord) = u;
 endfunction
 
 ## Variant of above algorithm, which utilized vectorized evaluation of f
 function [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options)
 
-warning ("off", "Octave:broadcast", "local");
+  warning ("off", "Octave:broadcast", "local");
 
-## Make vectorization dimension cat_dim orthogonal to the dimension of the data
-## in y to allow simple function definitions.
-if (iscolumn (y))
+  ## Make vectorization dimension cat_dim orthogonal to the dimension
+  ## of the data in y to allow simple function definitions.
+  if (iscolumn (y))
     x0 = vec (x0);
     data_dim = 1;
     cat_dim = 2;
-else
+  else
     assert (isrow (y));
     x0 = transpose (vec (x0));
     data_dim = 2;
     cat_dim = 1;
-endif
+  endif
 
-x = intervalpart (empty (size (x0)));
-s = size (x0);
-s(cat_dim) = 0;
-x_paving = infsup (zeros (s));
-x_inner_idx = false (0);
-queue = x0;
-x_scalar = isscalar (x0);
+  x = intervalpart (empty (size (x0)));
+  s = size (x0);
+  s(cat_dim) = 0;
+  x_paving = infsup (zeros (s));
+  x_inner_idx = false (0);
+  queue = x0;
+  x_scalar = isscalar (x0);
 
-## Test functions
-verify_subset = @(fval) all (subset (fval, y), data_dim);
-verify_disjoint = @(fval) any (disjoint (fval, y), data_dim);
+  ## Test functions
+  verify_subset = @(fval) all (subset (fval, y), data_dim);
+  verify_disjoint = @(fval) any (disjoint (fval, y), data_dim);
 
-## Utility functions for indexing the queue
-idx.type = '()';
-idx.subs = {:, :};
+  ## Utility functions for indexing the queue
+  idx.type = '()';
+  idx.subs = {:, :};
 
-while (not (isempty (queue.inf)))
+  while (not (isempty (queue.inf)))
     ## Evaluate f(x)
-    l_args = num2cell (queue.inf, cat_dim);
-    u_args = num2cell (queue.sup, cat_dim);
-    f_args = cellfun (@(l, u) infsup (l, u), ...
-                      l_args, u_args, ...
-                      "UniformOutput", false);
+    f_args = cell();
+    idx.subs = {:, :};
+    for i=1:numel(x0)
+      idx.subs{data_dim} = i;
+      f_args{i} = subsref (queue, idx);
+    endfor
+    idx.subs = {:, :};
     options.MaxFunEvals --;
     options.MaxIter --;
     if (options.Contract)
-        fval_and_contractions = nthargout (1 : (1 + length (x0)), ...
-                                           @feval, f, y, f_args{:});
-        fval = fval_and_contractions{1};
-        contractions = cat (data_dim, fval_and_contractions{2 : end});
-        ## Sanitize the contractions returned by the function
-        queue = intersect (queue, contractions);
-        ## Utilize contradictions to discard candidates
-        contradiction = any (isempty (queue), data_dim);
-        idx.subs{cat_dim} = not (contradiction);
-        queue = subsref (queue, idx);
-        if (isempty (queue.inf))
-            break
-        endif
-        fval = subsref (fval, idx);
+      fval_and_contractions = nthargout (1 : (1 + length (x0)), ...
+                                         @feval, f, y, f_args{:});
+      fval = fval_and_contractions{1};
+      contractions = cat (data_dim, fval_and_contractions{2 : end});
+      ## Sanitize the contractions returned by the function
+      queue = intersect (queue, contractions);
+      ## Utilize contradictions to discard candidates
+      contradiction = any (isempty (queue), data_dim);
+      idx.subs{cat_dim} = not (contradiction);
+      queue = subsref (queue, idx);
+      if (isempty (queue.inf))
+        break
+      endif
+      fval = subsref (fval, idx);
     else
-        fval = feval (f, f_args{:});
+      fval = feval (f, f_args{:});
     endif
     ## Check whether x is outside of the preimage of y
     ## or x is inside the preimage of y
@@ -467,23 +469,23 @@ while (not (isempty (queue.inf)))
     queue = subsref (queue, idx);
     ## Stop after MaxIter or MaxFunEvals
     if (options.MaxIter <= 0 || options.MaxFunEvals <= 0)
-        x = union (cat (cat_dim, x, queue), [], cat_dim);
-        x_paving = cat (cat_dim, x_paving, queue);
-        s = size (queue);
-        s(data_dim) = 1;
-        x_inner_idx = cat (cat_dim, x_inner_idx, false (s));
-        break
+      x = union (cat (cat_dim, x, queue), [], cat_dim);
+      x_paving = cat (cat_dim, x_paving, queue);
+      s = size (queue);
+      s(data_dim) = 1;
+      x_inner_idx = cat (cat_dim, x_inner_idx, false (s));
+      break
     endif
     ## Stop iteration for small intervals
     if (not (isempty (options.TolFun)))
-        idx.subs{cat_dim} = not (is_inside | is_outside);
-        fval = subsref (fval, idx);
-        widths = max (wid (fval), [], data_dim);
-        is_small = widths < options.TolFun;
+      idx.subs{cat_dim} = not (is_inside | is_outside);
+      fval = subsref (fval, idx);
+      widths = max (wid (fval), [], data_dim);
+      is_small = widths < options.TolFun;
     else
-        s = size (queue);
-        s(data_dim) = 1;
-        is_small = false (s);
+      s = size (queue);
+      s(data_dim) = 1;
+      is_small = false (s);
     endif
     [widths, bisect_coord] = max (wid (queue), [], data_dim);
     is_small = is_small | (widths < options.TolX);
@@ -499,40 +501,40 @@ while (not (isempty (queue.inf)))
     ## Bisect remaining intervals at the largest coordinate.
     x1 = x2 = queue;
     if (x_scalar)
-        coord = queue;
+      coord = queue;
     else
-        coord_idx.type = "()";
-        if (data_dim == 1)
-            coord_idx.subs = {bisect_coord - 1 + ...
-                (1 : rows (queue.inf) : numel (queue.inf))};
-        else
-            coord_idx.subs = {bisect_coord - 1 + ...
-                (1 : columns (queue.inf) : numel (queue.inf)).'};
-        endif
-        coord = subsref (queue, coord_idx);
+      coord_idx.type = "()";
+      if (data_dim == 1)
+        coord_idx.subs = {bisect_coord - 1 + ...
+                          (1 : rows (queue.inf) : numel (queue.inf))};
+      else
+        coord_idx.subs = {bisect_coord - 1 + ...
+                          (1 : columns (queue.inf) : numel (queue.inf)).'};
+      endif
+      coord = subsref (queue, coord_idx);
     endif
     m_coord = mid (coord);
     if (x_scalar)
-        x1.sup = x2.inf = m_coord;
+      x1.sup = x2.inf = m_coord;
     else
-        x1.sup = subsasgn (x1.sup, coord_idx, m_coord);
-        x2.inf = subsasgn (x2.inf, coord_idx, m_coord);
+      x1.sup = subsasgn (x1.sup, coord_idx, m_coord);
+      x2.inf = subsasgn (x2.inf, coord_idx, m_coord);
     endif
     queue = cat (cat_dim, x1, x2);
     if (isempty (queue.inf))
-        break
+      break
     endif
     ## Short-circuit if no paving must be computed and remaining intervals
     ## are subsets of the already computed interval enclosure.
     if (nargout < 2)
-        idx.subs{cat_dim} = not (all (subset (queue, x), data_dim));
-        queue = subsref (queue, idx);
+      idx.subs{cat_dim} = not (all (subset (queue, x), data_dim));
+      queue = subsref (queue, idx);
     endif
-endwhile
+  endwhile
 
-if (nargout >= 2 && data_dim != 1)
+  if (nargout >= 2 && data_dim != 1)
     x_paving = transpose (x_paving);
-endif
+  endif
 
 endfunction
 
