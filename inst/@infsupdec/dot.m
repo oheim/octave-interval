@@ -17,12 +17,20 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} dot (@var{X}, @var{Y})
 ## @defmethodx {@@infsupdec} dot (@var{X}, @var{Y}, @var{DIM})
-## 
+##
 ## Compute the dot product of two interval vectors.
-## 
-## If @var{X} and @var{Y} are matrices, calculate the dot products along the
+##
+## If @var{X} and @var{Y} are arrays, calculate the dot products along the
 ## first non-singleton dimension.  If the optional argument @var{DIM} is given,
 ## calculate the dot products along this dimension.
+##
+## Conceptually this is equivalent to @code{sum (@var{X} .* @var{Y})}
+## but it is computed in such a way that no intermediate round-off
+## errors are introduced.
+##
+## Broadcasting is performed along all dimensions except if @var{X}
+## and @var{Y} are both vectors and @var{DIM} is not specified, in
+## which case they are aligned along dimension 1.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -45,51 +53,40 @@
 
 function result = dot (x, y, dim)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
-if (nargin < 3)
+  endif
+  if (nargin < 3)
     if (isvector (x.dec) && isvector (y.dec))
-        ## Align vectors along common dimension
-        dim = 1;
-        x = vec (x, dim);
-        y = vec (y, dim);
+      ## Align vectors along common dimension
+      dim = 1;
+      x = vec (x, dim);
+      y = vec (y, dim);
     else
-        ## Try to find non-singleton dimension
-        dim = find (and (size (x.dec) ~= 1, size (y.dec) ~= 1), 1);
-        if (isempty (dim))
-            dim = 1;
-        endif
+      ## Try to find non-singleton dimension
+      xsize = size (x.dec);
+      ysize = size (y.dec);
+      xsize(end+1:ndims (y)) = 1;
+      ysize(end+1:ndims (x)) = 1;
+      dim = find (and (xsize ~= 1, ysize ~= 1), 1);
+      if (isempty (dim))
+        dim = 1;
+      endif
     endif
-endif
+  endif
 
-## null matrix input -> null matrix output
-if (isempty (x.dec) || isempty (y.dec))
-    result = infsupdec (zeros (min (size (x.dec), size (y.dec))));
-    return
-endif
-
-## Only the sizes of non-singleton dimensions must agree. Singleton dimensions
-## do broadcast (independent of parameter dim).
-if ((min (size (x.dec, 1), size (y.dec, 1)) > 1 && ...
-        size (x.dec, 1) ~= size (y.dec, 1)) || ...
-    (min (size (x.dec, 2), size (y.dec, 2)) > 1 && ...
-        size (x.dec, 2) ~= size (y.dec, 2)))
-    error ("interval:InvalidOperand", "dot: sizes of X and Y must match")
-endif
-
-result = newdec (dot (x.infsup, y.infsup, dim));
-warning ("off", "Octave:broadcast", "local");
-result.dec = min (result.dec, ...
-                  min (min (x.dec, [], dim), min (y.dec, [], dim)));
+  result = newdec (dot (x.infsup, y.infsup, dim));
+  warning ("off", "Octave:broadcast", "local");
+  result.dec = min (result.dec, ...
+                    min (min (x.dec, [], dim), min (y.dec, [], dim)));
 
 endfunction
 
@@ -126,6 +123,21 @@ endfunction
 %!assert (isequal (dot (infsupdec ([1; 2; 3]), 42), infsupdec(252)));
 %!assert (isequal (dot (infsupdec ([1; 2; 3]), 42, 1), infsupdec(252)));
 %!assert (isequal (dot (infsupdec ([1; 2; 3]), 42, 2), infsupdec([42; 84; 126])));
+
+%!# N-dimensional arrays
+%!test
+%!  x = infsupdec (reshape (1:24, 2, 3, 4));
+%!  y = infsupdec (2.*ones (2, 3, 4));
+%!  assert (isequal (dot (x, y, 3), infsupdec ([80, 96, 112; 88, 104, 120])))
+%!test
+%!  x = infsupdec (ones (2, 2, 2, 2));
+%!  y = infsupdec (1);
+%!  assert (size (dot (x, y)), [1, 2, 2, 2]);
+%!  assert (size (dot (x, y, 1)), [1, 2, 2, 2]);
+%!  assert (size (dot (x, y, 2)), [2, 1, 2, 2]);
+%!  assert (size (dot (x, y, 3)), [2, 2, 1, 2]);
+%!  assert (size (dot (x, y, 4)), [2, 2, 2]);
+%!  assert (size (dot (x, y, 5)), [2, 2, 2, 2]);
 
 %!# from the documentation string
 %!assert (isequal (dot ([infsupdec(1), 2, 3], [infsupdec(2), 3, 4]), infsupdec (20)));
