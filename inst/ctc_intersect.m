@@ -91,9 +91,19 @@ function varargout = ctc_intersect_eval (ctc1, y1, ctc2, y2, varargin)
   y = varargin{1};
   x = varargin(2 : end);
 
+  ## Always return at least one value
+  if nargout == 0
+    nargout = 1;
+  endif
+
   ## Evaluate each contractor function
   fval_and_contractions1 = nthargout (1 : nargout, ctc1, y1, x{:});
   fval_and_contractions2 = nthargout (1 : nargout, ctc2, y2, x{:});
+
+  if nargout == 1
+    fval_and_contractions1 = {fval_and_contractions1};
+    fval_and_contractions2 = {fval_and_contractions2};
+  endif
 
   ## Compute fval = y if both function values are inside of their constraints
   fval1 = fval_and_contractions1{1};
@@ -116,7 +126,11 @@ endfunction
 function d = y_dist (y, fval)
   d = infsup (idist (y, fval), hdist (y, fval));
   d(subset (fval, y) & not (isempty (fval))) = 0;
-  d = sum (d(:));
+  for i = 1:ndims (y)
+    if (size (y, i) != 1)
+      d = sum (d, i);
+    endif
+  endfor
 endfunction
 
 %!function [fval, x] = ctc_abs (y, x)
