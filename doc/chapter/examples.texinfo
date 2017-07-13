@@ -126,7 +126,7 @@ The step can be interpreted geometrically as an intersection of the graph's tang
 @var{x}₁ = (mid (@var{x}₀) @minus{} @var{f} (mid (@var{x}₀)) / @var{f}' (@var{x}₀)) ∩ @var{x}₀
 @end display
 
-Here we use the pivot element @code{mid (@var{x}₀)} and produce an enclosure of all possible tangents with the x-axis.  In special cases the division with @code{@var{f}' (@var{x}₀)} yields two intervals and the algorithm bisects the search range.  Eventually this algorithm produces enclosures for all possible roots of the function @var{f}.  The interval newton method is implemented by the function @funref{@@infsup/fzero}.
+Here we use the pivot element @code{mid (@var{x}₀)} and produce an enclosure of all possible tangents with the x-axis.  In special cases the division with @code{@var{f}' (@var{x}₀)} yields two intervals and the algorithm bisects the search range.  Eventually this algorithm produces enclosures for all possible roots of the function @var{f} in the interval @var{x}₀.  The interval newton method is implemented by the function @funref{@@infsup/fzero}.
 
 To produce the derivative of function @var{f}, the automatic differentiation from the symbolic package bears a helping hand.  However, be careful since this may introduce numeric errors with coefficients.
 
@@ -340,4 +340,3 @@ The solution is not optimal, please refer to Luc Jaulin's paper for more sophist
 </object>
 @end html
 @end float
-
