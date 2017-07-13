@@ -149,13 +149,13 @@ The default text representation of intervals is not guaranteed to be exact, beca
 
 
 
-@subsection Interval Vectors and Matrices
+@subsection Interval Vectors, Matrices and Arrays
 
-Vectors and matrices of intervals can be created by passing numerical matrices, string or cell arrays to the interval constructors. With cell arrays it is also possible to mix several types of boundaries.
+Vectors, matrices and arrays of intervals can be created by passing numerical arrays, string or cell arrays to the interval constructors. With cell arrays it is also possible to mix several types of boundaries.
 
-Interval matrices behave like normal matrices in GNU Octave and can be used for broadcasting and vectorized function evaluation.  Vectorized function evaluation usually is the key to create very fast programs.
+Interval arrays behave like normal arrays in GNU Octave and can be used for broadcasting and vectorized function evaluation.  Vectorized function evaluation usually is the key to create very fast programs.
 
-Create interval matrices
+Create interval arrays
 @example
 @group
 M = infsupdec (magic (3))
@@ -207,8 +207,51 @@ infsupdec (@{1; eps; "4/7"; "pi"@}, @{2; 1; "e"; "0xff"@})
    [0.57142, 2.7183]_com
        [3.1415, 255]_com
 @end group
+@example
+@group
+infsupdec (ones (2, 2, 2))
+  @result{} ans = 2×2×2 interval array
+
+  ans(:,:,1) =
+
+     [1]_com   [1]_com
+     [1]_com   [1]_com
+
+  ans(:,:,2) =
+
+     [1]_com   [1]_com
+     [1]_com   [1]_com
+@end group
+@end example
 @end example
 
+Strings can easily be used to create vectors and matrices of intervals, @code{,} and @code{;} are used to denote the next element in the row or a new row.  Octave does however not have way of representing arrays with three or more dimensions using strings in the same way.  Therefore you can only create such arrays by passing numerical matrices or cells to the constructor.  Alternatively you can build it up in steps.
+
+@example
+@group
+> A = infsupdec ("1 [2, 3]; 4, 5; 6, 7")
+  A = 3×2 interval matrix
+
+     [1]_com   [2, 3]_com
+     [4]_com      [5]_com
+     [6]_com      [7]_com
+
+> A(:,:,2) = infsupdec ("0.1, 0.2; 0.3, 0.4; 0.5, 0.6")
+  A ⊂ 3×2×2 interval array
+
+  ans(:,:,1) =
+
+     [1]_com   [2, 3]_com
+     [4]_com      [5]_com
+     [6]_com      [7]_com
+
+  ans(:,:,2) =
+
+     [0.099999, 0.10001]_com   [0.19999, 0.20001]_com
+      [0.29999, 0.30001]_com   [0.39999, 0.40001]_com
+                   [0.5]_com   [0.59999, 0.60001]_com
+@end group
+@end example
 
 @section Arithmetic Operations
 
@@ -277,11 +320,11 @@ infsup (1, 3) <= infsup (2, 4)
 @end example
 
 
-@section Matrix Operations
+@section Matrix and Array Operations
 
-Above mentioned operations can also be applied element-wise to interval vectors and matrices. Many operations use vectorization techniques.
+Above mentioned operations can also be applied element-wise to interval vectors, matrices or arrays. Many operations use vectorization techniques.
 
-In addition, there are matrix operations on interval matrices. These operations comprise: dot product, matrix multiplication, vector sums (all with tightest accuracy), matrix inversion, matrix powers, and solving linear systems (the latter are less accurate). As a result of missing hardware / low-level library support and missing optimizations, these operations are relatively slow compared to familiar operations in floating-point arithmetic.
+In addition, there are operations on interval matrices and arrays. These operations comprise: dot product, matrix multiplication, vector sums (all with tightest accuracy), matrix inversion, matrix powers, and solving linear systems (the latter are less accurate). As a result of missing hardware / low-level library support and missing optimizations, these operations are relatively slow compared to familiar operations in floating-point arithmetic.
 
 Examples of using interval matrix functions
 @example
@@ -424,8 +467,7 @@ The solution for plotting functions with interval arithmetic is called: “minci
 @myimage{image/interval-vs-normal-plot.m,Plotting an interval function and a classic function}
 
 
-For 3D plotting the @funref{@@infsup/meshgrid} function, as usual, becomes handy.  The following example shows how two different ranges for X and Y coordinates are used to construct a grid, where the function @funref{@@infsup/atan2} is evaluated.  In this particular case the interval grid has gaps, because X and Y coordinates have been constructed such that intervals do not intersect.
+For 3D plotting the Octave meshgrid function, as usual, becomes handy.  The following example shows how two different ranges for X and Y coordinates are used to construct a grid, where the function @funref{@@infsup/atan2} is evaluated.  In this particular case the interval grid has gaps, because X and Y coordinates have been constructed such that intervals do not intersect.
 
 @include image/interval-plot3.m.texinfo
 @myimage{image/interval-plot3.m,Plotting 3D interval grid points}
-
