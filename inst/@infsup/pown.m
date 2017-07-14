@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} pown (@var{X}, @var{P})
-## 
+##
 ## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.
 ##
 ## Monomials are defined for all real numbers and the special monomial
@@ -47,7 +47,7 @@ if (not (isnumeric (p)) || any (any (fix (p) ~= p)))
     error ("interval:InvalidOperand", "pown: exponent is not an integer");
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (x.inf, p)))
     x.inf = ones (size (p)) .* x.inf;
     x.sup = ones (size (p)) .* x.sup;
@@ -77,10 +77,10 @@ if (any (idx.subs{1}(:))) # p even
 
     x_mag = mag (subsref (x, idx));
     x_mag(isnan (x_mag)) = -inf;
-    
+
     x.inf = subsasgn (x.inf, idx, x_mig);
     x.sup = subsasgn (x.sup, idx, x_mag);
-    
+
     result = subsasgn (result, idx, pow (subsref (x, idx), subsref (p, idx)));
 endif
 

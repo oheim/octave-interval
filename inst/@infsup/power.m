@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} power (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} .^ @var{Y}}
-## 
+##
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
 ## positive; (3) negative base @var{X} together with integral exponent @var{Y}.
@@ -78,7 +78,7 @@ else
     return
 endif
 
-## Resize, if scalar × matrix or vector × matrix or scalar × vector
+## Resize, if broadcasting is needed
 if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
@@ -102,16 +102,16 @@ xMinusWithIntegerY = not (emptyresult) & x.inf < 0 & ...
 if (any (xMinusWithIntegerY(:)))
     ySingleInteger = isfinite (y.inf) & isfinite (y.sup) & ...
                      ceil (y.inf) == floor (y.sup);
-    
+
     ## y contains a single integer
     idx.subs = {xMinusWithIntegerY & ySingleInteger};
     if (any (idx.subs{1}(:)))
-        xMinus = intersect (subsref (x, idx), ... # intersect to 
+        xMinus = intersect (subsref (x, idx), ... # intersect to
                             infsup (-inf, 0));    # speed up computation
         zMinus = subsasgn (zMinus, idx, ...
                            pown (xMinus, ceil (subsref (y.inf, idx))));
     endif
-    
+
     ## y contains several integers
     idx.subs = {xMinusWithIntegerY & not(ySingleInteger)};
     if (any (idx.subs{1}(:)))

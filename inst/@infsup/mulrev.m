@@ -19,7 +19,7 @@
 ## @deftypemethodx {@@infsup} {@var{X} =} mulrev (@var{B}, @var{C})
 ## @deftypemethodx {@@infsup} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C})
 ## @deftypemethodx {@@infsup} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C}, @var{X})
-## 
+##
 ## Compute the reverse multiplication function or the two-output division.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -72,7 +72,7 @@ if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
-## Resize, if scalar × matrix or vector × matrix or scalar × vector
+## Resize, if broadcasting is needed
 if (not (size_equal (b.inf, c.inf)))
     b.inf = ones (size (c.inf)) .* b.inf;
     b.sup = ones (size (c.inf)) .* b.sup;

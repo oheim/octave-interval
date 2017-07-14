@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{Y} =} powrev2 (@var{A}, @var{C}, @var{Y})
 ## @deftypemethodx {@@infsup} {@var{Y} =} powrev2 (@var{A}, @var{C})
-## 
+##
 ## Compute the reverse power function for the second parameter.
 ##
 ## That is, an enclosure of all @code{y ∈ @var{Y}} where
@@ -60,7 +60,7 @@ endif
 a = intersect (a, infsup (0, inf));
 c = intersect (c, infsup (0, inf));
 
-## Resize, if scalar × matrix or vector × matrix or scalar × vector
+## Resize, if broadcasting is needed
 if (not (size_equal (a.inf, c.inf)))
     a.inf = ones (size (c.inf)) .* a.inf;
     a.sup = ones (size (c.inf)) .* a.sup;

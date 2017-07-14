@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} tanrev (@var{C}, @var{X})
 ## @deftypemethodx {@@infsup} {@var{X} =} tanrev (@var{C})
-## 
+##
 ## Compute the reverse tangent function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -58,7 +58,7 @@ endif
 arctangent = atan (c);
 result = x;
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (arctangent.inf, result.inf)))
     arctangent.inf = ones (size (result.inf)) .* arctangent.inf;
     arctangent.sup = ones (size (result.inf)) .* arctangent.sup;
@@ -95,7 +95,7 @@ if (any (select(:)))
     idx.subs = {(select_u & ~overlapping)};
     u(idx.subs{1}) = ...
         sup (subsref (arctangent, idx) + subsref (n, idx) .* pi);
-    
+
     ## Find a larger lower bound for x, if the restriction from c allows it
     l = -inf (size (result.inf));
     select_l = select & result.inf > -inf;
@@ -115,10 +115,10 @@ if (any (select(:)))
     idx.subs = {(select_l & ~overlapping)};
     l(idx.subs {1}) = ...
         inf (subsref (arctangent, idx) + subsref (n, idx) .* pi);
-    
+
     result.inf(select) = max (l(select), result.inf(select));
     result.sup(select) = min (u(select), result.sup(select));
-    
+
     result.inf(result.inf > result.sup) = inf;
     result.sup(result.inf > result.sup) = -inf;
 endif

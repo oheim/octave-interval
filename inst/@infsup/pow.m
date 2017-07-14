@@ -16,8 +16,8 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} pow (@var{X}, @var{Y})
-## 
-## Compute the simple power function on intervals defined by 
+##
+## Compute the simple power function on intervals defined by
 ## @code{exp (@var{Y} * log (@var{X}))}.
 ##
 ## The function is only defined where @var{X} is positive or where @var{X} is
@@ -51,7 +51,7 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;

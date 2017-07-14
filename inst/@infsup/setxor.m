@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {} setxor (@var{A}, @var{B})
 ## @deftypemethodx {@@infsup} {[@var{C}, @var{C1}, @var{C2}] =} setxor (@var{A}, @var{B})
-## 
+##
 ## Build the symmetric difference of intervals @var{A} and @var{B}.
 ##
 ## With three output arguments, return intervals @var{C1} and @var{C2} such
@@ -57,7 +57,7 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (a.inf, b.inf)))
     a.inf = ones (size (b.inf)) .* a.inf;
     a.sup = ones (size (b.inf)) .* a.sup;
@@ -106,23 +106,23 @@ if (nargout > 1)
     select = a.inf == b.inf;
     l1(select) = inf;
     u1(select) = -inf;
-    
+
     l1(l1 == 0) = -0;
     u1(u1 == 0) = +0;
-    
+
     c1 = infsup ();
     c1.inf = l1;
     c1.sup = u1;
-    
+
     l2 = b3;
     u2 = b4;
     select = a.sup == b.sup;
     l2(select) = inf;
     u2(select) = -inf;
-    
+
     l2(l2 == 0) = -0;
     u2(u2 == 0) = +0;
-    
+
     c2 = infsup ();
     c2.inf = l2;
     c2.sup = u2;

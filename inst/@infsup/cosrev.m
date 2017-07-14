@@ -17,12 +17,12 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} cosrev (@var{C}, @var{X})
 ## @deftypemethodx {@@infsup} {@var{X} =} cosrev (@var{C})
-## 
+##
 ## Compute the reverse cosine function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
 ## @code{cos (x) ∈ @var{C}}.
-## 
+##
 ## Accuracy: The result is a valid enclosure.
 ##
 ## @example
@@ -58,7 +58,7 @@ endif
 arccosine = acos (c);
 result = x;
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (arccosine.inf, result.inf)))
     arccosine.inf = ones (size (result.inf)) .* arccosine.inf;
     arccosine.sup = ones (size (result.inf)) .* arccosine.sup;
@@ -131,10 +131,10 @@ if (any (select(:)))
     idx.subs = {(select_l & ~overlapping & rem (n, 2) ~= 0)};
     l(idx.subs {1}) = ...
         inf (subsref (arccosine, idx) + subsref (m, idx) .* pi);
-    
+
     result.inf(select) = max (l(select), result.inf(select));
     result.sup(select) = min (u(select), result.sup(select));
-    
+
     result.inf(result.inf > result.sup) = inf;
     result.sup(result.inf > result.sup) = -inf;
 endif

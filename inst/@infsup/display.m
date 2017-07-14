@@ -26,8 +26,8 @@
 ## boundaries exactly represent the actual boundaries.  Otherwise a subset
 ## symbol is used instead (this feature is not available on Microsoft Windows).
 ##
-## For non-scalar intervals the size and classification (interval vector or
-## interval matrix) is displayed before the content.
+## For non-scalar intervals the size and classification (interval vector,
+## interval matrix or interval array) is displayed before the content.
 ##
 ## @example
 ## @group

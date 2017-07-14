@@ -72,14 +72,13 @@ function varargout = disp (x)
     return
   endif
 
-  ## Interval matrix / vector
   columnwidth = max (cellfun ("length", s), [], 1);
   columnwidth += 3; # add 3 spaces between columns
 
-  ## Print all columns
   buffer = "";
   numberofmatrixparts = prod (size (x.inf)(3:end));
   for matrixpart = 1:numberofmatrixparts
+    ## Print the current submatrix
     if (rows (x.inf) > 0)
       ## FIXME: See display.m for how current_print_indent_level is used
       global current_print_indent_level;

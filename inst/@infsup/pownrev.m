@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
 ## @deftypemethodx {@@infsup} {@var{X} =} pownrev (@var{C}, @var{P})
-## 
+##
 ## Compute the reverse monomial @code{x^@var{P}}.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -55,7 +55,7 @@ if (not (isnumeric (p)) || fix (p) ~= p)
     error ("interval:InvalidOperand", "pownrev: exponent is not an integer");
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (x.inf, c.inf)))
     x.inf = ones (size (c.inf)) .* x.inf;
     x.sup = ones (size (c.inf)) .* x.sup;

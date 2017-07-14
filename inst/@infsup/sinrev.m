@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} sinrev (@var{C}, @var{X})
 ## @deftypemethodx {@@infsup} {@var{X} =} sinrev (@var{C})
-## 
+##
 ## Compute the reverse sine function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -58,7 +58,7 @@ endif
 arcsine = asin (c);
 result = x;
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (arcsine.inf, result.inf)))
     arcsine.inf = ones (size (result.inf)) .* arcsine.inf;
     arcsine.sup = ones (size (result.inf)) .* arcsine.sup;
@@ -74,7 +74,7 @@ idx.type = '()';
 persistent pi = infsup ("pi");
 select = not (isempty (result)) ...
     & not (subset (infsup (-pi.sup / 2, pi.sup / 2), arcsine));
-    
+
 if (any (select(:)))
     ## Find a smaller upper bound for x, if the restriction from c allows it
     u = inf (size (result.inf));
@@ -102,7 +102,7 @@ if (any (select(:)))
     idx.subs = {(select_u & ~overlapping & rem (n, 2) ~= 0)};
     u(idx.subs{1}) = ...
         sup (subsref (arcsine, idx) + subsref (m, idx) .* pi);
-    
+
     ## Find a larger lower bound for x, if the restriction from c allows it
     l = -inf (size (result.inf));
     select_l = select & result.inf > -inf;
@@ -129,10 +129,10 @@ if (any (select(:)))
     idx.subs = {(select_l & ~overlapping & rem (n, 2) ~= 0)};
     l(idx.subs {1}) = ...
         inf (subsref (arcsine, idx) + subsref (m, idx) .* pi);
-    
+
     result.inf(select) = max (l(select), result.inf(select));
     result.sup(select) = min (u(select), result.sup(select));
-    
+
     result.inf(result.inf > result.sup) = inf;
     result.sup(result.inf > result.sup) = -inf;
 endif

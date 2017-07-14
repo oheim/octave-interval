@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} fma (@var{X}, @var{Y}, @var{Z})
-## 
+##
 ## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.
 ##
 ## This function is semantically equivalent to evaluating multiplication and
@@ -57,7 +57,7 @@ if (not (isa (z, "infsup")))
     z = infsup (z);
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} setdiff (@var{A}, @var{B})
-## 
+##
 ## Build the relative complement of interval @var{B} in interval @var{A}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -49,7 +49,7 @@ if (not (isa (b, "infsup")))
     b = infsup (b);
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (a.inf, b.inf)))
     a.inf = ones (size (b.inf)) .* a.inf;
     a.sup = ones (size (b.inf)) .* a.sup;

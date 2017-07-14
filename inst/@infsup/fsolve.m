@@ -335,12 +335,12 @@ function [x, x_paving, x_inner_idx] = fsolve (f, x0, y, options)
     ## Bisect remaining intervals at the largest coordinate.
     ##
     ## Since the bisect function is the most costly, we want to call it only
-    ## once. Thus, we extract the largest coordinate from each interval matrix
+    ## once. Thus, we extract the largest coordinate from each interval array
     ## inside queue and combine them into an interval vector [l_coord, u_coord]
     ## with the length of queue. We call the bisect function on this vector,
     ## which bisects each interval component and produces vectors
     ## [l_coord, m_coord] and [m_coord, u_coord]. These are used to replace the
-    ## largest coordinate from each original interval matrix.
+    ## largest coordinate from each original interval array.
     if (x_scalar)
       [l_coord, u_coord] = ...
       cellfun (@(interval) ...

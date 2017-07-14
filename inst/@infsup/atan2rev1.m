@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{Y} =} atan2rev1 (@var{B}, @var{C}, @var{Y})
 ## @deftypemethodx {@@infsup} {@var{Y} =} atan2rev1 (@var{B}, @var{C})
-## 
+##
 ## Compute the reverse atan2 function for the first parameter.
 ##
 ## That is, an enclosure of all @code{y ∈ @var{Y}} where
@@ -58,7 +58,7 @@ if (not (isa (y, "infsup")))
     y = infsup (y);
 endif
 
-## Resize, if scalar × matrix or vector × matrix or scalar × vector
+## Resize, if broadcasting is needed
 if (not (size_equal (b.inf, c.inf)))
     b.inf = ones (size (c.inf)) .* b.inf;
     b.sup = ones (size (c.inf)) .* b.sup;

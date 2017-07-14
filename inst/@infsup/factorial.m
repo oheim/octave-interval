@@ -16,15 +16,15 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} factorial (@var{N})
-## 
+##
 ## Compute the factorial of @var{N} where @var{N} is a non-negative integer.
 ##
 ## If @var{N} is a scalar, this is equivalent to
 ## @display
 ## factorial (@var{N}) = 1 * 2 * @dots{} * @var{N}.
 ## @end display
-## For vector or matrix arguments, return the factorial of each element in the
-## array.
+## For vector, matrix or array arguments, return the factorial of each
+## element in the array.
 ##
 ## For non-integers see the generalized factorial function @command{gamma}.
 ## Note that the factorial function grows large quite quickly, and the result

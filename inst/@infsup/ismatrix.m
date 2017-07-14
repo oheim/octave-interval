@@ -17,11 +17,8 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} ismatrix (@var{A})
 ##
-## Return true if @var{A} is an interval matrix.
+## Return true if @var{A} is a 2-D interval array.
 ##
-## Scalars (1x1 matrices) and vectors (1xN or Nx1 matrices) are subsets of the
-## more general N-dimensional matrix and @code{ismatrix} will return true for
-## these objects as well.
 ## @seealso{@@infsup/isscalar, @@infsup/isvector}
 ## @end defmethod
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} atan2 (@var{Y}, @var{X})
-## 
+##
 ## Compute the inverse tangent with two arguments.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -47,7 +47,7 @@ if (not (isa (x, "infsup")))
     x = infsup (x);
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;

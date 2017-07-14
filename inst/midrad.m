@@ -29,8 +29,7 @@
 ## parameter, the radius @var{R} defaults to zero.
 ##
 ## Parameters can be simple numbers, intervals or interval literals as strings.
-## Scalar values or scalar intervals do broadcast if combined with matrices or
-## interval matrices.
+## If needed, broadcasting is performed.
 ##
 ## The result is not guaranteed to be tightest if parameters are given as
 ## strings.  This is due to intermediate results.  The infsupdec constructor

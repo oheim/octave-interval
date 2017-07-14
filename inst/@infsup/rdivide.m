@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} rdivide (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} ./ @var{Y}}
-## 
+##
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
 ## For @var{X} = 1 compute the reciprocal of @var{Y}.  Thus this function can
@@ -60,7 +60,7 @@ endif
 ## Short-circuit evaluation for 1 ./ x
 if (all (vec (x.inf == 1 & x.sup == 1)))
     result = recip (y);
-    ## Resize, if scalar × matrix
+    ## Resize, if broadcasting is needed
     if (not (size_equal (x.inf, y.inf)))
         result.inf = ones (size (x.inf)) .* result.inf;
         result.sup = ones (size (x.inf)) .* result.sup;
@@ -68,7 +68,7 @@ if (all (vec (x.inf == 1 & x.sup == 1)))
     return
 endif
 
-## Resize, if scalar × matrix
+## Resize, if broadcasting is needed
 if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;

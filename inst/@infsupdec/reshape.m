@@ -19,7 +19,7 @@
 ## @defmethodx {@@infsupdec} reshape (@var{X}, [@var{M} @var{N}, ...])
 ## @defmethodx {@@infsupdec} reshape (@var{X}, ..., @var{[]}, ...)
 ##
-## Return an interval matrix with the specified dimensions (M, N) whose
+## Return an interval matrix with the specified dimensions (M, N, ...) whose
 ## elements are taken from the interval matrix @var{A}.  The elements of the
 ## matrix are accessed in column-major order (like Fortran arrays are stored).
 ##
