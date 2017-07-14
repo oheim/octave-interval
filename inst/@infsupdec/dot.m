@@ -87,7 +87,11 @@ function result = dot (x, y, dim)
   warning ("off", "Octave:broadcast", "local");
   result.dec = min (result.dec, ...
                     min (min (x.dec, [], dim), min (y.dec, [], dim)));
-
+  if (isequal (x, infsupdec ([])) && isequal (y, infsupdec ([])))
+    ## Inconsistency, dot (infsupdec ([]), []) = [0]_com
+    ## Needs to be handled here for the decoration to work correctly
+    result = newdec (result.infsup);
+  endif
 endfunction
 
 %!# matrix × matrix
