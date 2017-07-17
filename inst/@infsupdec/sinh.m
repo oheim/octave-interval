@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} sinh (@var{X})
-## 
+##
 ## Compute the hyperbolic sine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,14 +36,14 @@
 
 function result = sinh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (sinh (x.infsup));
-## sinh is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (sinh (x.infsup));
+  ## sinh is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

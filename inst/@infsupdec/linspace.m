@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} linspace (@var{BASE}, @var{LIMIT})
 ## @defmethodx {@@infsupdec} linspace (@var{BASE}, @var{LIMIT}, @var{N})
-## 
+##
 ## Return a row vector of @var{N} linearly spaced members between @var{BASE}
 ## and @var{LIMIT}.
 ##
@@ -32,7 +32,7 @@
 ## @group
 ## transpose (linspace (infsupdec (0), infsupdec (10), 4))
 ##   @result{} ans ⊂ 4×1 interval vector
-##   
+##
 ##                     [0]_com
 ##        [3.3333, 3.3334]_com
 ##        [6.6666, 6.6667]_com
@@ -48,23 +48,23 @@
 
 function result = linspace (base, limit, n)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
-if (not (isa (base, "infsupdec")))
+  endif
+  if (not (isa (base, "infsupdec")))
     base = infsupdec (base);
-endif
-if (not (isa (limit, "infsupdec")))
+  endif
+  if (not (isa (limit, "infsupdec")))
     limit = infsupdec (limit);
-endif
-if (nargin < 3)
+  endif
+  if (nargin < 3)
     n = 100;
-endif
+  endif
 
-result = newdec (linspace (base.infsup, limit.infsup, n));
-## linspace is defined and continuous everywhere
-result.dec = min (result.dec, min (base.dec, limit.dec));
+  result = newdec (linspace (base.infsup, limit.infsup, n));
+  ## linspace is defined and continuous everywhere
+  result.dec = min (result.dec, min (base.dec, limit.dec));
 
 endfunction
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} log1p (@var{X})
-## 
+##
 ## Compute @code{log (1 + @var{X})} accurately in the neighborhood of zero.
 ##
 ## The function is only defined where @var{X} is greater than -1.
@@ -38,18 +38,18 @@
 
 function result = log1p (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (log1p (x.infsup));
+  result = newdec (log1p (x.infsup));
 
-## log1p is continuous everywhere, but defined for x > -1 only
-persistent domain_hull = infsup (-1, inf);
-result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
+  ## log1p is continuous everywhere, but defined for x > -1 only
+  persistent domain_hull = infsup (-1, inf);
+  result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

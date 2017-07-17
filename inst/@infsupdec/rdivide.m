@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} rdivide (@var{X}, @var{Y})
 ## @defopx Operator {@@infsupdec} {@var{X} ./ @var{Y}}
-## 
+##
 ## Divide all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
 ## For @var{X} = 1 compute the reciprocal of @var{Y}.  Thus this function can
@@ -42,27 +42,27 @@
 
 function result = rdivide (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = newdec (rdivide (x.infsup, y.infsup));
+  result = newdec (rdivide (x.infsup, y.infsup));
 
-divisionbyzero = ismember (0, y);
-if (not (size_equal (x.dec, y.dec)))
+  divisionbyzero = ismember (0, y);
+  if (not (size_equal (x.dec, y.dec)))
     divisionbyzero = divisionbyzero & true (size (x.dec));
-endif
-result.dec(divisionbyzero) = _trv ();
+  endif
+  result.dec(divisionbyzero) = _trv ();
 
-result.dec = min (result.dec, min (x.dec, y.dec));
+  result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

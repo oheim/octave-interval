@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} floor (@var{X})
-## 
+##
 ## Round each number in interval @var{X} towards -Inf.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -38,22 +38,22 @@
 
 function result = floor (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (floor (x.infsup));
+  result = newdec (floor (x.infsup));
 
-## Between two integral numbers the function is constant, thus continuous
-discontinuous = not (issingleton (result));
-result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
+  ## Between two integral numbers the function is constant, thus continuous
+  discontinuous = not (issingleton (result));
+  result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
 
-onlyrestrictioncontinuous = issingleton (result) & fix (inf (x)) == inf (x);
-result.dec(onlyrestrictioncontinuous) = ...
-    min (result.dec(onlyrestrictioncontinuous), _dac ());
+  onlyrestrictioncontinuous = issingleton (result) & fix (inf (x)) == inf (x);
+  result.dec(onlyrestrictioncontinuous) = ...
+  min (result.dec(onlyrestrictioncontinuous), _dac ());
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

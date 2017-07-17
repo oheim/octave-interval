@@ -34,25 +34,25 @@
 
 function A = subsasgn (A, S, B)
 
-if (nargin ~= 3)
+  if (nargin ~= 3)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (A, "infsupdec")))
+  if (not (isa (A, "infsupdec")))
     A = infsupdec (A);
-endif
-if (not (isa (B, "infsupdec")))
+  endif
+  if (not (isa (B, "infsupdec")))
     B = infsupdec (B);
-endif
+  endif
 
-A.infsup = subsasgn (A.infsup, S, B.infsup);
+  A.infsup = subsasgn (A.infsup, S, B.infsup);
 
-A.dec(A.dec == 0) = uint8 (255);
-B.dec(B.dec == 0) = uint8 (255);
-A.dec = subsasgn (A.dec, S, B.dec);
-A.dec(A.dec == 0) = _com (); # any new elements are [0]_com
-A.dec(A.dec == uint8 (255)) = uint8 (0);
+  A.dec(A.dec == 0) = uint8 (255);
+  B.dec(B.dec == 0) = uint8 (255);
+  A.dec = subsasgn (A.dec, S, B.dec);
+  A.dec(A.dec == 0) = _com (); # any new elements are [0]_com
+  A.dec(A.dec == uint8 (255)) = uint8 (0);
 
 endfunction
 

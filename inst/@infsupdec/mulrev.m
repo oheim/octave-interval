@@ -19,7 +19,7 @@
 ## @deftypemethodx {@@infsupdec} {@var{X} =} mulrev (@var{B}, @var{C})
 ## @deftypemethodx {@@infsupdec} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C})
 ## @deftypemethodx {@@infsupdec} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C}, @var{X})
-## 
+##
 ## Compute the reverse multiplication function or the two-output division.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -59,38 +59,38 @@
 
 function [u, v] = mulrev (b, c, x)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     x = infsupdec (-inf, inf);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
-if (not (isa (c, "infsupdec")))
+  endif
+  if (not (isa (c, "infsupdec")))
     c = infsupdec (c);
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-if (nargout < 2)
+  if (nargout < 2)
     u = mulrev (b.infsup, c.infsup, x.infsup);
     u = infsupdec (u, "trv");
     u.dec(isnai (x) | isnai (b) | isnai (c)) = _ill ();
-else
+  else
     [u, v] = mulrev (b.infsup, c.infsup, x.infsup);
     u = newdec (u);
     u.dec(isempty (b) | isempty (c) | ismember (0, b)) = _trv ();
     u.dec = min (u.dec, min (b.dec, c.dec));
     u.dec(isnai (x)) = _ill ();
-    
+
     v = infsupdec (v, "trv");
     v.dec(isnai (x) | isnai (b) | isnai (c)) = _ill ();
-endif
+  endif
 
 endfunction
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} asin (@var{X})
-## 
+##
 ## Compute the inverse sine in radians (arcsine).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,18 +36,18 @@
 
 function result = asin (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (asin (x.infsup));
+  result = newdec (asin (x.infsup));
 
-## asin is continuous everywhere, but defined for [-1, 1] only
-persistent domain = infsup (-1, 1);
-result.dec(not (subset (x.infsup, domain))) = _trv ();
+  ## asin is continuous everywhere, but defined for [-1, 1] only
+  persistent domain = infsup (-1, 1);
+  result.dec(not (subset (x.infsup, domain))) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

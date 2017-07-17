@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} nthroot (@var{X}, @var{N})
-## 
+##
 ## Compute the real n-th root of @var{X}.
 ##
 ## Accuracy: The result is a valid enclosure.  The result is a tight
@@ -31,24 +31,24 @@
 
 function result = nthroot (x, n)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-result = newdec (nthroot (intervalpart (x), n));
+  result = newdec (nthroot (intervalpart (x), n));
 
-## nthroot is continuous everywhere, but not defined everywhere
-even = mod (n, 2) == 0;
-defined = (not (even) & (n > 0 | inf (x) > 0 | sup (x) < 0)) ...
-        | (even       & ((n > 0 & inf (x) >= 0) ...
-                       | (n < 0 & inf (x) > 0)));
-result.dec(not (defined)) = _trv ();
+  ## nthroot is continuous everywhere, but not defined everywhere
+  even = mod (n, 2) == 0;
+  defined = (not (even) & (n > 0 | inf (x) > 0 | sup (x) < 0)) ...
+            | (even       & ((n > 0 & inf (x) >= 0) ...
+                             | (n < 0 & inf (x) > 0)));
+  result.dec(not (defined)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

@@ -48,43 +48,43 @@
 
 function result = mtimes (x, y, accuracy)
 
-if (nargin < 2 || nargin > 3 || (nargin == 3 && not (ischar (accuracy))))
+  if (nargin < 2 || nargin > 3 || (nargin == 3 && not (ischar (accuracy))))
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-## null matrix input -> null matrix output
-if (isempty (x.dec) || isempty (y.dec))
+  ## null matrix input -> null matrix output
+  if (isempty (x.dec) || isempty (y.dec))
     if (size (x.dec, 2) ~= size (y.dec, 1))
-        error ("interval:InvalidOperand", ...
-               "operator *: nonconformant arguments");
+      error ("interval:InvalidOperand", ...
+             "operator *: nonconformant arguments");
     endif
     result = infsupdec (zeros (rows (x.dec), columns (y.dec)));
     return
-endif
+  endif
 
-if (isscalar (x) || isscalar (y))
+  if (isscalar (x) || isscalar (y))
     result = times (x, y);
     return
-endif
+  endif
 
-if (nargin == 2)
+  if (nargin == 2)
     result = newdec (mtimes (x.infsup, y.infsup));
-else
+  else
     result = newdec (mtimes (x.infsup, y.infsup, accuracy));
-endif
+  endif
 
-dec_x = min (x.dec, [], 2);
-dec_y = min (y.dec, [], 1);
-warning ('off', 'Octave:broadcast', 'local');
-result.dec = min (result.dec, min (dec_x, dec_y));
+  dec_x = min (x.dec, [], 2);
+  dec_y = min (y.dec, [], 1);
+  warning ('off', 'Octave:broadcast', 'local');
+  result.dec = min (result.dec, min (dec_x, dec_y));
 
 endfunction
 

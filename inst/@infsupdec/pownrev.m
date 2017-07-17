@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
 ## @deftypemethodx {@@infsupdec} {@var{X} =} pownrev (@var{C}, @var{P})
-## 
+##
 ## Compute the reverse monomial @code{x^@var{P}}.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -40,24 +40,24 @@
 
 function result = pownrev (c, x, p)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     p = x;
     x = infsupdec (-inf, inf);
-endif
-if (not (isa (c, "infsupdec")))
+  endif
+  if (not (isa (c, "infsupdec")))
     c = infsupdec (c);
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-result = infsupdec (pownrev (c.infsup, x.infsup, p), "trv");
-result.dec(isnai (c) | isnai (x)) = _ill ();
+  result = infsupdec (pownrev (c.infsup, x.infsup, p), "trv");
+  result.dec(isnai (c) | isnai (x)) = _ill ();
 
 endfunction
 

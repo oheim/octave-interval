@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} inf (@var{X})
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
-## 
+##
 ## Get the (greatest) lower boundary for all numbers of interval @var{X}.
 ##
 ## If @var{X} is empty, @code{inf (@var{X})} is positive infinity.  If @var{X}
@@ -40,13 +40,13 @@
 
 function result = inf (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = inf (x.infsup);
-result(isnai (x)) = nan;
+  result = inf (x.infsup);
+  result(isnai (x)) = nan;
 
 endfunction
 

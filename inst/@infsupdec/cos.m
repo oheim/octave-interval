@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} cos (@var{X})
-## 
+##
 ## Compute the cosine in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,14 +36,14 @@
 
 function result = cos (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (cos (x.infsup));
-## cos is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (cos (x.infsup));
+  ## cos is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{X} =} tanrev (@var{C}, @var{X})
 ## @deftypemethodx {@@infsupdec} {@var{X} =} tanrev (@var{C})
-## 
+##
 ## Compute the reverse tangent function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -44,23 +44,23 @@
 
 function result = tanrev (c, x)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     x = infsupdec (-inf, inf);
-endif
-if (not (isa (c, "infsupdec")))
+  endif
+  if (not (isa (c, "infsupdec")))
     c = infsupdec (c);
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-result = infsupdec (tanrev (c.infsup, x.infsup), "trv");
-result.dec(isnai (c) | isnai (x)) = _ill ();
+  result = infsupdec (tanrev (c.infsup, x.infsup), "trv");
+  result.dec(isnai (c) | isnai (x)) = _ill ();
 
 endfunction
 

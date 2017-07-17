@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} dilog (@var{X})
-## 
+##
 ## Compute the real part of the dilogarithm function.
 ##
 ## @tex
@@ -52,14 +52,14 @@
 
 function result = dilog (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (dilog (x.infsup));
-## dilog is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (dilog (x.infsup));
+  ## dilog is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

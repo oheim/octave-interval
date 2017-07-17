@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} uminus (@var{X})
 ## @defopx Operator {@@infsupdec} {-@var{X}}
-## 
+##
 ## Negate all numbers in the interval.
 ##
 ## Accuracy: The result is exact.
@@ -37,14 +37,14 @@
 
 function result = uminus (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## uminus is defined and continuous everywhere
-result = newdec (uminus (x.infsup));
-result.dec = x.dec;
+  ## uminus is defined and continuous everywhere
+  result = newdec (uminus (x.infsup));
+  result.dec = x.dec;
 
 endfunction
 

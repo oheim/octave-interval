@@ -48,20 +48,20 @@
 
 function result = factorial (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## The function is not continuous, since it is defined for non-negative
-## integrals only.  Thus the best possible decoration can be “dac”.
-result = infsupdec (factorial (x.infsup), "dac");
+  ## The function is not continuous, since it is defined for non-negative
+  ## integrals only.  Thus the best possible decoration can be “dac”.
+  result = infsupdec (factorial (x.infsup), "dac");
 
-## The function is defined for non-negative integrals only
-defined = issingleton (x) & fix (sup (x)) == sup (x);
-result.dec(not (defined)) = _trv ();
+  ## The function is defined for non-negative integrals only
+  defined = issingleton (x) & fix (sup (x)) == sup (x);
+  result.dec(not (defined)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

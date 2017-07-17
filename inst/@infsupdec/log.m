@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} log (@var{X})
-## 
+##
 ## Compute the natural logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
@@ -38,18 +38,18 @@
 
 function result = log (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (log (x.infsup));
+  result = newdec (log (x.infsup));
 
-## log is continuous everywhere, but defined for x > 0 only
-persistent domain_hull = infsup (0, inf);
-result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
+  ## log is continuous everywhere, but defined for x > 0 only
+  persistent domain_hull = infsup (0, inf);
+  result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

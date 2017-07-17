@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} roundb (@var{X})
-## 
+##
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded towards the nearest even integer.
 ##
@@ -39,24 +39,26 @@
 
 function result = roundb (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (roundb (x.infsup));
+  result = newdec (roundb (x.infsup));
 
-discontinuous = not (issingleton (result));
-result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
+  discontinuous = not (issingleton (result));
+  result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
 
-onlyrestrictioncontinuous = issingleton (result) & not (...
-    (rem (inf (result), 2) ~= 0 | ...
-        ((fix (sup (x)) == sup (x) | fix (sup (x) * 2) / 2 ~= sup (x)) & ...
-         (fix (inf (x)) == inf (x) | fix (inf (x) * 2) / 2 ~= inf (x)))));
-result.dec(onlyrestrictioncontinuous) = ...
-    min (result.dec(onlyrestrictioncontinuous), _dac ());
+  onlyrestrictioncontinuous = issingleton (result) & ...
+                              not ((rem (inf (result), 2) ~= 0 | ...
+                                    ((fix (sup (x)) == sup (x) | ...
+                                      fix (sup (x) * 2) / 2 ~= sup (x)) & ...
+                                     (fix (inf (x)) == inf (x) | ...
+                                      fix (inf (x) * 2) / 2 ~= inf (x)))));
+  result.dec(onlyrestrictioncontinuous) = ...
+  min (result.dec(onlyrestrictioncontinuous), _dac ());
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

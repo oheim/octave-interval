@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} acosh (@var{X})
-## 
+##
 ## Compute the inverse hyperbolic cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,18 +36,18 @@
 
 function result = acosh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (acosh (x.infsup));
+  result = newdec (acosh (x.infsup));
 
-## acosh is continuous everywhere, but defined for [1, Inf] only
-persistent domain = infsup (1, inf);
-result.dec(not (subset (x.infsup, domain))) = _trv ();
+  ## acosh is continuous everywhere, but defined for [1, Inf] only
+  persistent domain = infsup (1, inf);
+  result.dec(not (subset (x.infsup, domain))) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

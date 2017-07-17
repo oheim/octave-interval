@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} realsqrt (@var{X})
-## 
+##
 ## Compute the square root (for all non-negative numbers).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,19 +36,19 @@
 
 function result = realsqrt (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (realsqrt (x.infsup));
+  result = newdec (realsqrt (x.infsup));
 
-## realsqrt is continuous everywhere, but defined for x >= 0 only
-persistent domain = infsup (0, inf);
-defined = subset (x.infsup, domain);
-result.dec(not (defined)) = _trv ();
+  ## realsqrt is continuous everywhere, but defined for x >= 0 only
+  persistent domain = infsup (0, inf);
+  defined = subset (x.infsup, domain);
+  result.dec(not (defined)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

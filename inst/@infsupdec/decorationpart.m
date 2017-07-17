@@ -60,39 +60,39 @@
 
 function dec = decorationpart (x, type)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     type = "char";
-endif
+  endif
 
-switch (type)
+  switch (type)
     case "char"
-        # see below
+                                # see below
     case "uint8"
-        dec = x.dec;
-        return
+      dec = x.dec;
+      return
     otherwise
-        error ("decorationpart: illegal value for parameter TYPE")
-endswitch
+      error ("decorationpart: illegal value for parameter TYPE")
+  endswitch
 
-persistent dec_translation = {...
-    # 0 = ill
-    "ill", [], [], [], ...
-    # 4 = trv
-    "trv", [], [], [], ...
-    # 8 = def
-    "def", [], [], [], ...
-    # 12 = dac
-    "dac", [], [], [], ...
-    # 16 = com
-    "com"};
+  persistent dec_translation = {...
+                                # 0 = ill
+                                 "ill", [], [], [], ...
+                                # 4 = trv
+                                 "trv", [], [], [], ...
+                                # 8 = def
+                                 "def", [], [], [], ...
+                                # 12 = dac
+                                 "dac", [], [], [], ...
+                                # 16 = com
+                                 "com"};
 
-dec = cell (size (x.dec));
-dec(:) = dec_translation(x.dec(:) + 1);
+  dec = cell (size (x.dec));
+  dec(:) = dec_translation(x.dec(:) + 1);
 
 endfunction
 

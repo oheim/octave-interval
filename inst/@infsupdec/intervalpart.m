@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{S} =} intervalpart (@var{X})
-## 
+##
 ## Return the bare interval for the decorated interval @var{X}.
 ##
 ## @seealso{@@infsupdec/decorationpart}
@@ -28,17 +28,17 @@
 
 function bare = intervalpart (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-if (any (isnai (x)(:)))
+  if (any (isnai (x)(:)))
     warning ("interval:IntvlPartOfNaI", ...
              "intervalpart: NaI has no interval part")
-endif
+  endif
 
-bare = x.infsup;
+  bare = x.infsup;
 
 endfunction
 

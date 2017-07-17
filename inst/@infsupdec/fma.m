@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} fma (@var{X}, @var{Y}, @var{Z})
-## 
+##
 ## Fused multiply and add @code{@var{X} * @var{Y} + @var{Z}}.
 ##
 ## This function is semantically equivalent to evaluating multiplication and
@@ -43,24 +43,24 @@
 
 function result = fma (x, y, z)
 
-if (nargin ~= 3)
+  if (nargin ~= 3)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
-if (not (isa (z, "infsupdec")))
+  endif
+  if (not (isa (z, "infsupdec")))
     z = infsupdec (z);
-endif
+  endif
 
-result = newdec (fma (x.infsup, y.infsup, z.infsup));
-## fma is defined and continuous everywhere
-result.dec = min (result.dec, min (x.dec, min (y.dec, z.dec)));
+  result = newdec (fma (x.infsup, y.infsup, z.infsup));
+  ## fma is defined and continuous everywhere
+  result.dec = min (result.dec, min (x.dec, min (y.dec, z.dec)));
 
 endfunction
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} erfc (@var{X})
-## 
+##
 ## Compute the complementary error function @code{1 - erf (@var{X})}.
 ##
 ## @tex
@@ -53,14 +53,14 @@
 
 function result = erfc (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (erfc (x.infsup));
-## erfc is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (erfc (x.infsup));
+  ## erfc is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

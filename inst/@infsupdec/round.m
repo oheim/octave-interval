@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} round (@var{X})
-## 
+##
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded away from zero (towards +Inf or -Inf depending on the sign).
 ##
@@ -39,26 +39,28 @@
 
 function result = round (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (round (x.infsup));
+  result = newdec (round (x.infsup));
 
-## Round is like a scaled fix function
-discontinuous = not (issingleton (result));
-result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
+  ## Round is like a scaled fix function
+  discontinuous = not (issingleton (result));
+  result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
 
-onlyrestrictioncontinuous = issingleton (result) & not (...
-    (sup (x) >= 0 | ...
-            fix (sup (x)) == sup (x) | fix (sup (x) * 2) / 2 ~= sup (x)) & ...
-    (inf (x) <= 0 | ...
-            fix (inf (x)) == inf (x) | fix (inf (x) * 2) / 2 ~= inf (x)));
-result.dec(onlyrestrictioncontinuous) = ...
-    min (result.dec(onlyrestrictioncontinuous), _dac ());
+  onlyrestrictioncontinuous = issingleton (result) & ...
+                              not ((sup (x) >= 0 | ...
+                                    fix (sup (x)) == sup (x) | ...
+                                    fix (sup (x) * 2) / 2 ~= sup (x)) & ...
+                                   (inf (x) <= 0 | ...
+                                    fix (inf (x)) == inf (x) | ...
+                                    fix (inf (x) * 2) / 2 ~= inf (x)));
+  result.dec(onlyrestrictioncontinuous) = ...
+  min (result.dec(onlyrestrictioncontinuous), _dac ());
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

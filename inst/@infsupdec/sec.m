@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} sec (@var{X})
-## 
+##
 ## Compute the secant in radians, that is the reciprocal cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,19 +36,19 @@
 
 function result = sec (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (sec (x.infsup));
+  result = newdec (sec (x.infsup));
 
-## Because sec (nextdown (pi/2)) < realmax, we can simple check for
-## a singularity by comparing the result with entire.
-domain = not (isentire (result));
-result.dec(not (domain)) = _trv ();
+  ## Because sec (nextdown (pi/2)) < realmax, we can simple check for
+  ## a singularity by comparing the result with entire.
+  domain = not (isentire (result));
+  result.dec(not (domain)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

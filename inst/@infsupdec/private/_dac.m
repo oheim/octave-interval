@@ -24,6 +24,6 @@
 ## Created: 2015-04-18
 
 function d = _dac ()
-## See IEEE Std 1788-2015 14.4 Interchange representations and encodings
-persistent d = uint8 (12);
+  ## See IEEE Std 1788-2015 14.4 Interchange representations and encodings
+  persistent d = uint8 (12);
 endfunction

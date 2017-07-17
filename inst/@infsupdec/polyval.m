@@ -45,20 +45,20 @@
 
 function result = polyval (p, x)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (p, "infsupdec")))
+  endif
+  if (not (isa (p, "infsupdec")))
     p = infsupdec (p);
-endif
+  endif
 
-result = newdec (polyval (p.infsup, x.infsup));
-result.dec = min (result.dec, min (min (p.dec), x.dec));
+  result = newdec (polyval (p.infsup, x.infsup));
+  result.dec = min (result.dec, min (min (p.dec), x.dec));
 
 endfunction
 

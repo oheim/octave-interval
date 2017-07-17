@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} acos (@var{X})
-## 
+##
 ## Compute the inverse cosine in radians (arccosine).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,18 +36,18 @@
 
 function result = acos (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (acos (x.infsup));
+  result = newdec (acos (x.infsup));
 
-## acos is continuous everywhere, but defined for [-1, 1] only
-persistent domain = infsup (-1, 1);
-result.dec(not (subset (x.infsup, domain))) = _trv ();
+  ## acos is continuous everywhere, but defined for [-1, 1] only
+  persistent domain = infsup (-1, 1);
+  result.dec(not (subset (x.infsup, domain))) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

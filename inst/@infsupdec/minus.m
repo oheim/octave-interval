@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} minus (@var{X}, @var{Y})
 ## @defopx Operator {@@infsupdec} {@var{X} - @var{Y}}
-## 
+##
 ## Subtract all numbers of interval @var{Y} from all numbers of @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -39,21 +39,21 @@
 
 function result = minus (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = newdec (minus (x.infsup, y.infsup));
-## minus is defined and continuous everywhere
-result.dec = min (result.dec, min (x.dec, y.dec));
+  result = newdec (minus (x.infsup, y.infsup));
+  ## minus is defined and continuous everywhere
+  result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{Y} =} powrev2 (@var{A}, @var{C}, @var{Y})
 ## @deftypemethodx {@@infsupdec} {@var{Y} =} powrev2 (@var{A}, @var{C})
-## 
+##
 ## Compute the reverse power function for the second parameter.
 ##
 ## That is, an enclosure of all @code{y ∈ @var{Y}} where
@@ -44,27 +44,27 @@
 
 function result = powrev2 (a, c, y)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     y = infsupdec (-inf, inf);
-endif
-if (not (isa (a, "infsupdec")))
+  endif
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (c, "infsupdec")))
+  endif
+  if (not (isa (c, "infsupdec")))
     c = infsupdec (c);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-## inverse power is not a point function
-result = infsupdec (powrev2 (a.infsup, c.infsup, y.infsup), "trv");
-result.dec(isnai (y) | isnai (a) | isnai (c)) = _ill ();
+  ## inverse power is not a point function
+  result = infsupdec (powrev2 (a.infsup, c.infsup, y.infsup), "trv");
+  result.dec(isnai (y) | isnai (a) | isnai (c)) = _ill ();
 
 endfunction
 

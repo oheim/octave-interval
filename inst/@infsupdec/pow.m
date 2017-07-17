@@ -16,8 +16,8 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} pow (@var{X}, @var{Y})
-## 
-## Compute the simple power function on intervals defined by 
+##
+## Compute the simple power function on intervals defined by
 ## @code{exp (@var{Y} * log (@var{X}))}.
 ##
 ## The function is only defined where @var{X} is positive or where @var{X} is
@@ -40,29 +40,29 @@
 
 function result = pow (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = newdec (pow (x.infsup, y.infsup));
+  result = newdec (pow (x.infsup, y.infsup));
 
-## pow is continuous everywhere (where it is defined),
-## but defined for x > 0 or (x = 0 and y > 0) only
-persistent nonnegative = infsup (0, inf);
-domain = interior (x.infsup, nonnegative) | ...
-        (subset (x.infsup, nonnegative) & interior (y.infsup, nonnegative));
+  ## pow is continuous everywhere (where it is defined),
+  ## but defined for x > 0 or (x = 0 and y > 0) only
+  persistent nonnegative = infsup (0, inf);
+  domain = interior (x.infsup, nonnegative) | ...
+           (subset (x.infsup, nonnegative) & interior (y.infsup, nonnegative));
 
-result.dec(not (domain)) = _trv ();
+  result.dec(not (domain)) = _trv ();
 
-result.dec = min (result.dec, min (x.dec, y.dec));
+  result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

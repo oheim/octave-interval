@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} pow2 (@var{X})
-## 
+##
 ## Compute @code{2^x} for all numbers in @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,14 +36,14 @@
 
 function result = pow2 (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (pow2 (x.infsup));
-## pow2 is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (pow2 (x.infsup));
+  ## pow2 is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

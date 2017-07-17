@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} eq (@var{A}, @var{B})
 ## @defopx Operator {@@infsupdec} {@var{A} == @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for equality.
 ##
 ## True, if all numbers from @var{A} are also contained in @var{B} and vice
@@ -41,20 +41,20 @@
 
 function result = eq (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-result = eq (a.infsup, b.infsup);
-result(isnai (a) | isnai (b)) = false ();
+  result = eq (a.infsup, b.infsup);
+  result(isnai (a) | isnai (b)) = false ();
 
 endfunction
 

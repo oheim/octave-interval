@@ -20,7 +20,7 @@
 ## @deftypemethodx {@@infsupdec} {M =} diag (@var{V}, @var{K})
 ## @deftypemethodx {@@infsupdec} {M =} diag (@var{V}, @var{M}, @var{N})
 ## @deftypemethodx {@@infsupdec} {V =} diag (@var{M}, @var{K})
-## 
+##
 ## Create a diagonal matrix @var{M} with vector @var{V} on diagonal @var{K} or
 ## extract a vector @var{V} from the @var{K}-th diagonal of matrix @var{M}.
 ##
@@ -30,7 +30,7 @@
 ## @group
 ## diag (infsupdec (1 : 3))
 ##   @result{} ans = 3×3 interval matrix
-##     
+##
 ##        [1]_com   [0]_com   [0]_com
 ##        [0]_com   [2]_com   [0]_com
 ##        [0]_com   [0]_com   [3]_com
@@ -44,23 +44,23 @@
 
 function x = diag (x, varargin)
 
-if (nargin > 3)
+  if (nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if ((nargin >= 2 && isa (varargin{1}, 'infsup')) || ...
-    (nargin >= 3 && isa (varargin{2}, 'infsup')))
+  if ((nargin >= 2 && isa (varargin{1}, 'infsup')) || ...
+      (nargin >= 3 && isa (varargin{2}, 'infsup')))
     error ('diag: invalid argument; only the first may be an interval');
-endif
+  endif
 
-x.dec(x.dec == 0) = uint8 (255);
+  x.dec(x.dec == 0) = uint8 (255);
 
-x.infsup = diag (x.infsup, varargin{:});
-x.dec = diag (x.dec, varargin{:});
+  x.infsup = diag (x.infsup, varargin{:});
+  x.dec = diag (x.dec, varargin{:});
 
-x.dec(x.dec == uint8 (0)) = _com (); # any new elements are [0]_com
-x.dec(x.dec == uint8 (255)) = uint8 (0);
+  x.dec(x.dec == uint8 (0)) = _com (); # any new elements are [0]_com
+  x.dec(x.dec == uint8 (255)) = uint8 (0);
 
 endfunction
 

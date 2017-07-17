@@ -18,7 +18,7 @@
 ## @defmethod {@@infsupdec} max (@var{X})
 ## @defmethodx {@@infsupdec} max (@var{X}, @var{Y})
 ## @defmethodx {@@infsupdec} max (@var{X}, [], @var{DIM})
-## 
+##
 ## Compute the maximum value chosen from intervals.
 ##
 ## This function does not return the greatest element of the interval (see
@@ -50,39 +50,39 @@
 
 function result = max (x, y, dim)
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-switch (nargin)
+  switch (nargin)
     case 1
-        bare = max (x.infsup);
+      bare = max (x.infsup);
     case 2
-        if (not (isa (y, "infsupdec")))
-            y = infsupdec (y);
-        endif
-        bare = max (x.infsup, y.infsup);
+      if (not (isa (y, "infsupdec")))
+        y = infsupdec (y);
+      endif
+      bare = max (x.infsup, y.infsup);
     case 3
-        if (not (builtin ("isempty", y)))
-            warning ("max: second argument is ignored");
-        endif
-        bare = max (x.infsup, [], dim);
+      if (not (builtin ("isempty", y)))
+        warning ("max: second argument is ignored");
+      endif
+      bare = max (x.infsup, [], dim);
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-result = newdec (bare);
-## max is defined and continuous everywhere
-switch (nargin)
+  result = newdec (bare);
+  ## max is defined and continuous everywhere
+  switch (nargin)
     case 1
-        result.dec = min (result.dec, min (x.dec));
+      result.dec = min (result.dec, min (x.dec));
     case 2
-        warning ("off", "Octave:broadcast", "local");
-        result.dec = min (result.dec, min (x.dec, y.dec));
+      warning ("off", "Octave:broadcast", "local");
+      result.dec = min (result.dec, min (x.dec, y.dec));
     case 3
-        result.dec = min (result.dec, min (x.dec, [], dim));
-endswitch
+      result.dec = min (result.dec, min (x.dec, [], dim));
+  endswitch
 
 endfunction
 

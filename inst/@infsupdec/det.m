@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} det (@var{A})
-## 
+##
 ## Compute the determinant of matrix @var{A}.
 ##
 ## The determinant for matrices of size 3×3 or greater is computed via L-U
@@ -39,13 +39,13 @@
 
 function result = det (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (det (x.infsup));
-result.dec = min (result.dec, min (min (x.dec)));
+  result = newdec (det (x.infsup));
+  result.dec = min (result.dec, min (min (x.dec)));
 
 endfunction
 

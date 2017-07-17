@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} mince (@var{X})
 ## @defmethodx {@@infsupdec} mince (@var{X}, @var{N})
-## 
+##
 ## Mince interval @var{X} into a row vector of @var{N} sub-intervals of equal
 ## size.
 ##
@@ -46,19 +46,19 @@
 
 function result = mince (x, n)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (nargin < 2)
+  endif
+  if (nargin < 2)
     n = 100;
-endif
+  endif
 
-result = infsupdec (mince (x.infsup, n), "trv");
-result.dec = min (result.dec, x.dec);
+  result = infsupdec (mince (x.infsup, n), "trv");
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

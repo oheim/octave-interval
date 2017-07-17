@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} abs (@var{X})
-## 
+##
 ## Compute the absolute value of numbers.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -38,14 +38,14 @@
 
 function result = abs (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (abs (x.infsup));
-## abs is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (abs (x.infsup));
+  ## abs is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

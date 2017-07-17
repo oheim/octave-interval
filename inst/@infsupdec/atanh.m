@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} atanh (@var{X})
-## 
+##
 ## Compute the inverse hyperbolic tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,18 +36,18 @@
 
 function result = atanh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (atanh (x.infsup));
+  result = newdec (atanh (x.infsup));
 
-## atanh is continuous everywhere, but defined for ]-1, 1[ only
-persistent domain_hull = infsup (-1, 1);
-result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
+  ## atanh is continuous everywhere, but defined for ]-1, 1[ only
+  persistent domain_hull = infsup (-1, 1);
+  result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

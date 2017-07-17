@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} gamma (@var{X})
-## 
+##
 ## Compute the gamma function.
 ##
 ## @tex
@@ -28,7 +28,7 @@
 ## @group
 ## @verbatim
 ##              ∞
-##             /  
+##             /
 ## gamma (x) = | t^(x - 1) * exp (-t) dt
 ##             /
 ##            0
@@ -37,7 +37,7 @@
 ## @end ifnottex
 ##
 ## Accuracy: The result is a valid enclosure.  The result is tightest for
-## @var{X} >= -10. 
+## @var{X} >= -10.
 ##
 ## @example
 ## @group
@@ -54,20 +54,20 @@
 
 function result = gamma (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (gamma (x.infsup));
-## gamma is continuous where it is defined
+  result = newdec (gamma (x.infsup));
+  ## gamma is continuous where it is defined
 
-undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
-            (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
-            (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
-result.dec(undefined) = _trv ();
+  undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
+              (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
+              (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
+  result.dec(undefined) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

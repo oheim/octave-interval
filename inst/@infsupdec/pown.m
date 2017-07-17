@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} pown (@var{X}, @var{P})
-## 
+##
 ## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.
 ##
 ## Monomials are defined for all real numbers and the special monomial
@@ -39,18 +39,18 @@
 
 function result = pown (x, p)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (pown (x.infsup, p));
+  result = newdec (pown (x.infsup, p));
 
-## x^P is undefined for x == 0 and P < 0
-domain = p >= 0 | not (ismember (0, x));
-result.dec(not (domain)) = _trv ();
+  ## x^P is undefined for x == 0 and P < 0
+  domain = p >= 0 | not (ismember (0, x));
+  result.dec(not (domain)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

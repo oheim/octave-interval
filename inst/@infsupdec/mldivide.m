@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} mldivide (@var{X}, @var{Y})
 ## @defopx Operator {@@infsupdec} {@var{X} \ @var{Y}}
-## 
+##
 ## Return the interval matrix left division of @var{X} and @var{Y}.
 ##
 ## Accuracy: The result is a valid enclosure.
@@ -39,21 +39,21 @@
 
 function result = mldivide (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-## Reverse operations should not carry decoration
-result = infsupdec (mldivide (x.infsup, y.infsup), "trv");
-warning ("off", "Octave:broadcast", "local");
-result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
+  ## Reverse operations should not carry decoration
+  result = infsupdec (mldivide (x.infsup, y.infsup), "trv");
+  warning ("off", "Octave:broadcast", "local");
+  result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
 
 endfunction
 

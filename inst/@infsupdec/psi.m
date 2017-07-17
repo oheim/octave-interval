@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} psi (@var{X})
-## 
+##
 ## Compute the digamma function, also known as the psi function.
 ##
 ## @tex
@@ -52,24 +52,24 @@
 
 function result = psi (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-if (isnai (x))
+  if (isnai (x))
     result = x;
     return
-endif
+  endif
 
-result = newdec (psi (x.infsup));
-## psi is continuous where it is defined
-undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
-            (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
-            (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
-result.dec(undefined) = _trv ();
+  result = newdec (psi (x.infsup));
+  ## psi is continuous where it is defined
+  undefined = (inf (x) <= 0 & fix (inf (x)) == inf (x)) | ...
+              (sup (x) <= 0 & fix (sup (x)) == sup (x)) | ...
+              (inf (x) < 0 & ceil (inf (x)) <= floor (sup (x)));
+  result.dec(undefined) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

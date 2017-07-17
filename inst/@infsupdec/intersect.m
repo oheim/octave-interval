@@ -18,7 +18,7 @@
 ## @defmethod {@@infsupdec} intersect (@var{A})
 ## @defmethodx {@@infsupdec} intersect (@var{A}, @var{B})
 ## @defmethodx {@@infsupdec} intersect (@var{A}, [], @var{DIM})
-## 
+##
 ## Intersect intervals.
 ##
 ## With two arguments the intersection is built pair-wise.  Otherwise the
@@ -48,32 +48,32 @@
 
 function result = intersect (a, b, dim)
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
+  endif
 
-switch (nargin)
+  switch (nargin)
     case 1
-        result = infsupdec (intersect (a.infsup), "trv");
-        result.dec = min (result.dec, min (a.dec));
-        
+      result = infsupdec (intersect (a.infsup), "trv");
+      result.dec = min (result.dec, min (a.dec));
+
     case 2
-        if (not (isa (b, "infsupdec")))
-            b = infsupdec (b);
-        endif
-        result = infsupdec (intersect (a.infsup, b.infsup), "trv");
-        warning ("off", "Octave:broadcast", "local");
-        result.dec = min (result.dec, min (a.dec, b.dec));
+      if (not (isa (b, "infsupdec")))
+        b = infsupdec (b);
+      endif
+      result = infsupdec (intersect (a.infsup, b.infsup), "trv");
+      warning ("off", "Octave:broadcast", "local");
+      result.dec = min (result.dec, min (a.dec, b.dec));
     case 3
-        if (not (builtin ("isempty", b)))
-            warning ("intersect: second argument is ignored");
-        endif
-        result = infsupdec (intersect (a.infsup, [], dim), "trv");
-        result.dec = min (result.dec, min (a.dec, [], dim));
+      if (not (builtin ("isempty", b)))
+        warning ("intersect: second argument is ignored");
+      endif
+      result = infsupdec (intersect (a.infsup, [], dim), "trv");
+      result.dec = min (result.dec, min (a.dec, [], dim));
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
 endfunction
 
