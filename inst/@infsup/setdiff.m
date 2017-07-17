@@ -38,43 +38,43 @@
 
 function a = setdiff (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
+  endif
 
-## Resize, if broadcasting is needed
-if (not (size_equal (a.inf, b.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (a.inf, b.inf)))
     a.inf = ones (size (b.inf)) .* a.inf;
     a.sup = ones (size (b.inf)) .* a.sup;
     b.inf = ones (size (a.inf)) .* b.inf;
     b.sup = ones (size (a.inf)) .* b.sup;
-endif
+  endif
 
-l = a.inf;
-u = a.sup;
+  l = a.inf;
+  u = a.sup;
 
-select = b.sup >= a.sup & b.inf > a.inf;
-u(select) = min (u(select), b.inf(select));
+  select = b.sup >= a.sup & b.inf > a.inf;
+  u(select) = min (u(select), b.inf(select));
 
-select = b.inf <= a.inf & b.sup < a.sup;
-l(select) = max (l(select), b.sup(select));
+  select = b.inf <= a.inf & b.sup < a.sup;
+  l(select) = max (l(select), b.sup(select));
 
-emptyresult = b.inf <= a.inf & b.sup >= a.sup;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = b.inf <= a.inf & b.sup >= a.sup;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
-u(u == 0) = +0;
+  l(l == 0) = -0;
+  u(u == 0) = +0;
 
-a.inf = l;
-a.sup = u;
+  a.inf = l;
+  a.sup = u;
 
 endfunction
 

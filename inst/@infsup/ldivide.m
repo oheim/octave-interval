@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} ldivide (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} .\ @var{Y}}
-## 
+##
 ## Divide all numbers of interval @var{Y} by all numbers of @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -39,12 +39,12 @@
 
 function result = ldivide (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-result = rdivide (y, x);
+  result = rdivide (y, x);
 
 endfunction
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} coth (@var{X})
-## 
+##
 ## Compute the hyperbolic cotangent, that is the reciprocal hyperbolic tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,32 +36,32 @@
 
 function x = coth (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = u = zeros (size (x.inf));
+  l = u = zeros (size (x.inf));
 
-select = x.inf >= 0 | x.sup <= 0;
-if (any (select(:)))
+  select = x.inf >= 0 | x.sup <= 0;
+  if (any (select(:)))
     l(select) = mpfr_function_d ('coth', -inf, x.sup(select));
     l(select & x.sup == 0) = -inf;
     u(select) = mpfr_function_d ('coth', +inf, x.inf(select));
     u(select & x.inf == 0) = inf;
-endif
-select = x.inf < 0 & x.sup > 0;
-if (any (select(:)))
+  endif
+  select = x.inf < 0 & x.sup > 0;
+  if (any (select(:)))
     l(select) = -inf;
     u(select) = inf;
-endif
+  endif
 
-emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

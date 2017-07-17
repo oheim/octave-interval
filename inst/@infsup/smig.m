@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} smig (@var{X})
-## 
+##
 ## Get the signed mignitude of numbers in interval @var{X}, that is the unique
 ## number closest to zero for each element.
 ##
@@ -39,15 +39,15 @@
 
 function result = smig (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = zeros (size (x.inf));
-result(x.inf > 0) = x.inf;
-result(x.sup < 0) = x.sup;
-result(isempty (x)) = nan ();
+  result = zeros (size (x.inf));
+  result(x.inf > 0) = x.inf;
+  result(x.sup < 0) = x.sup;
+  result(isempty (x)) = nan ();
 
 endfunction
 

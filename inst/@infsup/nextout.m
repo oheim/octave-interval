@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} nextout (@var{X})
-## 
+##
 ## Increases the interval's boundaries in each direction to the next number.
 ##
 ## This is the equivalent function to IEEE 754's nextDown and nextUp.
@@ -36,19 +36,19 @@
 
 function x = nextout (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-persistent delta = pow2 (-1074);
-l = mpfr_function_d ('minus', -inf, x.inf, delta);
-u = mpfr_function_d ('plus',  +inf, x.sup, delta);
+  persistent delta = pow2 (-1074);
+  l = mpfr_function_d ('minus', -inf, x.inf, delta);
+  u = mpfr_function_d ('plus',  +inf, x.sup, delta);
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

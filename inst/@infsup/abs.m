@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} abs (@var{X})
-## 
+##
 ## Compute the absolute value of numbers.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -38,26 +38,26 @@
 
 function x = abs (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## This is already correct, if the interval(s) are non-negative.
-l = x.inf;
-u = x.sup;
+  ## This is already correct, if the interval(s) are non-negative.
+  l = x.inf;
+  u = x.sup;
 
-## This is even correct, if the interval(s) are empty.
-notpositive = (x.sup <= 0);
-l(notpositive) = -x.sup(notpositive);
-u(notpositive) = -x.inf(notpositive);
+  ## This is even correct, if the interval(s) are empty.
+  notpositive = (x.sup <= 0);
+  l(notpositive) = -x.sup(notpositive);
+  u(notpositive) = -x.inf(notpositive);
 
-zerointerior = (x.inf < 0 & not (notpositive));
-l(zerointerior) = -0;
-u(zerointerior) = max (-x.inf(zerointerior), x.sup(zerointerior));
+  zerointerior = (x.inf < 0 & not (notpositive));
+  l(zerointerior) = -0;
+  u(zerointerior) = max (-x.inf(zerointerior), x.sup(zerointerior));
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

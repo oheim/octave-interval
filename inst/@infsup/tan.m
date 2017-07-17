@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} tan (@var{X})
-## 
+##
 ## Compute the tangent in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,45 +36,49 @@
 
 function x = tan (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = u = zeros (size (x));
+  l = u = zeros (size (x));
 
-## Check, if wid (x) is certainly greater than pi. This may save computation of
-## some tangent values.
-width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
-persistent pi = infsup ("pi");
-certainlyfullperiod = width >= sup (pi);
+  ## Check, if wid (x) is certainly greater than pi. This may save
+  ## computation of some tangent values.
+  width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
+  persistent pi = infsup ("pi");
+  certainlyfullperiod = width >= sup (pi);
 
-possiblynotfullperiod = not (certainlyfullperiod);
-if (__check_crlibm__ ())
-    l(possiblynotfullperiod) = crlibm_function ('tan', -inf, x.inf(possiblynotfullperiod));
-    u(possiblynotfullperiod) = crlibm_function ('tan', inf, x.sup(possiblynotfullperiod));
-else
-    l(possiblynotfullperiod) = mpfr_function_d ('tan', -inf, x.inf(possiblynotfullperiod));
-    u(possiblynotfullperiod) = mpfr_function_d ('tan', inf, x.sup(possiblynotfullperiod));
-endif
+  possiblynotfullperiod = not (certainlyfullperiod);
+  if (__check_crlibm__ ())
+    l(possiblynotfullperiod) = crlibm_function ('tan', -inf, ...
+                                                x.inf(possiblynotfullperiod));
+    u(possiblynotfullperiod) = crlibm_function ('tan', inf, ...
+                                                x.sup(possiblynotfullperiod));
+  else
+    l(possiblynotfullperiod) = mpfr_function_d ('tan', -inf, ...
+                                                x.inf(possiblynotfullperiod));
+    u(possiblynotfullperiod) = mpfr_function_d ('tan', inf, ...
+                                                x.sup(possiblynotfullperiod));
+  endif
 
-singularity = certainlyfullperiod | ...
-              l > u | (...
-                  width > 2 & (...
-                      sign (l) == sign (u) | ...
-                      max (abs (l), abs (u)) < 1));
+  singularity = certainlyfullperiod | ...
+                l > u | (...
+                          width > 2 & (...
+                                        sign (l) == sign (u) | ...
+                                        max (abs (l), abs (u)) < 1));
 
-l(singularity) = -inf;
-u(singularity) = inf;
+  l(singularity) = -inf;
+  u(singularity) = inf;
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

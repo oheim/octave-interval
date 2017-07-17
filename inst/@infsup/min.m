@@ -18,7 +18,7 @@
 ## @defmethod {@@infsup} min (@var{X})
 ## @defmethodx {@@infsup} min (@var{X}, @var{Y})
 ## @defmethodx {@@infsup} min (@var{X}, [], @var{DIM})
-## 
+##
 ## Compute the minimum value chosen from intervals.
 ##
 ## This function does not return the least element of the interval (see
@@ -50,36 +50,36 @@
 
 function x = min (x, y, dim)
 
-if (not (isa (x, "infsup")))
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-switch (nargin)
+  switch (nargin)
     case 1
-        l = min (x.inf);
-        u = min (x.sup);
-        l(any (isempty (x))) = inf;
+      l = min (x.inf);
+      u = min (x.sup);
+      l(any (isempty (x))) = inf;
     case 2
-        if (not (isa (y, "infsup")))
-            y = infsup (y);
-        endif
-        l = min (x.inf, y.inf);
-        u = min (x.sup, y.sup);
-        l(isempty (x) | isempty (y)) = inf;
+      if (not (isa (y, "infsup")))
+        y = infsup (y);
+      endif
+      l = min (x.inf, y.inf);
+      u = min (x.sup, y.sup);
+      l(isempty (x) | isempty (y)) = inf;
     case 3
-        if (not (builtin ("isempty", y)))
-            warning ("min: second argument is ignored");
-        endif
-        l = min (x.inf, [], dim);
-        u = min (x.sup, [], dim);
-        l(any (isempty (x), dim)) = inf;
+      if (not (builtin ("isempty", y)))
+        warning ("min: second argument is ignored");
+      endif
+      l = min (x.inf, [], dim);
+      u = min (x.sup, [], dim);
+      l(any (isempty (x), dim)) = inf;
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefun {[@var{BOUNDARY}, @var{UNCERTAIN}] =} uncertainsplit (@var{BOUNDARY})
-## 
+##
 ## The the decimal number itself and the decimal number that represents the
 ## uncertainty for the number.
 ## @end deftypefun
@@ -26,48 +26,50 @@
 
 function [boundary, uncertain] = uncertainsplit (boundary)
 
-uncertainseparator = find (boundary == "?", 1);
-assert (not (isempty (uncertainseparator)));
-exponentseparator = find (lower (boundary) == "e", 1);
-if (isempty (exponentseparator))
+  uncertainseparator = find (boundary == "?", 1);
+  assert (not (isempty (uncertainseparator)));
+  exponentseparator = find (lower (boundary) == "e", 1);
+  if (isempty (exponentseparator))
     exponentfield = "";
     if (uncertainseparator == length (boundary))
-        ulpcount = "";
+      ulpcount = "";
     else
-        ulpcount = boundary ((uncertainseparator + 1) : end);
+      ulpcount = boundary ((uncertainseparator + 1) : end);
     endif
-else
+  else
     exponentfield = boundary (exponentseparator : end);
     ulpcount = boundary ((uncertainseparator + 1) : (exponentseparator - 1));
-endif
-## Strip uncertain information from the boundary
-literal = boundary (1 : (uncertainseparator - 1));
-boundary = strcat (literal, exponentfield);
+  endif
+  ## Strip uncertain information from the boundary
+  literal = boundary (1 : (uncertainseparator - 1));
+  boundary = strcat (literal, exponentfield);
 
-## Make a decimal number that represents the uncertainty
-decimalseparator = find ((literal == ".") + (literal == ","), 1);
-if (isempty (ulpcount))
+  ## Make a decimal number that represents the uncertainty
+  decimalseparator = find ((literal == ".") + (literal == ","), 1);
+  if (isempty (ulpcount))
     ## Half-ULP
     if (isempty (decimalseparator))
-        uncertain = "0.5";
+      uncertain = "0.5";
     else
-        uncertain = strcat (regexprep (literal, "[0-9]", "0"), "5");
+      uncertain = strcat (regexprep (literal, "[0-9]", "0"), "5");
     endif
-else
+  else
     uncertain = ulpcount;
     if (not (isempty (decimalseparator)))
-        ## Insert decimal point in ulp number
-        placesafterpoint = length (literal) - decimalseparator;
-        if (length (uncertain) < length (literal))
-            uncertain = prepad (uncertain, length (literal), "0", 2);
-        endif
-        uncertain = strcat (uncertain (1 : ...
-            (length (uncertain) - placesafterpoint)), ...
-            ".", ...
-            uncertain ((length (uncertain) - placesafterpoint + 1) ...
-            : length (uncertain)));
+      ## Insert decimal point in ulp number
+      placesafterpoint = length (literal) - decimalseparator;
+      if (length (uncertain) < length (literal))
+        uncertain = prepad (uncertain, length (literal), "0", 2);
+      endif
+      uncertain = strcat (uncertain (1 : ...
+                                     (length (uncertain) - ...
+                                      placesafterpoint)), ...
+                          ".", ...
+                          uncertain ((length (uncertain) - ...
+                                      placesafterpoint + 1) ...
+                                     : length (uncertain)));
     endif
-endif
-uncertain = strcat (uncertain, exponentfield);
+  endif
+  uncertain = strcat (uncertain, exponentfield);
 
 endfunction

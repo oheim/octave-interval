@@ -27,12 +27,12 @@
 
 function result = numel (a)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = numel (a.inf);
+  result = numel (a.inf);
 
 endfunction
 

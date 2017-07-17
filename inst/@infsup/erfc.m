@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} erfc (@var{X})
-## 
+##
 ## Compute the complementary error function @code{1 - erf (@var{X})}.
 ##
 ## @tex
@@ -53,23 +53,23 @@
 
 function x = erfc (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## erf is monotonically decreasing
-l = mpfr_function_d ('erfc', -inf, x.sup);
-u = mpfr_function_d ('erfc', +inf, x.inf);
+  ## erf is monotonically decreasing
+  l = mpfr_function_d ('erfc', -inf, x.sup);
+  u = mpfr_function_d ('erfc', +inf, x.inf);
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

@@ -39,49 +39,49 @@
 
 function [Q, R, P] = qr (A)
 
-## We use the Gram-Schmidt process, since Householder reflections would
-## introduce a much larger overestimation for Q in most cases.
+  ## We use the Gram-Schmidt process, since Householder reflections would
+  ## introduce a much larger overestimation for Q in most cases.
 
-n = length (A);
-Q = resize (A, n);
-R = zeros (n);
-P = eye (columns (A));
+  n = length (A);
+  Q = resize (A, n);
+  R = zeros (n);
+  P = eye (columns (A));
 
-for i = 1 : n
+  for i = 1 : n
     iColIdx = substruct ("()", {":", i});
     if (nargout >= 3 && i < columns (A))
-        ## Swap columns of Q, choose the column with maximum norm as next pivot
-        B = subsref (Q, substruct ("()", {":", i : n}));
-        [~, j] = max (mig (sumsq (B, 1)));
-        j += i - 1;
-        if (j != i)
-            swapIdx = 1 : n;
-            swapIdx([i j]) = [j i];
-            swap = @(X) subsref (X, substruct ("()", {":", swapIdx}));
-            Q = swap (Q);
-            R = swap (R);
-            P = P(:, swapIdx(1 : columns (A)));
-        endif
+      ## Swap columns of Q, choose the column with maximum norm as next pivot
+      B = subsref (Q, substruct ("()", {":", i : n}));
+      [~, j] = max (mig (sumsq (B, 1)));
+      j += i - 1;
+      if (j != i)
+        swapIdx = 1 : n;
+        swapIdx([i j]) = [j i];
+        swap = @(X) subsref (X, substruct ("()", {":", swapIdx}));
+        Q = swap (Q);
+        R = swap (R);
+        P = P(:, swapIdx(1 : columns (A)));
+      endif
     endif
     iCol = subsref (Q, iColIdx);
     d = norm (iCol, 2);
     iCol = mulrev (d, iCol, "[-1, +1]");
     Q = subsasgn (Q, iColIdx, iCol);
     R = subsasgn (R, substruct ("()", {i, i}), d);
-    
-    if (i < n)
-        otherColsIdx = substruct ("()", {":", (i + 1) : n});
-        otherCols = subsref (Q, otherColsIdx);
-        d = dot (otherCols, iCol, 1);
-        otherCols -= d .* iCol;
-        Q = subsasgn (Q, otherColsIdx, otherCols);
-        R = subsasgn (R, substruct ("()", {i, (i + 1) : n}), d);
-    endif
-endfor
 
-Q = resize (Q, rows (A));
-R = resize (R, size (A));
-P = inv (P);
+    if (i < n)
+      otherColsIdx = substruct ("()", {":", (i + 1) : n});
+      otherCols = subsref (Q, otherColsIdx);
+      d = dot (otherCols, iCol, 1);
+      otherCols -= d .* iCol;
+      Q = subsasgn (Q, otherColsIdx, otherCols);
+      R = subsasgn (R, substruct ("()", {i, (i + 1) : n}), d);
+    endif
+  endfor
+
+  Q = resize (Q, rows (A));
+  R = resize (R, size (A));
+  P = inv (P);
 
 endfunction
 

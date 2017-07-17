@@ -32,12 +32,12 @@
 
 function result = ctranspose (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = transpose (x);
+  result = transpose (x);
 
 endfunction
 

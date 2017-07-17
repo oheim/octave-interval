@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} uplus (@var{X})
 ## @defopx Operator {@@infsup} {+@var{X}}
-## 
+##
 ## Return the interval itself.
 ##
 ## Accuracy: The result is exact.
@@ -38,10 +38,10 @@
 
 function x = uplus (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
 endfunction
 

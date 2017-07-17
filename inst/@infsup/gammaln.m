@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} gammaln (@var{X})
-## 
+##
 ## Compute the logarithm of the gamma function for positive arguments.
 ##
 ## @tex
@@ -53,48 +53,48 @@
 
 function x = gammaln (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## The gamma function is also defined for negative, non-integral arguments and
-## its logarithm would be defined for −2n <= x <= −2n+1.
-## However, we only compute the function for x > 0.
+  ## The gamma function is also defined for negative, non-integral arguments and
+  ## its logarithm would be defined for −2n <= x <= −2n+1.
+  ## However, we only compute the function for x > 0.
 
-## https://oeis.org/A030169
-persistent x_min_inf = 1.4616321449683623;
-persistent x_min_sup = 1.4616321449683624;
+  ## https://oeis.org/A030169
+  persistent x_min_inf = 1.4616321449683623;
+  persistent x_min_sup = 1.4616321449683624;
 
-## Both gammaln (infsup (x_min_inf)) and gammaln (infsup (x_min_sup)) contain
-## the exact minimum value of gammaln. Thus we can simply split the function's
-## domain in half and assume that each is strictly monotonic.
+  ## Both gammaln (infsup (x_min_inf)) and gammaln (infsup (x_min_sup)) contain
+  ## the exact minimum value of gammaln. Thus we can simply split the function's
+  ## domain in half and assume that each is strictly monotonic.
 
-l = inf (size (x.inf));
-u = -l;
+  l = inf (size (x.inf));
+  u = -l;
 
-## Monotonically decreasing for x1
-x1 = intersect (x, infsup (0, x_min_sup));
-select = not (isempty (x1)) & x1.sup > 0;
-if (any (select(:)))
+  ## Monotonically decreasing for x1
+  x1 = intersect (x, infsup (0, x_min_sup));
+  select = not (isempty (x1)) & x1.sup > 0;
+  if (any (select(:)))
     x1.inf(x1.inf == 0) = 0; # fix negative zero
     l(select) = mpfr_function_d ('gammaln', -inf, x1.sup(select));
     u(select) = mpfr_function_d ('gammaln', +inf, x1.inf(select));
-endif
+  endif
 
-## Monotonically increasing for x2
-x2 = intersect (x, infsup (x_min_inf, inf));
-select = not (isempty (x2));
-if (any (select(:)))
+  ## Monotonically increasing for x2
+  x2 = intersect (x, infsup (x_min_inf, inf));
+  select = not (isempty (x2));
+  if (any (select(:)))
     l(select) = mpfr_function_d ('gammaln', -inf, x2.inf(select));
     u(select) = max (u (select), ...
-                mpfr_function_d ('gammaln', +inf, x2.sup(select)));
-endif
+                     mpfr_function_d ('gammaln', +inf, x2.sup(select)));
+  endif
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

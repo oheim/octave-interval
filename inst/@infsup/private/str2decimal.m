@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deffun str2decimal (@var{S})
-## 
+##
 ## Parse a decimal number string @var{S} and split the sign, the mantissa and
 ## the exponent information.
 ##
@@ -61,87 +61,87 @@
 
 function decimal = str2decimal (string)
 
-## Strip Sign
-if (isempty (string))
+  ## Strip Sign
+  if (isempty (string))
     decimal.s = false;
-else
+  else
     decimal.s = (string(1) == "-");
     if (strfind("+-", string(1)))
-        string = string (2:end);
+      string = string (2:end);
     endif
-endif
+  endif
 
-## Split mantissa & exponent
-[decimal.m, decimal.e] = strtok (string, "eE");
+  ## Split mantissa & exponent
+  [decimal.m, decimal.e] = strtok (string, "eE");
 
-## Convert exponent from string to number
-if (isempty (decimal.e))
+  ## Convert exponent from string to number
+  if (isempty (decimal.e))
     decimal.e = int64(0); # 10 ^ 0 = 1
-else
+  else
     if (strfind (decimal.e, ".") || strfind (decimal.e, ","))
-        error ("interval:InvalidOperand", ...
-               ["invalid decimal number with rational exponent: " string]);
+      error ("interval:InvalidOperand", ...
+             ["invalid decimal number with rational exponent: " string]);
     endif
     decimal.e = str2double (decimal.e(2:end)); # remove “e” and convert
     if (isnan (decimal.e) || ... # greater than realmax or illegal format
         abs(decimal.e) >= pow2 (53)) # possibly lost precision
-        error ("interval:InvalidOperand", ...
-               ["invalid decimal number with big/invalid exponent: " string]);
+      error ("interval:InvalidOperand", ...
+             ["invalid decimal number with big/invalid exponent: " string]);
     endif
     decimal.e = int64 (decimal.e);
-endif
+  endif
 
-## Normalize mantissa: remove leading zeroes within string representation
-## before decimal point. This does not affect the exponent and is therefore
-## preferred over the normalization below, which might produce overflow errors.
-decimal.m = decimal.m(find(decimal.m ~= "0", 1):end);
+  ## Normalize mantissa: remove leading zeroes within string representation
+  ## before decimal point. This does not affect the exponent and is therefore
+  ## preferred over the normalization below, which might produce overflow errors.
+  decimal.m = decimal.m(find(decimal.m ~= "0", 1):end);
 
-## Split Mantissa at decimal point
-decimal.m = strsplit (decimal.m, {".",","});
-switch length(decimal.m)
+  ## Split Mantissa at decimal point
+  decimal.m = strsplit (decimal.m, {".",","});
+  switch length(decimal.m)
     case 0
-        decimal.m = {"", ""};
+      decimal.m = {"", ""};
     case 1
-        decimal.m{2} = "";
+      decimal.m{2} = "";
     case 2
-        # nothing to do
+                                # nothing to do
     otherwise
-        error ("interval:InvalidOperand", ...
-               ["invalid decimal number with multiple decimal points: " ...
+      error ("interval:InvalidOperand", ...
+             ["invalid decimal number with multiple decimal points: " ...
                 string]);
-endswitch
+  endswitch
 
-## Normalize mantissa string: move decimal point to the left
-if (decimal.e + length (decimal.m{1}) >= intmax (class (decimal.e)))
+  ## Normalize mantissa string: move decimal point to the left
+  if (decimal.e + length (decimal.m{1}) >= intmax (class (decimal.e)))
     error ("interval:InvalidOperand", ...
            ["exponent overflow during normalization: " string ]);
-endif
-decimal.e += length (decimal.m{1});
-decimal.m = strcat (decimal.m{1}, decimal.m{2});
+  endif
+  decimal.e += length (decimal.m{1});
+  decimal.m = strcat (decimal.m{1}, decimal.m{2});
 
-## Convert mantissa to numeric vector with decimal digits
-decimal.m = str2num (decimal.m');
+  ## Convert mantissa to numeric vector with decimal digits
+  decimal.m = str2num (decimal.m');
 
-## Normalize mantissa: remove leading zeroes
-firstnonzerodigit = find (decimal.m ~= 0, 1, "first");
-if (firstnonzerodigit > 1)
+  ## Normalize mantissa: remove leading zeroes
+  firstnonzerodigit = find (decimal.m ~= 0, 1, "first");
+  if (firstnonzerodigit > 1)
     decimal.m = decimal.m(firstnonzerodigit:end);
     if (decimal.e - (firstnonzerodigit - 1) <= intmin (class (decimal.e)))
-        error ("interval:InvalidOperand", ...
-               ["exponent overflow during normalization: " string ]);
+      error ("interval:InvalidOperand", ...
+             ["exponent overflow during normalization: " string ]);
     endif
     decimal.e -= firstnonzerodigit - 1;
-elseif (isempty (firstnonzerodigit)) # all digits are zero
+  elseif (isempty (firstnonzerodigit)) # all digits are zero
     decimal.s = false;
     decimal.m = [];
     decimal.e = int64 (0);
     return
-endif
+  endif
 
-## Normalize mantissa: remove trailing zeroes;
-lastnonzerodigit = find (decimal.m ~= 0, 1, "last");
-if (lastnonzerodigit < length (decimal.m))
+  ## Normalize mantissa: remove trailing zeroes;
+  lastnonzerodigit = find (decimal.m ~= 0, 1, "last");
+  if (lastnonzerodigit < length (decimal.m))
     decimal.m = decimal.m(1:lastnonzerodigit);
-endif
+  endif
 
 endfunction

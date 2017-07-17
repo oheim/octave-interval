@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} det (@var{A})
-## 
+##
 ## Compute the determinant of matrix @var{A}.
 ##
 ## The determinant for matrices of size 3×3 or greater is computed via L-U
@@ -39,55 +39,55 @@
 
 function result = det (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-if (not (issquare (x.inf)))
+  if (not (issquare (x.inf)))
     error ("det: argument must be a square matrix");
-endif
+  endif
 
-if (any (isempty (x)(:)))
+  if (any (isempty (x)(:)))
     result = infsup ();
     return
-endif
+  endif
 
-switch (rows (x.inf))
+  switch (rows (x.inf))
     case 0
-        result = infsup (1);
-        return
+      result = infsup (1);
+      return
     case 1
-        result = x;
-        return
+      result = x;
+      return
     case 2
-        ## det ([1, 3; 2, 4]) = 4*1 - 3*2
-        ## The result will be tightest.
-        result = mtimes (infsup ([x.inf(4), -x.sup(3)], ...
-                                 [x.sup(4), -x.inf(3)]), ...
-                         infsup (x.inf(:, 1), x.sup(:, 1)));
-        return
-endswitch
+      ## det ([1, 3; 2, 4]) = 4*1 - 3*2
+      ## The result will be tightest.
+      result = mtimes (infsup ([x.inf(4), -x.sup(3)], ...
+                               [x.sup(4), -x.inf(3)]), ...
+                       infsup (x.inf(:, 1), x.sup(:, 1)));
+      return
+  endswitch
 
-zero = x.inf == 0 & x.sup == 0;
-if (any (all (zero, 1)) || any (all (zero, 2)))
+  zero = x.inf == 0 & x.sup == 0;
+  if (any (all (zero, 1)) || any (all (zero, 2)))
     ## One column or row being zero
     result = infsup (0);
     return
-endif
+  endif
 
-## P * x = L * U, with
-## det (P) = ±1 and det (L) = 1 and det (U) = prod (diag (U))
-##
-## => det (x) = det (P) * det (U)
-[~, U, P] = lu (x);
-result = times (det (P), prod (diag (U)));
+  ## P * x = L * U, with
+  ## det (P) = ±1 and det (L) = 1 and det (U) = prod (diag (U))
+  ##
+  ## => det (x) = det (P) * det (U)
+  [~, U, P] = lu (x);
+  result = times (det (P), prod (diag (U)));
 
-## Integer matrix, determinant must be integral
-if (all (all (fix (x.inf) == x.inf & fix (x.sup) == x.sup)))
+  ## Integer matrix, determinant must be integral
+  if (all (all (fix (x.inf) == x.inf & fix (x.sup) == x.sup)))
     result.inf = ceil (result.inf);
     result.sup = floor (result.sup);
-endif
+  endif
 
 endfunction
 

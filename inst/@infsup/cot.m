@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} cot (@var{X})
-## 
+##
 ## Compute the cotangent in radians, that is the reciprocal tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,43 +36,43 @@
 
 function x = cot (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = u = zeros (size (x));
+  l = u = zeros (size (x));
 
-## Check, if wid (x) is certainly greater than pi. This may save computation of
-## some cotangent values.
-width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
-persistent pi = infsup ("pi");
-certainlyfullperiod = width >= sup (pi);
+  ## Check, if wid (x) is certainly greater than pi. This may save computation of
+  ## some cotangent values.
+  width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
+  persistent pi = infsup ("pi");
+  certainlyfullperiod = width >= sup (pi);
 
-possiblynotfullperiod = not (certainlyfullperiod);
-l(possiblynotfullperiod) = ...
-    mpfr_function_d ('cot', -inf, x.sup(possiblynotfullperiod));
-u(possiblynotfullperiod) = ...
-    mpfr_function_d ('cot', +inf, x.inf(possiblynotfullperiod));
+  possiblynotfullperiod = not (certainlyfullperiod);
+  l(possiblynotfullperiod) = ...
+  mpfr_function_d ('cot', -inf, x.sup(possiblynotfullperiod));
+  u(possiblynotfullperiod) = ...
+  mpfr_function_d ('cot', +inf, x.inf(possiblynotfullperiod));
 
-l(x.sup == 0) = -inf;
-u(x.inf == 0) = +inf;
+  l(x.sup == 0) = -inf;
+  u(x.inf == 0) = +inf;
 
-singularity = certainlyfullperiod | ...
-              l > u | (...
-                  width > 2 & (...
-                      sign (l) == sign (u) | ...
-                      max (abs (l), abs (u)) < 1));
+  singularity = certainlyfullperiod | ...
+                l > u | (...
+                          width > 2 & (...
+                                        sign (l) == sign (u) | ...
+                                        max (abs (l), abs (u)) < 1));
 
-l(singularity) = -inf;
-u(singularity) = inf;
+  l(singularity) = -inf;
+  u(singularity) = inf;
 
-emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

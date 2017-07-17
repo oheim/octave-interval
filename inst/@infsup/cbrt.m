@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} cbrt (@var{X})
-## 
+##
 ## Compute the cube root.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,13 +36,13 @@
 
 function x = cbrt (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x.inf = mpfr_function_d ('cbrt', -inf, x.inf);
-x.sup = mpfr_function_d ('cbrt', +inf, x.sup);
+  x.inf = mpfr_function_d ('cbrt', -inf, x.inf);
+  x.sup = mpfr_function_d ('cbrt', +inf, x.sup);
 
 endfunction
 

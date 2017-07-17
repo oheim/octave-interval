@@ -40,7 +40,7 @@
 
 function result = vertcat (varargin)
 
-result = cat (1, varargin{:});
+  result = cat (1, varargin{:});
 
 endfunction
 

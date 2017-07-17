@@ -34,27 +34,27 @@
 
 function A = subsasgn (A, S, B)
 
-if (nargin ~= 3)
+  if (nargin ~= 3)
     print_usage ();
     return
-endif
-if (not (isa (A, "infsup")))
+  endif
+  if (not (isa (A, "infsup")))
     A = infsup (A);
-endif
-if (not (isa (B, "infsup")))
+  endif
+  if (not (isa (B, "infsup")))
     B = infsup (B);
-elseif (isa (B, "infsupdec"))
+  elseif (isa (B, "infsupdec"))
     ## Workaround for bug #42735
     A = subsasgn (A, S, B);
     return
-endif
+  endif
 
-assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
+  assert (strcmp (S.type, "()"), "only subscripts with parenthesis allowed");
 
 
-A.inf = subsasgn (A.inf, S, B.inf);
-A.sup = subsasgn (A.sup, S, B.sup);
-A.inf(A.inf == 0) = -0; # any new elements are stored as [-0, +0] internally
+  A.inf = subsasgn (A.inf, S, B.inf);
+  A.sup = subsasgn (A.sup, S, B.sup);
+  A.inf(A.inf == 0) = -0; # any new elements are stored as [-0, +0] internally
 
 endfunction
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} erf (@var{X})
-## 
+##
 ## Compute the error function.
 ##
 ## @tex
@@ -53,23 +53,23 @@
 
 function x = erf (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## erf is monotonically increasing
-l = mpfr_function_d ('erf', -inf, x.inf);
-u = mpfr_function_d ('erf', +inf, x.sup);
+  ## erf is monotonically increasing
+  l = mpfr_function_d ('erf', -inf, x.inf);
+  u = mpfr_function_d ('erf', +inf, x.sup);
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

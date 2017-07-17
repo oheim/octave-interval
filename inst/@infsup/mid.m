@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} mid (@var{X})
-## 
+##
 ## Get the midpoint of interval @var{X}.
 ##
 ## If @var{X} is empty, @code{mid (@var{X})} is NaN.
@@ -44,23 +44,23 @@
 
 function result = mid (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## First divide by 2 and then add, because this will prevent overflow.
-## The different rounding modes for division will make errors of 2^-1075
-## with subnormal numbers cancel each other out, or will make the round
-## to nearest prefer the side that had an underflow error.
-l = mpfr_function_d ('rdivide', -inf, x.inf, 2);
-u = mpfr_function_d ('rdivide', +inf, x.sup, 2);
-result = l + u;
+  ## First divide by 2 and then add, because this will prevent overflow.
+  ## The different rounding modes for division will make errors of 2^-1075
+  ## with subnormal numbers cancel each other out, or will make the round
+  ## to nearest prefer the side that had an underflow error.
+  l = mpfr_function_d ('rdivide', -inf, x.inf, 2);
+  u = mpfr_function_d ('rdivide', +inf, x.sup, 2);
+  result = l + u;
 
-result(x.inf == -inf) = -realmax ();
-result(x.sup == inf) = realmax ();
-result(isentire (x)) = 0;
-result(isempty (x)) = nan ();
+  result(x.inf == -inf) = -realmax ();
+  result(x.sup == inf) = realmax ();
+  result(isentire (x)) = 0;
+  result(isempty (x)) = nan ();
 
 endfunction
 

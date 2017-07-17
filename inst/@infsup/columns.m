@@ -27,12 +27,12 @@
 
 function result = columns (a)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = columns (a.inf);
+  result = columns (a.inf);
 
 endfunction
 

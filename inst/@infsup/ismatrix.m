@@ -30,12 +30,12 @@
 ## been solved with GNU Octave 4.0.
 function result = ismatrix (A)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = ismatrix (A.inf);
+  result = ismatrix (A.inf);
 
 endfunction
 

@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} rsqrt (@var{X})
-## 
+##
 ## Compute the reciprocal square root (for all positive numbers).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,17 +36,17 @@
 
 function x = rsqrt (x)
 
-l = mpfr_function_d ('rsqrt', -inf, max (0, x.sup));
-u = mpfr_function_d ('rsqrt', +inf, max (0, x.inf));
+  l = mpfr_function_d ('rsqrt', -inf, max (0, x.sup));
+  u = mpfr_function_d ('rsqrt', +inf, max (0, x.inf));
 
-emptyresult = isempty (x) | x.sup <= 0;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x) | x.sup <= 0;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

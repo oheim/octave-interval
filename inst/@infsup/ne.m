@@ -18,7 +18,7 @@
 ## @defop Method {@@infsup} ne (@var{A}, @var{B})
 ## @defopx Operator {@@infsup} {@var{A} ~= @var{B}}
 ## @defopx Operator {@@infsup} {@var{A} != @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for inequality.
 ##
 ## True, if @var{A} contains a number which is not a member in @var{B} or vice
@@ -34,12 +34,12 @@
 
 function result = ne (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-result = not (eq (a, b));
+  result = not (eq (a, b));
 
 endfunction
 

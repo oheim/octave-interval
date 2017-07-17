@@ -18,7 +18,7 @@
 ## @defmethod {@@infsup} max (@var{X})
 ## @defmethodx {@@infsup} max (@var{X}, @var{Y})
 ## @defmethodx {@@infsup} max (@var{X}, [], @var{DIM})
-## 
+##
 ## Compute the maximum value chosen from intervals.
 ##
 ## This function does not return the greatest element of the interval (see
@@ -50,36 +50,36 @@
 
 function x = max (x, y, dim)
 
-if (not (isa (x, "infsup")))
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-switch (nargin)
+  switch (nargin)
     case 1
-        l = max (x.inf);
-        u = max (x.sup);
-        u(any (isempty (x))) = -inf;
+      l = max (x.inf);
+      u = max (x.sup);
+      u(any (isempty (x))) = -inf;
     case 2
-        if (not (isa (y, "infsup")))
-            y = infsup (y);
-        endif
-        l = max (x.inf, y.inf);
-        u = max (x.sup, y.sup);
-        u(isempty (x) | isempty (y)) = -inf;
+      if (not (isa (y, "infsup")))
+        y = infsup (y);
+      endif
+      l = max (x.inf, y.inf);
+      u = max (x.sup, y.sup);
+      u(isempty (x) | isempty (y)) = -inf;
     case 3
-        if (not (builtin ("isempty", y)))
-            warning ("max: second argument is ignored");
-        endif
-        l = max (x.inf, [], dim);
-        u = max (x.sup, [], dim);
-        u(any (isempty (x), dim)) = -inf;
+      if (not (builtin ("isempty", y)))
+        warning ("max: second argument is ignored");
+      endif
+      l = max (x.inf, [], dim);
+      u = max (x.sup, [], dim);
+      u(any (isempty (x), dim)) = -inf;
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

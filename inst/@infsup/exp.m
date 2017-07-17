@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} exp (@var{X})
-## 
+##
 ## Compute the exponential function.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,25 +36,25 @@
 
 function x = exp (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## exp is monotonically increasing from (-inf, 0) to (inf, inf)
-if (__check_crlibm__ ())
+  ## exp is monotonically increasing from (-inf, 0) to (inf, inf)
+  if (__check_crlibm__ ())
     l = crlibm_function ('exp', -inf, x.inf); # this also works for empty intervals
     u = crlibm_function ('exp', +inf, x.sup); # ... this does not
-else
+  else
     l = mpfr_function_d ('exp', -inf, x.inf); # this also works for empty intervals
     u = mpfr_function_d ('exp', +inf, x.sup); # ... this does not
-endif
+  endif
 
-l(l == 0) = -0;
-u(isempty (x)) = -inf;
+  l(l == 0) = -0;
+  u(isempty (x)) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

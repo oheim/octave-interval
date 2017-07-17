@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} bitunpack (@var{X})
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
-## 
+##
 ## Encode bare interval @var{X} in interchange format.
 ##
 ## The result is a raw bit pattern of length 128 that derive from two binary64
@@ -40,29 +40,29 @@
 
 function result = bitunpack (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## The exchange representation of [Empty] is (+inf, -inf).  The exchange
-## representation of [0, 0] is (-0, +0). Both is guaranteed by the infsup
-## constructor.
+  ## The exchange representation of [Empty] is (+inf, -inf).  The exchange
+  ## representation of [0, 0] is (-0, +0). Both is guaranteed by the infsup
+  ## constructor.
 
-l = bitunpack (x.inf);
-u = bitunpack (x.sup);
+  l = bitunpack (x.inf);
+  u = bitunpack (x.sup);
 
-## Initialize result vector
-result = zeros (1, length (l) + length (u), 'logical');
-if (not (isrow (l)))
+  ## Initialize result vector
+  result = zeros (1, length (l) + length (u), 'logical');
+  if (not (isrow (l)))
     result = result';
-endif
+  endif
 
-## Merge 64 bit blocks from l and u (alternating) together into result.
-target = reshape (1 : length (result), 64, numel (x.inf) + numel (x.sup));
-target(:, 2 : 2 : size (target, 2)) = [];
-result(target) = l;
-result(target + 64) = u;
+  ## Merge 64 bit blocks from l and u (alternating) together into result.
+  target = reshape (1 : length (result), 64, numel (x.inf) + numel (x.sup));
+  target(:, 2 : 2 : size (target, 2)) = [];
+  result(target) = l;
+  result(target + 64) = u;
 
 endfunction
 

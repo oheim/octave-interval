@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sign (@var{X})
-## 
+##
 ## Compute the signum function for each number in interval @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -39,22 +39,22 @@
 
 function x = sign (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = sign (x.inf);
-u = sign (x.sup);
+  l = sign (x.inf);
+  u = sign (x.sup);
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

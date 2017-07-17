@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} inv (@var{A})
-## 
+##
 ## Compute the inverse of the square matrix @var{A}.
 ##
 ## Accuracy: The result is a valid enclosure.
@@ -44,18 +44,18 @@
 
 function result = inv (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-n = length (x);
-if (n <= 1)
+  n = length (x);
+  if (n <= 1)
     result = rdivide (1, x);
     return
-endif
+  endif
 
-result = mldivide (x, eye (n));
+  result = mldivide (x, eye (n));
 
 endfunction
 

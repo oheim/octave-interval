@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} mince (@var{X})
 ## @defmethodx {@@infsup} mince (@var{X}, @var{N})
-## 
+##
 ## Mince interval @var{X} into a row vector of @var{N} sub-intervals of equal
 ## size.
 ##
@@ -46,34 +46,34 @@
 
 function x = mince (x, n)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (nargin < 2)
+  endif
+  if (nargin < 2)
     n = 100;
-endif
+  endif
 
-base = limit = x;
-idx.type = '()';
-idx.subs = {isfinite(x.inf)};
-base = subsasgn (base, idx, infsup (subsref (x.inf, idx)));
-idx.subs = {isfinite(x.sup)};
-limit = subsasgn (limit, idx, infsup (subsref (x.sup, idx)));
+  base = limit = x;
+  idx.type = '()';
+  idx.subs = {isfinite(x.inf)};
+  base = subsasgn (base, idx, infsup (subsref (x.inf, idx)));
+  idx.subs = {isfinite(x.sup)};
+  limit = subsasgn (limit, idx, infsup (subsref (x.sup, idx)));
 
-boundaries = linspace (base, limit, n + 1);
-l = boundaries.inf(:, 1 : end - 1);
-u = boundaries.sup(:, 2 : end);
+  boundaries = linspace (base, limit, n + 1);
+  l = boundaries.inf(:, 1 : end - 1);
+  u = boundaries.sup(:, 2 : end);
 
-empty = vec (isempty (x));
-l(empty, :) = inf;
-u(empty, :) = -inf;
+  empty = vec (isempty (x));
+  l(empty, :) = inf;
+  u(empty, :) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

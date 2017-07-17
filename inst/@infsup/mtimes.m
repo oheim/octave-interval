@@ -48,110 +48,110 @@
 
 function result = mtimes (x, y, accuracy)
 
-if (nargin < 2 || nargin > 3 || (nargin == 3 && not (ischar (accuracy))))
+  if (nargin < 2 || nargin > 3 || (nargin == 3 && not (ischar (accuracy))))
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     y = infsup (y);
-elseif (isa (y, "infsupdec"))
+  elseif (isa (y, "infsupdec"))
     ## Workaround for bug #42735
     result = mtimes (x, y);
     return
-endif
+  endif
 
-if (isscalar (x) || isscalar (y))
+  if (isscalar (x) || isscalar (y))
     result = times (x, y);
     return
-endif
+  endif
 
-if (size (x.inf, 2) ~= size (y.inf, 1))
+  if (size (x.inf, 2) ~= size (y.inf, 1))
     error ("interval:InvalidOperand", ...
            "operator *: nonconformant arguments");
-endif
+  endif
 
-if (nargin >= 3)
+  if (nargin >= 3)
     switch (accuracy)
-        case "valid"
-            ## Fast matrix multiplication uses rounding mode switches, which
-            ## might not work on all systems.  Thus, we validate whether the
-            ## BLAS routines respect rounding modes correctly on the current
-            ## platform and fall back to the slow implementation otherwise.
-            persistent use_rounding_mode = check_rounding_mode ();
-            if (use_rounding_mode)
-                result = fast_mtimes (x, y);
-                return
-            else
-                warning ('interval:rounding', ...
-                         ['mtimes: rounding modes not supported, falling ', ...
-                          'back to slow but accurate matrix multiplication']);
-            endif
-        case "tight"
-            ## Default mode
-        otherwise
-            print_usage();
-            return
+      case "valid"
+        ## Fast matrix multiplication uses rounding mode switches, which
+        ## might not work on all systems.  Thus, we validate whether the
+        ## BLAS routines respect rounding modes correctly on the current
+        ## platform and fall back to the slow implementation otherwise.
+        persistent use_rounding_mode = check_rounding_mode ();
+        if (use_rounding_mode)
+          result = fast_mtimes (x, y);
+          return
+        else
+          warning ('interval:rounding', ...
+                   ['mtimes: rounding modes not supported, falling ', ...
+                    'back to slow but accurate matrix multiplication']);
+        endif
+      case "tight"
+        ## Default mode
+      otherwise
+        print_usage();
+        return
     endswitch
-endif
+  endif
 
-## mtimes could also be computed with a for loop and the dot operation.
-## However, that would take significantly longer (loop + missing JIT-compiler,
-## several OCT-file calls), so we use an optimized
-## OCT-file for that particular operation.
+  ## mtimes could also be computed with a for loop and the dot operation.
+  ## However, that would take significantly longer (loop + missing JIT-compiler,
+  ## several OCT-file calls), so we use an optimized
+  ## OCT-file for that particular operation.
 
-[l, u] = mpfr_matrix_mul_d (x.inf, y.inf, x.sup, y.sup);
-result = infsup (l, u);
+  [l, u] = mpfr_matrix_mul_d (x.inf, y.inf, x.sup, y.sup);
+  result = infsup (l, u);
 
 endfunction
 
 function C = fast_mtimes (A, B)
-## Implements Algorithm 4.8
-## IImul7: interval interval multiplication with 7 point matrix multiplications
-## Rump, Siegried M. 2012. “Fast interval matrix multiplication.”
-## Numerical Algorithms 61(1), 1-34.
-## http://www.ti3.tu-harburg.de/paper/rump/Ru11a.pdf.
-##
-## Although this is the slowest of the published fast algorithms, it is the
-## most accurate.
+  ## Implements Algorithm 4.8
+  ## IImul7: interval interval multiplication with 7 point matrix multiplications
+  ## Rump, Siegried M. 2012. “Fast interval matrix multiplication.”
+  ## Numerical Algorithms 61(1), 1-34.
+  ## http://www.ti3.tu-harburg.de/paper/rump/Ru11a.pdf.
+  ##
+  ## Although this is the slowest of the published fast algorithms, it is the
+  ## most accurate.
 
-[mA, rA] = rad (A);
-[mB, rB] = rad (B);
-rhoA = sign (mA) .* min (abs (mA), rA);
-rhoB = sign (mB) .* min (abs (mB), rB);
-unwind_protect
+  [mA, rA] = rad (A);
+  [mB, rB] = rad (B);
+  rhoA = sign (mA) .* min (abs (mA), rA);
+  rhoB = sign (mB) .* min (abs (mB), rB);
+  unwind_protect
     __setround__ (+inf);
     rC = abs (mA) * rB + rA * (abs (mB) + rB) + (-abs (rhoA)) * abs (rhoB);
     u = mA * mB + rhoA * rhoB + rC;
     __setround__ (-inf);
     l = mA * mB + rhoA * rhoB - rC;
-unwind_protect_cleanup
+  unwind_protect_cleanup
     __setround__ (0.5); # restore default rounding mode (to nearest)
-end_unwind_protect
+  end_unwind_protect
 
-C = infsup (l, u);
+  C = infsup (l, u);
 
 endfunction
 
 function works = check_rounding_mode ()
 
-try
+  try
     unwind_protect
-        works = true ();
-        __setround__ (+inf);
-        works &= (1 + realmin > 1);
-        works &= ([1 1 -1] * [1; realmin; realmin] > 1);
-        __setround__ (-inf);
-        works &= (1 + realmin == 1);
-        works &= ([1 1 -1] * [1; realmin; realmin] < 1);
+      works = true ();
+      __setround__ (+inf);
+      works &= (1 + realmin > 1);
+      works &= ([1 1 -1] * [1; realmin; realmin] > 1);
+      __setround__ (-inf);
+      works &= (1 + realmin == 1);
+      works &= ([1 1 -1] * [1; realmin; realmin] < 1);
     unwind_protect_cleanup
-        __setround__ (0.5);
+      __setround__ (0.5);
     end_unwind_protect
-catch
+  catch
     works = false ();
-end_try_catch
+  end_try_catch
 
 endfunction
 

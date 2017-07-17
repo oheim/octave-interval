@@ -32,12 +32,12 @@
 ## FIXME This function is only required, because of bug #43925
 function result = isscalar (A)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = isscalar (A.inf);
+  result = isscalar (A.inf);
 
 endfunction
 

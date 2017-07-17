@@ -31,12 +31,12 @@
 ## FIXME This function is only required, because of regression #44498
 function result = isvector (A)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = isvector (A.inf);
+  result = isvector (A.inf);
 
 endfunction
 

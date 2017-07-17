@@ -48,25 +48,25 @@
 
 function x = factorial (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = max (0, ceil (x.inf));
-u = floor (x.sup);
+  l = max (0, ceil (x.inf));
+  u = floor (x.sup);
 
-emptyresult = l > u;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = l > u;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(not (emptyresult)) = ...
-    mpfr_function_d ("factorial", -inf, l(not (emptyresult)));
-u(not (emptyresult)) = ...
-    mpfr_function_d ("factorial", +inf, u(not (emptyresult)));
+  l(not (emptyresult)) = ...
+  mpfr_function_d ("factorial", -inf, l(not (emptyresult)));
+  u(not (emptyresult)) = ...
+  mpfr_function_d ("factorial", +inf, u(not (emptyresult)));
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

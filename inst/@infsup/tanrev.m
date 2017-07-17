@@ -40,42 +40,42 @@
 
 function result = tanrev (c, x)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     x = infsup (-inf, inf);
-endif
-if (not (isa (c, "infsup")))
+  endif
+  if (not (isa (c, "infsup")))
     c = infsup (c);
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-arctangent = atan (c);
-result = x;
+  arctangent = atan (c);
+  result = x;
 
-## Resize, if broadcasting is needed
-if (not (size_equal (arctangent.inf, result.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (arctangent.inf, result.inf)))
     arctangent.inf = ones (size (result.inf)) .* arctangent.inf;
     arctangent.sup = ones (size (result.inf)) .* arctangent.sup;
     result.inf = ones (size (arctangent.inf)) .* result.inf;
     result.sup = ones (size (arctangent.inf)) .* result.sup;
-endif
+  endif
 
-result.inf(isempty (arctangent)) = inf;
-result.sup(isempty (arctangent)) = -inf;
+  result.inf(isempty (arctangent)) = inf;
+  result.sup(isempty (arctangent)) = -inf;
 
-idx.type = '()';
+  idx.type = '()';
 
-persistent pi = infsup ("pi");
-select = not (isempty (result)) ...
-    & not (subset (infsup (-pi.sup / 2, pi.sup / 2), arctangent));
+  persistent pi = infsup ("pi");
+  select = not (isempty (result)) ...
+           & not (subset (infsup (-pi.sup / 2, pi.sup / 2), arctangent));
 
-if (any (select(:)))
+  if (any (select(:)))
     ## Find a smaller upper bound for x, if the restriction from c allows it
     u = inf (size (result.inf));
     select_u = select & result.sup < inf;
@@ -85,16 +85,17 @@ if (any (select(:)))
     arctangentshifted = arctangent;
     idx.subs = {select_u};
     arctangentshifted = subsasgn (arctangentshifted, idx, ...
-        subsref (arctangentshifted, idx) + n(select_u) .* pi);
+                                  subsref (arctangentshifted, idx) + ...
+                                  n(select_u) .* pi);
     overlapping = not (isempty (intersect (result, arctangentshifted)));
     u(select_u & overlapping) = ...
-        min (result.sup(select_u & overlapping), ...
-             arctangentshifted.sup(select_u & overlapping));
+    min (result.sup(select_u & overlapping), ...
+         arctangentshifted.sup(select_u & overlapping));
     n(select_u & ~overlapping) = ...
-        mpfr_function_d ('minus', +inf, n(select_u & ~overlapping), 1);
+    mpfr_function_d ('minus', +inf, n(select_u & ~overlapping), 1);
     idx.subs = {(select_u & ~overlapping)};
     u(idx.subs{1}) = ...
-        sup (subsref (arctangent, idx) + subsref (n, idx) .* pi);
+    sup (subsref (arctangent, idx) + subsref (n, idx) .* pi);
 
     ## Find a larger lower bound for x, if the restriction from c allows it
     l = -inf (size (result.inf));
@@ -105,23 +106,24 @@ if (any (select(:)))
     arctangentshifted = arctangent;
     idx.subs = {select_l};
     arctangentshifted = subsasgn (arctangentshifted, idx, ...
-        subsref (arctangentshifted, idx) + n(select_l) .* pi);
+                                  subsref (arctangentshifted, idx) + ...
+                                  n(select_l) .* pi);
     overlapping = not (isempty (intersect (result, arctangentshifted)));
     l(select_l & overlapping) = ...
-        max (result.inf (select_l & overlapping), ...
-            arctangentshifted.inf(select_l & overlapping));
+    max (result.inf (select_l & overlapping), ...
+         arctangentshifted.inf(select_l & overlapping));
     n(select_l & ~overlapping) = ...
-        mpfr_function_d ('plus', -inf, n(select_l & ~overlapping), 1);
+    mpfr_function_d ('plus', -inf, n(select_l & ~overlapping), 1);
     idx.subs = {(select_l & ~overlapping)};
     l(idx.subs {1}) = ...
-        inf (subsref (arctangent, idx) + subsref (n, idx) .* pi);
+    inf (subsref (arctangent, idx) + subsref (n, idx) .* pi);
 
     result.inf(select) = max (l(select), result.inf(select));
     result.sup(select) = min (u(select), result.sup(select));
 
     result.inf(result.inf > result.sup) = inf;
     result.sup(result.inf > result.sup) = -inf;
-endif
+  endif
 
 endfunction
 

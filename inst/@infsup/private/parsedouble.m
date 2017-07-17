@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefun {[@var{SIGN}, @var{EXPONENT}, @var{MANTISSA}] =} parsedouble (@var{X})
-## 
+##
 ## Parse a finite binary floating point number @var{X} in double precision.
 ##
 ## The mantissa is normalized, the implicit first bit is moved after the point
@@ -28,35 +28,35 @@
 
 function [sign, exponent, mantissa] = parsedouble (binary)
 
-if (not (isfinite (binary)) || isnan (binary))
+  if (not (isfinite (binary)) || isnan (binary))
     assert (false (), "Invalid call to parsedouble");
-endif
+  endif
 
-## Decode bit representation
-hex = num2hex (binary); # 16 hexadecimal digits (with leading zeros)
-hexvalues = rem (uint8 (hex) - 47, 39); # 1 .. 16
-lookup = [0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1;...
-          0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1;...
-          0 0 1 1 0 0 1 1 0 0 1 1 0 0 1 1;...
-          0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1];
-bits = (logical (lookup (:, hexvalues))) (:)';
+  ## Decode bit representation
+  hex = num2hex (binary); # 16 hexadecimal digits (with leading zeros)
+  hexvalues = rem (uint8 (hex) - 47, 39); # 1 .. 16
+  lookup = [0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1;...
+            0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1;...
+            0 0 1 1 0 0 1 1 0 0 1 1 0 0 1 1;...
+            0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1];
+  bits = (logical (lookup (:, hexvalues))) (:)';
 
-## Separate sign, exponent, and mantissa bits.
-sign = bits(1);
-exponent = bits(2 : 12);
-fraction = bits(13 : end)';
+  ## Separate sign, exponent, and mantissa bits.
+  sign = bits(1);
+  exponent = bits(2 : 12);
+  fraction = bits(13 : end)';
 
-if (sum (exponent) == 0) # denormalized numbers
+  if (sum (exponent) == 0) # denormalized numbers
     mantissa = fraction;
-else # normalized numbers
+  else # normalized numbers
     mantissa = [true(); fraction];
-endif
+  endif
 
-## Decode IEEE 754 exponent
-exponent = int64(pow2 (10 : -1 : 0) * exponent') - 1023;
+  ## Decode IEEE 754 exponent
+  exponent = int64(pow2 (10 : -1 : 0) * exponent') - 1023;
 
-## binary == (-1) ^ sign * fraction (=X.XXXXX… in binary) * 2 ^ exponent
+  ## binary == (-1) ^ sign * fraction (=X.XXXXX… in binary) * 2 ^ exponent
 
-exponent ++;
+  exponent ++;
 
 endfunction

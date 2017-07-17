@@ -30,12 +30,12 @@
 
 function result = ndims (a)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = ndims (a.inf);
+  result = ndims (a.inf);
 
 endfunction
 

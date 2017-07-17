@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} realsqrt (@var{X})
-## 
+##
 ## Compute the square root (for all non-negative numbers).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,17 +36,17 @@
 
 function x = realsqrt (x)
 
-l = mpfr_function_d ('realsqrt', -inf, max (0, x.inf));
-u = mpfr_function_d ('realsqrt', +inf, max (0, x.sup));
+  l = mpfr_function_d ('realsqrt', -inf, max (0, x.inf));
+  u = mpfr_function_d ('realsqrt', +inf, max (0, x.sup));
 
-emptyresult = isempty (x) | x.sup < 0;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x) | x.sup < 0;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

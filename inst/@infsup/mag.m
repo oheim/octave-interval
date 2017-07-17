@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} mag (@var{X})
-## 
+##
 ## Get the magnitude of numbers in interval @var{X}, that is the maximum of
 ## absolute values for each element.
 ##
@@ -39,13 +39,13 @@
 
 function result = mag (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = max (abs (x.inf), abs (x.sup));
-result(x.inf > x.sup) = nan ();
+  result = max (abs (x.inf), abs (x.sup));
+  result(x.inf > x.sup) = nan ();
 
 endfunction
 

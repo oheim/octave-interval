@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} ceil (@var{X})
-## 
+##
 ## Round each number in interval @var{X} towards +Inf.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -38,15 +38,15 @@
 
 function x = ceil (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x.inf = ceil (x.inf);
-x.sup = ceil (x.sup);
+  x.inf = ceil (x.inf);
+  x.sup = ceil (x.sup);
 
-x.sup(x.sup == 0) = +0;
+  x.sup(x.sup == 0) = +0;
 
 endfunction
 

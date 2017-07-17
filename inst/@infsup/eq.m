@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} eq (@var{A}, @var{B})
 ## @defopx Operator {@@infsup} {@var{A} == @var{B}}
-## 
+##
 ## Compare intervals @var{A} and @var{B} for equality.
 ##
 ## True, if all numbers from @var{A} are also contained in @var{B} and vice
@@ -41,22 +41,22 @@
 
 function result = eq (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-elseif (isa (b, "infsupdec"))
+  elseif (isa (b, "infsupdec"))
     ## Workaround for bug #42735
     result = eq (a, b);
     return
-endif
+  endif
 
-result = (a.inf == b.inf & a.sup == b.sup);
+  result = (a.inf == b.inf & a.sup == b.sup);
 
 endfunction
 

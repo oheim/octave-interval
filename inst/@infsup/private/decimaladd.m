@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefun {@var{DECIMAL} =} decimaladd (@var{DECIMAL}, @var{ADDEND})
-## 
+##
 ## Add two decimal numbers.
 ##
 ## @end deftypefun
@@ -26,81 +26,81 @@
 
 function [decimal] = decimaladd (decimal, addend)
 
-## Align mantissas
-if (addend.e < decimal.e)
+  ## Align mantissas
+  if (addend.e < decimal.e)
     addend.m = [zeros(decimal.e - addend.e, 1); ...
-                   addend.m];
+                addend.m];
     addend.e = decimal.e;
-elseif (addend.e > decimal.e)
+  elseif (addend.e > decimal.e)
     decimal.m = [zeros(addend.e - decimal.e, 1); ...
                  decimal.m];
     decimal.e = addend.e;
-endif
-if (length (decimal.m) > length (addend.m))
+  endif
+  if (length (decimal.m) > length (addend.m))
     addend.m = [addend.m; ...
-        zeros(length (decimal.m) - ...
-              length (addend.m), 1)];
-elseif (length (decimal.m) < length (addend.m))
+                zeros(length (decimal.m) - ...
+                      length (addend.m), 1)];
+  elseif (length (decimal.m) < length (addend.m))
     decimal.m = [decimal.m; ...
-        zeros(length (addend.m) - ...
-              length (decimal.m), 1)];
-endif
+                 zeros(length (addend.m) - ...
+                       length (decimal.m), 1)];
+  endif
 
-assert (length (decimal.m) == length (addend.m));
-assert (decimal.e == addend.e);
+  assert (length (decimal.m) == length (addend.m));
+  assert (decimal.e == addend.e);
 
-## Add
-if (decimal.s == addend.s)
+  ## Add
+  if (decimal.s == addend.s)
     decimal.m += addend.m;
-else
+  else
     decimal.m -= addend.m;
-endif
+  endif
 
-## Carry
-while (not (isempty (find (decimal.m >= 10))))
+  ## Carry
+  while (not (isempty (find (decimal.m >= 10))))
     decimal.m = [0; rem(decimal.m, 10)] ...
-              + [(decimal.m >= 10); 0];
+                + [(decimal.m >= 10); 0];
     if (decimal.m(1) == 0)
-        decimal.m(1) = [];
+      decimal.m(1) = [];
     else
-        decimal.e ++;
+      decimal.e ++;
     endif
-endwhile
+  endwhile
 
-## Resolve negative decimal digits
-while (1)
+  ## Resolve negative decimal digits
+  while (1)
     highestnegative = find (decimal.m < 0, 1);
     if (isempty (highestnegative))
-        break;
+      break;
     endif
     highestpositive = find (decimal.m > 0, 1);
-    
+
     if (isempty (highestpositive) || ...
         highestnegative < highestpositive)
-        ## Flip sign
-        decimal.s = not (decimal.s);
-        decimal.m *= -1;
+      ## Flip sign
+      decimal.s = not (decimal.s);
+      decimal.m *= -1;
     else
-        assert (decimal.m(1) >= 0);
-        decimal.m += 10 * (decimal.m < 0) ...
+      assert (decimal.m(1) >= 0);
+      decimal.m += 10 * (decimal.m < 0) ...
                    - [(decimal.m(2:end) < 0); 0];
     endif
-endwhile
-clear highestnegative highestpositive;
+  endwhile
+  clear highestnegative highestpositive;
 
-## Normalize mantissa: remove leading zeroes
-firstnonzerodigit = find (decimal.m ~= 0, 1, "first");
-if (firstnonzerodigit > 1)
+  ## Normalize mantissa: remove leading zeroes
+  firstnonzerodigit = find (decimal.m ~= 0, 1, "first");
+  if (firstnonzerodigit > 1)
     decimal.m = decimal.m(firstnonzerodigit:end);
     decimal.e -= firstnonzerodigit - 1;
-elseif (isempty (firstnonzerodigit)) # all digits are zero
+  elseif (isempty (firstnonzerodigit)) # all digits are zero
     decimal.s = false;
     decimal.m = [];
     decimal.e = int64 (0);
     return
-endif
+  endif
 
-## Remove trailing zeros
-decimal.m = decimal.m(1 : find (decimal.m ~= 0, 1, "last"));
+  ## Remove trailing zeros
+  decimal.m = decimal.m(1 : find (decimal.m ~= 0, 1, "last"));
 
 endfunction

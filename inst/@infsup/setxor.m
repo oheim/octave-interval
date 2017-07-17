@@ -46,55 +46,55 @@
 
 function [c, c1, c2] = setxor (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsup")))
+  endif
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
+  endif
 
-## Resize, if broadcasting is needed
-if (not (size_equal (a.inf, b.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (a.inf, b.inf)))
     a.inf = ones (size (b.inf)) .* a.inf;
     a.sup = ones (size (b.inf)) .* a.sup;
     b.inf = ones (size (a.inf)) .* b.inf;
     b.sup = ones (size (a.inf)) .* b.sup;
-endif
+  endif
 
-## Sort the four boundaries in ascending order b1 <= b2 <= b3 <= b4,
-## if only one empty interval is present, then [b2, b3] = [Empty],
-## with two empty intervals we also have [b1, b4] = [Empty].
-b1 = min (a.inf, b.inf);
-b2 = max (a.inf, b.inf);
-b3 = min (a.sup, b.sup);
-b4 = max (a.sup, b.sup);
-[b2, b3] = deal (min (b2, b3), max (b2, b3));
+  ## Sort the four boundaries in ascending order b1 <= b2 <= b3 <= b4,
+  ## if only one empty interval is present, then [b2, b3] = [Empty],
+  ## with two empty intervals we also have [b1, b4] = [Empty].
+  b1 = min (a.inf, b.inf);
+  b2 = max (a.inf, b.inf);
+  b3 = min (a.sup, b.sup);
+  b4 = max (a.sup, b.sup);
+  [b2, b3] = deal (min (b2, b3), max (b2, b3));
 
-l = b1;
-u = b4;
+  l = b1;
+  u = b4;
 
-select = a.inf == b.inf;
-l(select) = b3(select);
+  select = a.inf == b.inf;
+  l(select) = b3(select);
 
-select = a.sup == b.sup;
-u(select) = b2(select);
+  select = a.sup == b.sup;
+  u(select) = b2(select);
 
-select = a.inf == b.inf & a.sup == b.sup;
-l(select) = inf;
-u(select) = -inf;
+  select = a.inf == b.inf & a.sup == b.sup;
+  l(select) = inf;
+  u(select) = -inf;
 
-l(l == 0) = -0;
-u(u == 0) = +0;
+  l(l == 0) = -0;
+  u(u == 0) = +0;
 
-c = infsup ();
-c.inf = l;
-c.sup = u;
+  c = infsup ();
+  c.inf = l;
+  c.sup = u;
 
-if (nargout > 1)
+  if (nargout > 1)
     select = isempty (a) | isempty (b);
     b1(select) = a.inf(select);
     b2(select) = a.sup(select);
@@ -126,7 +126,7 @@ if (nargout > 1)
     c2 = infsup ();
     c2.inf = l2;
     c2.sup = u2;
-endif
+  endif
 
 endfunction
 

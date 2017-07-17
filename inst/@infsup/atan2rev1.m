@@ -40,104 +40,107 @@
 
 function result = atan2rev1 (b, c, y)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     y = infsup (-inf, inf);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
-if (not (isa (c, "infsup")))
+  endif
+  if (not (isa (c, "infsup")))
     c = infsup (c);
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     y = infsup (y);
-endif
+  endif
 
-## Resize, if broadcasting is needed
-if (not (size_equal (b.inf, c.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (b.inf, c.inf)))
     b.inf = ones (size (c.inf)) .* b.inf;
     b.sup = ones (size (c.inf)) .* b.sup;
     c.inf = ones (size (b.inf)) .* c.inf;
     c.sup = ones (size (b.inf)) .* c.sup;
-endif
-if (not (size_equal (b.inf, y.inf)))
+  endif
+  if (not (size_equal (b.inf, y.inf)))
     b.inf = ones (size (y.inf)) .* b.inf;
     b.sup = ones (size (y.inf)) .* b.sup;
     c.inf = ones (size (y.inf)) .* c.inf;
     c.sup = ones (size (y.inf)) .* c.sup;
     y.inf = ones (size (b.inf)) .* y.inf;
     y.sup = ones (size (b.inf)) .* y.sup;
-endif
+  endif
 
-persistent pi = infsup ("pi");
-idx.type = '()';
+  persistent pi = infsup ("pi");
+  idx.type = '()';
 
-emptyresult = isempty (y) | isempty (b) | isempty (c) | ...
-    c.inf >= sup (pi) | c.sup <= inf (-pi);
+  emptyresult = isempty (y) | isempty (b) | isempty (c) | ...
+                c.inf >= sup (pi) | c.sup <= inf (-pi);
 
-result = repmat (infsup (), size (y.inf));
+  result = repmat (infsup (), size (y.inf));
 
-## c1 is the part of c where y >= 0 and x <= 0
-c1 = intersect (c, infsup (inf (pi) / 2, sup (pi)));
-select = not (emptyresult | isempty (c1) | ...
-    b.inf > 0 | y.sup < 0 | c1.sup == inf (pi) / 2 | ...
-    (b.inf >= 0 & y.sup <= 0) | (b.inf >= 0 & c1.inf > inf (pi) / 2));
-if (any (select(:)))
+  ## c1 is the part of c where y >= 0 and x <= 0
+  c1 = intersect (c, infsup (inf (pi) / 2, sup (pi)));
+  select = not (emptyresult | isempty (c1) | ...
+                b.inf > 0 | y.sup < 0 | c1.sup == inf (pi) / 2 | ...
+                (b.inf >= 0 & y.sup <= 0) | ...
+                (b.inf >= 0 & c1.inf > inf (pi) / 2));
+  if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.sup, c.sup
     ## maximum is located at b.inf, c.inf
     l = zeros (size (result.inf));
     select_l = select & c1.sup < sup (pi) & b.sup < 0;
     l (select_l) = ...
-        max (0, ...
-             inf (b.sup (select_l) .* tan (infsup (c1.sup (select_l)))));
+    max (0, ...
+         inf (b.sup (select_l) .* tan (infsup (c1.sup (select_l)))));
     u = inf (size (result.inf));
     select_u = select & c1.inf > inf (pi) / 2 & b.inf > -inf;
     u (select_u) = ...
-        sup (b.inf (select_u) .* tan (infsup (c1.inf (select_u))));
+    sup (b.inf (select_u) .* tan (infsup (c1.inf (select_u))));
     idx.subs = {select};
     result = subsasgn (result, idx, ...
-        intersect (subsref (y, idx), ...
-                   infsup (subsref (l, idx), subsref (u, idx))));
-endif
+                       intersect (subsref (y, idx), ...
+                                  infsup (subsref (l, idx), subsref (u, idx))));
+  endif
 
-## c2 is the part of c where y >= 0 and x >= 0
-c2 = intersect (c, infsup (0, sup (pi) / 2));
-select = not (emptyresult | isempty (c2) | b.sup < 0 | y.sup < 0 | ...
-    c2.inf == sup (pi) / 2 | ...
-    (b.sup <= 0 & y.sup <= 0) | (b.sup <= 0 & c2.sup < sup (pi) / 2));
-if (any (select(:)))
+  ## c2 is the part of c where y >= 0 and x >= 0
+  c2 = intersect (c, infsup (0, sup (pi) / 2));
+  select = not (emptyresult | isempty (c2) | b.sup < 0 | y.sup < 0 | ...
+                c2.inf == sup (pi) / 2 | ...
+                (b.sup <= 0 & y.sup <= 0) | ...
+                (b.sup <= 0 & c2.sup < sup (pi) / 2));
+  if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.inf, c.inf
     ## maximum is located at b.sup, c.sup
     l = zeros (size (result.inf));
     select_l = select & c2.inf > 0 & b.inf > 0;
     l (select_l) = ...
-        max (0, ...
-             inf (b.inf (select_l) .* tan (infsup (c2.inf (select_l)))));
+    max (0, ...
+         inf (b.inf (select_l) .* tan (infsup (c2.inf (select_l)))));
     u = inf (size (result.inf));
     u (c2.sup == 0) = 0;
     select_u = select & c2.sup ~= 0 & c2.sup < sup (pi) / 2 & b.sup < inf;
     u (select_u) = ...
-        sup (b.sup (select_u) .* tan (infsup (c2.sup (select_u))));
+    sup (b.sup (select_u) .* tan (infsup (c2.sup (select_u))));
     idx.subs = {select};
     result = subsasgn (result, idx, ...
-        union (subsref (result, idx), ...
-               intersect (subsref (y, idx), ...
-                          infsup (subsref (l, idx), subsref (u, idx)))));
-endif
+                       union (subsref (result, idx), ...
+                              intersect (subsref (y, idx), ...
+                                         infsup (subsref (l, idx), ...
+                                                 subsref (u, idx)))));
+  endif
 
-## c3 is the part of c where y <= 0 and x >= 0
-c3 = intersect (c, infsup (inf (-pi) / 2, 0));
-select = not (emptyresult | isempty (c3) | b.sup < 0 | y.inf > 0 | ...
-    c3.sup == inf (-pi) / 2 | (b.sup <= 0 & y.inf >= 0) | ...
-    (b.sup <= 0 & c2.inf > inf (-pi) / 2));
-if (any (select(:)))
+  ## c3 is the part of c where y <= 0 and x >= 0
+  c3 = intersect (c, infsup (inf (-pi) / 2, 0));
+  select = not (emptyresult | isempty (c3) | b.sup < 0 | y.inf > 0 | ...
+                c3.sup == inf (-pi) / 2 | (b.sup <= 0 & y.inf >= 0) | ...
+                (b.sup <= 0 & c2.inf > inf (-pi) / 2));
+  if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.sup, c.inf
     ## maximum is located at b.inf, c.sup
@@ -145,42 +148,44 @@ if (any (select(:)))
     l (c3.inf == 0) = 0;
     select_l = select & c3.inf ~= 0 & c3.inf > inf (-pi) / 2 & b.sup < inf;
     l (select_l) = ...
-        inf (b.sup (select_l) .* tan (infsup (c3.inf (select_l))));
+    inf (b.sup (select_l) .* tan (infsup (c3.inf (select_l))));
     u = zeros (size (result.inf));
     select_u = select & c3.sup ~= 0 & b.inf > 0;
     u (select_u) = ...
-        sup (b.inf (select_u) .* tan (infsup (c3.sup (select_u))));
+    sup (b.inf (select_u) .* tan (infsup (c3.sup (select_u))));
     idx.subs = {select};
     result = subsasgn (result, idx, ...
-        union (subsref (result, idx), ...
-               intersect (subsref (y, idx), ...
-                          infsup (subsref (l, idx), subsref (u, idx)))));
-endif
+                       union (subsref (result, idx), ...
+                              intersect (subsref (y, idx), ...
+                                         infsup (subsref (l, idx), ...
+                                                 subsref (u, idx)))));
+  endif
 
-## c4 is the part of c where y <= 0 and x <= 0
-c4 = intersect (c, infsup (inf (-pi), sup (-pi) / 2));
-select = not (emptyresult | isempty (c4) | b.inf > 0 | y.inf > 0 | ...
-    c4.inf == sup (-pi) / 2 | (b.inf >= 0 & y.inf >= 0) | ...
-    (b.inf >= 0 & c4.sup < sup (-pi) / 2));
-if (any (select(:)))
+  ## c4 is the part of c where y <= 0 and x <= 0
+  c4 = intersect (c, infsup (inf (-pi), sup (-pi) / 2));
+  select = not (emptyresult | isempty (c4) | b.inf > 0 | y.inf > 0 | ...
+                c4.inf == sup (-pi) / 2 | (b.inf >= 0 & y.inf >= 0) | ...
+                (b.inf >= 0 & c4.sup < sup (-pi) / 2));
+  if (any (select(:)))
     ## The inverse function is y = b * tan (c)
     ## minimum is located at b.inf, c.sup
     ## maximum is located at b.sup, c.inf
     l = -inf (size (result.inf));
     select_l = select & c4.sup < sup (-pi) / 2 & b.inf > -inf;
     l (select_l) = ...
-        inf (b.inf (select_l) .* tan (infsup (c4.sup (select_l))));
+    inf (b.inf (select_l) .* tan (infsup (c4.sup (select_l))));
     u = zeros (size (result.inf));
     select_u = select & c4.inf > inf (-pi) & b.sup < 0;
     u (select_u) = ...
-        min (0, ...
-             sup (b.sup (select_u) .* tan (infsup (c4.sup (select_u)))));
+    min (0, ...
+         sup (b.sup (select_u) .* tan (infsup (c4.sup (select_u)))));
     idx.subs = {select};
     result = subsasgn (result, idx, ...
-        union (subsref (result, idx), ...
-               intersect (subsref (y, idx), ...
-                          infsup (subsref (l, idx), subsref (u, idx)))));
-endif
+                       union (subsref (result, idx), ...
+                              intersect (subsref (y, idx), ...
+                                         infsup (subsref (l, idx), ...
+                                                 subsref (u, idx)))));
+  endif
 
 endfunction
 

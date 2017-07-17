@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefun {[@var{X}, @var{ISEXACT}] =} hex2double (@var{S}, @var{DIRECTION})
-## 
+##
 ## Convert a hexadecimal floating point number @var{S} to double precision with
 ## directed rounding.
 ##
@@ -30,165 +30,165 @@
 
 function [binary, isexact] = hex2double (string, direction)
 
-## Strip Sign
-if (isempty (string))
+  ## Strip Sign
+  if (isempty (string))
     hex.s = false;
-else
+  else
     hex.s = (string (1) == "-");
     if (strfind("+-", string(1)))
-        string = string (2:end);
+      string = string (2:end);
     endif
-endif
+  endif
 
-## Strip hex indicator
-if (strncmpi ("0x", string, 2))
+  ## Strip hex indicator
+  if (strncmpi ("0x", string, 2))
     string = string (3:end);
-else
+  else
     error ("interval:InvalidOperand", ...
            ["invalid hex number does not start with 0x: " string]);
-endif
+  endif
 
-## Split mantissa & exponent
-[hex.m, hex.e] = strtok (string, "pP");
+  ## Split mantissa & exponent
+  [hex.m, hex.e] = strtok (string, "pP");
 
-## Convert exponent from string to number
-if (isempty (hex.e))
+  ## Convert exponent from string to number
+  if (isempty (hex.e))
     hex.e = int64(0); # 2 ^ 0 = 1
-else
+  else
     if (strfind (hex.e, ".") || strfind (hex.e, ","))
-        error ("interval:InvalidOperand", ...
-               ["invalid hex number with rational exponent: " string]);
+      error ("interval:InvalidOperand", ...
+             ["invalid hex number with rational exponent: " string]);
     endif
     hex.e = str2double (hex.e(2:end)); # remove “p” and convert
     if (isnan (hex.e) || ... # greater than realmax or illegal format
         abs(hex.e) >= pow2 (53)) # possibly lost precision
-        error ("interval:InvalidOperand", ...
-               ["invalid hex number with big/invalid exponent: " string]);
+      error ("interval:InvalidOperand", ...
+             ["invalid hex number with big/invalid exponent: " string]);
     endif
     hex.e = int64 (hex.e);
-endif
+  endif
 
-## Split Mantissa at point
-hex.m = strsplit (hex.m, {".",","});
-switch length(hex.m)
+  ## Split Mantissa at point
+  hex.m = strsplit (hex.m, {".",","});
+  switch length(hex.m)
     case 0
-        hex.m = {"", ""};
+      hex.m = {"", ""};
     case 1
-        hex.m{2} = "";
+      hex.m{2} = "";
     case 2
-        # nothing to do
+                                # nothing to do
     otherwise
-        error ("interval:InvalidOperand", ...
-               ["invalid hex number with multiple points: " string]);
-endswitch
+      error ("interval:InvalidOperand", ...
+             ["invalid hex number with multiple points: " string]);
+  endswitch
 
-## Normalize mantissa string: move point to the right
-if (hex.e - length (hex.m{2}) * 4 <= intmin (class (hex.e)))
+  ## Normalize mantissa string: move point to the right
+  if (hex.e - length (hex.m{2}) * 4 <= intmin (class (hex.e)))
     error ("interval:InvalidOperand", ...
            ["exponent overflow during normalization: " string ]);
-endif
-hex.e -= length (hex.m{2}) * 4;
-hex.m = strcat (hex.m{1}, hex.m{2});
+  endif
+  hex.e -= length (hex.m{2}) * 4;
+  hex.m = strcat (hex.m{1}, hex.m{2});
 
-hexvalues = rem (uint8 (hex.m) - 47, 39); # 1 .. 16
-lookup = [0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1;...
-          0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1;...
-          0 0 1 1 0 0 1 1 0 0 1 1 0 0 1 1;...
-          0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1];
-hex.m = (logical (lookup (:, hexvalues))) (:)';
+  hexvalues = rem (uint8 (hex.m) - 47, 39); # 1 .. 16
+  lookup = [0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1;...
+            0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1;...
+            0 0 1 1 0 0 1 1 0 0 1 1 0 0 1 1;...
+            0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1];
+  hex.m = (logical (lookup (:, hexvalues))) (:)';
 
-## Normalize mantissa: remove leading zeroes
-firstnonzerodigit = find (hex.m, 1, "first");
-if (firstnonzerodigit > 1)
+  ## Normalize mantissa: remove leading zeroes
+  firstnonzerodigit = find (hex.m, 1, "first");
+  if (firstnonzerodigit > 1)
     hex.m = hex.m (firstnonzerodigit:end);
-elseif (isempty (firstnonzerodigit))
+  elseif (isempty (firstnonzerodigit))
     ## All digits are zero
     isexact = true ();
     if (hex.s)
-        binary = -0;
+      binary = -0;
     else
-        binary = 0;
+      binary = 0;
     endif
     return
-endif
+  endif
 
-## Move point to the left, right after the first significand binary digit
-if (length (hex.m) > 1)
+  ## Move point to the left, right after the first significand binary digit
+  if (length (hex.m) > 1)
     if (hex.e + (length (hex.m) - 1) >= intmax (class (hex.e)))
-        error ("interval:InvalidOperand", ...
-               ["exponent overflow during normalization: " string ]);
+      error ("interval:InvalidOperand", ...
+             ["exponent overflow during normalization: " string ]);
     endif
     hex.e += length (hex.m) - 1;
-endif
+  endif
 
-## Overflow
-if (hex.e > 1023)
+  ## Overflow
+  if (hex.e > 1023)
     isexact = false ();
     if (hex.s && direction < 0)
-        binary = -inf;
+      binary = -inf;
     elseif (hex.s)
-        binary = -realmax ();
+      binary = -realmax ();
     elseif (direction > 0)
-        binary = inf;
+      binary = inf;
     else
-        binary = realmax ();
+      binary = realmax ();
     endif
     return
-endif
+  endif
 
-## Underflow
-if (hex.e < -1074)
+  ## Underflow
+  if (hex.e < -1074)
     isexact = false ();
     if (hex.s && direction < 0)
-        binary = -pow2 (-1074);
+      binary = -pow2 (-1074);
     elseif (hex.s)
-        binary = -0;
+      binary = -0;
     elseif (direction > 0)
-        binary = pow2 (-1074);
+      binary = pow2 (-1074);
     else
-        binary = 0;
+      binary = 0;
     endif
     return
-endif
+  endif
 
-if (hex.e < -1022)
+  if (hex.e < -1022)
     ## Subnormal numbers
     hex.m = [zeros(1, -1022 - hex.e), hex.m];
     ieee754exponent = -1023;
-else
+  else
     ## Normal numbers
     ieee754exponent = hex.e;
-endif
+  endif
 
-## Only the most significand 53 bits are relevant.
-significand = postpad (hex.m, 53, 0, 2);
-isexact = length (hex.m) <= length (significand) || ...
-          isempty (find (hex.m (54:end), 1));
+  ## Only the most significand 53 bits are relevant.
+  significand = postpad (hex.m, 53, 0, 2);
+  isexact = length (hex.m) <= length (significand) || ...
+            isempty (find (hex.m (54:end), 1));
 
-## The first bit can be omitted (normalization).
-significand (1) = [];
+  ## The first bit can be omitted (normalization).
+  significand (1) = [];
 
-## The remaining 52 bits can be converted to 13 hex digits
-ieee754mantissa = dec2hex (pow2 (51 : -1 : 0) * significand', 13);
+  ## The remaining 52 bits can be converted to 13 hex digits
+  ieee754mantissa = dec2hex (pow2 (51 : -1 : 0) * significand', 13);
 
-if (not (hex.s))
+  if (not (hex.s))
     ieee754signandexponent = ieee754exponent + 1023;
-else
+  else
     ieee754signandexponent = ieee754exponent + 1023 + pow2 (11);
-endif
+  endif
 
-ieee754double = strcat (dec2hex (ieee754signandexponent, 3), ieee754mantissa);
-binary = hex2num (ieee754double);
+  ieee754double = strcat (dec2hex (ieee754signandexponent, 3), ieee754mantissa);
+  binary = hex2num (ieee754double);
 
-## Last, consider the rounding direction
-if (isexact || ...
-    (direction < 0 && not (hex.s)) ||
-    (direction > 0 && hex.s))
-    ## The number is exact or the truncation of digits above resulted in 
+  ## Last, consider the rounding direction
+  if (isexact || ...
+      (direction < 0 && not (hex.s)) ||
+      (direction > 0 && hex.s))
+    ## The number is exact or the truncation of digits above resulted in
     ## correct rounding direction
-else
+  else
     delta = pow2 (-1074);
     binary = mpfr_function_d ('plus', direction, binary, delta);
-endif
+  endif
 
 endfunction

@@ -18,7 +18,7 @@
 ## @defmethod {@@infsup} intersect (@var{A})
 ## @defmethodx {@@infsup} intersect (@var{A}, @var{B})
 ## @defmethodx {@@infsup} intersect (@var{A}, [], @var{DIM})
-## 
+##
 ## Intersect intervals.
 ##
 ## With two arguments the intersection is built pair-wise.  Otherwise the
@@ -44,38 +44,38 @@
 
 function a = intersect (a, b, dim)
 
-if (not (isa (a, "infsup")))
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
+  endif
 
-switch (nargin)
+  switch (nargin)
     case 1
-        l = max (a.inf);
-        u = min (a.sup);
+      l = max (a.inf);
+      u = min (a.sup);
     case 2
-        if (not (isa (b, "infsup")))
-            b = infsup (b);
-        endif
-        l = max (a.inf, b.inf);
-        u = min (a.sup, b.sup);
+      if (not (isa (b, "infsup")))
+        b = infsup (b);
+      endif
+      l = max (a.inf, b.inf);
+      u = min (a.sup, b.sup);
     case 3
-        if (not (builtin ("isempty", b)))
-            warning ("intersect: second argument is ignored");
-        endif
-        l = max (a.inf, [], dim);
-        u = min (a.sup, [], dim);
+      if (not (builtin ("isempty", b)))
+        warning ("intersect: second argument is ignored");
+      endif
+      l = max (a.inf, [], dim);
+      u = min (a.sup, [], dim);
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-## If the intervals do not intersect, the result must be empty.
-emptyresult = l > u;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  ## If the intervals do not intersect, the result must be empty.
+  emptyresult = l > u;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-a.inf = l;
-a.sup = u;
+  a.inf = l;
+  a.sup = u;
 
 endfunction
 

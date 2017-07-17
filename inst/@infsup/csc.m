@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} csc (@var{X})
-## 
+##
 ## Compute the cosecant in radians, that is the reciprocal sine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,52 +36,52 @@
 
 function x = csc (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = u = derivl = derivu = zeros (size (x.inf));
+  l = u = derivl = derivu = zeros (size (x.inf));
 
-## Check, if wid (x) is certainly greater than 2*pi. This can save the
-## computation if some values.
-width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
-persistent pi = infsup ("pi");
-certainlysingularity = width >= sup (pi);
+  ## Check, if wid (x) is certainly greater than 2*pi. This can save the
+  ## computation if some values.
+  width = mpfr_function_d ('minus', -inf, x.sup, x.inf);
+  persistent pi = infsup ("pi");
+  certainlysingularity = width >= sup (pi);
 
-## We simply compute the cosecant for both endpoints.
-x.inf(x.inf == 0) = +0;
-x.sup(x.sup == 0) = -0;
-select = not (certainlysingularity);
-l(select) = min (...
-    mpfr_function_d ('csc', -inf, x.inf(select)), ...
-    mpfr_function_d ('csc', -inf, x.sup(select)));
-u(select) = max (...
-    mpfr_function_d ('csc', inf, x.inf(select)), ...
-    mpfr_function_d ('csc', inf, x.sup(select)));
+  ## We simply compute the cosecant for both endpoints.
+  x.inf(x.inf == 0) = +0;
+  x.sup(x.sup == 0) = -0;
+  select = not (certainlysingularity);
+  l(select) = min (...
+                    mpfr_function_d ('csc', -inf, x.inf(select)), ...
+                    mpfr_function_d ('csc', -inf, x.sup(select)));
+  u(select) = max (...
+                    mpfr_function_d ('csc', inf, x.inf(select)), ...
+                    mpfr_function_d ('csc', inf, x.sup(select)));
 
-## A change of sign is a sufficient singularity indicator
-certainlysingularity = certainlysingularity | (select & sign (l) ~= sign (u));
-l(certainlysingularity) = -inf;
-u(certainlysingularity) = inf;
+  ## A change of sign is a sufficient singularity indicator
+  certainlysingularity = certainlysingularity | (select & sign (l) ~= sign (u));
+  l(certainlysingularity) = -inf;
+  u(certainlysingularity) = inf;
 
-## Check, whether the interval contains a local extremum using the derivative
-select = not (certainlysingularity);
-derivl(select) = -mpfr_function_d ('csc', 0, x.inf(select)) .* ...
-                  mpfr_function_d ('cot', 0, x.inf(select));
-derivu(select) = -mpfr_function_d ('csc', 0, x.sup(select)) .* ...
-                  mpfr_function_d ('cot', 0, x.sup(select));
-hasextremum = select & ((derivl <= 0 & derivu >= 0) | ...
-                        (derivl >= 0 & derivu <= 0));
-l(hasextremum & l > 0) = 1;
-u(hasextremum & u < 0) = -1;
+  ## Check, whether the interval contains a local extremum using the derivative
+  select = not (certainlysingularity);
+  derivl(select) = -mpfr_function_d ('csc', 0, x.inf(select)) .* ...
+                    mpfr_function_d ('cot', 0, x.inf(select));
+  derivu(select) = -mpfr_function_d ('csc', 0, x.sup(select)) .* ...
+                    mpfr_function_d ('cot', 0, x.sup(select));
+  hasextremum = select & ((derivl <= 0 & derivu >= 0) | ...
+                          (derivl >= 0 & derivu <= 0));
+  l(hasextremum & l > 0) = 1;
+  u(hasextremum & u < 0) = -1;
 
-emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x) | (x.inf == 0 & x.sup == 0);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

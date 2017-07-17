@@ -31,7 +31,7 @@
 
 function result = length (a)
 
-result = length (a.inf);
+  result = length (a.inf);
 
 endfunction
 

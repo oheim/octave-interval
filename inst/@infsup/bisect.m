@@ -33,7 +33,7 @@
 ## @example
 ## @group
 ## [a, b] = bisect (infsup (2, 32))
-##   @result{} 
+##   @result{}
 ##     a = [2, 8]
 ##     b = [8, 32]
 ## @end group
@@ -47,60 +47,60 @@
 
 function [a, b] = bisect (x)
 
-if (nargin > 1)
+  if (nargin > 1)
     print_usage ();
     return
-endif
+  endif
 
-m = zeros (size (x.inf));
-idx.type = '()';
+  m = zeros (size (x.inf));
+  idx.type = '()';
 
-positive = x.inf >= 0 & x.sup > 0;
-if (any (positive(:)))
+  positive = x.inf >= 0 & x.sup > 0;
+  if (any (positive(:)))
     idx.subs = {positive};
     bounded = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
     m(positive) = min (realmax, pow2 (mid (log2 (bounded))));
-endif
+  endif
 
-negative = x.inf < 0 & x.sup <= 0;
-if (any (negative(:)))
+  negative = x.inf < 0 & x.sup <= 0;
+  if (any (negative(:)))
     idx.subs = {negative};
     bounded = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     m(negative) = ...
-        uminus (min (realmax, pow2 (mid (log2 (uminus (bounded))))));
-endif
+    uminus (min (realmax, pow2 (mid (log2 (uminus (bounded))))));
+  endif
 
-both_signs = x.inf < 0 & x.sup > 0;
-both_signs_p = both_signs & x.sup > -x.inf;
-if (any (both_signs_p(:)))
+  both_signs = x.inf < 0 & x.sup > 0;
+  both_signs_p = both_signs & x.sup > -x.inf;
+  if (any (both_signs_p(:)))
     idx.subs = {both_signs_p};
     bounded_n = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     bounded_p = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
     m(both_signs_p) = min (realmax, pow2 (
-        mid (log2 (bounded_p)) ...
-        - mid (log2 (uminus (bounded_n))) ...
-        - 1074));
-endif
+                                        mid (log2 (bounded_p)) ...
+                                        - mid (log2 (uminus (bounded_n))) ...
+                                        - 1074));
+  endif
 
-both_signs_n = both_signs & x.sup < -x.inf;
-if (any (both_signs_n(:)))
+  both_signs_n = both_signs & x.sup < -x.inf;
+  if (any (both_signs_n(:)))
     idx.subs = {both_signs_n};
     bounded_n = intersect (infsup (-realmax, -pow2 (-1074)), subsref (x, idx));
     bounded_p = intersect (infsup (pow2 (-1074), realmax), subsref (x, idx));
-    m(both_signs_n) = uminus (min (realmax, pow2 (
-        mid (log2 (uminus (bounded_n))) ...
-        - mid (log2 (bounded_p)) ...
-        - 1074)));
-endif
+    m(both_signs_n) = uminus (min (realmax, ...
+                                   pow2 (mid (log2 (uminus (bounded_n))) ...
+                                         - mid (log2 (bounded_p)) ...
+                                         - 1074)));
+  endif
 
-m = min (max (m, x.inf), x.sup);
+  m = min (max (m, x.inf), x.sup);
 
-a = b = x;
-m(isempty (x)) = -inf;
-a.sup = m;
-m(isempty (x)) = inf;
-m(m == 0) = -0;
-b.inf = m;
+  a = b = x;
+  m(isempty (x)) = -inf;
+  a.sup = m;
+  m(isempty (x)) = inf;
+  m(m == 0) = -0;
+  b.inf = m;
 
 endfunction
 

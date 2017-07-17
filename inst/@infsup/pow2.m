@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} pow2 (@var{X})
-## 
+##
 ## Compute @code{2^x} for all numbers in @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,20 +36,20 @@
 
 function x = pow2 (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## pow2 is monotonically increasing from (-inf, 0) to (inf, inf)
-l = mpfr_function_d ('pow2', -inf, x.inf); # this works for empty intervals
-u = mpfr_function_d ('pow2', +inf, x.sup); # ... this does not
+  ## pow2 is monotonically increasing from (-inf, 0) to (inf, inf)
+  l = mpfr_function_d ('pow2', -inf, x.inf); # this works for empty intervals
+  u = mpfr_function_d ('pow2', +inf, x.sup); # ... this does not
 
-l(l == 0) = -0;
-u(isempty (x)) = -inf;
+  l(l == 0) = -0;
+  u(isempty (x)) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 
