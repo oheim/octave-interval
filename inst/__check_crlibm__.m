@@ -25,37 +25,37 @@
 
 function result = __check_crlibm__ ()
 
-if (exist ("crlibm_function") != 3)
+  if (exist ("crlibm_function") != 3)
     ## oct file not in the path
     result = false;
-endif
+  endif
 
-persistent use_crlibm = verify_crlibm ();
+  persistent use_crlibm = verify_crlibm ();
 
-result = use_crlibm;
+  result = use_crlibm;
 
 endfunction
 
 function works = verify_crlibm ()
 
-arithmetic_test_suite = fullfile (...
-    fileparts (file_in_loadpath ("__check_crlibm__.m")), ...
-    "test", ...
-    "crlibm.tst");
+  arithmetic_test_suite = fullfile (...
+                                     fileparts (file_in_loadpath ("__check_crlibm__.m")), ...
+                                     "test", ...
+                                     "crlibm.tst");
 
-if (exist (arithmetic_test_suite) == 0)
+  if (exist (arithmetic_test_suite) == 0)
     ## test suite missing: assume that a package maintainer has removed it to
     ## save some space after having verified that the test suite passes.
     works = true;
     return
-endif
+  endif
 
-works = test (arithmetic_test_suite, "quiet");
+  works = test (arithmetic_test_suite, "quiet");
 
-if (!works)
+  if (!works)
     warning ("interval:crlibm", ...
-             "crlibm is not working properly, using MPFR as a fallback"); 
-endif
+             "crlibm is not working properly, using MPFR as a fallback");
+  endif
 
 endfunction
 

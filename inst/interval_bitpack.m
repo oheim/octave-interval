@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defun interval_bitpack (@var{X})
-## 
+##
 ## Decode an interval from its interchange format.
 ##
 ## The input must either be a matrix of n × 128 bits for n bare intervals, or a
@@ -39,42 +39,42 @@
 
 function result = interval_bitpack (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
-if (not (islogical (x)))
+  endif
+  if (not (islogical (x)))
     ## Built-in function bitpack will fail on other data types
     error ("interval:InvalidOperand", ...
            ['interval_bitpack: parameter must be a bool matrix, ' ...
-            'was: ' typeinfo(x)])
-endif
+              'was: ' typeinfo(x)])
+  endif
 
-switch size (x, 2)
+  switch size (x, 2)
     case 128 # (inf, sup)
-        l = bitpack (x (:, 1 : 64)' (:), 'double');
-        u = bitpack (x (:, 65 : 128)' (:), 'double');
-        result = infsup (l, u);
-    
+      l = bitpack (x (:, 1 : 64)' (:), 'double');
+      u = bitpack (x (:, 65 : 128)' (:), 'double');
+      result = infsup (l, u);
+
     case 136 # (inf, sup, dec)
-        l = bitpack (x (:, 1 : 64)' (:), 'double');
-        u = bitpack (x (:, 65 : 128)' (:), 'double');
-        d = bitpack (x (:, 129 : 136)' (:), 'uint8');
-        
-        dec = cell (size (x, 1), 1);
-        dec (d == 4) = 'trv';
-        dec (d == 8) = 'def';
-        dec (d == 12) = 'dac';
-        dec (d == 16) = 'com';
-        
-        result = infsupdec (l, u, dec);
-        
+      l = bitpack (x (:, 1 : 64)' (:), 'double');
+      u = bitpack (x (:, 65 : 128)' (:), 'double');
+      d = bitpack (x (:, 129 : 136)' (:), 'uint8');
+
+      dec = cell (size (x, 1), 1);
+      dec (d == 4) = 'trv';
+      dec (d == 8) = 'def';
+      dec (d == 12) = 'dac';
+      dec (d == 16) = 'com';
+
+      result = infsupdec (l, u, dec);
+
     otherwise
-        error ("interval:InvalidOperand", ...
-               ['interval_bitpack: invalid bit-length, ' ...
+      error ("interval:InvalidOperand", ...
+             ['interval_bitpack: invalid bit-length, ' ...
                 'expected: 128 or 136, ' ...
                 'was: ' num2str(size (x, 2))])
-endswitch
+  endswitch
 
 endfunction
 %!test "bare";

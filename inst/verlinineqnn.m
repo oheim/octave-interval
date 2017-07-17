@@ -38,7 +38,7 @@
 ## @item
 ## Either @var{x} is a real vector verified to satisfy both inequalities and
 ## @var{y} is a vector of NaN's,
-## 
+##
 ## @item
 ## or @var{y} is a real vector verified to satisfy
 ## @display
@@ -55,7 +55,7 @@
 ## @end itemize
 ##
 ## This work was supported by the Czech Republic National Research Program
-## “Information Society”, project 1ET400300415. 
+## “Information Society”, project 1ET400300415.
 ##
 ## @seealso{linprog}
 ## @end deftypefun
@@ -66,89 +66,89 @@
 
 function [x, y] = verlinineqnn (A, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-b = b(:);
-[m, n] = size (A);
+  b = b(:);
+  [m, n] = size (A);
 
-if (m ~= length(b) || ~isreal (A) || ~isreal (b))
+  if (m ~= length(b) || ~isreal (A) || ~isreal (b))
     error ("verlinineqnn: Parameters must be real and of matching size");
-endif
+  endif
 
-if (~issparse (A))
+  if (~issparse (A))
     A = sparse (A);
-endif
-x = verlinineqnninner (A, b);
-if (~isnan (x(1)) || nargout < 2)
+  endif
+  x = verlinineqnninner (A, b);
+  if (~isnan (x(1)) || nargout < 2)
     y = nan (m, 1);
     return
-endif
+  endif
 
-Ao = [-A'; -speye(m, m); b'];
-bo = [zeros(1, n + m), -1]';
-y = verlinineqnninner (Ao, bo);
+  Ao = [-A'; -speye(m, m); b'];
+  bo = [zeros(1, n + m), -1]';
+  y = verlinineqnninner (Ao, bo);
 endfunction
 
 
 function x = verlinineqnninner (A, b)
-## inner subroutine of verlinineqnn
-## finds a verified solution to A*x<=b, x>=0, or yields a vector of NaN's
-## additive and multiplicative perturbation used
+  ## inner subroutine of verlinineqnn
+  ## finds a verified solution to A*x<=b, x>=0, or yields a vector of NaN's
+  ## additive and multiplicative perturbation used
 
-[m, n] = size (A);  
-ep = max (1e-10, max ([m n 100]) * max ([norm(A, inf) norm(b, inf)]) * eps); 
-e = ones (n, 1);
-Ao = [A; -speye(n, n)];
-bo = [b' zeros(n, 1)']'; # Ao*x<=bo is equivalent to A*x<=b, x>=0
+  [m, n] = size (A);
+  ep = max (1e-10, max ([m n 100]) * max ([norm(A, inf) norm(b, inf)]) * eps);
+  e = ones (n, 1);
+  Ao = [A; -speye(n, n)];
+  bo = [b' zeros(n, 1)']'; # Ao*x<=bo is equivalent to A*x<=b, x>=0
 
-# additive perturbation
-bo = bo - ep .* ones (m + n, 1);
-x = lpprocedure (e, Ao, bo); # solves min e'*x subject to Ao*x<=bo
+                                # additive perturbation
+  bo = bo - ep .* ones (m + n, 1);
+  x = lpprocedure (e, Ao, bo); # solves min e'*x subject to Ao*x<=bo
 
-if (not (any (isnan (x)(:))))
+  if (not (any (isnan (x)(:))))
     left = A * infsup (x); # interval quantity
     if (all (left.sup <= b) && all (x >= 0))
-        # verified solution
-        return
+                                # verified solution
+      return
     endif
-endif
+  endif
 
-# multiplicative perturbation
-bo = bo - ep .* abs (bo) - ep .* (bo == 0);
-x = lpprocedure (e, Ao, bo); # solves min e'*x subject to Ao*x<=bo
+                                # multiplicative perturbation
+  bo = bo - ep .* abs (bo) - ep .* (bo == 0);
+  x = lpprocedure (e, Ao, bo); # solves min e'*x subject to Ao*x<=bo
 
-if (not (any (isnan (x)(:))))
+  if (not (any (isnan (x)(:))))
     left = A * infsup (x); # interval quantity
     if (all (left.sup <= b) && all (x >= 0))
-        # verified solution
-        return
+                                # verified solution
+      return
     endif
-endif
+  endif
 
-# no verified solution
-x = nan (n, 1);
+                                # no verified solution
+  x = nan (n, 1);
 endfunction
 
 
 function x = lpprocedure (c, A, b)
-## solves linear programming problem min c'*x subject to A*x<=b
-## x should be always assigned (unverified optimal solution, or something else;
-## the result is checked afterwards)
-## placed separately so that a different linear programming procedure might
-## also be used
+  ## solves linear programming problem min c'*x subject to A*x<=b
+  ## x should be always assigned (unverified optimal solution, or something else;
+  ## the result is checked afterwards)
+  ## placed separately so that a different linear programming procedure might
+  ## also be used
 
-persistent GLP_MSG_OFF = 0;
+  persistent GLP_MSG_OFF = 0;
 
-[m, n] = size (A);
-x = glpk (c, A, b, ...
-          [], [], ... # 0 <= x <= inf
-          repmat ("U", 1, m), ... # inequality constraint with an upper bound b
-          repmat ("C", 1, n), ... # continuous variable x
-          1, ... # minimization
-          struct ("msglev", GLP_MSG_OFF));
+  [m, n] = size (A);
+  x = glpk (c, A, b, ...
+            [], [], ... # 0 <= x <= inf
+            repmat ("U", 1, m), ... # inequality constraint with an upper bound b
+            repmat ("C", 1, n), ... # continuous variable x
+            1, ... # minimization
+            struct ("msglev", GLP_MSG_OFF));
 
 endfunction
 

@@ -26,7 +26,7 @@
 ##
 ## For a square interval (or real) matrix @var{A}, this function verifies
 ## inverse nonnegativity of @var{A}, or not-inverse-nonnegativity of @var{A},
-## or yields no verified result: 
+## or yields no verified result:
 ##
 ## @table @asis
 ## @item @var{nonneg} = 1
@@ -46,7 +46,7 @@
 ## @url{http://www.cs.cas.cz/~rohn}, Section 3.9.
 ##
 ## This work was supported by the Czech Republic National Research
-## Program “Information Society”, project 1ET400300415. 
+## Program “Information Society”, project 1ET400300415.
 ##
 ## @seealso{inv}
 ## @end deftypefun
@@ -57,59 +57,59 @@
 
 function [nonneg, As] = verinvnonneg (A)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-[m, n] = size (A);
-nonneg = -1;
-As = repmat (infsup, m, n);
+  [m, n] = size (A);
+  nonneg = -1;
+  As = repmat (infsup, m, n);
 
-if (m ~= n)
+  if (m ~= n)
     error ("verinvnonneg: matrix not square");
-endif
+  endif
 
-if (~isa (A, "infsup"))
+  if (~isa (A, "infsup"))
     A = infsup (A); # allows for real input
-endif
+  endif
 
-if (any (isempty (A)(:)))
-    # matrix is empty interval: no inverse
+  if (any (isempty (A)(:)))
+                                # matrix is empty interval: no inverse
     nonneg = 0;
     return
-endif
+  endif
 
-Al = infsup (inf (A), max (-realmax, inf (A)));
-Bl = inv (Al); 
-if (all (all (issingleton (A))))
+  Al = infsup (inf (A), max (-realmax, inf (A)));
+  Bl = inv (Al);
+  if (all (all (issingleton (A))))
     Au = Al;
     Bu = Bl;
-else
+  else
     Au = infsup (min (realmax, sup (A)), sup (A));
     Bu = inv (Au);
-endif
+  endif
 
-if (any ((isempty (Bl) | isempty (Bu))(:)))
-    # empty inverse: no inverse exists
+  if (any ((isempty (Bl) | isempty (Bu))(:)))
+                                # empty inverse: no inverse exists
     nonneg = 0;
     return
-endif
-if (all (all (Bl.inf >= 0)) && all (all (Bu.inf >= 0)))
-    # verified inverse nonnegative; Kuttler, Math. of Comp. 1971
+  endif
+  if (all (all (Bl.inf >= 0)) && all (all (Bu.inf >= 0)))
+          # verified inverse nonnegative; Kuttler, Math. of Comp. 1971
     nonneg = 1;
     return
-endif
-if (any ((Bl.sup < 0)(:)))
+  endif
+  if (any ((Bl.sup < 0)(:)))
     nonneg = 0;
     As=Al; # A.inf verified not inverse nonnegative
-    return 
-endif
-if (any ((Bu.sup < 0)(:)))
+    return
+  endif
+  if (any ((Bu.sup < 0)(:)))
     nonneg = 0;
     As = Au; # A.sup verified not inverse nonnegative
-    return 
-end
+    return
+  end
 endfunction
 
 %!assert (verinvnonneg (eye (1)), 1)

@@ -29,42 +29,42 @@
 
 function result = __split_interval_literals__ (s)
 
-if (isempty (s))
+  if (isempty (s))
     result = { s };
     return
-endif
+  endif
 
-## Split into rows,
-## using newline characters, semicolon and rows in 2D strings as delimiters
-row = transpose (ostrsplit (s, ";\n"));
+  ## Split into rows,
+  ## using newline characters, semicolon and rows in 2D strings as delimiters
+  row = transpose (ostrsplit (s, ";\n"));
 
-## Normalize delimiters between intervals within the same row
-row = strrep (row, "\t", ' ');
-row = strrep (row, '[', "\t["); # start of interval literals
-row = regexprep (row, '(](_\w*)?)\s*', "$1\t"); # end of interval literals
+  ## Normalize delimiters between intervals within the same row
+  row = strrep (row, "\t", ' ');
+  row = strrep (row, '[', "\t["); # start of interval literals
+  row = regexprep (row, '(](_\w*)?)\s*', "$1\t"); # end of interval literals
 
-## Bare numbers “1 2, 3 4” shall be split into columns by spaces or commas
-[bare_numbers.s, bare_numbers.e] = regexp (row, '(^|\t)[^\t\[]+($|\t)');
-for i = 1 : numel (row)
+  ## Bare numbers “1 2, 3 4” shall be split into columns by spaces or commas
+  [bare_numbers.s, bare_numbers.e] = regexp (row, '(^|\t)[^\t\[]+($|\t)');
+  for i = 1 : numel (row)
     for j = 1 : numel (bare_numbers.s {i})
-        select = bare_numbers.s {i} (j) : bare_numbers.e {i} (j);
-        row {i} (select) = strrep (strrep (row {i} (select), ' ', "\t"), ...
-                                                             ',', "\t");
+      select = bare_numbers.s {i} (j) : bare_numbers.e {i} (j);
+      row {i} (select) = strrep (strrep (row {i} (select), ' ', "\t"), ...
+                                 ',', "\t");
     endfor
-endfor
+  endfor
 
-## Separate columns within each row
-row = cellfun (@(s) strsplit (strtrim (s), "\t"), row, "UniformOutput", false);
+  ## Separate columns within each row
+  row = cellfun (@(s) strsplit (strtrim (s), "\t"), row, "UniformOutput", false);
 
-## Fill short rows with empty columns
-cols = cellfun ('numel', row);
-max_cols = max (cols);
-for i = find (cols < max_cols)'
+  ## Fill short rows with empty columns
+  cols = cellfun ('numel', row);
+  max_cols = max (cols);
+  for i = find (cols < max_cols)'
     row {i} = horzcat (row {i}, {"[Empty]"} (ones (1, max_cols - cols (i))));
-endfor
+  endfor
 
-## Build a 2D cell array from a cell array of cell arrays
-result = vertcat (row {:});
+  ## Build a 2D cell array from a cell array of cell arrays
+  result = vertcat (row {:});
 
 endfunction
 
