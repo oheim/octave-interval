@@ -207,6 +207,7 @@ infsupdec (@{1; eps; "4/7"; "pi"@}, @{2; 1; "e"; "0xff"@})
    [0.57142, 2.7183]_com
        [3.1415, 255]_com
 @end group
+@end example
 @example
 @group
 infsupdec (ones (2, 2, 2))
