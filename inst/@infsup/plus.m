@@ -69,7 +69,7 @@ function x = plus (x, y)
 endfunction
 
 %!# from the documentation string
-%! assert (infsup (2, 3) + infsup (1, 2) == infsup (3, 5));
+%!assert (infsup (2, 3) + infsup (1, 2) == infsup (3, 5));
 
 %!# correct use of signed zeros
 %!test
@@ -78,10 +78,8 @@ endfunction
 %! assert (not (signbit (sup (x))));
 
 %!shared testdata
-%! # Load test/itl.mat (contains test data from src/*.itl)
-%! addpath (file_in_loadpath ("test/"));
-%! warning ("off", "Octave:data-file-in-path", "local");
-%! testdata = load ("itl.mat");
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test
 %! # Scalar evaluation
