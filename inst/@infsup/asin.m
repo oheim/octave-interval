@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} asin (@var{X})
-## 
+##
 ## Compute the inverse sine in radians (arcsine).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,30 +36,30 @@
 
 function x = asin (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-persistent domain = infsup (-1, 1);
-x = intersect (x, domain);
+  persistent domain = infsup (-1, 1);
+  x = intersect (x, domain);
 
-## asin is monotonically increasing from (-1, -pi/2) to (1, pi/2)
-if (__check_crlibm__ ())
+  ## asin is monotonically increasing from (-1, -pi/2) to (1, pi/2)
+  if (__check_crlibm__ ())
     l = crlibm_function ('asin', -inf, x.inf);
     u = crlibm_function ('asin', +inf, x.sup);
-else
+  else
     l = mpfr_function_d ('asin', -inf, x.inf);
     u = mpfr_function_d ('asin', +inf, x.sup);
-endif
-l(l == 0) = -0;
+  endif
+  l(l == 0) = -0;
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

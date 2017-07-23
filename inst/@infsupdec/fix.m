@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} fix (@var{X})
-## 
+##
 ## Truncate fractional portion of each number in interval @var{X}.  This is
 ## equivalent to rounding towards zero.
 ##
@@ -39,25 +39,25 @@
 
 function result = fix (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (fix (x.infsup));
+  result = newdec (fix (x.infsup));
 
-## Between two integral numbers the function is constant, thus continuous
-## At x == 0 the function is continuous.
-discontinuous = not (issingleton (result));
-result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
+  ## Between two integral numbers the function is constant, thus continuous
+  ## At x == 0 the function is continuous.
+  discontinuous = not (issingleton (result));
+  result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
 
-onlyrestrictioncontinuous = issingleton (result) & ...
-    ((sup (x) < 0 & fix (sup (x)) == sup (x)) | ...
-     (inf (x) > 0 & fix (inf (x)) == inf (x)));
-result.dec(onlyrestrictioncontinuous) = ...
-    min (result.dec(onlyrestrictioncontinuous), _dac ());
+  onlyrestrictioncontinuous = issingleton (result) & ...
+                              ((sup (x) < 0 & fix (sup (x)) == sup (x)) | ...
+                               (inf (x) > 0 & fix (inf (x)) == inf (x)));
+  result.dec(onlyrestrictioncontinuous) = ...
+  min (result.dec(onlyrestrictioncontinuous), _dac ());
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

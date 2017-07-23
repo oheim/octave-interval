@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} dilog (@var{X})
-## 
+##
 ## Compute the real part of the dilogarithm function.
 ##
 ## @tex
@@ -52,33 +52,33 @@
 
 function x = dilog (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = inf (size (x.inf));
-u = -l;
+  l = inf (size (x.inf));
+  u = -l;
 
-## Monotonically increasing for x1
-x1 = intersect (x, infsup (-inf, 2));
-select = not (isempty (x1));
-if (any (select(:)))
+  ## Monotonically increasing for x1
+  x1 = intersect (x, infsup (-inf, 2));
+  select = not (isempty (x1));
+  if (any (select(:)))
     l(select) = mpfr_function_d ('dilog', -inf, x1.inf(select));
     u(select) = mpfr_function_d ('dilog', +inf, x1.sup(select));
-endif
+  endif
 
-## Monotonically decreasing for x2
-x2 = intersect (x, infsup (2, inf));
-select = not (isempty (x2));
-if (any (select(:)))
+  ## Monotonically decreasing for x2
+  x2 = intersect (x, infsup (2, inf));
+  select = not (isempty (x2));
+  if (any (select(:)))
     l(select) = min (l(select), ...
-                mpfr_function_d ('dilog', -inf, x2.sup(select)));
+                     mpfr_function_d ('dilog', -inf, x2.sup(select)));
     u(select) = mpfr_function_d ('dilog', +inf, x2.inf(select));
-endif
+  endif
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

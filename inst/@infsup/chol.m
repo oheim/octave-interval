@@ -74,7 +74,7 @@
 ##
 ## This function tries to guarantee that each symmetric matrix in @var{A} is
 ## positive definite.  If that fails, a warning is triggered.
-## 
+##
 ## @example
 ## @group
 ## A = infsup (pascal (3));
@@ -99,46 +99,46 @@
 
 function [fact, P] = chol (A, option)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-elseif (nargin < 2)
+  elseif (nargin < 2)
     option = "upper";
-endif
+  endif
 
-if (not (ischar (option) && any (strcmp (option, {"upper", "lower"}))))
+  if (not (ischar (option) && any (strcmp (option, {"upper", "lower"}))))
     print_usage ();
     return
-endif
+  endif
 
-[m, n] = size (A);
-if (m ~= n)
+  [m, n] = size (A);
+  if (m ~= n)
     error ("chol: matrix is not square");
-endif
+  endif
 
-## Matrix is symmetric by definition, eliminate illegal values
-A = intersect (A, A');
-P = 0;
+  ## Matrix is symmetric by definition, eliminate illegal values
+  A = intersect (A, A');
+  P = 0;
 
-## columnwise computation of L done in frame of A
-for k = 1 : n
+  ## columnwise computation of L done in frame of A
+  for k = 1 : n
     idx_diag = substruct ("()", {k, k});
     ## row vector # enables vectorized computation
     el = subsref (A, substruct ("()", {k, 1 : k - 1}));
     ## first main formula (diagonal entry)
     alpha = subsref (A, idx_diag) - el * el';
     if (inf (alpha) <= 0)
-        if (sup (alpha) <= 0)
-            ## each symmetric Ao in A verified not to be PD
-            P = -alpha.sup;
-            if (nargout < 2)
-                error ("chol: matrix is not positive definite");
-            endif
-        else
-            ## continue only on PD values, but warn about it
-            warning ("chol:PD", ...
-                     "chol: matrix is not guaranteed to be positive definite");
+      if (sup (alpha) <= 0)
+        ## each symmetric Ao in A verified not to be PD
+        P = -alpha.sup;
+        if (nargout < 2)
+          error ("chol: matrix is not positive definite");
         endif
+      else
+        ## continue only on PD values, but warn about it
+        warning ("chol:PD", ...
+                 "chol: matrix is not guaranteed to be positive definite");
+      endif
     endif
     s = sqrt (alpha);
     A = subsasgn (A, idx_diag, s);
@@ -148,15 +148,15 @@ for k = 1 : n
                   (subsref (A, idx_subdiag) - ...
                    subsref (A, substruct ("()", {k + 1 : n, 1 : k - 1})) * ...
                    el') ./ s);
-endfor
-## verified Cholesky decomposition found
-L = tril (A); # lower triangular part extracted
-switch (option)
+  endfor
+  ## verified Cholesky decomposition found
+  L = tril (A); # lower triangular part extracted
+  switch (option)
     case "lower"
-        fact = L;
+      fact = L;
     case "upper"
-        fact = L';
-endswitch
+      fact = L';
+  endswitch
 
 endfunction
 

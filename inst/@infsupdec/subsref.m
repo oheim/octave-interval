@@ -21,7 +21,7 @@
 ## @defopx Operator {@@infsupdec} {@var{A}(@var{I1}, @var{I2})}
 ## @defopx Operator {@@infsupdec} {@var{A}.@var{P}}
 ##
-## Select property @var{P} or elements @var{I} from interval matrix @var{A}.
+## Select property @var{P} or elements @var{I} from interval array @var{A}.
 ##
 ## The index @var{I} may be either @code{:} or an index matrix.
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING

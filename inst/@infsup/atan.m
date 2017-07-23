@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} atan (@var{X})
-## 
+##
 ## Compute the inverse tangent in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,27 +36,27 @@
 
 function x = atan (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## atan is monotonically increasing
-if (__check_crlibm__ ())
+  ## atan is monotonically increasing
+  if (__check_crlibm__ ())
     l = crlibm_function ('atan', -inf, x.inf);
     u = crlibm_function ('atan', +inf, x.sup);
-else
+  else
     l = mpfr_function_d ('atan', -inf, x.inf);
     u = mpfr_function_d ('atan', +inf, x.sup);
-endif
-l(l == 0) = -0;
+  endif
+  l(l == 0) = -0;
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

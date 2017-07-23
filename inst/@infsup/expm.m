@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} expm (@var{A})
-## 
+##
 ## Compute the matrix exponential of square matrix @var{A}.
 ##
 ## The matrix exponential is defined as the infinite Taylor series
@@ -49,7 +49,7 @@
 ## single step).
 ##
 ## The algorithm has been published by Alexandre Goldsztejn and Arnold
-## Neumaier (2009), “On the Exponentiation of Interval Matrices.” 
+## Neumaier (2009), “On the Exponentiation of Interval Matrices.”
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
@@ -79,46 +79,46 @@
 
 function result = expm (A)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-if (isscalar (A))
+  if (isscalar (A))
     ## Short-circuit for scalars
     result = exp (A);
     return
-endif
+  endif
 
-if (not (issquare (A.inf)))
+  if (not (issquare (A.inf)))
     error ("interval:InvalidOperand", ...
            "expm: must be square matrix");
-endif
+  endif
 
-## Choose L such that ||A|| / 2^L < 0.1 and 10 <= L <= 100
-L = min (max (inf (ceil (log2 (10 * norm (A, inf)))), 10), 100);
-## Choose K such that K + 2 > ||A|| and 10 <= K <= 170
-K = min (max (inf (ceil (norm (A, inf) - 2)), 10), 170);
+  ## Choose L such that ||A|| / 2^L < 0.1 and 10 <= L <= 100
+  L = min (max (inf (ceil (log2 (10 * norm (A, inf)))), 10), 100);
+  ## Choose K such that K + 2 > ||A|| and 10 <= K <= 170
+  K = min (max (inf (ceil (norm (A, inf) - 2)), 10), 170);
 
-## 1. Scale
-A = rdivide (A, pow2 (L));
+  ## 1. Scale
+  A = rdivide (A, pow2 (L));
 
-## 2. Compute Taylor series
-## Compute Horner scheme: I + A*(I + A/2*(I + A/3*( ... (I + A/K) ... )))
-result = I = eye (size (A.inf));
-for k = K : -1 : 1
+  ## 2. Compute Taylor series
+  ## Compute Horner scheme: I + A*(I + A/2*(I + A/3*( ... (I + A/K) ... )))
+  result = I = eye (size (A.inf));
+  for k = K : -1 : 1
     result = I + A ./ k * result;
-endfor
-## Truncation error for the exponential series
-alpha = norm (A, inf);
-rho = pown (alpha, K + 1) ./ ...
-      (factorial (infsup (K + 1)) * (1 - alpha ./ (K + 2)));
-warning ("off", "interval:ImplicitPromote", "local");
-truncation_error = rho .* infsup (-1, 1);
-result = result + truncation_error;
+  endfor
+  ## Truncation error for the exponential series
+  alpha = norm (A, inf);
+  rho = pown (alpha, K + 1) ./ ...
+        (factorial (infsup (K + 1)) * (1 - alpha ./ (K + 2)));
+  warning ("off", "interval:ImplicitPromote", "local");
+  truncation_error = rho .* infsup (-1, 1);
+  result = result + truncation_error;
 
-## 3. Squaring
-result = mpower (result, pow2 (L));
+  ## 3. Squaring
+  result = mpower (result, pow2 (L));
 
 endfunction
 

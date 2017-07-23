@@ -54,77 +54,77 @@
 
 function result = polyval (p, x)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsup")))
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (not (isa (p, "infsup")))
+  endif
+  if (not (isa (p, "infsup")))
     p = infsup (p);
-endif
+  endif
 
-if (not (isscalar (x)))
+  if (not (isscalar (x)))
     error ('point of evaluation X must be a scalar')
-endif
+  endif
 
-if (not (isvector (p)))
+  if (not (isvector (p)))
     error ('polynomial P must be a vector of coefficients')
-endif
+  endif
 
-if (isempty (x))
+  if (isempty (x))
     result = x;
-endif;
+  endif;
 
-n = numel (p);
-switch (n)
+  n = numel (p);
+  switch (n)
     case 0 # empty sum
-        result = infsup (0);
-        return
+      result = infsup (0);
+      return
     case 1 # p .* x.^0
-        result = p;
-        return
+      result = p;
+      return
     case 2 # p(1) .* x.^1 + p(2) .* x.^0
-        result = fma (x, subsref (p, substruct ("()", {1})), ...
-                         subsref (p, substruct ("()", {2})));
-        return
-endswitch
+      result = fma (x, subsref (p, substruct ("()", {1})), ...
+                    subsref (p, substruct ("()", {2})));
+      return
+  endswitch
 
-if (x == 0)
+  if (x == 0)
     result = subsref (p, substruct ("()", {n}));
     return
-elseif (x == 1)
+  elseif (x == 1)
     result = sum (p);
     return
-elseif (x == -1)
+  elseif (x == -1)
     result = dot (p, (-1) .^ ((n : -1 : 1) - 1));
     return
-endif
+  endif
 
-kMax = 20;
+  kMax = 20;
 
-idxNext.type = '()';
-idxLast.type = '()';
+  idxNext.type = '()';
+  idxLast.type = '()';
 
-## Compute first approximation using Horner's scheme
-yy = infsup (zeros (n, 1));
-idxNext.subs = {1};
-result = subsref (p, idxNext);
-yy = subsasgn (yy, idxNext, result);
-for i = 2 : n
+  ## Compute first approximation using Horner's scheme
+  yy = infsup (zeros (n, 1));
+  idxNext.subs = {1};
+  result = subsref (p, idxNext);
+  yy = subsasgn (yy, idxNext, result);
+  for i = 2 : n
     idxNext.subs = {i};
     result = fma (result, x, subsref (p, idxNext));
     yy = subsasgn (yy, idxNext, result);
-endfor
+  endfor
 
-y = zeros (n, kMax);
-for k = 1 : kMax
+  y = zeros (n, kMax);
+  for k = 1 : kMax
     lastresult = result;
 
     if (isempty (result))
-        break
+      break
     endif
 
     ## Iterative refinement
@@ -135,28 +135,31 @@ for k = 1 : kMax
     ## evaluation of the interval system A*[y] = [r]
     yy = infsup (zeros (n, 1));
     for i = 2 : n
-        idxNext.subs = {i};
-        idxLast.subs = {i-1};
-        
-        coef = subsref (p, idxNext);
-        yy = subsasgn (yy, idxNext, dot (...
-            [subsref(yy, idxLast), coef, y(i, 1 : k), y(i - 1, 1 : k)], ...
-            [x,                    1,    -ones(1, k), x.*ones(1, k)]));
+      idxNext.subs = {i};
+      idxLast.subs = {i-1};
+
+      coef = subsref (p, idxNext);
+      yy = subsasgn (yy, idxNext, dot ([subsref(yy, idxLast), ...
+                                        coef, y(i, 1 : k), ...
+                                        y(i - 1, 1 : k)], ...
+                                       [x, ...
+                                        1, ...
+                                        -ones(1, k), x.*ones(1, k)]));
     endfor
-    
+
     ## Determination of a new enclosure of p (x)
     idxLast.subs = {n};
     result = intersect (result, sum ([subsref(yy, idxLast), y(n, 1 : k)]));
     if (eq (result, lastresult))
-        ## No improvement
-        break
+      ## No improvement
+      break
     endif
     if (mpfr_function_d ('plus', +inf, inf (result), pow2 (-1074)) >= ...
         sup (result))
-        ## 1 ULP accuracy reached
-        break
+      ## 1 ULP accuracy reached
+      break
     endif
-endfor
+  endfor
 
 endfunction
 

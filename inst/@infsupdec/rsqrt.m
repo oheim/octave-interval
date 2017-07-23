@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} rsqrt (@var{X})
-## 
+##
 ## Compute the reciprocal square root (for all positive numbers).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,18 +36,18 @@
 
 function result = rsqrt (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (rsqrt (x.infsup));
+  result = newdec (rsqrt (x.infsup));
 
-## rsqrt is continuous everywhere, but defined for x > 0 only
-persistent domain_hull = infsup (0, inf);
-result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
+  ## rsqrt is continuous everywhere, but defined for x > 0 only
+  persistent domain_hull = infsup (0, inf);
+  result.dec(not (interior (x.infsup, domain_hull))) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

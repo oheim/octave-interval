@@ -18,7 +18,7 @@
 ## @defmethod {@@infsup} union (@var{A})
 ## @defmethodx {@@infsup} union (@var{A}, @var{B})
 ## @defmethodx {@@infsup} union (@var{A}, [], @var{DIM})
-## 
+##
 ## Build the interval hull of the union of intervals.
 ##
 ## With two arguments the union is built pair-wise.  Otherwise the union is
@@ -44,33 +44,33 @@
 
 function a = union (a, b, dim)
 
-if (not (isa (a, "infsup")))
+  if (not (isa (a, "infsup")))
     a = infsup (a);
-endif
+  endif
 
-switch (nargin)
+  switch (nargin)
     case 1
-        l = min (a.inf);
-        u = max (a.sup);
+      l = min (a.inf);
+      u = max (a.sup);
     case 2
-        if (not (isa (b, "infsup")))
-            b = infsup (b);
-        endif
-        l = min (a.inf, b.inf);
-        u = max (a.sup, b.sup);
+      if (not (isa (b, "infsup")))
+        b = infsup (b);
+      endif
+      l = min (a.inf, b.inf);
+      u = max (a.sup, b.sup);
     case 3
-        if (not (builtin ("isempty", b)))
-            warning ("union: second argument is ignored");
-        endif
-        l = min (a.inf, [], dim);
-        u = max (a.sup, [], dim);
+      if (not (builtin ("isempty", b)))
+        warning ("union: second argument is ignored");
+      endif
+      l = min (a.inf, [], dim);
+      u = max (a.sup, [], dim);
     otherwise
-        print_usage ();
-        return
-endswitch
+      print_usage ();
+      return
+  endswitch
 
-a.inf = l;
-a.sup = u;
+  a.inf = l;
+  a.sup = u;
 
 endfunction
 

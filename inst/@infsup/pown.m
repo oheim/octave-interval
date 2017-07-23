@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} pown (@var{X}, @var{P})
-## 
+##
 ## Compute the monomial @code{x^@var{P}} for all numbers in @var{X}.
 ##
 ## Monomials are defined for all real numbers and the special monomial
@@ -39,83 +39,83 @@
 
 function result = pown (x, p)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isnumeric (p)) || any (any (fix (p) ~= p)))
+  endif
+  if (not (isnumeric (p)) || any (any (fix (p) ~= p)))
     error ("interval:InvalidOperand", "pown: exponent is not an integer");
-endif
+  endif
 
-## Resize, if scalar × matrix
-if (not (size_equal (x.inf, p)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (x.inf, p)))
     x.inf = ones (size (p)) .* x.inf;
     x.sup = ones (size (p)) .* x.sup;
     p = ones (size (x.inf)) .* p;
-endif
+  endif
 
-result = x; % already correct for p == 1
+  result = x; % already correct for p == 1
 
-select = (p == 0 & not (isempty (x)));
-result.inf(select) = result.sup(select) = 1;
+  select = (p == 0 & not (isempty (x)));
+  result.inf(select) = result.sup(select) = 1;
 
-idx.type = "()";
-idx.subs = {(p == 2)}; # x^2
-if (any (idx.subs{1}(:)))
+  idx.type = "()";
+  idx.subs = {(p == 2)}; # x^2
+  if (any (idx.subs{1}(:)))
     result = subsasgn (result, idx, sqr (subsref (x, idx)));
-endif
+  endif
 
-idx.subs = {(p == -1)}; # x^-1 = 1./x
-if (any (idx.subs{1}(:)))
+  idx.subs = {(p == -1)}; # x^-1 = 1./x
+  if (any (idx.subs{1}(:)))
     result = subsasgn (result, idx, 1 ./ subsref (x, idx));
-endif
+  endif
 
-idx.subs = {(rem (p, 2) == 0 & p ~= 2 & p ~= 0)};
-if (any (idx.subs{1}(:))) # p even
+  idx.subs = {(rem (p, 2) == 0 & p ~= 2 & p ~= 0)};
+  if (any (idx.subs{1}(:))) # p even
     x_mig = mig (subsref (x, idx));
     x_mig(isnan (x_mig)) = inf;
 
     x_mag = mag (subsref (x, idx));
     x_mag(isnan (x_mag)) = -inf;
-    
+
     x.inf = subsasgn (x.inf, idx, x_mig);
     x.sup = subsasgn (x.sup, idx, x_mag);
-    
-    result = subsasgn (result, idx, pow (subsref (x, idx), subsref (p, idx)));
-endif
 
-idx.subs = {(rem (p, 2) ~= 0 & p ~= -1)};
-if (any (idx.subs{1}(:))) # p odd
+    result = subsasgn (result, idx, pow (subsref (x, idx), subsref (p, idx)));
+  endif
+
+  idx.subs = {(rem (p, 2) ~= 0 & p ~= -1)};
+  if (any (idx.subs{1}(:))) # p odd
     x_idx = subsref (x, idx);
     p_idx = infsup (subsref (p, idx));
     result = subsasgn (result, idx, ...
-                        union (pow (x_idx, p_idx), ...
+                       union (pow (x_idx, p_idx), ...
                               -pow (-x_idx, p_idx)));
-endif
+  endif
 
-## Special case: x = [0]. The pow function used above would be undefined.
-select = (p > 0 & x.inf == 0 & x.sup == 0);
-result.inf(select) = -0;
-result.sup(select) = +0;
+  ## Special case: x = [0]. The pow function used above would be undefined.
+  select = (p > 0 & x.inf == 0 & x.sup == 0);
+  result.inf(select) = -0;
+  result.sup(select) = +0;
 
 endfunction
 
 function x = sqr (x)
-## Compute the square for each entry in @var{X}.
-##
-## Accuracy: The result is a tight enclosure.
+  ## Compute the square for each entry in @var{X}.
+  ##
+  ## Accuracy: The result is a tight enclosure.
 
-l = mpfr_function_d ('sqr', -inf, mig (x));
-u = mpfr_function_d ('sqr', +inf, mag (x));
+  l = mpfr_function_d ('sqr', -inf, mig (x));
+  u = mpfr_function_d ('sqr', +inf, mag (x));
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

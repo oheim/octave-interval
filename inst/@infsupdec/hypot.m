@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} hypot (@var{X}, @var{Y})
-## 
+##
 ## Compute the euclidean norm.
 ##
 ## @code{hypot (@var{x}, @var{y}) = sqrt (@var{x}^2 + @var{y}^2)}
@@ -39,21 +39,21 @@
 
 function result = hypot (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = newdec (hypot (x.infsup, y.infsup));
-## hypot is continuous and defined everywhere
-result.dec = min (result.dec, min (x.dec, y.dec));
+  result = newdec (hypot (x.infsup, y.infsup));
+  ## hypot is continuous and defined everywhere
+  result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

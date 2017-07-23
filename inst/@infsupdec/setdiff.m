@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} setdiff (@var{A}, @var{B})
-## 
+##
 ## Build the relative complement of interval @var{B} in interval @var{A}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -42,20 +42,20 @@
 
 function result = setdiff (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (a, "infsupdec")))
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-result = infsupdec (setdiff (a.infsup, b.infsup), "trv");
-result.dec(isnai (a) | isnai (b)) = _ill ();
+  result = infsupdec (setdiff (a.infsup, b.infsup), "trv");
+  result.dec(isnai (a) | isnai (b)) = _ill ();
 
 endfunction
 

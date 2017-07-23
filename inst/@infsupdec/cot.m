@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} cot (@var{X})
-## 
+##
 ## Compute the cotangent in radians, that is the reciprocal tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,19 +36,19 @@
 
 function result = cot (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (cot (x.infsup));
+  result = newdec (cot (x.infsup));
 
-## Because tan (nextdown (pi)) < realmax, we can simple check for
-## a singularity by comparing the result with entire for x ~= 0.
-domain = not (isentire (result)) | (inf (x) <= 0 & sup (x) >= 0);
-result.dec(not (domain)) = _trv ();
+  ## Because tan (nextdown (pi)) < realmax, we can simple check for
+  ## a singularity by comparing the result with entire for x ~= 0.
+  domain = not (isentire (result)) | (inf (x) <= 0 & sup (x) >= 0);
+  result.dec(not (domain)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

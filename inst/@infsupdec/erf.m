@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} erf (@var{X})
-## 
+##
 ## Compute the error function.
 ##
 ## @tex
@@ -53,14 +53,14 @@
 
 function result = erf (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (erf (x.infsup));
-## erf is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (erf (x.infsup));
+  ## erf is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

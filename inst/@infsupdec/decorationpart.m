@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} decorationpart (@var{X})
 ## @defmethodx {@@infsupdec} decorationpart (@var{X}, @var{TYPE})
-## 
+##
 ## Return the decoration of the decorated interval @var{X}.
 ##
 ## The returned value depends on the requested @var{TYPE}.
@@ -27,8 +27,8 @@
 ## size of its interval part.  Possible values: @option{ill}, @option{trv},
 ## @option{def}, @option{dac}, @option{com}.
 ## @item @option{uint8}
-## The decoration is a matrix of uint8 numbers and its size equals the size of
-## its interval part.  Possible values: @option{0}, @option{4}, @option{8}, 
+## The decoration is an array of uint8 numbers and its size equals the size of
+## its interval part.  Possible values: @option{0}, @option{4}, @option{8},
 ## @option{12}, @option{16} as defined by IEEE Std 1788-2015, 14.4 Interchange
 ## representations and encodings.
 ## @end table
@@ -60,39 +60,39 @@
 
 function dec = decorationpart (x, type)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     type = "char";
-endif
+  endif
 
-switch (type)
+  switch (type)
     case "char"
-        # see below
+                                # see below
     case "uint8"
-        dec = x.dec;
-        return
+      dec = x.dec;
+      return
     otherwise
-        error ("decorationpart: illegal value for parameter TYPE")
-endswitch
+      error ("decorationpart: illegal value for parameter TYPE")
+  endswitch
 
-persistent dec_translation = {...
-    # 0 = ill
-    "ill", [], [], [], ...
-    # 4 = trv
-    "trv", [], [], [], ...
-    # 8 = def
-    "def", [], [], [], ...
-    # 12 = dac
-    "dac", [], [], [], ...
-    # 16 = com
-    "com"};
+  persistent dec_translation = {...
+                                # 0 = ill
+                                 "ill", [], [], [], ...
+                                # 4 = trv
+                                 "trv", [], [], [], ...
+                                # 8 = def
+                                 "def", [], [], [], ...
+                                # 12 = dac
+                                 "dac", [], [], [], ...
+                                # 16 = com
+                                 "com"};
 
-dec = cell (size (x.dec));
-dec(:) = dec_translation(x.dec(:) + 1);
+  dec = cell (size (x.dec));
+  dec(:) = dec_translation(x.dec(:) + 1);
 
 endfunction
 
@@ -110,4 +110,3 @@ endfunction
 %!      < decorationpart (infsupdec ("[3, 4]_dac"), "uint8"));
 %!assert (decorationpart (infsupdec ("[3, 4]_dac"), "uint8") ...
 %!      < decorationpart (infsupdec ("[3, 4]_com"), "uint8"));
-

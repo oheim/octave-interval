@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypefun {[@var{QUOTIENT}, @var{REMAINDER}] =} decimaldivide (@var{DIVIDEND}, @var{DIVISOR}, @var{PRECISION})
-## 
+##
 ## Divide two decimal numbers.  The parameter @var{PRECISION} limits the
 ## maximum significand places in the @var{QUOTIENT}.
 ##
@@ -27,46 +27,46 @@
 
 function [quotient, remainder] = decimaldivide (dividend, divisor, precision)
 
-assert (not (isempty (divisor.m)), "division by zero");
+  assert (not (isempty (divisor.m)), "division by zero");
 
-if (isempty (dividend.m)) # 0 / divisor
+  if (isempty (dividend.m)) # 0 / divisor
     quotient = dividend;
     remainder = dividend;
     return
-endif
+  endif
 
-## Compute exponent and sign of the result
-quotient.e = dividend.e - divisor.e + 1;
-divisor.e = dividend.e;
-quotient.s = xor (dividend.s, divisor.s);
-divisor.s = dividend.s;
-quotient.m = zeros (precision, 1);
+  ## Compute exponent and sign of the result
+  quotient.e = dividend.e - divisor.e + 1;
+  divisor.e = dividend.e;
+  quotient.s = xor (dividend.s, divisor.s);
+  divisor.s = dividend.s;
+  quotient.m = zeros (precision, 1);
 
-## Perform long division
-remainder = dividend;
-i = 1;
-while (i <= length (quotient.m))
+  ## Perform long division
+  remainder = dividend;
+  i = 1;
+  while (i <= length (quotient.m))
     if (isempty (remainder.m))
-        break
+      break
     endif
-    
+
     while (sign (decimalcompare (divisor, remainder)) ~= (-1) ^ remainder.s)
-        quotient.m (i) ++;
-        
-        ## Subtract divisor from remainder
-        divisor.s = not (remainder.s);
-        remainder = decimaladd (remainder, divisor);
-        divisor.s = remainder.s;
+      quotient.m (i) ++;
+
+      ## Subtract divisor from remainder
+      divisor.s = not (remainder.s);
+      remainder = decimaladd (remainder, divisor);
+      divisor.s = remainder.s;
     endwhile
     divisor.e --;
     if (i == 1 && quotient.m (i) == 0)
-        quotient.e --;
+      quotient.e --;
     else
-        i++;
+      i++;
     endif
-endwhile
+  endwhile
 
-## Remove trailing zeros
-quotient.m = quotient.m(1 : find (quotient.m ~= 0, 1, "last"));
+  ## Remove trailing zeros
+  quotient.m = quotient.m(1 : find (quotient.m ~= 0, 1, "last"));
 
 endfunction

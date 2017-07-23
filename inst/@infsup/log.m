@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} log (@var{X})
-## 
+##
 ## Compute the natural logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
@@ -38,28 +38,28 @@
 
 function x = log (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x = intersect (x, infsup (0, inf));
+  x = intersect (x, infsup (0, inf));
 
-## log is monotonically increasing from (0, -inf) to (inf, inf)
-if (__check_crlibm__ ())
+  ## log is monotonically increasing from (0, -inf) to (inf, inf)
+  if (__check_crlibm__ ())
     l = crlibm_function ('log', -inf, x.inf); # this works for empty intervals
     u = crlibm_function ('log', +inf, x.sup); # ... this does not
-else
+  else
     l = mpfr_function_d ('log', -inf, x.inf); # this works for empty intervals
     u = mpfr_function_d ('log', +inf, x.sup); # ... this does not
-endif
+  endif
 
-l(x.sup == 0) = inf;
-l(l == 0) = -0;
-u(isempty (x) | x.sup == 0) = -inf;
+  l(x.sup == 0) = inf;
+  l(l == 0) = -0;
+  u(isempty (x) | x.sup == 0) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

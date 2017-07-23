@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} tanh (@var{X})
-## 
+##
 ## Compute the hyperbolic tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,23 +36,23 @@
 
 function x = tanh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## tanh is monotonically increasing from (-inf, -1) to (inf, 1)
-l = mpfr_function_d ('tanh', -inf, x.inf);
-u = mpfr_function_d ('tanh', +inf, x.sup);
+  ## tanh is monotonically increasing from (-inf, -1) to (inf, 1)
+  l = mpfr_function_d ('tanh', -inf, x.inf);
+  u = mpfr_function_d ('tanh', +inf, x.sup);
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

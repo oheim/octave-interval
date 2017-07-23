@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sumabs (@var{X})
 ## @defmethodx {@@infsup} sumabs (@var{X}, @var{DIM})
-## 
+##
 ## Sum of absolute values along dimension @var{DIM}.  If @var{DIM} is omitted,
 ## it defaults to the first non-singleton dimension.
 ##
@@ -38,16 +38,16 @@
 
 function result = sumabs (x, dim)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     result = sum (abs (x));
-else
+  else
     result = sum (abs (x), dim);
-endif
+  endif
 
 endfunction
 

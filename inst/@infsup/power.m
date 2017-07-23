@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} power (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} .^ @var{Y}}
-## 
+##
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
 ## positive; (3) negative base @var{X} together with integral exponent @var{Y}.
@@ -51,213 +51,214 @@
 
 function z = power (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     y = infsup (y);
-elseif (isa (y, "infsupdec"))
+  elseif (isa (y, "infsupdec"))
     ## Workaround for bug #42735
     z = power (x, y);
     return
-endif
+  endif
 
-## Short circuit integral powers, e.g., x.^2
-if (any ((y.inf == 0)(:)))
+  ## Short circuit integral powers, e.g., x.^2
+  if (any ((y.inf == 0)(:)))
     ## can't use pown, because 0^0 must evaluate to [Empty]
-elseif (any ((y.inf ~= y.sup)(:)) || ...
-        any ((not (isfinite (y.inf)))(:)) || ...
-        any ((fix (y.inf) ~= y.inf))(:))
+  elseif (any ((y.inf ~= y.sup)(:)) || ...
+          any ((not (isfinite (y.inf)))(:)) || ...
+          any ((fix (y.inf) ~= y.inf))(:))
     ## can't use pown, because y is no integer
-else
+  else
     z = pown (x, y.inf);
     return
-endif
+  endif
 
-## Resize, if scalar × matrix or vector × matrix or scalar × vector
-if (not (size_equal (x.inf, y.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (x.inf, y.inf)))
     x.inf = ones (size (y.inf)) .* x.inf;
     x.sup = ones (size (y.inf)) .* x.sup;
     y.inf = ones (size (x.inf)) .* y.inf;
     y.sup = ones (size (x.inf)) .* y.sup;
-endif
+  endif
 
-idx.type = "()";
+  idx.type = "()";
 
-emptyresult = x.inf == inf | y.inf == inf | ...
-              (x.inf == 0 & x.sup == 0 & y.sup <= 0);
+  emptyresult = x.inf == inf | y.inf == inf | ...
+                (x.inf == 0 & x.sup == 0 & y.sup <= 0);
 
-zPlus = pow (x, y); # pow is only defined for x > 0
-zContainsZero = y.inf > 0 & x.inf <= 0 & x.sup >= 0;
-zMinus = repmat (infsup (), size (x.inf));
+  zPlus = pow (x, y); # pow is only defined for x > 0
+  zContainsZero = y.inf > 0 & x.inf <= 0 & x.sup >= 0;
+  zMinus = repmat (infsup (), size (x.inf));
 
-xMinusWithIntegerY = not (emptyresult) & x.inf < 0 & ...
-                     not (isfinite (y.inf) & isfinite (y.sup) & ...
-                          ceil (y.inf) > floor (y.sup));
+  xMinusWithIntegerY = not (emptyresult) & x.inf < 0 & ...
+                       not (isfinite (y.inf) & isfinite (y.sup) & ...
+                            ceil (y.inf) > floor (y.sup));
 
-if (any (xMinusWithIntegerY(:)))
+  if (any (xMinusWithIntegerY(:)))
     ySingleInteger = isfinite (y.inf) & isfinite (y.sup) & ...
                      ceil (y.inf) == floor (y.sup);
-    
+
     ## y contains a single integer
     idx.subs = {xMinusWithIntegerY & ySingleInteger};
     if (any (idx.subs{1}(:)))
-        xMinus = intersect (subsref (x, idx), ... # intersect to 
-                            infsup (-inf, 0));    # speed up computation
-        zMinus = subsasgn (zMinus, idx, ...
-                           pown (xMinus, ceil (subsref (y.inf, idx))));
+      xMinus = intersect (subsref (x, idx), ... # intersect to
+                          infsup (-inf, 0));    # speed up computation
+      zMinus = subsasgn (zMinus, idx, ...
+                         pown (xMinus, ceil (subsref (y.inf, idx))));
     endif
-    
+
     ## y contains several integers
     idx.subs = {xMinusWithIntegerY & not(ySingleInteger)};
     if (any (idx.subs{1}(:)))
-        zMinus = subsasgn (zMinus, idx, ...
-                           multipleintegers (subsref (x, idx), ...
-                                             subsref (y, idx)));
+      zMinus = subsasgn (zMinus, idx, ...
+                         multipleintegers (subsref (x, idx), ...
+                                           subsref (y, idx)));
     endif
-endif
+  endif
 
-z = union (zMinus, zPlus);
-idx.subs = {zContainsZero};
-z = subsasgn (z, idx, union (subsref (z, idx), 0));
-z.inf(emptyresult) = inf;
-z.sup(emptyresult) = -inf;
+  z = union (zMinus, zPlus);
+  idx.subs = {zContainsZero};
+  z = subsasgn (z, idx, union (subsref (z, idx), 0));
+  z.inf(emptyresult) = inf;
+  z.sup(emptyresult) = -inf;
 
 endfunction
 
 function z = multipleintegers (x, y)
-## Value of power on NEGATIVE base and multiple integral exponents
+  ## Value of power on NEGATIVE base and multiple integral exponents
 
-## Intersect to simplify computation
-x = intersect (x, infsup (-inf, 0));
-y = intersect (ceil (y), floor (y));
+  ## Intersect to simplify computation
+  x = intersect (x, infsup (-inf, 0));
+  y = intersect (ceil (y), floor (y));
 
-assert (all (all (y.inf < y.sup & x.inf < 0)));
+  assert (all (all (y.inf < y.sup & x.inf < 0)));
 
-## Implements Table 3.4 in
-## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-## Diplomarbeit, Institute for Computer Science, University of Würzburg.
-## http://exp.ln0.de/heimlich-power-2011.htm.
-z = repmat (infsup (), size (x.inf));
+  ## Implements Table 3.4 in
+  ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
+  ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
+  ## http://exp.ln0.de/heimlich-power-2011.htm.
+  z = repmat (infsup (), size (x.inf));
 
-idx.type = "()";
+  idx.type = "()";
 
-idx.subs = {(x.sup <= -1 & y.sup <= 0)};
-if (any (idx.subs{1}(:)))
+  idx.subs = {(x.sup <= -1 & y.sup <= 0)};
+  if (any (idx.subs{1}(:)))
     xsup_idx = subsref (x.sup, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xsup_idx, goe (y_idx), gee (y_idx)));
-endif
-idx.subs = {(-1 <= x.inf & 0 <= y.inf)};
-if (any (idx.subs{1}(:)))
+  endif
+  idx.subs = {(-1 <= x.inf & 0 <= y.inf)};
+  if (any (idx.subs{1}(:)))
     xinf_idx = subsref (x.inf, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xinf_idx, loe (y_idx), lee (y_idx)));
-endif
-idx.subs = {((x.sup <= -1 | (x.inf < -1 & -1 < x.sup)) & ...
-             ((0 <= y.inf & not (-1 <= x.inf)) | (y.inf <= -1 & 1 <= y.sup)))};
-if (any (idx.subs{1}(:)))
+  endif
+  idx.subs = {((x.sup <= -1 | (x.inf < -1 & -1 < x.sup)) & ...
+               ((0 <= y.inf & not (-1 <= x.inf)) | (y.inf <= -1 & 1 <= y.sup)))};
+  if (any (idx.subs{1}(:)))
     xinf_idx = subsref (x.inf, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, twointegers (xinf_idx, goe (y_idx), gee (y_idx)));
-endif
-idx.subs = {(((x.inf < -1 & -1 < x.sup) | -1 <= x.inf) & ...
-             ((y.inf <= -1 & 1 <= y.sup) | (y.sup <= 0 & not (x.sup <= -1))))};
-if (any (idx.subs{1}(:)))
+  endif
+  idx.subs = {(((x.inf < -1 & -1 < x.sup) | -1 <= x.inf) & ...
+               ((y.inf <= -1 & 1 <= y.sup) | (y.sup <= 0 & not (x.sup <= -1))))};
+  if (any (idx.subs{1}(:)))
     xsup_idx = subsref (x.sup, idx);
     y_idx = subsref (y, idx);
     z = subsasgn (z, idx, union (subsref (z, idx), ...
-                          twointegers (xsup_idx, loe (y_idx), lee (y_idx))));
-endif
+                                 twointegers (xsup_idx, loe (y_idx), ...
+                                              lee (y_idx))));
+  endif
 
 endfunction
 
 function z = twointegers (base, oddexponent, evenexponent)
-## Range of power on single NEGATIVE base and two integral exponents
-##
-## twointegers (base, oddexponent, evenexponent) returns the interval
-## [-abs(base) ^ oddexponent, abs(base) ^ evenexponent] with correctly
-## rounded boundaries.
-##
-## twointegers (0, oddexponent, evenexponent) returns the limit value of
-## [-abs(base) ^ oddexponent, abs(base) ^ evenexponent] for base -> 0.
-##
-## twointegers (-inf, oddexponent, evenexponent) returns the limit value of
-## [-abs(base) ^ oddexponent, abs(base) ^ evenexponent] for base -> -inf.
-##
-## Note: oddexponent must not necessarily be odd, since it can be an
-## overestimation of an actual odd exponent, if its magnitude is > 2^53.
+  ## Range of power on single NEGATIVE base and two integral exponents
+  ##
+  ## twointegers (base, oddexponent, evenexponent) returns the interval
+  ## [-abs(base) ^ oddexponent, abs(base) ^ evenexponent] with correctly
+  ## rounded boundaries.
+  ##
+  ## twointegers (0, oddexponent, evenexponent) returns the limit value of
+  ## [-abs(base) ^ oddexponent, abs(base) ^ evenexponent] for base -> 0.
+  ##
+  ## twointegers (-inf, oddexponent, evenexponent) returns the limit value of
+  ## [-abs(base) ^ oddexponent, abs(base) ^ evenexponent] for base -> -inf.
+  ##
+  ## Note: oddexponent must not necessarily be odd, since it can be an
+  ## overestimation of an actual odd exponent, if its magnitude is > 2^53.
 
-assert (all (all (oddexponent ~= 0)));
-assert (all (all (not (isfinite (oddexponent) & isfinite (evenexponent)) | ...
-                  abs (oddexponent - evenexponent) <= 1)));
-base = abs (base);
-z = infsup (zeros (size (base)));
-z.inf(base == 0 & oddexponent < 0) = -inf;
-z.sup(base == 0 & evenexponent < 0) = inf;
-z.sup(base == 0 & evenexponent == 0) = 1;
+  assert (all (all (oddexponent ~= 0)));
+  assert (all (all (not (isfinite (oddexponent) & isfinite (evenexponent)) | ...
+                    abs (oddexponent - evenexponent) <= 1)));
+  base = abs (base);
+  z = infsup (zeros (size (base)));
+  z.inf(base == 0 & oddexponent < 0) = -inf;
+  z.sup(base == 0 & evenexponent < 0) = inf;
+  z.sup(base == 0 & evenexponent == 0) = 1;
 
-z.inf(base == inf & oddexponent > 0) = -inf;
-z.sup(base == inf & evenexponent > 0) = inf;
-z.sup(base == inf & evenexponent == 0) = 1;
+  z.inf(base == inf & oddexponent > 0) = -inf;
+  z.sup(base == inf & evenexponent > 0) = inf;
+  z.sup(base == inf & evenexponent == 0) = 1;
 
-z.sup(base == 1) = 1;
-z.sup(0 < base & base < 1 & evenexponent <= 0) = inf;
-z.sup(1 < base & base < inf & evenexponent >= 0) = inf;
-select = 0 < base & base < inf & isfinite (evenexponent);
-if (any (select(:)))
+  z.sup(base == 1) = 1;
+  z.sup(0 < base & base < 1 & evenexponent <= 0) = inf;
+  z.sup(1 < base & base < inf & evenexponent >= 0) = inf;
+  select = 0 < base & base < inf & isfinite (evenexponent);
+  if (any (select(:)))
     z.sup(select) = sup (pown (infsup (base(select)), evenexponent(select)));
-endif
+  endif
 
-z.inf(base == 1) = -1;
-z.inf(0 < base & base < 1 & oddexponent <= 0) = -inf;
-z.inf(1 < base & base < inf & oddexponent >= 0) = -inf;
+  z.inf(base == 1) = -1;
+  z.inf(0 < base & base < 1 & oddexponent <= 0) = -inf;
+  z.inf(1 < base & base < inf & oddexponent >= 0) = -inf;
 
-bigexponent = oddexponent == evenexponent;
-select = 0 < base & base < inf & bigexponent;
-z.inf(select) = -z.sup(select);
+  bigexponent = oddexponent == evenexponent;
+  select = 0 < base & base < inf & bigexponent;
+  z.inf(select) = -z.sup(select);
 
-select = 0 < base & base < inf & isfinite (oddexponent) & not (bigexponent);
-if (any (select(:)))
+  select = 0 < base & base < inf & isfinite (oddexponent) & not (bigexponent);
+  if (any (select(:)))
     z.inf(select) = -sup (pown (infsup (base(select)), oddexponent(select)));
-endif
+  endif
 
 endfunction
 
 function e = goe (y)
-## GOE Greatest odd exponent in interval y
-e = floor (y.sup);
-even = rem (e, 2) == 0;
-e(even) = mpfr_function_d ('minus', +inf, e(even), 1);
-e(e < y.inf) = nan (); # no odd number in interval
+  ## GOE Greatest odd exponent in interval y
+  e = floor (y.sup);
+  even = rem (e, 2) == 0;
+  e(even) = mpfr_function_d ('minus', +inf, e(even), 1);
+  e(e < y.inf) = nan (); # no odd number in interval
 endfunction
 
 function e = gee (y)
-## GEE Greatest even exponent in interval y
-e = floor (y.sup);
-odd = rem (e, 2) ~= 0;
-e(odd) = mpfr_function_d ('minus', +inf, e(odd), 1);
-e(e < y.inf) = nan (); # no even number in interval
+  ## GEE Greatest even exponent in interval y
+  e = floor (y.sup);
+  odd = rem (e, 2) ~= 0;
+  e(odd) = mpfr_function_d ('minus', +inf, e(odd), 1);
+  e(e < y.inf) = nan (); # no even number in interval
 endfunction
 
 function e = loe (y)
-## LOE Least odd exponent in interval y
-e = ceil (y.inf);
-even = rem (e, 2) == 0;
-e(even) = mpfr_function_d ('plus', -inf, e(even), 1);
-e(e > y.sup) = nan (); # no odd number in interval
+  ## LOE Least odd exponent in interval y
+  e = ceil (y.inf);
+  even = rem (e, 2) == 0;
+  e(even) = mpfr_function_d ('plus', -inf, e(even), 1);
+  e(e > y.sup) = nan (); # no odd number in interval
 endfunction
 
 function e = lee (y)
-## LOE Least even exponent in interval y
-e = ceil (y.inf);
-odd = rem (e, 2) ~= 0;
-e(odd) = mpfr_function_d ('plus', -inf, e(odd), 1);
-e(e > y.sup) = nan (); # no odd number in interval
+  ## LOE Least even exponent in interval y
+  e = ceil (y.inf);
+  odd = rem (e, 2) ~= 0;
+  e(odd) = mpfr_function_d ('plus', -inf, e(odd), 1);
+  e(e > y.sup) = nan (); # no odd number in interval
 endfunction
 
 %!# from the documentation string

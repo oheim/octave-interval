@@ -38,13 +38,13 @@
 
 function x = transpose (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x.inf = transpose (x.inf);
-x.sup = transpose (x.sup);
+  x.inf = transpose (x.inf);
+  x.sup = transpose (x.sup);
 
 endfunction
 

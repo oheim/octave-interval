@@ -35,77 +35,77 @@
 
 function __print_mesa__ (h, filename)
 
-if (not (exist ('__osmesa_print__')))
+  if (not (exist ('__osmesa_print__')))
     warning (['__print_mesa__ requires Octave >= 4.0.0, ' ...
-              'falling back to builtin print function'])
+                'falling back to builtin print function'])
     builtin ('print', h, filename);
     return
-endif
+  endif
 
-## hide figure (for __osmesa_print__ to work)
-set (h, 'visible', 'off');
+  ## hide figure (for __osmesa_print__ to work)
+  set (h, 'visible', 'off');
 
-screensize = get (h, 'position') (3 : 4);
-## print exports raster graphics with 150 dpi
-exportsize = 150 .* get (h, 'paperposition') (3 : 4);
-## __osmesa_print__ seems to apply no anti-aliasing.
-## Thus, we apply a FXAA filter ourself. Since this would make the image pretty
-## small, we have to increase the figure size.
-rendersize = 2 .* exportsize;
-set (h, 'position', [0, 0, rendersize]);
-resizefactor = mean (rendersize ./ screensize);
+  screensize = get (h, 'position') (3 : 4);
+  ## print exports raster graphics with 150 dpi
+  exportsize = 150 .* get (h, 'paperposition') (3 : 4);
+  ## __osmesa_print__ seems to apply no anti-aliasing.
+  ## Thus, we apply a FXAA filter ourself. Since this would make the
+  ## image pretty small, we have to increase the figure size.
+  rendersize = 2 .* exportsize;
+  set (h, 'position', [0, 0, rendersize]);
+  resizefactor = mean (rendersize ./ screensize);
 
-## The greater figure size together with the FXAA filter effectively increase
-## the image's resolution. In order to get readable text and visible lines,
-## we must also increase font sizes, line widths and dot sizes.
-##
-## FIXME The following code might not increase the size of all relevant objects
-## in the figure, but works quite well for everything that can be encountered
-## in the interval package.
-a = allchild (h);
-a = a (strcmp (get (a, 'type'), 'axes')); # axis and legend
-for obj = a'
+  ## The greater figure size together with the FXAA filter effectively increase
+  ## the image's resolution. In order to get readable text and visible lines,
+  ## we must also increase font sizes, line widths and dot sizes.
+  ##
+  ## FIXME: The following code might not increase the size of all
+  ## relevant objects in the figure, but works quite well for
+  ## everything that can be encountered in the interval package.
+  a = allchild (h);
+  a = a (strcmp (get (a, 'type'), 'axes')); # axis and legend
+  for obj = a'
     set (obj, 'fontsize', resizefactor * get (obj, 'fontsize'), ...
-              'linewidth', resizefactor * get (obj, 'linewidth'));
-endfor
-l = allchild (a);
-if (iscell (l))
+         'linewidth', resizefactor * get (obj, 'linewidth'));
+  endfor
+  l = allchild (a);
+  if (iscell (l))
     l = vertcat (l {:});
-endif
-t = l (strcmp (get (l, 'type'), 'text'));
-for obj = t'
+  endif
+  t = l (strcmp (get (l, 'type'), 'text'));
+  for obj = t'
     set (obj, 'fontsize', resizefactor * get (obj, 'fontsize'));
-endfor
-l = l (strcmp (get (l, 'type'), 'line') | strcmp (get (l, 'type'), 'patch'));
-for obj = l'
+  endfor
+  l = l (strcmp (get (l, 'type'), 'line') | strcmp (get (l, 'type'), 'patch'));
+  for obj = l'
     set (obj, 'linewidth', resizefactor * get (obj, 'linewidth'));
-endfor
-g = allchild (a);
-if (iscell (g))
+  endfor
+  g = allchild (a);
+  if (iscell (g))
     g = vercat (g {:});
-endif
-g = g (strcmp (get (g, 'type'), 'hggroup')); # markers from scatter plots
-p = allchild (g);
-if (iscell (p))
+  endif
+  g = g (strcmp (get (g, 'type'), 'hggroup')); # markers from scatter plots
+  p = allchild (g);
+  if (iscell (p))
     p = vertcat (p {:});
-endif
-p = p (strcmp (get (p, 'type'), 'patch'));
-for obj = p'
+  endif
+  p = p (strcmp (get (p, 'type'), 'patch'));
+  for obj = p'
     set (obj, 'markersize', resizefactor * get (obj, 'markersize'));
-endfor
+  endfor
 
-## Capture OpenGL scene (without gl2ps)
-warning ('off', 'Octave:GraphicsMagic-Quantum-Depth', 'local');
-img = __osmesa_print__ (h);
+  ## Capture OpenGL scene (without gl2ps)
+  warning ('off', 'Octave:GraphicsMagic-Quantum-Depth', 'local');
+  img = __osmesa_print__ (h);
 
-## Apply FXAA
-img = uint16 (img);
-img = img (1:2:end, :, :) + img (2:2:end, :, :);
-img = img (:, 1:2:end, :) + img (:, 2:2:end, :);
-img = uint8 (img / 4);
+  ## Apply FXAA
+  img = uint16 (img);
+  img = img (1:2:end, :, :) + img (2:2:end, :, :);
+  img = img (:, 1:2:end, :) + img (:, 2:2:end, :);
+  img = uint8 (img / 4);
 
-## Save to file
-imwrite (img, filename);
+  ## Save to file
+  imwrite (img, filename);
 
 endfunction
 

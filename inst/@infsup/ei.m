@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} ei (@var{X})
-## 
+##
 ## Compute the exponential integral for positive arguments.
 ##
 ## @tex
@@ -52,23 +52,23 @@
 
 function x = ei (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = inf (size (x.inf));
-u = -l;
+  l = inf (size (x.inf));
+  u = -l;
 
-## ei is monotonically increasing and defined for x > 0
-defined = x.sup > 0;
-l(defined) = mpfr_function_d ('ei', -inf, max (0, x.inf(defined)));
-u(defined) = mpfr_function_d ('ei', +inf, x.sup(defined));
+  ## ei is monotonically increasing and defined for x > 0
+  defined = x.sup > 0;
+  l(defined) = mpfr_function_d ('ei', -inf, max (0, x.inf(defined)));
+  u(defined) = mpfr_function_d ('ei', +inf, x.sup(defined));
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

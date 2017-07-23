@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} csc (@var{X})
-## 
+##
 ## Compute the cosecant in radians, that is the reciprocal sine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,19 +36,19 @@
 
 function result = csc (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (csc (x.infsup));
+  result = newdec (csc (x.infsup));
 
-## Because csc (nextdown (pi)) < realmax, we can simple check for
-## a singularity by comparing the result with entire for x ~= 0.
-domain = not (isentire (result)) | (inf (x) <= 0 & sup (x) >= 0);
-result.dec(not (domain)) = _trv ();
+  ## Because csc (nextdown (pi)) < realmax, we can simple check for
+  ## a singularity by comparing the result with entire for x ~= 0.
+  domain = not (isentire (result)) | (inf (x) <= 0 & sup (x) >= 0);
+  result.dec(not (domain)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

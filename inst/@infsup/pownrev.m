@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} pownrev (@var{C}, @var{X}, @var{P})
 ## @deftypemethodx {@@infsup} {@var{X} =} pownrev (@var{C}, @var{P})
-## 
+##
 ## Compute the reverse monomial @code{x^@var{P}}.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -36,50 +36,56 @@
 
 function result = pownrev (c, x, p)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
-if (nargin < 3)
+  endif
+  if (nargin < 3)
     p = x;
     x = infsup (-inf, inf);
-endif
-if (not (isa (c, "infsup")))
+  endif
+  if (not (isa (c, "infsup")))
     c = infsup (c);
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-if (not (isnumeric (p)) || fix (p) ~= p)
+  if (not (isnumeric (p)) || fix (p) ~= p)
     error ("interval:InvalidOperand", "pownrev: exponent is not an integer");
-endif
+  endif
 
-## Resize, if scalar × matrix
-if (not (size_equal (x.inf, c.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (x.inf, c.inf)))
     x.inf = ones (size (c.inf)) .* x.inf;
     x.sup = ones (size (c.inf)) .* x.sup;
     c.inf = ones (size (x.inf)) .* c.inf;
     c.sup = ones (size (x.inf)) .* c.sup;
-endif
+  endif
 
-if (p == 0) # x^p == 1
+  if (p == 0) # x^p == 1
     result = x;
     emptyresult = c.inf > 1 | c.sup < 1;
     result.inf(emptyresult) = inf;
     result.sup(emptyresult) = -inf;
-else
+  else
     even = mod (p, 2) == 0;
     if (even)
-        result = union (...
-                intersect (x, nthroot (intersect (c, infsup (0, inf)), p)), ...
-                intersect (x, -nthroot (intersect (c, infsup (0, inf)), p)));
+      result = union (intersect (x, nthroot (intersect (c, ...
+                                                        infsup (0, inf)), ...
+                                             p)), ...
+                      intersect (x, -nthroot (intersect (c, ...
+                                                         infsup (0, inf)), ...
+                                              p)));
     else
-        result = union (...
-                intersect (x, nthroot (intersect (c, infsup (0, inf)), p)), ...
-                intersect (x, nthroot (intersect (c, infsup (-inf, 0)), p)));
+      result = union (intersect (x, nthroot (intersect (c, ...
+                                                        infsup (0, inf)), ...
+                                             p)), ...
+                      intersect (x, nthroot (intersect (c, ...
+                                                        infsup (-inf, 0)), ...
+                                             p)));
     endif
-endif
+  endif
 
 endfunction
 

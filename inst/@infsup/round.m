@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} round (@var{X})
-## 
+##
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded away from zero (towards +Inf or -Inf depending on the sign).
 ##
@@ -39,16 +39,16 @@
 
 function x = round (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x.inf = round (x.inf);
-x.sup = round (x.sup);
+  x.inf = round (x.inf);
+  x.sup = round (x.sup);
 
-x.inf(x.inf == 0) = -0;
-x.sup(x.sup == 0) = +0;
+  x.inf(x.inf == 0) = -0;
+  x.sup(x.sup == 0) = +0;
 
 endfunction
 

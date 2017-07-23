@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} mpower (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} ^ @var{Y}}
-## 
+##
 ## Return the matrix power operation of @var{X} raised to the @var{Y} power.
 ##
 ## If @var{X} is a scalar, this function and @code{power} are equivalent.
@@ -47,59 +47,59 @@
 
 function result = mpower (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-if (isscalar (x))
+  if (isscalar (x))
     ## Short-circuit for scalars
     result = power (x, y);
     return
-endif
+  endif
 
-if (not (isreal (y)) || fix (y) ~= y)
+  if (not (isreal (y)) || fix (y) ~= y)
     error ("interval:InvalidOperand", ...
            "mpower: only integral powers can be computed");
-endif
+  endif
 
-if (not (issquare (x.inf)))
+  if (not (issquare (x.inf)))
     error ("interval:InvalidOperand", ...
            "mpower: must be square matrix");
-endif
+  endif
 
-## Implements log-time algorithm A.1 in
-## Heimlich, Oliver. 2011. “The General Interval Power Function.”
-## Diplomarbeit, Institute for Computer Science, University of Würzburg.
-## http://exp.ln0.de/heimlich-power-2011.htm.
+  ## Implements log-time algorithm A.1 in
+  ## Heimlich, Oliver. 2011. “The General Interval Power Function.”
+  ## Diplomarbeit, Institute for Computer Science, University of Würzburg.
+  ## http://exp.ln0.de/heimlich-power-2011.htm.
 
-result = infsup (eye (length (x)));
-while (y ~= 0)
+  result = infsup (eye (length (x)));
+  while (y ~= 0)
     if (rem (y, 2) == 0) # y is even
-        [x.inf, x.sup] = mpfr_matrix_sqr_d (x.inf, x.sup);
-        y /= 2;
+      [x.inf, x.sup] = mpfr_matrix_sqr_d (x.inf, x.sup);
+      y /= 2;
     else # y is odd
-        result = mtimes (result, x);
-        if (all (vec (isempty (result))) || all (vec (isentire (result))))
-            ## We can stop the computation here, this is a fixed point
-            break
+      result = mtimes (result, x);
+      if (all (vec (isempty (result))) || all (vec (isentire (result))))
+        ## We can stop the computation here, this is a fixed point
+        break
+      endif
+      if (y > 0)
+        y --;
+      else
+        y ++;
+        if (y == 0)
+          ## Inversion after computation of a negative power.
+          ## Inversion should be the last step, because it is not
+          ## tightest and would otherwise increase rounding errors.
+          result = inv (result);
         endif
-        if (y > 0)
-            y --;
-        else
-            y ++;
-            if (y == 0)
-                ## Inversion after computation of a negative power.
-                ## Inversion should be the last step, because it is not
-                ## tightest and would otherwise increase rounding errors.
-                result = inv (result);
-            endif
-        endif
+      endif
     endif
-endwhile
+  endwhile
 
 endfunction
 

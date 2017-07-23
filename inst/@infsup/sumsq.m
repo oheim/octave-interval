@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sumsq (@var{X})
 ## @defmethodx {@@infsup} sumsq (@var{X}, @var{DIM})
-## 
+##
 ## Sum of squares along dimension @var{DIM}.  If @var{DIM} is omitted,
 ## it defaults to the first non-singleton dimension.
 ##
@@ -38,26 +38,17 @@
 
 function result = sumsq (x, dim)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (isempty (x.inf))
-    if (isa (x, 'infsupdec'))
-        result = infsupdec (0);
-    else
-        result = infsup (0);
-    endif
-    return
-endif
-
-x = abs (x);
-if (nargin < 2)
+  x = abs (x);
+  if (nargin < 2)
     result = dot (x, x);
-else
+  else
     result = dot (x, x, dim);
-endif
+  endif
 endfunction
 
 %!# from the documentation string

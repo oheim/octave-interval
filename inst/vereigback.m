@@ -45,7 +45,7 @@
 ## holds for complex eigenpairs (unpublished).
 ##
 ## This work was supported by the Czech Republic National Research
-## Program “Information Society”, project 1ET400300415. 
+## Program “Information Society”, project 1ET400300415.
 ## @seealso{eig}
 ## @end deftypefun
 
@@ -55,34 +55,34 @@
 
 function [lambda, X, ep] = vereigback (A)
 
-warning ("on", "vereigback:complex", "local")
-if (nargin ~= 1)
+  warning ("on", "vereigback:complex", "local")
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-[m, n] = size (A);
-[X, L] = eig (A); # A*X=X*L
-lambda = diag (L);
+  [m, n] = size (A);
+  [X, L] = eig (A); # A*X=X*L
+  lambda = diag (L);
 
-I = eye (n); 
-ep = inf (n, 1);
-if (nargout > 2)
+  I = eye (n);
+  ep = inf (n, 1);
+  if (nargout > 2)
     for i = 1 : n
-        ll = lambda (i);
-        xx = X(:, i);
-        if (~isreal (ll) || ~isreal (xx))
-            warning ("vereigback:complex", ...
-                "vereigback: complex eigenvalues / eigenvectors not supported")
-            ## issue warning only once per function call
-            warning ("off", "vereigback:complex", "local")
-        endif
-        ll = infsup (ll);
-        xx = infsup (xx);
-        epi = norm ((A - ll .* I) * xx, "inf") ./ norm (xx, 1); # main formula
-        ep(i) = epi.sup;
+      ll = lambda (i);
+      xx = X(:, i);
+      if (~isreal (ll) || ~isreal (xx))
+        warning ("vereigback:complex", ...
+                 "vereigback: complex eigenvalues / eigenvectors not supported")
+        ## issue warning only once per function call
+        warning ("off", "vereigback:complex", "local")
+      endif
+      ll = infsup (ll);
+      xx = infsup (xx);
+      epi = norm ((A - ll .* I) * xx, "inf") ./ norm (xx, 1); # main formula
+      ep(i) = epi.sup;
     end
-endif
+  endif
 
 endfunction
 

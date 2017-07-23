@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} roundb (@var{X})
-## 
+##
 ## Round each number in interval @var{X} to the nearest integer.  Ties are
 ## rounded towards the nearest even integer.
 ##
@@ -39,16 +39,16 @@
 
 function x = roundb (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x.inf = roundb (x.inf);
-x.sup = roundb (x.sup);
+  x.inf = roundb (x.inf);
+  x.sup = roundb (x.sup);
 
-x.inf(x.inf == 0) = -0;
-x.sup(x.sup == 0) = +0;
+  x.inf(x.inf == 0) = -0;
+  x.sup(x.sup == 0) = +0;
 
 endfunction
 

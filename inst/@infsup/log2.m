@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} log2 (@var{X})
-## 
+##
 ## Compute the binary (base-2) logarithm.
 ##
 ## The function is only defined where @var{X} is positive.
@@ -38,28 +38,28 @@
 
 function x = log2 (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x = intersect (x, infsup (0, inf));
+  x = intersect (x, infsup (0, inf));
 
-## log2 is monotonically increasing from (0, -inf) to (inf, inf)
-if (__check_crlibm__ ())
+  ## log2 is monotonically increasing from (0, -inf) to (inf, inf)
+  if (__check_crlibm__ ())
     l = crlibm_function ('log2', -inf, x.inf); # this works for empty intervals
     u = crlibm_function ('log2', +inf, x.sup); # ... this does not
-else
+  else
     l = mpfr_function_d ('log2', -inf, x.inf); # this works for empty intervals
     u = mpfr_function_d ('log2', +inf, x.sup); # ... this does not
-endif
+  endif
 
-l(x.sup == 0) = inf;
-l(l == 0) = -0;
-u(isempty (x) | x.sup == 0) = -inf;
+  l(x.sup == 0) = inf;
+  l(l == 0) = -0;
+  u(isempty (x) | x.sup == 0) = -inf;
 
-x.sup = u;
-x.inf = l;
+  x.sup = u;
+  x.inf = l;
 
 endfunction
 

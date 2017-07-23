@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{Z} =} cancelminus (@var{X}, @var{Y})
-## 
+##
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one
 ## knows @var{X} was obtained as the sum @var{Y} + @var{Z}.
 ##
@@ -40,22 +40,22 @@
 
 function result = cancelminus (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-## cancelMinus must not retain any useful decoration
-result = infsupdec (cancelminus (x.infsup, y.infsup), "trv");
+  ## cancelMinus must not retain any useful decoration
+  result = infsupdec (cancelminus (x.infsup, y.infsup), "trv");
 
-result.dec(isnai (x) | isnai (y)) = _ill ();
+  result.dec(isnai (x) | isnai (y)) = _ill ();
 
 endfunction
 

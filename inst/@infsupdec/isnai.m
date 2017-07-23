@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} isnai (@var{X})
-## 
+##
 ## Check if the interval is the result of a failed interval construction.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/isentire, @@infsupdec/issingleton, @@infsupdec/isempty}
@@ -28,13 +28,13 @@
 
 function result = isnai (interval)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## NaI is internally stored as an empty interval with ill decoration.
-result = (interval.dec == _ill ());
+  ## NaI is internally stored as an empty interval with ill decoration.
+  result = (interval.dec == _ill ());
 
 endfunction
 

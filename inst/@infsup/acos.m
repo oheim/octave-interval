@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} acos (@var{X})
-## 
+##
 ## Compute the inverse cosine in radians (arccosine).
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,30 +36,30 @@
 
 function x = acos (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-persistent domain = infsup (-1, 1);
-x = intersect (x, domain);
+  persistent domain = infsup (-1, 1);
+  x = intersect (x, domain);
 
-## acos is monotonically decreasing from (-1, pi) to (+1, 0)
-if (__check_crlibm__ ())
+  ## acos is monotonically decreasing from (-1, pi) to (+1, 0)
+  if (__check_crlibm__ ())
     l = crlibm_function ('acos', -inf, x.sup);
     u = crlibm_function ('acos', +inf, x.inf);
-else
+  else
     l = mpfr_function_d ('acos', -inf, x.sup);
     u = mpfr_function_d ('acos', +inf, x.inf);
-endif
-l(l == 0) = -0;
+  endif
+  l(l == 0) = -0;
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

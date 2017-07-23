@@ -18,12 +18,20 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} dot (@var{X}, @var{Y})
 ## @defmethodx {@@infsup} dot (@var{X}, @var{Y}, @var{DIM})
-## 
+##
 ## Compute the dot product of two interval vectors.
-## 
-## If @var{X} and @var{Y} are matrices, calculate the dot products along the
+##
+## If @var{X} and @var{Y} are arrays, calculate the dot products along the
 ## first non-singleton dimension.  If the optional argument @var{DIM} is given,
 ## calculate the dot products along this dimension.
+##
+## Conceptually this is equivalent to @code{sum (@var{X} .* @var{Y})}
+## but it is computed in such a way that no intermediate round-off
+## errors are introduced.
+##
+## Broadcasting is performed along all dimensions except if @var{X}
+## and @var{Y} are both vectors and @var{DIM} is not specified, in
+## which case they are aligned along dimension 1.
 ##
 ## Accuracy: The result is a tight enclosure.
 ##
@@ -46,95 +54,42 @@
 
 function x = dot (x, y, dim)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsup")))
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     y = infsup (y);
-endif
-if (nargin < 3)
+  endif
+  if (nargin < 3)
     if (isvector (x.inf) && isvector (y.inf))
-        ## Align vectors along common dimension
+      ## Align vectors along common dimension
+      dim = 1;
+      x = vec (x, dim);
+      y = vec (y, dim);
+    else
+      ## Try to find non-singleton dimension
+      xsize = size (x.inf);
+      ysize = size (y.inf);
+      xsize(end+1:ndims (y)) = 1;
+      ysize(end+1:ndims (x)) = 1;
+      dim = find (and (xsize ~= 1, ysize ~= 1), 1);
+      if (isempty (dim))
         dim = 1;
-        x.inf = vec (x.inf, dim);
-        x.sup = vec (x.sup, dim);
-        y.inf = vec (y.inf, dim);
-        y.sup = vec (y.sup, dim);
-    else
-        ## Try to find non-singleton dimension
-        dim = find (and (size (x.inf) ~= 1, size (y.inf) ~= 1), 1);
-        if (isempty (dim))
-            dim = 1;
-        endif
+      endif
     endif
-endif
+  endif
 
-## null matrix input -> null matrix output
-if (isempty (x.inf) || isempty (y.inf))
-    x = infsup (zeros (min (size (x.inf), size (y.inf))));
-    return
-endif
+  [l u] = mpfr_vector_dot_d (x.inf, y.inf, x.sup, y.sup, dim);
 
-## Only the sizes of non-singleton dimensions must agree. Singleton dimensions
-## do broadcast (independent of parameter dim).
-if ((min (size (x.inf, 1), size (y.inf, 1)) > 1 && ...
-        size (x.inf, 1) ~= size (y.inf, 1)) || ...
-    (min (size (x.inf, 2), size (y.inf, 2)) > 1 && ...
-        size (x.inf, 2) ~= size (y.inf, 2)))
-    error ("interval:InvalidOperand", "dot: sizes of X and Y must match")
-endif
+  l(l == 0) = -0;
 
-resultsize = max (size (x.inf), size (y.inf));
-resultsize(dim) = 1;
-
-l = u = zeros (resultsize);
-
-for n = 1 : numel (l)
-    idx.type = "()";
-    idx.subs = cell (1, 2);
-    idx.subs{dim} = ":";
-    idx.subs{3 - dim} = n;
-
-    ## Select current vector in matrix or broadcast scalars and vectors.
-    if (size (x.inf, 3 - dim) == 1)
-        vector.x = x;
-    else
-        vector.x = subsref (x, idx);
-    endif
-    if (size (y.inf, 3 - dim) == 1)
-        vector.y = y;
-    else
-        vector.y = subsref (y, idx);
-    endif
-    
-    [l(n), u(n)] = vectordot (vector.x, vector.y);
-endfor
-
-l(l == 0) = -0;
-
-x.inf = l;
-x.sup = u;
-
-endfunction
-
-## Dot product of two interval vectors; or one vector and one scalar.
-## Accuracy is tightest.
-function [l, u] = vectordot (x, y)
-
-if (isscalar (x.inf) && isscalar (y.inf))
-    ## Short-circuit: scalar × scalar
-    z = x .* y;
-    l = z.inf;
-    u = z.sup;
-    return
-endif
-
-[l, u] = mpfr_vector_dot_d (x.inf, y.inf, x.sup, y.sup);
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 
@@ -171,6 +126,22 @@ endfunction
 %!assert (dot (infsup ([1; 2; 3]), 42) == 252);
 %!assert (dot (infsup ([1; 2; 3]), 42, 1) == 252);
 %!assert (dot (infsup ([1; 2; 3]), 42, 2) == [42; 84; 126]);
+
+%!# N-dimensional arrays
+%!test
+%!  x = infsup (reshape (1:24, 2, 3, 4));
+%!  y = infsup (2.*ones (2, 3, 4));
+%!  assert (dot (x, y, 3) == infsup ([80, 96, 112; 88, 104, 120]))
+%!test
+%!  x = infsup (ones (2, 2, 2, 2));
+%!  y = infsup (1);
+%!  assert (size (dot (x, y)), [1, 2, 2, 2]);
+%!  assert (size (dot (x, y, 1)), [1, 2, 2, 2]);
+%!  assert (size (dot (x, y, 2)), [2, 1, 2, 2]);
+%!  assert (size (dot (x, y, 3)), [2, 2, 1, 2]);
+%!  assert (size (dot (x, y, 4)), [2, 2, 2]);
+%!  assert (size (dot (x, y, 5)), [2, 2, 2, 2]);
+
 
 %!# from the documentation string
 %!assert (dot ([infsup(1), 2, 3], [infsup(2), 3, 4]) == 20);

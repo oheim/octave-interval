@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{S} =} intervaltoexact (@var{X})
-## 
+##
 ## Build an exact representation of the interval @var{X} in
 ## hexadecimal-significand form.
 ##
@@ -36,12 +36,12 @@
 
 function s = intervaltoexact (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-s = intervaltotext (x, "exact hexadecimal");
+  s = intervaltotext (x, "exact hexadecimal");
 
 endfunction
 

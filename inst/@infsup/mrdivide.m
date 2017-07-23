@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} mrdivide (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} / @var{Y}}
-## 
+##
 ## Return the interval matrix right division of @var{X} and @var{Y}.
 ##
 ## Accuracy: The result is a valid enclosure.
@@ -39,31 +39,31 @@
 
 function result = mrdivide (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (isa (y, "infsupdec"))
+  endif
+  if (isa (y, "infsupdec"))
     if (not (isa (x, "infsupdec")))
-        x = infsupdec (x);
+      x = infsupdec (x);
     endif
-elseif (not (isa (x, "infsup")))
+  elseif (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (isa (x, "infsupdec"))
+  endif
+  if (isa (x, "infsupdec"))
     if (not (isa (y, "infsupdec")))
-        y = infsupdec (y);
+      y = infsupdec (y);
     endif
-elseif (not (isa (y, "infsup")))
+  elseif (not (isa (y, "infsup")))
     y = infsup (y);
-endif
+  endif
 
-if (isscalar (x) || isscalar (y))
+  if (isscalar (x) || isscalar (y))
     result = rdivide (x, y);
     return
-endif
+  endif
 
-result = mldivide (y', x')';
+  result = mldivide (y', x')';
 
 endfunction
 

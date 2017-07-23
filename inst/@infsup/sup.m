@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sup (@var{X})
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
-## 
+##
 ## Get the (least) upper boundary for all numbers of interval @var{X}.
 ##
 ## If @var{X} is empty, @code{sup (@var{X})} is negative infinity.
@@ -39,12 +39,12 @@
 
 function result = sup (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = x.sup;
+  result = x.sup;
 
 endfunction
 

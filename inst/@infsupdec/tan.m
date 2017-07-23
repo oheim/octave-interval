@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} tan (@var{X})
-## 
+##
 ## Compute the tangent in radians.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,19 +36,19 @@
 
 function result = tan (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (tan (x.infsup));
+  result = newdec (tan (x.infsup));
 
-## Because tan (nextdown (pi / 2)) < realmax, we can simple check for
-## a singularity by comparing the result with entire.
-domain = not (isentire (result));
-result.dec(not (domain)) = _trv ();
+  ## Because tan (nextdown (pi / 2)) < realmax, we can simple check for
+  ## a singularity by comparing the result with entire.
+  domain = not (isentire (result));
+  result.dec(not (domain)) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

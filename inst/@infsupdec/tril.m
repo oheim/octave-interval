@@ -37,24 +37,24 @@
 
 function A = tril (A, varargin)
 
-if (nargin > 3)
+  if (nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin >= 2 && isa (varargin{1}, 'infsup'))
+  if (nargin >= 2 && isa (varargin{1}, 'infsup'))
     error ('tril: invalid second argument; it must not be an interval');
-endif
-if (nargin >= 3 && isa (varargin{2}, 'infsup'))
+  endif
+  if (nargin >= 3 && isa (varargin{2}, 'infsup'))
     error ('tril: invalid third argument; it must not be an interval');
-endif
+  endif
 
-A.infsup = tril (A.infsup, varargin{:});
+  A.infsup = tril (A.infsup, varargin{:});
 
-A.dec(A.dec == 0) = uint8 (255);
-A.dec = tril (A.dec, varargin{:});
-A.dec(A.dec == 0) = _com (); # any new elements are [0]_com
-A.dec(A.dec == uint8 (255)) = uint8 (0);
+  A.dec(A.dec == 0) = uint8 (255);
+  A.dec = tril (A.dec, varargin{:});
+  A.dec(A.dec == 0) = _com (); # any new elements are [0]_com
+  A.dec(A.dec == uint8 (255)) = uint8 (0);
 
 endfunction
 

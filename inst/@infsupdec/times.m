@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} times (@var{X}, @var{Y})
 ## @defopx Operator {@@infsupdec} {@var{X} .* @var{Y}}
-## 
+##
 ## Multiply all numbers of interval @var{X} by all numbers of @var{Y}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -39,20 +39,20 @@
 
 function result = times (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = newdec (times (x.infsup, y.infsup));
-## times is defined and continuous everywhere
-result.dec = min (result.dec, min (x.dec, y.dec));
+  result = newdec (times (x.infsup, y.infsup));
+  ## times is defined and continuous everywhere
+  result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

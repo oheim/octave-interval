@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} sign (@var{X})
-## 
+##
 ## Compute the signum function for each number in interval @var{X}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -39,22 +39,22 @@
 
 function result = sign (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (sign (x.infsup));
+  result = newdec (sign (x.infsup));
 
-## sign is defined everywhere and continuous for x ~= 0
-discontinuous = not (issingleton (result));
-result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
+  ## sign is defined everywhere and continuous for x ~= 0
+  discontinuous = not (issingleton (result));
+  result.dec(discontinuous) = min (result.dec(discontinuous), _def ());
 
-onlyrestrictioncontinuous = inf (x) == 0 & sup (x) == 0;
-result.dec(onlyrestrictioncontinuous) = ...
-    min (result.dec(onlyrestrictioncontinuous), _dac ());
+  onlyrestrictioncontinuous = inf (x) == 0 & sup (x) == 0;
+  result.dec(onlyrestrictioncontinuous) = ...
+  min (result.dec(onlyrestrictioncontinuous), _dac ());
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} mpower (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} ^ @var{Y}}
-## 
+##
 ## Return the matrix power operation of @var{X} raised to the @var{Y} power.
 ##
 ## If @var{X} is a scalar, this function and @code{power} are equivalent.
@@ -47,38 +47,38 @@
 
 function result = mpower (x, y)
 
-if (nargin != 2)
+  if (nargin != 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-if (isscalar (x.dec))
+  if (isscalar (x.dec))
     ## Short-circuit for scalars
     result = power (x, y);
     return
-endif
+  endif
 
-if (not (isreal (y)) || fix (y) ~= y)
+  if (not (isreal (y)) || fix (y) ~= y)
     error ("interval:InvalidOperand", ...
            "mpower: only integral powers can be computed");
-endif
+  endif
 
-result = newdec (mpower (x.infsup, y));
+  result = newdec (mpower (x.infsup, y));
 
-if (y < 0)
+  if (y < 0)
     result.dec(:) = _trv ();
-elseif (y < 2)
+  elseif (y < 2)
     result.dec = x.dec;
-elseif (y == 2)
+  elseif (y == 2)
     warning ('off', 'Octave:broadcast', 'local');
     result.dec = min (result.dec, min (min (x.dec, [], 1), ...
                                        min (x.dec, [], 2)));
-elseif (y > 2)
+  elseif (y > 2)
     result.dec = min (result.dec, min (vec (x.dec)));
-endif
+  endif
 
 endfunction
 

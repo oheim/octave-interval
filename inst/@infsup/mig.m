@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} mig (@var{X})
-## 
+##
 ## Get the mignitude of numbers in interval @var{X}, that is the minimum of
 ## absolute values for each element.
 ##
@@ -39,14 +39,14 @@
 
 function result = mig (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = min (abs (x.inf), abs (x.sup));
-result(sign (x.inf) ~= sign (x.sup)) = 0;
-result(x.inf > x.sup) = nan ();
+  result = min (abs (x.inf), abs (x.sup));
+  result(sign (x.inf) ~= sign (x.sup)) = 0;
+  result(x.inf > x.sup) = nan ();
 
 endfunction
 

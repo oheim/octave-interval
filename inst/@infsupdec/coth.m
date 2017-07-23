@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} coth (@var{X})
-## 
+##
 ## Compute the hyperbolic cotangent, that is the reciprocal hyperbolic tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,16 +36,16 @@
 
 function result = coth (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (coth (x.infsup));
-## coth is defined and continuous for x ~= 0
-result.dec (inf (x) <= 0 & sup (x) >= 0) = _trv ();
+  result = newdec (coth (x.infsup));
+  ## coth is defined and continuous for x ~= 0
+  result.dec (inf (x) <= 0 & sup (x) >= 0) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

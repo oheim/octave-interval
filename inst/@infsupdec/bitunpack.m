@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} bitunpack (@var{X})
 ## @comment DO NOT SYNCHRONIZE DOCUMENTATION STRING
-## 
+##
 ## Encode decorated interval @var{X} in interchange format.
 ##
 ## The result is a raw bit pattern of length 136 that derive from two binary64
@@ -41,33 +41,33 @@
 
 function result = bitunpack (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-bare = bitunpack (x.infsup);
-d = bitunpack (x.dec);
+  bare = bitunpack (x.infsup);
+  d = bitunpack (x.dec);
 
-## The exchange representation of [NaI] is (NaN, NaN, ill).
-if (any (isnai (x)(:)))
+  ## The exchange representation of [NaI] is (NaN, NaN, ill).
+  if (any (isnai (x)(:)))
     bare(vec (1:128) + 128 .* vec (find (isnai (x)) - 1, 2)) = ...
-        [bitunpack(nan (sum (isnai (x)), 2))];
-endif
+    [bitunpack(nan (sum (isnai (x)), 2))];
+  endif
 
-## Initialize result vector
-result = zeros (1, length (bare) + length (d), 'logical');
-if (not (isrow (bare)))
+  ## Initialize result vector
+  result = zeros (1, length (bare) + length (d), 'logical');
+  if (not (isrow (bare)))
     result = result';
-endif
+  endif
 
-## Merge alternating 128 bit blocks from bare and 8 bit blocks from d together
-## into result.
-target_bare = reshape (1 : length (result), 8, length (result) / 8);
-target_d = target_bare (:, 17 : 17 : size (target_bare, 2));
-target_bare(:, 17 : 17 : size (target_bare, 2)) = [];
-result(target_bare) = bare;
-result(target_d) = d;
+  ## Merge alternating 128 bit blocks from bare and 8 bit blocks from d together
+  ## into result.
+  target_bare = reshape (1 : length (result), 8, length (result) / 8);
+  target_d = target_bare (:, 17 : 17 : size (target_bare, 2));
+  target_bare(:, 17 : 17 : size (target_bare, 2)) = [];
+  result(target_bare) = bare;
+  result(target_d) = d;
 
 endfunction
 

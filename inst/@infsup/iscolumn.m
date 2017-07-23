@@ -29,12 +29,12 @@
 ## FIXME This function is only required, because of a regression in octave 4.0
 function result = iscolumn (A)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = iscolumn (A.inf);
+  result = iscolumn (A.inf);
 
 endfunction
 

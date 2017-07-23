@@ -44,7 +44,7 @@
 ##
 ## @item verified unbounded
 ## @var{x} is verified to enclose a primal feasible solution @var{xo}, and
-## @var{y} is verified to enclose a vector @var{yo} such that the objective 
+## @var{y} is verified to enclose a vector @var{yo} such that the objective
 ## tends to -Inf along the feasible half-line
 ## @{@var{xo} + @var{t} * @var{yo} | @var{t} @geq{} 0@},
 ## @var{h} is empty,
@@ -70,7 +70,7 @@
 ## @var{m} = rows (@var{A}).
 ##
 ## This work was supported by the Czech Republic National Research
-## Program “Information Society”, project 1ET400300415. 
+## Program “Information Society”, project 1ET400300415.
 ## @seealso{linprog}
 ## @end deftypefun
 
@@ -80,159 +80,159 @@
 
 function [flag, x, y, h] = verlinprog (A, b, c)
 
-if (nargin ~= 3)
+  if (nargin ~= 3)
     print_usage ();
     return
-endif
+  endif
 
-b = b(:); c = c(:);
-[m, n] = size(A);
-p = length (b); q = length (c);
+  b = b(:); c = c(:);
+  [m, n] = size(A);
+  p = length (b); q = length (c);
 
-flag = "no verified result";
-x = repmat (infsup, n, 1);
-y = repmat (infsup, m, 1);
-h = infsup;
+  flag = "no verified result";
+  x = repmat (infsup, n, 1);
+  y = repmat (infsup, m, 1);
+  h = infsup;
 
-if (~(m == p && n == q) || (m > n))
+  if (~(m == p && n == q) || (m > n))
     error ("verlinprog: sizes do not match");
-endif
-if (~isreal (A) || ~isreal (b) || ~isreal (c))
+  endif
+  if (~isreal (A) || ~isreal (b) || ~isreal (c))
     error("verlinprog: data not real");
-endif
-if issparse (b)
+  endif
+  if issparse (b)
     b = full (b);
-end
-if issparse (c)
+  end
+  if issparse (c)
     c = full (c);
-end
+  end
 
-# verifying infeasibility
-yi = verinfeas (A, b);
-if (~isempty(yi(1))) # verified Farkas vector found
+                                # verifying infeasibility
+  yi = verinfeas (A, b);
+  if (~isempty(yi(1))) # verified Farkas vector found
     y = yi;
     flag = "verified infeasible";
     return
-endif
+  endif
 
-# verifying feasibility
-xf = veropt (A, b, ones (n, 1));
-if (isempty (xf(1))) # verified feasible solution not found
+                                # verifying feasibility
+  xf = veropt (A, b, ones (n, 1));
+  if (isempty (xf(1))) # verified feasible solution not found
     flag = "no verified result";
     return
-endif
+  endif
 
-# verifying unboundedness
-yu = verunbound (A, c);
-if (~isempty (yu(1))) # verified descent direction found
+                                # verifying unboundedness
+  yu = verunbound (A, c);
+  if (~isempty (yu(1))) # verified descent direction found
     x = xf;
     y = yu;
     flag = "verified unbounded";
     return
-endif
+  endif
 
-# verifying optimality
-[xo, B, N] = veropt (A, b, c);
-if (isempty (xo(1))) % verified feasible primal solution with basis B not found
+                                # verifying optimality
+  [xo, B, N] = veropt (A, b, c);
+  if (isempty (xo(1))) % verified feasible primal solution with basis B not found
     x = xf; # previous feasible solution outputted
-    flag = "verified feasible"; 
+    flag = "verified feasible";
     return
-endif
+  endif
 
-AB = A(:, B);
-if (issparse (AB))
+  AB = A(:, B);
+  if (issparse (AB))
     AB = full (AB); # only the square submatrix taken full
-endif
-yB = mldivide (infsup (AB'), infsup (c(B)));
-if (isempty (yB(1))) # verified feasible dual solution not found
+  endif
+  yB = mldivide (infsup (AB'), infsup (c(B)));
+  if (isempty (yB(1))) # verified feasible dual solution not found
     x = xo; # candidate for optimum outputted as feasible solution
     flag = "verified feasible";
     return
-endif
+  endif
 
-c = infsup (c);
-A = infsup (A);
-crit = c' - yB' * A; # criterial row (dual feasibility)
-crit = crit(N);      # nonbasic part of it
-if (~all (crit.inf >= 0)) # verified feasible dual solution not found
+  c = infsup (c);
+  A = infsup (A);
+  crit = c' - yB' * A; # criterial row (dual feasibility)
+  crit = crit(N);      # nonbasic part of it
+  if (~all (crit.inf >= 0)) # verified feasible dual solution not found
     x = xo; % candidate for optimum outputted as feasible solution
     flag = "verified feasible";
     return
-endif
+  endif
 
 # verified quantities     # verified primal and dual feasible solutions found
-x = xo;                   # x is a verified primal optimal solution
-y = yB;                   # y is a verified dual optimal solution
-if (nargout >= 3)
+  x = xo;                   # x is a verified primal optimal solution
+  y = yB;                   # y is a verified dual optimal solution
+  if (nargout >= 3)
     h1 = c' * x;
-    h2 = b' * y;                                               
-    h = intersect (h1, h2);   # h is a verified optimal value (duality theorem) 
+    h2 = b' * y;
+    h = intersect (h1, h2);   # h is a verified optimal value (duality theorem)
     if (isempty (h))
-        h = h1;
+      h = h1;
     end
-endif
-flag = "verified optimum";
+  endif
+  flag = "verified optimum";
 endfunction
 
 
 function [x, B, N] = veropt (A, b, c)
-## B is the "basis index set" of an optimal solution of the LP problem
-## min c'*x  subject to  A*x=b, x>=0,
-## x is a verified basic feasible solution with this basis
-## N is the set of nonbasic indices
+  ## B is the "basis index set" of an optimal solution of the LP problem
+  ## min c'*x  subject to  A*x=b, x>=0,
+  ## x is a verified basic feasible solution with this basis
+  ## N is the set of nonbasic indices
 
-persistent GLP_MSG_OFF = 0;
-[m, n] = size (A); 
-x = repmat(infsup, n, 1);
-B = nan (m, 1);
-N = nan (n, 1);
+  persistent GLP_MSG_OFF = 0;
+  [m, n] = size (A);
+  x = repmat(infsup, n, 1);
+  B = nan (m, 1);
+  N = nan (n, 1);
 
-[xopt, ~, exitflag] = glpk (c, A, b, ...
-    [], [], ... # 0 <= x <= inf
-    repmat ("S", 1, m), ... # equality constraints Ax = b
-    repmat ("C", 1, n), ... # continuous variable x
-    1, ... # minimization
-    struct ("msglev", GLP_MSG_OFF));
+  [xopt, ~, exitflag] = glpk (c, A, b, ...
+                              [], [], ... # 0 <= x <= inf
+                              repmat ("S", 1, m), ... # equality constraints Ax = b
+                              repmat ("C", 1, n), ... # continuous variable x
+                              1, ... # minimization
+                              struct ("msglev", GLP_MSG_OFF));
 
-if (exitflag ~= 0)
+  if (exitflag ~= 0)
     return
-endif
+  endif
 
-[xx, J] = sort (xopt);
-B = J(n - m + 1 : n); # B is set of "basic" indices,
-N = J(1 : n - m);     # N of "nonbasic" ones
+  [xx, J] = sort (xopt);
+  B = J(n - m + 1 : n); # B is set of "basic" indices,
+  N = J(1 : n - m);     # N of "nonbasic" ones
 
-AB = A(:, B);
-if (issparse (AB))
+  AB = A(:, B);
+  if (issparse (AB))
     AB = full (AB); # only the square submatrix taken full (because of mldivide)
-endif
-xB = mldivide (infsup (AB), infsup (b));
-if (isempty (xB(1)) || ~all (xB.inf >= 0))
-    # verified "optimal" solution not found
+  endif
+  xB = mldivide (infsup (AB), infsup (b));
+  if (isempty (xB(1)) || ~all (xB.inf >= 0))
+                               # verified "optimal" solution not found
     return
-endif
+  endif
 
-# verified "optimal" solution found
-x = infsup (zeros (n, 1));
-x(B) = xB;
+                                # verified "optimal" solution found
+  x = infsup (zeros (n, 1));
+  x(B) = xB;
 endfunction
 
 
 function y = verinfeas (A, b)
-# y verified to enclose a Farkas vector yo (i.e., satisfying A'*yo>=0, b'*yo<0)
-# its existence implies infeasibility of A*x=b
+  # y verified to enclose a Farkas vector yo (i.e., satisfying A'*yo>=0, b'*yo<0)
+  # its existence implies infeasibility of A*x=b
 
-[m, n] = size (A);
-y = repmat(infsup, m, 1);
-ep = max (1e-08, max ([m n 100]) * max ([norm(A, inf) norm(b, inf)]) * eps);
-Afv = [A' -A'    -eye(n) zeros(n,1);    # Afv is (n+1)x(2*m+n+1)
-       b' -b' zeros(1,n)         1];
-bfv = [zeros(n, 1)' -1]';               # bfv is (n+1)x1
+  [m, n] = size (A);
+  y = repmat(infsup, m, 1);
+  ep = max (1e-08, max ([m n 100]) * max ([norm(A, inf) norm(b, inf)]) * eps);
+  Afv = [A' -A'    -eye(n) zeros(n,1);    # Afv is (n+1)x(2*m+n+1)
+         b' -b' zeros(1,n)         1];
+  bfv = [zeros(n, 1)' -1]';               # bfv is (n+1)x1
 
-# perturbation to compensate roundoff errors (so that A'*y>=0)
-bfv = bfv + ep * [ones(1, n) -1]';
-yf = veropt (Afv, bfv, ones (2 * m + n + 1, 1)); % system: A'*y>=0, b'*y<=-1, y written as y=y1-y2
-if (~isempty (yf(1)))
+        # perturbation to compensate roundoff errors (so that A'*y>=0)
+  bfv = bfv + ep * [ones(1, n) -1]';
+  yf = veropt (Afv, bfv, ones (2 * m + n + 1, 1)); % system: A'*y>=0, b'*y<=-1, y written as y=y1-y2
+  if (~isempty (yf(1)))
     yf = mid (yf);
     y1 = yf(1 : m);
     y2 = yf(m + 1 : 2 * m);
@@ -243,28 +243,28 @@ if (~isempty (yf(1)))
     alpha = A' * yf;
     beta = b' * yf;
     if (all (alpha.inf >= 0)) && (beta.sup < 0)
-        # infeasibility verified
-        y=yf; # Farkas vector outputted
+                                # infeasibility verified
+      y=yf; # Farkas vector outputted
     endif
-endif
+  endif
 endfunction
 
 
 function y = verunbound (A, c)
-# y verified to enclose a vector yo satisfying A*yo=0, yo>=0, c'*yo<=-1
-# under feasibility its existence implies unboundedness
+  # y verified to enclose a vector yo satisfying A*yo=0, yo>=0, c'*yo<=-1
+  # under feasibility its existence implies unboundedness
 
-[m, n] = size (A);
-y = repmat (infsup, n, 1);
-Aunb = [A zeros(m, 1);                       # Aunb is (m+1)x(n+1)
-        c'         1];
-bunb = [zeros(1, m) -1]';                    # bunb is (m+1)x1
-yunb = veropt (Aunb, bunb, ones (n + 1, 1)); # yunb is (n+1)x1
-if (~isempty (yunb(1)))
-    # y satisfies A*y=0, y>=0, c'*y=-1 
+  [m, n] = size (A);
+  y = repmat (infsup, n, 1);
+  Aunb = [A zeros(m, 1);                       # Aunb is (m+1)x(n+1)
+          c'         1];
+  bunb = [zeros(1, m) -1]';                    # bunb is (m+1)x1
+  yunb = veropt (Aunb, bunb, ones (n + 1, 1)); # yunb is (n+1)x1
+  if (~isempty (yunb(1)))
+                                # y satisfies A*y=0, y>=0, c'*y=-1
     y = yunb(1:n);
     return
-endif
+  endif
 endfunction
 
 %!test

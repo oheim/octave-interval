@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sinh (@var{X})
-## 
+##
 ## Compute the hyperbolic sine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,27 +36,27 @@
 
 function x = sinh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-if (__check_crlibm__ ())
+  if (__check_crlibm__ ())
     l = crlibm_function ('sinh', -inf, x.inf);
     u = crlibm_function ('sinh', +inf, x.sup);
-else
+  else
     l = mpfr_function_d ('sinh', -inf, x.inf);
     u = mpfr_function_d ('sinh', +inf, x.sup);
-endif
+  endif
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

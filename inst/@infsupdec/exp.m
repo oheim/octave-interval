@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} exp (@var{X})
-## 
+##
 ## Compute the exponential function.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,14 +36,14 @@
 
 function result = exp (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = newdec (exp (x.infsup));
-## exp is defined and continuous everywhere
-result.dec = min (result.dec, x.dec);
+  result = newdec (exp (x.infsup));
+  ## exp is defined and continuous everywhere
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

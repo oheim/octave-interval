@@ -20,6 +20,11 @@
         Removed interval implementation of meshgrid, it now falls back on the standard implementation. The difference is that it does not automatically convert all input to intervals and it can now output a 3-d grid properly.
 @end itemize
 
+Bugfixes
+@itemize
+@item diag: Fixed error when called with more than one argument.
+@end itemize
+
 @release{2.1.1, 2017-xx-xx}
 @noindent Bugfixes
 @itemize

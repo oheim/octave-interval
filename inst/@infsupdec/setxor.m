@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {} setxor (@var{A}, @var{B})
 ## @deftypemethodx {@@infsupdec} {[@var{C}, @var{C1}, @var{C2}] =} setxor (@var{A}, @var{B})
-## 
+##
 ## Build the symmetric difference of intervals @var{A} and @var{B}.
 ##
 ## With three output arguments, return intervals @var{C1} and @var{C2} such
@@ -50,28 +50,28 @@
 
 function [c, c1, c2] = setxor (a, b)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (a, "infsupdec")))
+  endif
+  if (not (isa (a, "infsupdec")))
     a = infsupdec (a);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
+  endif
 
-if (nargout > 1)
+  if (nargout > 1)
     [c, c1, c2] = setxor (a.infsup, b.infsup);
     c1 = infsupdec (c1, "trv");
     c2 = infsupdec (c2, "trv");
     c1.dec(isnai (a) | isnai (b)) = c2.dec(isnai (a) | isnai (b)) = _ill ();
-else
+  else
     c = setxor (a.infsup, b.infsup);
-endif
+  endif
 
-c = infsupdec (c, "trv");
-c.dec(isnai (a) | isnai (b)) = _ill ();
+  c = infsupdec (c, "trv");
+  c.dec(isnai (a) | isnai (b)) = _ill ();
 
 endfunction
 

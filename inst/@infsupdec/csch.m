@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} csch (@var{X})
-## 
+##
 ## Compute the hyperbolic cosecant, that is the reciprocal hyperbolic sine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,21 +36,21 @@
 
 function result = csch (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-if (isnai (x))
+  if (isnai (x))
     result = x;
     return
-endif
+  endif
 
-result = newdec (csch (x.infsup));
-## csch is defined and continuous for x ~= 0
-result.dec (inf (x) <= 0 & sup (x) >= 0) = _trv ();
+  result = newdec (csch (x.infsup));
+  ## csch is defined and continuous for x ~= 0
+  result.dec (inf (x) <= 0 & sup (x) >= 0) = _trv ();
 
-result.dec = min (result.dec, x.dec);
+  result.dec = min (result.dec, x.dec);
 
 endfunction
 

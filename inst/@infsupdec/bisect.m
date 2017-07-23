@@ -37,7 +37,7 @@
 ## @example
 ## @group
 ## [a, b] = bisect (infsupdec (2, 32))
-##   @result{} 
+##   @result{}
 ##     a = [2, 8]_trv
 ##     b = [8, 32]_trv
 ## @end group
@@ -51,17 +51,17 @@
 
 function [a, b] = bisect (x)
 
-if (nargin > 1)
+  if (nargin > 1)
     print_usage ();
     return
-endif
+  endif
 
-## bisect must not retain any useful decoration
-[a, b] = bisect (x.infsup);
-a = infsupdec (a, "trv");
-b = infsupdec (b, "trv");
+  ## bisect must not retain any useful decoration
+  [a, b] = bisect (x.infsup);
+  a = infsupdec (a, "trv");
+  b = infsupdec (b, "trv");
 
-a.dec(isnai (x)) = b.dec(isnai (x)) = _ill ();
+  a.dec(isnai (x)) = b.dec(isnai (x)) = _ill ();
 
 endfunction
 

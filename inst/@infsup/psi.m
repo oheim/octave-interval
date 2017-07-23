@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} psi (@var{X})
-## 
+##
 ## Compute the digamma function, also known as the psi function.
 ##
 ## @tex
@@ -52,34 +52,34 @@
 
 function x = psi (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-u = inf (size (x.inf));
-l = -u;
+  u = inf (size (x.inf));
+  l = -u;
 
-## psi is monotonically increasing, but not defined for non-positive integers.
-nosingularity = x.inf >= 0 | ceil (x.inf) > floor (x.sup) | ...
-    (ceil (x.inf) == floor (x.sup) & ...
-        (fix (x.inf) == x.inf | fix (x.sup) == x.sup));
-if (any (nosingularity(:)))
+  ## psi is monotonically increasing, but not defined for non-positive integers.
+  nosingularity = x.inf >= 0 | ceil (x.inf) > floor (x.sup) | ...
+                  (ceil (x.inf) == floor (x.sup) & ...
+                   (fix (x.inf) == x.inf | fix (x.sup) == x.sup));
+  if (any (nosingularity(:)))
     x.inf(x.inf == 0) = 0; # fix negative zero
     l(nosingularity & (x.inf > 0 | fix (x.inf) ~= x.inf)) = ...
-        mpfr_function_d ('psi', -inf, x.inf(nosingularity));
+    mpfr_function_d ('psi', -inf, x.inf(nosingularity));
     u(nosingularity & (x.sup > 0 | fix (x.sup) ~= x.sup)) = ...
-        mpfr_function_d ('psi', +inf, x.sup(nosingularity));
-endif
+    mpfr_function_d ('psi', +inf, x.sup(nosingularity));
+  endif
 
-emptyresult = x.inf == x.sup & fix (x.inf) == x.inf & x.inf <= 0;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = x.inf == x.sup & fix (x.inf) == x.inf & x.inf <= 0;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

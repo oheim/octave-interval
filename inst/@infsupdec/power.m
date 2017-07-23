@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} power (@var{X}, @var{Y})
 ## @defopx Operator {@@infsupdec} {@var{X} .^ @var{Y}}
-## 
+##
 ## Compute the general power function on intervals, which is defined for
 ## (1) any positive base @var{X}; (2) @code{@var{X} = 0} when @var{Y} is
 ## positive; (3) negative base @var{X} together with integral exponent @var{Y}.
@@ -51,30 +51,30 @@
 
 function result = power (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = newdec (power (x.infsup, y.infsup));
+  result = newdec (power (x.infsup, y.infsup));
 
-## The general power function is continuous where it is defined
-domain = not (isempty (result)) & (...
-            inf (x) > 0 | ... # defined for all x > 0
+  ## The general power function is continuous where it is defined
+  domain = not (isempty (result)) & ...
+           (inf (x) > 0 | ... # defined for all x > 0
             (inf (x) == 0 & inf (y) > 0) | ... # defined for x = 0 if y > 0
-            # defined for x < 0 only where y is integral
-            (issingleton (y) & fix (inf (y)) == inf (y) & ... 
-                (inf (y) > 0 | not (ismember (0, x))))); # not defined for 0^0
-result.dec(not (domain)) = _trv ();
+                          # defined for x < 0 only where y is integral
+            (issingleton (y) & fix (inf (y)) == inf (y) & ...
+             (inf (y) > 0 | not (ismember (0, x))))); # not defined for 0^0
+  result.dec(not (domain)) = _trv ();
 
-result.dec = min (result.dec, min (x.dec, y.dec));
+  result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

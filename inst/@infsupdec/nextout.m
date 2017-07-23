@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} nextout (@var{X})
-## 
+##
 ## Increases the interval's boundaries in each direction to the next number.
 ##
 ## This is the equivalent function to IEEE 754's nextDown and nextUp.
@@ -40,13 +40,13 @@
 
 function result = nextout (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = infsupdec (nextout (x.infsup), "trv");
-result.dec(isnai (x)) = _ill ();
+  result = infsupdec (nextout (x.infsup), "trv");
+  result.dec(isnai (x)) = _ill ();
 
 endfunction
 

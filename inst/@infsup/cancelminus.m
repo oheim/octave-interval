@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{Z} =} cancelminus (@var{X}, @var{Y})
-## 
+##
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one
 ## knows @var{X} was obtained as the sum @var{Y} + @var{Z}.
 ##
@@ -37,46 +37,46 @@
 
 function x = cancelminus (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     y = infsup (y);
-endif
+  endif
 
-l = mpfr_function_d ('minus', -inf, x.inf, y.inf);
-u = mpfr_function_d ('minus', +inf, x.sup, y.sup);
+  l = mpfr_function_d ('minus', -inf, x.inf, y.inf);
+  u = mpfr_function_d ('minus', +inf, x.sup, y.sup);
 
-wid_x1 = wid (intersect (x, infsup (-inf, 0)));
-wid_x2 = wid (intersect (x, infsup (0, inf)));
-wid_y1 = wid (intersect (y, infsup (-inf, 0)));
-wid_y2 = wid (intersect (y, infsup (0, inf)));
-[wid_x1, wid_x2] = deal (max (wid_x1, wid_x2), min (wid_x1, wid_x2));
-[wid_y1, wid_y2] = deal (max (wid_y1, wid_y2), min (wid_y1, wid_y2));
+  wid_x1 = wid (intersect (x, infsup (-inf, 0)));
+  wid_x2 = wid (intersect (x, infsup (0, inf)));
+  wid_y1 = wid (intersect (y, infsup (-inf, 0)));
+  wid_y2 = wid (intersect (y, infsup (0, inf)));
+  [wid_x1, wid_x2] = deal (max (wid_x1, wid_x2), min (wid_x1, wid_x2));
+  [wid_y1, wid_y2] = deal (max (wid_y1, wid_y2), min (wid_y1, wid_y2));
 
-entireresult = (isempty (y) & not (isempty (x))) | ...
-               y.inf == -inf | y.sup == inf | ...
-               x.inf == -inf | x.sup == inf | ...
-               ## We have to check for wid (x) < wid (y), which is difficult
-               ## for wid > realmax, because of overflow and
-               ## for interior zero, because of rounding errors.
-               (iscommoninterval (x) & iscommoninterval (y) & ...
-                (wid_x1 - wid_y1) + (wid_x2 - wid_y2) < 0);
-l(entireresult) = -inf;
-u(entireresult) = inf;
+  entireresult = (isempty (y) & not (isempty (x))) | ...
+                 y.inf == -inf | y.sup == inf | ...
+                 x.inf == -inf | x.sup == inf | ...
+                 ## We have to check for wid (x) < wid (y), which is difficult
+                 ## for wid > realmax, because of overflow and
+                 ## for interior zero, because of rounding errors.
+                 (iscommoninterval (x) & iscommoninterval (y) & ...
+                  (wid_x1 - wid_y1) + (wid_x2 - wid_y2) < 0);
+  l(entireresult) = -inf;
+  u(entireresult) = inf;
 
-emptyresult = isempty (x) & not (entireresult);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x) & not (entireresult);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

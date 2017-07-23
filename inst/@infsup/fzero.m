@@ -19,7 +19,7 @@
 ## @deftypemethodx {@@infsup} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF})
 ## @deftypemethodx {@@infsup} {@var{X} =} fzero (@var{F}, @var{X0}, @var{OPTIONS})
 ## @deftypemethodx {@@infsup} {@var{X} =} fzero (@var{F}, @var{X0}, @var{DF}, @var{OPTIONS})
-## 
+##
 ## Compute the enclosure of all roots of function @var{F} in interval @var{X0}.
 ##
 ## Parameters @var{F} and (possibly) @var{DF} may either be a function handle,
@@ -55,7 +55,7 @@
 ## df = @@(x) -sin (x);
 ## fzero (f, infsup ("[-10, 10]"), df)
 ##   @result{} ans ⊂ 6×1 interval vector
-##    
+##
 ##        [-7.854, -7.8539]
 ##       [-4.7124, -4.7123]
 ##       [-1.5708, -1.5707]
@@ -77,89 +77,89 @@
 
 function x = fzero (f, x0, df, options)
 
-if (nargin > 4 || nargin < 2)
+  if (nargin > 4 || nargin < 2)
     print_usage ();
     return
-endif
+  endif
 
-## Set default parameters
-defaultoptions = optimset (optimset, 'MaxIter', 200);
-if (nargin == 2)
+  ## Set default parameters
+  defaultoptions = optimset (optimset, 'MaxIter', 200);
+  if (nargin == 2)
     df = [];
     options = defaultoptions;
-elseif (nargin == 3)
+  elseif (nargin == 3)
     if (isstruct (df))
-        options = optimset (defaultoptions, options);
-        df = [];
+      options = optimset (defaultoptions, options);
+      df = [];
     else
-        options = defaultoptions;
+      options = defaultoptions;
     endif
-else
+  else
     options = optimset (defaultoptions, options);
-endif
+  endif
 
-## Check parameters
-if (not (isa (x0, "infsup")))
+  ## Check parameters
+  if (not (isa (x0, "infsup")))
     error ("interval:InvalidOperand", "fzero: Parameter X0 is no interval")
-elseif (not (isscalar (x0)))
+  elseif (not (isscalar (x0)))
     error ("interval:InvalidOperand", ...
            "fzero: Parameter X0 must be a scalar / F must be univariate")
-elseif (isempty (x0))
+  elseif (isempty (x0))
     error ("interval:InvalidOperand", ...
            "fzero: Initial interval is empty, nothing to do")
-elseif (not (is_function_handle (f)) && not (ischar (f)))
+  elseif (not (is_function_handle (f)) && not (ischar (f)))
     error ("interval:InvalidOperand", ...
            "fzero: Parameter F is no function handle")
-elseif (not (isempty (df)) && ...
-        not (is_function_handle (df)) && ...
-        not (ischar (df)))
+  elseif (not (isempty (df)) && ...
+          not (is_function_handle (df)) && ...
+          not (ischar (df)))
     error ("interval:InvalidOperand", ...
            "fzero: Parameter DF is not function handle")
-endif
+  endif
 
-## Does not work on decorated intervals, strip decoration part
-if (isa (x0, "infsupdec"))
+  ## Does not work on decorated intervals, strip decoration part
+  if (isa (x0, "infsupdec"))
     if (isnai (x0))
-        result = x0;
-        return
+      result = x0;
+      return
     endif
     x0 = intervalpart (x0);
-endif
+  endif
 
-[l, u] = findroots (f, df, x0, 0, options);
+  [l, u] = findroots (f, df, x0, 0, options);
 
-x = infsup ();
-x.inf = l;
-x.sup = u;
+  x = infsup ();
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 
 ## This function will perform the recursive newton / bisection steps
 function [l, u] = findroots (f, df, x0, stepcount, options)
 
-l = u = zeros (0, 1);
+  l = u = zeros (0, 1);
 
-## Try the newton step, if derivative is known
-if (not (isempty (df)))
+  ## Try the newton step, if derivative is known
+  if (not (isempty (df)))
     m = infsup (mid (x0));
     [a, b] = mulrev (feval (df, x0), feval (f, m));
     if (isempty (a) && isempty (b))
-        ## Function evaluated outside of its domain
-        a = x0;
+      ## Function evaluated outside of its domain
+      a = x0;
     else
-        a = intersect (x0, m - a);
-        b = intersect (x0, m - b);
-        if (isempty (a))
-            [a, b] = deal (b, a);
-        endif
+      a = intersect (x0, m - a);
+      b = intersect (x0, m - b);
+      if (isempty (a))
+        [a, b] = deal (b, a);
+      endif
     endif
-else
+  else
     a = x0;
     b = infsup ();
-endif
+  endif
 
-## Switch to bisection if the newton step did not produce two intervals
-if ((eq (x0, a) || isempty (b)) && not (issingleton (a)) && not (isempty (a)))
+  ## Switch to bisection if the newton step did not produce two intervals
+  if ((eq (x0, a) || isempty (b)) && not (issingleton (a)) && not (isempty (a)))
     ## When the interval is very large, bisection at the midpoint would
     ## take “forever” to converge, because floating point numbers are not
     ## distributed evenly on the real number lane.
@@ -170,52 +170,52 @@ if ((eq (x0, a) || isempty (b)) && not (issingleton (a)) && not (isempty (a)))
     ## When the interval is small, this algorithm will choose
     ## approximately mid (a).
     [a, b] = bisect (a);
-elseif (b < a)
+  elseif (b < a)
     ## Sort the roots in ascending order
     [a, b] = deal (b, a);
-endif
+  endif
 
-for x1 = {a, b}
+  for x1 = {a, b}
     x1 = x1 {1};
-    
+
     if (strcmp (options.Display, "iter"))
-        display (x1);
+      display (x1);
     endif
-    
+
     f_x1 = feval (f, x1);
     if  (not (ismember (0, f_x1)))
-        ## The interval evaluation of f over x1 proves that there are no roots
-        ## or x1 is empty
-        continue
+      ## The interval evaluation of f over x1 proves that there are no roots
+      ## or x1 is empty
+      continue
     endif
     if (isentire (f_x1) || ...
         wid (f_x1) / max (realmin (), wid (x1)) < pow2 (-20))
-        ## Slow convergence detected, cancel iteration soon
-        options.MaxIter = options.MaxIter / 1.5;
+      ## Slow convergence detected, cancel iteration soon
+      options.MaxIter = options.MaxIter / 1.5;
     endif
-    
+
     if (eq (x1, x0) || stepcount >= options.MaxIter
         || wid (x1) <= options.TolX || wid (f_x1) <= options.TolFun)
-        ## Stop recursion if result is accurate enough or if no improvement
-        [newl, newu] = deal (x1.inf, x1.sup);
+      ## Stop recursion if result is accurate enough or if no improvement
+      [newl, newu] = deal (x1.inf, x1.sup);
     else
-        [newl, newu] = findroots (f, df, x1, stepcount + 1, options);
+      [newl, newu] = findroots (f, df, x1, stepcount + 1, options);
     endif
     if (not (isempty (newl)))
-        if (isempty (l))
-            l = newl;
-            u = newu;
-        elseif (u (end) == newl (1))
-            ## Merge intersecting intervals
-            u (end) = newu (1);
-            l = [l; newl(2 : end, 1)];
-            u = [u; newu(2 : end, 1)];
-        else
-            l = [l; newl];
-            u = [u; newu];
-        endif
+      if (isempty (l))
+        l = newl;
+        u = newu;
+      elseif (u (end) == newl (1))
+        ## Merge intersecting intervals
+        u (end) = newu (1);
+        l = [l; newl(2 : end, 1)];
+        u = [u; newu(2 : end, 1)];
+      else
+        l = [l; newl];
+        u = [u; newu];
+      endif
     endif
-endfor
+  endfor
 
 endfunction
 

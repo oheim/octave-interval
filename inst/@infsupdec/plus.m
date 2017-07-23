@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsupdec} plus (@var{X}, @var{Y})
 ## @defopx Operator {@@infsupdec} {@var{X} + @var{Y}}
-## 
+##
 ## Add all numbers of interval @var{X} to all numbers of @var{Y}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -39,21 +39,21 @@
 
 function result = plus (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (x, "infsupdec")))
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = newdec (plus (x.infsup, y.infsup));
-## plus is continuous and defined everywhere
-result.dec = min (result.dec, min (x.dec, y.dec));
+  result = newdec (plus (x.infsup, y.infsup));
+  ## plus is continuous and defined everywhere
+  result.dec = min (result.dec, min (x.dec, y.dec));
 
 endfunction
 

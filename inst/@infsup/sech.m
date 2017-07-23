@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sech (@var{X})
-## 
+##
 ## Compute the hyperbolic secant, that is the reciprocal hyperbolic cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,22 +36,22 @@
 
 function x = sech (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = mpfr_function_d ('sech', -inf, mag (x));
-u = mpfr_function_d ('sech', +inf, mig (x));
+  l = mpfr_function_d ('sech', -inf, mag (x));
+  u = mpfr_function_d ('sech', +inf, mig (x));
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

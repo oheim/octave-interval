@@ -19,9 +19,9 @@
 ##
 ## Return the length of interval object @var{A}.
 ##
-## The length is 0 for empty objects, 1 for scalars, and the number of elements
-## for vectors.  For matrix objects, the length is the number of rows or
-## columns, whichever is greater.
+## The length is 0 for empty objects, 1 for scalars, and the number of
+## elements for vectors.  For matrix or N-dimensional objects, the
+## length is the number of elements along the largest dimension.
 ## @seealso{@@infsup/numel, @@infsup/size, @@infsup/rows, @@infsup/columns, @@infsup/end}
 ## @end defmethod
 
@@ -31,7 +31,7 @@
 
 function result = length (a)
 
-result = length (a.inf);
+  result = length (a.inf);
 
 endfunction
 

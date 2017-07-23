@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} sqrt (@var{X})
-## 
+##
 ## Compute the square root (for all non-negative numbers).
 ##
 ## Since intervals are only defined for real numbers, this function and
@@ -39,12 +39,12 @@
 
 function result = sqrt (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = realsqrt (x);
+  result = realsqrt (x);
 
 endfunction
 

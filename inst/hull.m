@@ -21,8 +21,7 @@
 ## Create an interval enclosure for a list of parameters.
 ##
 ## Parameters can be simple numbers, intervals or interval literals as strings.
-## Scalar values or scalar intervals do broadcast if combined with matrices or
-## interval matrices.
+## If needed, broadcasting is performed.
 ##
 ## NaNs represent missing values and are treated like empty intervals.  Inf and
 ## -Inf can be used to create unbound intervals, but note that these values
@@ -83,7 +82,7 @@ function result = hull (varargin)
                                   "UniformOutput", false ());
   decoratedintervals = not (floats);
 
-  ## Extract inf and sup matrices for remaining elements of l and u.
+  ## Extract inf and sup arrays for remaining elements of l and u.
   l(decoratedintervals) = cellfun (@inf, varargin(decoratedintervals), ...
                                    "UniformOutput", false ());
   u(decoratedintervals) = cellfun (@sup, varargin(decoratedintervals), ...
@@ -112,7 +111,7 @@ function result = hull (varargin)
     endif
   endfor
 
-  ## Compute min and max of inf and sup matrices, NaNs would be ignored and must
+  ## Compute min and max of inf and sup arrays, NaNs would be ignored and must
   ## be considered
   nans = false (targetsize);
   l = cat (numberofdimensions + 1, l{:});

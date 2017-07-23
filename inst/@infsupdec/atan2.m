@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsupdec} atan2 (@var{Y}, @var{X})
-## 
+##
 ## Compute the inverse tangent with two arguments.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,33 +36,34 @@
 
 function result = atan2 (y, x)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-if (not (isa (y, "infsupdec")))
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
+  endif
 
-result = newdec (atan2 (y.infsup, x.infsup));
+  result = newdec (atan2 (y.infsup, x.infsup));
 
-## The function is discontinuous for x <= 0 and y == 0
-discontinuos = inf (y) < 0 & sup (y) >= 0 & inf (x) < 0;
-result.dec(discontinuos) = min (result.dec(discontinuos), _def ());
+  ## The function is discontinuous for x <= 0 and y == 0
+  discontinuos = inf (y) < 0 & sup (y) >= 0 & inf (x) < 0;
+  result.dec(discontinuos) = min (result.dec(discontinuos), _def ());
 
-## For y = [0, y.sup] the function is discontinuous, but its restriction is not
-onlyrestrictioncontinuous = inf (y) == 0 & inf (x) < 0;
-result.dec(onlyrestrictioncontinuous) = ...
-    min (result.dec(onlyrestrictioncontinuous), _dac ());
+  ## For y = [0, y.sup] the function is discontinuous, but its
+  ## restriction is not
+  onlyrestrictioncontinuous = inf (y) == 0 & inf (x) < 0;
+  result.dec(onlyrestrictioncontinuous) = ...
+  min (result.dec(onlyrestrictioncontinuous), _dac ());
 
-## The only undefined input is <0,0>
-result.dec(ismember (0, y) & ismember (0, x)) = _trv ();
+  ## The only undefined input is <0,0>
+  result.dec(ismember (0, y) & ismember (0, x)) = _trv ();
 
-result.dec = min (result.dec, min (y.dec, x.dec));
+  result.dec = min (result.dec, min (y.dec, x.dec));
 
 endfunction
 

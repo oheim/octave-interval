@@ -16,13 +16,13 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{x} =} gauss (@var{A}, @var{b})
-## 
+##
 ## Solve a linear interval system @var{A} * @var{x} = @var{b} using Gaussian
 ## elimination.
 ##
 ## The found enclosure is improved with the help of the Gauß-Seidel-method.
 ##
-## Note: This algorithm is very inaccurate and slow for matrices of a dimension 
+## Note: This algorithm is very inaccurate and slow for matrices of a dimension
 ## greater than 3.  A better solver is provided by @code{mldivide}.  The
 ## inaccuracy mainly comes from the dependency problem of interval arithmetic
 ## during back-substitution of the solution's enclosure.
@@ -46,20 +46,20 @@
 
 function result = gauss (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsupdec")))
+  endif
+  if (not (isa (x, "infsupdec")))
     x = infsupdec (x);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-result = infsupdec (gauss (x.infsup, y.infsup), "trv");
-warning ("off", "Octave:broadcast", "local");
-result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
+  result = infsupdec (gauss (x.infsup, y.infsup), "trv");
+  warning ("off", "Octave:broadcast", "local");
+  result.dec = min (result.dec, min (vec (min (x.dec, y.dec))));
 
 endfunction
 

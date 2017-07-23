@@ -16,15 +16,15 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} factorial (@var{N})
-## 
+##
 ## Compute the factorial of @var{N} where @var{N} is a non-negative integer.
 ##
 ## If @var{N} is a scalar, this is equivalent to
 ## @display
 ## factorial (@var{N}) = 1 * 2 * @dots{} * @var{N}.
 ## @end display
-## For vector or matrix arguments, return the factorial of each element in the
-## array.
+## For vector, matrix or array arguments, return the factorial of each
+## element in the array.
 ##
 ## For non-integers see the generalized factorial function @command{gamma}.
 ## Note that the factorial function grows large quite quickly, and the result
@@ -48,25 +48,25 @@
 
 function x = factorial (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-l = max (0, ceil (x.inf));
-u = floor (x.sup);
+  l = max (0, ceil (x.inf));
+  u = floor (x.sup);
 
-emptyresult = l > u;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = l > u;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(not (emptyresult)) = ...
-    mpfr_function_d ("factorial", -inf, l(not (emptyresult)));
-u(not (emptyresult)) = ...
-    mpfr_function_d ("factorial", +inf, u(not (emptyresult)));
+  l(not (emptyresult)) = ...
+  mpfr_function_d ("factorial", -inf, l(not (emptyresult)));
+  u(not (emptyresult)) = ...
+  mpfr_function_d ("factorial", +inf, u(not (emptyresult)));
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

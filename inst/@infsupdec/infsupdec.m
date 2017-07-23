@@ -71,9 +71,9 @@
 ## will produce NaIs, whereas illegal decorations provided as an additional
 ## function parameter will be automatically adjusted.
 ##
-## For the creation of interval matrices, arguments may be provided as (1) cell
-## arrays with arbitrary/mixed types, (2) numeric matrices, or (3) strings.
-## Scalar values do broadcast.
+## For the creation of interval arrays, arguments may be provided as (1) cell
+## arrays with arbitrary/mixed types, (2) numeric arrays, or for matrices (3)
+## strings.  Scalar values do broadcast.
 ##
 ## Non-standard behavior: This class constructor is not described by IEEE Std
 ## 1788-2015, however it implements the standard functions setDec,

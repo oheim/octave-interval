@@ -22,8 +22,8 @@
 ##
 ## Return the entire set of real numbers.
 ##
-## With additional parameters, create an interval vector/matrix, which
-## comprises entire interval entries.
+## With additional parameters, create an interval vector/matrix/array,
+## which comprises entire interval entries.
 ##
 ## The entire set of real numbers [Entire] is a closed interval.  If used as
 ## an enclosure for a certain value, it represents a state of minimum

@@ -37,17 +37,17 @@
 
 function A = triu (A, varargin)
 
-if (nargin >= 2 && isa (varargin{1}, 'infsup'))
+  if (nargin >= 2 && isa (varargin{1}, 'infsup'))
     error ('triu: invalid second argument; it must not be an interval');
-endif
-if (nargin >= 3 && isa (varargin{2}, 'infsup'))
+  endif
+  if (nargin >= 3 && isa (varargin{2}, 'infsup'))
     error ('triu: invalid third argument; it must not be an interval');
-endif
+  endif
 
-A.inf = triu (A.inf, varargin{:});
-A.sup = triu (A.sup, varargin{:});
+  A.inf = triu (A.inf, varargin{:});
+  A.sup = triu (A.sup, varargin{:});
 
-A.inf(A.inf == 0) = -0;
+  A.inf(A.inf == 0) = -0;
 
 endfunction
 

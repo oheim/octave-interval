@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defop Method {@@infsup} plus (@var{X}, @var{Y})
 ## @defopx Operator {@@infsup} {@var{X} + @var{Y}}
-## 
+##
 ## Add all numbers of interval @var{X} to all numbers of @var{Y}.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -39,32 +39,32 @@
 
 function x = plus (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
-if (not (isa (y, "infsup")))
+  endif
+  if (not (isa (y, "infsup")))
     y = infsup (y);
-elseif (isa (y, "infsupdec"))
+  elseif (isa (y, "infsupdec"))
     ## Workaround for bug #42735
     result = plus (x, y);
     return
-endif
+  endif
 
-l = mpfr_function_d ('plus', -inf, x.inf, y.inf);
-u = mpfr_function_d ('plus', +inf, x.sup, y.sup);
+  l = mpfr_function_d ('plus', -inf, x.inf, y.inf);
+  u = mpfr_function_d ('plus', +inf, x.sup, y.sup);
 
-emptyresult = isempty (x) | isempty (y);
-l (emptyresult) = inf;
-u (emptyresult) = -inf;
+  emptyresult = isempty (x) | isempty (y);
+  l (emptyresult) = inf;
+  u (emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

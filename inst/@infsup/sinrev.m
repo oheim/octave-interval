@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} sinrev (@var{C}, @var{X})
 ## @deftypemethodx {@@infsup} {@var{X} =} sinrev (@var{C})
-## 
+##
 ## Compute the reverse sine function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -40,42 +40,42 @@
 
 function result = sinrev (c, x)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     x = infsup (-inf, inf);
-endif
-if (not (isa (c, "infsup")))
+  endif
+  if (not (isa (c, "infsup")))
     c = infsup (c);
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-arcsine = asin (c);
-result = x;
+  arcsine = asin (c);
+  result = x;
 
-## Resize, if scalar × matrix
-if (not (size_equal (arcsine.inf, result.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (arcsine.inf, result.inf)))
     arcsine.inf = ones (size (result.inf)) .* arcsine.inf;
     arcsine.sup = ones (size (result.inf)) .* arcsine.sup;
     result.inf = ones (size (arcsine.inf)) .* result.inf;
     result.sup = ones (size (arcsine.inf)) .* result.sup;
-endif
+  endif
 
-result.inf(isempty (arcsine)) = inf;
-result.sup(isempty (arcsine)) = -inf;
+  result.inf(isempty (arcsine)) = inf;
+  result.sup(isempty (arcsine)) = -inf;
 
-idx.type = '()';
+  idx.type = '()';
 
-persistent pi = infsup ("pi");
-select = not (isempty (result)) ...
-    & not (subset (infsup (-pi.sup / 2, pi.sup / 2), arcsine));
-    
-if (any (select(:)))
+  persistent pi = infsup ("pi");
+  select = not (isempty (result)) ...
+           & not (subset (infsup (-pi.sup / 2, pi.sup / 2), arcsine));
+
+  if (any (select(:)))
     ## Find a smaller upper bound for x, if the restriction from c allows it
     u = inf (size (result.inf));
     select_u = select & result.sup < inf;
@@ -85,24 +85,26 @@ if (any (select(:)))
     arcsineshifted = arcsine;
     idx.subs = {(select_u & rem (n, 2) == 0)};
     arcsineshifted = subsasgn (arcsineshifted, idx, ...
-        subsref (arcsineshifted, idx) + subsref (n, idx) .* pi);
+                               subsref (arcsineshifted, idx) + ...
+                               subsref (n, idx) .* pi);
     idx.subs = {(select_u & rem (n, 2) ~= 0)};
     arcsineshifted = subsasgn (arcsineshifted, idx, ...
-        subsref (n, idx) .* pi - subsref (arcsineshifted, idx));
+                               subsref (n, idx) .* pi - ...
+                               subsref (arcsineshifted, idx));
     overlapping = not (isempty (intersect (result, arcsineshifted)));
     u(select_u & overlapping) = ...
-        min (result.sup(select_u & overlapping), ...
-             arcsineshifted.sup(select_u & overlapping));
+    min (result.sup(select_u & overlapping), ...
+         arcsineshifted.sup(select_u & overlapping));
     m = n;
     m(select_u & ~overlapping) = ...
-        mpfr_function_d ('minus', +inf, m(select_u & ~overlapping), 1);
+    mpfr_function_d ('minus', +inf, m(select_u & ~overlapping), 1);
     idx.subs = {(select_u & ~overlapping & rem (n, 2) == 0)};
     u(idx.subs{1}) = ...
-        sup (subsref (m, idx) .* pi - subsref (arcsine, idx));
+    sup (subsref (m, idx) .* pi - subsref (arcsine, idx));
     idx.subs = {(select_u & ~overlapping & rem (n, 2) ~= 0)};
     u(idx.subs{1}) = ...
-        sup (subsref (arcsine, idx) + subsref (m, idx) .* pi);
-    
+    sup (subsref (arcsine, idx) + subsref (m, idx) .* pi);
+
     ## Find a larger lower bound for x, if the restriction from c allows it
     l = -inf (size (result.inf));
     select_l = select & result.inf > -inf;
@@ -112,30 +114,32 @@ if (any (select(:)))
     arcsineshifted = arcsine;
     idx.subs = {(select_l & rem (n, 2) == 0)};
     arcsineshifted = subsasgn (arcsineshifted, idx, ...
-        subsref (arcsineshifted, idx) + subsref (n, idx) .* pi);
+                               subsref (arcsineshifted, idx) + ...
+                               subsref (n, idx) .* pi);
     idx.subs = {(select_l & rem (n, 2) ~= 0)};
     arcsineshifted = subsasgn (arcsineshifted, idx, ...
-        subsref (n, idx) .* pi - subsref (arcsineshifted, idx));
+                               subsref (n, idx) .* pi - ...
+                               subsref (arcsineshifted, idx));
     overlapping = not (isempty (intersect (result, arcsineshifted)));
     l(select_l & overlapping) = ...
-        max (result.inf(select_l & overlapping), ...
-             arcsineshifted.inf(select_l & overlapping));
+    max (result.inf(select_l & overlapping), ...
+         arcsineshifted.inf(select_l & overlapping));
     m = n;
     m(select_l & ~overlapping) = ...
-        mpfr_function_d ('plus', -inf, m(select_l & ~overlapping), 1);
+    mpfr_function_d ('plus', -inf, m(select_l & ~overlapping), 1);
     idx.subs = {(select_l & ~overlapping & rem (n, 2) == 0)};
     l(idx.subs {1}) = ...
-        inf (subsref (m, idx) .* pi - subsref (arcsine, idx));
+    inf (subsref (m, idx) .* pi - subsref (arcsine, idx));
     idx.subs = {(select_l & ~overlapping & rem (n, 2) ~= 0)};
     l(idx.subs {1}) = ...
-        inf (subsref (arcsine, idx) + subsref (m, idx) .* pi);
-    
+    inf (subsref (arcsine, idx) + subsref (m, idx) .* pi);
+
     result.inf(select) = max (l(select), result.inf(select));
     result.sup(select) = min (u(select), result.sup(select));
-    
+
     result.inf(result.inf > result.sup) = inf;
     result.sup(result.inf > result.sup) = -inf;
-endif
+  endif
 
 endfunction
 

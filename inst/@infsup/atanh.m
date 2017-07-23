@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} atanh (@var{X})
-## 
+##
 ## Compute the inverse hyperbolic tangent.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,25 +36,25 @@
 
 function x = atanh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-x = intersect (x, infsup (-1, 1));
+  x = intersect (x, infsup (-1, 1));
 
-## atanh is monotonically increasing between (-1, -inf) and (1, inf)
-l = mpfr_function_d ('atanh', -inf, x.inf);
-u = mpfr_function_d ('atanh', +inf, x.sup);
+  ## atanh is monotonically increasing between (-1, -inf) and (1, inf)
+  l = mpfr_function_d ('atanh', -inf, x.inf);
+  u = mpfr_function_d ('atanh', +inf, x.sup);
 
-emptyresult = isempty (x) | x.sup <= -1 | x.inf >= 1;
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x) | x.sup <= -1 | x.inf >= 1;
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

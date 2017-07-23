@@ -27,12 +27,12 @@
 
 function result = rows (a)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = rows (a.inf);
+  result = rows (a.inf);
 
 endfunction
 

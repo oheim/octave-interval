@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {[@var{L}, @var{U}] = } lu (@var{A})
 ## @deftypemethodx {@@infsupdec} {[@var{L}, @var{U}, @var{P}] = } lu (@var{A})
-## 
+##
 ## Compute the LU decomposition of @var{A}.
 ##
 ## @var{A} will be a subset of @var{L} * @var{U} with lower triangular matrix
@@ -36,26 +36,26 @@
 
 function [L, U, P] = lu (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-P = eye (size (x.dec));
-if (isnai (x))
+  P = eye (size (x.dec));
+  if (isnai (x))
     L = U = nai ();
     return
-endif
+  endif
 
-if (nargout >= 3)
+  if (nargout >= 3)
     [L, U, P] = lu (x.infsup);
-else
+  else
     [L, U] = lu (x.infsup);
-endif    
+  endif
 
-## Reverse operations should not carry decoration
-L = infsupdec (L, "trv");
-U = infsupdec (U, "trv");
+  ## Reverse operations should not carry decoration
+  L = infsupdec (L, "trv");
+  U = infsupdec (U, "trv");
 
 endfunction
 

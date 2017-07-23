@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} newdec (@var{X})
-## 
+##
 ## Create a decorated interval from a bare interval.
 ##
 ## The decorated interval will carry the best possible decoration, i. e.,
@@ -41,13 +41,13 @@
 
 function xd = newdec (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-warning ("off", "interval:ImplicitPromote", "local");
-xd = infsupdec (x);
+  warning ("off", "interval:ImplicitPromote", "local");
+  xd = infsupdec (x);
 
 endfunction
 

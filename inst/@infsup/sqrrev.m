@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} sqrrev (@var{C}, @var{X})
 ## @deftypemethodx {@@infsup} {@var{X} =} sqrrev (@var{C})
-## 
+##
 ## Compute the reverse square function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -40,25 +40,25 @@
 
 function result = sqrrev (c, x)
 
-if (nargin > 2)
+  if (nargin > 2)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 2)
+  if (nargin < 2)
     x = infsup (-inf, inf);
-endif
-if (not (isa (c, "infsup")))
+  endif
+  if (not (isa (c, "infsup")))
     c = infsup (c);
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-p = sqrt (c);
-n = -p;
+  p = sqrt (c);
+  n = -p;
 
-result = union (intersect (p, x), intersect (n, x));
+  result = union (intersect (p, x), intersect (n, x));
 
 endfunction
 

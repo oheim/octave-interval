@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} cosh (@var{X})
-## 
+##
 ## Compute the hyperbolic cosine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,26 +36,26 @@
 
 function x = cosh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## cosh is symmetric and has its global minimum located at (0, 1).
-if (__check_crlibm__ ())
+  ## cosh is symmetric and has its global minimum located at (0, 1).
+  if (__check_crlibm__ ())
     l = crlibm_function ('cosh', -inf, mig (x));
     u = crlibm_function ('cosh', +inf, mag (x));
-else
+  else
     l = mpfr_function_d ('cosh', -inf, mig (x));
     u = mpfr_function_d ('cosh', +inf, mag (x));
-endif
+  endif
 
-emptyresult = isempty (x);
-l(emptyresult) = inf;
-u(emptyresult) = -inf;
+  emptyresult = isempty (x);
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

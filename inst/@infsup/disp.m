@@ -73,14 +73,13 @@ function varargout = disp (x)
     return
   endif
 
-  ## Interval matrix / vector
   columnwidth = max (cellfun ("length", s), [], 1);
   columnwidth += 3; # add 3 spaces between columns
 
-  ## Print all columns
   buffer = "";
   numberofmatrixparts = prod (size (x.inf)(3:end));
   for matrixpart = 1:numberofmatrixparts
+    ## Print the current submatrix
     if (rows (x.inf) > 0)
       ## FIXME: See display.m for how current_print_indent_level is used
       global current_print_indent_level;
@@ -90,7 +89,7 @@ function varargout = disp (x)
         ## Print the index for the current matrix in the array
         buffer = cstrcat (buffer, sprintf("ans(:,:"));
         matrixpartsubscript = cell (1, ndims (x) - 2);
-        [matrixpartsubscript{:}] = ind2sub (size (x.inf), matrixpart);
+        [matrixpartsubscript{:}] = ind2sub (size (x.inf)(3:end), matrixpart);
         buffer = cstrcat (buffer, ...
                           sprintf(",%d", ...
                                   matrixpartsubscript{1:ndims (x.inf) - 2}));

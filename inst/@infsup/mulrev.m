@@ -19,7 +19,7 @@
 ## @deftypemethodx {@@infsup} {@var{X} =} mulrev (@var{B}, @var{C})
 ## @deftypemethodx {@@infsup} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C})
 ## @deftypemethodx {@@infsup} {[@var{U}, @var{V}] =} mulrev (@var{B}, @var{C}, @var{X})
-## 
+##
 ## Compute the reverse multiplication function or the two-output division.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -55,117 +55,117 @@
 
 function [u, v] = mulrev (b, c, x)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
-if (nargin < 3)
+  endif
+  if (nargin < 3)
     x = infsup (-inf, inf);
-endif
-if (not (isa (b, "infsup")))
+  endif
+  if (not (isa (b, "infsup")))
     b = infsup (b);
-endif
-if (not (isa (c, "infsup")))
+  endif
+  if (not (isa (c, "infsup")))
     c = infsup (c);
-endif
-if (not (isa (x, "infsup")))
+  endif
+  if (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-## Resize, if scalar × matrix or vector × matrix or scalar × vector
-if (not (size_equal (b.inf, c.inf)))
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (b.inf, c.inf)))
     b.inf = ones (size (c.inf)) .* b.inf;
     b.sup = ones (size (c.inf)) .* b.sup;
     c.inf = ones (size (b.inf)) .* c.inf;
     c.sup = ones (size (b.inf)) .* c.sup;
-endif
+  endif
 
-u = v = x;
-u.inf = v.inf = inf (size (b.inf));
-u.sup = v.sup = -inf (size (b.inf));
+  u = v = x;
+  u.inf = v.inf = inf (size (b.inf));
+  u.sup = v.sup = -inf (size (b.inf));
 
-emptyresult = b.inf == inf | c.inf == inf ...
-            | (b.inf == 0 & b.sup == 0 & (c.sup < 0 | c.inf > 0)); # x * 0 ~= 0
-twocomponents = b.inf < 0 & b.sup > 0 & not (emptyresult) & ...
-              (c.sup < 0 | c.inf > 0);
-onecomponent = not (twocomponents) & not (emptyresult);
+  emptyresult = b.inf == inf | c.inf == inf ...
+                | (b.inf == 0 & b.sup == 0 & (c.sup < 0 | c.inf > 0)); # x * 0 ~= 0
+  twocomponents = b.inf < 0 & b.sup > 0 & not (emptyresult) & ...
+                  (c.sup < 0 | c.inf > 0);
+  onecomponent = not (twocomponents) & not (emptyresult);
 
-u.inf(twocomponents) = -inf;
-v.sup(twocomponents) = inf;
-dom = twocomponents & c.inf <= 0 & c.sup >= 0;
-u.sup(dom) = v.inf(dom) = 0;
-dom = twocomponents & c.inf > 0;
-if (not (isempty (dom)))
+  u.inf(twocomponents) = -inf;
+  v.sup(twocomponents) = inf;
+  dom = twocomponents & c.inf <= 0 & c.sup >= 0;
+  u.sup(dom) = v.inf(dom) = 0;
+  dom = twocomponents & c.inf > 0;
+  if (not (isempty (dom)))
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.inf(dom), b.inf(dom));
     v.inf(dom) = mpfr_function_d ('rdivide', -inf, c.inf(dom), b.sup(dom));
-endif
-dom = twocomponents & c.sup < 0;
-if (not (isempty (dom)))
+  endif
+  dom = twocomponents & c.sup < 0;
+  if (not (isempty (dom)))
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.sup(dom), b.sup(dom));
     v.inf(dom) = mpfr_function_d ('rdivide', -inf, c.sup(dom), b.inf(dom));
-endif
+  endif
 
-dom = onecomponent & b.inf >= 0 & c.inf >= 0;
-if (not (isempty (dom)))
+  dom = onecomponent & b.inf >= 0 & c.inf >= 0;
+  if (not (isempty (dom)))
     b.inf(dom & b.inf == 0) = +0;
     c.inf(dom & c.inf == 0) = +0;
     u.inf(dom) = mpfr_function_d ('rdivide', -inf, c.inf(dom), b.sup(dom));
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.sup(dom), b.inf(dom));
-endif
-dom = onecomponent & b.sup <= 0 & c.inf >= 0;
-if (not (isempty (dom)))
+  endif
+  dom = onecomponent & b.sup <= 0 & c.inf >= 0;
+  if (not (isempty (dom)))
     b.sup(dom & b.sup == 0) = -0;
     c.inf(dom & c.inf == 0) = +0;
     u.inf(dom) = mpfr_function_d ('rdivide', -inf, c.sup(dom), b.sup(dom));
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.inf(dom), b.inf(dom));
-endif
-dom = onecomponent & b.inf >= 0 & c.sup <= 0;
-if (not (isempty (dom)))
+  endif
+  dom = onecomponent & b.inf >= 0 & c.sup <= 0;
+  if (not (isempty (dom)))
     b.inf(dom & b.inf == 0) = +0;
     c.sup(dom & c.sup == 0) = -0;
     u.inf(dom) = mpfr_function_d ('rdivide', -inf, c.inf(dom), b.inf(dom));
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.sup(dom), b.sup(dom));
-endif
-dom = onecomponent & b.sup <= 0 & c.sup <= 0;
-if (not (isempty (dom)))
+  endif
+  dom = onecomponent & b.sup <= 0 & c.sup <= 0;
+  if (not (isempty (dom)))
     b.sup(dom & b.sup == 0) = -0;
     c.sup(dom & c.sup == 0) = -0;
     u.inf(dom) = mpfr_function_d ('rdivide', -inf, c.sup(dom), b.inf(dom));
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.inf(dom), b.sup(dom));
-endif
-dom = onecomponent & c.inf < 0 & c.sup > 0 & b.inf > 0;
-if (not (isempty (dom)))
+  endif
+  dom = onecomponent & c.inf < 0 & c.sup > 0 & b.inf > 0;
+  if (not (isempty (dom)))
     u.inf(dom) = mpfr_function_d ('rdivide', -inf, c.inf(dom), b.inf(dom));
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.sup(dom), b.inf(dom));
-endif
-dom = onecomponent & c.inf < 0 & c.sup > 0 & b.sup < 0;
-if (not (isempty (dom)))
+  endif
+  dom = onecomponent & c.inf < 0 & c.sup > 0 & b.sup < 0;
+  if (not (isempty (dom)))
     u.inf(dom) = mpfr_function_d ('rdivide', -inf, c.sup(dom), b.sup(dom));
     u.sup(dom) = mpfr_function_d ('rdivide', +inf, c.inf(dom), b.sup(dom));
-endif
-dom = onecomponent & b.inf <= 0 & b.sup >= 0 & c.inf <= 0 & c.sup >= 0;
-# x * 0 == 0
-u.inf(dom) = -inf;
-u.sup(dom) = inf;
+  endif
+  dom = onecomponent & b.inf <= 0 & b.sup >= 0 & c.inf <= 0 & c.sup >= 0;
+                                # x * 0 == 0
+  u.inf(dom) = -inf;
+  u.sup(dom) = inf;
 
-u.inf(u.inf == 0) = -0;
-u.sup(u.sup == 0) = +0;
-v.inf(v.inf == 0) = -0;
-v.sup(v.sup == 0) = +0;
+  u.inf(u.inf == 0) = -0;
+  u.sup(u.sup == 0) = +0;
+  v.inf(v.inf == 0) = -0;
+  v.sup(v.sup == 0) = +0;
 
-## Intersect u and v with x
-u.inf = max (u.inf, x.inf);
-u.sup = min (u.sup, x.sup);
-v.inf = max (v.inf, x.inf);
-v.sup = min (v.sup, x.sup);
+  ## Intersect u and v with x
+  u.inf = max (u.inf, x.inf);
+  u.sup = min (u.sup, x.sup);
+  v.inf = max (v.inf, x.inf);
+  v.sup = min (v.sup, x.sup);
 
-if (nargout < 2)
+  if (nargout < 2)
     u.inf(twocomponents) = min (u.inf(twocomponents), v.inf(twocomponents));
     u.sup(twocomponents) = max (u.sup(twocomponents), v.sup(twocomponents));
     emptyresult = u.inf > u.sup;
     u.inf(emptyresult) = inf;
     u.sup(emptyresult) = -inf;
-else
+  else
     empty_u = u.inf > u.sup;
     u.inf(empty_u) = inf;
     u.sup(empty_u) = -inf;
@@ -176,9 +176,9 @@ else
     ## because x is positive for example.  Then, only one component shall be
     ## returned
     swap = twocomponents & isempty (u) & not (isempty (v));
-    [u.inf(swap), u.sup(swap), v.inf(swap), v.sup(swap)] = deal (...
-        v.inf(swap), v.sup(swap), u.inf(swap), u.sup(swap));
-endif
+    [u.inf(swap), u.sup(swap), v.inf(swap), ...
+     v.sup(swap)] = deal (v.inf(swap), v.sup(swap), u.inf(swap), u.sup(swap));
+  endif
 
 endfunction
 

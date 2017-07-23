@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{X} =} absrev (@var{C}, @var{X})
 ## @deftypemethodx {@@infsup} {@var{X} =} absrev (@var{C})
-## 
+##
 ## Compute the reverse absolute value function.
 ##
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
@@ -40,24 +40,24 @@
 
 function result = absrev (c, x)
 
-if (nargin < 1 || nargin > 2)
+  if (nargin < 1 || nargin > 2)
     print_usage ();
     return
-endif
-if (not (isa (c, "infsup")))
+  endif
+  if (not (isa (c, "infsup")))
     c = infsup (c);
-endif
-if (nargin < 2)
+  endif
+  if (nargin < 2)
     x = infsup (-inf, inf);
-elseif (not (isa (x, "infsup")))
+  elseif (not (isa (x, "infsup")))
     x = infsup (x);
-endif
+  endif
 
-## Compute the pre-image of abs for positive and negative x separately.
-p = intersect (c, infsup (0, inf));
-n = -p;
+  ## Compute the pre-image of abs for positive and negative x separately.
+  p = intersect (c, infsup (0, inf));
+  n = -p;
 
-result = union (intersect (p, x), intersect (n, x));
+  result = union (intersect (p, x), intersect (n, x));
 
 endfunction
 

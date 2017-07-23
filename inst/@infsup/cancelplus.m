@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsup} {@var{Z} =} cancelplus (@var{X}, @var{Y})
-## 
+##
 ## Recover interval @var{Z} from intervals @var{X} and @var{Y}, given that one
 ## knows @var{X} was obtained as the difference @var{Z} - @var{Y}.
 ##
@@ -37,12 +37,12 @@
 
 function result = cancelplus (x, y)
 
-if (nargin ~= 2)
+  if (nargin ~= 2)
     print_usage ();
     return
-endif
+  endif
 
-result = cancelminus (x, -y);
+  result = cancelminus (x, -y);
 
 endfunction
 

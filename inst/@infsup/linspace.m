@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} linspace (@var{BASE}, @var{LIMIT})
 ## @defmethodx {@@infsup} linspace (@var{BASE}, @var{LIMIT}, @var{N})
-## 
+##
 ## Return a row vector of @var{N} linearly spaced members between @var{BASE}
 ## and @var{LIMIT}.
 ##
@@ -32,7 +32,7 @@
 ## @group
 ## transpose (linspace (infsup (0), infsup (10), 4))
 ##   @result{} ans ⊂ 4×1 interval vector
-##   
+##
 ##                     [0]
 ##        [3.3333, 3.3334]
 ##        [6.6666, 6.6667]
@@ -48,31 +48,31 @@
 
 function base = linspace (base, limit, n)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
-if (not (isa (base, "infsup")))
+  endif
+  if (not (isa (base, "infsup")))
     base = infsup (base);
-endif
-if (not (isa (limit, "infsup")))
+  endif
+  if (not (isa (limit, "infsup")))
     limit = infsup (limit);
-endif
-if (nargin < 3)
+  endif
+  if (nargin < 3)
     n = 100;
-endif
+  endif
 
-l = mpfr_linspace_d (-inf, base.inf, limit.inf, n);
-u = mpfr_linspace_d (+inf, base.sup, limit.sup, n);
+  l = mpfr_linspace_d (-inf, base.inf, limit.inf, n);
+  u = mpfr_linspace_d (+inf, base.sup, limit.sup, n);
 
-empty = vec (isempty (base) | isempty (limit));
-l(empty, :) = inf;
-u(empty, :) = -inf;
+  empty = vec (isempty (base) | isempty (limit));
+  l(empty, :) = inf;
+  u(empty, :) = -inf;
 
-l(l == 0) = -0;
+  l(l == 0) = -0;
 
-base.inf = l;
-base.sup = u;
+  base.inf = l;
+  base.sup = u;
 
 endfunction
 

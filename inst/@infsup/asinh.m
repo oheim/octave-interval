@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} asinh (@var{X})
-## 
+##
 ## Compute the inverse hyperbolic sine.
 ##
 ## Accuracy: The result is a tight enclosure.
@@ -36,19 +36,19 @@
 
 function x = asinh (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-## asinh is monotonically increasing
-## This also works for empty intervals!
-l = mpfr_function_d ('asinh', -inf, x.inf);
-u = mpfr_function_d ('asinh', +inf, x.sup);
-l(l == 0) = -0;
+  ## asinh is monotonically increasing
+  ## This also works for empty intervals!
+  l = mpfr_function_d ('asinh', -inf, x.inf);
+  u = mpfr_function_d ('asinh', +inf, x.sup);
+  l(l == 0) = -0;
 
-x.inf = l;
-x.sup = u;
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 

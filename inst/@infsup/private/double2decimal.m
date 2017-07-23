@@ -16,7 +16,7 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @deffun double2decimal (@var{X})
-## 
+##
 ## Convert a binary floating point number @var{X} in double precision to a
 ## decimal floating point number with arbitrary precision.  The number must be
 ## a finite number and must not be NaN.
@@ -57,68 +57,68 @@
 
 function decimal = double2decimal (binary)
 
-[decimal.s, exponent, fraction] = parsedouble (binary);
+  [decimal.s, exponent, fraction] = parsedouble (binary);
 
-if (sum (fraction) == 0) # this number equals zero
+  if (sum (fraction) == 0) # this number equals zero
     decimal.s = false; # normalize: remove sign from -0
     decimal.m = [];
     decimal.e = int64 (0);
     return
-endif
+  endif
 
-## Remove trailing zeroes if this might reduce the number of loop cycles below
-if (exponent < length (fraction))
+  ## Remove trailing zeroes if this might reduce the number of loop cycles below
+  if (exponent < length (fraction))
     fraction = fraction(1:find (fraction, 1, "last"));
-endif
+  endif
 
-## Move the point to the end of the mantissa and interpret mantissa as a binary
-## integer number that is now in front of the point. Convert binary integer
-## to decimal.
-exponent -= length (fraction);
-decimal.m = zeros ();
-for i = 1 : length(fraction)
+  ## Move the point to the end of the mantissa and interpret mantissa
+  ## as a binary integer number that is now in front of the
+  ## point. Convert binary integer to decimal.
+  exponent -= length (fraction);
+  decimal.m = zeros ();
+  for i = 1 : length(fraction)
     ## Multiply by 2
     decimal.m .*= 2;
     ## Add 1 if necessary
     decimal.m(end) += fraction(i);
     ## Carry
     decimal.m = [0; rem(decimal.m, 10)] ...
-              + [(decimal.m >= 10); 0];
-endfor
-clear fraction;
+                + [(decimal.m >= 10); 0];
+  endfor
+  clear fraction;
 
-## Normalize: Remove leading zeroes (for performance reasons not in loop)
-decimal.m = decimal.m(find (decimal.m ~= 0, 1, "first"):end);
-assert (length (decimal.m) > 0, "number must not equal zero at this point");
-decimal.e = int64 (length (decimal.m));
+  ## Normalize: Remove leading zeroes (for performance reasons not in loop)
+  decimal.m = decimal.m(find (decimal.m ~= 0, 1, "first"):end);
+  assert (length (decimal.m) > 0, "number must not equal zero at this point");
+  decimal.e = int64 (length (decimal.m));
 
-## Multiply decimal integer with 2 ^ exponent
-while (exponent > 0)
+  ## Multiply decimal integer with 2 ^ exponent
+  while (exponent > 0)
     decimal.m .*= 2;
     decimal.m = [0; rem(decimal.m, 10)] ...
-              + [(decimal.m >= 10); 0];
+                + [(decimal.m >= 10); 0];
     if (decimal.m(1) == 0)
-        decimal.m(1) = [];
+      decimal.m(1) = [];
     else
-        decimal.e ++;
+      decimal.e ++;
     endif
     exponent --;
-endwhile
-while (exponent < 0)
+  endwhile
+  while (exponent < 0)
     ## Instead of division by 2 we devide by 10 and multiply by 5
     decimal.e --; # cheap division by 10
     decimal.m .*= 5;
     decimal.m = [0; rem(decimal.m, 10)] ...
-              + [floor(decimal.m ./ 10); 0];
+                + [floor(decimal.m ./ 10); 0];
     if (decimal.m(1) == 0)
-        decimal.m(1) = [];
+      decimal.m(1) = [];
     else
-        decimal.e ++;
+      decimal.e ++;
     endif
     exponent ++;
-endwhile
+  endwhile
 
-## Normalize mantissa: remove trailing zeroes;
-decimal.m = decimal.m(1 : find (decimal.m ~= 0, 1, "last"));
+  ## Normalize mantissa: remove trailing zeroes;
+  decimal.m = decimal.m(1 : find (decimal.m ~= 0, 1, "last"));
 
 endfunction

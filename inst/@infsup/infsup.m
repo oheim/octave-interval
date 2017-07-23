@@ -104,7 +104,7 @@ function [x, isexact, overflow, isnai] = infsup (l, u)
   ## Split any arguments into l and u, where l and u denote lower and upper
   ## boundaries.  l and u shall be either numeric arrays or cell arrays with
   ## strings or numeric entries.  The size of l and u will equal the interval
-  ## matrix size of the final result (unless broadcasting is going to be applied
+  ## array size of the final result (unless broadcasting is going to be applied
   ## as a very last step).
   ##
   ## Strings in l and u will be normalized, that is, trimmed and converted to
@@ -139,7 +139,7 @@ function [x, isexact, overflow, isnai] = infsup (l, u)
         char_idx = cellfun ("ischar", l);
         l(char_idx) = lower (strtrim (l(char_idx)));
       else
-        ## Not cell or char, e. g. numeric matrix.
+        ## Not cell or char, e. g. numeric array.
         ## Syntax infsup (x) has to be equivalent with infsup (x, x).
         ## No need to trim or normalize character case.
         u = l;
@@ -415,10 +415,10 @@ function [x, isexact, overflow, isnai] = infsup (l, u)
   ## Part 2
   ##
   ## Boundaries have been split into lower and upper boundaries and shall be
-  ## converted to binary64 matrices with string parsing and outward rounding.
+  ## converted to binary64 arrays with string parsing and outward rounding.
   ##
-  ## l contains a cell array or a matrix of lower boundaries.
-  ## u contains a cell array or a matrix of upper boundaries.
+  ## l contains a cell array or an array of lower boundaries.
+  ## u contains a cell array or an array of upper boundaries.
   ##
   ## Each of l and u will be converted into binary64 individually and will be
   ## stored in x.inf and x.sup respectively.

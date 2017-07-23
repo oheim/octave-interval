@@ -17,7 +17,7 @@
 ## @documentencoding UTF-8
 ## @deftypemethod {@@infsupdec} {@var{Y} =} atan2rev1 (@var{B}, @var{C}, @var{Y})
 ## @deftypemethodx {@@infsupdec} {@var{Y} =} atan2rev1 (@var{B}, @var{C})
-## 
+##
 ## Compute the reverse atan2 function for the first parameter.
 ##
 ## That is, an enclosure of all @code{y ∈ @var{Y}} where
@@ -44,28 +44,28 @@
 
 function result = atan2rev1 (b, c, y)
 
-if (nargin < 2 || nargin > 3)
+  if (nargin < 2 || nargin > 3)
     print_usage ();
     return
-endif
+  endif
 
-if (nargin < 3)
+  if (nargin < 3)
     y = infsupdec (-inf, inf);
-endif
-if (not (isa (b, "infsupdec")))
+  endif
+  if (not (isa (b, "infsupdec")))
     b = infsupdec (b);
-endif
-if (not (isa (c, "infsupdec")))
+  endif
+  if (not (isa (c, "infsupdec")))
     c = infsupdec (c);
-endif
-if (not (isa (y, "infsupdec")))
+  endif
+  if (not (isa (y, "infsupdec")))
     y = infsupdec (y);
-endif
+  endif
 
-## inverse atan2 is not a point function
-result = infsupdec (atan2rev1 (b.infsup, c.infsup, y.infsup), "trv");
+  ## inverse atan2 is not a point function
+  result = infsupdec (atan2rev1 (b.infsup, c.infsup, y.infsup), "trv");
 
-result.dec(isnai (y) | isnai (b) | isnai (c)) = _ill ();
+  result.dec(isnai (y) | isnai (b) | isnai (c)) = _ill ();
 
 endfunction
 

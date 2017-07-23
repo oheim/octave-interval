@@ -45,84 +45,92 @@
 
 function c = ctc_union (ctc1, y1, ctc2, y2)
 
-## Reorder parameters
-switch (nargin)
+  ## Reorder parameters
+  switch (nargin)
     case 2
-        ctc2 = y1;
-        y1 = y2 = 0;
+      ctc2 = y1;
+      y1 = y2 = 0;
     case 3
-        if (is_function_handle (y1))
-            y2 = ctc2;
-            ctc2 = y1;
-            y1 = 0;
-        else
-            y2 = 0;
-        endif
+      if (is_function_handle (y1))
+        y2 = ctc2;
+        ctc2 = y1;
+        y1 = 0;
+      else
+        y2 = 0;
+      endif
     case 4
-        ...
+      ...
     otherwise
-        print_usage ();
-endswitch
+      print_usage ();
+  endswitch
 
-## Check parameters
-if (not (isa (y1, "infsup")))
+  ## Check parameters
+  if (not (isa (y1, "infsup")))
     y1 = infsup (y1);
-endif
-if (not (isa (y2, "infsup")))
+  endif
+  if (not (isa (y2, "infsup")))
     y2 = infsup (y2);
-endif
+  endif
 
-if (not (is_function_handle (ctc1)) && not (ischar (ctc1)))
+  if (not (is_function_handle (ctc1)) && not (ischar (ctc1)))
     error ("interval:InvalidOperand", ...
            "ctc_union: Parameter C1 is no function handle")
-endif
-if (not (is_function_handle (ctc2)) && not (ischar (ctc2)))
+  endif
+  if (not (is_function_handle (ctc2)) && not (ischar (ctc2)))
     error ("interval:InvalidOperand", ...
            "ctc_union: Parameter C2 is no function handle")
-endif
+  endif
 
-c = @(varargin) ctc_union_eval (ctc1, y1, ctc2, y2, varargin{:});
+  c = @(varargin) ctc_union_eval (ctc1, y1, ctc2, y2, varargin{:});
 
 endfunction
 
 
 function varargout = ctc_union_eval (ctc1, y1, ctc2, y2, varargin)
 
-y = varargin{1};
-x = varargin(2 : end);
+  y = varargin{1};
+  x = varargin(2 : end);
 
-## Evaluate each contractor function
-fval_and_contractions1 = nthargout (1 : nargout, ctc1, y1, x{:});
-fval_and_contractions2 = nthargout (1 : nargout, ctc2, y2, x{:});
+  ## Always return at least one value
+  if nargout == 0
+    nargout = 1;
+  endif
 
-## Compute fval = y if either function value is inside of its constraints
-fval1 = fval_and_contractions1{1};
-fval2 = fval_and_contractions2{1};
-fval1 = y + y_dist (y1, fval1);
-fval2 = y + y_dist (y2, fval2);
-varargout{1} = union (fval1, fval2);
-## It suffices, if one contractor is a subset of y.
-varargout{1}(fval1 == y | fval2 == y) = y;
+  ## Evaluate each contractor function
+  fval_and_contractions1 = nthargout (1 : nargout, ctc1, y1, x{:});
+  fval_and_contractions2 = nthargout (1 : nargout, ctc2, y2, x{:});
 
-## Unite the contractions
-for i = 2 : nargout
+  if nargout == 1
+    fval_and_contractions1 = {fval_and_contractions1};
+    fval_and_contractions2 = {fval_and_contractions2};
+  endif
+
+  ## Compute fval = y if either function value is inside of its constraints
+  fval1 = fval_and_contractions1{1};
+  fval2 = fval_and_contractions2{1};
+  fval1 = y + y_dist (y1, fval1);
+  fval2 = y + y_dist (y2, fval2);
+  varargout{1} = union (fval1, fval2);
+  ## It suffices, if one contractor is a subset of y.
+  varargout{1}(fval1 == y | fval2 == y) = y;
+
+  ## Unite the contractions
+  for i = 2 : nargout
     varargout{i} = union (fval_and_contractions1{i}, ...
                           fval_and_contractions2{i});
-endfor
+  endfor
 
 endfunction
 
 
 function d = y_dist (y, fval)
-d = infsup (idist (y, fval), hdist (y, fval));
-d(subset (fval, y) & not (isempty (fval))) = 0;
-if (columns (y) == 1)
-    d = sum (d, 1);
-elseif (rows (y) == 1)
-    d = sum (d, 2);
-else
-    d = sum (sum (d));
-endif
+  d = infsup (idist (y, fval), hdist (y, fval));
+  d(subset (fval, y) & not (isempty (fval))) = 0;
+  for i = 1:ndims (y)
+    if (size (y, i) != 1)
+      d = sum (d, i);
+    endif
+  endfor
 endfunction
 
 %!function [fval, cx] = ctc_sin (y, x)

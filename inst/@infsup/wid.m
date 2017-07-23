@@ -16,11 +16,11 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} wid (@var{X})
-## 
+##
 ## Get the width of interval @var{X}.
 ##
 ## If @var{X} is empty, @code{wid (@var{X})} is NaN.
-## If @var{X} is unbounded in one or both directions, @code{wid (@var{X})} is 
+## If @var{X} is unbounded in one or both directions, @code{wid (@var{X})} is
 ## positive infinity.
 ##
 ## Accuracy: The result is a tight enclosure of the interval's actual width.
@@ -40,14 +40,14 @@
 
 function result = wid (x)
 
-if (nargin ~= 1)
+  if (nargin ~= 1)
     print_usage ();
     return
-endif
+  endif
 
-result = mpfr_function_d ('minus', +inf, x.sup, x.inf);
+  result = mpfr_function_d ('minus', +inf, x.sup, x.inf);
 
-result(x.inf > x.sup) = nan ();
+  result(x.inf > x.sup) = nan ();
 
 endfunction
 
