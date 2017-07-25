@@ -224,21 +224,20 @@ infsupdec (ones (2, 2, 2))
      [1]_com   [1]_com
 @end group
 @end example
-@end example
 
 Strings can easily be used to create vectors and matrices of intervals, @code{,} and @code{;} are used to denote the next element in the row or a new row.  Octave does however not have way of representing arrays with three or more dimensions using strings in the same way.  Therefore you can only create such arrays by passing numerical matrices or cells to the constructor.  Alternatively you can build it up in steps.
 
 @example
 @group
-> A = infsupdec ("1 [2, 3]; 4, 5; 6, 7")
-  A = 3×2 interval matrix
+A = infsupdec ("1 [2, 3]; 4, 5; 6, 7")
+  @result{} A = 3×2 interval matrix
 
      [1]_com   [2, 3]_com
      [4]_com      [5]_com
      [6]_com      [7]_com
 
-> A(:,:,2) = infsupdec ("0.1, 0.2; 0.3, 0.4; 0.5, 0.6")
-  A ⊂ 3×2×2 interval array
+A(:,:,2) = infsupdec ("0.1, 0.2; 0.3, 0.4; 0.5, 0.6")
+  @result{} A ⊂ 3×2×2 interval array
 
   ans(:,:,1) =
 
