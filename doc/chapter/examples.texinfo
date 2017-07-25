@@ -231,7 +231,7 @@ Consider the function @code{f (x) = @var{p1} ^ x * (@var{p2} + @var{p3} * x + @
 Using plain @funref{@@infsup/fsolve} would take considerably longer, because the search range has 4 dimensions.  Bisecting intervals requires an exponential number of steps and can easily become inefficient.  Thus we use a contractor for function @var{f}, which in addition to the function value can produce a refinement for its parameter constraints.  Contractors can easily be build using interval reverse operations like @funref{@@infsup/mulrev}, @funref{@@infsup/sqrrev}, @funref{@@infsup/powrev1}, etc.
 
 @example
-@c doctest: +SKIP
+@c doctest: -TEXINFO_SKIP_BLOCKS_WO_OUTPUT
 @group
 ## Simulate some data sets and add uncertainty
 x = -6 : 3 : 18;
@@ -273,7 +273,6 @@ endfunction
 Now, search for solutions in the range of @code{p} and try to restore the function parameters.
 
 @example
-@c doctest: +SKIP
 @group
 p = infsup ("[1.1, 2] [1, 5] [-5, -1] [0.1, 5]");
 p = fsolve (@@contractor, ...
