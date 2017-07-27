@@ -60,3 +60,23 @@ endfunction
 %!test
 %! x = pow10 (infsup (-inf, -realmax));
 %! assert (signbit (inf (x)));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.exp10;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     pow10 (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.exp10;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pow10 (in1), out));

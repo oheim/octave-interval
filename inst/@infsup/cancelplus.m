@@ -48,3 +48,24 @@ endfunction
 
 %!# from the documentation string
 %!assert (cancelplus (infsup (2, 3), infsup (1, 1.5)) == infsup (3.5, 4));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.cancelPlus;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     cancelplus (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.cancelPlus;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (cancelplus (in1, in2), out));

@@ -50,3 +50,23 @@ endfunction
 %!assert (not (issingleton (intervalpart (empty ()))));
 
 %!warning assert (not (issingleton (infsupdec (2, 1))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.isSingleton;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     issingleton (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.isSingleton;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (issingleton (in1), out));

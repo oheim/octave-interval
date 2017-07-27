@@ -490,3 +490,24 @@ endfunction
 %! assert (x.inf, reshape (1:8, 2, 2, 2));
 %! assert (x.sup, reshape (2:9, 2, 2, 2));
 %! assert (decorationpart (x), decpart)
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.setDec;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     infsupdec (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.setDec;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (infsupdec (in1, in2), out));

@@ -85,3 +85,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (sec (infsup (1)) == "[0x1.D9CF0F125CC29, 0x1.D9CF0F125CC2A]");
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.sec;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     sec (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.sec;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (sec (in1), out));

@@ -52,3 +52,23 @@ endfunction
 
 %!assert (mig (infsup (-1, 2)), 0);
 %!assert (mig (infsup (-42, -23)), 23);
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.mig;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     mig (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.mig;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (mig (in1), out));

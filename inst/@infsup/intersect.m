@@ -124,3 +124,24 @@ endfunction
 %! x = intersect (infsup (-1, 0), infsup (0, 1));
 %! assert (signbit (inf (x)));
 %! assert (not (signbit (sup (x))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.intersection;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     intersect (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.intersection;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (intersect (in1, in2), out));

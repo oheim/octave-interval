@@ -46,3 +46,23 @@ endfunction
 %!assert (not (isentire (intervalpart (empty ()))));
 
 %!warning assert (not (isentire (infsupdec (2, 1))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.isEntire;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     isentire (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.isEntire;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (isentire (in1), out));

@@ -56,3 +56,23 @@ endfunction
 
 %!assert (isequal (newdec (infsupdec (2, 3)), infsupdec (2, 3)));
 %!assert (isequal (newdec (infsupdec (1, "trv")), infsupdec (1, "trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.newDec;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     newdec (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.newDec;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (newdec (in1), out));

@@ -53,3 +53,24 @@ endfunction
 
 %!assert (disjoint (infsup (3, 4), infsup (5, 6)));
 %!assert (not (disjoint (infsup (3, 4), infsup (4, 5))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.disjoint;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     disjoint (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.disjoint;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (disjoint (in1, in2), out));

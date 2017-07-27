@@ -60,3 +60,24 @@ endfunction
 %!assert (not (ismember (0, intervalpart (empty ()))));
 
 %!warning assert (not (ismember (0, infsupdec (2, 1))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.isMember;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     ismember (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.isMember;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (ismember (in1, in2), out));

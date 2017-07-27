@@ -76,3 +76,24 @@ endfunction
 
 %!# from the documentation string
 %!assert (union (infsup (1, 3), infsup (2, 4)) == infsup (1, 4));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.convexHull;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     union (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.convexHull;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (union (in1, in2), out));

@@ -67,3 +67,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (coth (infsup (1)) == "[0x1.50231499B6B1D, 0x1.50231499B6B1E]");
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.coth;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     coth (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.coth;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (coth (in1), out));

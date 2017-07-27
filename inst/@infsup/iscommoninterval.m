@@ -56,3 +56,23 @@ endfunction
 %!assert (not (iscommoninterval (entire ())));
 
 %!warning assert (not (iscommoninterval (infsupdec (2, 1))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.isCommonInterval;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     iscommoninterval (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.isCommonInterval;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (iscommoninterval (in1), out));

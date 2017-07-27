@@ -53,3 +53,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (wid (infsup (2.5, 3.5)), 1);
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.wid;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     wid (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.wid;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (wid (in1), out));

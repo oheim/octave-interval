@@ -52,3 +52,24 @@ endfunction
 
 %!assert (precedes (infsup (1, 2), infsup (2, 3)));
 %!assert (not (precedes (infsup (1, 2.1), infsup (1.9, 3))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.precedes;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     precedes (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.precedes;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (precedes (in1, in2), out));

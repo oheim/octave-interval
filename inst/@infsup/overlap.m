@@ -193,3 +193,24 @@ endfunction
 %! [s, n] = overlap (infsup (3, 4), infsup (1, 2));
 %! assert (s, "after");
 %! assert (n, uint16 (1));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.overlap;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     overlap (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!xtest
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.overlap;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (overlap (in1, in2), out));

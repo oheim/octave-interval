@@ -202,3 +202,24 @@ endfunction
 %!test
 %! x = nthroot (infsup (0, inf), -3);
 %! assert (signbit (inf (x)));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.rootn;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     nthroot (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!xtest
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.rootn;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (nthroot (in1, in2), out));

@@ -66,3 +66,23 @@ endfunction
 %! x = expm1 (infsup (0));
 %! assert (signbit (inf (x)));
 %! assert (not (signbit (sup (x))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsup.expm1;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     expm1 (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsup.expm1;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (expm1 (in1), out));
