@@ -138,7 +138,9 @@ f = @@(x) sqrt (x) + (x + 1) .* cos (x);
 @group
 pkg load symbolic
 df = function_handle (diff (formula (f (sym ("x")))))
-  @result{} df = @@(x) -(x + 1) .* sin (x) + cos (x) + 1 ./ (2 .* sqrt (x))
+  @result{} df =
+
+   @@(x) -(x + 1) .* sin (x) + cos (x) + 1 ./ (2 .* sqrt (x))
 @end group
 @group
 fzero (f, infsup ("[0, 6]"), df)
