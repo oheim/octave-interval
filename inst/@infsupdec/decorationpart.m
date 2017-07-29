@@ -110,3 +110,23 @@ endfunction
 %!      < decorationpart (infsupdec ("[3, 4]_dac"), "uint8"));
 %!assert (decorationpart (infsupdec ("[3, 4]_dac"), "uint8") ...
 %!      < decorationpart (infsupdec ("[3, 4]_com"), "uint8"));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.decorationPart;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     decorationpart (testcase.in{1}), ...
+%!     {testcase.out}));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.decorationPart;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = {testcases.out}';
+%! assert (isequaln (decorationpart (in1), out));

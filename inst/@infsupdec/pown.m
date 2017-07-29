@@ -58,3 +58,40 @@ endfunction
 %!assert (isequal (pown (infsupdec (5, 6), 2), infsupdec (25, 36)));
 
 %!assert (pown (infsupdec (-2, 1), 2) == infsupdec (0, 4));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqr;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     pown (testcase.in{1}, 2), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqr;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pown (in1, 2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.pown;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     pown (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.pown;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pown (in1, in2), out));

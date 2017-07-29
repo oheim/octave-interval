@@ -88,3 +88,24 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (max (infsupdec (2, 3), infsupdec (1, 2)), infsupdec (2, 3)));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.max;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     max (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.max;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (max (in1, in2), out));

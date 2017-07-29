@@ -50,23 +50,3 @@ endfunction
 
 %!# from the documentation string
 %!assert (sqrt (infsup (-6, 4)) == infsup (0, 2));
-
-%!shared testdata
-%! # Load compiled test data (from test/*.itl)
-%! testdata = load (file_in_loadpath ("test/itl.mat"));
-
-%!test
-%! # Scalar evaluation
-%! testcases = testdata.NoSignal.infsup.sqrt;
-%! for testcase = [testcases]'
-%!   assert (isequaln (...
-%!     sqrt (testcase.in{1}), ...
-%!     testcase.out));
-%! endfor
-
-%!test
-%! # Vector evaluation
-%! testcases = testdata.NoSignal.infsup.sqrt;
-%! in1 = vertcat (vertcat (testcases.in){:, 1});
-%! out = vertcat (testcases.out);
-%! assert (isequaln (sqrt (in1), out));

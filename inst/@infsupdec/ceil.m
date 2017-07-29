@@ -60,3 +60,23 @@ endfunction
 %!# from the documentation string
 %!assert (isequal (ceil (infsupdec (2.5, 3.5)), infsupdec (3, 4, "def")));
 %!assert (isequal (ceil (infsupdec (-.5, 5)), infsupdec (0, 5, "def")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.ceil;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     ceil (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.ceil;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (ceil (in1), out));

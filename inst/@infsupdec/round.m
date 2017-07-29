@@ -89,3 +89,23 @@ endfunction
 %!assert (isequal (round (infsupdec (-inf, realmin)), infsupdec (-inf, 0, "def")));
 %!assert (isequal (round (infsupdec (-inf, realmax)), infsupdec (-inf, realmax, "def")));
 %!assert (isequal (round (infsupdec (-inf, inf)), infsupdec (-inf, inf, "def")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.roundTiesToAway;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     round (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.roundTiesToAway;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (round (in1), out));

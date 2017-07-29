@@ -62,3 +62,42 @@ function result = pownrev (c, x, p)
 endfunction
 
 %!assert (isequal (pownrev (infsupdec (25, 36), infsupdec (0, inf), 2), infsupdec (5, 6, "trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.pownRev;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     pownrev (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!xtest
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.pownRev;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pownrev (in1, in2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.pownRevBin;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     pownrev (testcase.in{1}, testcase.in{2}, testcase.in{3}), ...
+%!     testcase.out));
+%! endfor
+
+%!xtest
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.pownRevBin;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! in3 = vertcat (vertcat (testcases.in){:, 3});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pownrev (in1, in2, in3), out));

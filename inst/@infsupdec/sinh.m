@@ -49,3 +49,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (sinh (infsupdec (1)), infsupdec ("[0x1.2CD9FC44EB982, 0x1.2CD9FC44EB983]")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sinh;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     sinh (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sinh;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (sinh (in1), out));

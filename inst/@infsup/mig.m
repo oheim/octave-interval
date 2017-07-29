@@ -72,3 +72,19 @@ endfunction
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
 %! out = vertcat (testcases.out);
 %! assert (isequaln (mig (in1), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.mig;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     mig (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.mig;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (mig (in1), out));

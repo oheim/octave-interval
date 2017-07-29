@@ -113,3 +113,76 @@ endfunction
 %!test
 %!  [u, v] = mulrev (infsupdec (-inf, inf), infsupdec (1));
 %!  assert (isequal (u, infsupdec (-inf, 0, "trv")) & isequal (v, infsupdec (0, inf, "trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRevToPair1;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     nthargout (1, 2, @mulrev, testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRevToPair1;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (nthargout (1, 2, @mulrev, in1, in2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRevToPair2;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     nthargout (2, @mulrev, testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRevToPair2;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (nthargout (2, @mulrev, in1, in2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRev;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     mulrev (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRev;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (mulrev (in1, in2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRevTen;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     mulrev (testcase.in{1}, testcase.in{2}, testcase.in{3}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.mulRevTen;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! in3 = vertcat (vertcat (testcases.in){:, 3});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (mulrev (in1, in2, in3), out));

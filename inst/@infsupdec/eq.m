@@ -81,3 +81,24 @@ endfunction
 %!assert (eq (infsupdec (-inf, inf), infsupdec (42)) == false);
 %!assert (eq (infsupdec (-inf, 0), infsupdec (-inf, inf)) == false);
 %!assert (eq (infsupdec (-inf, inf), infsupdec (-inf, inf)) == true);
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.equal;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     eq (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.equal;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (eq (in1, in2), out));

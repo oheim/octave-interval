@@ -66,3 +66,40 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (sqrrev (infsupdec (-2, 1)), infsupdec (-1, 1, "trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqrRev;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     sqrrev (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqrRev;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (sqrrev (in1), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqrRevBin;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     sqrrev (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqrRevBin;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (sqrrev (in1, in2), out));

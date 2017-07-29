@@ -67,3 +67,19 @@ endfunction
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
 %! out = vertcat (testcases.out);
 %! assert (isequaln (uplus (in1), out));
+
+%!test
+%! # Decorated scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.pos;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     uplus (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Decorated vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.pos;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (uplus (in1), out));

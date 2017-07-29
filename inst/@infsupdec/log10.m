@@ -55,3 +55,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (log10 (infsupdec (2)), infsupdec ("[0x1.34413509F79FEp-2, 0x1.34413509F79FFp-2]")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.log10;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     log10 (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.log10;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (log10 (in1), out));

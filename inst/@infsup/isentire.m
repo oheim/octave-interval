@@ -66,3 +66,19 @@ endfunction
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
 %! out = vertcat (testcases.out);
 %! assert (isequaln (isentire (in1), out));
+
+%!test
+%! # Decorated scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.isEntire;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     isentire (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Decorated vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.isEntire;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (isentire (in1), out));

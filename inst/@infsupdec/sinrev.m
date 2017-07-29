@@ -66,3 +66,40 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (sinrev (infsupdec (-1), infsupdec (0, 6)), infsupdec ("[0x1.2D97C7F3321D2p2, 0x1.2D97C7F3321D3p2]_trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sinRev;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     sinrev (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sinRev;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (sinrev (in1), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sinRevBin;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     sinrev (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sinRevBin;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (sinrev (in1, in2), out));

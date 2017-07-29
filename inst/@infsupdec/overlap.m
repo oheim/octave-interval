@@ -96,3 +96,24 @@ function [state, bitmask] = overlap (a, b)
 endfunction
 
 %!assert (overlap (infsupdec (1, 2), infsupdec (3, 4)), "before");
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.overlap;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     overlap (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!xtest
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.overlap;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (overlap (in1, in2), out));

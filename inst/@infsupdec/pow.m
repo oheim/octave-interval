@@ -68,3 +68,24 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (pow (infsupdec (5, 6), infsupdec (2, 3)), infsupdec (25, 216)));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.pow;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     pow (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!xtest
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.pow;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pow (in1, in2), out));

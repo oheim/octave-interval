@@ -53,3 +53,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (acos (infsupdec (.5)), infsupdec ("[0x1.0C152382D7365, 0x1.0C152382D7366]")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.acos;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     acos (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.acos;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (acos (in1), out));

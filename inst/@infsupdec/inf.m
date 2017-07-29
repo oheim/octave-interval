@@ -55,3 +55,23 @@ endfunction
 %!assert (inf (infsupdec ("[nai]")), nan);
 %!warning id=interval:UndefinedOperation
 %! assert (inf (infsupdec (2, 1)), nan);
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.inf;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     inf (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.inf;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (inf (in1), out));

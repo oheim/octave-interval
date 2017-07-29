@@ -502,4 +502,45 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
 %!  assert (l, [80, 96, 112; 88, 104, 120]);
 %!  assert (u, [80, 96, 112; 88, 104, 120]);
 %!  assert (d, [80, 96, 112; 88, 104, 120]);
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.double.dot_nearest;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     mpfr_vector_dot_d (0.5, testcase.in{1}, testcase.in{2}, 2), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.double.dot_nearest;
+%! in1 = vertcat (testcases.in)(:, 1);
+%! in1 = cell2mat (cellfun ("postpad", in1, {(max (cellfun ("numel", in1)))}, "UniformOutput", false));
+%! in2 = vertcat (testcases.in)(:, 2);
+%! in2 = cell2mat (cellfun ("postpad", in2, {(max (cellfun ("numel", in2)))}, "UniformOutput", false));
+%! out = vertcat (testcases.out);
+%! assert (isequaln (mpfr_vector_dot_d (0.5, in1, in2, 2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.double.sum_sqr_nearest;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     mpfr_vector_dot_d (0.5, testcase.in{1}, testcase.in{1}, 2), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.double.sum_sqr_nearest;
+%! in1 = vertcat (testcases.in);
+%! in1 = cell2mat (cellfun ("postpad", in1, {(max (cellfun ("numel", in1)))}, "UniformOutput", false));
+%! out = vertcat (testcases.out);
+%! assert (isequaln (mpfr_vector_dot_d (0.5, in1, in1, 2), out));
+
 */

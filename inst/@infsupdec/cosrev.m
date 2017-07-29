@@ -66,3 +66,40 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (cosrev (0, infsupdec (6, 9)), infsupdec ("[0x1.F6A7A2955385Ep2, 0x1.F6A7A2955386p2]_trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.cosRev;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     cosrev (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.cosRev;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (cosrev (in1), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.cosRevBin;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     cosrev (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.cosRevBin;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (cosrev (in1, in2), out));

@@ -55,3 +55,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (log2 (infsupdec (2)), infsupdec (1)));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.log2;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     log2 (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.log2;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (log2 (in1), out));

@@ -60,3 +60,28 @@ endfunction
 %!# from the documentation string
 %!assert (isequal (floor (infsupdec (2.5, 3.5)), infsupdec (2, 3, "def")));
 %!assert (isequal (floor (infsupdec (-0.5, 5)), infsupdec (-1, 5, "def")));
+
+%!warning
+%! _ = @infsupdec;
+%! assert (isequal (...
+%!   floor (_ ("jansen")), nai)) #ghtwish
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.floor;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     floor (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.floor;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (floor (in1), out));

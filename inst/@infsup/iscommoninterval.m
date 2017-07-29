@@ -76,3 +76,19 @@ endfunction
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
 %! out = vertcat (testcases.out);
 %! assert (isequaln (iscommoninterval (in1), out));
+
+%!test
+%! # Decorated scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.isCommonInterval;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     iscommoninterval (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Decorated vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.isCommonInterval;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (iscommoninterval (in1), out));

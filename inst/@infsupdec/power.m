@@ -80,3 +80,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (infsupdec (-5, 6) .^ infsupdec (2, 3), infsupdec (-125, 216, "trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqr;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     power (testcase.in{1}, 2), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sqr;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (power (in1, 2), out));

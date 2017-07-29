@@ -49,3 +49,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (atan (infsupdec (1)), infsupdec ("[0x1.921FB54442D18p-1, 0x1.921FB54442D19p-1]")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.atan;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     atan (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.atan;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (atan (in1), out));

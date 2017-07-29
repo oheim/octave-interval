@@ -49,3 +49,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (cos (infsupdec (1)), infsupdec ("[0x1.14A280FB5068Bp-1, 0x1.14A280FB5068Cp-1]")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.cos;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     cos (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.cos;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (cos (in1), out));

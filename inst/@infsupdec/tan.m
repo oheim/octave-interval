@@ -54,3 +54,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (tan (infsupdec (1)), infsupdec ("[0x1.8EB245CBEE3A5, 0x1.8EB245CBEE3A6]")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.tan;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     tan (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.tan;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (tan (in1), out));

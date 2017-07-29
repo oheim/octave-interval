@@ -41,3 +41,23 @@ endfunction
 %!assert (isnai (infsupdec ("[nai]")));
 %!assert (not (isnai (infsupdec (2, 3))));
 %!warning assert (isnai (infsupdec ("happy 42 hacking")), logical ([1 0 1]));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.isNaI;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     isnai (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.isNaI;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (isnai (in1), out));

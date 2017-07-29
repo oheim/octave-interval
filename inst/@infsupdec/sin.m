@@ -50,3 +50,23 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (sin (infsupdec (1)), infsupdec ("[0x1.AED548F090CEEp-1, 0x1.AED548F090CEFp-1]")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.sin;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     sin (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.sin;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (sin (in1), out));

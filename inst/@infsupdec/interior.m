@@ -53,3 +53,24 @@ function result = interior (a, b)
 endfunction
 
 %!assert (interior (infsupdec (1, 2), infsupdec (0, 3)));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.interior;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     interior (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.interior;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (interior (in1, in2), out));

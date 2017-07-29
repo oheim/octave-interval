@@ -70,3 +70,40 @@ endfunction
 %!assert (isequal (infsupdec (2, 3) ./ infsupdec (1, 2), infsupdec (1, 3)));
 
 %!assert (1 ./ infsupdec (1, 4) == infsupdec (0.25, 1));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.div;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     rdivide (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.div;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (rdivide (in1, in2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.recip;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     rdivide (1, testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.recip;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (rdivide (1, in1), out));

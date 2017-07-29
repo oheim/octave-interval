@@ -511,3 +511,36 @@ endfunction
 %! in2 = vertcat (vertcat (testcases.in){:, 2});
 %! out = vertcat (testcases.out);
 %! assert (isequaln (infsupdec (in1, in2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.("d-numsToInterval");
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     infsupdec (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.("d-numsToInterval");
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (infsupdec (in1, in2), out));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.("d-textToInterval");
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     infsupdec (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.("d-textToInterval");
+%! in1 = vertcat (testcases.in);
+%! out = vertcat (testcases.out);
+%! assert (isequaln (infsupdec (in1), out));

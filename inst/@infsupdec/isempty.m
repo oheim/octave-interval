@@ -46,3 +46,23 @@ endfunction
 
 %!assert (isempty (infsupdec ()));
 %!assert (not (isempty (infsupdec (1, 2))));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.isEmpty;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     isempty (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.isEmpty;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (isempty (in1), out));

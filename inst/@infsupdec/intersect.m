@@ -79,3 +79,24 @@ endfunction
 
 %!# from the documentation string
 %!assert (isequal (intersect (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (2, 3, "trv")));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.intersection;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     intersect (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.intersection;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (intersect (in1, in2), out));
