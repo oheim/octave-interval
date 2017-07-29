@@ -544,3 +544,43 @@ endfunction
 %! in1 = vertcat (testcases.in);
 %! out = vertcat (testcases.out);
 %! assert (isequaln (infsupdec (in1), out));
+
+%!warning
+%! testcases = testdata.PossiblyUndefinedOperation.infsupdec.("d-textToInterval");
+%! for testcase = [testcases]'
+%!   lastwarn ("", "");
+%!   assert (isequaln (...
+%!     infsupdec (testcase.in{1}), ...
+%!     testcase.out));
+%!   assert (nthargout (2, @lastwarn), "interval:PossiblyUndefinedOperation");
+%! endfor
+
+%!xtest
+%! testcases = testdata.UndefinedOperation.infsupdec.("d-textToInterval");
+%! for testcase = [testcases]'
+%!   lastwarn ("", "");
+%!   assert (isequaln (...
+%!     infsupdec (testcase.in{1}), ...
+%!     testcase.out));
+%!   assert (nthargout (2, @lastwarn), "interval:UndefinedOperation");
+%! endfor
+
+%!warning
+%! testcases = testdata.UndefinedOperation.infsupdec.("d-numsToInterval");
+%! for testcase = [testcases]'
+%!   lastwarn ("", "");
+%!   assert (isequaln (...
+%!     infsupdec (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%!   assert (nthargout (2, @lastwarn), "interval:UndefinedOperation");
+%! endfor
+
+%!warning
+%! testcases = testdata.UndefinedOperation.infsup.setDec;
+%! for testcase = [testcases]'
+%!   lastwarn ("", "");
+%!   assert (isequaln (...
+%!     infsupdec (testcase.in{1}, testcase.in{2}), ...
+%!     testcase.out));
+%!   assert (nthargout (2, @lastwarn), "interval:UndefinedOperation");
+%! endfor

@@ -45,3 +45,33 @@ endfunction
 %!warning id=interval:IntvlPartOfNaI
 %! assert (intervalpart (nai ()) == infsup ());
 %!assert (intervalpart (infsupdec (2, 3)) == infsup (2, 3));
+
+%!shared testdata
+%! # Load compiled test data (from test/*.itl)
+%! testdata = load (file_in_loadpath ("test/itl.mat"));
+
+%!test
+%! # Scalar evaluation
+%! testcases = testdata.NoSignal.infsupdec.intervalPart;
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     intervalpart (testcase.in{1}), ...
+%!     testcase.out));
+%! endfor
+
+%!test
+%! # Vector evaluation
+%! testcases = testdata.NoSignal.infsupdec.intervalPart;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (intervalpart (in1), out));
+
+%!warning
+%! testcases = testdata.IntvlPartOfNaI.infsupdec.intervalPart;
+%! for testcase = [testcases]'
+%!   lastwarn ("", "");
+%!   assert (isequaln (...
+%!     intervalpart (testcase.in{1}), ...
+%!     testcase.out));
+%!   assert (nthargout (2, @lastwarn), "interval:IntvlPartOfNaI");
+%! endfor
