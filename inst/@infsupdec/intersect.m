@@ -81,7 +81,7 @@ endfunction
 %!assert (isequal (intersect (infsupdec (1, 3), infsupdec (2, 4)), infsupdec (2, 3, "trv")));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

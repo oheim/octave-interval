@@ -50,7 +50,7 @@ SHELL   = /bin/sh
 ##
 ##   * Python 3 / Interval Testing Framework for IEEE 1788
 ##
-##     The tool is used to convert test/*.itl into GNU Octave *.tst files
+##     The tool is used to convert src/test/*.itl into GNU Octave *.tst files
 ##     for validation of the package.
 ##
 ##     The tool is automatically cloned from Github.  It is important to have
@@ -336,18 +336,18 @@ debian:
 ## The following rules are required for generation of loadable test data ##
 ###########################################################################
 
-TST_SOURCES = $(sort $(wildcard test/*.itl))
+TST_SOURCES = $(sort $(wildcard src/test/*.itl))
 ITF1788_HOME ?= $(BUILD_DIR)/ITF1788
 
 $(ITF1788_HOME):
 	git clone https://github.com/oheim/ITF1788.git "$@"
 
 TST_DICT_GENERATED_DIR = $(BUILD_DIR)/octave/dictionary/interval-dictionary
-TST_DICT_GENERATED_SRC = $(TST_SOURCES:test/%.itl=$(TST_DICT_GENERATED_DIR)/%.tst)
+TST_DICT_GENERATED_SRC = $(TST_SOURCES:src/test/%.itl=$(TST_DICT_GENERATED_DIR)/%.tst)
 
-$(TST_DICT_GENERATED_DIR)/%.tst: test/%.itl | $(ITF1788_HOME)
+$(TST_DICT_GENERATED_DIR)/%.tst: src/test/%.itl | $(ITF1788_HOME)
 	@echo "Compiling $< ..."
-	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, dictionary, interval-dictionary)" -o "$(BUILD_DIR)" -s "test"
+	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, dictionary, interval-dictionary)" -o "$(BUILD_DIR)" -s "src/test"
 
 run: $(TST_DICT_GENERATED)
 $(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC)

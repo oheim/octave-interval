@@ -68,7 +68,7 @@ endfunction
 %!assert (isequal (cosrev (0, infsupdec (6, 9)), infsupdec ("[0x1.F6A7A2955385Ep2, 0x1.F6A7A2955386p2]_trv")));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

@@ -57,7 +57,7 @@ endfunction
 %!assert (isequal (log10 (infsupdec (2)), infsupdec ("[0x1.34413509F79FEp-2, 0x1.34413509F79FFp-2]")));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

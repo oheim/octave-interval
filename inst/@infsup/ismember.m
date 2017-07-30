@@ -62,7 +62,7 @@ endfunction
 %!warning assert (not (ismember (0, infsupdec (2, 1))));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

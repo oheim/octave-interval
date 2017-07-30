@@ -100,7 +100,7 @@ endfunction
 %!assert (isequal (absrev (infsupdec (-2, 1)), infsupdec (-1, 1, "trv")));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

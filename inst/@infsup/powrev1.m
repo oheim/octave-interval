@@ -233,7 +233,7 @@ endfunction
 %!assert (powrev1 (infsup (2, 5), infsup (3, 6)) == "[0x1.3EE8390D43955, 0x1.3988E1409212Fp1]");
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

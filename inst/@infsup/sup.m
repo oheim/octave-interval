@@ -52,7 +52,7 @@ endfunction
 %!assert (sup (infsup (2.5, 3.5)), 3.5);
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

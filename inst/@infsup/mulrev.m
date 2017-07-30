@@ -203,7 +203,7 @@ endfunction
 %!  assert (eq (u, infsup (-inf, 0)) & eq (v, infsup (0, inf)));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

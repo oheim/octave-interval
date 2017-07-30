@@ -60,7 +60,7 @@ endfunction
 %!assert (isequal (infsupdec (2, 3) .* infsupdec (1, 2), infsupdec (2, 6)));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

@@ -147,7 +147,7 @@ endfunction
 %!assert (sinrev (infsup (-1), infsup (0, 6)) == "[0x1.2D97C7F3321D2p2, 0x1.2D97C7F3321D3p2]");
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

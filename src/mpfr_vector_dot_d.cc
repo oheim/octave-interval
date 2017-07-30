@@ -504,7 +504,7 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
 %!  assert (d, [80, 96, 112; 88, 104, 120]);
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

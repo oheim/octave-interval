@@ -87,7 +87,7 @@ endfunction
 %!assert (max (infsup (2, 3), infsup (1, 2)) == infsup (2, 3));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

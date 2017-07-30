@@ -68,7 +68,7 @@ endfunction
 %!assert (isequal (fma (infsupdec (1+eps), infsupdec (7), infsupdec ("0.1")), infsupdec ("[0x1.C666666666668p2, 0x1.C666666666669p2]")));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

@@ -87,7 +87,7 @@ endfunction
 %!assert (sec (infsup (1)) == "[0x1.D9CF0F125CC29, 0x1.D9CF0F125CC2A]");
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

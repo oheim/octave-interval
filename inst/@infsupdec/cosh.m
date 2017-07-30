@@ -51,7 +51,7 @@ endfunction
 %!assert (isequal (cosh (infsupdec (1)), infsupdec ("[0x1.8B07551D9F55, 0x1.8B07551D9F551]")));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

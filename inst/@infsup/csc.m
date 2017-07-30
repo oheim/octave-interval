@@ -89,7 +89,7 @@ endfunction
 %!assert (csc (infsup (1)) == "[0x1.303AA9620B223, 0x1.303AA9620B224]");
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

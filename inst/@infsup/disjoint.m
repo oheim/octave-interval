@@ -55,7 +55,7 @@ endfunction
 %!assert (not (disjoint (infsup (3, 4), infsup (4, 5))));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

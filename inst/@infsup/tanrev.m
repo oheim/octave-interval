@@ -131,7 +131,7 @@ endfunction
 %!assert (tanrev (infsup (0), infsup (2, 4)) == infsup ("pi"));
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

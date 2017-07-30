@@ -69,7 +69,7 @@ endfunction
 %!assert (coth (infsup (1)) == "[0x1.50231499B6B1D, 0x1.50231499B6B1E]");
 
 %!shared testdata
-%! # Load compiled test data (from test/*.itl)
+%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test
