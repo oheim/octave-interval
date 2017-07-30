@@ -354,7 +354,9 @@ $(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC)
 	@echo "Regenerating interval test library ($@) ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
 		--eval 'for file = strsplit ("$^"), printf ("  %s\n", file{:}); source (file); endfor;' \
-		--eval 'save ("-binary", "-zip", "$@", "-struct", "tests", "NoSignal", "UndefinedOperation", "PossiblyUndefinedOperation", "InvalidOperand", "IntvlPartOfNaI", "IntvlOverflow");'
+		--eval 'save ("-binary", "$@_", "-struct", "tests", "NoSignal", "UndefinedOperation", "PossiblyUndefinedOperation", "InvalidOperand", "IntvlPartOfNaI", "IntvlOverflow");'
+	@echo "Compressing interval test library ($@) ..."
+	@(zopfli -c "$@_" || gzip --best -f -c "$@_") > "$@"
 
 ## Run build in self tests (BISTs)
 test: $(OCT_COMPILED) $(TST_DICT_GENERATED) | $(BUILD_DIR)/inst/
