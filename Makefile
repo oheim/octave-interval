@@ -115,7 +115,7 @@ LILYPOND ?= $(shell which lilypond 2> /dev/null)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
-.PHONY: help dist release html run check test-bist doctest install info clean md5
+.PHONY: help dist release html run check test doctest install info clean md5
 
 help:
 	@echo
@@ -131,7 +131,7 @@ help:
 	@echo "   make clean    Cleanup"
 	@echo
 
-check: doctest test-bist
+check: doctest test
 dist: $(RELEASE_TARBALL_COMPRESSED)
 html: $(HTML_TARBALL_COMPRESSED)
 md5:  $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED)
@@ -332,48 +332,16 @@ debian:
 	(cd $(DEBIAN_WORKSPACE_ROOT)/octave-$(PACKAGE) && \
 	 gbp import-orig ../octave-$(PACKAGE)_$(VERSION).orig.tar.gz --pristine-tar)
 
-###################################################################
-## The following rules are required for generation of test files ##
-###################################################################
+###########################################################################
+## The following rules are required for generation of loadable test data ##
+###########################################################################
 
 TST_SOURCES = $(sort $(wildcard test/*.itl))
-TST_GENERATED_DIR = $(BUILD_DIR)/octave/native/interval
-TST_GENERATED = $(TST_SOURCES:test/%.itl=$(TST_GENERATED_DIR)/%.tst)
-TST_PATCHED = $(BUILD_DIR)/.tar.tests
 ITF1788_HOME ?= $(BUILD_DIR)/ITF1788
 
 $(ITF1788_HOME):
 	git clone https://github.com/oheim/ITF1788.git "$@"
 
-$(TST_GENERATED_DIR)/%.tst: test/%.itl | $(ITF1788_HOME)
-	@echo "Compiling $< ..."
-	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, native, interval)" -o "$(BUILD_DIR)" -s "test"
-	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
-		echo "## by the Interval Testing Framework for IEEE 1788."; \
-		echo -n "## https://github.com/oheim/ITF1788/tree/"; \
-		echo $(shell cd "$(ITF1788_HOME)" && git log --max-count=1 | head -1 | cut -f2 -d" "); \
-		cat "$@") > "$@_"
-	@mv "$@_" "$@"
-
-check: test-itl
-.PHONY: test-itl
-test-itl: $(TST_GENERATED) $(OCT_COMPILED)
-	@echo "Running ITF1788 test suite in GNU Octave ..."
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
-		--eval 'success = true;' \
-		--eval 'for file = strsplit ("$(TST_GENERATED)"), success &= test (file{1}, "quiet", stdout); endfor;' \
-		--eval 'exit (not (success));'
-
-$(RELEASE_TARBALL_COMPRESSED): $(TST_PATCHED)
-$(TST_PATCHED): $(TST_GENERATED) | $(RELEASE_TARBALL)
-	@echo "Patching generated tests into release tarball ..."
-	@# `tar --update --transform` fails to update the files
-	@# The following line is a workaroung that removes duplicates
-	@tar --delete --file "$|" $(patsubst $(TST_GENERATED_DIR)/%,$(PACKAGE)-$(VERSION)/inst/test/%,$?) 2> /dev/null || true
-	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$|" --transform="s!^$(TST_GENERATED_DIR)/!$(PACKAGE)-$(VERSION)/inst/test/!" $?
-	@touch "$@"
-
-## TODO: Migrate all tests for dictionary test suite
 TST_DICT_GENERATED_DIR = $(BUILD_DIR)/octave/dictionary/interval-dictionary
 TST_DICT_GENERATED_SRC = $(TST_SOURCES:test/%.itl=$(TST_DICT_GENERATED_DIR)/%.tst)
 
@@ -388,8 +356,8 @@ $(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC)
 		--eval 'for file = strsplit ("$^"), printf ("  %s\n", file{:}); source (file); endfor;' \
 		--eval 'save ("-binary", "-zip", "$@", "-struct", "tests", "NoSignal", "UndefinedOperation", "PossiblyUndefinedOperation", "InvalidOperand", "IntvlPartOfNaI", "IntvlOverflow");'
 
-## Validate unit tests
-test-bist: $(OCT_COMPILED) $(TST_DICT_GENERATED) | $(BUILD_DIR)/inst/
+## Run build in self tests (BISTs)
+test: $(OCT_COMPILED) $(TST_DICT_GENERATED) | $(BUILD_DIR)/inst/
 	@echo "Testing package in GNU Octave ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --path "$(BUILD_DIR)/inst/" \
 		--eval 'success = true;' \
