@@ -74,6 +74,21 @@ endfunction
 %! assert (isequaln (mig (in1), out));
 
 %!test
+%! # N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsup.mig;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
+%! assert (isequaln (mig (in1), out));
+
+%!test
 %! # Scalar evaluation
 %! testcases = testdata.NoSignal.infsupdec.mig;
 %! for testcase = [testcases]'
@@ -87,4 +102,19 @@ endfunction
 %! testcases = testdata.NoSignal.infsupdec.mig;
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
 %! out = vertcat (testcases.out);
+%! assert (isequaln (mig (in1), out));
+
+%!test
+%! # Decorated N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsup.mig;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
 %! assert (isequaln (mig (in1), out));
