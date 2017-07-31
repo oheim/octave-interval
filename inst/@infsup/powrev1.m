@@ -253,3 +253,22 @@ endfunction
 %! in3 = vertcat (vertcat (testcases.in){:, 3});
 %! out = vertcat (testcases.out);
 %! assert (isequaln (powrev1 (in1, in2, in3), out));
+
+%!test
+%! # N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsup.powRev1;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! in3 = vertcat (vertcat (testcases.in){:, 3});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! in2 = reshape ([in2; in2(1:i)], testsize);
+%! in3 = reshape ([in3; in3(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
+%! assert (isequaln (powrev1 (in1, in2, in3), out));
