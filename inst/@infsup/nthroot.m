@@ -219,10 +219,15 @@ endfunction
 %!     testcase.out));
 %! endfor
 
-%!xtest
+%!test
 %! # Vector evaluation
+%! # nthroot does not support vectorization of N. We can partially
+%! # test vectorization of the first argument by specifying N and
+%! # letting x be a vector.
 %! testcases = testdata.NoSignal.infsup.rootn;
-%! in1 = vertcat (vertcat (testcases.in){:, 1});
-%! in2 = vertcat (vertcat (testcases.in){:, 2});
-%! out = vertcat (testcases.out);
-%! assert (isequaln (nthroot (in1, in2), out));
+%! for testcase = [testcases]'
+%!   assert (isequaln (...
+%!     nthroot ([testcase.in{1}, testcase.in{1}], ...
+%!              testcase.in{2}), ...
+%!     [testcase.out, testcase.out]));
+%! endfor
