@@ -118,7 +118,7 @@ function y = powrev2 (a, c, y)
   z = c.inf > 0 & c.inf < 1;
   select = x & z & u > 0;
   if (any (select(:)))
-    u (select) = min (u (select), powrev2rounded (a.sup, c.inf, +inf));
+    u (select) = min (u (select), powrev2rounded (a.sup, c.inf, +inf)(select));
   endif
 
   ## x containedBy/finishes [0, 1] =============================================
@@ -146,7 +146,7 @@ function y = powrev2 (a, c, y)
   l(select) = 0;
 
   z = c.sup == inf & c.inf > 1;
-  select = x & z & u > 0 && a.sup <= 1;
+  select = x & z & u > 0 & a.sup <= 1;
   u(select) = 0;
 
   gap.inf = -inf (size (l));
@@ -283,7 +283,7 @@ endfunction
 %!     testcase.out));
 %! endfor
 
-%!xtest
+%!test
 %! # Vector evaluation
 %! testcases = testdata.NoSignal.infsup.powRev2;
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
