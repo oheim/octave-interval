@@ -207,10 +207,10 @@ endfunction
 %!     testcase.out));
 %! endfor
 
-%!xtest
+%!test
 %! # Vector evaluation
 %! testcases = testdata.NoSignal.infsup.overlap;
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
 %! in2 = vertcat (vertcat (testcases.in){:, 2});
-%! out = vertcat (testcases.out);
+%! out = {testcases.out}';
 %! assert (isequaln (overlap (in1, in2), out));
