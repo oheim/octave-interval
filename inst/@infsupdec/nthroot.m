@@ -19,6 +19,8 @@
 ##
 ## Compute the real n-th root of @var{X}.
 ##
+## @var{N} must be a nonzero scalar integer.
+##
 ## Accuracy: The result is a valid enclosure.  The result is a tight
 ## enclosure for @var{n} ≥ -2.  The result also is a tight enclosure if the
 ## reciprocal of @var{n} can be computed exactly in double-precision.
