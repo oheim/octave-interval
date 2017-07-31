@@ -43,7 +43,7 @@ function result = pown (x, p)
     print_usage ();
     return
   endif
-  if (not (isnumeric (p)) || any (any (fix (p) ~= p)))
+  if (not (isnumeric (p)) || any ((fix (p) ~= p)(:)))
     error ("interval:InvalidOperand", "pown: exponent is not an integer");
   endif
 
