@@ -14,26 +14,50 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{2.2.0, 2017-xx-xx}
+@release{3.0.0, 2017-xx-xx}
 @itemize
 @item
-        Removed interval implementation of meshgrid, it now falls back on the standard implementation. The difference is that it does not automatically convert all input to intervals and it can now output a 3-d grid properly.
+	Removed interval implementation of meshgrid, it now falls back on the standard implementation. The difference is that it does not automatically convert all input to intervals and it can now output a 3-d grid properly.
+
+@item
+	Indexing expressions on intervals can now use the @command{end} keyword (bug #50626, thanks to Joel Dahne).
+
+@item
+	Processor support for SSE2 is automatically detected during package installation.  This fixes installation problems on devices without SSE2, for example the usual Android phones and tablets.
+
+@item
+	Adjustments to ITF1788 test suite:
+@itemize
+@item
+	Several additional unit tests have been derived from libieeep1788 together with the latest version of the interval testing framework.  That is, tests with NaN values, NaI values, IEEE 1788 exceptions, and tests for the following functions: numsToInterval, textToInterval, intervalPart, newDev, setDec, decorationPart, and reduction operations.
+@item
+	Unit tests have been reorganized: The source code of test cases has been moved to /src/test/.
+@item
+	The test suite is no longer compiled as separate Octave test files (*.tst).  Instead, any interval test library files (*.itl) are stored as loadable test data (itl.mat).  The test data is then used by built-in self-tests of the functions.  This simplifies testing of functions and saves storage space after package installation.  For example, @command{test @infsup/plus} will run any arithmetic tests on the interval plus function.
+@end itemize
+
+@item
+	Minor adjustments to the package documentation:
+@itemize
+@item
+	To improve privacy and page load, the package manual no longer uses external references for CSS and web fonts.
+@item
+	HTML fonts have been changed and fallback fonts for Windows have been introduced.
+@item
+	Adjustments to examples for the latest versions of the doctest package and symbolic package.
+@end itemize
 @end itemize
 
 Bugfixes
 @itemize
+@item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.
 @item diag: Fixed error when called with more than one argument.
+@item dot: Fixed error in identification of dimensions when broadcasting (thanks to Joel Dahne).
 @item infsupdec: Now creates a warning if the @code{[NaI]} literal is combined with decoration.
+@item infsupdec: No longer produces warnings for mixed parameters with strings and numerics.
+@item verlinineqnn: No longer produces warnings for unverified solutions.
 @end itemize
 
-@release{2.1.1, 2017-xx-xx}
-@noindent Bugfixes
-@itemize
-@item infsupdec: Fixed unnecessary warnings with mixed parameters, strings and numerics.
-@item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.
-@item dot: Fixed error in identification of dimensions when broadcasting (thanks to Joel Dahne).
-@item Fixed indexing operations on intervals with the use of @code{end} (bug #50626, thanks to Joel Dahne).
-@end itemize
 
 @release{2.1.0, 2016-12-28}
 @itemize
