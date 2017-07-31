@@ -226,6 +226,13 @@ function [x, isexact] = infsupdec (varargin)
           [bare, isexact, overflow, isnai] = infsup (varargin{1});
           isnai(nai_literal_idx) = true;
 
+          ## There is no version of [nai], which may carry decoration.
+          if (any (not (cellfun ("isempty", decstr))(nai_literal_idx)(:)))
+            warning ("interval:UndefinedOperation", ...
+              "the [NaI] literal may not carry decoration")
+            decstr(nai_literal_idx) = "";
+          endif
+
         otherwise
           [bare, isexact, overflow, isnai] = infsup (varargin{1});
 
@@ -555,7 +562,7 @@ endfunction
 %!   assert (nthargout (2, @lastwarn), "interval:PossiblyUndefinedOperation");
 %! endfor
 
-%!xtest
+%!warning
 %! testcases = testdata.UndefinedOperation.infsupdec.("d-textToInterval");
 %! for testcase = [testcases]'
 %!   lastwarn ("", "");
