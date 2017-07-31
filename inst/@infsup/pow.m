@@ -93,7 +93,7 @@ function x = pow (x, y)
   u(emptyresult) = -inf;
 
   ## Fix 0 ^ positive = 0
-  u(x.sup == 0 && u == 1) = 0;
+  u(x.sup == 0 & u == 1) = 0;
 
   l(l == 0) = -0;
 
@@ -124,7 +124,7 @@ endfunction
 %!     testcase.out));
 %! endfor
 
-%!xtest
+%!test
 %! # Vector evaluation
 %! testcases = testdata.NoSignal.infsup.pow;
 %! in1 = vertcat (vertcat (testcases.in){:, 1});

@@ -82,7 +82,7 @@ endfunction
 %!     testcase.out));
 %! endfor
 
-%!xtest
+%!test
 %! # Vector evaluation
 %! testcases = testdata.NoSignal.infsupdec.pow;
 %! in1 = vertcat (vertcat (testcases.in){:, 1});
