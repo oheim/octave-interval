@@ -17,7 +17,13 @@
 @release{3.0.0, 2017-xx-xx}
 @itemize
 @item
-	Removed interval implementation of meshgrid, it now falls back on the standard implementation. The difference is that it does not automatically convert all input to intervals and it can now output a 3-d grid properly.
+	Support for N-dimensional arrays of intervals.
+
+@item
+	Removed interval implementation of @command{meshgrid}, it now falls back on the standard implementation.  The difference being that it does not automatically convert all input to intervals and it can now output a 3-d grid properly.
+
+@item
+	dot, sum, prod: Altered how empty input is handled.  It is now more consistent and compatible with Matlab.  This is slightly different from how the standard version handle it at the moment. See bug #51333 and #48690 for some information.
 
 @item
 	Indexing expressions on intervals can now use the @command{end} keyword (bug #50626, thanks to Joel Dahne).
@@ -33,12 +39,14 @@
 @item
 	Unit tests have been reorganized: The source code of test cases has been moved to /src/test/.
 @item
-	The test suite is no longer compiled as separate Octave test files (*.tst).  Instead, any interval test library files (*.itl) are stored as loadable test data (itl.mat).  The test data is then used by built-in self-tests of the functions.  This simplifies testing of functions and saves storage space after package installation.  For example, @command{test @infsup/plus} will run any arithmetic tests on the interval plus function.
+	The test suite is no longer compiled as separate Octave test files (*.tst).  Instead, any interval test library files (*.itl) are stored as loadable test data (itl.mat).  The test data is then used by built-in self-tests of the functions.  This simplifies testing of functions and saves storage space after package installation.  For example, @command{test @@infsup/plus} will run any arithmetic tests on the interval plus function.
 @end itemize
 
 @item
-	Minor adjustments to the package documentation:
+	Adjustments to the package documentation:
 @itemize
+@item
+	Information about how to create N-dimensional arrays of intervals.
 @item
 	To improve privacy and page load, the package manual no longer uses external references for CSS and web fonts.
 @item
@@ -56,6 +64,9 @@ Bugfixes
 @item infsupdec: Now creates a warning if the @code{[NaI]} literal is combined with decoration.
 @item infsupdec: No longer produces warnings for mixed parameters with strings and numerics.
 @item verlinineqnn: No longer produces warnings for unverified solutions.
+@item pow, pow2rev: Fixed error when called with vector arguments.
+@item ctc_intersect, ctc_union: Fixed error when called with less than two output arguments.
+@item sin: Fixed error when upper boundary is zero (bug #51283)
 @end itemize
 
 
