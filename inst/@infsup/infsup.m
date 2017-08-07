@@ -1356,6 +1356,23 @@ endfunction
 %! assert (isequaln (infsup (in1, in2), out));
 
 %!test
+%! # N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsup.("b-numsToInterval");
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! in2 = reshape ([in2; in2(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
+%! assert (isequaln (infsup (in1, in2), out));
+
+%!test
 %! # Scalar evaluation
 %! testcases = testdata.NoSignal.infsup.("b-textToInterval");
 %! for testcase = [testcases]'
@@ -1370,6 +1387,23 @@ endfunction
 %! in1 = vertcat (testcases.in);
 %! out = vertcat (testcases.out);
 %! assert (isequaln (infsup (in1), out));
+
+%!test
+%! # N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsup.("b-numsToInterval");
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! in2 = reshape ([in2; in2(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
+%! assert (isequaln (infsup (in1, in2), out));
 
 %!warning
 %! testcases = testdata.PossiblyUndefinedOperation.infsup.("b-textToInterval");
@@ -1400,20 +1434,3 @@ endfunction
 %!     testcase.out));
 %!   assert (nthargout (2, @lastwarn), "interval:UndefinedOperation");
 %! endfor
-
-%!test
-%! # N-dimensional array evaluation
-%! testcases = testdata.NoSignal.infsup.("b-numsToInterval");
-%! in1 = vertcat (vertcat (testcases.in){:, 1});
-%! in2 = vertcat (vertcat (testcases.in){:, 2});
-%! out = vertcat (testcases.out);
-%! # Reshape data
-%! i = -1;
-%! do
-%!   i = i + 1;
-%!   testsize = factor (numel (in1) + i);
-%! until (numel (testsize) > 2)
-%! in1 = reshape ([in1; in1(1:i)], testsize);
-%! in2 = reshape ([in2; in2(1:i)], testsize);
-%! out = reshape ([out; out(1:i)], testsize);
-%! assert (isequaln (infsup (in1, in2), out));
