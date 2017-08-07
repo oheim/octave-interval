@@ -57,7 +57,10 @@ std::pair <NDArray, NDArray> interval_vector_dot (
 
   for (int i = 0; i < dimensions; i ++)
     {
-      result_dims(i) = std::max (x_dims(i), y_dims(i));
+      if (x_dims(i) != 1)
+        result_dims(i) = x_dims(i);
+      else
+        result_dims(i) = y_dims(i);
     }
 
   result_dims(dim - 1) = 1;
