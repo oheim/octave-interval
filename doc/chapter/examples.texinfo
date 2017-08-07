@@ -133,6 +133,7 @@ To produce the derivative of function @var{f}, the automatic differentiation fro
 
 @example
 @group
+@c doctest: +SKIP_IF(compare_versions (sympref('version'), '2.5.0', '<'))
 f = @@(x) sqrt (x) + (x + 1) .* cos (x);
 @end group
 @group
@@ -140,9 +141,10 @@ pkg load symbolic
 df = function_handle (diff (formula (f (sym ("x")))))
   @result{} df =
 
-   @@(x) -(x + 1) .* sin (x) + cos (x) + 1 ./ (2 .* sqrt (x))
+   @@(x) -(x + 1) .* sin (x) + cos (x) + 1 ./ (2 * sqrt (x))
 @end group
 @group
+@c doctest: +SKIP_IF(compare_versions (sympref('version'), '2.5.0', '<'))
 fzero (f, infsup ("[0, 6]"), df)
   @result{} ans ⊂ 2×1 interval vector
 
