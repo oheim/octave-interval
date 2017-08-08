@@ -2,7 +2,7 @@
   Copyright 2015-2016 Oliver Heimlich
   Copyright 2017 Joel Dahne
   Copyright 2009-2017 Jaroslav Hajek
-  Copyright 2009 VZLU Prague  
+  Copyright 2009 VZLU Prague
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -201,17 +201,20 @@ void evaluate (
 // Evaluate nthroot
 void nthroot (
   NDArray &arg1,       // Operand 1 and result
-  const uint64_t arg2, // Operand 2
+  const uint64NDArray arg2, // Operand 2
   const mpfr_rnd_t rnd)
 {
   mpfr_t mp;
   mpfr_init2 (mp, BINARY64_PRECISION);
 
+  // Note that no broadcasting is performed here, this is because
+  // that nthroot performs the broadcasting in the m-file
+
   const octave_idx_type n = arg1.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp, arg1.elem (i), MPFR_RNDZ);
-      mpfr_root (mp, mp, arg2, rnd);
+      mpfr_root (mp, mp, arg2.elem(i), rnd);
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
 
@@ -483,7 +486,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, arg2, rnd, &mpfr_sub);
         else if (function == "nthroot")
           {
-            const uint64_t n = args (3).uint64_array_value ().elem (0);
+            uint64NDArray n = args (3).uint64_array_value ();
             if (error_state)
               return octave_value_list ();
             nthroot (arg1, n, rnd);

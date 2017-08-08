@@ -19,8 +19,6 @@
 ##
 ## Compute the real n-th root of @var{X}.
 ##
-## @var{N} must be a nonzero scalar integer.
-##
 ## Accuracy: The result is a valid enclosure.  The result is a tight
 ## enclosure for @var{n} ≥ -2.  The result also is a tight enclosure if the
 ## reciprocal of @var{n} can be computed exactly in double-precision.
@@ -41,106 +39,105 @@ function x = nthroot (x, n)
     x = infsup (x);
   endif
 
-  if (not (isnumeric (n)) || fix (n) ~= n)
+  if (not (isnumeric (n)) || any ((fix (n) ~= n)(:)))
     error ("interval:InvalidOperand", "nthroot: degree is not an integer");
   endif
 
-  even = mod (n, 2) == 0;
-  if (even)
-    x = intersect (x, infsup (0, inf));
+  if (any ((n == 0)(:)))
+    error ("interval:InvalidOperand", ...
+           "nthroot: degree must be nonzero");
   endif
 
-  switch sign (n)
-    case +1
-      emptyresult = isempty (x);
-      l = mpfr_function_d ('nthroot', -inf, x.inf, n);
-      u = mpfr_function_d ('nthroot', +inf, x.sup, n);
+  ## Resize, if broadcasting is needed
+  if (not (size_equal (x.inf, n)))
+    x.inf = ones (size (n)) .* x.inf;
+    x.sup = ones (size (n)) .* x.sup;
+    n = ones (size (x.inf)) .* n;
+  endif
 
-      l(emptyresult) = inf;
-      u(emptyresult) = -inf;
+  even = mod (n, 2) == 0;
+  odd = not (even);
 
-      l(l == 0) = -0;
+  idx.type = "()";
+  idx.subs = {even};
+  x = subsasgn (x, idx, intersect (subsref (x, idx), infsup (0, inf)));
 
-      x.inf = l;
-      x.sup = u;
+  positive = n > 0;
+  negative = not (positive);
+  emptyresult = isempty (x) ...
+                | (even & negative & x.sup <= 0) ...
+                | (negative & x.inf == 0 & x.sup == 0);
 
-    case -1
-      emptyresult = isempty (x) ...
-                    | (x.sup <= 0 & even) | (x.inf == 0 & x.sup == 0);
+  ## Don't have to calculate empty results
+  even = even & not (emptyresult);
+  odd = odd & not (emptyresult);
+  positive = positive & not (emptyresult);
+  negative = negative & not (emptyresult);
 
-      if (even)
-        l = zeros (size (x.inf));
-        u = inf (size (x.inf));
+  l = zeros (size (x.inf));
+  u = inf (size (x.inf));
 
-        select = x.inf > 0 & isfinite (x.inf);
-        if (any (select(:)))
-          u(select) = invrootrounded (x.inf(select), -n, +inf);
-        endif
-        select = x.sup > 0 & isfinite (x.sup);
-        if (any (select(:)))
-          l(select) = invrootrounded (x.sup(select), -n, -inf);
-        endif
+  ## Positive n
+  l(positive) = mpfr_function_d ('nthroot', -inf, x.inf(positive), n(positive));
+  u(positive) = mpfr_function_d ('nthroot', +inf, x.sup(positive), n(positive));
 
-        l(emptyresult) = inf;
-        u(emptyresult) = -inf;
+  ## Negative and even n
+  select = even & negative & x.inf > 0 & isfinite (x.inf);
+  u(select) = invrootrounded (x.inf(select), -n(select), +inf);
 
-        l(l == 0) = -0;
+  select = even & negative & x.sup > 0 & isfinite (x.sup);
+  l(select) = invrootrounded (x.sup(select), -n(select), -inf);
 
-        x.inf = l;
-        x.sup = u;
-      else # uneven
-        l = zeros (size (x.inf));
-        u = inf (size (x.inf));
+  ## Negative and odd n
+  ## The result is computed as the union of the nthroot of the negative
+  ## part and the positive part of x
+  oddandnegative = odd & negative;
 
-        select = x.inf > 0 & isfinite (x.inf);
-        if (any (select(:)))
-          u(select) = invrootrounded (x.inf(select), -n, +inf);
-        endif
-        select = x.sup > 0 & isfinite (x.sup);
-        if (any (select(:)))
-          l(select) = invrootrounded (x.sup(select), -n, -inf);
-        endif
+  ## Positive part of x
+  l_positivepart = zeros (size (x.inf));
+  u_positivepart = inf (size (x.inf));
 
-        notpositive = x.sup <= 0;
-        l(emptyresult | notpositive) = inf;
-        u(emptyresult | notpositive) = -inf;
+  select = oddandnegative & x.inf > 0 & isfinite (x.inf);
+  u_positivepart(select) = invrootrounded (x.inf(select), -n(select), +inf);
 
-        l(l == 0) = -0;
+  select = oddandnegative & x.sup > 0 & isfinite (x.sup);
+  l_positivepart(select) = invrootrounded (x.sup(select), -n(select), -inf);
 
-                                # this is only the positive part
-        pos = x;
-        pos.inf = l;
-        pos.sup = u;
+  l_positivepart(x.sup <= 0) = inf;
+  u_positivepart(x.sup <= 0) = -inf;
 
-        l = zeros (size (x.inf));
-        u = inf (size (x.inf));
+  l(l == 0) = -0;
 
-        select = x.sup < 0 & isfinite (x.sup);
-        if (any (select(:)))
-          u(select) = invrootrounded (-x.sup(select), -n, +inf);
-        endif
-        select = x.inf < 0 & isfinite (x.inf);
-        if (any (select(:)))
-          l(select) = invrootrounded (-x.inf(select), -n, -inf);
-        endif
+  ## Negative part of x
+  l_negativepart = zeros (size (x.inf));
+  u_negativepart = inf (size (x.inf));
 
-        notnegative = x.inf >= 0;
-        l(emptyresult | notnegative) = inf;
-        u(emptyresult | notnegative) = -inf;
+  select = oddandnegative & x.sup < 0 & isfinite (x.sup);
+  u_negativepart(select) = invrootrounded (-x.sup(select), -n(select), +inf);
 
-        u(u == 0) = +0;
+  select = oddandnegative & x.inf < 0 & isfinite (x.inf);
+  l_negativepart(select) = invrootrounded (-x.inf(select), -n(select), -inf);
 
-        neg = x;
-        neg.inf = -u;
-        neg.sup = -l;
 
-        x = union (pos, neg);
-      endif
+  l_negativepart(x.inf >= 0) = inf;
+  u_negativepart(x.inf >= 0) = -inf;
 
-    otherwise
-      error ("interval:InvalidOperand", ...
-             "nthroot: degree must be a nonzero scalar");
-  endswitch
+  u(u == 0) = +0;
+
+  ## Compute the union
+  l(oddandnegative) = min (l_positivepart(oddandnegative), ...
+                           -u_negativepart(oddandnegative));
+  u(oddandnegative) = max (u_positivepart(oddandnegative), ...
+                           -l_negativepart(oddandnegative));
+
+  l(emptyresult) = inf;
+  u(emptyresult) = -inf;
+
+  u(u == 0) = +0;
+  l(l == 0) = -0;
+
+  x.inf = l;
+  x.sup = u;
 
 endfunction
 
@@ -161,33 +158,42 @@ function x = invrootrounded (z, n, direction)
   if (direction > 0)
     x1 = z;
     select = z > 1;
-    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.inf);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), ...
+                                  -inv_n.inf(select));
     select = z < 1;
-    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.sup);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), ...
+                                  -inv_n.sup(select));
   else
     x1 = z;
     select = z > 1;
-    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.sup);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), ...
+                                  -inv_n.sup(select));
     select = z < 1;
-    x1(select) = mpfr_function_d ('pow', direction, z(select), -inv_n.inf);
+    x1(select) = mpfr_function_d ('pow', direction, z(select), ...
+                                  -inv_n.inf(select));
   endif
 
-  if (issingleton (inv_n))
-    ## We are lucky: The result is correctly rounded
-    x = x1;
-    return
-  endif
+  exact = issingleton (inv_n);
 
-  x2 = mpfr_function_d ('rdivide', direction, 1, ...
-                        mpfr_function_d ('nthroot', -direction, z, n));
-  x3 = mpfr_function_d ('nthroot', direction, ...
-                        mpfr_function_d ('rdivide', direction, 1, z), n);
+  x = z;
+  x(exact) = x1(exact);
 
-  ## Choose the most accurate result
-  if (direction > 0)
-    x = min (min (x1, x2), x3);
-  else
-    x = max (max (x1, x2), x3);
+  inexact = not (exact);
+
+  if (any (inexact(:)))
+    x2 = mpfr_function_d ('rdivide', direction, 1, ...
+                          mpfr_function_d ('nthroot', -direction, ...
+                                           z(inexact), n(inexact)));
+    x3 = mpfr_function_d ('nthroot', direction, ...
+                          mpfr_function_d ('rdivide', direction, ...
+                                           1, z(inexact)), n(inexact));
+
+    ## Choose the most accurate result
+    if (direction > 0)
+      x(inexact) = min (min (x1(inexact), x2), x3);
+    else
+      x(inexact) = max (max (x1(inexact), x2), x3);
+    endif
   endif
 
 endfunction
@@ -206,6 +212,11 @@ endfunction
 %! x = nthroot (infsup (0, inf), -3);
 %! assert (signbit (inf (x)));
 
+%!assert (nthroot (infsup (-1, 1), 2) == infsup (0, 1));
+%!assert (nthroot (infsup (-1, 1), 3) == infsup (-1, 1));
+%!assert (nthroot (infsup (-1, 1), -2) == infsup (1, inf));
+%!assert (nthroot (infsup (-1, 1), -3) == infsup (-inf, inf));
+
 %!shared testdata
 %! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
@@ -221,13 +232,31 @@ endfunction
 
 %!test
 %! # Vector evaluation
-%! # nthroot does not support vectorization of N. We can partially
-%! # test vectorization of the first argument by specifying N and
-%! # letting x be a vector.
 %! testcases = testdata.NoSignal.infsup.rootn;
-%! for testcase = [testcases]'
-%!   assert (isequaln (...
-%!     nthroot ([testcase.in{1}, testcase.in{1}], ...
-%!              testcase.in{2}), ...
-%!     [testcase.out, testcase.out]));
-%! endfor
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (nthroot (in1, in2), out));
+
+%!test
+%! # N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsup.rootn;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! if (i > numel (in1))
+%!   i = i - numel (in1);
+%!   in1 = [in1; in1];
+%!   in2 = [in2; in2];
+%!   out = [out; out];
+%! endif
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! in2 = reshape ([in2; in2(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
+%! assert (isequaln (nthroot (in1, in2), out));

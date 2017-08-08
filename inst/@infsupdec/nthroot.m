@@ -19,8 +19,6 @@
 ##
 ## Compute the real n-th root of @var{X}.
 ##
-## @var{N} must be a nonzero scalar integer.
-##
 ## Accuracy: The result is a valid enclosure.  The result is a tight
 ## enclosure for @var{n} ≥ -2.  The result also is a tight enclosure if the
 ## reciprocal of @var{n} can be computed exactly in double-precision.
@@ -46,8 +44,7 @@ function result = nthroot (x, n)
   ## nthroot is continuous everywhere, but not defined everywhere
   even = mod (n, 2) == 0;
   defined = (not (even) & (n > 0 | inf (x) > 0 | sup (x) < 0)) ...
-            | (even       & ((n > 0 & inf (x) >= 0) ...
-                             | (n < 0 & inf (x) > 0)));
+            | (even & ((n > 0 & inf (x) >= 0)| (n < 0 & inf (x) > 0)));
   result.dec(not (defined)) = _trv ();
 
   result.dec = min (result.dec, x.dec);
@@ -55,3 +52,8 @@ function result = nthroot (x, n)
 endfunction
 
 %!assert (isequal (nthroot (infsupdec (25, 36), 2), infsupdec (5, 6)));
+
+%!assert (isequal (nthroot (infsupdec (-1, 1), 2), infsupdec (0, 1, "trv")));
+%!assert (isequal (nthroot (infsupdec (-1, 1), 3), infsupdec (-1, 1)));
+%!assert (isequal (nthroot (infsupdec (-1, 1), -2), infsupdec (1, inf, "trv")));
+%!assert (isequal (nthroot (infsupdec (-1, 1), -3), infsupdec (-inf, inf, "trv")));
