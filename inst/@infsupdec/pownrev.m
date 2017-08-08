@@ -23,8 +23,6 @@
 ## That is, an enclosure of all @code{x ∈ @var{X}} where
 ## @code{pown (x, @var{P}) ∈ @var{C}}.
 ##
-## @var{P} must be a nonzero scalar integer.
-##
 ## Accuracy: The result is a valid enclosure.  The result is a tight
 ## enclosure for @var{P} ≥ -2.  The result also is a tight enclosure if the
 ## reciprocal of @var{P} can be computed exactly in double-precision.
@@ -80,16 +78,28 @@ endfunction
 
 %!test
 %! # Vector evaluation
-%! # pownrev does not support vectorization of P. We can partially
-%! # test vectorization of the first argument by specifying P and
-%! # letting C, X be a vectors.
 %! testcases = testdata.NoSignal.infsupdec.pownRev;
-%! for testcase = [testcases]'
-%!   assert (isequaln (...
-%!     pownrev ([testcase.in{1}, testcase.in{1}], ...
-%!              testcase.in{2}), ...
-%!     [testcase.out, testcase.out]));
-%! endfor
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pownrev (in1, in2), out));
+
+%!test
+%! # N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsupdec.pownRev;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! in2 = reshape ([in2; in2(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
+%! assert (isequaln (pownrev (in1, in2), out));
 
 %!test
 %! # Scalar evaluation
@@ -102,14 +112,28 @@ endfunction
 
 %!test
 %! # Vector evaluation
-%! # pownrev does not support vectorization of P. We can partially
-%! # test vectorization of the first argument by specifying P and
-%! # letting C, X be a vectors.
 %! testcases = testdata.NoSignal.infsupdec.pownRevBin;
-%! for testcase = [testcases]'
-%!   assert (isequaln (...
-%!     pownrev ([testcase.in{1}, testcase.in{1}], ...
-%!              [testcase.in{2}, testcase.in{2}], ...
-%!              testcase.in{3}), ...
-%!     [testcase.out, testcase.out]));
-%! endfor
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! in3 = vertcat (vertcat (testcases.in){:, 3});
+%! out = vertcat (testcases.out);
+%! assert (isequaln (pownrev (in1, in2, in3), out));
+
+%!test
+%! # N-dimensional array evaluation
+%! testcases = testdata.NoSignal.infsupdec.pownRevBin;
+%! in1 = vertcat (vertcat (testcases.in){:, 1});
+%! in2 = vertcat (vertcat (testcases.in){:, 2});
+%! in3 = vertcat (vertcat (testcases.in){:, 3});
+%! out = vertcat (testcases.out);
+%! # Reshape data
+%! i = -1;
+%! do
+%!   i = i + 1;
+%!   testsize = factor (numel (in1) + i);
+%! until (numel (testsize) > 2)
+%! in1 = reshape ([in1; in1(1:i)], testsize);
+%! in2 = reshape ([in2; in2(1:i)], testsize);
+%! in3 = reshape ([in3; in3(1:i)], testsize);
+%! out = reshape ([out; out(1:i)], testsize);
+%! assert (isequaln (pownrev (in1, in2, in3), out));
