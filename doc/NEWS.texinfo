@@ -26,6 +26,9 @@
 	dot, sum, prod: Altered how empty input is handled.  It is now more consistent and compatible with Matlab.  This is slightly different from how the standard version handle it at the moment. See bug #51333 and #48690 for some information.
 
 @item
+	nthroot, pownrev: Now supports vectorization of n (for nthroot) and p (for pownrev), broadcasting is fully supported.
+
+@item
 	Indexing expressions on intervals can now use the @command{end} keyword (bug #50626, thanks to Joel Dahne).
 
 @item
