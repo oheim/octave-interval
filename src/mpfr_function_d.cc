@@ -88,7 +88,10 @@ void evaluate (
 
   for (int i = 0; i < dimensions; i ++)
     {
-      result_dims(i) = std::max (arg1_dims(i), arg2_dims(i));
+      if (arg1_dims(i) != 1)
+        result_dims(i) = arg1_dims(i);
+      else
+        result_dims(i) = arg2_dims(i);
     }
 
   NDArray result (result_dims);
