@@ -13,7 +13,7 @@ The interval package is a collection of functions for interval arithmetic. It is
 @@software@{octave-interval,
   author  = @{Oliver Heimlich@},
   title   = @{GNU Octave Interval Package@},
-  url     = @{http://octave.sourceforge.net/interval/@},
+  url     = @{https://octave.sourceforge.io/interval/@},
   version = @{@value{version}@},
   date    = @{@value{date}@},
 @}

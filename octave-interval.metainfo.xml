@@ -52,7 +52,7 @@ without any warranty.
 		<keyword>enclosure</keyword>
 		<keyword>bisection</keyword>
 	</keywords>
-	<url type="homepage">http://octave.sourceforge.net/interval/</url>
+	<url type="homepage">https://octave.sourceforge.io/interval/</url>
 	<url type="bugtracker">https://savannah.gnu.org/bugs/?group=octave</url>
 	<metadata_license>FSFAP</metadata_license>
 	<project_license>GPL-3.0+</project_license>

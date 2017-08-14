@@ -11,6 +11,20 @@
 
 @ifcommandnotdefined funref
 @macro funref{function}
-@inlinefmtifelse{html,@uref{@inlineifset{octave-forge,..}@inlineifclear{octave-forge,http://octave.sourceforge.net/interval}/function/\function\.html,\function\},@command{\function\}}
+@c We want to have links from the package manual to the function reference.
+@c The function reference is not compiled by texinfo as part of the
+@c package manual compilation, so we can't use simple Texinfo references.
+@c The file names of the function reference do not use HTML special
+@c character escaping (like Texinfo does), so we can't use Texinfo
+@c references to external nodes.  However, the url can easily be
+@c constructed from the function name or the class and method name.
+@c If the manual is generated for publication on Octave Forge, we can
+@c use relative links (from ../package_doc/ to ../function/).
+@c Otherwise, if a standalone manual is generated, we need external
+@c links to Octave Forge (there is no local function reference so we fall
+@c back to using the online reference).
+@c In the printed manual (PDF), we don't use links and format the function's
+@c name like a command name.
+@inlinefmtifelse{html,@uref{@inlineifset{octave-forge,..}@inlineifclear{octave-forge,https://octave.sourceforge.io/interval}/function/\function\.html,\function\},@command{\function\}}
 @end macro
 @end ifcommandnotdefined

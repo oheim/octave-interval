@@ -53,6 +53,8 @@
 @item
 	To improve privacy and page load, the package manual no longer uses external references for CSS and web fonts.
 @item
+    The package URL has been updated (after Octave Forge has switched to HTTPS).
+@item
 	HTML fonts have been changed and fallback fonts for Windows have been introduced.
 @item
 	Adjustments to examples for the latest versions of the doctest package and symbolic package.

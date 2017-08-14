@@ -177,11 +177,11 @@ It is possible to use faster (BLAS based) routines during computation of the mat
 
 The interval package is free software: Everyone is encouraged to use it, copy it and redistribute it, as well as to make changes under the terms of the GNU General Public License.
 
-The interval package is part of Octave Forge, a sibling of the GNU Octave project. Official releases are published at @url{http://octave.sourceforge.net/}.
+The interval package is part of Octave Forge, a sibling of the GNU Octave project. Official releases are published at @url{https://octave.sourceforge.io/}.
 
-The @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,source code repository} is located at Octave Forge and contains the latest development version. Information for developers can be found on the @uref{http://wiki.octave.org/Interval_package,package's page at Octave wiki}.
+The @uref{https://sourceforge.net/p/octave/interval/ci/default/tree/,source code repository} is located at Octave Forge and contains the latest development version. Information for developers can be found on the @uref{https://wiki.octave.org/Interval_package,package's page at Octave wiki}.
 
-Bug reports and feature requests for either the software or this manual may be posted under the @uref{http://savannah.gnu.org/projects/octave,Octave Project at Savannah}.
+Bug reports and feature requests for either the software or this manual may be posted under the @uref{https://savannah.gnu.org/projects/octave,Octave Project at Savannah}.
 
 Contributions to the software and this manual are highly appreciated.
 
