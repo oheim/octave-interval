@@ -3,6 +3,7 @@
 @c Copyright 2017 Joel Dahne
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
+@include macros.texinfo
 
 @unnumbered Preface
 

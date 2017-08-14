@@ -2,6 +2,7 @@
 @c Copyright 2015-2016 Oliver Heimlich.
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8
+@include macros.texinfo
 
 @appendix IEEE Std 1788-2015
 

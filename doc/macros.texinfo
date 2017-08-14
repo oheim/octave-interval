@@ -1,0 +1,16 @@
+@ifcommandnotdefined myimage
+@macro myimage{file, description}
+@ifnothtml
+@center @image{\file\,,,\description\,}
+@end ifnothtml
+@html
+<img border="0" src="\file\.png" alt="\description\" />
+@end html
+@end macro
+@end ifcommandnotdefined
+
+@ifcommandnotdefined funref
+@macro funref{function}
+@inlinefmtifelse{html,@uref{@inlineifset{octave-forge,..}@inlineifclear{octave-forge,http://octave.sourceforge.net/interval}/function/\function\.html,\function\},@command{\function\}}
+@end macro
+@end ifcommandnotdefined

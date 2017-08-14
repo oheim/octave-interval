@@ -286,19 +286,30 @@ run: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS) | $(BUILD_DIR)/inst
 	@echo
 
 ## Validate code examples
-doctest: $(OCT_COMPILED)
+doctest: doctest-manual doctest-docstrings
+.PHONY: doctest-manual doctest-docstrings
+doctest-manual: $(OCT_COMPILED)
 	@# Workaround for OctSymPy issue 273, we must pre-initialize the package
 	@# Otherwise, it will make the doctests fail
-	@echo "Testing documentation strings ..."
+	@echo "Testing package manual ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --eval \
 		"pkg load doctest; \
 		 pkg load symbolic; warning ('off', 'OctSymPy:function_handle:nocodegen'); sym ('x'); \
 		 set (0, 'defaultfigurevisible', 'off'); \
-		 targets = '@infsup @infsupdec $(shell find inst/ src/ -maxdepth 1 -regex ".*\\.\\(m\\|oct\\)" -printf "%f\\n" | cut -f1 -d.) $(shell find doc/ -name "*.texinfo")'; \
+		 makeinfo_program (cstrcat (makeinfo_program (), ' -I doc/')); \
+		 targets = '$(shell find doc/ -name "*.texinfo")'; \
 		 targets = strsplit (targets, ' '); \
 		 success = doctest (targets); \
 		 exit (!success)"
-	@echo
+doctest-docstrings: $(OCT_COMPILED)
+	@echo "Testing documentation strings ..."
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --eval \
+		"pkg load doctest; \
+		 set (0, 'defaultfigurevisible', 'off'); \
+		 targets = '@infsup @infsupdec $(shell find inst/ src/ -maxdepth 1 -regex ".*\\.\\(m\\|oct\\)" -printf "%f\\n" | cut -f1 -d.)'; \
+		 targets = strsplit (targets, ' '); \
+		 success = doctest (targets); \
+		 exit (!success)"
 
 ## Check the creation of the manual
 ## The doc/Makefile may be used by the end user
@@ -358,9 +369,9 @@ $(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC)
 	@echo "Compressing interval test library ($@) ..."
 	@(zopfli -c "$@_" || gzip --best -f -c "$@_") > "$@"
 
-## Run build in self tests (BISTs)
+## Run built-in self tests (BISTs)
 test: $(OCT_COMPILED) $(TST_DICT_GENERATED) | $(BUILD_DIR)/inst/
-	@echo "Testing package in GNU Octave ..."
+	@echo "Testing built-in self tests (BISTs) ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --path "$(BUILD_DIR)/inst/" \
 		--eval 'success = true;' \
 		--eval 'for file = {dir("./src/*.cc").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
