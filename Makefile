@@ -294,7 +294,7 @@ doctest: $(OCT_COMPILED)
 		"pkg load doctest; \
 		 pkg load symbolic; warning ('off', 'OctSymPy:function_handle:nocodegen'); sym ('x'); \
 		 set (0, 'defaultfigurevisible', 'off'); \
-		 targets = '$(shell (ls inst; ls src | grep .oct) | cut -f2 -d@ | cut -f1 -d.) $(shell find doc/ -name \*.texinfo)'; \
+		 targets = '@infsup @infsupdec $(shell find inst/ src/ -maxdepth 1 -regex ".*\\.\\(m\\|oct\\)" -printf "%f\\n" | cut -f1 -d.) $(shell find doc/ -name "*.texinfo")'; \
 		 targets = strsplit (targets, ' '); \
 		 success = doctest (targets); \
 		 exit (!success)"
