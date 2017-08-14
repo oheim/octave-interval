@@ -71,9 +71,8 @@ function x = postpad (x, len, c, dim)
   endif
 
   if (nargin < 4)
-    if (isvector (x.inf) && not (isscalar (x.inf)))
-      dim = find (size (x.inf) ~= 1, 1);
-    else
+    dim = find (size (x.inf) ~= 1, 1);
+    if (isempty (dim))
       dim = 1;
     endif
   elseif (isa (dim, "infsup"))
@@ -88,3 +87,4 @@ endfunction
 %!assert (postpad (infsup (1:3), 4, 4) == infsup (1:4));
 %!assert (postpad (infsup (1:3), 2, 4) == infsup (1:2));
 %!assert (postpad (infsup (0), 10, 0, 3) == infsup (zeros (1, 1, 10)))
+%!assert (postpad (infsup (zeros (1, 2, 2)), 3) == infsup (zeros (1, 3, 2)));

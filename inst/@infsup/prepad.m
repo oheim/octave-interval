@@ -71,9 +71,8 @@ function x = prepad (x, len, c, dim)
   endif
 
   if (nargin < 4)
-    if (isvector (x.inf) && not (isscalar (x.inf)))
-      dim = find (size (x.inf) ~= 1, 1);
-    else
+    dim = find (size (x.inf) ~= 1, 1);
+    if (isempty (dim))
       dim = 1;
     endif
   elseif (isa (dim, "infsup"))
@@ -88,3 +87,4 @@ endfunction
 %!assert (prepad (infsup (2:4), 4, 1) == infsup (1:4));
 %!assert (prepad (infsup (0:2), 2, 1) == infsup (1:2));
 %!assert (prepad (infsup (0), 10, 0, 3) == infsup (zeros (1, 1, 10)))
+%!assert (prepad (infsup (zeros (1, 2, 2)), 3) == infsup (zeros (1, 3, 2)));
