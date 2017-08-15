@@ -70,9 +70,27 @@ function display (x)
     return
   endif
 
+  if (compare_versions (OCTAVE_VERSION (), "4.4.0", ">=") || ...
+      (compare_versions (OCTAVE_VERSION (), "4.3.0", ">=") && not (exist ("__compactformat__", "builtin"))))
+    ## Starting with changeset f84aa17075d4 it is possible
+    ## to query the format function without breaking
+    ## current format settings.
+    [~, spacing] = format ();
+  else
+    ## Old Octave versions don't support it,
+    ## but use a (deprecated) root property.
+    spacing = get (0, "FormatSpacing");
+  endif
+  loose_spacing = strcmp ("loose", spacing);
+
   global current_print_indent_level;
   save_current_print_indent_level = current_print_indent_level;
   unwind_protect
+
+    ## FIXME: The built-in display function does not print the var name,
+    ## if called with “display (var name)”.  We assume that this method
+    ## is always called for output after expression evaluation.
+
     label = inputname (1);
     if (isempty (label) && regexp(argn, '^\[\d+,\d+\]$'))
       ## During output of cell array contents
@@ -124,7 +142,11 @@ function display (x)
     else
       printf (" interval array")
     endif
-    printf ("\n\n");
+    if (loose_spacing)
+      printf ("\n\n");
+    else
+      printf ("\n");
+    endif
 
     if (not (isempty (s)))
       printf (line_prefix);
@@ -136,7 +158,14 @@ function display (x)
 
       printf (s);
 
-      printf ("\n");
+      ## FIXME: The built-in display function prints an extra line break,
+      ## if called with “display (var name)”—even with compact format
+      ## spacing.  We assume that this method is always called for output
+      ## after expression evaluation.
+
+      if (loose_spacing)
+        printf ("\n");
+      endif
     endif
   unwind_protect_cleanup
     current_print_indent_level = save_current_print_indent_level;

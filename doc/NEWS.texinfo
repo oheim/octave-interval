@@ -26,6 +26,9 @@
 	dot, sum, prod: Altered how empty input is handled.  It is now more consistent and compatible with Matlab.  This is slightly different from how the standard version handle it at the moment. See bug #51333 and #48690 for some information.
 
 @item
+	Output of interval matrices may be customized with @command{format compact} to display more data per page.
+
+@item
 	nthroot, pownrev: Now supports vectorization of n (for nthroot) and p (for pownrev), broadcasting is fully supported.
 
 @item
@@ -53,7 +56,7 @@
 @item
 	To improve privacy and page load, the package manual no longer uses external references for CSS and web fonts.
 @item
-    The package URL has been updated (after Octave Forge has switched to HTTPS).
+	The package URL has been updated (after Octave Forge has switched to HTTPS).
 @item
 	HTML fonts have been changed and fallback fonts for Windows have been introduced.
 @item

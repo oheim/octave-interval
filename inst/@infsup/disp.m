@@ -73,6 +73,19 @@ function varargout = disp (x)
     return
   endif
 
+  if (compare_versions (OCTAVE_VERSION (), "4.4.0", ">=") || ...
+      (compare_versions (OCTAVE_VERSION (), "4.3.0", ">=") && not (exist ("__compactformat__", "builtin"))))
+    ## Starting with changeset f84aa17075d4 it is possible
+    ## to query the format function without breaking
+    ## current format settings.
+    [~, spacing] = format ();
+  else
+    ## Old Octave versions don't support it,
+    ## but use a (deprecated) root property.
+    spacing = get (0, "FormatSpacing");
+  endif
+  loose_spacing = strcmp ("loose", spacing);
+
   columnwidth = max (cellfun ("length", s), [], 1);
   columnwidth += 3; # add 3 spaces between columns
 
@@ -86,6 +99,12 @@ function varargout = disp (x)
       maxwidth = terminal_size ()(2) - current_print_indent_level;
 
       if (ndims (x) > 2)
+        ## Loose format: Use extra newline between previous matrix and current label,
+        ## unless the submatrix is scalar
+        if (loose_spacing && matrixpart > 1 && ...
+            (rows (x.inf) > 1 || columns (x.inf) > 1))
+          buffer = cstrcat (buffer, "\n");
+        endif
         ## Print the index for the current matrix in the array
         buffer = cstrcat (buffer, sprintf("ans(:,:"));
         matrixpartsubscript = cell (1, ndims (x) - 2);
@@ -97,7 +116,7 @@ function varargout = disp (x)
         ## representation is not exact?
         buffer = cstrcat (buffer, sprintf(") ="));
         if (rows (x.inf) > 1 || columns (x.inf) > 1)
-          buffer = cstrcat (buffer, "\n\n");
+          buffer = cstrcat (buffer, ifelse (loose_spacing, "\n\n", "\n"));
         endif
       endif
 
@@ -119,25 +138,23 @@ function varargout = disp (x)
                (split_long_rows () && ...
                 usedwidth + columnwidth(cend + 1) > maxwidth))
         if (cstart > 1 || cend < columns (x.inf))
-          if (cstart > 1)
+          if (loose_spacing && cstart > 1)
             buffer = cstrcat (buffer, "\n");
           endif
           if (cend > cstart)
             buffer = cstrcat (buffer, ...
-                              sprintf(" Columns %d through %d:\n\n", ...
+                              sprintf(" Columns %d through %d:\n", ...
                                       cstart, cend)); ...
           else
             buffer = cstrcat (buffer, ...
-                              sprintf(" Column %d:\n\n", cstart));
+                              sprintf(" Column %d:\n", cstart));
+          endif
+          if (loose_spacing)
+            buffer = cstrcat (buffer, "\n");
           endif
         endif
         ## Convert string matrix into string with newlines
         buffer = cstrcat (buffer, strjoin (cellstr (submatrix), "\n"), "\n");
-        ## If not on the last line output an extra newline, unless
-        ## the size of the submatrix is 1x1
-        if (matrixpart ~= numberofmatrixparts && (rows (x.inf) > 1 || columns (x.inf) > 1))
-          buffer = cstrcat (buffer, "\n");
-        endif
         if (nargout == 0)
           printf (buffer);
           buffer = "";
@@ -167,3 +184,27 @@ endfunction
 %! i(1, 1, 3) = empty ();
 %! i(1, 1, 4) = nai ();
 %! assert (disp (i(1,1,:)), "ans(:,:,1) =   [1]_com\nans(:,:,2) =   [Entire]_dac\nans(:,:,3) =   [Empty]_trv\nans(:,:,4) =   [NaI]\n")
+%!test
+%! x = infsup (zeros ([1 2 2]));
+%! unwind_protect
+%!   format compact
+%!   compact = disp (x);
+%!   format loose
+%!   loose = disp (x);
+%! unwind_protect_cleanup
+%!   format
+%! end_unwind_protect
+%! assert (compact, "ans(:,:,1) =\n   [0]   [0]\nans(:,:,2) =\n   [0]   [0]\n");
+%! assert (loose, "ans(:,:,1) =\n\n   [0]   [0]\n\nans(:,:,2) =\n\n   [0]   [0]\n");
+%!test
+%! x = infsup (zeros ([1 1 2]));
+%! unwind_protect
+%!   format compact
+%!   compact = disp (x);
+%!   format loose
+%!   loose = disp (x);
+%! unwind_protect_cleanup
+%!   format
+%! end_unwind_protect
+%! assert (compact, "ans(:,:,1) =   [0]\nans(:,:,2) =   [0]\n");
+%! assert (loose,   "ans(:,:,1) =   [0]\nans(:,:,2) =   [0]\n");
