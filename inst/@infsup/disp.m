@@ -73,18 +73,7 @@ function varargout = disp (x)
     return
   endif
 
-  if (compare_versions (OCTAVE_VERSION (), "4.4.0", ">=") || ...
-      (compare_versions (OCTAVE_VERSION (), "4.3.0", ">=") && not (exist ("__compactformat__", "builtin"))))
-    ## Starting with changeset f84aa17075d4 it is possible
-    ## to query the format function without breaking
-    ## current format settings.
-    [~, spacing] = format ();
-  else
-    ## Old Octave versions don't support it,
-    ## but use a (deprecated) root property.
-    spacing = get (0, "FormatSpacing");
-  endif
-  loose_spacing = strcmp ("loose", spacing);
+  loose_spacing = __loosespacing__ ();
 
   columnwidth = max (cellfun ("length", s), [], 1);
   columnwidth += 3; # add 3 spaces between columns
