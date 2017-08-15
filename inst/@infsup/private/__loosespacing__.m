@@ -60,9 +60,14 @@ function result = __loosespacing__ ()
     ## TODO: This case can be removed after the 4.4.0 release.
     [~, spacing] = format ();
   else
-    ## In older versions, we can use a deprecated root property,
-    ## which has been removed in Octave 4.2.0.
-    spacing = get (0, "FormatSpacing");
+    ## In older versions, we use this kludgy workaround to
+    ## detect the current settings.
+    ## Note: The deprecated root property "FormatSpacing",
+    ## which has been removed in Octave 4.2.0, always returns "loose"
+    ## in Octave < 4.0.0 and is of no use.
+    compact_spacing = isempty (strfind (disp (zeros ([1 2 2])), "\n\n"));
+    result = not (compact_spacing);
+    return
   endif
 
   result = strcmp ("loose", spacing);
