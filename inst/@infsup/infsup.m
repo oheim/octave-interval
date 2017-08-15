@@ -99,6 +99,8 @@ function [x, isexact, overflow, isnai] = infsup (l, u)
                                                     "sup", -inf), ...
                                             "infsup");
 
+  warning ("off", "Octave:broadcast", "local");
+
   ## Part 1
   ##
   ## Split any arguments into l and u, where l and u denote lower and upper

@@ -47,6 +47,8 @@ function [Q, R, P] = qr (A)
   R = zeros (n);
   P = eye (columns (A));
 
+  warning ("off", "Octave:broadcast", "local");
+
   for i = 1 : n
     iColIdx = substruct ("()", {":", i});
     if (nargout >= 3 && i < columns (A))

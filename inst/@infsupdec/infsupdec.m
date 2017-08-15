@@ -131,6 +131,8 @@ function [x, isexact] = infsupdec (varargin)
     return
   endif
 
+  warning ("off", "Octave:broadcast", "local");
+
   for i = 1 : numel (varargin)
     if (ischar (varargin{i}))
       varargin{i} = __split_interval_literals__ (varargin{i});
