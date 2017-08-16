@@ -10,7 +10,7 @@ SHELL   = /bin/sh
 ## This file helps the package maintainer to
 ##   1. run the development version
 ##   2. check that all tests pass
-##   3. prepare the release 
+##   3. prepare the release
 ##
 ## This Makefile is _not_ meant to be portable. In order to use it, you
 ## have to install certain dependencies. This file is not distributed in
@@ -364,7 +364,7 @@ run: $(TST_DICT_GENERATED)
 $(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC)
 	@echo "Regenerating interval test library ($@) ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
-		--eval 'for file = strsplit ("$^"), printf ("  %s\n", file{:}); source (file); endfor;' \
+		--eval 'for file = strsplit ("$^"), printf ("  %s\n", file{:}); source (file{:}); endfor;' \
 		--eval 'save ("-binary", "$@_", "-struct", "tests", "NoSignal", "UndefinedOperation", "PossiblyUndefinedOperation", "InvalidOperand", "IntvlPartOfNaI", "IntvlOverflow");'
 	@echo "Compressing interval test library ($@) ..."
 	@(zopfli -c "$@_" || gzip --best -f -c "$@_") > "$@"
@@ -380,4 +380,3 @@ test: $(OCT_COMPILED) $(TST_DICT_GENERATED) | $(BUILD_DIR)/inst/
 		--eval 'for file = {dir("./inst/@infsup/*.m").name}, success &= test (strcat ("@infsup/", file{1}), "quiet", stdout); endfor;' \
 		--eval 'for file = {dir("./inst/@infsupdec/*.m").name}, success &= test (strcat ("@infsupdec/", file{1}), "quiet", stdout); endfor;' \
 		--eval 'exit (not (success));'
-
