@@ -192,8 +192,7 @@ endif
 $(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
 	@# The output of pdftocairo has a much better quality
 	@# compared to the output from inkscape --export-png.
-	@pdftocairo -png -singlefile -transp -r 120 "$<" "$(BUILD_DIR)/cairo.tmp"
-	@mv "$(BUILD_DIR)/cairo.tmp.png" "$@"
+	@pdftocairo -png -singlefile -transp -r 120 "$<" "$(GENERATED_IMAGE_DIR)/$*.svg"
 $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
 	@echo "Compiling $< ..."
 	@inkscape --without-gui \
