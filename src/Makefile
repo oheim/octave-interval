@@ -18,7 +18,7 @@ LDFLAGS_MPFR   =-lmpfr
 ## Use important flags in XTRA_CFLAGS for OpenMP (workaround for bug #45280)
 CFLAG_OPENMP   =$(findstring -fopenmp,$(shell $(MKOCTFILE) -p XTRA_CFLAGS))
 HAS_SSE2       =$(findstring sse2,$(shell cat /proc/cpuinfo))
-ifdef HAS_SSE2
+ifneq ($(HAS_SSE2),)
 CONF_FLAG_SSE2 ?=--enable-sse2
 endif
 
