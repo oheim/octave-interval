@@ -360,7 +360,7 @@ $(TST_DICT_GENERATED_DIR)/%.tst: src/test/%.itl | $(ITF1788_HOME)
 	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, dictionary, interval-dictionary)" -o "$(BUILD_DIR)" -s "src/test"
 
 run: $(TST_DICT_GENERATED)
-$(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC)
+$(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC) | $(OCT_COMPILED)
 	@echo "Regenerating interval test library ($@) ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
 		--eval 'for file = strsplit ("$^"), printf ("  %s\n", file{:}); source (file{:}); endfor;' \
