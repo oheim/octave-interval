@@ -108,7 +108,7 @@ void evaluate (
 
   // Fix broadcasting along all singleton dimensions
   // Does not work for broadcasting along the first dimension
-  for (int i = std::max (start, 1); i < dimensions; i ++)
+  for (int i = std::max (start, static_cast <octave_idx_type> (1)); i < dimensions; i ++)
   {
     if (arg1_dims(i) == 1)
       arg1_cdims(i-1) = 0;
