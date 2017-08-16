@@ -70,7 +70,7 @@ Bugfixes
 @item Processor support for SSE2 is automatically detected during package installation.  This fixes installation problems on devices without SSE2, for example the usual Android phones and tablets (bug #51758).
 @item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.  The functions failed to return NaN (not a number).
 @item diag: With more than one argument the function no longer fails with an error.
-@item dot: Fixed error in identification of dimensions when broadcasting:  When the optional dimension argument is missing, the first non-signleton for both arguments is used (before broadcasting applies).
+@item dot: Fixed error in identification of dimensions when broadcasting:  When the optional dimension argument is missing, the first non-singleton dimension of both arguments is used (before broadcasting applies).
 @item infsupdec: Now creates a warning if the @code{[NaI]} literal is combined with decoration, e. g. @samp{[NaI]_ill}.
 @item infsupdec: No longer produces warnings for mixed parameters with strings and numerics.
 @item verlinineqnn: No longer produces warnings for unverified solutions.
