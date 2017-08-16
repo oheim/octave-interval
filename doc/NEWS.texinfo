@@ -15,33 +15,34 @@
 @center Summary of important user-visible changes
 
 @release{3.0.0, 2017-xx-xx}
+This major release introduces support for N-dimensional arrays of intervals.  With previous versions, interval objects have been limited to two dimensions.  Only scalar values, vectors, and matrices could be created.  Now, interval objects can be used with three or more dimensions as well.  Binary and ternary operations support broadcasting of singleton dimensions, which can be expanded to produce higher dimensional results.
+
+Most work for this version has been accomplished by Joel Dahne during his Google Summer of Code project.  The project involved thorough maintenance of all interval functions, which led to improvements and bugfixes beyond the original goal.
+
 @itemize
 @item
 	Support for N-dimensional arrays of intervals.
 
 @item
-	Removed interval implementation of @command{meshgrid}, it now falls back on the standard implementation.  The difference being that it does not automatically convert all input to intervals and it can now output a 3-d grid properly.
+	Removed interval implementation of @command{meshgrid}, it now falls back on the standard implementation which can output a 3-d grid properly.  This no longer automatically converts all input to intervals.  For example, it is possible to create a grid for interval X values and non-interval Y values.
 
 @item
-	dot, sum, prod: Altered how empty input is handled.  It is now more consistent and compatible with Matlab.  This is slightly different from how the standard version handle it at the moment. See bug #51333 and #48690 for some information.
+	dot, prod, sum: Altered how empty input is handled.  They are more consistent with the standard sum and prod functions (return zero/one for 0×0 input along the first dimension).  For the dot function it is slightly different from how the Octave core function handles it at the moment (bug #51333).
 
 @item
 	Output of interval matrices may be customized with @command{format compact} to display more data per page.
 
 @item
-	nthroot, pownrev: Now supports vectorization of n (for nthroot) and p (for pownrev), broadcasting is fully supported.
+	nthroot, pownrev: Now supports vectorization of @var{n} (for nthroot) and @var{p} (for pownrev), broadcasting is fully supported.
 
 @item
-	Indexing expressions on intervals can now use the @command{end} keyword (bug #50626, thanks to Joel Dahne).
-
-@item
-	Processor support for SSE2 is automatically detected during package installation.  This fixes installation problems on devices without SSE2, for example the usual Android phones and tablets.
+	Indexing expressions on intervals can now use the @command{end} keyword and the special operator @samp{:} to select all entries.  This affects selection of entries and assignment of entries (bug #49592, bug #50626).
 
 @item
 	Adjustments to ITF1788 test suite:
 @itemize
 @item
-	Several additional unit tests have been derived from libieeep1788 together with the latest version of the interval testing framework.  That is, tests with NaN values, NaI values, IEEE 1788 exceptions, and tests for the following functions: numsToInterval, textToInterval, intervalPart, newDev, setDec, decorationPart, and reduction operations.
+	Several further unit tests have been derived from libieeep1788 together with the latest version of the interval testing framework.  That is, tests with NaN values, NaI values, IEEE 1788 exceptions, and tests for the following functions: numsToInterval, textToInterval, intervalPart, newDev, setDec, decorationPart, and reduction operations.
 @item
 	Unit tests have been reorganized: The source code of test cases has been moved to /src/test/.
 @item
@@ -54,27 +55,29 @@
 @item
 	Information about how to create N-dimensional arrays of intervals.
 @item
-	To improve privacy and page load, the package manual no longer uses external references for CSS and web fonts.
+	To improve privacy and page loading times, the package manual no longer uses external references for CSS and web fonts.
 @item
 	The package URL has been updated (after Octave Forge has switched to HTTPS).
 @item
 	HTML fonts have been changed and fallback fonts for Windows have been introduced.
 @item
-	Adjustments to examples for the latest versions of the doctest package and symbolic package.
+	Adjustments to code examples to support the latest versions of the doctest package and symbolic package.
 @end itemize
 @end itemize
 
 Bugfixes
 @itemize
-@item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.
-@item diag: Fixed error when called with more than one argument.
-@item dot: Fixed error in identification of dimensions when broadcasting (thanks to Joel Dahne).
-@item infsupdec: Now creates a warning if the @code{[NaI]} literal is combined with decoration.
+@item Processor support for SSE2 is automatically detected during package installation.  This fixes installation problems on devices without SSE2, for example the usual Android phones and tablets (bug #51758).
+@item wid, mig, mag: Fixed wrong return value for NaI (not an interval) values.  The functions failed to return NaN (not a number).
+@item diag: With more than one argument the function no longer fails with an error.
+@item dot: Fixed error in identification of dimensions when broadcasting:  When the optional dimension argument is missing, the first non-signleton for both arguments is used (before broadcasting applies).
+@item infsupdec: Now creates a warning if the @code{[NaI]} literal is combined with decoration, e. g. @samp{[NaI]_ill}.
 @item infsupdec: No longer produces warnings for mixed parameters with strings and numerics.
 @item verlinineqnn: No longer produces warnings for unverified solutions.
-@item pow, pow2rev: Fixed error when called with vector arguments.
-@item ctc_intersect, ctc_union: Fixed error when called with less than two output arguments.
-@item sin: Fixed error when upper boundary is zero (bug #51283)
+@item pow: Fixed error when called with vector arguments.  The result was only guaranteed to be sharp in the first entry, e. g. @samp{pow ([0 0], infsup (0, 1))} produced the interval [0, 1] for the second entry.
+@item pow2rev: Fixed errors when called with non-scalar arguments in two cases, which could produce wrong results.
+@item ctc_intersect, ctc_union: Fixed runtime errors when the combined contractor function is called with less than two output arguments.
+@item sin: Fixed possible interval representation error, where the upper boundary of the result could become a signed zero (bug #51283).
 @end itemize
 
 
