@@ -131,13 +131,13 @@ function display (x)
     else
       printf (" interval array")
     endif
-    if (loose_spacing)
-      printf ("\n\n");
-    else
-      printf ("\n");
-    endif
+    printf ("\n");
 
     if (not (isempty (s)))
+      if (loose_spacing)
+        printf ("\n");
+      endif
+
       printf (line_prefix);
 
       if (current_print_indent_level > 0)

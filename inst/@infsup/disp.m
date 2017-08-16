@@ -160,6 +160,8 @@ function varargout = disp (x)
 endfunction
 
 %!assert (disp (infsup([])), "");
+%!assert (disp (infsup(zeros (0, 1))), "");
+%!assert (disp (infsup(zeros (1, 0))), "");
 %!assert (disp (infsup(0)), "[0]\n");
 %!assert (disp (infsup(0, 1)), "[0, 1]\n");
 %!assert (disp (infsup([0 0])), "   [0]   [0]\n");
