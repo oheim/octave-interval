@@ -86,8 +86,10 @@ function result = dot (x, y, dim)
 
   result = newdec (dot (x.infsup, y.infsup, dim));
   warning ("off", "Octave:broadcast", "local");
-  result.dec = min (result.dec, ...
-                    min (min (x.dec, [], dim), min (y.dec, [], dim)));
+  if (size (x, dim) > 0 && size (y, dim) > 0)
+    result.dec = min (result.dec, ...
+                      min (min (x.dec, [], dim), min (y.dec, [], dim)));
+  endif
   if (isequal (x, infsupdec ([])) && isequal (y, infsupdec ([])))
     ## Inconsistency, dot (infsupdec ([]), []) = [0]_com
     ## Needs to be handled here for the decoration to work correctly
@@ -128,6 +130,9 @@ endfunction
 %!assert (isequal (dot (infsupdec ([1; 2; 3]), 42), infsupdec(252)));
 %!assert (isequal (dot (infsupdec ([1; 2; 3]), 42, 1), infsupdec(252)));
 %!assert (isequal (dot (infsupdec ([1; 2; 3]), 42, 2), infsupdec([42; 84; 126])));
+
+%!# empty matrix x empty matrix
+%!assert (isequal (dot (infsupdec (ones (0, 2)), infsupdec (ones (0, 2))), infsupdec ([0, 0])));
 
 %!# N-dimensional arrays
 %!test
