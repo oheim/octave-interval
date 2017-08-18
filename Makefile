@@ -34,10 +34,14 @@ SHELL   = /bin/sh
 ##     @example blocks from the documentation (both function documentation
 ##     and user manual).
 ##
+##     Always use the latest release of doctest for releaser preparation!
+##
 ##   * Octave package: generate_html
 ##
 ##     The Octave Forge package is used to generate the HTML documentation
 ##     for publication of this package on Octave Forge.
+##
+##     Always use the latest release of doctest for releaser preparation!
 ##
 ##   * Inkscape
 ##
@@ -67,6 +71,7 @@ SHELL   = /bin/sh
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 DATE = $(shell grep "^Date: " DESCRIPTION | cut -f2 -d" ")
+HG_ID = $(shell hg identify --id)
 HG_DATETIME_LOCAL = $(shell hg log --rev . --template {date\|isodate})
 HG_DATETIME_UTC = $(shell date --utc --rfc-3339=seconds --date="$(HG_DATETIME_LOCAL)")
 TAR_REPRODUCIBLE_OPTIONS = --mtime="$(HG_DATETIME_UTC)" --mode=a+r,g-w,o-w --owner=root --group=root --numeric-owner
@@ -115,7 +120,7 @@ LILYPOND ?= $(shell which lilypond 2> /dev/null)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
-.PHONY: help dist release html run check test doctest install info clean md5
+.PHONY: help dist release html run check test doctest install info clean md5 id
 
 help:
 	@echo
@@ -136,10 +141,16 @@ dist: $(RELEASE_TARBALL_COMPRESSED)
 html: $(HTML_TARBALL_COMPRESSED)
 md5:  $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED)
 	@md5sum $^
+id:
+	@echo "Source Revision: $(HG_ID)"
+	@( case "$(HG_ID)" in *+ ) \
+	     echo "You have uncommitted changes!";; \
+	   esac \
+	)
 
-release: $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED) md5
+release: $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED) id md5
 	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
-	@echo "Execute: hg tag \"release-$(VERSION)\""
+	@echo "The Octave Forge admins will tag this revision after publication."
 
 install: $(INSTALLED_PACKAGE)
 
