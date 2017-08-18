@@ -68,6 +68,7 @@ Interval function (most with tightest accuracy)
  @infsup/sign
  @infsup/sin
  @infsup/sinh
+ @infsup/sqrt
  @infsup/tan
  @infsup/tanh
  @infsup/times
@@ -199,7 +200,7 @@ Utility function
  @infsup/vertcat
  @infsupdec/decorationpart
  @infsupdec/intervalpart
-API function to the MPFR and crlibm libraries
+API function to low-level libraries
  crlibm_function
  mpfr_function_d
  mpfr_linspace_d
@@ -208,3 +209,8 @@ API function to the MPFR and crlibm libraries
  mpfr_to_string_d
  mpfr_vector_sum_d
  mpfr_vector_dot_d
+Internal utility function (use at one's own risk)
+ __setround__
+ __check_crlibm__
+ __print_mesa__
+ __split_interval_literals__
