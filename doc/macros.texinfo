@@ -1,3 +1,8 @@
+@c This is part of the GNU Octave Interval Package Manual.
+@c Copyright 2015-2017 Oliver Heimlich.
+@c See the file manual.texinfo for copying conditions.
+@documentencoding UTF-8
+
 @ifcommandnotdefined myimage
 @macro myimage{file, description}
 @ifnothtml

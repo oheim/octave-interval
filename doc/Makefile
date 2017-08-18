@@ -1,5 +1,5 @@
 ## This is part of the GNU Octave Interval Package.
-## Copyright 2015-2016 Oliver Heimlich.
+## Copyright 2015-2017 Oliver Heimlich.
 ## See the file COPYING for copying conditions.
 
 SHELL      = /bin/sh
