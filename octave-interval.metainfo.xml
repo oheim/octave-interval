@@ -2,6 +2,7 @@
 <!--
 Copyright 2016-2017 Oliver Heimlich
 Copyright 2016 Rodéric Moitié
+Copyright 2017 Joel Dahne
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright
@@ -15,6 +16,7 @@ without any warranty.
 	<summary>Real-valued interval arithmetic</summary>
 	<summary xml:lang="de">Reellwertige Intervallarithmetik</summary>
 	<summary xml:lang="fr">Arithmétique d'intervalles à valeurs réelles</summary>
+	<summary xml:lang="sv">Reellvärd intervallaritmetik</summary>
 	<description>
 		<p>The interval package for real-valued interval arithmetic allows one to evaluate functions over subsets of their domain.  All results are verified, because interval computations automatically keep track of any errors.</p>
 		<p>These concepts can be used to handle uncertainties, estimate arithmetic errors and produce reliable results.  Also it can be applied to computer-assisted proofs, constraint programming, and verified computing.</p>
@@ -29,6 +31,11 @@ without any warranty.
 		<p>Le paquet arithmétique d'intervalles à valeurs réelles permet d'évaluer des fonctions sur des sous-ensembles de leurs domaines.  Tous les résultats sont garantis car les calculs par intervalles permettent un suivi automatique des erreurs.</p>
 		<p>Ces concepts peuvent être utilisés pour prendre en compte les incertitudes, estimer les erreurs arithmétiques, et générer des résultats fiables.  Ils peuvent également être appliqués à des preuves assistées par ordinateur, à la programmation par contraintes et à des calculs garantis.</p>
 		<p>Cette implantation est basée sur des bornes d'intervalles sous forme de nombres réels 64 bits et se conforme au standard IEEE 1788-2015, standard IEEE pour l'arithmétique d'intervalles.</p>
+	</description>
+	<description xml:lang="sv">
+		<p>Intervallbiblioteket för reellvärd intervallaritmetik låter en evaluera funktioner över delmängder av deras domän.  Alla resultat är verifierade, då intervallberäkningarna automatiskt håller reda på eventuella fel.</p>
+		<p>Dessa koncept kan användas för att hantera osäkerheter, uppskatta beräkningsfel och producera säkra resultat.  Det kan också användas till datorstödda bevis, villkorsprogrammering och verifierade beräkningar.</p>
+		<p>Implementationen är baserad på intervallgränser representerade med binary64 tal och är kompatibel med IEEE Std 1788-2015, IEEE standarden för intervallaritmetik.</p>
 	</description>
 	<keywords>
 		<keyword>interval arithmetic</keyword>
