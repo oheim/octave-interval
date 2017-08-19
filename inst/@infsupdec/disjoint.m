@@ -23,7 +23,7 @@
 ## True, if all numbers from @var{A} are not contained in @var{B} and vice
 ## versa.  False, if @var{A} and @var{B} have at least one element in common.
 ##
-## Evaluated on interval array, this functions is applied element-wise.
+## Evaluated on interval arrays, this functions is applied element-wise.
 ##
 ## @seealso{@@infsupdec/eq, @@infsupdec/subset, @@infsupdec/interior}
 ## @end defmethod
