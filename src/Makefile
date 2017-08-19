@@ -54,7 +54,7 @@ crlibm/crlibm_config.h:
 mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
 mpfr_%.oct: mpfr_%.cc mpfr_commons.h
-	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
+	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) -Wno-comment  $<
 
 ## <cfenv> api oct-file
 ##
@@ -64,7 +64,7 @@ mpfr_%.oct: mpfr_%.cc mpfr_commons.h
 ## omit the __setround__ function from a redistributed binary package.
 ## However, please inform the package maintainer of the error.
 __setround__.oct: __setround__.cc
-	$(MKOCTFILE)  -o $@  $<
+	$(MKOCTFILE)  -o $@  -Wno-unknown-pragmas  $<
 
 clean:
 	test ! -e crlibm/Makefile || $(MAKE) -C crlibm $@
