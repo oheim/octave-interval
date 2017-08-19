@@ -17,8 +17,15 @@ OBJ            = crlibm_function.oct \
 LDFLAGS_MPFR   =-lmpfr
 ## Use important flags in XTRA_CFLAGS for OpenMP (workaround for bug #45280)
 CFLAG_OPENMP   =$(findstring -fopenmp,$(shell $(MKOCTFILE) -p XTRA_CFLAGS))
-HAS_SSE2       =$(findstring sse2,$(shell cat /proc/cpuinfo))
-ifneq ($(HAS_SSE2),)
+
+## Auto-detect SSE2 for configuration of crlibm
+## Ask the compiler to allow cross-compilation
+SSE2_MACRO_DEF =$(shell echo \
+                        | $(shell $(MKOCTFILE) -p CC) \
+                          $(shell $(MKOCTFILE) -p CFLAGS) \
+                          -dM -E - \
+                        | grep "__SSE2__" | grep "1" )
+ifneq ($(SSE2_MACRO_DEF),)
 CONF_FLAG_SSE2 ?=--enable-sse2
 endif
 
