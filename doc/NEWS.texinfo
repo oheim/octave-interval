@@ -79,6 +79,7 @@ Bugfixes
 @item pow2rev: Fixed errors when called with non-scalar arguments in two cases, which could produce wrong results.
 @item ctc_intersect, ctc_union: Fixed runtime errors when the combined contractor function is called with less than two output arguments.
 @item sin: Fixed possible interval representation error, where the upper boundary of the result could become a signed zero (bug #51283).
+@item factorial: Improved result decoration for integer input, since the function is continuous (bug #51783).
 @end itemize
 
 
