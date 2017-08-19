@@ -15,7 +15,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{3.0.0, 2017-xx-xx}
+@release{3.0.0, 2017-08-19}
 This major release introduces support for N-dimensional arrays of intervals.  With previous versions, interval objects have been limited to two dimensions.  Only scalar values, vectors, and matrices could be created.  Now, interval objects can be used with three or more dimensions as well.  Binary and ternary operations support broadcasting of singleton dimensions, which can be expanded to produce higher dimensional results.
 
 Most work for this version has been accomplished by Joel Dahne during his Google Summer of Code project.  The project involved thorough maintenance of all interval functions, which led to improvements and bugfixes beyond the original goal.
