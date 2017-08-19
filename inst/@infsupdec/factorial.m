@@ -1,5 +1,5 @@
-## Copyright 2016 Oliver Heimlich
-## Copyright 2016 Joel Dahne
+## Copyright 2017 Oliver Heimlich
+## Copyright 2017 Joel Dahne
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -71,3 +71,5 @@ endfunction
 %!assert (isequal (factorial (infsupdec ("[0, 1.99]")), infsupdec (1, "trv")));
 %!assert (isequal (factorial (infsupdec ("[0, 2]")), infsupdec (1, 2, "trv")));
 %!assert (isequal (factorial (infsupdec ("[1.4, 1.6]")), empty ()));
+%!assert (isequal (factorial (infsupdec (23)), infsupdec ("[0x1.5e5c335f8a4cdp+74, 0x1.5e5c335f8a4cep+74]_com")));
+%!assert (isequal (factorial (infsupdec (171)), infsupdec ("[0x1.fffffffffffffp+1023, Inf]_dac")));
