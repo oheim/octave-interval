@@ -1,4 +1,5 @@
 ## Copyright 2016 Oliver Heimlich
+## Copyright 2016 Joel Dahne
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -36,7 +37,7 @@
 ## @example
 ## @group
 ## factorial (infsupdec (6))
-##   @result{} ans = [720]_dac
+##   @result{} ans = [720]_com
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/prod, @@infsupdec/gamma, @@infsupdec/gammaln}
@@ -53,9 +54,7 @@ function result = factorial (x)
     return
   endif
 
-  ## The function is not continuous, since it is defined for non-negative
-  ## integrals only.  Thus the best possible decoration can be “dac”.
-  result = infsupdec (factorial (x.infsup), "dac");
+  result = newdec (factorial (x.infsup));
 
   ## The function is defined for non-negative integrals only
   defined = issingleton (x) & fix (sup (x)) == sup (x);
@@ -66,9 +65,9 @@ function result = factorial (x)
 endfunction
 
 %!# from the documentation string
-%!assert (factorial (infsupdec (6)) == infsupdec (720, "dac"));
+%!assert (isequal (factorial (infsupdec (6)), infsupdec (720)));
 
-%!assert (factorial (infsupdec (0)) == infsupdec (1, "dac"));
-%!assert (factorial (infsupdec ("[0, 1.99]")) == infsupdec (1, "trv"));
-%!assert (factorial (infsupdec ("[0, 2]")) == "[1, 2]_trv");
-%!assert (factorial (infsupdec ("[1.4, 1.6]")) == "[Empty]_trv");
+%!assert (isequal (factorial (infsupdec (0)), infsupdec (1)));
+%!assert (isequal (factorial (infsupdec ("[0, 1.99]")), infsupdec (1, "trv")));
+%!assert (isequal (factorial (infsupdec ("[0, 2]")), infsupdec (1, 2, "trv")));
+%!assert (isequal (factorial (infsupdec ("[1.4, 1.6]")), empty ()));
