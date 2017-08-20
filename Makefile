@@ -362,6 +362,7 @@ ITL_DATA_GENERATED = inst/test/itl.mat
 ITF1788_HOME ?= $(BUILD_DIR)/ITF1788
 $(ITF1788_HOME):
 	git clone https://github.com/oheim/ITF1788.git "$@"
+	(cd "$@"; git reset --hard 7b379e9f7f72182953ce8f897eeb790f9a45f3c4)
 
 ITF1788_CODEGEN_DIR = $(BUILD_DIR)/octave/dictionary/interval-dictionary
 ITF1788_CODEGEN_SCRIPTS = $(ITL_SOURCES:src/test/%.itl=$(ITF1788_CODEGEN_DIR)/%.tst)
