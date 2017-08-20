@@ -111,8 +111,7 @@ GENERATED_CRLIBM_AUTOMAKE = \
 	src/crlibm/INSTALL \
 	src/crlibm/compile
 EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/inst/test/%.cc-tst,$(CC_WITH_TESTS))
-TST_DICT_GENERATED = $(BUILD_DIR)/inst/test/itl.mat
-GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CRLIBM_AUTOMAKE) $(EXTRACTED_CC_TESTS) $(TST_DICT_GENERATED)
+GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CRLIBM_AUTOMAKE) $(EXTRACTED_CC_TESTS)
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
@@ -290,9 +289,9 @@ $(EXTRACTED_CC_TESTS): $(BUILD_DIR)/inst/test/%.cc-tst: src/%.cc | $(BUILD_DIR)/
 	@mv "$@_" "$@"
 
 ## Interactive shell with the package's functions in the path
-run: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS) | $(BUILD_DIR)/inst
+run: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
 	@echo "Run GNU Octave with the development version of the package"
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --path "$(BUILD_DIR)/inst/"
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/"
 	@echo
 
 ## Validate code examples
@@ -357,32 +356,34 @@ debian:
 ## The following rules are required for generation of loadable test data ##
 ###########################################################################
 
-TST_SOURCES = $(sort $(wildcard src/test/*.itl))
-ITF1788_HOME ?= $(BUILD_DIR)/ITF1788
+ITL_SOURCES = $(sort $(wildcard src/test/*.itl))
+ITL_DATA_GENERATED = inst/test/itl.mat
 
+ITF1788_HOME ?= $(BUILD_DIR)/ITF1788
 $(ITF1788_HOME):
 	git clone https://github.com/oheim/ITF1788.git "$@"
 
-TST_DICT_GENERATED_DIR = $(BUILD_DIR)/octave/dictionary/interval-dictionary
-TST_DICT_GENERATED_SRC = $(TST_SOURCES:src/test/%.itl=$(TST_DICT_GENERATED_DIR)/%.tst)
-
-$(TST_DICT_GENERATED_DIR)/%.tst: src/test/%.itl | $(ITF1788_HOME)
+ITF1788_CODEGEN_DIR = $(BUILD_DIR)/octave/dictionary/interval-dictionary
+ITF1788_CODEGEN_SCRIPTS = $(ITL_SOURCES:src/test/%.itl=$(ITF1788_CODEGEN_DIR)/%.tst)
+.INTERMEDIATE: $(ITF1788_CODEGEN_SCRIPTS)
+$(ITF1788_CODEGEN_SCRIPTS): $(ITF1788_CODEGEN_DIR)/%.tst: src/test/%.itl | $(ITF1788_HOME)
 	@echo "Compiling $< ..."
 	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, dictionary, interval-dictionary)" -o "$(BUILD_DIR)" -s "src/test"
 
-run: $(TST_DICT_GENERATED)
-$(TST_DICT_GENERATED) : $(TST_DICT_GENERATED_SRC) | $(OCT_COMPILED)
+run: $(ITL_DATA_GENERATED)
+$(ITL_DATA_GENERATED) : $(ITF1788_CODEGEN_SCRIPTS) | $(OCT_COMPILED)
 	@echo "Regenerating interval test library ($@) ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
-		--eval 'for file = strsplit ("$^"), printf ("  %s\n", file{:}); source (file{:}); endfor;' \
+		--eval 'for file = strsplit ("$(ITF1788_CODEGEN_SCRIPTS)"), printf ("  %s\n", file{:}); source (file{:}); endfor;' \
 		--eval 'save ("-binary", "$@_", "-struct", "tests", "NoSignal", "UndefinedOperation", "PossiblyUndefinedOperation", "InvalidOperand", "IntvlPartOfNaI", "IntvlOverflow");'
 	@echo "Compressing interval test library ($@) ..."
 	@(zopfli -c "$@_" || gzip --best -f -c "$@_") > "$@"
+	@$(RM) "$@_"
 
 ## Run built-in self tests (BISTs)
-test: $(OCT_COMPILED) $(TST_DICT_GENERATED) | $(BUILD_DIR)/inst/
+test: $(OCT_COMPILED) $(ITL_DATA_GENERATED)
 	@echo "Testing built-in self tests (BISTs) ..."
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --path "$(BUILD_DIR)/inst/" \
+	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
 		--eval 'success = true;' \
 		--eval 'for file = {dir("./src/*.cc").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
 		--eval 'for file = {dir("./inst/*.m").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
