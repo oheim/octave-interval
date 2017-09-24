@@ -60,6 +60,7 @@ Interval function (most with tightest accuracy)
  @infsup/psi
  @infsup/rdivide
  @infsup/realsqrt
+ @infsup/rem
  @infsup/round
  @infsup/roundb
  @infsup/rsqrt

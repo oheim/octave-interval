@@ -316,6 +316,7 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
   "@defunx mpfr_function_d ('psi', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('rdivide', @var{R}, @var{X}, @var{Y})\n"
   "@defunx mpfr_function_d ('realsqrt', @var{R}, @var{X})\n"
+  "@defunx mpfr_function_d ('rem', @var{R}, @var{X}, @var{Y})\n"
   "@defunx mpfr_function_d ('rsqrt', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('sec', @var{R}, @var{X})\n"
   "@defunx mpfr_function_d ('sech', @var{R}, @var{X})\n"
@@ -500,6 +501,8 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
           evaluate (arg1, arg2, rnd, &mpfr_pow);
         else if (function == "rdivide")
           evaluate (arg1, arg2, rnd, &mpfr_div);
+        else if (function == "rem")
+          evaluate (arg1, arg2, rnd, &mpfr_fmod);
         else if (function == "times")
           evaluate (arg1, arg2, rnd, &mpfr_mul);
         else
