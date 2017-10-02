@@ -19,6 +19,20 @@
 ##
 ## Compute the remainder of the division @var{X} by @var{Y}.
 ##
+## Conceptionally, it is given by the expression
+## @code{@var{X} - @var{Y} .* fix (@var{X} ./ @var{Y})}.  For negative @var{X},
+## the remainder will be either zero or negative.  This function is undefined
+## for @var{Y} = 0.
+##
+## @example
+## @group
+## rem (infsupdec (3), infsupdec (2))
+##   @result{} ans = [1]_com
+## rem (infsupdec (-3), infsupdec (2))
+##   @result{} ans = [-1]_com
+## @end group
+## @end example
+##
 ## Accuracy: The result is a valid enclosure.
 ##
 ## @seealso{@@infsupdec/rdivide}
