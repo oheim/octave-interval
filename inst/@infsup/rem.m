@@ -35,7 +35,7 @@
 ## @end group
 ## @end example
 ##
-## @seealso{@@infsup/rdivide}
+## @seealso{@@infsup/rdivide, @@infsup/mod}
 ## @end defmethod
 
 ## Author: Oliver Heimlich
@@ -87,9 +87,22 @@ function [result, d] = rem (x, y)
 endfunction
 
 function [l, u, d] = rem_quadrant_I (x, y)
+
   ## Compute fractions x ./ y at three corners of the interval box to detect
   ## cases with y = x ./ n inside the area, where the function is noncontinuous
   ## and takes extreme values.
+  ##
+  ##   ^ y                .* y = x / 1
+  ##   |                .*
+  ##   |     q--------.*-r
+  ##   |     |      .*   |
+  ##   |     +----.*-----s   y = x / 2
+  ##   |        .*       ..**
+  ##   |      .*     ..**
+  ##   |    .*   ..**
+  ##   |  .* ..**
+  ##   |.*.**     (and so on)
+  ##   +---------------------> x
   q = mpfr_function_d ("rdivide", -inf, x.inf, y.sup);
   r = mpfr_function_d ("rdivide", +inf, x.sup, y.sup);
   s = mpfr_function_d ("rdivide", +inf, x.sup, y.inf);

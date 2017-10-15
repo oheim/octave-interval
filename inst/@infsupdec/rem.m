@@ -35,7 +35,7 @@
 ##
 ## Accuracy: The result is a valid enclosure.
 ##
-## @seealso{@@infsupdec/rdivide}
+## @seealso{@@infsupdec/rdivide, @@infsupdec/mod}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

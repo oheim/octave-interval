@@ -50,6 +50,7 @@ Interval function (most with tightest accuracy)
  @infsup/max
  @infsup/min
  @infsup/minus
+ @infsup/mod
  @infsup/nthroot
  @infsup/plus
  @infsup/pow
