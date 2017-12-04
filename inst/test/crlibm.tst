@@ -1,4 +1,4 @@
-## Copyright 2016 Oliver Heimlich
+## Copyright 2016-2017 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -13,9 +13,6 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-## crlibm.mat has been created from crlibm's /test/*.testdata and is
-## Copyright 2005-2007 F. de Dinechin, Ch. Q. Lauter, and V. Lefevre.
-## Conversion into Octave's binary .mat format has been done by Oliver Heimlich.
 %!shared testdata
 %! # We have to lookup the .mat file to load it.
 %! testdata = load (fullfile (...
