@@ -8,19 +8,9 @@
 
 The interval package is free software and can be used under the terms of the GNU General Public License Version 3 (or at your option any later version).  The wording of the license can be found below.
 
-The interval package contains derivative work, which is based on other free software released under various licenses.  Original authors are properly attributed in the manual and copyright statements have been retained in the particular source files.  For simplicity, most derivative work has been relicensed in this package.  Thus, the GPLv3+ is the main license for the software and documentation in this package.
+The interval package contains derivative work, which is based on other free software released under various licenses.  Original authors are properly attributed in the manual and copyright statements have been retained in the particular source files or in separate .license files.  For simplicity, most derivative work has been relicensed in this package.  Thus, the GPLv3+ is the main license for the software and documentation in this package.
 
-Details on derivative work:
-@itemize
-@item
-This package bundles the library crlibm in @code{src/crlibm/}, which is licensed under the GNU Lesser General Public License Version 2.1 (or at your option any later version).  The license can be found in @code{src/crlibm/COPYING.LIB}.  To save resources, the original test files of crlibm are not redistributed, but the test data can be found in @code{inst/test/crlibm.mat} in binary format and can be extracted with Octave's @command{load} command.  The test data of crlibm is copyrighted 2005–2007 by Florent de Dinechin, Christoph Q. Lauter, and Vincent Lefevre.
-
-@item
-This package contains various interval arithmetic test cases.  The source code in @code{src/test/} is portable and can be used to test other interval arithmetic libraries as well.  For that purpose, use the software @uref{https://github.com/oheim/ITF1788,Interval Testing Framework for IEEE 1788}.  The combination of these source files is compiled and redistributed in binary format under @code{inst/test/itl.mat}.  So, for copyright information regarding this file, please consult the individual @code{.itl} files.
-
-@item
-You can find a copy of the Apache License 2.0 in the file @code{doc/license/apache-2.0}.  According to section 4(a) of the license it is mandatory to include a copy for the derivative, relicensed work, which has previously been under the Apache License 2.0.
-@end itemize
+This package bundles the library crlibm in @code{src/crlibm/}, which is licensed under the GNU Lesser General Public License Version 2.1 (or at your option any later version).  The license can be found in @code{src/crlibm/COPYING.LIB}.
 
 @sp 5
 

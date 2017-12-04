@@ -1,0 +1,39 @@
+## Copyright 1990-2000 Institut fuer Angewandte Mathematik,
+##                     Universitaet Karlsruhe, Germany
+## Copyright 2000-2014 Wiss. Rechnen/Softwaretechnologie
+##                     Universitaet Wuppertal, Germany
+## Copyright 1997-2000 Institut fuer Wissenschaftliches Rechnen
+##                     und Mathematische Modellbildung (IWRMM)
+##                                      and
+##                     Institut fuer Angewandte Mathematik
+##                     Universitaet Karlsruhe, Germany
+## Copyright 2000-2005 Wiss. Rechnen/Softwaretechnologie
+##                     Universitaet Wuppertal, Germany
+## Copyright 2013-2015 Marco Nehmeier (nehmeier@informatik.uni-wuerzburg.de)
+## Copyright 2009–2012 Spaces project, Inria Lorraine
+##                     and Salsa project, INRIA Rocquencourt,
+##                     and Arenaire project, Inria Rhone-Alpes, France
+##                     and Lab. ANO, USTL (Univ. of Lille),  France
+## Copyright 2015-2016 Oliver Heimlich
+
+## The static interval test data in itl.mat has been collected from various
+## sources with the help of the ITF1788 project, see
+## https://github.com/oheim/ITF1788.
+##
+## Unit tests from C-XSC version 2.5.4 (original license: LGPLv2+) have been
+## converted by Oliver Heimlich.
+##
+## Unit tests from FI_LIB version 1.2 (original authors: Werner Hofschuster and
+## Walter Kraemer, original license: LGPLv2+) have been converted by Oliver
+## Heimlich.
+##
+## Unit tests from libieeep1788 (original author: Marco Nehmeier, original
+## license: Apache License 2.0) have been converted by Oliver Heimlich with
+## minor corrections.
+##
+## Unit tests from GNU MPFI (original authors:
+## Philippe Theveny <Philippe.Theveny@ens-lyon.fr> and
+## Nathalie Revol <Nathalie.Revol@ens-lyon.fr>, original license: LGPLv2.1+)
+## have been converted by Oliver Heimlich.
+##
+## Other test cases are original work by Oliver Heimlich.
