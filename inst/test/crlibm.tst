@@ -14,11 +14,7 @@
 ## along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 %!shared testdata
-%! # We have to lookup the .mat file to load it.
-%! testdata = load (fullfile (...
-%!   fileparts (file_in_loadpath ("__check_crlibm__.m")), ...
-%!   "test", ...
-%!   "crlibm.mat"));
+%! testdata = load (file_in_loadpath ("test/crlibm.mat"));;
 
 %!function verify (fname, rnd, data)
 %!  assert (crlibm_function (fname, rnd, data.input), data.output);
