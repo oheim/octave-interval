@@ -214,5 +214,4 @@ API function to low-level libraries
 Internal utility function (use at one's own risk)
  __setround__
  __check_crlibm__
- __print_mesa__
  __split_interval_literals__

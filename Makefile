@@ -239,17 +239,14 @@ $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
 	@OCTAVE="$(OCTAVE)" make --directory="$(INSTALLED_PACKAGE_DIR)/doc" images
 	@echo "Generating HTML documentation for the package. This may take a while ..."
 	@# 1. Load the generate_html package
-	@# 2. Replace builtin print function because of various
-	@#    bugs #44181, #45104, #45137
-	@# 3. Set fonts for demo plots and use off-screen rendering
-	@# 4. Make the use of random values in demos reproducible between builds
-	@# 5. Specify path to package manual
-	@# 6. Use custom CSS and global version number
+	@# 2. Set fonts for demo plots and use off-screen rendering
+	@# 3. Make the use of random values in demos reproducible between builds
+	@# 4. Specify path to package manual
+	@# 5. Use custom CSS and global version number
 	@#    (only affects package manual, not function reference)
-	@# 7. Run the generation
+	@# 6. Run the generation
 	@$(OCTAVE) --no-gui --silent \
 		--eval "pkg load generate_html;" \
-		--eval "function print (h, filename); __print_mesa__ (h, filename); endfunction;" \
 		--eval "set (0, 'defaultaxesfontname', 'Fantasque Sans Mono');" \
 		--eval "set (0, 'defaulttextfontname', 'Roboto Condensed');" \
 		--eval "set (0, 'defaultfigurevisible', 'off');" \
@@ -325,21 +322,23 @@ doctest-docstrings: $(OCT_COMPILED)
 GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
 GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
 info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) | $(GENERATED_IMAGES_PNG)
+$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) | $(GENERATED_IMAGES_PNG) $(INSTALLED_PACKAGE)
 	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  VERSION=$(VERSION) \
-	  make manual.html)
+	  OCTAVE="$(OCTAVE)" \
+	  $(MAKE) manual.html)
 	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
 	@cp -f --update doc/image/*.svg "$(BUILD_DIR)/doc/image/"
 	@mv doc/manual.html "$@"
-$(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) $(GENERATED_IMAGES_PDF)
+$(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) $(GENERATED_IMAGES_PDF) $(INSTALLED_PACKAGE)
 	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
 	@(cd doc; \
 	  TEXI2DVI_BUILD_DIRECTORY="../$(BUILD_DIR)/doc" \
 	  MAKEINFO="makeinfo -I ../$(BUILD_DIR)/doc --Xopt=--tidy" \
 	  VERSION=$(VERSION) \
-	  make manual.pdf)
+	  OCTAVE="$(OCTAVE)" \
+	  $(MAKE) manual.pdf)
 	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
 	@mv doc/manual.pdf "$@"
 
