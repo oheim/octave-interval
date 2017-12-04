@@ -52,17 +52,6 @@ SHELL   = /bin/sh
 ##     of all images. The .PNG versions are also used in the HTML manual, which
 ##     is published at Octave Forge.
 ##
-##   * Python 3 / Interval Testing Framework for IEEE 1788
-##
-##     The tool is used to convert src/test/*.itl into GNU Octave *.tst files
-##     for validation of the package.
-##
-##     The tool is automatically cloned from Github.  It is important to have
-##     a local git workspace, because the generated files will be tagged with
-##     the generator version.
-##
-##     See its requirements.txt file for required python packages.
-##
 ##   * Zopfli
 ##
 ##     Is used to produce a smaller release tarball than is possible with gzip.
@@ -351,37 +340,8 @@ debian:
 	(cd $(DEBIAN_WORKSPACE_ROOT)/octave-$(PACKAGE) && \
 	 gbp import-orig ../octave-$(PACKAGE)_$(VERSION).orig.tar.gz --pristine-tar)
 
-###########################################################################
-## The following rules are required for generation of loadable test data ##
-###########################################################################
-
-ITL_SOURCES = $(sort $(wildcard src/test/*.itl))
-ITL_DATA_GENERATED = inst/test/itl.mat
-
-ITF1788_HOME ?= $(BUILD_DIR)/ITF1788
-$(ITF1788_HOME):
-	git clone https://github.com/oheim/ITF1788.git "$@"
-	(cd "$@"; git reset --hard 7b379e9f7f72182953ce8f897eeb790f9a45f3c4)
-
-ITF1788_CODEGEN_DIR = $(BUILD_DIR)/octave/dictionary/interval-dictionary
-ITF1788_CODEGEN_SCRIPTS = $(ITL_SOURCES:src/test/%.itl=$(ITF1788_CODEGEN_DIR)/%.tst)
-.INTERMEDIATE: $(ITF1788_CODEGEN_SCRIPTS)
-$(ITF1788_CODEGEN_SCRIPTS): $(ITF1788_CODEGEN_DIR)/%.tst: src/test/%.itl | $(ITF1788_HOME)
-	@echo "Compiling $< ..."
-	@PYTHONPATH="$(ITF1788_HOME)" python3 -m itf1788 -f "$(shell basename $<)" -c "(octave, dictionary, interval-dictionary)" -o "$(BUILD_DIR)" -s "src/test"
-
-run: $(ITL_DATA_GENERATED)
-$(ITL_DATA_GENERATED) : $(ITF1788_CODEGEN_SCRIPTS) | $(OCT_COMPILED)
-	@echo "Regenerating interval test library ($@) ..."
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
-		--eval 'for file = strsplit ("$(ITF1788_CODEGEN_SCRIPTS)"), printf ("  %s\n", file{:}); source (file{:}); endfor;' \
-		--eval 'save ("-binary", "$@_", "-struct", "tests", "NoSignal", "UndefinedOperation", "PossiblyUndefinedOperation", "InvalidOperand", "IntvlPartOfNaI", "IntvlOverflow");'
-	@echo "Compressing interval test library ($@) ..."
-	@(zopfli -c "$@_" || gzip --best -f -c "$@_") > "$@"
-	@$(RM) "$@_"
-
 ## Run built-in self tests (BISTs)
-test: $(OCT_COMPILED) $(ITL_DATA_GENERATED)
+test: $(OCT_COMPILED)
 	@echo "Testing built-in self tests (BISTs) ..."
 	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
 		--eval 'success = true;' \
