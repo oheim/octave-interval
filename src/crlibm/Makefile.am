@@ -60,7 +60,8 @@ else # default assumed to be gcc
 if USE_SSE2
 AM_CFLAGS = -std=c99 -Wall -msse2 -mfpmath=sse 
 else
-AM_CFLAGS = -std=c99 -Wall -O3
+# GCC's -frounding-math is needed for FPU control
+AM_CFLAGS = -std=c99 -Wall -O3 -frounding-math
 endif
 endif
 
