@@ -15,6 +15,31 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{3.1.0, 2017-12-xx}
+This minor release introduces two new functions and fixes severe bugs.
+
+@itemize
+@item
+    mod, rem: Two new interval arithmetic functions to compute the remainder of a floored division or truncated division respectively.
+
+@item
+    plot: Fixed a regression with plotting 2D rectangles in the upcoming Octave 4.4.
+
+@item
+    The internal function @command{__print_mesa__} for off-screen mesa rendering has been removed, because the upstream mesa project no longer supports off-screen and on-screen rendering in a single executable (Debian bug #877149).  It is recommended to use Octave's @command{print} function instead, which has greatly been improved in Octave 4.2 regarding the output of rectangles and boxes.
+
+@item
+    A package installation error on 32-bit systems could be fixed (bug #51857).
+
+@item
+    During package installation, FPU control could not be activated on x86-32 platforms.  Thus, the crlibm library could not disable 80-bit floating-point arithmetic and 64-bit interval arithmetic had to use the slower mpfr library instead (Debian bug #874135).
+
+@item
+    Source code for interval arithmetic tests from the ITF1788 project have been removed from this package, since the loadable test data @code{itl.mat} can be edited and processed with Octave easily.  If unit test code for other interval arithmetic libraries shall be generated, find the project at @url{https://github.com/oheim/ITF1788}.
+
+@end itemize
+
+
 @release{3.0.0, 2017-08-19}
 This major release introduces support for N-dimensional arrays of intervals.  With previous versions, interval objects have been limited to two dimensions.  Only scalar values, vectors, and matrices could be created.  Now, interval objects can be used with three or more dimensions as well.  Binary and ternary operations support broadcasting of singleton dimensions, which can be expanded to produce higher dimensional results.
 
