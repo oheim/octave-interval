@@ -15,7 +15,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{3.1.0, 2017-12-xx}
+@release{3.1.0, 2017-12-10}
 This minor release introduces two new functions and fixes severe bugs.
 
 @itemize
