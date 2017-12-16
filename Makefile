@@ -87,6 +87,7 @@ GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
 GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
 GENERATED_IMAGES = $(GENERATED_IMAGES_EPS) $(GENERATED_IMAGES_PDF) $(GENERATED_IMAGES_PNG)
+GENERATED_CONFIGURE = src/configure
 GENERATED_CRLIBM_AUTOMAKE = \
 	src/crlibm/aclocal.m4 \
 	src/crlibm/configure \
@@ -100,7 +101,7 @@ GENERATED_CRLIBM_AUTOMAKE = \
 	src/crlibm/INSTALL \
 	src/crlibm/compile
 EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/inst/test/%.cc-tst,$(CC_WITH_TESTS))
-GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CRLIBM_AUTOMAKE) $(EXTRACTED_CC_TESTS)
+GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CONFIGURE) $(GENERATED_CRLIBM_AUTOMAKE) $(EXTRACTED_CC_TESTS)
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
@@ -108,7 +109,7 @@ LILYPOND ?= $(shell which lilypond 2> /dev/null)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
-.PHONY: help dist release html run check test doctest install info clean md5 id
+.PHONY: help dist release html run check test doctest install info clean bootstrap md5 id
 
 help:
 	@echo
@@ -203,6 +204,11 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 	@grep --invert-match "^%% CreationDate: " "$(BUILD_DIR)/$<.eps" > "$(BUILD_DIR)/$<.eps_"
 	@mv "$(BUILD_DIR)/$<.eps_" "$(BUILD_DIR)/$<.eps"
 
+bootstrap: $(GENERATED_CONFIGURE)
+$(GENERATED_CONFIGURE):
+	(cd src && autoconf)
+
+bootstrap: $(GENERATED_CRLIBM_AUTOMAKE)
 $(GENERATED_CRLIBM_AUTOMAKE):
 	(cd src/crlibm && aclocal && autoheader && autoconf && automake --add-missing -c --ignore-deps && autoconf)
 
