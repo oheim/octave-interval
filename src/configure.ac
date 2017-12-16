@@ -2,6 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 ### Copyright (C) 2017 Olaf Till <i7tiol@t-online.de>
+### Copyright (C) 2017 Oliver Heimlich <oheim@posteo.de>
 ###
 ### This program is free software; you can redistribute it and/or
 ### modify it under the terms of the GNU General Public License as
@@ -18,7 +19,7 @@
 ### <http://www.gnu.org/licenses/>.
 
 AC_PREREQ([2.69])
-AC_INIT([interval], [3.1.0], [Oliver Heimlich <oheim@posteo.de>])
+AC_INIT([interval], [m4_esyscmd_s([grep ^Version:\  ../DESCRIPTION | cut -f2 -d\ ])], [Oliver Heimlich <oheim@posteo.de>])
 AC_CONFIG_SRCDIR([mpfr_function_d.cc])
 
 # Checks for programs.
