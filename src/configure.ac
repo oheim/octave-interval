@@ -31,7 +31,6 @@ AC_LANG([C++])
 AC_CHECK_LIB([mpfr], [mpfr_init2], [], [
   AC_MSG_ERROR([could not find the mpfr library])
 ])
-AC_CHECK_LIB([m], [exp])
 
 # Checks for header files.
 AC_CHECK_HEADERS([fenv.h])
