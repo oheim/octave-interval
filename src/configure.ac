@@ -33,6 +33,7 @@ AC_CHECK_LIB([mpfr], [mpfr_init2], [], [
 ])
 
 # Checks for header files.
+AC_CHECK_HEADERS([sstream])
 AC_CHECK_HEADERS([fenv.h])
 AC_CHECK_HEADERS([mpfr.h], [], [
   AC_MSG_ERROR([could not find mpfr.h, possibly an mpfr development package has to be installed])
