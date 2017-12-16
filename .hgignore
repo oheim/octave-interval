@@ -21,13 +21,13 @@ fntests.log
 ^src/crlibm/(.*)\.in$
 
 # autoconf
-^src/crlibm/configure
+^src/(.*/)?configure$
 
 # automake
 ^src/crlibm/(INSTALL|compile|config.guess|config.sub|depcomp|install-sh|missing|test-driver)$
 
 # configure
-^src/crlibm/(Makefile|config.log|config.status|crlibm_config.h|scs_lib/Makefile|stamp-h1|tests/Makefile)$
+^src/(.*/)?(Makefile|config.log|config.status|crlibm_config.h|scs_lib/Makefile|stamp-h1|tests/Makefile)$
 
 # test suite
 ^src/crlibm/tests/crlibm_
