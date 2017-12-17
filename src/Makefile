@@ -14,6 +14,8 @@ OBJ            = crlibm_function.oct \
                  mpfr_vector_dot_d.oct \
                  __setround__.oct
 
+BUNDLED_CRLIBM_DIR = crlibm
+
 LDFLAGS_MPFR   =-lmpfr
 ## Use important flags in XTRA_CFLAGS for OpenMP (workaround for bug #45280)
 CFLAG_OPENMP   =$(findstring -fopenmp,$(shell $(MKOCTFILE) -p XTRA_CFLAGS))
@@ -32,8 +34,8 @@ endif
 all: $(OBJ)
 
 ## crlibm api oct-file
-crlibm_function.oct: crlibm_function.o crlibm/crlibm_private.o
-	$(MKOCTFILE)  -o $@  $< crlibm/*.o crlibm/scs_lib/*.o
+crlibm_function.oct: crlibm_function.o $(BUNDLED_CRLIBM_DIR)/crlibm_private.o
+	$(MKOCTFILE)  -o $@  $< $(BUNDLED_CRLIBM_DIR)/*.o $(BUNDLED_CRLIBM_DIR)/scs_lib/*.o
 crlibm_function.o: crlibm_function.cc
 	$(MKOCTFILE)  --compile -o $@  $<
 
@@ -45,10 +47,10 @@ crlibm_function.o: crlibm_function.cc
 ## omit the crlibm library from a redistributed binary package,
 ## (you must keep __check_crlibm__.m).
 ## However, please inform the package maintainer of the error.
-crlibm/crlibm_private.o: crlibm/crlibm_config.h
-	$(MAKE) -C crlibm CFLAGS+="$(shell $(MKOCTFILE) -p CPICFLAG) -Wno-div-by-zero -Wno-unused-variable -Wno-unused-but-set-variable"
-crlibm/crlibm_config.h:
-	(cd crlibm && ./configure --disable-dependency-tracking $(CONF_FLAG_SSE2))
+$(BUNDLED_CRLIBM_DIR)/crlibm_private.o: $(BUNDLED_CRLIBM_DIR)/crlibm_config.h
+	$(MAKE) -C $(BUNDLED_CRLIBM_DIR) CFLAGS+="$(shell $(MKOCTFILE) -p CPICFLAG) -Wno-div-by-zero -Wno-unused-variable -Wno-unused-but-set-variable"
+$(BUNDLED_CRLIBM_DIR)/crlibm_config.h:
+	(cd $(BUNDLED_CRLIBM_DIR) && ./configure --disable-dependency-tracking $(CONF_FLAG_SSE2))
 
 ## GNU MPFR api oct-files
 mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h
@@ -67,7 +69,7 @@ __setround__.oct: __setround__.cc
 	$(MKOCTFILE)  -o $@  -Wno-unknown-pragmas  $<
 
 clean:
-	test ! -e crlibm/Makefile || $(MAKE) -C crlibm $@
+	test ! -e $(BUNDLED_CRLIBM_DIR)/Makefile || $(MAKE) -C $(BUNDLED_CRLIBM_DIR) $@
 	$(RM) *.oct *.o
 
 .PHONY: all clean
