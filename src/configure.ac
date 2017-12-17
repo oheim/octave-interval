@@ -31,6 +31,7 @@ AC_LANG([C++])
 AC_CHECK_LIB([mpfr], [mpfr_init2], [], [
   AC_MSG_ERROR([could not find the mpfr library])
 ])
+AC_CHECK_LIB([m], [floor])
 
 # Checks for header files.
 AC_CHECK_HEADERS([sstream])
@@ -47,4 +48,4 @@ AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
-AC_CHECK_FUNCS([fesetround floor])
+AC_CHECK_FUNCS([fesetround])
