@@ -72,6 +72,7 @@ RELEASE_TARBALL = $(RELEASE_DIR).tar
 RELEASE_TARBALL_COMPRESSED = $(RELEASE_TARBALL).gz
 HTML_DIR = $(BUILD_DIR)/$(PACKAGE)-html
 HTML_TARBALL_COMPRESSED = $(HTML_DIR).tar.gz
+BUNDLED_CRLIBM_DIR = src/crlibm
 INSTALLED_PACKAGE_DIR = ~/octave/$(PACKAGE)-$(VERSION)
 INSTALLED_PACKAGE = $(INSTALLED_PACKAGE_DIR)/packinfo/DESCRIPTION
 GENERATED_COPYING = $(BUILD_DIR)/COPYING
@@ -89,17 +90,17 @@ GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
 GENERATED_IMAGES = $(GENERATED_IMAGES_EPS) $(GENERATED_IMAGES_PDF) $(GENERATED_IMAGES_PNG)
 GENERATED_CONFIGURE = src/configure
 GENERATED_CRLIBM_AUTOMAKE = \
-	src/crlibm/aclocal.m4 \
-	src/crlibm/configure \
-	src/crlibm/config.guess \
-	src/crlibm/config.sub \
-	src/crlibm/install-sh \
-	src/crlibm/Makefile.in \
-	src/crlibm/scs_lib/Makefile.in \
-	src/crlibm/crlibm_config.h.in \
-	src/crlibm/missing \
-	src/crlibm/INSTALL \
-	src/crlibm/compile
+	$(BUNDLED_CRLIBM_DIR)/aclocal.m4 \
+	$(BUNDLED_CRLIBM_DIR)/configure \
+	$(BUNDLED_CRLIBM_DIR)/config.guess \
+	$(BUNDLED_CRLIBM_DIR)/config.sub \
+	$(BUNDLED_CRLIBM_DIR)/install-sh \
+	$(BUNDLED_CRLIBM_DIR)/Makefile.in \
+	$(BUNDLED_CRLIBM_DIR)/scs_lib/Makefile.in \
+	$(BUNDLED_CRLIBM_DIR)/crlibm_config.h.in \
+	$(BUNDLED_CRLIBM_DIR)/missing \
+	$(BUNDLED_CRLIBM_DIR)/INSTALL \
+	$(BUNDLED_CRLIBM_DIR)/compile
 EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/inst/test/%.cc-tst,$(CC_WITH_TESTS))
 GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CONFIGURE) $(GENERATED_CRLIBM_AUTOMAKE) $(EXTRACTED_CC_TESTS)
 TAR_PATCHED = $(BUILD_DIR)/.tar
@@ -210,7 +211,7 @@ $(GENERATED_CONFIGURE):
 
 bootstrap: $(GENERATED_CRLIBM_AUTOMAKE)
 $(GENERATED_CRLIBM_AUTOMAKE):
-	(cd src/crlibm && aclocal && autoheader && autoconf && automake --add-missing -c --ignore-deps && autoconf)
+	(cd $(BUNDLED_CRLIBM_DIR) && aclocal && autoheader && autoconf && automake --add-missing -c --ignore-deps && autoconf)
 
 ## Patch generated stuff into the release tarball
 $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
