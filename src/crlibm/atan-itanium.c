@@ -687,7 +687,7 @@ extern double atan_rn(double xd) {
 	return reshi;
     }      
 #else
-  /* ROUNDING TEST à la Ziv */
+  /* ROUNDING TEST Ã  la Ziv */
       /* This constant was found by dichotomy. I am very ashamed */
       rn_constant = 1.01;
   reslo = res - reshi;

@@ -1,5 +1,5 @@
 # Usage: This files builds an error computation for the case when both the
-# index and the exponent are zero.
+# index and the exponent are zero.
 
 # sed -f ../maple/TEMPLOG/polynomials.sed  -f ../maple/TEMPLOG/log-de_0.sed ../gappa/log-de-index0-E0.gappa | $GAPPA 
 

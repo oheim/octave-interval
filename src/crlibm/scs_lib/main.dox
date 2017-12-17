@@ -6,7 +6,7 @@
    @section intro Introduction
 
 SCSLib is a fast and lightweight multiple-precision library developped
-in the Arénaire project at ENS Lyon. It was developed as a building
+in the ArÃ©naire project at ENS Lyon. It was developed as a building
 block for evaluating elementary functions with correct rounding. Its
 interesting features are:
 

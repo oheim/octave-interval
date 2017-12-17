@@ -72,7 +72,7 @@ tripledoubleprocedures.pdf: docs/latex/tripledoubleprocedures.tex
 	mv tripledoubleprocedures.pdf ..
 
 crlibm.pdf: docs/latex/crlibm.tex
-	cd docs/latex; pdflatex crlibm; bibtex crlibm; pdflatex crlibm; pdflatex crlibm;\
+	cd docs/latex; lualatex crlibm; bibtex crlibm; lualatex crlibm; lualatex crlibm;\
 	mv crlibm.pdf .. 
 
 doc: crlibm.pdf tripledoubleprocedures.pdf

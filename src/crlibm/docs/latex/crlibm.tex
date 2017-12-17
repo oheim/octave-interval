@@ -1,4 +1,6 @@
-\documentclass[a4paper,pdftex]{book} 
+\documentclass[a4paper]{book} 
+
+\usepackage{fontspec}
 
 \usepackage{fullpage}
 %\usepackage{isolatin1} 
@@ -115,13 +117,13 @@
 
 
 
-% Environnement pour disposer de propriété ``à la leslie lamport''
-\newcounter{propexp} % reset propexp à chaque chapitre
+% Environnement pour disposer de propriÃ©tÃ© ``Ã  la leslie lamport''
+\newcounter{propexp} % reset propexp Ã  chaque chapitre
 \newenvironment{prop}
 {\begin{trivlist}\refstepcounter{propexp}\item[\hbox to 0pt{\spring {\bf $<$\arabic{propexp}$>$}}]}
 {\ifvmode\smallskip\fi$\bullet$\end{trivlist}}
 
-% Définition de l'environnement proof
+% DÃ©finition de l'environnement proof
 \def\spring{\hskip 0pt minus 1fil}
 \def\@yproof[#1]{\@proof{ #1}}
 \def\@proof#1{\begin{trivlist}\item[\hbox to 0pt{\spring $\diamond$}]
@@ -160,23 +162,23 @@
 %% }
 
 %% \RRIresume{%
-%%   CRLibm est une bibliothèque mathématique offrant l'arrondi correct
-%%   en double précision selon les quatre modes d'arrondi. Ce rapport
-%%   détaille les algorithmes utilisés et prouve fonction par fonction la
-%%   propriété d'arrondi correct.
+%%   CRLibm est une bibliothÃ¨que mathÃ©matique offrant l'arrondi correct
+%%   en double prÃ©cision selon les quatre modes d'arrondi. Ce rapport
+%%   dÃ©taille les algorithmes utilisÃ©s et prouve fonction par fonction la
+%%   propriÃ©tÃ© d'arrondi correct.
 %% }%
 
 %% \RRIkeywords{elementary functions, correct rounding, IEEE-754, double precision}
 
-%% \RRImotscles{fonctions élémentaires, arrondi correct, IEEE-754, double précision}
+%% \RRImotscles{fonctions Ã©lÃ©mentaires, arrondi correct, IEEE-754, double prÃ©cision}
 
 %% \RRItheme{2}
 
-%% \RRIprojet{Arénaire}
+%% \RRIprojet{ArÃ©naire}
 
 %% \RRIinria{\RRnote{%
 %%     This  text  is  also  available   as  a  research  report  of  the
-%%     Laboratoire    de     l'Informatique    du    Parallélisme    {\tt
+%%     Laboratoire    de     l'Informatique    du    ParallÃ©lisme    {\tt
 %%       http://www.ens-lyon.fr/LIP}.
 %% }}%
 
@@ -189,7 +191,7 @@
 
 \section*{Important warning}
 
-This report describes and proves version \input{../../VERSION} of the
+This report describes and proves version 1.0beta5 of the
 \texttt{crlibm} library. It may therefore not correspond to the latest
 version. An up-to-date version will always be distributed along with
 the code.

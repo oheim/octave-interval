@@ -390,7 +390,7 @@ Line 38-44 & The goal of the second range reduction is to write $y$ as $y = inde
 
 \begin{lstlisting}[caption={Procedure \texttt{cosh\_quick} - polynomial evaluation - first reconstruction},firstnumber=45]
   y.d = b_hi;
-  /*   first, y²  */
+  /*   first, yÂ²  */
   square_b_hi = b_hi * b_hi;
   /* effective computation of the polynomial approximation */
   
@@ -399,7 +399,7 @@ Line 38-44 & The goal of the second range reduction is to write $y$ as $y = inde
     tsb_hi = 0;
   }
   else {
-    /*   second, cosh(b) = b² * (1/2 + b² * (1/24 + b² * 1/720)) */
+    /*   second, cosh(b) = bÂ² * (1/2 + bÂ² * (1/24 + bÂ² * 1/720)) */
     tcb_hi = (square_b_hi)* (c2.d + square_b_hi * (c4.d + square_b_hi * c6.d));
     tsb_hi = square_b_hi * (s3.d + square_b_hi * (s5.d + square_b_hi * s7.d));
   }
@@ -432,7 +432,7 @@ Line 50    & Match $b_{hi}$ and then $b$ with $2^{-40}$\\
 Line 51-52 & If $|b| \leq 2^{-40}$, we will have $|tcb|,[tsb| \leq \maxabserr{square\_b}$, so we can directly set $tcb$ and $tsb$ to zero: \\
            & converning the mathematical values, we have $|\widehat{tcb}|, |\widehat{tsb}| \leq 2^{-24}$. \\
            & We can avoid by this way any problem with subnormal numbers. \\
-Line 55-56 & Polynomial evaluation of $\cosh(x)-1$ and $\frac{\sinh(x)}{x}-1$, following the Hörner scheme. \\
+Line 55-56 & Polynomial evaluation of $\cosh(x)-1$ and $\frac{\sinh(x)}{x}-1$, following the HÃ¶rner scheme. \\
            & A maple procedure is used to compute the error on this computations\\
            & There are 2 reasons for the total error :\\
            & the effective computations, since all operations are done with 53 bits of precision.\\

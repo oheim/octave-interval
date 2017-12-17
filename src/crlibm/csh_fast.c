@@ -82,7 +82,7 @@ static void do_cosh(double x, double* preshi, double* preslo){
 
   
   y.d = b_hi;
-  /*   first, y²  */
+  /*   first, yÂ²  */
   square_b_hi = b_hi * b_hi;
   /* effective computation of the polynomial approximation */
   
@@ -91,7 +91,7 @@ static void do_cosh(double x, double* preshi, double* preslo){
     tsb_hi = 0;
   }
   else {
-    /*   second, cosh(y) = y² * (1/2 + y² * (1/24 + y² * 1/720)) */
+    /*   second, cosh(y) = yÂ² * (1/2 + yÂ² * (1/24 + yÂ² * 1/720)) */
     tcb_hi = (square_b_hi)* (c2.d + square_b_hi * (c4.d + square_b_hi * c6.d));
     tsb_hi = square_b_hi * (s3.d + square_b_hi * (s5.d + square_b_hi * s7.d));
   }
@@ -420,7 +420,7 @@ static void do_sinh(double x, double* prh, double* prl){
   /* since b_hi was between -2^-1 and 2^1, we now have b_hi between -2^-9 and 2^-9 */
   
   y.d = b_hi;
-  /*   first, y² = square_y_hi + square_y_lo  */
+  /*   first, yÂ² = square_y_hi + square_y_lo  */
   square_y_hi = b_hi * b_hi;
   /* effective computation of the polyomial approximation */
   if (((y.i[HI])&(0x7FFFFFFF)) <= (two_minus_30.i[HI])) {
@@ -429,7 +429,7 @@ static void do_sinh(double x, double* prh, double* prl){
   }
   else {
     tsb_hi = square_y_hi * (s3.d + square_y_hi * (s5.d + square_y_hi * s7.d));
-    /*   second, cosh(y) = y² * (1/2 + y² * (1/24 + y² * 1/720)) */
+    /*   second, cosh(y) = yÂ² * (1/2 + yÂ² * (1/24 + yÂ² * 1/720)) */
     tcb_hi = (square_y_hi)* (c2.d + square_y_hi * (c4.d + square_y_hi * c6.d));
   }
   

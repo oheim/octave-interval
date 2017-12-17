@@ -1,8 +1,8 @@
 Toute la doc est dans les pages info.
 
-Les seuls fichiers que j'ai écrits moi-même sont configure.in et Makefile.am
+Les seuls fichiers que j'ai Ã©crits moi-mÃªme sont configure.in et Makefile.am
 
-Les commandes à taper la première fois après le cvs checkout sont
+Les commandes Ã  taper la premiÃ¨re fois aprÃ¨s le cvs checkout sont
 (dans l'ordre)
 
 aclocal
@@ -16,10 +16,10 @@ automake --add-missing
 Pour faire la doc:
 doxygen Doxyfile.user
 doxygen Doxyfile.dev
-puis aller dans le répertoires latex de Docs et faire 
+puis aller dans le rÃ©pertoires latex de Docs et faire 
 cd Docs/latex/
 pdflatex  refman.tex 
-(deux fois pour les références)
+(deux fois pour les rÃ©fÃ©rences)
 
 Pour enlever un peu du bordel d'autoconf:
 make distclean
