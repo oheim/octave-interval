@@ -4,8 +4,9 @@
  * Copyright (c) 2007 Christoph Lauter (ENS Lyon), 
  *                    with Sylvain Chevillard (ENS Lyon) for the polynomials
  *
- * This file is part of the crlibm library developed by the Arenaire
- * project at Ecole Normale Superieure de Lyon
+ * This file is part of crlibm, the correctly rounded mathematical library,
+ * which has been developed by the Arénaire project at École normale supérieure
+ * de Lyon.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,7 +21,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-*/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

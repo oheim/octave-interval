@@ -1,6 +1,14 @@
 /*
- * Author  : David Defour, Catherine Daramy, Florent de Dinechin, Christoph Lauter
- * Contact : David.Defour@ens-lyon.fr, catherine_daramy@ens-lyon.fr
+ * Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+ * Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+ * and Jean-Michel Muller
+ *
+ * Author : David Defour, Catherine Daramy, Florent de Dinechin, Christoph Lauter
+ * Contact: David.Defour@ens-lyon.fr, catherine_daramy@ens-lyon.fr
+ *
+ * This file is part of crlibm, the correctly rounded mathematical library,
+ * which has been developed by the Arénaire project at École normale supérieure
+ * de Lyon.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

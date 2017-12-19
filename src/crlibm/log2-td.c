@@ -1,19 +1,34 @@
 /* 
- * This function computes log2, correctly rounded, 
+ * This function computes log2, correctly rounded,
  * using experimental techniques based on triple double arithmetics
-
- THIS IS EXPERIMENTAL SOFTWARE
- 
  *
- * Author :  Christoph Lauter
+ * Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+ * Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+ * and Jean-Michel Muller
+ *
+ * Author: Christoph Lauter
  * christoph.lauter at ens-lyon.fr
  *
+ * This file is part of crlibm, the correctly rounded mathematical library,
+ * which has been developed by the Arénaire project at École normale supérieure
+ * de Lyon.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
- To have it replace the crlibm log2, do:
+ THIS IS EXPERIMENTAL SOFTWARE
 
- gcc -DHAVE_CONFIG_H -I.  -fPIC  -O2 -c log2-td.c;   mv log2-td.o log2_accurate.o; make 
-
- 
 */
 
 
