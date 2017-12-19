@@ -1,30 +1,28 @@
-/** Conversion of floating-point double to SCS
-@file double2scs.c
-
-@author Defour David David.Defour@ens-lyon.fr
-@author Florent de Dinechin Florent.de.Dinechin@ens-lyon.fr 
-
-This file is part of the SCS library.
-*/
-
 /*
-Copyright (C) 2002  David Defour and Florent de Dinechin
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-
+ * Conversion of floating-point double to SCS
+ *
+ * Copyright (C) 2002 David Defour and Florent de Dinechin
+ *
+ * This file is part of scslib, the Software Carry-Save multiple-precision
+ * library, which has been developed by the Arénaire project at École normale
+ * supérieure de Lyon.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
+
+
 #include "scs.h"
 #include "scs_private.h"
 

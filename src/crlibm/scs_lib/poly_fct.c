@@ -1,6 +1,11 @@
 /*
- * Author  : Defour David
- * Contact : David.Defour@ens-lyon.fr
+ * Copyright (C) 2002 David Defour, Catherine Daramy, and Florent de Dinechin
+ *
+ * Author: David Defour
+ *
+ * This file is part of scslib, the Software Carry-Save multiple-precision
+ * library, which has been developed by the Arénaire project at École normale
+ * supérieure de Lyon.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
