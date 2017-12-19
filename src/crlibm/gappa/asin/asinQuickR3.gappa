@@ -1,3 +1,25 @@
+# This file is part of crlibm, the correctly rounded mathematical library,
+# which has been developed by the Arénaire project at École normale supérieure
+# de Lyon.
+#
+# Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+# Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+# and Jean-Michel Muller
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 # The polynomial to implement is: 630003272697881842133904116649941b-110 + (x * (22930469560677484970259027045179b-104 + (x * (758992598782411b-51 + (x * (7959118817390667b-54 + (x * (1064903604618827b-51 + (x * (5844783312361271b-53 + (x * (8131347476778009b-53 + (x * (1508230740643617b-50 + (x * (2296555345676609b-50 + (x * (7188218310357077b-51 + (x * (5730917143769297b-50 + (x * (4688813330751791b-49 + (x * 7638382581357819b-49)))))))))))))))))))))))
 # The polynomial implemented is: 630003272697881842133904116649941b-110 + (x * (22930469560677484970259027045179b-104 + (x * (758992598782411b-51 + (x * (7959118817390667b-54 + (x * (1064903604618827b-51 + (x * (5844783312361271b-53 + (x * (8131347476778009b-53 + (x * (1508230740643617b-50 + (x * (2296555345676609b-50 + (x * (7188218310357077b-51 + (x * (5730917143769297b-50 + (x * (4688813330751791b-49 + (x * 7638382581357819b-49)))))))))))))))))))))))
 # The domain is [-603367941593347b-54;301683970796841b-53]

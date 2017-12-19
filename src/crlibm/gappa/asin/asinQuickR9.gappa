@@ -1,3 +1,25 @@
+# This file is part of crlibm, the correctly rounded mathematical library,
+# which has been developed by the Arénaire project at École normale supérieure
+# de Lyon.
+#
+# Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+# Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+# and Jean-Michel Muller
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 # The polynomial to implement is: 2275941405803339b-51 + (x * ((-6362552512264725b-56) + (x * (3031517174156445b-57 + (x * ((-1916916249275531b-58) + (x * (2775872004195495b-60 + (x * ((-8705693150762623b-63) + (x * (3596618703231213b-63 + (x * ((-3084299124302975b-64) + (x * (1359599812531581b-64 + (x * ((-4899514141103273b-67) + (x * (566891145413529b-65 + (x * (-8316266913880567b-70))))))))))))))))))))))
 # The polynomial implemented is: 2275941405803339b-51 + (x * ((-6362552512264725b-56) + (x * (3031517174156445b-57 + (x * ((-1916916249275531b-58) + (x * (2775872004195495b-60 + (x * ((-8705693150762623b-63) + (x * (3596618703231213b-63 + (x * ((-3084299124302975b-64) + (x * (1359599812531581b-64 + (x * ((-4899514141103273b-67) + (x * (566891145413529b-65 + (x * (-8316266913880567b-70))))))))))))))))))))))
 # The domain is [-140737488356209b-50;1125899906835577b-53]

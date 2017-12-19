@@ -1,3 +1,25 @@
+# This file is part of crlibm, the correctly rounded mathematical library,
+# which has been developed by the Arénaire project at École normale supérieure
+# de Lyon.
+#
+# Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+# Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+# and Jean-Michel Muller
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 # The polynomial to implement is: x * (1b0 + ((x^(1b1)) * (108172851219475575594385340192083b-109 + ((x^(1b1)) * (3042361440547750563592087693241b-105 + ((x^(1b1)) * (115899483449438116708269989305805b-111 + ((x^(1b1)) * (78876037347534273870913665352907b-111 + ((x^(1b1)) * (14520361420796082234834302007973b-109 + ((x^(1b1)) * (90100704200837228890721343577993b-112 + ((x^(1b1)) * (8050184333924753b-59 + ((x^(1b1)) * (3329579917524393b-58 + ((x^(1b1)) * (703398096605685b-56 + ((x^(1b1)) * (2418349647542263b-58 + ((x^(1b1)) * (4215384086352865b-59 + ((x^(1b1)) * (3716565942414711b-59 + ((x^(1b1)) * (3308858625299127b-59 + ((x^(1b1)) * (1485727445894643b-58 + ((x^(1b1)) * (1338544855889499b-58 + ((x^(1b1)) * (1262327254413885b-58 + ((x^(1b1)) * (7109335287797167b-61 + ((x^(1b1)) * 3595912496380613b-59))))))))))))))))))))))))))))))))))))
 # The polynomial implemented is: x * (1b0 + ((x^(1b1)) * (108172851219475575594385340192083b-109 + ((x^(1b1)) * (3042361440547750563592087693241b-105 + ((x^(1b1)) * (115899483449438116708269989305805b-111 + ((x^(1b1)) * (78876037347534273870913665352907b-111 + ((x^(1b1)) * (14520361420796082234834302007973b-109 + ((x^(1b1)) * (90100704200837228890721343577993b-112 + ((x^(1b1)) * (8050184333924753b-59 + ((x^(1b1)) * (3329579917524393b-58 + ((x^(1b1)) * (703398096605685b-56 + ((x^(1b1)) * (2418349647542263b-58 + ((x^(1b1)) * (4215384086352865b-59 + ((x^(1b1)) * (3716565942414711b-59 + ((x^(1b1)) * (3308858625299127b-59 + ((x^(1b1)) * (1485727445894643b-58 + ((x^(1b1)) * (1338544855889499b-58 + ((x^(1b1)) * (1262327254413885b-58 + ((x^(1b1)) * (7109335287797167b-61 + ((x^(1b1)) * 3595912496380613b-59))))))))))))))))))))))))))))))))))))
 # The domain is [1b-54;9007199254740983b-55]

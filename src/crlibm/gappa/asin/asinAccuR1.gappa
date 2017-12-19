@@ -1,3 +1,25 @@
+# This file is part of crlibm, the correctly rounded mathematical library,
+# which has been developed by the Arénaire project at École normale supérieure
+# de Lyon.
+#
+# Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+# Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+# and Jean-Michel Muller
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 # The polynomial to implement is: 12733824903478660485213924945761441b-115 + (x * (21274243840621107493132068550861b-104 + (x * (56506575121178698033892645299217b-108 + (x * (162352694585912342011697266345865b-109 + (x * (108824425124571119884970372511875b-109 + (x * (130962285214586424233709645857015b-109 + (x * (64538322654437688214573659252359b-108 + (x * (19138493711791118275730909715341b-106 + (x * (86948317116031170147801372254985b-108 + (x * (2926340027982217b-53 + (x * (7079519916441877b-54 + (x * (4400722769684657b-53 + (x * (2753619111017419b-52 + (x * (1747593133357423b-51 + (x * (1117301179312929b-50 + (x * (2882758419021281b-51 + (x * (7485076380936111b-52 + (x * (4889438710496705b-51 + (x * (6420893266510167b-51 + (x * (8469313684169241b-51 + (x * (701323415166733b-47 + (x * (7696281875237263b-50 + (x * 5166029452007411b-49)))))))))))))))))))))))))))))))))))))))))))
 # The polynomial implemented is: 12733824903478660485213924945761441b-115 + (x * (21274243840621107493132068550861b-104 + (x * (56506575121178698033892645299217b-108 + (x * (162352694585912342011697266345865b-109 + (x * (108824425124571119884970372511875b-109 + (x * (130962285214586424233709645857015b-109 + (x * (64538322654437688214573659252359b-108 + (x * (19138493711791118275730909715341b-106 + (x * (86948317116031170147801372254985b-108 + (x * (2926340027982217b-53 + (x * (7079519916441877b-54 + (x * (4400722769684657b-53 + (x * (2753619111017419b-52 + (x * (1747593133357423b-51 + (x * (1117301179312929b-50 + (x * (2882758419021281b-51 + (x * (7485076380936111b-52 + (x * (4889438710496705b-51 + (x * (6420893266510167b-51 + (x * (8469313684169241b-51 + (x * (701323415166733b-47 + (x * (7696281875237263b-50 + (x * 5166029452007411b-49)))))))))))))))))))))))))))))))))))))))))))
 # The domain is [-466363011288839b-53;932726022577599b-54]

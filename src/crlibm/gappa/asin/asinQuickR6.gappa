@@ -1,3 +1,25 @@
+# This file is part of crlibm, the correctly rounded mathematical library,
+# which has been developed by the Arénaire project at École normale supérieure
+# de Lyon.
+#
+# Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+# Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+# and Jean-Michel Muller
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 # The polynomial to implement is: 224072655290838820901547103663141b-108 + (x * (52617200066848308315160320054687b-105 + (x * (1564981109275549b-51 + (x * (4992165443239819b-52 + (x * (8442373737503053b-52 + (x * (1027827836419783b-48 + (x * (132850146592389b-44 + (x * (4608740736026111b-48 + (x * (2581118930247463b-46 + (x * (5928868654976949b-46 + (x * (108504530938057b-39 + (x * (522450050528739b-40 + (x * 5043156194756227b-42)))))))))))))))))))))))
 # The polynomial implemented is: 224072655290838820901547103663141b-108 + (x * (52617200066848308315160320054687b-105 + (x * (1564981109275549b-51 + (x * (4992165443239819b-52 + (x * (8442373737503053b-52 + (x * (1027827836419783b-48 + (x * (132850146592389b-44 + (x * (4608740736026111b-48 + (x * (2581118930247463b-46 + (x * (5928868654976949b-46 + (x * (108504530938057b-39 + (x * (522450050528739b-40 + (x * 5043156194756227b-42)))))))))))))))))))))))
 # The domain is [-110485440722351b-52;55242720361239b-51]
