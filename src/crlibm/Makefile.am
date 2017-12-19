@@ -105,13 +105,12 @@ EXTRA_DIST = VERSION TODO\
 	maple/exp-td.mpl maple/csh.mpl \
 	maple/log-td.mpl  maple/log-de.mpl \
 	maple/log2-td.mpl maple/log10-td.mpl \
-	maple/trigo.mpl maple/atan.mpl maple/atan-pentium.mpl \
+	maple/trigo.mpl maple/atan.mpl \
 	maple/asin-td.mpl maple/acos-td.mpl \
 	maple/sqrt.mpl \
 	maple/expm1.mpl \
 	maple/gal.mpl \
 	maple/pow.mpl \
-	maple/atan-itanium.mpl \
 	gappa/trigos/SinCosCase3.gappa gappa/trigos/TanCase2.gappa \
 	gappa/trigos/TanCase2.gappa \
 	gappa/trigos/SinCosCase3.gappa gappa/trigos/TanCase2.gappa \
@@ -152,6 +151,4 @@ EXTRA_DIST = VERSION TODO\
 	scs_lib/tests/tbx_timing.h \
 	tests/testperfs.sh\
 	triple-double.h double-extended.h \
-	log-de.c log-de.h log-td.c log-td.h\
-	atan-pentium.c atan-itanium.c 
- 
+	log-de.c log-de.h log-td.c log-td.h
