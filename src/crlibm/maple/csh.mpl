@@ -1,3 +1,25 @@
+# This file is part of crlibm, the correctly rounded mathematical library,
+# which has been developed by the ArÃ©naire project at Ã‰cole normale supÃ©rieure
+# de Lyon.
+#
+# Copyright (C) 2004-2011 David Defour, Catherine Daramy-Loirat,
+# Florent de Dinechin, Matthieu Gallet, Nicolas Gast, Christoph Quirin Lauter,
+# and Jean-Michel Muller
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
 restart:
 Digits := 150;
 with (numapprox):with(orthopoly):
@@ -238,10 +260,10 @@ sa_max := delta_table_sinh_func()[2];
 #we use   cosh(b) = 1 + sum(b^(2*k)/(2*k!), k > 0)
 #         sinh(b) = b * (1 + sum(b^(2*k)/(2*k+1!), k > 0))
 
-#both used polynoms are even (x², x^4, x^6, ...) and we can use this fact
+#both used polynoms are even (xï¿½, x^4, x^6, ...) and we can use this fact
 y_max := b_max ^ 2;
 delta_y := 1/2*ulp(y_max) + delta_b^2;
-# remove the first x and compute the polynomial of y = x²
+# remove the first x and compute the polynomial of y = xï¿½
 poly_ch2 :=  subs(x=sqrt(y), expand(poly_ch));
 poly_sh2 :=  subs(x=sqrt(y), expand(poly_sh));
 errlist_cosh := errlist_quickphase_horner(degree(poly_ch2), 0, 0, 2^(-53), 2^(-70)):
