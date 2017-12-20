@@ -15,7 +15,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{3.1.0, 2017-12-10}
+@release{3.1.0, 2017-12-21}
 This minor release introduces two new functions and fixes severe bugs.
 
 @itemize
@@ -32,10 +32,13 @@ This minor release introduces two new functions and fixes severe bugs.
     A package installation error on 32-bit systems could be fixed (bug #51857).
 
 @item
-    During package installation, FPU control could not be activated on x86-32 platforms.  Thus, the crlibm library could not disable 80-bit floating-point arithmetic and 64-bit interval arithmetic had to use the slower mpfr library instead (Debian bug #874135).
+    During package installation, FPU control has not be activated on x86-32 platforms.  Thus, the crlibm library could not disable 80-bit floating-point arithmetic and produced wrong results.  This has been detected by the interval package, which fell back on the slower mpfr library instead (Debian bug #874135).  After fixing compiler options, x86-32 platforms can now use crlibm correctly—even without 64-bit SSE registers.
 
 @item
     Source code for interval arithmetic tests from the ITF1788 project have been removed from this package, since the loadable test data @code{itl.mat} can be edited and processed with Octave easily.  If unit test code for other interval arithmetic libraries shall be generated, find the project at @url{https://github.com/oheim/ITF1788}.
+
+@item
+    Thanks to Olaf Till, this package obtains a configure script (patch #9518).  It checks for available libraries during package installation and can help to identify missing dependencies.
 
 @end itemize
 
