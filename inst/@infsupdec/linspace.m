@@ -1,4 +1,5 @@
 ## Copyright 2015 Oliver Heimlich
+## Copyright 2018 Joel Dahne
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -24,7 +25,9 @@
 ## If @var{BASE} is greater than @var{LIMIT}, members are returned in
 ## decreasing order.  The default value for @var{N} is 100.
 ##
-## If either @var{BASE} or @var{LIMIT} is not a scalar, the result is a matrix.
+## If either @var{BASE} or @var{LIMIT} is not a scalar, they are
+## converted to column vectors and the result is a matrix where the
+## rows are the independent sequences.
 ##
 ## Accuracy: The result is an accurate enclosure.
 ##
@@ -61,6 +64,14 @@ function result = linspace (base, limit, n)
   if (nargin < 3)
     n = 100;
   endif
+
+  if (not (isvector (base)) || not (isvector (limit)))
+    error ("linspace: BASE and LIMIT must be scalars or vectors");
+  endif
+
+  ## Convert base and limit to column vectors
+  base = reshape (base, [], 1);
+  limit = reshape (limit, [], 1);
 
   result = newdec (linspace (base.infsup, limit.infsup, n));
   ## linspace is defined and continuous everywhere

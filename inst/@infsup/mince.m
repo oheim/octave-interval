@@ -1,4 +1,5 @@
 ## Copyright 2015 Oliver Heimlich
+## Copyright 2018 Joel Dahne
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -24,8 +25,9 @@
 ## The sub-intervals are returned in ascending order and may overlap due to
 ## round-off errors.
 ##
-## If @var{X} is not a scalar, the result is a matrix.  The default value for
-## @var{N} is 100.
+## If @var{X} is a vector it is converted to a column vector and the
+## result is a matrix where the rows are independent sequences.  The
+## default value for @var{N} is 100.
 ##
 ## Accuracy: The result is an accurate enclosure.
 ##
@@ -57,6 +59,13 @@ function x = mince (x, n)
     n = 100;
   endif
 
+  if (not (isvector (x)))
+    error ("linspace: x must be a scalar or a vector");
+  endif
+
+  ## Convert x to a column vector
+  x = reshape (x, [], 1);
+
   base = limit = x;
   idx.type = '()';
   idx.subs = {isfinite(x.inf)};
@@ -65,6 +74,7 @@ function x = mince (x, n)
   limit = subsasgn (limit, idx, infsup (subsref (x.sup, idx)));
 
   boundaries = linspace (base, limit, n + 1);
+
   l = boundaries.inf(:, 1 : end - 1);
   u = boundaries.sup(:, 2 : end);
 
