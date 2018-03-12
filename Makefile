@@ -206,7 +206,7 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 	@mv "$(BUILD_DIR)/$<.eps_" "$(BUILD_DIR)/$<.eps"
 
 bootstrap: $(GENERATED_CONFIGURE)
-$(GENERATED_CONFIGURE):
+$(GENERATED_CONFIGURE): src/configure.ac
 	(cd src && autoconf)
 
 bootstrap: $(GENERATED_CRLIBM_AUTOMAKE)
