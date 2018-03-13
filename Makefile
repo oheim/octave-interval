@@ -64,6 +64,7 @@ HG_ID = $(shell hg identify --id)
 HG_DATETIME_LOCAL = $(shell hg log --rev . --template {date\|isodatesec})
 HG_DATETIME_UTC = $(shell date --utc --rfc-3339=seconds --date="$(HG_DATETIME_LOCAL)")
 TAR_REPRODUCIBLE_OPTIONS = --mtime="$(HG_DATETIME_UTC)" --mode=a+r,g-w,o-w --owner=root --group=root --numeric-owner
+H_SOURCES = $(sort $(wildcard src/*.h))
 CC_SOURCES = $(sort $(wildcard src/*.cc))
 CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
 BUILD_DIR = build
@@ -268,7 +269,7 @@ $(CC_SOURCES): src/Makefile
 ## Compilation of oct-files happens in a separate Makefile,
 ## which is bundled in the release and will be used during
 ## package installation by Octave.
-$(OCT_COMPILED): $(CC_SOURCES) | $(BUILD_DIR) $(GENERATED_CRLIBM_AUTOMAKE)
+$(OCT_COMPILED): $(CC_SOURCES) $(H_SOURCES) | $(BUILD_DIR) $(GENERATED_CRLIBM_AUTOMAKE)
 	@echo "Compiling OCT-files ..."
 	@(cd src; MKOCTFILE="$(MKOCTFILE)" make)
 	@touch "$@"
