@@ -98,11 +98,12 @@ GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(G
 TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
+ZOPFLI ?= $(shell which zopfli 2> /dev/null)
 LILYPOND ?= $(shell which lilypond 2> /dev/null)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
-.PHONY: help dist release html run check test doctest install info clean bootstrap md5 id
+.PHONY: help html run check test doctest install info clean
 
 help:
 	@echo
@@ -119,18 +120,17 @@ help:
 	@echo
 
 check: doctest test
-dist: $(RELEASE_TARBALL_COMPRESSED)
+dist: .dist/$(PACKAGE)-$(VERSION).tar.gz
 html: $(HTML_TARBALL_COMPRESSED)
-md5:  $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED)
-	@md5sum $^
-id:
+
+.PHONY: release
+release: .dist/$(PACKAGE)-$(VERSION).tar.gz $(HTML_TARBALL_COMPRESSED)
 	@echo "Source Revision: $(HG_ID)"
 	@( case "$(HG_ID)" in *+ ) \
 	     echo "You have uncommitted changes!";; \
 	   esac \
 	)
-
-release: $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED) id md5
+	@md5sum $^
 	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
 	@echo "The Octave Forge admins will tag this revision after publication."
 
@@ -192,11 +192,11 @@ DIST_IMAGE_OBJ = $(patsubst %,.dist/%,$(IMAGE_OBJ))
 .dist/doc/image/%.svg.png: .dist/doc/image/%.svg.pdf
 	@# The output of pdftocairo has a much better quality
 	@# compared to the output from inkscape --export-png.
-	@echo " [PDFTOCAIRO] PNG $<"
+	@echo " [PDFTOCAIRO] $<"
 	@pdftocairo -png -singlefile -transp -r 120 "$<" ".dist/doc/image/$*.svg"
 .dist/doc/image/%.svg.eps: doc/image/%.svg
 	@mkdir -p .dist/doc/image
-	@echo " [INKSCAPE] EPS $<"
+	@echo " [INKSCAPE --export-eps] $<"
 	@inkscape --without-gui \
 		--export-ignore-filters \
 		--export-eps="$@" \
@@ -206,7 +206,7 @@ DIST_IMAGE_OBJ = $(patsubst %,.dist/%,$(IMAGE_OBJ))
 	@mv "$@_" "$@"
 .dist/doc/image/%.svg.pdf: doc/image/%.svg
 	@mkdir -p .dist/doc/image
-	@echo " [INKSCAPE] PDF $<"
+	@echo " [INKSCAPE --export-pdf] $<"
 	@inkscape --without-gui \
 		--export-ignore-filters \
 		--export-pdf="$@" \
@@ -240,8 +240,21 @@ DIST_TEXT_OBJ = $(patsubst %,.dist/%,$(TEXT_OBJ))
 	@# of the Octave package) if automake artefacts are older than their source
 	@# files.  Prevent this by applying the timestamp of the source code
 	@# revision, which is the same that is used by “hg archive”.
-	@echo " [TAR] update"
+	@echo " [TAR --update] $@"
 	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$@" --transform="s!^.dist/!$(PACKAGE)-$(VERSION)/!" $(wordlist 2,$(words $^),$^)
+
+
+.dist/$(PACKAGE)-$(VERSION).tar.gz: .dist/$(PACKAGE)-$(VERSION).tar
+ifneq ($(ZOPFLI),)
+%.gz: %
+	@echo " [ZOPFLI] $<"
+	@$(ZOPFLI) --i10 "$<"
+else
+%.gz: %
+	@echo " [GZIP] $<"
+	@gzip --best -f -k "$<"
+	@touch "$@"
+endif
 
 
 clean:
@@ -252,18 +265,6 @@ clean:
 
 $(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/inst $(BUILD_DIR)/inst/test:
 	@mkdir -p "$@"
-
-$(RELEASE_TARBALL): .hg/dirstate | $(BUILD_DIR)
-	@echo "Creating package release ..."
-	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" --exclude "src/crlibm/tests" "$@"
-	@# build/.tar* files are used for incremental updates
-	@# to the tarball and must be cleared
-	@rm -f $(BUILD_DIR)/.tar*
-
-$(RELEASE_TARBALL_COMPRESSED): $(RELEASE_TARBALL)
-	@echo "Compressing release tarball ..."
-	@(cd "$(BUILD_DIR)" && zopfli "../$<" || gzip --best -f -k "../$<")
-	@touch "$@"
 
 $(INSTALLED_PACKAGE): $(RELEASE_TARBALL)
 	@echo "Installing package in GNU Octave ..."
@@ -286,20 +287,7 @@ doc/image/%.svg: doc/image/%.ly
 	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" "$(BUILD_DIR)/$<.ps"
 endif
 
-## Patch generated stuff into the release tarball
-$(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
 $(INSTALLED_PACKAGE): $(TAR_PATCHED)
-$(TAR_PATCHED): $(GENERATED_OBJ) | $(RELEASE_TARBALL)
-	@echo "Patching generated files into release tarball ..."
-	@# `tar --update --transform` fails to update the files
-	@# The following line is a workaroung that removes duplicates
-	@tar --delete --file "$|" $(patsubst $(BUILD_DIR)/%,$(PACKAGE)-$(VERSION)/%,$?) 2> /dev/null || true
-	@# make tries to re-run automake on the target system (during installation
-	@# of the Octave package) if automake artefacts are older than their source
-	@# files.  Prevent this by applying the timestamp of the source code
-	@# revision, which is the same that is used by “hg archive”.
-	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$|" --transform="s!^$(BUILD_DIR)/!$(PACKAGE)-$(VERSION)/!" --transform="s!^src/!$(PACKAGE)-$(VERSION)/src/!" $?
-	@touch "$@"
 
 ## HTML Documentation for Octave Forge
 $(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
