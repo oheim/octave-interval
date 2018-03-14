@@ -80,15 +80,6 @@ GENERATED_COPYING = $(BUILD_DIR)/COPYING
 GENERATED_CITATION = $(BUILD_DIR)/CITATION
 GENERATED_NEWS = $(BUILD_DIR)/NEWS
 GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
-IMAGE_SOURCES = \
-	doc/image/cameleon-start-end.svg \
-	doc/image/cameleon-transition.svg \
-	doc/image/inverse-power.svg \
-	doc/image/octave-interval.svg
-GENERATED_IMAGES_EPS = $(patsubst %,$(BUILD_DIR)/%.eps,$(IMAGE_SOURCES))
-GENERATED_IMAGES_PDF = $(patsubst %,$(BUILD_DIR)/%.pdf,$(IMAGE_SOURCES))
-GENERATED_IMAGES_PNG = $(patsubst %,$(BUILD_DIR)/%.png,$(IMAGE_SOURCES))
-GENERATED_IMAGES = $(GENERATED_IMAGES_EPS) $(GENERATED_IMAGES_PDF) $(GENERATED_IMAGES_PNG)
 GENERATED_CONFIGURE = src/configure
 GENERATED_CRLIBM_AUTOMAKE = \
 	$(BUNDLED_CRLIBM_DIR)/aclocal.m4 \
@@ -145,6 +136,8 @@ release: $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED) id md5
 
 install: $(INSTALLED_PACKAGE)
 
+
+## Generated Autotool files for the release tarball
 CRLIBM_AUTOTOOLS_OBJ = \
 	src/crlibm/aclocal.m4 \
 	src/crlibm/configure \
@@ -158,53 +151,98 @@ CRLIBM_AUTOTOOLS_OBJ = \
 	src/crlibm/INSTALL \
 	src/crlibm/compile
 DIST_CRLIBM_AUTOTOOLS_OBJ = $(patsubst %,.dist/%,$(CRLIBM_AUTOTOOLS_OBJ))
-
 .dist/src/configure: src/configure.ac
-	# AUTOTOOLS ./src/
+	@echo " [AUTOTOOLS] src/"
 	@mkdir -p .dist/src
-	@( cd .dist/src && \
-	   ln -sf ../../src/configure.ac . && \
-	   VERSION=$(VERSION) autoconf \
+	@(	cd .dist/src && \
+		ln -sf ../../src/configure.ac . && \
+		VERSION=$(VERSION) autoconf \
 	)
-
 .NOTPARALLEL: $(DIST_CRLIBM_AUTOTOOLS_OBJ)
 $(DIST_CRLIBM_AUTOTOOLS_OBJ): src/crlibm/configure.ac src/crlibm/Makefile.am src/crlibm/scs_lib/Makefile.am
-	# AUTOTOOLS ./src/crlibm/
+	@echo " [AUTOTOOLS] src/crlibm/"
 	@mkdir -p .dist/src/crlibm/scs_lib
-	@( cd .dist/src/crlibm/scs_lib && \
-	   ln -sf ../../../../src/crlibm/scs_lib/Makefile.am . \
+	@(	cd .dist/src/crlibm/scs_lib && \
+		ln -sf ../../../../src/crlibm/scs_lib/Makefile.am . \
 	)
-	@( cd .dist/src/crlibm && \
-	   ln -sf $(patsubst %,../../../%,\
-	     src/crlibm/configure.ac \
-	     src/crlibm/Makefile.am \
-	     src/crlibm/AUTHORS \
-	     src/crlibm/ChangeLog \
-	     src/crlibm/COPYING.LIB \
-	     src/crlibm/NEWS \
-	     src/crlibm/README) . && \
-	   aclocal && \
-	   autoheader && \
-	   automake --add-missing -c --ignore-deps && \
-	   autoconf \
+	@(	cd .dist/src/crlibm && \
+		ln -sf $(patsubst %,../../../%,\
+			src/crlibm/configure.ac \
+			src/crlibm/Makefile.am \
+			src/crlibm/AUTHORS \
+			src/crlibm/ChangeLog \
+			src/crlibm/COPYING.LIB \
+			src/crlibm/NEWS \
+			src/crlibm/README) . && \
+		aclocal && \
+		autoheader && \
+		automake --add-missing -c --ignore-deps && \
+		autoconf \
 	)
 	@touch --no-create $(DIST_CRLIBM_AUTOTOOLS_OBJ)
 
-.dist/$(PACKAGE)-$(VERSION).tar: .hg/dirstate .dist/src/configure $(DIST_CRLIBM_AUTOTOOLS_OBJ)
-	@# For the release tarball, we can take most files from version control and
-	@# exclude:
-	@#  - .hgignore and .hgtags
-	@#  - some maintainer scripts
-	@#  - crlibm test code (it is already included in crlibm.mat and would take a lot of space)
-	# HG ARCHIVE
+
+## Generated graphic files for the release tarball
+IMAGE_SRC = $(filter-out %animation.svg,$(wildcard doc/image/*.svg))
+IMAGE_OBJ = \
+	$(patsubst %,%.eps,$(IMAGE_SRC)) \
+	$(patsubst %,%.pdf,$(IMAGE_SRC)) \
+	$(patsubst %,%.png,$(IMAGE_SRC))
+DIST_IMAGE_OBJ = $(patsubst %,.dist/%,$(IMAGE_OBJ))
+.dist/doc/image/%.svg.png: .dist/doc/image/%.svg.pdf
+	@# The output of pdftocairo has a much better quality
+	@# compared to the output from inkscape --export-png.
+	@echo " [PDFTOCAIRO] PNG $<"
+	@pdftocairo -png -singlefile -transp -r 120 "$<" ".dist/doc/image/$*.svg"
+.dist/doc/image/%.svg.eps: doc/image/%.svg
+	@mkdir -p .dist/doc/image
+	@echo " [INKSCAPE] EPS $<"
+	@inkscape --without-gui \
+		--export-ignore-filters \
+		--export-eps="$@" \
+		"$<" > /dev/null
+	@# Make the build reproducible and remove timestamp metadata
+	@grep --invert-match "^%% CreationDate: " "$@" > "$@_"
+	@mv "$@_" "$@"
+.dist/doc/image/%.svg.pdf: doc/image/%.svg
+	@mkdir -p .dist/doc/image
+	@echo " [INKSCAPE] PDF $<"
+	@inkscape --without-gui \
+		--export-ignore-filters \
+		--export-pdf="$@" \
+		"$<" > /dev/null
+
+
+## Generated text files for the release tarball
+TEXT_OBJ = \
+	COPYING \
+	CITATION \
+	NEWS
+DIST_TEXT_OBJ = $(patsubst %,.dist/%,$(TEXT_OBJ))
+.dist/%: doc/%.texinfo
+	@echo " [MAKEINFO] $<"
+	@mkdir -p .dist
+	@makeinfo --plaintext -D "version $(VERSION)" -D "date $(DATE)" --output="$@" "$<"
+
+
+## For the release tarball, we can take most files from version control and
+## exclude:
+##  - .hgignore and .hgtags
+##  - some maintainer scripts
+##  - crlibm test code (it is already included in crlibm.mat
+##    and would take a lot of space)
+## In addition, generated files are patched into the release tarball.  Since
+## hg and tar are very fast, we can simply recreate the tarball from scratch.
+.dist/$(PACKAGE)-$(VERSION).tar: .hg/dirstate .dist/src/configure $(DIST_CRLIBM_AUTOTOOLS_OBJ) $(DIST_IMAGE_OBJ) $(DIST_TEXT_OBJ)
+	@echo " [HG] archive"
 	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" --exclude "src/crlibm/tests" "$@"
-	@# Patch generated files into the release tarball.
 	@# Make tries to re-run automake on the target system (during installation
 	@# of the Octave package) if automake artefacts are older than their source
 	@# files.  Prevent this by applying the timestamp of the source code
 	@# revision, which is the same that is used by “hg archive”.
-	# TAR UPDATE
+	@echo " [TAR] update"
 	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$@" --transform="s!^.dist/!$(PACKAGE)-$(VERSION)/!" $(wordlist 2,$(words $^),$^)
+
 
 clean:
 	make -C src clean
@@ -231,17 +269,13 @@ $(INSTALLED_PACKAGE): $(RELEASE_TARBALL)
 	@echo "Installing package in GNU Octave ..."
 	@$(OCTAVE) --no-gui --silent --eval "pkg install $<"
 
-## Plaintext info files are generated from GNU TexInfo sources
-$(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS): build/%: doc/%.texinfo
-	@echo "Compiling $< ..."
-	@makeinfo --plaintext -D "version $(VERSION)" -D "date $(DATE)" --output="$@" "$<"
 
 ## GNU LilyPond graphics
 ## This is an exotic dependency for an Octave package, so the generated SVG
 ## is under version control and only gets recreated when LilyPond is installed.
 ifneq ($(LILYPOND),)
-doc/image/%.svg: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
-	@echo "Compiling $< ..."
+doc/image/%.svg: doc/image/%.ly
+	@echo " [LILYPOND] $< ..."
 	@# .ly -> .eps
 	@$(LILYPOND) --ps --output "$(BUILD_DIR)/$<" --silent "$<"
 	@# .eps -> .pdf (with size optimizations)
@@ -251,23 +285,6 @@ doc/image/%.svg: doc/image/%.ly | $(GENERATED_IMAGE_DIR)
 	@# .ps -> .svg
 	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" "$(BUILD_DIR)/$<.ps"
 endif
-
-## Inkscape SVG graphics
-$(GENERATED_IMAGE_DIR)/%.svg.png: $(GENERATED_IMAGE_DIR)/%.svg.pdf
-	@# The output of pdftocairo has a much better quality
-	@# compared to the output from inkscape --export-png.
-	@pdftocairo -png -singlefile -transp -r 120 "$<" "$(GENERATED_IMAGE_DIR)/$*.svg"
-$(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.svg | $(GENERATED_IMAGE_DIR)
-	@echo "Compiling $< ..."
-	@inkscape --without-gui \
-		--export-ignore-filters \
-		--export-eps="$(BUILD_DIR)/$<.eps" \
-		--export-pdf="$(BUILD_DIR)/$<.pdf" \
-		"$<" > /dev/null
-	@# Make the build reproducible and remove timestamp metadata
-	@grep --invert-match "^%% CreationDate: " "$(BUILD_DIR)/$<.eps" > "$(BUILD_DIR)/$<.eps_"
-	@mv "$(BUILD_DIR)/$<.eps_" "$(BUILD_DIR)/$<.eps"
-
 
 ## Patch generated stuff into the release tarball
 $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)
