@@ -12,19 +12,7 @@ fntests.log
 
 # The following files are created during package build
 ^build/
-
-# aclocal
-/aclocal.m4
-/autom4te.cache/
-
-# autoheader
-^src/crlibm/(.*)\.in$
-
-# autoconf
-^src/(.*/)?configure$
-
-# automake
-^src/crlibm/(INSTALL|compile|config.guess|config.sub|depcomp|install-sh|missing|test-driver)$
+^.dist/
 
 # configure
 ^src/(.*/)?(Makefile|config.log|config.status|crlibm_config.h|scs_lib/Makefile|stamp-h1|tests/Makefile)$

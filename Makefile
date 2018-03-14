@@ -145,9 +145,71 @@ release: $(RELEASE_TARBALL_COMPRESSED) $(HTML_TARBALL_COMPRESSED) id md5
 
 install: $(INSTALLED_PACKAGE)
 
+CRLIBM_AUTOTOOLS_OBJ = \
+	src/crlibm/aclocal.m4 \
+	src/crlibm/configure \
+	src/crlibm/config.guess \
+	src/crlibm/config.sub \
+	src/crlibm/install-sh \
+	src/crlibm/Makefile.in \
+	src/crlibm/scs_lib/Makefile.in \
+	src/crlibm/crlibm_config.h.in \
+	src/crlibm/missing \
+	src/crlibm/INSTALL \
+	src/crlibm/compile
+DIST_CRLIBM_AUTOTOOLS_OBJ = $(patsubst %,.dist/%,$(CRLIBM_AUTOTOOLS_OBJ))
+
+.dist/src/configure: src/configure.ac
+	# AUTOTOOLS ./src/
+	@mkdir -p .dist/src
+	@( cd .dist/src && \
+	   ln -sf ../../src/configure.ac . && \
+	   VERSION=$(VERSION) autoconf \
+	)
+
+.NOTPARALLEL: $(DIST_CRLIBM_AUTOTOOLS_OBJ)
+$(DIST_CRLIBM_AUTOTOOLS_OBJ): src/crlibm/configure.ac src/crlibm/Makefile.am src/crlibm/scs_lib/Makefile.am
+	# AUTOTOOLS ./src/crlibm/
+	@mkdir -p .dist/src/crlibm/scs_lib
+	@( cd .dist/src/crlibm/scs_lib && \
+	   ln -sf ../../../../src/crlibm/scs_lib/Makefile.am . \
+	)
+	@( cd .dist/src/crlibm && \
+	   ln -sf $(patsubst %,../../../%,\
+	     src/crlibm/configure.ac \
+	     src/crlibm/Makefile.am \
+	     src/crlibm/AUTHORS \
+	     src/crlibm/ChangeLog \
+	     src/crlibm/COPYING.LIB \
+	     src/crlibm/NEWS \
+	     src/crlibm/README) . && \
+	   aclocal && \
+	   autoheader && \
+	   automake --add-missing -c --ignore-deps && \
+	   autoconf \
+	)
+	@touch --no-create $(DIST_CRLIBM_AUTOTOOLS_OBJ)
+
+.dist/$(PACKAGE)-$(VERSION).tar: .hg/dirstate .dist/src/configure $(DIST_CRLIBM_AUTOTOOLS_OBJ)
+	@# For the release tarball, we can take most files from version control and
+	@# exclude:
+	@#  - .hgignore and .hgtags
+	@#  - some maintainer scripts
+	@#  - crlibm test code (it is already included in crlibm.mat and would take a lot of space)
+	# HG ARCHIVE
+	@hg archive --exclude ".hg*" --exclude "Makefile" --exclude "*.sh" --exclude "src/crlibm/tests" "$@"
+	@# Patch generated files into the release tarball.
+	@# Make tries to re-run automake on the target system (during installation
+	@# of the Octave package) if automake artefacts are older than their source
+	@# files.  Prevent this by applying the timestamp of the source code
+	@# revision, which is the same that is used by “hg archive”.
+	# TAR UPDATE
+	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$@" --transform="s!^.dist/!$(PACKAGE)-$(VERSION)/!" $(wordlist 2,$(words $^),$^)
+
 clean:
 	make -C src clean
 	rm -rf "$(BUILD_DIR)"
+	rm -rf .dist
 	rm -f fntests.log
 
 $(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/inst $(BUILD_DIR)/inst/test:
@@ -206,13 +268,6 @@ $(GENERATED_IMAGE_DIR)/%.svg.eps $(GENERATED_IMAGE_DIR)/%.svg.pdf: doc/image/%.s
 	@grep --invert-match "^%% CreationDate: " "$(BUILD_DIR)/$<.eps" > "$(BUILD_DIR)/$<.eps_"
 	@mv "$(BUILD_DIR)/$<.eps_" "$(BUILD_DIR)/$<.eps"
 
-bootstrap: $(GENERATED_CONFIGURE)
-$(GENERATED_CONFIGURE): src/configure.ac
-	(cd src && autoconf)
-
-bootstrap: $(GENERATED_CRLIBM_AUTOMAKE)
-$(GENERATED_CRLIBM_AUTOMAKE):
-	(cd $(BUNDLED_CRLIBM_DIR) && aclocal && autoheader && autoconf && automake --add-missing -c --ignore-deps && autoconf)
 
 ## Patch generated stuff into the release tarball
 $(RELEASE_TARBALL_COMPRESSED): $(TAR_PATCHED)

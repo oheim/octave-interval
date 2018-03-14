@@ -19,7 +19,7 @@
 ### <http://www.gnu.org/licenses/>.
 
 AC_PREREQ([2.69])
-AC_INIT([interval], [m4_esyscmd_s([grep ^Version:\  ../DESCRIPTION | cut -f2 -d\ ])], [Oliver Heimlich <oheim@posteo.de>])
+AC_INIT([interval], [m4_esyscmd_s([echo $VERSION])], [Oliver Heimlich <oheim@posteo.de>])
 AC_CONFIG_SRCDIR([mpfr_function_d.cc])
 
 # Checks for programs.
