@@ -13,6 +13,7 @@ fntests.log
 # The following files are created during package build
 ^build/
 ^.dist/
+^.html/
 
 # configure
 ^src/(.*/)?(Makefile|config.log|config.status|crlibm_config.h|scs_lib/Makefile|stamp-h1|tests/Makefile)$

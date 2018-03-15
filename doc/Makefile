@@ -23,8 +23,9 @@ manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard
 	$(MAKEINFO) --Xopt=--texinfo='@set version $(VERSION)' --pdf "$<"
 
 image/%.m.png: image/%.m
-	$(OCTAVE) \
-		--no-gui --silent --no-history \
+	$(OCTAVE) --no-history \
+		--eval "pkg load interval;" \
+		--eval "set (0, 'defaultfigurevisible', 'off');" \
 		--eval "source ('$<');" \
 		--eval "print (gcf, '$@');"
 	@# The image size is too large for inclusion in the pdf,

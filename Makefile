@@ -61,9 +61,17 @@ PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
 DATE = $(shell grep "^Date: " DESCRIPTION | cut -f2 -d" ")
 HG_ID = $(shell hg identify --id)
+
 HG_DATETIME_LOCAL = $(shell hg log --rev . --template {date\|isodatesec})
 HG_DATETIME_UTC = $(shell date --utc --rfc-3339=seconds --date="$(HG_DATETIME_LOCAL)")
 TAR_REPRODUCIBLE_OPTIONS = --mtime="$(HG_DATETIME_UTC)" --mode=a+r,g-w,o-w --owner=root --group=root --numeric-owner
+
+OCTAVE_REPRODUCIBLE_OPTIONS = \
+	--norc \
+	--silent \
+	--no-history \
+	--eval "rand ('state', double ('reproducible')');"
+
 H_SOURCES = $(sort $(wildcard src/*.h))
 CC_SOURCES = $(sort $(wildcard src/*.cc))
 CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
@@ -73,29 +81,7 @@ RELEASE_TARBALL = $(RELEASE_DIR).tar
 RELEASE_TARBALL_COMPRESSED = $(RELEASE_TARBALL).gz
 HTML_DIR = $(BUILD_DIR)/$(PACKAGE)-html
 HTML_TARBALL_COMPRESSED = $(HTML_DIR).tar.gz
-BUNDLED_CRLIBM_DIR = src/crlibm
-INSTALLED_PACKAGE_DIR = ~/octave/$(PACKAGE)-$(VERSION)
-INSTALLED_PACKAGE = $(INSTALLED_PACKAGE_DIR)/packinfo/DESCRIPTION
-GENERATED_COPYING = $(BUILD_DIR)/COPYING
-GENERATED_CITATION = $(BUILD_DIR)/CITATION
-GENERATED_NEWS = $(BUILD_DIR)/NEWS
-GENERATED_IMAGE_DIR = $(BUILD_DIR)/doc/image
-GENERATED_CONFIGURE = src/configure
-GENERATED_CRLIBM_AUTOMAKE = \
-	$(BUNDLED_CRLIBM_DIR)/aclocal.m4 \
-	$(BUNDLED_CRLIBM_DIR)/configure \
-	$(BUNDLED_CRLIBM_DIR)/config.guess \
-	$(BUNDLED_CRLIBM_DIR)/config.sub \
-	$(BUNDLED_CRLIBM_DIR)/install-sh \
-	$(BUNDLED_CRLIBM_DIR)/Makefile.in \
-	$(BUNDLED_CRLIBM_DIR)/scs_lib/Makefile.in \
-	$(BUNDLED_CRLIBM_DIR)/crlibm_config.h.in \
-	$(BUNDLED_CRLIBM_DIR)/missing \
-	$(BUNDLED_CRLIBM_DIR)/INSTALL \
-	$(BUNDLED_CRLIBM_DIR)/compile
 EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/inst/test/%.cc-tst,$(CC_WITH_TESTS))
-GENERATED_OBJ = $(GENERATED_CITATION) $(GENERATED_COPYING) $(GENERATED_NEWS) $(GENERATED_IMAGES) $(GENERATED_CONFIGURE) $(GENERATED_CRLIBM_AUTOMAKE) $(EXTRACTED_CC_TESTS)
-TAR_PATCHED = $(BUILD_DIR)/.tar
 OCT_COMPILED = $(BUILD_DIR)/.oct
 
 ZOPFLI ?= $(shell which zopfli 2> /dev/null)
@@ -103,8 +89,8 @@ LILYPOND ?= $(shell which lilypond 2> /dev/null)
 OCTAVE ?= octave
 MKOCTFILE ?= mkoctfile -Wall
 
-.PHONY: help html run check test doctest install info clean
 
+.PHONY: help
 help:
 	@echo
 	@echo "Usage:"
@@ -112,29 +98,12 @@ help:
 	@echo "   make html     Create $(PACKAGE)-html.tar.gz for release"
 	@echo "   make release  Create both of the above plus md5 sums"
 	@echo
-	@echo "   make install  Install the package in GNU Octave"
+	@echo "   make install  Install the release in GNU Octave"
 	@echo "   make check    Validate the package (w/o install)"
 	@echo "   make run      Run the package in GNU Octave (w/o install)"
 	@echo
 	@echo "   make clean    Cleanup"
 	@echo
-
-check: doctest test
-dist: .dist/$(PACKAGE)-$(VERSION).tar.gz
-html: $(HTML_TARBALL_COMPRESSED)
-
-.PHONY: release
-release: .dist/$(PACKAGE)-$(VERSION).tar.gz $(HTML_TARBALL_COMPRESSED)
-	@echo "Source Revision: $(HG_ID)"
-	@( case "$(HG_ID)" in *+ ) \
-	     echo "You have uncommitted changes!";; \
-	   esac \
-	)
-	@md5sum $^
-	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
-	@echo "The Octave Forge admins will tag this revision after publication."
-
-install: $(INSTALLED_PACKAGE)
 
 
 ## Generated Autotool files for the release tarball
@@ -256,19 +225,26 @@ else
 	@touch "$@"
 endif
 
+.PHONY: dist
+dist: .dist/$(PACKAGE)-$(VERSION).tar.gz
+
+
+## Install the release tarball in Octave
+OCTAVE_PKG_PREFIX = $(HOME)/octave
+INSTALLED_PACKAGE = $(OCTAVE_PKG_PREFIX)/$(PACKAGE)-$(VERSION)/packinfo/DESCRIPTION
+.PHONY: install
+install: $(INSTALLED_PACKAGE)
+$(INSTALLED_PACKAGE): .dist/$(PACKAGE)-$(VERSION).tar
+	@echo " [OCTAVE] pkg install $(PACKAGE)"
+	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) \
+		--eval "pkg install -local $<"
+
 
 clean:
 	make -C src clean
 	rm -rf "$(BUILD_DIR)"
 	rm -rf .dist
 	rm -f fntests.log
-
-$(BUILD_DIR) $(GENERATED_IMAGE_DIR) $(BUILD_DIR)/inst $(BUILD_DIR)/inst/test:
-	@mkdir -p "$@"
-
-$(INSTALLED_PACKAGE): $(RELEASE_TARBALL)
-	@echo "Installing package in GNU Octave ..."
-	@$(OCTAVE) --no-gui --silent --eval "pkg install $<"
 
 
 ## GNU LilyPond graphics
@@ -287,40 +263,63 @@ doc/image/%.svg: doc/image/%.ly
 	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" "$(BUILD_DIR)/$<.ps"
 endif
 
-$(INSTALLED_PACKAGE): $(TAR_PATCHED)
 
-## HTML Documentation for Octave Forge
-$(HTML_TARBALL_COMPRESSED): $(INSTALLED_PACKAGE) | $(BUILD_DIR)
-	@# Compile images from m-file scripts,
-	@# which are not shipped in the release tarball
-	@OCTAVE="$(OCTAVE)" make --directory="$(INSTALLED_PACKAGE_DIR)/doc" images
-	@echo "Generating HTML documentation for the package. This may take a while ..."
-	@# 1. Load the generate_html package
-	@# 2. Set fonts for demo plots and use off-screen rendering
-	@# 3. Make the use of random values in demos reproducible between builds
-	@# 4. Specify path to package manual
-	@# 5. Use custom CSS and global version number
+## Create HTML Documentation from scratch
+.PHONY: html
+html: .html/$(PACKAGE)-html.tar.gz
+.html/$(PACKAGE)-html.tar.gz: $(INSTALLED_PACKAGE)
+	@# We need a generate_html package installed
+	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) \
+		--eval "if isempty (pkg ('list', 'generate_html')), \
+			disp (' [OCTAVE] pkg install generate_html'); \
+			pkg install -forge -local generate_html; \
+			endif;"
+	@# Compile images from m-file scripts in the installed package.
+	@# These are not shipped in the release tarball.
+	@echo " [OCTAVE] doc/images/*.m"
+	@OCTAVE="$(OCTAVE) $(subst ",\",$(OCTAVE_REPRODUCIBLE_OPTIONS))" $(MAKE) --directory="$(OCTAVE_PKG_PREFIX)/$(PACKAGE)-$(VERSION)/doc" images
+	@# Create manual and function reference
+	@#  - Use off-screen rendering (for demos)
+	@#  - Specify path to package manual
+	@#  - Use custom CSS and global version number
 	@#    (only affects package manual, not function reference)
-	@# 6. Run the generation
-	@$(OCTAVE) --no-gui --silent \
+	@echo " [OCTAVE] generate_package_html"
+	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) \
 		--eval "pkg load generate_html;" \
-		--eval "set (0, 'defaultaxesfontname', 'Fantasque Sans Mono');" \
-		--eval "set (0, 'defaulttextfontname', 'Roboto Condensed');" \
 		--eval "set (0, 'defaultfigurevisible', 'off');" \
-		--eval "rand ('state', double ('reproducible')');" \
 		--eval "options = get_html_options ('octave-forge');" \
 		--eval "options.package_doc = 'manual.texinfo';" \
-		--eval "options.package_doc_options = '-D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <div id="sf_logo"><a href=\"https://sourceforge.net/\"><img width=\"88\" height=\"31\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"//sourceforge.net/sflogo.php?group_id=2888&amp;type=1\" /></a></div>'' --css-ref=manual.css';" \
-		--eval "generate_package_html ('$(PACKAGE)', '$(HTML_DIR)', options)"
+		--eval "options.package_doc_options = '-D ''version $(VERSION)'' -D octave-forge --set-customization-variable ''TOP_NODE_UP_URL ../index.html'' --set-customization-variable ''PRE_BODY_CLOSE <div id="sf_logo"><a href=\"https://sourceforge.net/\"><img width=\"120\" height=\"30\" style=\"border:0\" alt=\"Sourceforge.net Logo\" src=\"https://sourceforge.net/sflogo.php?group_id=2888&amp;type=13\" /></a></div>'' --css-ref=manual.css';" \
+		--eval "generate_package_html ('$(PACKAGE)', '.html', options)"
 	@# Documentation will be put on a webserver,
 	@# where .svgz files can save bandwidth and CPU time.
 	@# Locally this doesn't work so well, see https://bugzilla.mozilla.org/show_bug.cgi?id=52282
-	@(cd $(HTML_DIR)/$(PACKAGE)/package_doc/image/; \
-		((zopfli *.svg && rm -f *.svg) || gzip --best -f *.svg); \
-		rename 's!\.svg\.gz!.svgz!' *.svg.gz)
-	@(cd $(HTML_DIR)/$(PACKAGE)/package_doc/; \
+	@echo " [GZIP] package_doc/image/*.svg"
+	@(	cd .html/$(PACKAGE)/package_doc/image/; \
+		gzip --best -f *.svg; \
+		rename -f 's!\.svg\.gz!.svgz!' *.svg.gz)
+	@echo " [SED] package_doc/*.html"
+	@(cd .html/$(PACKAGE)/package_doc/; \
 		sed -i 's!"\(image/[^"]*\.svg\)"!"\1z"!g' *.html)
-	@tar --create --auto-compress --transform="s!^$(BUILD_DIR)/!!" --file "$@" "$(HTML_DIR)"
+	@echo " [TAR --create] .html/$(PACKAGE)/"
+	@tar --create --auto-compress --transform="s!^.html/!!" --file "$@" .html/$(PACKAGE)/
+
+
+.PHONY: release
+release: .dist/$(PACKAGE)-$(VERSION).tar.gz .html/$(PACKAGE)-html.tar.gz
+	@echo "Source Revision: $(HG_ID)"
+	@( case "$(HG_ID)" in *+ ) \
+	     echo "You have uncommitted changes!";; \
+	   esac \
+	)
+	@md5sum $^
+	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
+	@echo "The Octave Forge admins will tag this revision after publication."
+
+
+
+check: doctest test
+
 
 ## If the src/Makefile changes, recompile all oct-files
 $(CC_SOURCES): src/Makefile
