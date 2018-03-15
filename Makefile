@@ -81,7 +81,7 @@ CRLIBM_AUTOTOOLS_OBJ = \
 	src/crlibm/missing \
 	src/crlibm/INSTALL \
 	src/crlibm/compile
-DIST_CRLIBM_AUTOTOOLS_OBJ = $(patsubst %,.dist/%,$(CRLIBM_AUTOTOOLS_OBJ))
+DIST_CRLIBM_AUTOTOOLS_OBJ = $(addprefix .dist/,$(CRLIBM_AUTOTOOLS_OBJ))
 .dist/src/configure: src/configure.ac
 	@echo " [AUTOTOOLS] src/"
 	@mkdir -p .dist/src
@@ -97,7 +97,7 @@ $(DIST_CRLIBM_AUTOTOOLS_OBJ): src/crlibm/configure.ac src/crlibm/Makefile.am src
 		ln -sf ../../../../src/crlibm/scs_lib/Makefile.am . \
 	)
 	@(	cd .dist/src/crlibm && \
-		ln -sf $(patsubst %,../../../%,\
+		ln -sf $(addprefix ../../../,\
 			src/crlibm/configure.ac \
 			src/crlibm/Makefile.am \
 			src/crlibm/AUTHORS \
@@ -114,11 +114,8 @@ $(DIST_CRLIBM_AUTOTOOLS_OBJ): src/crlibm/configure.ac src/crlibm/Makefile.am src
 
 ## Generated graphic files
 IMAGE_SRC = $(filter-out %animation.svg,$(wildcard doc/image/*.svg))
-IMAGE_OBJ = \
-	$(patsubst %,%.eps,$(IMAGE_SRC)) \
-	$(patsubst %,%.pdf,$(IMAGE_SRC)) \
-	$(patsubst %,%.png,$(IMAGE_SRC))
-DIST_IMAGE_OBJ = $(patsubst %,.dist/%,$(IMAGE_OBJ))
+IMAGE_OBJ = $(addsuffix .eps,$(IMAGE_SRC)) $(addsuffix .pdf,$(IMAGE_SRC)) $(addsuffix .png,$(IMAGE_SRC))
+DIST_IMAGE_OBJ = $(addprefix .dist/,$(IMAGE_OBJ))
 .dist/doc/image/%.svg.png: .dist/doc/image/%.svg.pdf
 	@# The output of pdftocairo has a much better quality
 	@# compared to the output from inkscape --export-png.
@@ -144,7 +141,7 @@ DIST_IMAGE_OBJ = $(patsubst %,.dist/%,$(IMAGE_OBJ))
 
 ## Generated text files
 TEXT_OBJ = COPYING CITATION NEWS
-DIST_TEXT_OBJ = $(patsubst %,.dist/%,$(TEXT_OBJ))
+DIST_TEXT_OBJ = $(addprefix .dist/,$(TEXT_OBJ))
 .dist/%: doc/%.texinfo
 	@echo " [MAKEINFO] $<"
 	@mkdir -p .dist
@@ -276,9 +273,9 @@ $(wildcard src/*.cc): src/Makefile
 ## Mirror any workspace src/* files in .build and compile OCT files
 OCT_COMPILED = .build/.oct
 $(OCT_COMPILED): $(wildcard src/*) .build/configure $(patsubst src/%,.build/%,$(CRLIBM_AUTOTOOLS_OBJ))
-	@ln -sf $(patsubst %,../%,$(filter-out src/crlibm,$(wildcard src/*))) .build/
-	@ln -sf $(patsubst %,../../%,$(filter-out src/crlibm/scs_lib,$(wildcard src/crlibm/*))) .build/crlibm/
-	@ln -sf $(patsubst %,../../../%,$(wildcard src/crlibm/scs_lib/*)) .build/crlibm/scs_lib/
+	@ln -sf $(addprefix ../,$(filter-out src/crlibm,$(wildcard src/*))) .build/
+	@ln -sf $(addprefix ../../,$(filter-out src/crlibm/scs_lib,$(wildcard src/crlibm/*))) .build/crlibm/
+	@ln -sf $(addprefix ../../../,$(wildcard src/crlibm/scs_lib/*)) .build/crlibm/scs_lib/
 	@echo " [MAKE] src"
 	@OCTAVE="$(OCTAVE) $(subst ",\",$(OCTAVE_REPRODUCIBLE_OPTIONS))" MKOCTFILE="$(MKOCTFILE)" $(MAKE) --directory=.build
 	@touch $@
