@@ -15,47 +15,10 @@ SHELL   = /bin/sh
 ## This Makefile is _not_ meant to be portable. In order to use it, you
 ## have to install certain dependencies. This file is not distributed in
 ## the release tarball, so its dependencies must be met by developers only.
-##
-## It is intended that users of the release tarball do not need to install
-## the tools and generators used here!
-##
-## DEPENDENCIES
-##   * You should use GNU make and a GNU operating system. So far, this
-##     Makefile has been used with Debian GNU/Linux 8 only and is not
-##     guaranteed to work on other systems.
-##
-##     For example, doctest will fail on Windows, because console output
-##     uses singlebyte characters on Windows and multibyte characters
-##     on better systems.
-##
-##   * Octave package: doctest
-##
-##     The Octave Forge package is used to find errors in the code of
-##     @example blocks from the documentation (both function documentation
-##     and user manual).
-##
-##     Always use the latest release of doctest for releaser preparation!
-##
-##   * Octave package: generate_html
-##
-##     The Octave Forge package is used to generate the HTML documentation
-##     for publication of this package on Octave Forge.
-##
-##     Always use the latest release of doctest for releaser preparation!
-##
-##   * Inkscape
-##
-##     Is used to generate or convert images for the manual.
-##
-##     The package repository contains only source code for the images, whereas
-##     the release tarball additionally contains .PNG, .EPS and .PDF versions
-##     of all images. The .PNG versions are also used in the HTML manual, which
-##     is published at Octave Forge.
-##
-##   * Zopfli
-##
-##     Is used to produce a smaller release tarball than is possible with gzip.
-##
+
+OCTAVE ?= octave
+MKOCTFILE ?= mkoctfile -Wall
+ZOPFLI ?= $(shell which zopfli 2> /dev/null)
 
 PACKAGE = $(shell grep "^Name: " DESCRIPTION | cut -f2 -d" ")
 VERSION = $(shell grep "^Version: " DESCRIPTION | cut -f2 -d" ")
@@ -70,25 +33,15 @@ OCTAVE_REPRODUCIBLE_OPTIONS = \
 	--norc \
 	--silent \
 	--no-history \
+	--no-gui \
 	--eval "rand ('state', double ('reproducible')');"
 
-H_SOURCES = $(sort $(wildcard src/*.h))
-CC_SOURCES = $(sort $(wildcard src/*.cc))
-CC_WITH_TESTS = $(shell grep --files-with-matches '^%!' $(CC_SOURCES))
-BUILD_DIR = build
-RELEASE_DIR = $(BUILD_DIR)/$(PACKAGE)-$(VERSION)
-RELEASE_TARBALL = $(RELEASE_DIR).tar
-RELEASE_TARBALL_COMPRESSED = $(RELEASE_TARBALL).gz
-HTML_DIR = $(BUILD_DIR)/$(PACKAGE)-html
-HTML_TARBALL_COMPRESSED = $(HTML_DIR).tar.gz
-EXTRACTED_CC_TESTS = $(patsubst src/%.cc,$(BUILD_DIR)/inst/test/%.cc-tst,$(CC_WITH_TESTS))
-OCT_COMPILED = $(BUILD_DIR)/.oct
-
-ZOPFLI ?= $(shell which zopfli 2> /dev/null)
-LILYPOND ?= $(shell which lilypond 2> /dev/null)
-OCTAVE ?= octave
-MKOCTFILE ?= mkoctfile -Wall
-
+OCTAVE_INSTALL_MISSING = \
+	$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) \
+		--eval "if isempty (pkg ('list', 'PKG')), \
+			disp (' [OCTAVE] pkg install PKG'); \
+			pkg install -forge -local PKG; \
+			endif;"
 
 .PHONY: help
 help:
@@ -105,8 +58,17 @@ help:
 	@echo "   make clean    Cleanup"
 	@echo
 
+.PHONY: clean
+clean:
+	$(RM) -r .build .dist .html
 
-## Generated Autotool files for the release tarball
+##
+## PART A: Produce the release tarball
+##
+## This happens in a temporary directory ./.dist/
+##
+
+## Generated Autotool files
 CRLIBM_AUTOTOOLS_OBJ = \
 	src/crlibm/aclocal.m4 \
 	src/crlibm/configure \
@@ -150,8 +112,7 @@ $(DIST_CRLIBM_AUTOTOOLS_OBJ): src/crlibm/configure.ac src/crlibm/Makefile.am src
 	)
 	@touch --no-create $(DIST_CRLIBM_AUTOTOOLS_OBJ)
 
-
-## Generated graphic files for the release tarball
+## Generated graphic files
 IMAGE_SRC = $(filter-out %animation.svg,$(wildcard doc/image/*.svg))
 IMAGE_OBJ = \
 	$(patsubst %,%.eps,$(IMAGE_SRC)) \
@@ -181,18 +142,13 @@ DIST_IMAGE_OBJ = $(patsubst %,.dist/%,$(IMAGE_OBJ))
 		--export-pdf="$@" \
 		"$<" > /dev/null
 
-
-## Generated text files for the release tarball
-TEXT_OBJ = \
-	COPYING \
-	CITATION \
-	NEWS
+## Generated text files
+TEXT_OBJ = COPYING CITATION NEWS
 DIST_TEXT_OBJ = $(patsubst %,.dist/%,$(TEXT_OBJ))
 .dist/%: doc/%.texinfo
 	@echo " [MAKEINFO] $<"
 	@mkdir -p .dist
 	@makeinfo --plaintext -D "version $(VERSION)" -D "date $(DATE)" --output="$@" "$<"
-
 
 ## For the release tarball, we can take most files from version control and
 ## exclude:
@@ -212,7 +168,10 @@ DIST_TEXT_OBJ = $(patsubst %,.dist/%,$(TEXT_OBJ))
 	@echo " [TAR --update] $@"
 	@tar $(TAR_REPRODUCIBLE_OPTIONS) --update --file "$@" --transform="s!^.dist/!$(PACKAGE)-$(VERSION)/!" $(wordlist 2,$(words $^),$^)
 
-
+## Compress the tarball for smaller download size.
+## Zopfli can create smaller files that gzip.
+.PHONY: dist
+dist: .dist/$(PACKAGE)-$(VERSION).tar.gz
 .dist/$(PACKAGE)-$(VERSION).tar.gz: .dist/$(PACKAGE)-$(VERSION).tar
 ifneq ($(ZOPFLI),)
 %.gz: %
@@ -225,9 +184,12 @@ else
 	@touch "$@"
 endif
 
-.PHONY: dist
-dist: .dist/$(PACKAGE)-$(VERSION).tar.gz
-
+##
+## Part B: Create HTML documentation for publication on Octave Forge
+##
+## Installs the package in Octave and partly happens in the user's pkg dir,
+## the result is put in a temporary directory ./.html/
+##
 
 ## Install the release tarball in Octave
 OCTAVE_PKG_PREFIX = $(HOME)/octave
@@ -239,44 +201,14 @@ $(INSTALLED_PACKAGE): .dist/$(PACKAGE)-$(VERSION).tar
 	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) \
 		--eval "pkg install -local $<"
 
-
-clean:
-	make -C src clean
-	rm -rf "$(BUILD_DIR)"
-	rm -rf .dist
-	rm -f fntests.log
-
-
-## GNU LilyPond graphics
-## This is an exotic dependency for an Octave package, so the generated SVG
-## is under version control and only gets recreated when LilyPond is installed.
-ifneq ($(LILYPOND),)
-doc/image/%.svg: doc/image/%.ly
-	@echo " [LILYPOND] $< ..."
-	@# .ly -> .eps
-	@$(LILYPOND) --ps --output "$(BUILD_DIR)/$<" --silent "$<"
-	@# .eps -> .pdf (with size optimizations)
-	@epstopdf "$(BUILD_DIR)/$<.eps"
-	@# .pdf -> .ps (convert font glyphs to outline shapes)
-	@gs -q -o "$(BUILD_DIR))/$<.ps" -dNOCACHE -sDEVICE=pswrite "$(BUILD_DIR)/$<.pdf"
-	@# .ps -> .svg
-	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" "$(BUILD_DIR)/$<.ps"
-endif
-
-
 ## Create HTML Documentation from scratch
 .PHONY: html
 html: .html/$(PACKAGE)-html.tar.gz
 .html/$(PACKAGE)-html.tar.gz: $(INSTALLED_PACKAGE)
-	@# We need a generate_html package installed
-	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) \
-		--eval "if isempty (pkg ('list', 'generate_html')), \
-			disp (' [OCTAVE] pkg install generate_html'); \
-			pkg install -forge -local generate_html; \
-			endif;"
+	@$(subst PKG,generate_html,$(OCTAVE_INSTALL_MISSING))
 	@# Compile images from m-file scripts in the installed package.
 	@# These are not shipped in the release tarball.
-	@echo " [OCTAVE] doc/images/*.m"
+	@echo " [MAKE] doc/images/*.m"
 	@OCTAVE="$(OCTAVE) $(subst ",\",$(OCTAVE_REPRODUCIBLE_OPTIONS))" $(MAKE) --directory="$(OCTAVE_PKG_PREFIX)/$(PACKAGE)-$(VERSION)/doc" images
 	@# Create manual and function reference
 	@#  - Use off-screen rendering (for demos)
@@ -304,7 +236,9 @@ html: .html/$(PACKAGE)-html.tar.gz
 	@echo " [TAR --create] .html/$(PACKAGE)/"
 	@tar --create --auto-compress --transform="s!^.html/!!" --file "$@" .html/$(PACKAGE)/
 
-
+## The release consists of the tarball from part A and the HTML documentation
+## for Octave Forge.  Revision numbers and hash values are used to tag and
+## verify the upload.
 .PHONY: release
 release: .dist/$(PACKAGE)-$(VERSION).tar.gz .html/$(PACKAGE)-html.tar.gz
 	@echo "Source Revision: $(HG_ID)"
@@ -316,45 +250,71 @@ release: .dist/$(PACKAGE)-$(VERSION).tar.gz .html/$(PACKAGE)-html.tar.gz
 	@echo "Upload @ https://sourceforge.net/p/octave/package-releases/new/"
 	@echo "The Octave Forge admins will tag this revision after publication."
 
+##
+## Part C: (Interactive) tests during development
+##
+## There is no need to install the package.  Generated files (see part A) and
+## compiled OCT files can be rebuild incrementally, which is fast.  OCT files
+## are compiled in a temporary directory .build, from where they can be loaded.
+##
 
-
-check: doctest test
-
+## Mirror generated .dist files for compilation in .build
+.build/configure: .build/%: .dist/src/%
+	@mkdir -p .build
+	@ln -sf ../$< $@
+$(patsubst src/%,.build/%,$(filter-out src/crlibm/scs_lib/%,$(CRLIBM_AUTOTOOLS_OBJ))): .build/%: .dist/src/%
+	@mkdir -p .build/crlibm
+	@ln -sf ../../$< $@
+.build/crlibm/scs_lib/Makefile.in: .build/%: .dist/src/%
+	@mkdir -p .build/crlibm/scs_lib
+	@ln -sf ../../../$< $@
 
 ## If the src/Makefile changes, recompile all oct-files
-$(CC_SOURCES): src/Makefile
+$(wildcard src/*.cc): src/Makefile
 	@touch --no-create "$@"
 
-## Compilation of oct-files happens in a separate Makefile,
-## which is bundled in the release and will be used during
-## package installation by Octave.
-$(OCT_COMPILED): $(CC_SOURCES) $(H_SOURCES) | $(BUILD_DIR) $(GENERATED_CRLIBM_AUTOMAKE)
-	@echo "Compiling OCT-files ..."
-	@(cd src; MKOCTFILE="$(MKOCTFILE)" make)
-	@touch "$@"
+## Mirror any workspace src/* files in .build and compile OCT files
+OCT_COMPILED = .build/.oct
+$(OCT_COMPILED): $(wildcard src/*) .build/configure $(patsubst src/%,.build/%,$(CRLIBM_AUTOTOOLS_OBJ))
+	@ln -sf $(patsubst %,../%,$(filter-out src/crlibm,$(wildcard src/*))) .build/
+	@ln -sf $(patsubst %,../../%,$(filter-out src/crlibm/scs_lib,$(wildcard src/crlibm/*))) .build/crlibm/
+	@ln -sf $(patsubst %,../../../%,$(wildcard src/crlibm/scs_lib/*)) .build/crlibm/scs_lib/
+	@echo " [MAKE] src"
+	@OCTAVE="$(OCTAVE) $(subst ",\",$(OCTAVE_REPRODUCIBLE_OPTIONS))" MKOCTFILE="$(MKOCTFILE)" $(MAKE) --directory=.build
+	@touch $@
 
-## Extract tests for oct-files. These would be lost during pkg install.
-$(EXTRACTED_CC_TESTS): $(BUILD_DIR)/inst/test/%.cc-tst: src/%.cc | $(BUILD_DIR)/inst/test
-	@echo "Extracting tests from $< ..."
-	@rm -f "$@-t" "$@"
-	@(	echo "## DO NOT EDIT!  Generated automatically from $<"; \
-		grep '^%!' "$<") > "$@_"
-	@mv "$@_" "$@"
+## Octave parameters to make M files and compiled OCT files available
+OCTAVE_WORKSPACE_PATH = --path "inst/" --path ".build/"
 
-## Interactive shell with the package's functions in the path
-run: $(OCT_COMPILED) $(EXTRACTED_CC_TESTS)
-	@echo "Run GNU Octave with the development version of the package"
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/"
+## Interactive shell with the current workspace functions in the path
+.PHONY: run
+run: $(OCT_COMPILED)
+	@$(OCTAVE) $(OCTAVE_WORKSPACE_PATH) --no-gui --silent
 	@echo
 
-## Validate code examples
-doctest: doctest-manual doctest-docstrings
-.PHONY: doctest-manual doctest-docstrings
+## Run built-in self tests (BISTs)
+.PHONY: test
+test: $(OCT_COMPILED)
+	@echo " [OCTAVE] test"
+	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) $(OCTAVE_WORKSPACE_PATH) \
+		--eval 'success = true;' \
+		--eval 'for file = {dir("./src/*.cc").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/*.m").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/test/*.tst").name}, success &= test (strcat ("test/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/@infsup/*.m").name}, success &= test (strcat ("@infsup/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'for file = {dir("./inst/@infsupdec/*.m").name}, success &= test (strcat ("@infsupdec/", file{1}), "quiet", stdout); endfor;' \
+		--eval 'exit (not (success));'
+
+## Validate code examples from the package manual.
+## Workaround for OctSymPy issue 273, we must pre-initialize the package.
+## Otherwise, it will make the doctests fail.
+.PHONY: doctest-manual
 doctest-manual: $(OCT_COMPILED)
-	@# Workaround for OctSymPy issue 273, we must pre-initialize the package
-	@# Otherwise, it will make the doctests fail
-	@echo "Testing package manual ..."
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --eval \
+	@$(subst PKG,doctest,$(OCTAVE_INSTALL_MISSING:PKG=doctest))
+	@$(subst PKG,symbolic,$(OCTAVE_INSTALL_MISSING))
+	@echo " [OCTAVE] doctest doc/"
+	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) $(OCTAVE_WORKSPACE_PATH) \
+		--eval \
 		"pkg load doctest; \
 		 pkg load symbolic; warning ('off', 'OctSymPy:function_handle:nocodegen'); sym ('x'); \
 		 set (0, 'defaultfigurevisible', 'off'); \
@@ -363,9 +323,14 @@ doctest-manual: $(OCT_COMPILED)
 		 targets = strsplit (targets, ' '); \
 		 success = doctest (targets); \
 		 exit (!success)"
+
+## Validate code examples from documentation strings.
+.PHONY: doctest-docstrings
 doctest-docstrings: $(OCT_COMPILED)
-	@echo "Testing documentation strings ..."
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" --eval \
+	@$(subst PKG,doctest,$(OCTAVE_INSTALL_MISSING:PKG=doctest))
+	@echo " [OCTAVE] doctest"
+	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) $(OCTAVE_WORKSPACE_PATH) \
+		--eval \
 		"pkg load doctest; \
 		 set (0, 'defaultfigurevisible', 'off'); \
 		 targets = '@infsup @infsupdec $(shell find inst/ src/ -maxdepth 1 -regex ".*\\.\\(m\\|oct\\)" -printf "%f\\n" | cut -f1 -d.)'; \
@@ -373,48 +338,37 @@ doctest-docstrings: $(OCT_COMPILED)
 		 success = doctest (targets); \
 		 exit (!success)"
 
-## Check the creation of the manual
-## The doc/Makefile may be used by the end user
-GENERATED_MANUAL_HTML = $(BUILD_DIR)/doc/manual.html
-GENERATED_MANUAL_PDF = $(BUILD_DIR)/doc/manual.pdf
-info: $(GENERATED_MANUAL_HTML) $(GENERATED_MANUAL_PDF)
-$(GENERATED_MANUAL_HTML): doc/manual.texinfo doc/manual.css $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) | $(GENERATED_IMAGES_PNG) $(INSTALLED_PACKAGE)
-	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
-	@(cd doc; \
-	  VERSION=$(VERSION) \
-	  OCTAVE="$(OCTAVE)" \
-	  $(MAKE) manual.html)
-	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
-	@cp -f --update doc/image/*.svg "$(BUILD_DIR)/doc/image/"
-	@mv doc/manual.html "$@"
-$(GENERATED_MANUAL_PDF): doc/manual.texinfo $(wildcard doc/chapter/*) $(wildcard doc/image/*.texinfo) $(GENERATED_IMAGES_PDF) $(INSTALLED_PACKAGE)
-	@cp -f --update $(BUILD_DIR)/doc/image/*.m.png doc/image/ || true
-	@(cd doc; \
-	  TEXI2DVI_BUILD_DIRECTORY="../$(BUILD_DIR)/doc" \
-	  MAKEINFO="makeinfo -I ../$(BUILD_DIR)/doc --Xopt=--tidy" \
-	  VERSION=$(VERSION) \
-	  OCTAVE="$(OCTAVE)" \
-	  $(MAKE) manual.pdf)
-	@mv doc/image/*.m.png "$(BUILD_DIR)/doc/image/"
-	@mv doc/manual.pdf "$@"
+.PHONY: doctest
+doctest: doctest-docstrings doctest-manual
+
+.PHONY: check
+check: doctest test
+
+##
+## Part D: Miscellaneous utilities
+##
+
+## GNU LilyPond graphics
+## This is an exotic dependency for an Octave package, so the generated SVG
+## is under version control and only gets recreated when LilyPond is installed.
+LILYPOND ?= $(shell which lilypond 2> /dev/null)
+ifneq ($(LILYPOND),)
+doc/image/%.svg: doc/image/%.ly
+	@echo " [LILYPOND] $<"
+	@# .ly -> .eps
+	@$(LILYPOND) --ps --output "$(BUILD_DIR)/$<" --silent "$<"
+	@# .eps -> .pdf (with size optimizations)
+	@epstopdf "$(BUILD_DIR)/$<.eps"
+	@# .pdf -> .ps (convert font glyphs to outline shapes)
+	@gs -q -o "$(BUILD_DIR))/$<.ps" -dNOCACHE -sDEVICE=pswrite "$(BUILD_DIR)/$<.pdf"
+	@# .ps -> .svg
+	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" "$(BUILD_DIR)/$<.ps"
+endif
 
 ## Push the new release to Debian
 ## (inspired by https://xkcd.com/1597/ because I always forget the required commands)
 .PHONY: debian
-DEBIAN_WORKSPACE_ROOT = ../Debian
 debian:
-	cp "$(RELEASE_TARBALL_COMPRESSED)" "$(DEBIAN_WORKSPACE_ROOT)/octave-$(PACKAGE)_$(VERSION).orig.tar.gz"
-	(cd $(DEBIAN_WORKSPACE_ROOT)/octave-$(PACKAGE) && \
+	cp "$(RELEASE_TARBALL_COMPRESSED)" "../Debian/octave-$(PACKAGE)_$(VERSION).orig.tar.gz"
+	(cd ../Debian/octave-$(PACKAGE) && \
 	 gbp import-orig ../octave-$(PACKAGE)_$(VERSION).orig.tar.gz --pristine-tar)
-
-## Run built-in self tests (BISTs)
-test: $(OCT_COMPILED)
-	@echo "Testing built-in self tests (BISTs) ..."
-	@$(OCTAVE) --no-gui --silent --path "inst/" --path "src/" \
-		--eval 'success = true;' \
-		--eval 'for file = {dir("./src/*.cc").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/*.m").name}, success &= test (file{1}, "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/test/*.tst").name}, success &= test (strcat ("test/", file{1}), "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/@infsup/*.m").name}, success &= test (strcat ("@infsup/", file{1}), "quiet", stdout); endfor;' \
-		--eval 'for file = {dir("./inst/@infsupdec/*.m").name}, success &= test (strcat ("@infsupdec/", file{1}), "quiet", stdout); endfor;' \
-		--eval 'exit (not (success));'

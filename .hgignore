@@ -4,19 +4,8 @@ syntax: regexp
 # project's top-level directory".
 
 (^|/)octave-(core|workspace)$
-\.oct$
-\.a$
-\.o$
-\.Po$
-fntests.log
 
-# The following files are created during package build
-^build/
+# The following files are created during package build (see Makefile)
 ^.dist/
 ^.html/
-
-# configure
-^src/(.*/)?(Makefile|config.log|config.status|crlibm_config.h|scs_lib/Makefile|stamp-h1|tests/Makefile)$
-
-# test suite
-^src/crlibm/tests/crlibm_
+^.build/
