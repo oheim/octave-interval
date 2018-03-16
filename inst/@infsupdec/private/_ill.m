@@ -25,5 +25,5 @@
 
 function d = _ill ()
   ## See IEEE Std 1788-2015 14.4 Interchange representations and encodings
-  persistent d = uint8 (0);
+  d = uint8 (0);
 endfunction

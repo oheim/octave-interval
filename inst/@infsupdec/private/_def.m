@@ -25,5 +25,5 @@
 
 function d = _def ()
   ## See IEEE Std 1788-2015 14.4 Interchange representations and encodings
-  persistent d = uint8 (8);
+  d = uint8 (8);
 endfunction

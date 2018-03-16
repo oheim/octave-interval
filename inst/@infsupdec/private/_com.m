@@ -25,5 +25,5 @@
 
 function d = _com ()
   ## See IEEE Std 1788-2015 14.4 Interchange representations and encodings
-  persistent d = uint8 (16);
+  d = uint8 (16);
 endfunction
