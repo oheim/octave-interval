@@ -97,7 +97,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   // Switch to hexadecimal, if “format hex” is active
   if (format == "auto")
     // Maybe there is an easier way to find out whether format hex is active?!
-    if (feval ("disp",
+    if (octave::feval ("disp",
                octave_value_list(octave_value (octave_uint8(255))),
                1)
               (0).string_value () == "ff\n")
@@ -106,7 +106,8 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
   // Switch the conversion template depending on the format
   if (format == "auto")
     {
-      const int precision = feval ("output_precision")(0).scalar_value ();
+      const int precision = octave::feval ("output_precision")
+                                          (0).scalar_value ();
       str_template = "%."
                      + inttostring (precision)
                      + "R*g";

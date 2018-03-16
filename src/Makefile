@@ -52,10 +52,21 @@ $(BUNDLED_CRLIBM_DIR)/crlibm_private.o: $(BUNDLED_CRLIBM_DIR)/crlibm_config.h
 $(BUNDLED_CRLIBM_DIR)/crlibm_config.h:
 	(cd $(BUNDLED_CRLIBM_DIR) && ./configure --disable-dependency-tracking $(CONF_FLAG_SSE2))
 
+## To be backwards compatible with old versions of Octave, we use wrapper
+## functions around some core API functions.
+OCTAVE_VERSION = $(shell $(OCTAVE_CONFIG) -p VERSION)
+ifneq ($(filter 3.% 4.0.% 4.1.% 4.2.%,$(OCTAVE_VERSION)),)
+OCTAVE_COMPATIBILITY = compatibility/octave_4.2.cc
+else
+OCTAVE_COMPATIBILITY = compatibility/octave_current.cc
+endif
+compatibility/octave.cc: $(OCTAVE_COMPATIBILITY)
+	cp $< $@
+
 ## GNU MPFR api oct-files
-mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h
+mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave.cc
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
-mpfr_%.oct: mpfr_%.cc mpfr_commons.h
+mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave.cc
 	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) -Wno-comment  $<
 
 ## <cfenv> api oct-file

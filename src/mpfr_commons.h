@@ -18,6 +18,9 @@
 #include <octave/oct.h>
 #include <mpfr.h>
 
+#include "compatibility/octave.h"
+#include "compatibility/octave.cc"
+
 #define BINARY64_PRECISION 53
 #define BINARY64_EMIN -1073
 #define BINARY64_ACCU_PRECISION 2134 + 2150
@@ -46,10 +49,10 @@ void exact_interval_dot_product (
   const MArray <double> vector_yl, // Lower boundary of second parameter
   const MArray <double> vector_yu) // Upper boundary of second parameter
 {
-  if (! vector_xl.is_vector () ||
-      ! vector_xu.is_vector () ||
-      ! vector_yl.is_vector () ||
-      ! vector_yu.is_vector ())
+  if (! isvector (vector_xl) ||
+      ! isvector (vector_xu) ||
+      ! isvector (vector_yl) ||
+      ! isvector (vector_yu))
     {
       error ("dot product can only be computed over vectors");
       return;

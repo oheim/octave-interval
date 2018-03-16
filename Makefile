@@ -17,6 +17,7 @@ SHELL   = /bin/sh
 ## the release tarball, so its dependencies must be met by developers only.
 
 OCTAVE ?= octave
+OCTAVE_CONFIG ?= octave-config
 MKOCTFILE ?= mkoctfile -Wall
 ZOPFLI ?= $(shell which zopfli 2> /dev/null)
 
@@ -272,12 +273,14 @@ $(wildcard src/*.cc): src/Makefile
 
 ## Mirror any workspace src/* files in .build and compile OCT files
 OCT_COMPILED = .build/.oct
-$(OCT_COMPILED): $(wildcard src/*) .build/configure $(patsubst src/%,.build/%,$(CRLIBM_AUTOTOOLS_OBJ))
-	@ln -sf $(addprefix ../,$(filter-out src/crlibm,$(wildcard src/*))) .build/
+$(OCT_COMPILED): $(wildcard src/*) $(wildcard src/compatibility/*) .build/configure $(patsubst src/%,.build/%,$(CRLIBM_AUTOTOOLS_OBJ))
+	@mkdir -p .build/compatibility
+	@ln -sf $(addprefix ../,$(filter-out src/crlibm src/compatibility,$(wildcard src/*))) .build/
+	@ln -sf $(addprefix ../../,$(wildcard src/compatibility/*)) .build/compatibility/
 	@ln -sf $(addprefix ../../,$(filter-out src/crlibm/scs_lib,$(wildcard src/crlibm/*))) .build/crlibm/
 	@ln -sf $(addprefix ../../../,$(wildcard src/crlibm/scs_lib/*)) .build/crlibm/scs_lib/
 	@echo " [MAKE] src"
-	@OCTAVE="$(OCTAVE) $(subst ",\",$(OCTAVE_REPRODUCIBLE_OPTIONS))" MKOCTFILE="$(MKOCTFILE)" $(MAKE) --directory=.build
+	@OCTAVE="$(OCTAVE) $(subst ",\",$(OCTAVE_REPRODUCIBLE_OPTIONS))" OCTAVE_CONFIG="$(OCTAVE_CONFIG)" MKOCTFILE="$(MKOCTFILE)" $(MAKE) --directory=.build
 	@touch $@
 
 ## Octave parameters to make M files and compiled OCT files available
