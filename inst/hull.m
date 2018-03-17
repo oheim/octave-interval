@@ -96,7 +96,7 @@ function result = hull (varargin)
   endfor
   targetsize = max (sizes, [], 2);
   warning ("off", "Octave:broadcast", "local");
-  if (!all (all (or (targetsize == sizes, sizes == 1))))
+  if (!all (or (targetsize == sizes, sizes == 1)(:)))
     error ("hull: dimensions mismatch")
   endif
   for dim = 1:numberofdimensions
@@ -188,6 +188,10 @@ endfunction
 %!assert (isequal (hull (zeros (2, 2, 2, 2), ones (2, 2, 2, 2)), infsupdec (zeros (2, 2, 2, 2), ones (2, 2, 2, 2))))
 %!assert (isequal (hull (zeros (2, 1, 4, 1), ones (1, 3, 1, 5), -1), infsupdec (-ones (2, 3, 4, 5), ones (2, 3, 4, 5))))
 %!assert (isnai (hull (zeros (2, 2, 2, 2), ones (2, 2, 2, 2), nai)), logical (ones (2, 2, 2, 2)))
+
+%!error <dimensions mismatch> hull (1:2, 1:3);
+%!error <dimensions mismatch> hull ((1:2)', (1:3)');
+%!error <dimensions mismatch> hull (ones (2, 2, 2), ones (2, 2, 3));
 
 %!test "from the documentation string";
 %! assert (isequal (hull (1, 2, 3, 4), infsupdec (1, 4, "com")));
