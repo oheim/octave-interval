@@ -34,6 +34,9 @@ AC_SUBST(VERSION)
 ISODATE=`date +%Y-%m-%d`
 AC_SUBST(ISODATE)
 
+dnl Silence warning: ar: 'u' modifier ignored since 'D' is the default
+AC_SUBST(ARFLAGS, [cr])
+
 dnl Check for system information
 AC_CANONICAL_HOST
 case $host_os in
