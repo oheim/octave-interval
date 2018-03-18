@@ -1,4 +1,4 @@
-## Copyright 2014-2016 Oliver Heimlich
+## Copyright 2014-2016,2018 Oliver Heimlich
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -16,8 +16,13 @@
 ## -*- texinfo -*-
 ## @documentencoding UTF-8
 ## @defmethod {@@infsup} numel (@var{A})
+## @defmethodx {@@infsup} numel (@var{A}, @var{idx1}, @var{idx2}, @dots{})
 ##
 ## Return the number of elements in the interval object @var{A}.
+##
+## Optionally, if indices @var{idx1}, @var{idx2}, @dots{} are supplied, return
+## the number of elements that would result from indexing
+## @code{A(idx1, idx2, @dots{})}.
 ## @seealso{@@infsup/length, @@infsup/size, @@infsup/rows, @@infsup/columns, @@infsup/end}
 ## @end defmethod
 
@@ -25,14 +30,13 @@
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function result = numel (a)
+function result = numel (a, varargin)
 
-  if (nargin ~= 1)
-    print_usage ();
-    return
+  if (not (isa (a, "infsup")))
+    error ("invalid use of interval as indexing parameter to numel ()")
   endif
 
-  result = numel (a.inf);
+  result = numel (a.inf, varargin{:});
 
 endfunction
 
@@ -41,3 +45,9 @@ endfunction
 %!assert (numel (infsup (zeros (3, 1))), 3);
 %!assert (numel (infsup (zeros (1, 4))), 4);
 %!assert (numel (infsup (zeros (3, 4))), 12);
+
+%!assert (numel (infsup (ones (2, 3)), 3:5), 3);
+%!assert (numel (infsup (ones (2, 3)), ":", 2), 2);
+%!assert (numel (infsup (ones (2, 3)), 2, ":"), 3);
+
+%!error <invalid use> numel (1, infsup(1));
