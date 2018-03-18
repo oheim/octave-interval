@@ -35,9 +35,11 @@ all: $(OBJ)
 
 ## crlibm api oct-file
 crlibm_function.oct: crlibm_function.o $(BUNDLED_CRLIBM_DIR)/crlibm_private.o
-	$(MKOCTFILE)  -o $@  $< $(BUNDLED_CRLIBM_DIR)/*.o $(BUNDLED_CRLIBM_DIR)/scs_lib/*.o
+	@echo " [MKOCTFILE] $<"
+	@$(MKOCTFILE)  -o $@  $< $(BUNDLED_CRLIBM_DIR)/*.o $(BUNDLED_CRLIBM_DIR)/scs_lib/*.o
 crlibm_function.o: crlibm_function.cc
-	$(MKOCTFILE)  --compile -o $@  $<
+	@echo " [MKOCTFILE] $<"
+	@$(MKOCTFILE)  --compile -o $@  $<
 
 ## bundled crlibm library
 ##
@@ -61,13 +63,15 @@ else
 OCTAVE_COMPATIBILITY = compatibility/octave_current.cc
 endif
 compatibility/octave.cc: $(OCTAVE_COMPATIBILITY)
-	cp $< $@
+	@cp $< $@
 
 ## GNU MPFR api oct-files
 mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave.cc
-	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
+	@echo " [MKOCTFILE] $<"
+	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
 mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave.cc
-	$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) -Wno-comment  $<
+	@echo " [MKOCTFILE] $<"
+	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) -Wno-comment  $<
 
 ## <cfenv> api oct-file
 ##
@@ -77,7 +81,8 @@ mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave
 ## omit the __setround__ function from a redistributed binary package.
 ## However, please inform the package maintainer of the error.
 __setround__.oct: __setround__.cc
-	$(MKOCTFILE)  -o $@  -Wno-unknown-pragmas  $<
+	@echo " [MKOCTFILE] $<"
+	@$(MKOCTFILE)  -o $@  -Wno-unknown-pragmas  $<
 
 clean:
 	test ! -e $(BUNDLED_CRLIBM_DIR)/Makefile || $(MAKE) -C $(BUNDLED_CRLIBM_DIR) $@

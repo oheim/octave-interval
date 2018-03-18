@@ -17,23 +17,28 @@ all: $(OBJ)
 images: $(IMAGE_OBJ)
 
 manual.html: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(IMAGE_OBJ)
-	$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --css-include manual.css "$<"
+	@echo " [MAKEINFO --html] $<"
+	@$(MAKEINFO) -D 'version $(VERSION)' --html --no-split --css-include manual.css "$<"
 
 manual.pdf: manual.texinfo $(wildcard chapter/*) license/gpl-3.0.texi $(wildcard image/*.texinfo) $(wildcard image/*.pdf) $(IMAGE_OBJ)
-	$(MAKEINFO) --Xopt=--texinfo='@set version $(VERSION)' --pdf "$<"
+	@echo " [MAKEINFO --pdf] $<"
+	@$(MAKEINFO) --Xopt=--texinfo='@set version $(VERSION)' --pdf "$<"
 
 image/%.m.png: image/%.m
-	$(OCTAVE) --no-history \
+	@echo " [OCTAVE] $<"
+	@$(OCTAVE) --no-history \
 		--eval "pkg load interval;" \
 		--eval "set (0, 'defaultfigurevisible', 'off');" \
 		--eval "source ('$<');" \
 		--eval "print (gcf, '$@');"
 	@# The image size is too large for inclusion in the pdf,
 	@# thus we increase the resolution from 150 to 250 dpi.
-	convert -density 98.425 -units PixelsPerCentimeter "$@" "$@"
+	@echo " [IMAGEMAGICK] $@"
+	@convert -density 98.425 -units PixelsPerCentimeter "$@" "$@"
 
 image/%.m: image/%.m.texinfo
-	$(MAKEINFO) -D m-file --plaintext "$<" > "$@"
+	@echo " [MAKEINFO --plaintext] $<"
+	@$(MAKEINFO) -D m-file --plaintext "$<" > "$@"
 
 clean:
 	$(RM) $(OBJ)
