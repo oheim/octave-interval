@@ -36,7 +36,7 @@ function result = numel (a, varargin)
     error ("invalid use of interval as indexing parameter to numel ()")
   endif
 
-  result = numel (a.inf, varargin{:});
+  result = numel (a.inf(varargin{:}));
 
 endfunction
 
@@ -49,5 +49,8 @@ endfunction
 %!assert (numel (infsup (ones (2, 3)), 3:5), 3);
 %!assert (numel (infsup (ones (2, 3)), ":", 2), 2);
 %!assert (numel (infsup (ones (2, 3)), 2, ":"), 3);
+
+%!# numel is called implicitly during this subsref expression (see bug #53375)
+%!assert (infsup ()(:).inf, inf);
 
 %!error <invalid use> numel (1, infsup(1));
