@@ -35,7 +35,7 @@
 ## @group
 ## format long
 ## disp (infsupdec ("pi"))
-##   @result{} [3.14159265358979, 3.1415926535898]_com
+##   @result{} [3.141592653589793, 3.141592653589794]_com
 ## format short
 ## disp (infsupdec ("pi"))
 ##   @result{} [3.1415, 3.1416]_com
