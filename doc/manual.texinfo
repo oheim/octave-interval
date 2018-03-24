@@ -34,7 +34,7 @@
 @copying
 This manual is for the GNU Octave interval package, version @value{version}.
 
-Copyright @copyright{} 2015–2017 Oliver Heimlich
+Copyright @copyright{} 2015–2018 Oliver Heimlich
 Copyright @copyright{} 2017 Joel Dahne
 Copyright @copyright{} 2008-2009 Simone Pernice
 

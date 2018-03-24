@@ -15,10 +15,14 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{3.x.y, 2018-xx-yy}
+@release{3.1.1, 2018-xx-yy}
 @itemize
 @item
-    numel: Added support for additional arguments to compute the number of elements after indexing an interval array.
+    numel: Added support for additional arguments to compute the number of elements after indexing an interval array.  This allows combined indexing expressions of the form @code{x(1:2).inf}.
+@item
+    Fixed a regression where decorated intervals could no longer be used in the upcoming Octave 4.4 (bug #53331).
+@item
+    Fixed several warnings during package installation.
 @end itemize
 
 
