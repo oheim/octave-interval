@@ -1,4 +1,4 @@
-## Copyright 2014-2017 Oliver Heimlich
+## Copyright 2014-2018 Oliver Heimlich
 ## Copyright 2017 Joel Dahne
 ##
 ## This program is free software; you can redistribute it and/or modify
@@ -75,10 +75,6 @@ function display (x)
   global current_print_indent_level;
   save_current_print_indent_level = current_print_indent_level;
   unwind_protect
-
-    ## FIXME: The built-in display function does not print the var name,
-    ## if called with “display (var name)”.  We assume that this method
-    ## is always called for output after expression evaluation.
 
     label = inputname (1);
     if (isempty (label) && regexp(argn, '^\[\d+,\d+\]$'))
@@ -177,6 +173,12 @@ endfunction
 %! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
 %!   assert (evalc ("a = infsup ()"), "a = [Empty]\n");
 %!   assert (evalc ("b = infsupdec ()"), "b = [Empty]_trv\n");
+%! endif
+
+%!test
+%! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
+%!   assert (evalc ("a = infsup (); display (a)"), "a = [Empty]\n");
+%!   assert (evalc ("b = infsupdec (); display (b)"), "b = [Empty]_trv\n");
 %! endif
 
 %!test
