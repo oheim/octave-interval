@@ -192,7 +192,6 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
 %!  endfor
 
 %!shared testdata
-%! # Load compiled test data (from src/test/*.itl)
 %! testdata = load (file_in_loadpath ("test/itl.mat"));
 
 %!test

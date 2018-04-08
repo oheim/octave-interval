@@ -71,7 +71,7 @@ mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
 mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave.cc
 	@echo " [MKOCTFILE] $<"
-	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) -Wno-comment  $<
+	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
 ## <cfenv> api oct-file
 ##
