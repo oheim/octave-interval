@@ -341,8 +341,18 @@ doctest-docstrings: $(OCT_COMPILED)
 .PHONY: doctest
 doctest: doctest-docstrings doctest-manual
 
+.PHONY: check-duplicates
+check-duplicates: $(INSTALLED_PACKAGE)
+	@$(subst PKG,generate_html,$(OCTAVE_INSTALL_MISSING))
+	@echo " [OCTAVE] check_duplicates"
+	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) \
+		--eval \
+		"pkg load generate_html; \
+		 success = isempty (check_duplicates ('$(PACKAGE)', struct ('text_only', true))); \
+		 exit (!success)"
+
 .PHONY: check
-check: doctest test
+check: doctest test check-duplicates
 
 ##
 ## Part D: Miscellaneous utilities
