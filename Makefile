@@ -310,7 +310,7 @@ test: $(OCT_COMPILED)
 ## Otherwise, it will make the doctests fail.
 .PHONY: doctest-manual
 doctest-manual: $(OCT_COMPILED)
-	@$(subst PKG,doctest,$(OCTAVE_INSTALL_MISSING:PKG=doctest))
+	@$(subst PKG,doctest,$(OCTAVE_INSTALL_MISSING))
 	@$(subst PKG,symbolic,$(OCTAVE_INSTALL_MISSING))
 	@echo " [OCTAVE] doctest doc/"
 	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) $(OCTAVE_WORKSPACE_PATH) \
@@ -327,7 +327,7 @@ doctest-manual: $(OCT_COMPILED)
 ## Validate code examples from documentation strings.
 .PHONY: doctest-docstrings
 doctest-docstrings: $(OCT_COMPILED)
-	@$(subst PKG,doctest,$(OCTAVE_INSTALL_MISSING:PKG=doctest))
+	@$(subst PKG,doctest,$(OCTAVE_INSTALL_MISSING))
 	@echo " [OCTAVE] doctest"
 	@$(OCTAVE) $(OCTAVE_REPRODUCIBLE_OPTIONS) $(OCTAVE_WORKSPACE_PATH) \
 		--eval \
