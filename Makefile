@@ -364,15 +364,16 @@ check: doctest test check-duplicates
 LILYPOND ?= $(shell which lilypond 2> /dev/null)
 ifneq ($(LILYPOND),)
 doc/image/%.svg: doc/image/%.ly
+	@mkdir -p .build/doc/image
 	@echo " [LILYPOND] $<"
 	@# .ly -> .eps
-	@$(LILYPOND) --ps --output "$(BUILD_DIR)/$<" --silent "$<"
+	@$(LILYPOND) --ps --output ".build/$<" --silent "$<"
 	@# .eps -> .pdf (with size optimizations)
-	@epstopdf "$(BUILD_DIR)/$<.eps"
+	@epstopdf ".build/$<.eps"
 	@# .pdf -> .ps (convert font glyphs to outline shapes)
-	@gs -q -o "$(BUILD_DIR))/$<.ps" -dNOCACHE -sDEVICE=pswrite "$(BUILD_DIR)/$<.pdf"
+	@gs -q -o ".build/$<.ps" -dNOCACHE -sDEVICE=ps2write ".build/$<.pdf"
 	@# .ps -> .svg
-	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" "$(BUILD_DIR)/$<.ps"
+	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" ".build/$<.ps"
 endif
 
 ## Push the new release to Debian
