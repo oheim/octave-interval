@@ -5,6 +5,7 @@
 
 SHELL          = /bin/sh
 OBJ            = crlibm_function.oct \
+                 intervaltotext2.oct \
                  mpfr_function_d.oct \
                  mpfr_linspace_d.oct \
                  mpfr_matrix_mul_d.oct \
@@ -72,6 +73,10 @@ mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons
 mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave.cc
 	@echo " [MKOCTFILE] $<"
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
+
+intervaltotext2.oct: intervaltotext2.cc
+	@echo " [MKOCTFILE] $<"
+	@$(MKOCTFILE)  -o $@  $<
 
 ## <cfenv> api oct-file
 ##
