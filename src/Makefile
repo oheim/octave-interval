@@ -74,9 +74,9 @@ mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/octave
 	@echo " [MKOCTFILE] $<"
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
-intervaltotext2.oct: intervaltotext2.cc
+intervaltotext2.oct: intervaltotext2.cc mpfr_commons.h
 	@echo " [MKOCTFILE] $<"
-	@$(MKOCTFILE)  -o $@  $<
+	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
 ## <cfenv> api oct-file
 ##

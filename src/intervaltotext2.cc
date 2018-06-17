@@ -16,6 +16,8 @@
 */
 
 #include <octave/oct.h>
+#include <mpfr.h>
+#include "mpfr_commons.h"
 
 enum interval_form
 {
@@ -39,7 +41,7 @@ enum plus_sign
   NEVER
 };
 
-struct interval_conversion_specifier
+struct interval_format
 {
   // preferred overall field width
   uint16_t total_width;
@@ -71,31 +73,32 @@ struct interval_conversion_specifier
   bool hide_punctuation;
 };
 
-const interval_conversion_specifier
+const interval_format
 GENERAL_PURPOSE_LAYOUT =
 {
-  0,          // total_width
-  INF_SUP,    // form
-  TITLE_CASE, // empty_entire_nai_case
-  false,      // entire_boundaries
-  INNER_ZERO, // display_plus
-  false,      // left_justify
-  false,      // pad_with_zeros
-  0,          // number_width
-  6,          // number_precision
-  0,          // radius_width
-  'g',        // number_format
-  false       // hide_punctuation
+  .total_width = 0,
+  .form = INF_SUP,
+  .empty_entire_nai_case = TITLE_CASE,
+  .entire_boundaries = false,
+  .display_plus = INNER_ZERO,
+  .left_justify = false,
+  .pad_with_zeros = false,
+  .number_width = 0,
+  .number_precision = 6,
+  .radius_width = 0,
+  .number_format = 'g',
+  .hide_punctuation = false
 };
 
-interval_conversion_specifier
+// Parse an interval format string for all layout options.
+interval_format
 parse_conversion_specifier
 (
   std::string buffer,
   std::size_t &characters_read
 )
 {
-  interval_conversion_specifier
+  interval_format
   layout = GENERAL_PURPOSE_LAYOUT;
 
   // Parse overall width
@@ -288,27 +291,81 @@ parse_conversion_specifier
   return layout;
 }
 
+// Compute a number format string for MPFR, which can be used to compute
+// string representations of interval boundaries and the interval midpoint.
+const char *
+to_mpfr_format_string
+(
+  interval_format layout
+)
+{
+  std::ostringstream format_string;
+
+  format_string << "%";
+  if (layout.number_width > 0)
+    {
+      if (layout.left_justify)
+        format_string << "-";
+
+      if (layout.display_plus == ALWAYS)
+        format_string << "+";
+
+      if (layout.pad_with_zeros)
+        format_string << "0";
+
+      format_string << layout.number_width;
+    }
+
+  if (layout.number_precision > 0)
+    format_string << "." << layout.number_precision;
+
+  format_string << "R*";
+
+  format_string << layout.number_format;
+
+  return format_string.str ().c_str ();
+}
+
+struct shared_conversion_resources
+{
+  const char *mpfr_template;
+  mpfr_t mp;
+  char *buf;
+};
+
+// Compute the string representation of a scalar interval.
 std::string
 interval_to_text
 (
-  const interval_conversion_specifier &layout,
+  const interval_format &layout,
+  const shared_conversion_resources stat,
   const double &inf,
   const double &sup,
   const uint8_t *dec = NULL
 )
 {
-  return "x";
+  return stat.mpfr_template;
 }
 
+// Compute the string representations of an array of intervals.
 Array <std::string>
 interval_to_text
 (
-  const interval_conversion_specifier &layout,
+  const interval_format &layout,
   const NDArray &inf,
   const NDArray &sup,
   const uint8NDArray *dec = NULL
 )
 {
+  // Initialize temporary variables for conversion
+  shared_conversion_resources stat =
+    {
+      .mpfr_template = to_mpfr_format_string (layout),
+      .mp = {},
+      .buf = new char[768]
+    };
+  mpfr_init2 (stat.mp, BINARY64_PRECISION);
+
   Array <std::string> retval (inf.dims ());
 
   const octave_idx_type n = inf.numel ();
@@ -319,16 +376,18 @@ interval_to_text
 
       std::string s;
       if (dec == NULL)
-        s = interval_to_text (layout, l, u);
+        s = interval_to_text (layout, stat, l, u);
       else
         {
-          const uint8_t
-          d = (*dec).elem (i);
-          s = interval_to_text (layout, l, u, &d);
+          const uint8_t d = (*dec).elem (i);
+          s = interval_to_text (layout, stat, l, u, &d);
         }
 
       retval(i) = s;
     }
+
+  mpfr_clear (stat.mp);
+  delete[] stat.buf;
 
   return retval;
 }
@@ -498,7 +557,7 @@ DEFUN_DLD (intervaltotext2, args, nargout,
   const octave_scalar_map
   x = args (0).scalar_map_value ();
 
-  interval_conversion_specifier layout;
+  interval_format layout;
   if (nargin < 2 || args (1).is_empty ())
     layout = GENERAL_PURPOSE_LAYOUT;
   else
@@ -509,12 +568,15 @@ DEFUN_DLD (intervaltotext2, args, nargout,
       std::size_t characters_read = 0;
       layout = parse_conversion_specifier (cs, characters_read);
 
-      // The remaining characters, after the conversion specifier, will be
-      // returned as a second output argument.  This allows @infsup/*printf
-      // methods to continue parsing a string format.
-      const std::string
-      remaining_characters = cs.substr (characters_read);
-      retval.append (octave_value (remaining_characters));
+      if (nargout >= 2)
+        {
+          // The remaining characters, after the conversion specifier, will be
+          // returned as a second output argument.  This allows @infsup/*printf
+          // methods to continue parsing a string format.
+          const std::string
+          remaining_characters = cs.substr (characters_read);
+          retval.append (octave_value (remaining_characters));
+        }
     }
 
   const octave_scalar_map
