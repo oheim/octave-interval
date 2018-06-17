@@ -91,15 +91,199 @@ GENERAL_PURPOSE_LAYOUT =
 interval_conversion_specifier
 parse_conversion_specifier
 (
-  const std::string &cs,
-  octave_idx_type &characters_read
+  std::string buffer,
+  std::size_t &characters_read
 )
 {
-  std::string buffer = cs;
-  characters_read = 0;
-
   interval_conversion_specifier
   layout = GENERAL_PURPOSE_LAYOUT;
+
+  // Parse overall width
+  {
+    std::size_t
+    end_of_overall_width = buffer.find_first_not_of ("0123456789");
+    if (end_of_overall_width != std::string::npos)
+      if (buffer.at (end_of_overall_width) == ':')
+        {
+          std::string
+          overall_width = buffer.substr (0, end_of_overall_width);
+
+          layout.total_width = atol (overall_width.c_str ());
+
+          buffer = buffer.substr (end_of_overall_width);
+          characters_read += end_of_overall_width;
+          // skip ':'
+          buffer = buffer.substr (1);
+          characters_read ++;
+        }
+  }
+
+  // Detect punctuation for inf-sup form, opening square bracket
+  if (buffer.compare (0, 1, std::string ("[")) != 0)
+    layout.hide_punctuation = true;
+  else
+    {
+      buffer = buffer.substr (1);
+      characters_read ++;
+    }
+
+  // Parse flags
+  {
+    bool is_flag = true;
+    while (is_flag && !buffer.empty ())
+      {
+        switch (buffer.at (0))
+          {
+            case 'C':
+              layout.empty_entire_nai_case = UPPER_CASE;
+              break;
+            case 'c':
+              layout.empty_entire_nai_case = LOWER_CASE;
+              break;
+            case '<':
+              layout.entire_boundaries = true;
+              break;
+            case '-':
+              layout.left_justify = true;
+              break;
+            case '+':
+              layout.display_plus = ALWAYS;
+              break;
+            case ' ':
+              layout.display_plus = NEVER;
+              break;
+            case '0':
+              layout.pad_with_zeros = true;
+              break;
+            case 'd':
+              layout.form = UNCERTAIN_DOWN;
+              break;
+            case 'u':
+              layout.form = UNCERTAIN_UP;
+              break;
+            default:
+              is_flag = false;
+          }
+        if (is_flag)
+          {
+            buffer = buffer.substr (1);
+            characters_read ++;
+          }
+      }
+  }
+
+  // Parse number field width
+  {
+    std::size_t
+    end_of_width = buffer.find_first_not_of ("0123456789");
+
+    std::string
+    width = buffer.substr (0, end_of_width);
+
+    layout.number_width = atol (width.c_str ());
+
+    buffer = buffer.substr (width.length ());
+    characters_read += width.length ();
+  }
+
+  // Parse number precision
+  if (!buffer.empty ())
+    if (buffer.at (0) == '.')
+      {
+        // skip '.'
+        buffer = buffer.substr (1);
+        characters_read ++;
+
+        std::size_t
+        end_of_precision = buffer.find_first_not_of ("0123456789");
+        std::string
+        precision = buffer.substr (0, end_of_precision);
+
+        layout.number_precision = atol (precision.c_str ());
+
+        buffer = buffer.substr (precision.length ());
+        characters_read += precision.length ();
+      }
+
+  // Parse uncertain specifier
+  if (!buffer.empty ())
+    if (buffer.at (0) == '?')
+      {
+        if (layout.form == INF_SUP)
+          {
+            if (!layout.hide_punctuation)
+              {
+                error ("illegal conversion specifier: "
+                      "you cannot use '?' in inf-sup form or missing ']'");
+                return layout;
+              }
+            layout.form = UNCERTAIN_SYMMETRIC;
+          }
+        buffer = buffer.substr (1);
+        characters_read ++;
+      }
+
+  // Parse radius width (only in uncertain form)
+  if (layout.form == UNCERTAIN_SYMMETRIC ||
+      layout.form == UNCERTAIN_DOWN ||
+      layout.form == UNCERTAIN_UP)
+    {
+      std::size_t
+      end_of_radius_width = buffer.find_first_not_of ("0123456789");
+      std::string
+      radius_width = buffer.substr (0, end_of_radius_width);
+
+      layout.radius_width = atol (radius_width.c_str ());
+
+      buffer = buffer.substr (radius_width.length ());
+      characters_read += radius_width.length ();
+    }
+
+  // Parse number format
+  {
+    if (buffer.empty ())
+      {
+        error ("illegal conversion specifier: "
+              "missing number format");
+        return layout;
+      }
+    layout.number_format = buffer.at (0);
+    buffer = buffer.substr (1);
+    characters_read ++;
+    switch (layout.number_format)
+      {
+        case 'e': case 'E':
+        case 'f': case 'F':
+        case 'g': case 'G':
+          // always valid
+          break;
+        case 'a': case 'A':
+          if (layout.form != INF_SUP)
+            {
+              error ("illegal conversion specifier: "
+                    "hexadecimal format is only allowed in inf-sup form");
+              return layout;
+            }
+          break;
+        default:
+          error ("illegal conversion specifier: "
+                "unrecognized number format");
+          return layout;
+      }
+  }
+
+  // Parse closing square bracket
+  if (layout.form == INF_SUP && !layout.hide_punctuation)
+    {
+      if (buffer.compare (0, 1, std::string ("]")) != 0)
+        {
+          error ("illegal conversion specifier: "
+                "missing ']'");
+          return layout;
+        }
+      buffer = buffer.substr (1);
+      characters_read ++;
+    }
 
   return layout;
 }
@@ -315,14 +499,14 @@ DEFUN_DLD (intervaltotext2, args, nargout,
   x = args (0).scalar_map_value ();
 
   interval_conversion_specifier layout;
-  if (nargin < 2)
+  if (nargin < 2 || args (1).is_empty ())
     layout = GENERAL_PURPOSE_LAYOUT;
   else
     {
       const std::string
       cs = args (1).string_value ();
 
-      octave_idx_type characters_read;
+      std::size_t characters_read = 0;
       layout = parse_conversion_specifier (cs, characters_read);
 
       // The remaining characters, after the conversion specifier, will be
