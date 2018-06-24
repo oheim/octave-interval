@@ -293,7 +293,7 @@ parse_conversion_specifier
 
 // Compute a number format string for MPFR, which can be used to compute
 // string representations of interval boundaries and the interval midpoint.
-const char *
+std::string
 to_mpfr_format_string
 (
   interval_format layout
@@ -316,39 +316,118 @@ to_mpfr_format_string
       format_string << layout.number_width;
     }
 
-  if (layout.number_precision > 0)
-    format_string << "." << layout.number_precision;
+  format_string << "." << layout.number_precision;
 
   format_string << "R*";
 
   format_string << layout.number_format;
 
-  return format_string.str ().c_str ();
+  return format_string.str ();
 }
 
 struct shared_conversion_resources
 {
+  // number format string for MPFR, can be used for a list of intervals
   const char *mpfr_template;
-  mpfr_t mp;
+  // temporary buffer for to-string-conversion
   char *buf;
+  // temporary MPFR variable with binary64 precision, can be used for
+  // conversion and directed rounding operations
+  mpfr_t mp;
+  // flag, whether all to-string-conversions have been lossless
+  bool is_exact;
 };
+
+// Convert a scalar double to string with directed rouding using MPFR
+std::string
+mpfr_to_string_d
+(
+  shared_conversion_resources &stat,
+  const double &x,
+  const mpfr_rnd_t &rnd
+)
+{
+  mpfr_set_d (stat.mp, x, MPFR_RNDZ);
+  mpfr_sprintf (stat.buf, stat.mpfr_template, rnd, stat.mp);
+  std::string retval(stat.buf);
+
+  if (stat.is_exact)
+    {
+      mpfr_rnd_t complementary_rnd;
+      switch (rnd)
+        {
+          case MPFR_RNDD: complementary_rnd = MPFR_RNDU; break;
+          case MPFR_RNDU: complementary_rnd = MPFR_RNDD; break;
+          case MPFR_RNDZ: complementary_rnd = MPFR_RNDA; break;
+          case MPFR_RNDA: complementary_rnd = MPFR_RNDZ; break;
+          default: complementary_rnd = MPFR_RNDN;
+        }
+
+      mpfr_sprintf (stat.buf, stat.mpfr_template, complementary_rnd, stat.mp);
+      stat.is_exact = (retval == stat.buf);
+    }
+
+  return retval;
+}
+
+// Lossless conversion of a scalar double to hexadecimal string
+std::string
+double_to_hex_string
+(
+  shared_conversion_resources &stat,
+  const double &x
+)
+{
+  return std::string ("to be copied from mpfr_to_string_d.cc");
+}
+
+// Convert a scalar double to string with directed rouding
+std::string
+double_to_string
+(
+  const interval_format &layout,
+  shared_conversion_resources &stat,
+  const double &x,
+  const mpfr_rnd_t &rnd
+)
+{
+  if (layout.number_format == 'a' || layout.number_format == 'A')
+    return double_to_hex_string (stat, x);
+  else
+    return mpfr_to_string_d (stat, x, rnd);
+}
 
 // Compute the string representation of a scalar interval.
 std::string
 interval_to_text
 (
   const interval_format &layout,
-  const shared_conversion_resources stat,
+  shared_conversion_resources &stat,
   const double &inf,
   const double &sup,
   const uint8_t *dec = NULL
 )
 {
-  return stat.mpfr_template;
+  std::string l;
+  if (layout.form == INF_SUP || layout.form == UNCERTAIN_UP)
+    l = double_to_string (layout, stat, inf, MPFR_RNDD);
+
+  std::string u;
+  if (layout.form == INF_SUP || layout.form == UNCERTAIN_DOWN)
+    u = double_to_string (layout, stat, sup, MPFR_RNDU);
+
+  std::string m;
+  if (layout.form == UNCERTAIN_SYMMETRIC)
+  {
+    m = double_to_string (layout, stat, inf / 2 + sup / 2, MPFR_RNDZ);
+  }
+
+  return "[" + l + ", " + u + "]";
 }
 
 // Compute the string representations of an array of intervals.
-Array <std::string>
+// 2nd return value: flag, whether conversion has been lossless
+std::pair <Array <std::string>, bool>
 interval_to_text
 (
   const interval_format &layout,
@@ -358,15 +437,22 @@ interval_to_text
 )
 {
   // Initialize temporary variables for conversion
+  char * mpfr_template;
+  {
+    std::string s = to_mpfr_format_string (layout);
+    mpfr_template = new char [s.length () + 1];
+    std::strcpy (mpfr_template, s.c_str ());
+  }
   shared_conversion_resources stat =
     {
-      .mpfr_template = to_mpfr_format_string (layout),
+      .mpfr_template = mpfr_template,
+      .buf = new char[768],
       .mp = {},
-      .buf = new char[768]
+      .is_exact = true
     };
   mpfr_init2 (stat.mp, BINARY64_PRECISION);
 
-  Array <std::string> retval (inf.dims ());
+  Array <std::string> interval_literals (inf.dims ());
 
   const octave_idx_type n = inf.numel ();
   for (octave_idx_type i = 0; i < n; i ++)
@@ -383,13 +469,15 @@ interval_to_text
           s = interval_to_text (layout, stat, l, u, &d);
         }
 
-      retval(i) = s;
+      interval_literals(i) = s;
     }
 
   mpfr_clear (stat.mp);
   delete[] stat.buf;
+  delete[] mpfr_template;
 
-  return retval;
+  return std::pair <Array <std::string>, bool>
+    (interval_literals, stat.is_exact);
 }
 
 DEFUN_DLD (intervaltotext2, args, nargout, 
@@ -568,10 +656,10 @@ DEFUN_DLD (intervaltotext2, args, nargout,
       std::size_t characters_read = 0;
       layout = parse_conversion_specifier (cs, characters_read);
 
-      if (nargout >= 2)
+      if (nargout >= 3)
         {
           // The remaining characters, after the conversion specifier, will be
-          // returned as a second output argument.  This allows @infsup/*printf
+          // returned as a third output argument.  This allows @infsup/*printf
           // methods to continue parsing a string format.
           const std::string
           remaining_characters = cs.substr (characters_read);
@@ -584,21 +672,33 @@ DEFUN_DLD (intervaltotext2, args, nargout,
       ? x
       : x.getfield ("infsup").scalar_map_value ();
 
+  const uint8NDArray
+  dec = (!decorated)
+      ? uint8NDArray ()
+      : x.getfield ("dec").uint8_array_value ();
+
   const NDArray
   inf = bare.getfield ("inf").array_value ();
 
   const NDArray
   sup = bare.getfield ("sup").array_value ();
-
+  
   Array <std::string> interval_literals;
-  if (!decorated)
-    interval_literals = interval_to_text (layout, inf, sup);
-  else
-    {
-      const uint8NDArray
-      dec = x.getfield ("dec").uint8_array_value ();
-      interval_literals = interval_to_text (layout, inf, sup, &dec);
-    }
+  bool is_exact;
+  {
+    std::pair <Array <std::string>, bool>
+    conversion_result;
+    if (!decorated)
+      conversion_result = interval_to_text (layout, inf, sup);
+    else
+      conversion_result = interval_to_text (layout, inf, sup, &dec);
+
+    interval_literals = conversion_result.first;
+    is_exact = conversion_result.second;
+  }
+
+  if (nargout >= 2)
+    retval.prepend (is_exact);
 
   if (interval_literals.numel () == 1)
     retval.prepend (octave_value (interval_literals.elem (0)));
