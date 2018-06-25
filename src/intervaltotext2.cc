@@ -544,7 +544,106 @@ interval_to_text
     m = double_to_string (layout, stat, false, inf / 2 + sup / 2, MPFR_RNDZ);
   }
 
-  return "[" + l + ", " + u + "]";
+  std::string d;
+  if (dec != NULL)
+    {
+      if (*dec == 16)
+        d = "_com";
+      else if (*dec == 12)
+        d = "_dac";
+      else if (*dec == 8)
+        d = "_def";
+      else if (*dec == 4)
+        d = "_trv";
+      else
+        d = "_ill";
+    }
+
+  bool display_brackets = (layout.form == INF_SUP && !layout.hide_punctuation);
+
+  std::string interval_parts[3] = {l, u, d};
+  if (d == "_ill")
+    {
+      switch (layout.empty_entire_nai_case)
+        {
+          case UPPER_CASE: interval_parts[0] = "NAI"; break;
+          case TITLE_CASE: interval_parts[0] = "NaI"; break;
+          case LOWER_CASE: interval_parts[0] = "nai"; break;
+        }
+      interval_parts[1] = "";
+      interval_parts[2] = ""; // [NaI] carries no decoration
+      display_brackets = !layout.hide_punctuation;
+    }
+  else if (layout.form == INF_SUP
+      && !layout.entire_boundaries
+      && inf == -std::numeric_limits <double>::infinity ()
+      && sup == std::numeric_limits <double>::infinity ())
+    {
+      switch (layout.empty_entire_nai_case)
+        {
+          case UPPER_CASE: interval_parts[0] = "ENTIRE"; break;
+          case TITLE_CASE: interval_parts[0] = "Entire"; break;
+          case LOWER_CASE: interval_parts[0] = "entire"; break;
+        }
+      interval_parts[1] = "";
+    }
+  else if (inf > sup)
+    {
+      switch (layout.empty_entire_nai_case)
+        {
+          case UPPER_CASE: interval_parts[0] = "EMPTY"; break;
+          case TITLE_CASE: interval_parts[0] = "Empty"; break;
+          case LOWER_CASE: interval_parts[0] = "empty"; break;
+        }
+      interval_parts[1] = "";
+      display_brackets = !layout.hide_punctuation;
+    }
+  else if (layout.form == INF_SUP && l == u)
+    {
+      interval_parts[1] = "";
+    }
+
+  if (layout.hide_punctuation)
+    {
+      // Without punctuation, use spaces as column delimiters
+      if (!interval_parts[2].empty ())
+        interval_parts[2].insert (0, 1, ' ');
+      if (!interval_parts[0].empty () && !interval_parts[1].empty ())
+        interval_parts[0].resize (interval_parts[0].length () + 1, ' ');
+    }
+
+  bool display_comma = display_brackets;
+  long available_number_width = layout.total_width;
+  available_number_width -= interval_parts[2].length (); // decoration
+  if (display_brackets)
+    {
+      available_number_width -= 2; // "[]"
+      if (!interval_parts[0].empty () && !interval_parts[1].empty ())
+        available_number_width -= 2; // ", "
+      else
+        display_comma = false;
+    }
+
+  long padding = available_number_width;
+  padding -= interval_parts[0].length ();
+  padding -= interval_parts[1].length ();
+  if (padding > 0)
+    {
+      size_t padding1 = padding / 2;
+      size_t padding0 = padding - padding1;
+
+      interval_parts[0].insert (0, padding0, ' ');
+      interval_parts[1].insert (0, padding1, ' ');
+    }
+
+  if (display_brackets)
+    {
+      return "[" + interval_parts[0]
+          + (display_comma ? ", " : "") + interval_parts[1]
+          + "]"  + interval_parts[2];
+    }
+  else
+    return interval_parts[0] + interval_parts[1] + interval_parts[2];
 }
 
 // Compute the string representations of an array of intervals.
