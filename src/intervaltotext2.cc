@@ -291,24 +291,26 @@ parse_conversion_specifier
   return layout;
 }
 
-// Compute a number format string for MPFR, which can be used to compute
+// Pre-compute number format strings for MPFR, which can be used to compute
 // string representations of interval boundaries and the interval midpoint.
 std::string
-to_mpfr_format_string
+prepare_format_string
 (
-  interval_format layout
+  const interval_format &layout,
+  const bool &force_sign
 )
 {
   std::ostringstream format_string;
 
   format_string << "%";
+
+  if (force_sign)
+    format_string << "+";
+
   if (layout.number_width > 0)
     {
       if (layout.left_justify)
         format_string << "-";
-
-      if (layout.display_plus == ALWAYS)
-        format_string << "+";
 
       if (layout.pad_with_zeros)
         format_string << "0";
@@ -318,7 +320,9 @@ to_mpfr_format_string
 
   format_string << "." << layout.number_precision;
 
-  format_string << "R*";
+  // MPFR will not be used for hexadecimal conversion
+  if (layout.number_format != 'a' && layout.number_format != 'A')
+    format_string << "R*";
 
   format_string << layout.number_format;
 
@@ -327,8 +331,9 @@ to_mpfr_format_string
 
 struct shared_conversion_resources
 {
-  // number format string for MPFR, can be used for a list of intervals
-  const char *mpfr_template;
+  // number format strings, can be used for a list of intervals
+  const char *signed_template;
+  const char *unsigned_template;
   // temporary buffer for to-string-conversion
   char *buf;
   // temporary MPFR variable with binary64 precision, can be used for
@@ -343,12 +348,20 @@ std::string
 mpfr_to_string_d
 (
   shared_conversion_resources &stat,
+  const bool &force_sign,
   const double &x,
   const mpfr_rnd_t &rnd
 )
 {
-  mpfr_set_d (stat.mp, x, MPFR_RNDZ);
-  mpfr_sprintf (stat.buf, stat.mpfr_template, rnd, stat.mp);
+  const char *
+  string_template = force_sign ? stat.signed_template : stat.unsigned_template;
+
+  if (x == -0.0)
+    mpfr_set_zero (stat.mp, 0); // never use negative zero to prevent sign
+  else
+    mpfr_set_d (stat.mp, x, MPFR_RNDZ);
+
+  mpfr_sprintf (stat.buf, string_template, rnd, stat.mp);
   std::string retval(stat.buf);
 
   if (stat.is_exact)
@@ -363,7 +376,7 @@ mpfr_to_string_d
           default: complementary_rnd = MPFR_RNDN;
         }
 
-      mpfr_sprintf (stat.buf, stat.mpfr_template, complementary_rnd, stat.mp);
+      mpfr_sprintf (stat.buf, string_template, complementary_rnd, stat.mp);
       stat.is_exact = (retval == stat.buf);
     }
 
@@ -374,11 +387,112 @@ mpfr_to_string_d
 std::string
 double_to_hex_string
 (
+  const interval_format &layout,
   shared_conversion_resources &stat,
+  const bool &force_sign,
   const double &x
 )
 {
-  return std::string ("to be copied from mpfr_to_string_d.cc");
+  // Do not use MPFR for double to hex conversion.
+  //
+  // MPFR would use any of the 16 hex digits before the point, but
+  // IEEE Std 1788-2015 requires the use of either 0 or 1 before the
+  // point, where 1 is used for normal numbers and 0 is used for
+  // subnormal numbers.  MPFR doesn't handle subnormal numbers.
+
+  // C99's floating-point conversion will use 0 before the point for
+  // subnormal numbers and non-zero before the point for normal
+  // numbers.
+  // https://www.gnu.org/software/libc/manual/html_node/Floating_002dPoint-Conversions.html
+  //
+  // However, it is not guaranteed that only 1 is used for normal
+  // numbers before the point (although this is the case for my gcc
+  // version 4.9.2).
+  //
+  // Also sprintf (... "%.13a" ...) is completely broken on Windows,
+  // where it either returns wrong values, or creates an infinite loop.
+
+  if (x == std::numeric_limits <double>::infinity ()
+      || x == -std::numeric_limits <double>::infinity ())
+    {
+      if (force_sign)
+        sprintf (stat.buf, stat.signed_template, x);
+      else
+        sprintf (stat.buf, stat.unsigned_template, x);
+
+      return std::string (stat.buf);
+    }
+
+  const bool
+  upper = (layout.number_format == 'A');
+
+  mpfr_set_d (stat.mp, x, MPFR_RNDZ);
+
+  long exponent;
+  double mantissa = mpfr_get_d_2exp (&exponent, stat.mp, MPFR_RNDZ);
+
+  // Use normal representation of numbers 1.xxx * 2 ^ e
+  // with hidden mantissa bit before the point
+  if (mantissa != 0.0)
+    {
+      exponent --;
+      mantissa *= 2.0; // 1.0 <= mantissa < 2.0
+    }
+  // Make subnormal numbers use the exponent -1022
+  if (exponent < std::numeric_limits <double>::min_exponent)
+    {
+      mantissa /= uint64_t (1) << (
+                            std::numeric_limits
+                              <double>::min_exponent - 1
+                            - exponent);
+      exponent = std::numeric_limits <double>::min_exponent - 1;
+    }
+
+  // Extract sign
+  bool sign = std::signbit (mantissa);
+  mantissa = std::abs (mantissa);
+
+  // Extract hidden bit
+  bool hiddenbit = (mantissa >= 1.0);
+  if (hiddenbit)
+    mantissa -= 1.0;
+
+  // shift mantissa by 32 bits to format the first part
+  // sprintf (... "%x" ...) requires an unsigned 4-byte int 
+  mantissa *= uint64_t (1) << (sizeof (uint32_t) * 8);
+  uint32_t first_part = static_cast <uint32_t> (mantissa);
+
+  // remove first mantissa part
+  mantissa -= first_part;
+
+  // shift mantissa by remaining 20 bits such that
+  // it is an integer
+  mantissa *= uint64_t (1) << (
+                        std::numeric_limits
+                          <double>::digits - 1 - 32);
+  uint32_t second_part = static_cast <uint32_t> (mantissa);
+
+  // Format hexadecimal number from individual parts
+  sprintf (stat.buf,
+    upper ? "%s0X%u.%08X%05XP%+d" : "%s0x%u.%08x%05xp%+d",
+    sign ? "-" : force_sign ? "+" : "",
+    static_cast <uint8_t> (hiddenbit),
+    first_part, second_part,
+    static_cast <int32_t> (exponent));
+
+  std::string retval (stat.buf);
+
+  // TODO: Implement more layout options
+
+  if (layout.number_width > retval.length ())
+    {
+      if (layout.left_justify)
+        retval.resize (layout.number_width, ' ');
+      else
+        retval.insert (0, layout.number_width - retval.length (), ' ');
+    }
+
+  return retval;
 }
 
 // Convert a scalar double to string with directed rouding
@@ -387,14 +501,15 @@ double_to_string
 (
   const interval_format &layout,
   shared_conversion_resources &stat,
+  const bool &force_sign,
   const double &x,
   const mpfr_rnd_t &rnd
 )
 {
   if (layout.number_format == 'a' || layout.number_format == 'A')
-    return double_to_hex_string (stat, x);
+    return double_to_hex_string (layout, stat, force_sign, x);
   else
-    return mpfr_to_string_d (stat, x, rnd);
+    return mpfr_to_string_d (stat, force_sign, x, rnd);
 }
 
 // Compute the string representation of a scalar interval.
@@ -410,16 +525,23 @@ interval_to_text
 {
   std::string l;
   if (layout.form == INF_SUP || layout.form == UNCERTAIN_UP)
-    l = double_to_string (layout, stat, inf, MPFR_RNDD);
+    {
+      bool force_sign = (inf != 0.0 && layout.display_plus == ALWAYS);
+      l = double_to_string (layout, stat, force_sign, inf, MPFR_RNDD);
+    }
 
   std::string u;
   if (layout.form == INF_SUP || layout.form == UNCERTAIN_DOWN)
-    u = double_to_string (layout, stat, sup, MPFR_RNDU);
+    {
+      bool force_sign = (sup != 0.0 && (layout.display_plus == ALWAYS ||
+          (layout.display_plus == INNER_ZERO && inf < 0.0 && 0.0 < sup)));
+      u = double_to_string (layout, stat, force_sign, sup, MPFR_RNDU);
+    }
 
   std::string m;
   if (layout.form == UNCERTAIN_SYMMETRIC)
   {
-    m = double_to_string (layout, stat, inf / 2 + sup / 2, MPFR_RNDZ);
+    m = double_to_string (layout, stat, false, inf / 2 + sup / 2, MPFR_RNDZ);
   }
 
   return "[" + l + ", " + u + "]";
@@ -437,15 +559,23 @@ interval_to_text
 )
 {
   // Initialize temporary variables for conversion
-  char * mpfr_template;
+  char * signed_template;
+  char * unsigned_template;
   {
-    std::string s = to_mpfr_format_string (layout);
-    mpfr_template = new char [s.length () + 1];
-    std::strcpy (mpfr_template, s.c_str ());
+    std::string s = prepare_format_string (layout, false);
+    unsigned_template = new char [s.length () + 1];
+    std::strcpy (unsigned_template, s.c_str ());
+
+    if (layout.display_plus != NEVER)
+      s = prepare_format_string (layout, true);
+
+    signed_template = new char [s.length () + 1];
+    std::strcpy (signed_template, s.c_str ());
   }
   shared_conversion_resources stat =
     {
-      .mpfr_template = mpfr_template,
+      .signed_template = signed_template,
+      .unsigned_template = unsigned_template,
       .buf = new char[768],
       .mp = {},
       .is_exact = true
@@ -474,7 +604,8 @@ interval_to_text
 
   mpfr_clear (stat.mp);
   delete[] stat.buf;
-  delete[] mpfr_template;
+  delete[] signed_template;
+  delete[] unsigned_template;
 
   return std::pair <Array <std::string>, bool>
     (interval_literals, stat.is_exact);
