@@ -292,6 +292,23 @@ parse_conversion_specifier
   return layout;
 }
 
+inline
+bool
+is_exact_hexadecimal (const interval_format &layout)
+{
+  if (layout.number_format == 'a' || layout.number_format == 'A')
+    {
+      // hex format, 1 character = 4 bit
+      if (layout.number_precision == (BINARY64_PRECISION - 1) / 4)
+      {
+        // 13 hexadecimal characters can be used to represent 52 bits,
+        // which equals binary64 precision (excluding the hidden bit).
+        return true;
+      }
+    }
+    return false;
+}
+
 // Pre-compute number format strings for MPFR, which can be used to compute
 // string representations of interval boundaries and the interval midpoint.
 std::string
@@ -321,8 +338,8 @@ prepare_format_string
 
   format_string << "." << layout.number_precision;
 
-  // MPFR will not be used for hexadecimal conversion
-  if (layout.number_format != 'a' && layout.number_format != 'A')
+  // MPFR will not be used for exact hexadecimal conversion
+  if (!is_exact_hexadecimal (layout))
     format_string << "R*";
 
   format_string << layout.number_format;
@@ -386,7 +403,7 @@ mpfr_to_string_d
 
 // Lossless conversion of a scalar double to hexadecimal string
 std::string
-double_to_hex_string
+double_to_exact_hex_string
 (
   const interval_format &layout,
   shared_conversion_resources &stat,
@@ -507,8 +524,8 @@ double_to_string
   const mpfr_rnd_t &rnd
 )
 {
-  if (layout.number_format == 'a' || layout.number_format == 'A')
-    return double_to_hex_string (layout, stat, force_sign, x);
+  if (is_exact_hexadecimal (layout))
+    return double_to_exact_hex_string (layout, stat, force_sign, x);
   else
     return mpfr_to_string_d (stat, force_sign, x, rnd);
 }
