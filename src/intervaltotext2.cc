@@ -16,6 +16,7 @@
 */
 
 #include <octave/oct.h>
+#include <octave/oct-map.h>
 #include <mpfr.h>
 #include "mpfr_commons.h"
 
