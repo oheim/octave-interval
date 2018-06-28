@@ -222,6 +222,12 @@ parse_conversion_specifier
                       "you cannot use '?' in inf-sup form or missing ']'");
                 return layout;
               }
+            if (layout.left_justify)
+              {
+                error ("illegal flag: "
+                       "you cannot use '-' in uncertain form");
+                return layout;
+              }
             layout.form = UNCERTAIN_SYMMETRIC;
             layout.hide_punctuation = false;
           }
@@ -1108,8 +1114,10 @@ DEFUN_DLD (intervaltotext, args, nargout,
   "@item u\n"
   "Use one-sided form with lower boundary and uncertain ulp-count in upward "
   "direction.  For unbound intervals, this flag is ignored.\n"
-  "@item -\n"
-  "Left justify within the given field width\n"
+  "@item C\n"
+  "Use upper case for Entire, Empty, and NaI\n"
+  "@item c\n"
+  "Use lower case for Entire, Empty, and NaI\n"
   "@item +\n"
   "Always use a plus sign for positive numbers\n"
   "@item 0\n"
