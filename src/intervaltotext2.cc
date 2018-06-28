@@ -22,24 +22,25 @@
 
 enum interval_form
 {
-  INF_SUP,
-  UNCERTAIN_SYMMETRIC,
-  UNCERTAIN_UP,
-  UNCERTAIN_DOWN
+  SPECIAL,             // [empty], [entire], [nai]
+  INF_SUP,             // [1, 2], [-inf, inf]
+  UNCERTAIN_SYMMETRIC, // 3.56?1
+  UNCERTAIN_UP,        // 3.560?2u
+  UNCERTAIN_DOWN       // -10?d
 };
 
 enum text_case
 {
-  TITLE_CASE,
-  LOWER_CASE,
-  UPPER_CASE
+  TITLE_CASE, // [Empty]
+  LOWER_CASE, // [empty]
+  UPPER_CASE  // [EMPTY]
 };
 
 enum plus_sign
 {
-  ALWAYS,
-  INNER_ZERO,
-  NEVER
+  ALWAYS,     // [+1, +2], [-1, +2]
+  INNER_ZERO, //   [1, 2], [-1, +2]
+  NEVER       //   [1, 2],  [-1, 2]
 };
 
 struct interval_format
@@ -51,7 +52,7 @@ struct interval_format
   interval_form form;
 
   // how Empty, Entire, and NaI are output
-  text_case empty_entire_nai_case;
+  text_case special_case;
   // whether Entire becomes [Entire] or [-Inf, Inf] (only in inf-sup form)
   bool entire_boundaries;
 
@@ -79,7 +80,7 @@ GENERAL_PURPOSE_LAYOUT =
 {
   .total_width = 0,
   .form = INF_SUP,
-  .empty_entire_nai_case = TITLE_CASE,
+  .special_case = TITLE_CASE,
   .entire_boundaries = false,
   .display_plus = INNER_ZERO,
   .left_justify = false,
@@ -139,10 +140,10 @@ parse_conversion_specifier
         switch (buffer.at (0))
           {
             case 'C':
-              layout.empty_entire_nai_case = UPPER_CASE;
+              layout.special_case = UPPER_CASE;
               break;
             case 'c':
-              layout.empty_entire_nai_case = LOWER_CASE;
+              layout.special_case = LOWER_CASE;
               break;
             case '<':
               layout.entire_boundaries = true;
@@ -222,6 +223,7 @@ parse_conversion_specifier
                 return layout;
               }
             layout.form = UNCERTAIN_SYMMETRIC;
+            layout.hide_punctuation = false;
           }
         buffer = buffer.substr (1);
         characters_read ++;
@@ -546,12 +548,14 @@ double_to_string
   const mpfr_rnd_t &rnd
 )
 {
-  // TODO remove sign from zero
+  std::string retval;
 
   if (is_exact_hexadecimal (layout))
-    return double_to_exact_hex_string (layout, stat, force_sign, x);
+    retval = double_to_exact_hex_string (layout, stat, force_sign, x);
   else
-    return mpfr_to_string_d (stat, force_sign, x, rnd);
+    retval = mpfr_to_string_d (stat, force_sign, x, rnd);
+
+  return retval;
 }
 
 // Compute the string representation of a scalar interval.
@@ -565,10 +569,61 @@ interval_to_text
   const uint8_t *dec = NULL
 )
 {
+  // Switch uncertain form for unbound intervals,
+  // if the interval cannot be represented with the desired direction
+  interval_form
+  form = layout.form;
+  switch (form)
+    {
+      case UNCERTAIN_SYMMETRIC:
+        if (inf != -std::numeric_limits <double>::infinity ()
+            && sup == std::numeric_limits <double>::infinity ())
+          form = UNCERTAIN_UP;
+        if (inf == -std::numeric_limits <double>::infinity ()
+            && sup != std::numeric_limits <double>::infinity ())
+          form = UNCERTAIN_DOWN;
+        break;
+
+      case UNCERTAIN_UP:
+        if (inf == -std::numeric_limits <double>::infinity ())
+          {
+            if (sup == std::numeric_limits <double>::infinity ())
+              form = UNCERTAIN_SYMMETRIC;
+            else
+              form = UNCERTAIN_DOWN;
+          }
+        break;
+
+      case UNCERTAIN_DOWN:
+        if (sup == std::numeric_limits <double>::infinity ())
+          {
+            if (inf == -std::numeric_limits <double>::infinity ())
+              form = UNCERTAIN_SYMMETRIC;
+            else
+              form = UNCERTAIN_UP;
+          }
+        break;
+
+      case INF_SUP:
+        // switch between [-inf, inf] and [entire]
+        if (!layout.entire_boundaries
+            && inf == -std::numeric_limits <double>::infinity ()
+            && sup == std::numeric_limits <double>::infinity ())
+          form = SPECIAL;
+        break;
+
+      case SPECIAL:
+        break;
+    }
+
+  // [nai] and [empty] can only be represented in special form
+  if (inf > sup)
+    form = SPECIAL; 
+
   std::string l;
   std::string u;
   std::string m_E;
-  switch (layout.form)
+  switch (form)
     {
       case INF_SUP:
         {
@@ -582,8 +637,18 @@ interval_to_text
 
       case UNCERTAIN_SYMMETRIC:
         {
-          const double
-          mid = inf / 2.0 + sup / 2.0;
+          double mid;
+          if (inf == -std::numeric_limits <double>::infinity ()
+              && sup == std::numeric_limits <double>::infinity ())
+            mid = 0.0;
+          else
+            mid = inf / 2.0 + sup / 2.0;
+
+          mid = std::min (std::max (
+            -std::numeric_limits <double>::max (),
+            mid),
+            std::numeric_limits <double>::max ());
+
           m_E = double_to_string (layout, stat, layout.display_plus == ALWAYS,
               mid, MPFR_RNDZ);
         }
@@ -598,13 +663,16 @@ interval_to_text
         m_E = double_to_string (layout, stat, layout.display_plus == ALWAYS,
             sup, MPFR_RNDU);
         break;
+
+      case SPECIAL:
+        break;
     }
 
   // Prepare uncertain form m?rvE
   std::string uncertain;
-  if (layout.form == UNCERTAIN_SYMMETRIC
-      || layout.form == UNCERTAIN_DOWN
-      || layout.form == UNCERTAIN_UP)
+  if (form == UNCERTAIN_SYMMETRIC
+      || form == UNCERTAIN_DOWN
+      || form == UNCERTAIN_UP)
     {
       // Split exponent
       std::string m;
@@ -652,8 +720,8 @@ interval_to_text
       // Compute radius (upper bound)
       double rad = 0.0;
       {
-        if (layout.form == UNCERTAIN_SYMMETRIC
-            || layout.form == UNCERTAIN_UP)
+        if (form == UNCERTAIN_SYMMETRIC
+            || form == UNCERTAIN_UP)
           {
             mpfr_strtofr (stat.mp, m.c_str (), NULL, 10, MPFR_RNDD);
             mpfr_d_sub (stat.mp, sup, stat.mp, MPFR_RNDU);
@@ -665,8 +733,8 @@ interval_to_text
                 stat.is_exact = (mpfr_cmp_d (stat.mp, rad) == 0);
               }
           }
-        if (layout.form == UNCERTAIN_SYMMETRIC
-            || layout.form == UNCERTAIN_DOWN)
+        if (form == UNCERTAIN_SYMMETRIC
+            || form == UNCERTAIN_DOWN)
           {
             mpfr_strtofr (stat.mp, m.c_str (), NULL, 10, MPFR_RNDU);
             mpfr_sub_d (stat.mp, stat.mp, inf, MPFR_RNDU);
@@ -721,9 +789,9 @@ interval_to_text
       }
 
       std::string v;
-      if (layout.form == UNCERTAIN_DOWN)
+      if (form == UNCERTAIN_DOWN)
         v = "d";
-      if (layout.form == UNCERTAIN_UP)
+      if (form == UNCERTAIN_UP)
         v = "u";
 
       uncertain = m + "?" + r + v + E;
@@ -744,66 +812,61 @@ interval_to_text
         d = "_ill";
     }
 
-  bool display_brackets = (layout.form == INF_SUP && !layout.hide_punctuation);
+  bool
+  display_brackets
+      = ((form == INF_SUP || form == SPECIAL) && !layout.hide_punctuation);
 
-  std::string interval_parts[3];
-  
-  if (layout.form == INF_SUP)
-    {
-      interval_parts[0] = l;
-      interval_parts[1] = u;
-    }
-  else
-    {
-      interval_parts[0] = "";
-      interval_parts[1] = uncertain;
-    }
-  interval_parts[2] = d;
+  std::string interval_parts[3] = {"", "", d};
 
-  if (d == "_ill")
+  switch (form)
     {
-      switch (layout.empty_entire_nai_case)
-        {
-          case UPPER_CASE: interval_parts[0] = "NAI"; break;
-          case TITLE_CASE: interval_parts[0] = "NaI"; break;
-          case LOWER_CASE: interval_parts[0] = "nai"; break;
-        }
-      interval_parts[1] = "";
-      interval_parts[2] = ""; // [NaI] carries no decoration
-      display_brackets = !layout.hide_punctuation;
-    }
-  else if (layout.form == INF_SUP
-      && !layout.entire_boundaries
-      && inf == -std::numeric_limits <double>::infinity ()
-      && sup == std::numeric_limits <double>::infinity ())
-    {
-      switch (layout.empty_entire_nai_case)
-        {
-          case UPPER_CASE: interval_parts[0] = "ENTIRE"; break;
-          case TITLE_CASE: interval_parts[0] = "Entire"; break;
-          case LOWER_CASE: interval_parts[0] = "entire"; break;
-        }
-      interval_parts[1] = "";
-    }
-  else if (inf > sup)
-    {
-      switch (layout.empty_entire_nai_case)
-        {
-          case UPPER_CASE: interval_parts[0] = "EMPTY"; break;
-          case TITLE_CASE: interval_parts[0] = "Empty"; break;
-          case LOWER_CASE: interval_parts[0] = "empty"; break;
-        }
-      interval_parts[1] = "";
-      display_brackets = !layout.hide_punctuation;
-    }
-  else if (layout.form == INF_SUP && l == u)
-    {
-      interval_parts[1] = "";
+      case INF_SUP:
+        interval_parts[0] = l;
+        if (l != u)
+          interval_parts[1] = u;
+        break;
+
+      case UNCERTAIN_SYMMETRIC:
+      case UNCERTAIN_UP:
+      case UNCERTAIN_DOWN:
+        interval_parts[1] = uncertain;
+        break;
+
+      case SPECIAL:
+        if (d == "_ill")
+          {
+            switch (layout.special_case)
+              {
+                case UPPER_CASE: interval_parts[0] = "NAI"; break;
+                case TITLE_CASE: interval_parts[0] = "NaI"; break;
+                case LOWER_CASE: interval_parts[0] = "nai"; break;
+              }
+            interval_parts[2] = ""; // [NaI] carries no decoration
+          }
+        else if (inf > sup)
+          {
+            switch (layout.special_case)
+              {
+                case UPPER_CASE: interval_parts[0] = "EMPTY"; break;
+                case TITLE_CASE: interval_parts[0] = "Empty"; break;
+                case LOWER_CASE: interval_parts[0] = "empty"; break;
+              }
+          }
+        else
+          {
+            switch (layout.special_case)
+              {
+                case UPPER_CASE: interval_parts[0] = "ENTIRE"; break;
+                case TITLE_CASE: interval_parts[0] = "Entire"; break;
+                case LOWER_CASE: interval_parts[0] = "entire"; break;
+              }
+          }
+        break;
     }
 
   if (layout.hide_punctuation)
     {
-      // Without punctuation, use spaces as column delimiters
+      // Without punctuation, add spaces as column delimiters
       if (!interval_parts[2].empty ())
         interval_parts[2].insert (0, 1, ' ');
       if (!interval_parts[0].empty () && !interval_parts[1].empty ())
@@ -1013,10 +1076,11 @@ DEFUN_DLD (intervaltotext2, args, nargout,
   "@item d\n"
   "Use one-sided form with upper boundary and uncertain ulp-count in downward "
   "direction.  By default the symmetric form with midpoint and radius is "
-  "used.\n"
+  "used.  For unbound intervals, this flag is ignored and the direction is "
+  "chosen automatically.\n"
   "@item u\n"
   "Use one-sided form with lower boundary and uncertain ulp-count in upward "
-  "direction\n"
+  "direction.  For unbound intervals, this flag is ignored.\n"
   "@item -\n"
   "Left justify within the given field width\n"
   "@item +\n"
