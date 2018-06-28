@@ -15,8 +15,10 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{3.1.1, 2018-xx-yy}
+@release{3.2.0, 2018-xx-yy}
 @itemize
+@item
+    intervaltotext: A regression in Octave 4.4 has removed the possibility to increase Octave's output precision beyond 16 decimal digits (bug #53456).  This has made it impossible to output intervals with a higher accuracy.  The function @command{intervaltotext} has been reimplemented with several new format options to customize the format and accuracy of the interval literal.
 @item
     numel: Added support for additional arguments to compute the number of elements after indexing an interval array.  This allows combined indexing expressions of the form @code{x(1:2).inf}.
 @item
