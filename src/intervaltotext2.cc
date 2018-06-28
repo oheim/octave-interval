@@ -347,11 +347,33 @@ prepare_format_string
   return format_string.str ();
 }
 
+std::string
+prepare_radius_format_string
+(
+  const interval_format &layout
+)
+{
+  std::ostringstream format_string;
+
+  format_string << "%";
+
+  if (layout.radius_width > 0)
+    {
+      format_string << "0";
+      format_string << layout.radius_width;
+    }
+
+  format_string << "u";
+
+  return format_string.str ();
+}
+
 struct shared_conversion_resources
 {
   // number format strings, can be used for a list of intervals
   const char *signed_template;
   const char *unsigned_template;
+  const char *radius_template;
   // temporary buffer for to-string-conversion
   char *buf;
   // temporary MPFR variable with binary64 precision, can be used for
@@ -411,7 +433,7 @@ double_to_exact_hex_string
   const double &x
 )
 {
-  // Do not use MPFR for double to hex conversion.
+  // Do not use MPFR for exact double to hex conversion.
   //
   // MPFR would use any of the 16 hex digits before the point, but
   // IEEE Std 1788-2015 requires the use of either 0 or 1 before the
@@ -493,7 +515,7 @@ double_to_exact_hex_string
   // Format hexadecimal number from individual parts
   sprintf (stat.buf,
     upper ? "%s0X%u.%08X%05XP%+d" : "%s0x%u.%08x%05xp%+d",
-    sign ? "-" : force_sign ? "+" : "",
+    sign ? "-" : (force_sign) ? "+" : "",
     static_cast <uint8_t> (hiddenbit),
     first_part, second_part,
     static_cast <int32_t> (exponent));
@@ -524,6 +546,8 @@ double_to_string
   const mpfr_rnd_t &rnd
 )
 {
+  // TODO remove sign from zero
+
   if (is_exact_hexadecimal (layout))
     return double_to_exact_hex_string (layout, stat, force_sign, x);
   else
@@ -542,25 +566,168 @@ interval_to_text
 )
 {
   std::string l;
-  if (layout.form == INF_SUP || layout.form == UNCERTAIN_UP)
-    {
-      bool force_sign = (inf != 0.0 && layout.display_plus == ALWAYS);
-      l = double_to_string (layout, stat, force_sign, inf, MPFR_RNDD);
-    }
-
   std::string u;
-  if (layout.form == INF_SUP || layout.form == UNCERTAIN_DOWN)
+  std::string m_E;
+  switch (layout.form)
     {
-      bool force_sign = (sup != 0.0 && (layout.display_plus == ALWAYS ||
-          (layout.display_plus == INNER_ZERO && inf < 0.0 && 0.0 < sup)));
-      u = double_to_string (layout, stat, force_sign, sup, MPFR_RNDU);
+      case INF_SUP:
+        {
+          bool
+          force_sign = (layout.display_plus == ALWAYS ||
+              (layout.display_plus == INNER_ZERO && inf < 0.0 && 0.0 < sup));
+          l = double_to_string (layout, stat, force_sign, inf, MPFR_RNDD);
+          u = double_to_string (layout, stat, force_sign, sup, MPFR_RNDU);
+        }
+        break;
+
+      case UNCERTAIN_SYMMETRIC:
+        {
+          const double
+          mid = inf / 2.0 + sup / 2.0;
+          m_E = double_to_string (layout, stat, layout.display_plus == ALWAYS,
+              mid, MPFR_RNDZ);
+        }
+        break;
+
+      case UNCERTAIN_UP:
+        m_E = double_to_string (layout, stat, layout.display_plus == ALWAYS,
+            inf, MPFR_RNDD);
+        break;
+
+      case UNCERTAIN_DOWN:
+        m_E = double_to_string (layout, stat, layout.display_plus == ALWAYS,
+            sup, MPFR_RNDU);
+        break;
     }
 
-  std::string m;
-  if (layout.form == UNCERTAIN_SYMMETRIC)
-  {
-    m = double_to_string (layout, stat, false, inf / 2 + sup / 2, MPFR_RNDZ);
-  }
+  // Prepare uncertain form m?rvE
+  std::string uncertain;
+  if (layout.form == UNCERTAIN_SYMMETRIC
+      || layout.form == UNCERTAIN_DOWN
+      || layout.form == UNCERTAIN_UP)
+    {
+      // Split exponent
+      std::string m;
+      std::string E;
+      {
+        std::size_t
+        e_pos = m_E.find_first_of ("eE");
+        if (e_pos == std::string::npos)
+          m = m_E;
+        else
+          {
+            E = m_E.substr (e_pos);
+            m = m_E.substr (0, e_pos);
+          }
+      }
+
+      // Represent ulp(m) as decimal string
+      std::string ulp;
+      {
+        ulp = m;
+
+        // Remove sign in case of negative midpoint
+        std::size_t
+        sign_pos = ulp.find ('-');
+        if (sign_pos != std::string::npos)
+          ulp = ulp.erase (sign_pos, 1);
+
+        // Replace all digits with zero and the last place with unit
+        std::replace_if (ulp.begin (), ulp.end (), ::isdigit, '0');
+        ulp[ulp.rfind ('0')] = '1';
+
+        // Append exponent for proper scaling
+        ulp += E;
+      }
+
+      // Compute ulp(m) (upper bound)
+      double ulp_d;
+      {
+        mpfr_strtofr (stat.mp, ulp.c_str (), NULL, 10, MPFR_RNDU);
+        ulp_d = mpfr_get_d (stat.mp, MPFR_RNDU);
+        if (stat.is_exact)
+          stat.is_exact = (1.0 <= ulp_d && ulp_d <= 1.0e16);
+      }
+
+      // Compute radius (upper bound)
+      double rad = 0.0;
+      {
+        if (layout.form == UNCERTAIN_SYMMETRIC
+            || layout.form == UNCERTAIN_UP)
+          {
+            mpfr_strtofr (stat.mp, m.c_str (), NULL, 10, MPFR_RNDD);
+            mpfr_d_sub (stat.mp, sup, stat.mp, MPFR_RNDU);
+            rad = std::max (rad, mpfr_get_d (stat.mp, MPFR_RNDU));
+            if (stat.is_exact)
+              {
+                mpfr_strtofr (stat.mp, m.c_str (), NULL, 10, MPFR_RNDU);
+                mpfr_d_sub (stat.mp, sup, stat.mp, MPFR_RNDD);
+                stat.is_exact = (mpfr_cmp_d (stat.mp, rad) == 0);
+              }
+          }
+        if (layout.form == UNCERTAIN_SYMMETRIC
+            || layout.form == UNCERTAIN_DOWN)
+          {
+            mpfr_strtofr (stat.mp, m.c_str (), NULL, 10, MPFR_RNDU);
+            mpfr_sub_d (stat.mp, stat.mp, inf, MPFR_RNDU);
+            rad = std::max (rad, mpfr_get_d (stat.mp, MPFR_RNDU));
+            if (stat.is_exact)
+              {
+                mpfr_strtofr (stat.mp, m.c_str (), NULL, 10, MPFR_RNDD);
+                mpfr_sub_d (stat.mp, stat.mp, inf, MPFR_RNDD);
+                stat.is_exact = (mpfr_cmp_d (stat.mp, rad) == 0);
+              }
+          }
+      }
+
+      // Compute radius as multiple of ulp(m) (upper bound)
+      std::string r;
+      {
+        double r_d;
+        {
+          mpfr_set_d (stat.mp, rad, MPFR_RNDZ);
+          mpfr_div_d (stat.mp, stat.mp, ulp_d, MPFR_RNDU);
+          r_d = mpfr_get_d (stat.mp, MPFR_RNDU);
+          if (stat.is_exact)
+            {
+              mpfr_set_d (stat.mp, rad, MPFR_RNDZ);
+              mpfr_div_d (stat.mp, stat.mp, ulp_d, MPFR_RNDD);
+              stat.is_exact = (mpfr_cmp_d (stat.mp, r_d) == 0);
+            }
+        }
+        if (r_d <= 0.5)
+          {
+            r = "";
+            if (stat.is_exact)
+              stat.is_exact = (r_d == 0.5);
+          }
+        else if (r_d > static_cast <double>
+            (std::numeric_limits <uint32_t>::max ()))
+          {
+            r = "?";
+            if (stat.is_exact)
+              stat.is_exact =
+                  (r_d == std::numeric_limits <double>::infinity ());
+          }
+        else
+          {
+            uint32_t
+            r_uint = std::ceil (r_d);
+            if (stat.is_exact)
+              stat.is_exact = (static_cast <double> (r_uint) == r_d);
+            std::sprintf (stat.buf, stat.radius_template, r_uint);
+            r = stat.buf;
+          }
+      }
+
+      std::string v;
+      if (layout.form == UNCERTAIN_DOWN)
+        v = "d";
+      if (layout.form == UNCERTAIN_UP)
+        v = "u";
+
+      uncertain = m + "?" + r + v + E;
+    }
 
   std::string d;
   if (dec != NULL)
@@ -579,7 +746,20 @@ interval_to_text
 
   bool display_brackets = (layout.form == INF_SUP && !layout.hide_punctuation);
 
-  std::string interval_parts[3] = {l, u, d};
+  std::string interval_parts[3];
+  
+  if (layout.form == INF_SUP)
+    {
+      interval_parts[0] = l;
+      interval_parts[1] = u;
+    }
+  else
+    {
+      interval_parts[0] = "";
+      interval_parts[1] = uncertain;
+    }
+  interval_parts[2] = d;
+
   if (d == "_ill")
     {
       switch (layout.empty_entire_nai_case)
@@ -647,8 +827,8 @@ interval_to_text
   padding -= interval_parts[1].length ();
   if (padding > 0)
     {
-      size_t padding1 = padding / 2;
-      size_t padding0 = padding - padding1;
+      std::size_t padding1 = padding / 2;
+      std::size_t padding0 = padding - padding1;
 
       interval_parts[0].insert (0, padding0, ' ');
       interval_parts[1].insert (0, padding1, ' ');
@@ -678,6 +858,7 @@ interval_to_text
   // Initialize temporary variables for conversion
   char * signed_template;
   char * unsigned_template;
+  char * radius_template;
   {
     std::string s = prepare_format_string (layout, false);
     unsigned_template = new char [s.length () + 1];
@@ -688,11 +869,16 @@ interval_to_text
 
     signed_template = new char [s.length () + 1];
     std::strcpy (signed_template, s.c_str ());
+
+    s = prepare_radius_format_string (layout);
+    radius_template = new char [s.length () + 1];
+    std::strcpy (radius_template, s.c_str ());
   }
   shared_conversion_resources stat =
     {
       .signed_template = signed_template,
       .unsigned_template = unsigned_template,
+      .radius_template = radius_template,
       .buf = new char[768],
       .mp = {},
       .is_exact = true
@@ -723,6 +909,7 @@ interval_to_text
   delete[] stat.buf;
   delete[] signed_template;
   delete[] unsigned_template;
+  delete[] radius_template;
 
   return std::pair <Array <std::string>, bool>
     (interval_literals, stat.is_exact);
@@ -901,7 +1088,8 @@ DEFUN_DLD (intervaltotext2, args, nargout,
       const std::string
       cs = args (1).string_value ();
 
-      std::size_t characters_read = 0;
+      std::size_t
+      characters_read = 0;
       layout = parse_conversion_specifier (cs, characters_read);
 
       if (nargout >= 3)
