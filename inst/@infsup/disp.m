@@ -45,7 +45,7 @@
 ##   @result{} s = [0]_com
 ## @end group
 ## @end example
-## @seealso{@@infsup/display, @@infsup/intervaltotext}
+## @seealso{@@infsup/display, intervaltotext}
 ## @end defmethod
 
 ## Author: Oliver Heimlich
@@ -59,8 +59,15 @@ function varargout = disp (x)
     return
   endif
 
-  ## With format="auto" the output precision can be set with the format command
-  [s, isexact] = intervaltotext (x, "auto");
+  if (strcmp (disp (uint8 (255)), "ff\n"))
+    ## hex output
+    cs = "[.13a]";
+  else
+    ## decimal output
+    cs = cstrcat ("[.", num2str (output_precision ()) , "g]");
+  endif
+
+  [s, isexact] = intervaltotext (x, cs);
 
   if (not (iscell (s)))
     ## Scalar interval

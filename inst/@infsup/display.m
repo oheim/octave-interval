@@ -56,7 +56,7 @@
 ##      [1]_com   [2]_com
 ## @end group
 ## @end example
-## @seealso{@@infsup/disp, @@infsup/intervaltotext}
+## @seealso{@@infsup/disp, intervaltotext}
 ## @end defmethod
 
 ## Author: Oliver Heimlich
