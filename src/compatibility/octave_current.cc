@@ -21,3 +21,8 @@ bool isvector (const Array <auto> x)
 {
   return x.isvector ();
 }
+
+bool isempty (const octave_value x)
+{
+  return x.isempty ();
+}

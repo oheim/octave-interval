@@ -22,3 +22,4 @@
 #include <octave/oct.h>
 
 bool isvector (const Array <auto> x);
+bool isempty (const octave_value x);

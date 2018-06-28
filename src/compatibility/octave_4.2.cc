@@ -26,6 +26,12 @@ bool isvector (const Array <auto> x)
   return x.is_vector ();
 }
 
+// The is_empty method has been replaced by isempty in Octave 4.4.
+bool isempty (const octave_value x)
+{
+  return x.is_empty ();
+}
+
 // feval has been moved into octave::feval in Octave 4.4.
 namespace octave
 {

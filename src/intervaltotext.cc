@@ -1180,7 +1180,7 @@ DEFUN_DLD (intervaltotext, args, nargout,
   x = args (0).scalar_map_value ();
 
   interval_format layout;
-  if (nargin < 2 || args (1).is_empty ())
+  if (nargin < 2 || isempty (args (1)))
     layout = GENERAL_PURPOSE_LAYOUT;
   else
     {
