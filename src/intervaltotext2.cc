@@ -425,6 +425,24 @@ mpfr_to_string_d
   return retval;
 }
 
+inline
+void
+pad_number_width
+(
+  const interval_format &layout,
+  std::string &formatted_number
+)
+{
+  if (layout.number_width > formatted_number.length ())
+    {
+      if (layout.left_justify)
+        formatted_number.resize (layout.number_width, ' ');
+      else
+        formatted_number.insert (0, 
+            layout.number_width - formatted_number.length (), ' ');
+    }
+}
+
 // Lossless conversion of a scalar double to hexadecimal string
 std::string
 double_to_exact_hex_string
@@ -526,13 +544,7 @@ double_to_exact_hex_string
 
   // TODO: Implement more layout options
 
-  if (layout.number_width > retval.length ())
-    {
-      if (layout.left_justify)
-        retval.resize (layout.number_width, ' ');
-      else
-        retval.insert (0, layout.number_width - retval.length (), ' ');
-    }
+  pad_number_width (layout, retval);
 
   return retval;
 }
@@ -554,6 +566,21 @@ double_to_string
     retval = double_to_exact_hex_string (layout, stat, force_sign, x);
   else
     retval = mpfr_to_string_d (stat, force_sign, x, rnd);
+
+  // Never display zeros with a sign, even for force_sign == true.
+  // For interval arithmetic, according to IEEE Std 1788-2015, there is no
+  // signed zero.  So, the number can be represented by 0 (not -0 or +0).
+  if (retval.find_first_of ("123456789") == std::string::npos)
+    {
+      std::size_t
+      sign_pos = retval.find_first_not_of (' ');
+      if (sign_pos != std::string::npos
+          && (retval[sign_pos] == '+' || retval[sign_pos] == '-'))
+        {
+          retval.erase (sign_pos, 1);
+          pad_number_width (layout, retval);
+        }
+    }
 
   return retval;
 }
