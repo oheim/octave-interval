@@ -1176,8 +1176,16 @@ DEFUN_DLD (intervaltotext2, args, nargout,
     layout = GENERAL_PURPOSE_LAYOUT;
   else
     {
-      const std::string
+      std::string
       cs = args (1).string_value ();
+
+      // For backwards compatibility with the old intervaltotext function
+      if (cs == "decimal")
+        cs = "[.16g]";
+      else if (cs == "exact decimal")
+        cs = "[.751g]";
+      else if (cs == "exact hexadecimal")
+        cs = "[.13a]";
 
       std::size_t
       characters_read = 0;
