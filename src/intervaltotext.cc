@@ -1147,7 +1147,6 @@ DEFUN_DLD (intervaltotext, args, nargout,
   "\n"
   "@end itemize\n"
   "\n"
-  "@end itemize\n"
   "@end table\n"
   "@end deftypefun"
   )
