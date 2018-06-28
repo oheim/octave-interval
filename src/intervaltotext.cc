@@ -576,7 +576,7 @@ double_to_string
   // Never display zeros with a sign, even for force_sign == true.
   // For interval arithmetic, according to IEEE Std 1788-2015, there is no
   // signed zero.  So, the number can be represented by 0 (not -0 or +0).
-  if (retval.find_first_of ("i123456789") == std::string::npos)
+  if (retval.find_first_of ("iI123456789") == std::string::npos)
     {
       std::size_t
       sign_pos = retval.find_first_not_of (' ');
@@ -1297,7 +1297,7 @@ DEFUN_DLD (intervaltotext, args, nargout,
 %!assert (intervaltotext (infsup (2, 3), "[f]"), "[2.000000, 3.000000]");
 %!assert (intervaltotext (infsup (2, 3), "[e]"), "[2.000000e+00, 3.000000e+00]");
 %!assert (intervaltotext (infsup (2, 3), "[E]"), "[2.000000E+00, 3.000000E+00]");
-%!assert (intervaltotext (infsup (-inf, inf), "[F]"), "[-INF, INF]");
+%!assert (intervaltotext (infsup (-inf, inf), "[<F]"), "[-INF, INF]");
 
 %!assert (intervaltotext (infsup (2, 3), "?g"), "2.5?5");
 %!assert (intervaltotext (infsup (2, 3), "9:?g"), "    2.5?5");
@@ -1316,7 +1316,7 @@ DEFUN_DLD (intervaltotext, args, nargout,
 %!assert (intervaltotext (infsup (2, 3), "+?g"), "+2.5?5");
 
 %!assert (intervaltotext (infsup (2, 3), "?f"), "2.500000?500000");
-%!assert (intervaltotext (infsup (2, 3), "[e]"), "2.500000?500000e+00");
-%!assert (intervaltotext (infsup (2, 3), "[E]"), "2.500000?500000E+00");
+%!assert (intervaltotext (infsup (2, 3), "?e"), "2.500000?500000e+00");
+%!assert (intervaltotext (infsup (2, 3), "?E"), "2.500000?500000E+00");
 
 */
