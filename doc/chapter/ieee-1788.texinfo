@@ -431,7 +431,7 @@ The operation @code{textToInterval} is implemented by the class constructors @fu
 
 @appendixsubsec Output
 
-See @funref{@@infsup/intervaltotext}.
+See @funref{intervaltotext}.
 
 @appendixsubsec Exact text representation
 
@@ -486,7 +486,7 @@ The inverval package version @value{version} for GNU Octave is conforming to IE
 @item
     How are interval datums converted to their exact text representations?
 
-    The binary64 boundaries are converted into hexadecimal-significand form as required by the standard.  It is also possible to convert interval datums to exact interval literals in decimal form, see optional arguments of function @funref{@@infsup/intervaltotext} for that purpose.
+    The binary64 boundaries are converted into hexadecimal-significand form as required by the standard.  It is also possible to convert interval datums to exact interval literals in decimal form, see optional arguments of function @funref{intervaltotext} for that purpose.
 @end enumerate
 
 @item Implementation-defined behavior

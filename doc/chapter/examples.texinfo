@@ -70,11 +70,11 @@ Further Examples
 
 Floating-point numbers are most commonly used in binary64 format, a.k.a. double precision.  Internally they are stored in the form @code{± @var{m} * 2 ^ @var{e}} with some integral mantissa @var{m} and exponent @var{e}.  Most decimal fractions can only be stored approximately in this format.
 
-The @funref{@@infsup/intervaltotext} function can be used to output the approximate value up to the last decimal digit.
+The @funref{intervaltotext} function can be used to output the approximate value up to the last decimal digit.
 
 @example
 @group
-intervaltotext (infsup (0.1), "exact decimal")
+intervaltotext (infsup (0.1), "[.55g]")
   @result{} ans = [0.1000000000000000055511151231257827021181583404541015625]
 @end group
 @end example
@@ -83,7 +83,7 @@ It can be seen that 0.1 is converted into the most accurate floating-point numbe
 
 @example
 @group
-intervaltotext (infsup ("0.1"), "exact decimal")
+intervaltotext (infsup ("0.1"), "[.55g]")
   @result{} ans =
     [0.09999999999999999167332731531132594682276248931884765625,
      0.1000000000000000055511151231257827021181583404541015625]
