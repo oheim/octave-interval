@@ -81,7 +81,7 @@
 ## infsup ("0??")
 ##   @result{} ans = [Entire]
 ## infsup ("911??de-2")
-##   @result{} ans ⊂ [-Inf, +9.1101]
+##   @result{} ans ⊂ [-inf, +9.1101]
 ## infsup ("10?")
 ##   @result{} ans = [9.5, 10.5]
 ## @end group

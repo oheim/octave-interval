@@ -46,8 +46,8 @@
 ## b = infsupdec (-inf, inf);
 ## [u, v] = mulrev (b, c)
 ##   @result{}
-##     u = [-Inf, 0]_trv
-##     v = [0, Inf]_trv
+##     u = [-inf, 0]_trv
+##     v = [0, inf]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/times}

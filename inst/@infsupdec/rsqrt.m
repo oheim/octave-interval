@@ -24,7 +24,7 @@
 ## @example
 ## @group
 ## rsqrt (infsupdec (-6, 4))
-##   @result{} ans = [0.5, Inf]_trv
+##   @result{} ans = [0.5, inf]_trv
 ## @end group
 ## @end example
 ## @seealso{@@infsupdec/realsqrt}
