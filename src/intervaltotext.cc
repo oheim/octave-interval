@@ -1005,7 +1005,7 @@ interval_to_text
     (interval_literals, stat.is_exact);
 }
 
-DEFUN_DLD (intervaltotext2, args, nargout, 
+DEFUN_DLD (intervaltotext, args, nargout, 
   "-*- texinfo -*-\n"
   "@documentencoding UTF-8\n"
   "@deftypefun {@var{s} =} intervaltotext (@var{X})\n"
@@ -1242,3 +1242,24 @@ DEFUN_DLD (intervaltotext2, args, nargout,
 
   return retval;
 }
+
+/*
+%!assert (intervaltotext (infsup (1 + eps), "exact decimal"), "[1.0000000000000002220446049250313080847263336181640625]");
+%!assert (intervaltotext (infsup (1 + eps), "exact hexadecimal"), "[0x1.0000000000001p+0]");
+%!test
+%! output_precision (3, 'local');
+%! assert (intervaltotext (infsup (pi), "auto"), "[3.14, 3.15]");
+%! output_precision (4, 'local');
+%! assert (intervaltotext (infsup (pi), "auto"), "[3.141, 3.142]");
+%!# from the documentation string
+%!assert (intervaltotext (infsup (1 + eps)), "[1.0000000000000002, 1.000000000000001]");
+%!assert (intervaltotext (nextout (infsup (1 + eps))), "[1, 1.0000000000000005]");
+%!assert (intervaltotext (infsup (1)), "[1]");
+%!assert (reshape (intervaltotext (infsup (reshape (1:120, 2, 3, 4, 5))), 1, 120), intervaltotext (infsup (1:120)));
+
+%!assert (intervaltotext (infsupdec (1 + eps), "exact decimal"), "[1.0000000000000002220446049250313080847263336181640625]_com");
+%!assert (intervaltotext (infsupdec (1 + eps), "exact hexadecimal"), "[0x1.0000000000001p+0]_com");
+%!assert (intervaltotext (infsupdec (1 + eps)), "[1.0000000000000002, 1.000000000000001]_com");
+%!assert (intervaltotext (infsupdec (1)), "[1]_com");
+%!assert (reshape (intervaltotext (infsupdec (reshape (1:120, 2, 3, 4, 5))), 1, 120), intervaltotext (infsupdec (1:120)));
+*/

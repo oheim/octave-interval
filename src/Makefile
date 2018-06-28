@@ -5,7 +5,7 @@
 
 SHELL          = /bin/sh
 OBJ            = crlibm_function.oct \
-                 intervaltotext2.oct \
+                 intervaltotext.oct \
                  mpfr_function_d.oct \
                  mpfr_linspace_d.oct \
                  mpfr_matrix_mul_d.oct \
@@ -70,7 +70,7 @@ mpfr_%.oct: mpfr_%.cc mpfr_commons.h $(OCTAVE_COMPATIBILITY)
 	@echo " [MKOCTFILE] $<"
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
-intervaltotext2.oct: intervaltotext2.cc mpfr_commons.h $(OCTAVE_COMPATIBILITY)
+intervaltotext.oct: intervaltotext.cc mpfr_commons.h $(OCTAVE_COMPATIBILITY)
 	@echo " [MKOCTFILE] $<"
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 

@@ -148,12 +148,12 @@ Interval numeric function
  @infsup/wid
 Interval input and output
  interval_bitpack
+ intervaltotext
  exacttointerval
  @infsup/bitunpack
  @infsup/disp
  @infsup/display
  @infsup/intervaltoexact
- @infsup/intervaltotext
  @infsup/plot
  @infsup/plot3
 Interval solver or optimizer
