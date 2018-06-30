@@ -18,11 +18,13 @@
 @release{3.2.0, 2018-xx-yy}
 @itemize
 @item
-    intervaltotext: A regression in Octave 4.4 has removed the possibility to increase Octave's output precision beyond 16 decimal digits (bug #53456).  This has made it impossible to output intervals with a higher accuracy.  The function @command{intervaltotext} has been reimplemented with several new format options to customize the format and accuracy of the interval literal.
+    Fixed a regression where decorated intervals could no longer be used in Octave 4.4 (bug #53331).
+@item
+    intervaltotext: A change in Octave 4.4 has removed the possibility to increase Octave's output precision beyond 16 decimal digits (bug #53456), which has made it impossible to output intervals with a higher accuracy.  The function @command{intervaltotext} has been reimplemented with several new format options to customize the format and accuracy of the interval literal.  All recommended conversion specifiers from IEEE Std 1788-2015 are now supported, e. g., intervals can be printed in uncertain form.
+@item
+    printf, fprintf, sprintf: New functions to produce formatted output with interval literals.
 @item
     numel: Added support for additional arguments to compute the number of elements after indexing an interval array.  This allows combined indexing expressions of the form @code{x(1:2).inf}.
-@item
-    Fixed a regression where decorated intervals could no longer be used in the upcoming Octave 4.4 (bug #53331).
 @item
     Fixed several warnings during package installation.
 @end itemize
