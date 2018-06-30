@@ -153,9 +153,12 @@ Interval input and output
  @infsup/bitunpack
  @infsup/disp
  @infsup/display
+ @infsup/fprintf
  @infsup/intervaltoexact
  @infsup/plot
  @infsup/plot3
+ @infsup/printf
+ @infsup/sprintf
 Interval solver or optimizer
  @infsup/fminsearch
  @infsup/fsolve

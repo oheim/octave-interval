@@ -1148,6 +1148,7 @@ DEFUN_DLD (intervaltotext, args, nargout,
   "@end itemize\n"
   "\n"
   "@end table\n"
+  "@seealso{@@infsup/printf, @@infsup/fprintf, @@infsup/sprintf}\n"
   "@end deftypefun"
   )
 {
