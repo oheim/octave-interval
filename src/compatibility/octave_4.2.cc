@@ -21,7 +21,7 @@
 #include <octave/parse.h>
 
 // The is_vector method has been replaced by isvector in Octave 4.4.
-bool isvector (const Array <auto> x)
+bool isvector (const Array <double> x)
 {
   return x.is_vector ();
 }

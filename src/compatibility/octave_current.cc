@@ -17,7 +17,7 @@
 
 #include <octave/oct.h>
 
-bool isvector (const Array <auto> x)
+bool isvector (const Array <double> x)
 {
   return x.isvector ();
 }
