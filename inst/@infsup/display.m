@@ -182,7 +182,7 @@ endfunction
 %! endif
 
 %!test
-%! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
+%! if (compare_versions (OCTAVE_VERSION, "4.2", ">=") && !ispc ())
 %!   assert (evalc ("display (infsup (magic (3)))"), ...
 %!    ["3×3 interval matrix\n", ...
 %!     "\n", ...
@@ -193,7 +193,7 @@ endfunction
 %! endif
 
 %!test
-%! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
+%! if (compare_versions (OCTAVE_VERSION, "4.2", ">=") && !ispc ())
 %!   assert (evalc ("infsup (magic (3))"), ...
 %!    ["ans = 3×3 interval matrix\n", ...
 %!     "\n", ...
@@ -204,12 +204,12 @@ endfunction
 %! endif
 
 %!test
-%! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
+%! if (compare_versions (OCTAVE_VERSION, "4.2", ">=") && !ispc ())
 %!   assert (evalc ("infsup ('pi')"), "ans ⊂ [3.1415, 3.1416]\n");
 %! endif
 
 %!test
-%! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
+%! if (compare_versions (OCTAVE_VERSION, "4.2", ">=") && !ispc ())
 %!   assert (evalc ("infsup (1:3)"), ...
 %!    ["ans = 1×3 interval vector\n", ...
 %!     "\n", ...
@@ -218,7 +218,7 @@ endfunction
 %! endif
 
 %!test
-%! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
+%! if (compare_versions (OCTAVE_VERSION, "4.2", ">=") && !ispc ()
 %!   assert (evalc ("infsup (ones(2, 2, 2))"), ...
 %!    ["ans = 2×2×2 interval array\n", ...
 %!     "\n", ...
