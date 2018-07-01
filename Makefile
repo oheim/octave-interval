@@ -380,6 +380,6 @@ endif
 ## (inspired by https://xkcd.com/1597/ because I always forget the required commands)
 .PHONY: debian
 debian:
-	cp "$(RELEASE_TARBALL_COMPRESSED)" "../Debian/octave-$(PACKAGE)_$(VERSION).orig.tar.gz"
+	cp ".dist/$(PACKAGE)-$(VERSION).tar.gz" "../Debian/octave-$(PACKAGE)_$(VERSION).orig.tar.gz"
 	(cd ../Debian/octave-$(PACKAGE) && \
 	 gbp import-orig ../octave-$(PACKAGE)_$(VERSION).orig.tar.gz --pristine-tar)
