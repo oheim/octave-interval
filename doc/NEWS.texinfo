@@ -15,7 +15,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{3.2.0, 2018-xx-yy}
+@release{3.2.0, 2018-07-01}
 @itemize
 @item
     Fixed a regression where decorated intervals could no longer be used in Octave 4.4 (bug #53331).
