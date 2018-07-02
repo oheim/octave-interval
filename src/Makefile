@@ -87,7 +87,7 @@ __setround__.oct: __setround__.cc
 
 clean:
 	test ! -e $(BUNDLED_CRLIBM_DIR)/Makefile || $(MAKE) -C $(BUNDLED_CRLIBM_DIR) $@
-	$(MAKE) -C compatibility
+	$(MAKE) -C compatibility clean
 	$(RM) *.oct *.o
 
 .PHONY: all clean
