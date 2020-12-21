@@ -68,9 +68,9 @@ function A = subsref (A, S)
       error ("interval cannot be indexed with {}")
     case "."
       if (any (strcmp (S(1).subs, methods ("infsupdec"))))
-        functionname = ["@infsupdec", filesep(),  S(1).subs];
+        functionname = ["@infsupdec/",  S(1).subs];
       elseif (any (strcmp (S(1).subs, methods ("infsup"))))
-        functionname = ["@infsup", filesep(), S(1).subs];
+        functionname = ["@infsup/", S(1).subs];
       else
         error (["interval property ‘", S(1).subs, "’ is unknown"])
       endif
