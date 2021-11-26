@@ -391,8 +391,6 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
       if (arg1.dims () != arg2.dims () || arg2.dims () != arg3.dims ())
         error ("mpfr_function_d: Array dimensions must agree!");
     }
-  if (error_state)
-    return octave_value_list ();
 
   // Choose the function to evaluate
   switch (nargin - 2)
@@ -491,8 +489,6 @@ DEFUN_DLD (mpfr_function_d, args, nargout,
         else if (function == "nthroot")
           {
             uint64NDArray n = args (3).uint64_array_value ();
-            if (error_state)
-              return octave_value_list ();
             nthroot (arg1, n, rnd);
           }
         else if (function == "plus")

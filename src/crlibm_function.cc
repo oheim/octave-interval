@@ -84,9 +84,6 @@ DEFUN_DLD (crlibm_function, args, nargout,
   const double      rnd      = args(1).scalar_value ();
   NDArray           arg1     = args(2).array_value ();
 
-  if (error_state)
-    return octave_value_list ();
-
   if (rnd == INFINITY)
     {
       // Round upwards

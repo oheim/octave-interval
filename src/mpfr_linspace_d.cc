@@ -65,8 +65,6 @@ DEFUN_DLD (mpfr_linspace_d, args, nargout,
     error ("mpfr_linspace_d: vectors must be of equal length");
   if (rnd != MPFR_RNDD && rnd != MPFR_RNDU)
     error ("mpfr_linspace_d: only directed rounding supported");
-  if (error_state)
-    return octave_value_list ();
 
   // Result size
   n = std::max (n, 1);

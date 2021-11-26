@@ -128,9 +128,7 @@ DEFUN_DLD (mpfr_to_string_d, args, nargout,
     }
   
   const Matrix x = args (2).matrix_value ();
-  if (error_state)
-    return octave_value_list ();
-  
+
   char buf [768];
   mpfr_t mp;
   mpfr_t zero;

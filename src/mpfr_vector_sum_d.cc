@@ -69,8 +69,6 @@ DEFUN_DLD (mpfr_vector_sum_d, args, nargout,
   const mpfr_rnd_t rnd      = parse_rounding_mode (args (0).scalar_value ());
   const NDArray    array    = args (1).array_value ();
   const octave_idx_type dim = args (2).scalar_value ();
-  if (error_state)
-    return octave_value_list ();
 
   if (dim > array.ndims ())
     {

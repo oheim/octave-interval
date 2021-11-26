@@ -460,8 +460,6 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
           NDArray array_xu = args (2).array_value ();
           NDArray array_yu = args (3).array_value ();
           octave_idx_type dim = args (4).scalar_value ();
-          if (error_state)
-            return octave_value_list ();
 
           std::pair <NDArray, NDArray> result_d =
               interval_vector_dot (array_xl, array_yl, array_xu, array_yu, dim);
@@ -475,8 +473,6 @@ DEFUN_DLD (mpfr_vector_dot_d, args, nargout,
           const NDArray array_x = args (1).array_value ();
           const NDArray array_y = args (2).array_value ();
           const octave_idx_type dim = args (3).scalar_value ();
-          if (error_state)
-            return octave_value_list ();
 
           std::pair <NDArray, NDArray> result_and_error
               = vector_dot (rnd, array_x, array_y, dim, nargout >= 2);

@@ -62,9 +62,6 @@ DEFUN_DLD (__setround__, args, nargout,
     error ("__setround__: Unsupported rounding mode, please use -inf, +inf "
            "or 0.5");
 
-  if (error_state)
-    return octave_value_list ();
-
   if (fesetround (mode) != 0)
     error ("__setround__: Unable to change rounding mode");
 

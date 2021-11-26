@@ -137,9 +137,7 @@ DEFUN_DLD (mpfr_matrix_mul_d, args, nargout,
   Matrix matrix_yl = args (1).matrix_value ();
   Matrix matrix_xu = args (2).matrix_value ();
   Matrix matrix_yu = args (3).matrix_value ();
-  if (error_state)
-    return octave_value_list ();
-  
+
   std::pair <Matrix, Matrix> result_d = 
     interval_matrix_mul (matrix_xl, matrix_yl, matrix_xu, matrix_yu);
   octave_value_list result;

@@ -331,9 +331,7 @@ DEFUN_DLD (mpfr_matrix_sqr_d, args, nargout,
 
   Matrix matrix_xl = args (0).matrix_value ();
   Matrix matrix_xu = args (1).matrix_value ();
-  if (error_state)
-    return octave_value_list ();
-  
+
   std::pair <Matrix, Matrix> result_d = 
     interval_matrix_sqr (matrix_xl, matrix_xu);
   octave_value_list result;
