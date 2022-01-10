@@ -77,11 +77,22 @@ function display (x)
   unwind_protect
 
     label = inputname (1);
-    if (isempty (label) && regexp(argn, '^\[\d+,\d+\]$'))
+    if (isempty (label) && compare_versions (OCTAVE_VERSION, "4.4", "<")
+        && regexp(argn, '^\[\d+,\d+\]$'))
       ## During output of cell array contents
+      ##
+      ## FIXME: We don't have access to
+      ## octave_value::current_print_indent_level
+      ## for correctly formatted nested cell array output.
+      ## Thus, the indentation will be wrong unless it is a member of
+      ## the outermost cell array.
+      ##
+      ## Since Octave 4.4 the display function will no longer be called
+      ## during the output of cell arrays, which outputs
+      ##   <class classname>
+      ## instead.  Also the argn function was removed in Octave 6.
+      ## Thus, this code is only for compatibility with old versions of Octave.
       label = argn;
-      ## FIXME: Need access to octave_value::current_print_indent_level
-      ## for correctly formatted nested cell array output
       current_print_indent_level = 2;
     else
       current_print_indent_level = 0;
