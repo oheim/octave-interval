@@ -69,3 +69,14 @@ endfunction
 %! assert (x, 3);
 %! assert (y, 3);
 %! assert (z, 1);
+
+# We also use some of Octave's builtin functions,
+# which depend upon the output of 'size'.
+# We want to verify that they work as desired
+# (see bug #42422).
+
+%!assert (ismatrix (infsup ([])));
+%!assert (ismatrix (infsup (0)));
+%!assert (ismatrix (infsup (zeros (3, 1))));
+%!assert (ismatrix (infsup (zeros (1, 4))));
+%!assert (ismatrix (infsup (zeros (3, 4))));

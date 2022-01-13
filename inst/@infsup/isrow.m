@@ -26,7 +26,8 @@
 ## Keywords: interval
 ## Created: 2015-04-18
 
-## FIXME This function is only required, because of a regression in octave 4.0
+## FIXME: One happy day this function can be removed, because bug #44498 has
+## been solved with GNU Octave 5.1.0. Move tests to size.m.
 function result = isrow (A)
 
   if (nargin ~= 1)

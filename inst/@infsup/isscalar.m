@@ -29,7 +29,8 @@
 ## Keywords: interval
 ## Created: 2015-02-02
 
-## FIXME This function is only required, because of bug #43925
+## FIXME: One happy day this function can be removed, because bug #43925 has
+## been solved with GNU Octave 5.1.0. Move tests to size.m.
 function result = isscalar (A)
 
   if (nargin ~= 1)
