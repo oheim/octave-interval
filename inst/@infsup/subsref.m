@@ -69,7 +69,14 @@ function A = subsref (A, S)
       if (not (any (strcmp (S(1).subs, methods (A)))))
         error (["interval property ‘", S(1).subs, "’ is unknown"])
       endif
-      functionname = ["@infsup/", S(1).subs];
+      if (compare_versions (OCTAVE_VERSION, "5.1.0", ">="))
+        functionname = ["@infsup/", S(1).subs];
+      else
+        # Octave 4.4.0 and older have used
+        # sys::file_ops::dir_sep_str in symbol_table::find_function
+        # to look up class method names.
+        functionname = ["@infsup", filesep(), S(1).subs];
+      endif
       if (nargin (functionname) ~= 1)
         error (["‘", S(1).subs, "’ is not a valid interval property"])
       endif
