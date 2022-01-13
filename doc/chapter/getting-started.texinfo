@@ -23,7 +23,7 @@ pkg install -forge interval
 @end group
 @end example
 
-During this kind of installation parts of the interval package are compiled for the target system, which requires development libraries for GNU Octave (version ≥ 3.8.0) and GNU MPFR (version ≥ 3.1.0) to be installed. It might be necessary to install packages “liboctave-dev” and “libmpfr-dev”, which are provided by most GNU distributions (names may vary).
+During this kind of installation parts of the interval package are compiled for the target system, which requires development libraries for GNU Octave (version ≥ 4.2.0) and GNU MPFR (version ≥ 3.1.0) to be installed. It might be necessary to install packages “liboctave-dev” and “libmpfr-dev”, which are provided by most GNU distributions (names may vary).
 
 In order to use the interval package during an Octave session, it must have been @emph{loaded}, i. e., added to the path.  In the following parts of the manual it is assumed that the package has been loaded, which can be accomplished with the @command{pkg load interval} command.  It is recommended to add this command at the beginning of script files, especially if script files are published or shared.  Automatic loading of the interval package can be activated by adding the line @command{pkg load interval} to your @file{.octaverc} file located in your user folder, for more information @pxref{Startup Files,,, octave, GNU Octave manual}.
 
