@@ -65,7 +65,5 @@ function chars_printed = printf (template, x)
 endfunction
 
 %!test
-%! if (compare_versions (OCTAVE_VERSION, "4.2", ">="))
-%!   assert (evalc ("n = printf ('%g', infsup ('pi'));"), "3.14159 3.1416");
-%!   assert (n, 14);
-%! endif
+%! assert (evalc ("n = printf ('%g', infsup ('pi'));"), "3.14159 3.1416");
+%! assert (n, 14);

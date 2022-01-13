@@ -80,10 +80,5 @@ endfunction
 
 %!assert (isequal (prepad (infsupdec (2:4), 4, 1), infsupdec (1:4)));
 %!assert (isequal (prepad (infsupdec (0:2), 2, 1), infsupdec (1:2)));
-%!test
-%! if (compare_versions (OCTAVE_VERSION (), "4.0.0", ">="))
-%!   assert (isequal (prepad (infsupdec (0), 10, 0, 3), infsupdec (zeros (1, 1, 10))));
-%! else
-%!   # In Octave 3.8.x it is not possible to increase the number of dimensions.
-%! endif
+%!assert (isequal (prepad (infsupdec (0), 10, 0, 3), infsupdec (zeros (1, 1, 10))));
 %!assert (isequal (prepad (infsupdec (zeros (1, 2, 2)), 3), infsupdec (zeros (1, 3, 2))));

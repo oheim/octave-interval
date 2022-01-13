@@ -86,10 +86,5 @@ endfunction
 
 %!assert (postpad (infsup (1:3), 4, 4) == infsup (1:4));
 %!assert (postpad (infsup (1:3), 2, 4) == infsup (1:2));
-%!test
-%! if (compare_versions (OCTAVE_VERSION (), "4.0.0", ">="))
-%!   assert (postpad (infsup (0), 10, 0, 3) == infsup (zeros (1, 1, 10)))
-%! else
-%!   # In Octave 3.8.x it is not possible to increase the number of dimensions.
-%! endif
+%!assert (postpad (infsup (0), 10, 0, 3) == infsup (zeros (1, 1, 10)))
 %!assert (postpad (infsup (zeros (1, 2, 2)), 3) == infsup (zeros (1, 3, 2)));

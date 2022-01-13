@@ -13,7 +13,7 @@ SHELL = /bin/sh
 ##
 ## The needed implementation for octave.h is selected during installation.
 OCTAVE_VERSION = $(shell $(OCTAVE_CONFIG) -p VERSION)
-ifneq ($(filter 3.% 4.0.% 4.1.% 4.2.%,$(OCTAVE_VERSION)),)
+ifneq ($(filter 4.2.%,$(OCTAVE_VERSION)),)
 SRC = octave_4.2.cc
 else
 SRC = octave_current.cc

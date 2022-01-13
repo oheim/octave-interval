@@ -53,21 +53,12 @@ function result = __loosespacing__ ()
     ## An internal function has been introduced by Octave 4.0.0.
     result = not (__compactformat__ ());
     return
-  elseif (compare_versions (OCTAVE_VERSION (), "4.2.0", ">="))
+  else
     ## Abovementioned changeset has removed the internal function.
     ## Development versions of Octave (4.3.0+) should already have
     ## support for the 2-output format function.
     ## TODO: This case can be removed after the 4.4.0 release.
     [~, spacing] = format ();
-  else
-    ## In older versions, we use this kludgy workaround to
-    ## detect the current settings.
-    ## Note: The deprecated root property "FormatSpacing",
-    ## which has been removed in Octave 4.2.0, always returns "loose"
-    ## in Octave < 4.0.0 and is of no use.
-    compact_spacing = isempty (strfind (disp (zeros ([1 2 2])), "\n\n"));
-    result = not (compact_spacing);
-    return
   endif
 
   result = strcmp ("loose", spacing);
