@@ -284,7 +284,7 @@ function [x, x_paving, x_inner_idx] = fsolve (f, x0, y, options)
   while (not (isempty (queue)))
     ## Evaluate f(x)
     options.MaxFunEvals -= numel (queue);
-    options.MaxIter --;
+    options.MaxIter--;
     if (options.Contract)
       [fval, contractions] = cellfun (f, {y}, queue, ...
                                       "UniformOutput", false);
@@ -435,8 +435,8 @@ function [x, x_paving, x_inner_idx] = vectorized (f, x0, y, options)
       f_args{i} = subsref (queue, idx);
     endfor
     idx.subs = {:, :};
-    options.MaxFunEvals --;
-    options.MaxIter --;
+    options.MaxFunEvals--;
+    options.MaxIter--;
     if (options.Contract)
       fval_and_contractions = nthargout (1 : (1 + length (x0)), ...
                                          @feval, f, y, f_args{:});

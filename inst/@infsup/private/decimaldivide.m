@@ -51,16 +51,16 @@ function [quotient, remainder] = decimaldivide (dividend, divisor, precision)
     endif
 
     while (sign (decimalcompare (divisor, remainder)) ~= (-1) ^ remainder.s)
-      quotient.m (i) ++;
+      quotient.m (i)++;
 
       ## Subtract divisor from remainder
       divisor.s = not (remainder.s);
       remainder = decimaladd (remainder, divisor);
       divisor.s = remainder.s;
     endwhile
-    divisor.e --;
+    divisor.e--;
     if (i == 1 && quotient.m (i) == 0)
-      quotient.e --;
+      quotient.e--;
     else
       i++;
     endif

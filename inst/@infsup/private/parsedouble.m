@@ -57,6 +57,6 @@ function [sign, exponent, mantissa] = parsedouble (binary)
 
   ## binary == (-1) ^ sign * fraction (=X.XXXXX… in binary) * 2 ^ exponent
 
-  exponent ++;
+  exponent++;
 
 endfunction

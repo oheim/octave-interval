@@ -88,9 +88,9 @@ function result = mpower (x, y)
         break
       endif
       if (y > 0)
-        y --;
+        y--;
       else
-        y ++;
+        y++;
         if (y == 0)
           ## Inversion after computation of a negative power.
           ## Inversion should be the last step, because it is not

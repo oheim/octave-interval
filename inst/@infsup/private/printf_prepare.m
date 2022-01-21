@@ -57,7 +57,7 @@ function [template, literals] = printf_prepare (template, x)
       template{n - 1} = cstrcat (template{n - 1}, "%%", template{n + 1});
       template([n, (n + 1)]) = [];
     else
-      n ++;
+      n++;
     endif
   endwhile
 

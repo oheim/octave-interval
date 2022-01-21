@@ -142,7 +142,7 @@ function [X, FVAL, iter] = fminsearch (f, X, options)
   cancel_algorithm = false ();
   idx.type = "()";
   while (true)
-    iter ++;
+    iter++;
 
     if (displayiter)
       display (X);

@@ -63,7 +63,7 @@ function [decimal] = decimaladd (decimal, addend)
     if (decimal.m(1) == 0)
       decimal.m(1) = [];
     else
-      decimal.e ++;
+      decimal.e++;
     endif
   endwhile
 

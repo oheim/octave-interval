@@ -100,22 +100,22 @@ function decimal = double2decimal (binary)
     if (decimal.m(1) == 0)
       decimal.m(1) = [];
     else
-      decimal.e ++;
+      decimal.e++;
     endif
-    exponent --;
+    exponent--;
   endwhile
   while (exponent < 0)
     ## Instead of division by 2 we devide by 10 and multiply by 5
-    decimal.e --; # cheap division by 10
+    decimal.e--; # cheap division by 10
     decimal.m .*= 5;
     decimal.m = [0; rem(decimal.m, 10)] ...
                 + [floor(decimal.m ./ 10); 0];
     if (decimal.m(1) == 0)
       decimal.m(1) = [];
     else
-      decimal.e ++;
+      decimal.e++;
     endif
-    exponent ++;
+    exponent++;
   endwhile
 
   ## Normalize mantissa: remove trailing zeroes;

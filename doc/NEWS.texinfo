@@ -26,6 +26,8 @@ This bugfix release fixes compatibility issues with new versions of GNU Octave.
 @item
     disp: Fix runtime errors in Octave 6 and later, when the function parameter is not a named variable (bug #59334).
 @item
+    Syntax errors caused by increment and decrement operators in Octave 7 and later have been fixed (bug #59334).
+@item
     Compilation errors during package installation with Octave 8 and later have been fixed (bug #61568).
 @item
 
