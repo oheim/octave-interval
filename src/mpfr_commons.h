@@ -21,6 +21,10 @@
 #include "compatibility/octave.h"
 #include "compatibility/octave.cc"
 
+#if MPFR_VERSION_MAJOR < 4
+#include "compatibility/mpfr_3.cc"
+#endif
+
 #define BINARY64_PRECISION 53
 #define BINARY64_EMIN -1073
 #define BINARY64_ACCU_PRECISION 2134 + 2150

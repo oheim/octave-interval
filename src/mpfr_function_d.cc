@@ -217,7 +217,7 @@ void nthroot (
   for (octave_idx_type i = 0; i < n; i ++)
     {
       mpfr_set_d (mp, arg1.elem (i), MPFR_RNDZ);
-      mpfr_root (mp, mp, static_cast <uint64_t> (arg2.elem(i)), rnd);
+      mpfr_rootn_ui (mp, mp, static_cast <uint64_t> (arg2.elem(i)), rnd);
       arg1.elem (i) = mpfr_get_d (mp, rnd);
     }
 
