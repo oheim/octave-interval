@@ -62,9 +62,9 @@ function result = exacttointerval (varargin)
     case 0
       [result, exactconversion] = infsup ();
     case 1
-      [result, exactconversion] = infsup (varargin {1});
+      [result, exactconversion] = infsup (varargin{1});
     case 2
-      [result, exactconversion] = infsup (varargin {1}, varargin {2});
+      [result, exactconversion] = infsup (varargin{1}, varargin{2});
     otherwise
       print_usage ();
       return
