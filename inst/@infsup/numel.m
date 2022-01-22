@@ -36,6 +36,14 @@ function result = numel (a, varargin)
     error ("invalid use of interval as indexing parameter to numel ()")
   endif
 
+  # We cannot use numel (a.inf, varargin{:}) here,
+  # because varargin may contain a magical colon (see bug 53375),
+  # which would produce an error:
+  # 'invalid use of colon in function argument list'.
+  #
+  # Thus, we index a.inf as a workaround.
+  # We must disable the warning which occurs if varargin is empty.
+  warning ("off", "Octave:empty-index", "local");
   result = numel (a.inf(varargin{:}));
 
 endfunction
