@@ -55,22 +55,14 @@ $(BUNDLED_CRLIBM_DIR)/crlibm_private.o: $(BUNDLED_CRLIBM_DIR)/crlibm_config.h
 $(BUNDLED_CRLIBM_DIR)/crlibm_config.h:
 	(cd $(BUNDLED_CRLIBM_DIR) && ./configure --disable-dependency-tracking $(CONF_FLAG_SSE2))
 
-## Wrapper functions for backwards compatibility with old Octave versions
-OCTAVE_COMPATIBILITY = compatibility/octave.h compatibility/octave.cc
-compatibility/octave.cc: $(filter-out $(OCTAVE_COMPATIBILITY),$(wildcard compatibility/*))
-	@echo " [MAKE] compatibility"
-	@$(MAKE) -C compatibility
-	@touch "$@"
-
 ## GNU MPFR api oct-files
-mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h $(OCTAVE_COMPATIBILITY)
+mpfr_matrix_mul_d.oct mpfr_matrix_sqr_d.oct : mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/mpfr.h
 	@echo " [MKOCTFILE] $<"
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR) $(CFLAG_OPENMP) $<
-mpfr_%.oct: mpfr_%.cc mpfr_commons.h $(OCTAVE_COMPATIBILITY)
+mpfr_%.oct: mpfr_%.cc mpfr_commons.h compatibility/octave.h compatibility/mpfr.h
 	@echo " [MKOCTFILE] $<"
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
-
-intervaltotext.oct: intervaltotext.cc mpfr_commons.h $(OCTAVE_COMPATIBILITY)
+intervaltotext.oct: intervaltotext.cc mpfr_commons.h compatibility/octave.h compatibility/mpfr.h
 	@echo " [MKOCTFILE] $<"
 	@$(MKOCTFILE)  -o $@ $(LDFLAGS_MPFR)  $<
 
@@ -87,7 +79,6 @@ __setround__.oct: __setround__.cc
 
 clean:
 	test ! -e $(BUNDLED_CRLIBM_DIR)/Makefile || $(MAKE) -C $(BUNDLED_CRLIBM_DIR) $@
-	$(MAKE) -C compatibility clean
 	$(RM) *.oct *.o
 
 .PHONY: all clean

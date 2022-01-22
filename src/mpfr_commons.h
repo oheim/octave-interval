@@ -19,11 +19,7 @@
 #include <mpfr.h>
 
 #include "compatibility/octave.h"
-#include "compatibility/octave.cc"
-
-#if MPFR_VERSION_MAJOR < 4
-#include "compatibility/mpfr_3.cc"
-#endif
+#include "compatibility/mpfr.h"
 
 #define BINARY64_PRECISION 53
 #define BINARY64_EMIN -1073

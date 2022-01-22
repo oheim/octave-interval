@@ -15,9 +15,14 @@
   along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
-// Implementation for MPFR version 3.x.y
+// This file contains wrappers around the GNU MPFR API to support multiple
+// versions of GNU MPFR.
 
 #include <mpfr.h>
+
+#if (MPFR_VERSION_MAJOR < 4)
+
+// Implementation for MPFR version 3.x.y
 
 // mpfr_root has been deprecated in MPFR 4 and the new function mpfr_rootn_ui
 // should be used instead.  For old MPFR versions, we simulate the
@@ -34,3 +39,5 @@ int mpfr_rootn_ui (
     return mpfr_root (rop, op, n, rnd);
   }
 }
+
+#endif
