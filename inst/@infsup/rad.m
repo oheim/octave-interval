@@ -32,7 +32,7 @@
 ## @example
 ## @group
 ## rad (infsup (2.5, 3.5))
-##   @result{} ans = 0.50000
+##   @result{} ans = 0.5000
 ## @end group
 ## @end example
 ## @seealso{@@infsup/inf, @@infsup/sup, @@infsup/mid, @@infsup/wid}
