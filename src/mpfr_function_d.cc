@@ -1,5 +1,5 @@
 /*
-  Copyright 2015-2016 Oliver Heimlich
+  Copyright 2015 Oliver Heimlich
   Copyright 2017 Joel Dahne
   Copyright 2009-2017 Jaroslav Hajek
   Copyright 2009 VZLU Prague

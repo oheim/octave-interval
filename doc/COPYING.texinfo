@@ -4,7 +4,7 @@
 @documentencoding UTF-8
 
 @c This is part of the GNU Octave Interval Package.
-@c Copyright 2015-2017 Oliver Heimlich.
+@c Copyright 2015 Oliver Heimlich.
 
 The interval package is free software and can be used under the terms of the GNU General Public License Version 3 (or at your option any later version).  The wording of the license can be found below.
 

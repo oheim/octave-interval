@@ -1,5 +1,5 @@
 @c This is part of the GNU Octave Interval Package Manual.
-@c Copyright 2015-2016 Oliver Heimlich.
+@c Copyright 2015 Oliver Heimlich.
 @c Copyright 2008-2009 Simone Pernice.
 @c See the file manual.texinfo for copying conditions.
 @documentencoding UTF-8

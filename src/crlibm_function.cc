@@ -1,5 +1,5 @@
 /*
-  Copyright 2015-2016 Oliver Heimlich
+  Copyright 2015 Oliver Heimlich
   Copyright 2017 Joel Dahne
 
   This program is free software; you can redistribute it and/or modify

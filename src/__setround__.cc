@@ -1,8 +1,8 @@
 /*
   Copyright 2015 Kai T. Ohlhus (Original version for C++11)
-  Copyright 2015-2016 Oliver Heimlich (Compatibility with C99 and different
-                                       parameter semantics for compatibility
-                                       with the Octave fenv package)
+  Copyright 2015 Oliver Heimlich (Compatibility with C99 and different
+                                  parameter semantics for compatibility
+                                  with the Octave fenv package)
   
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

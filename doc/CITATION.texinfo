@@ -4,7 +4,7 @@
 @documentencoding UTF-8
 
 @c This is part of the GNU Octave Interval Package.
-@c Copyright 2015-2017 Oliver Heimlich.
+@c Copyright 2015 Oliver Heimlich.
 @c See the file COPYING for copying conditions.
 
 The interval package is a collection of functions for interval arithmetic. It is developed at Octave Forge, a sibling of the GNU Octave project. To cite this particular version of the interval package in publications use:
