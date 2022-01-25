@@ -318,6 +318,7 @@ doctest-manual: $(OCT_COMPILED)
 		"pkg load doctest; \
 		 pkg load symbolic; warning ('off', 'OctSymPy:function_handle:nocodegen'); sym ('x'); \
 		 set (0, 'defaultfigurevisible', 'off'); \
+		 warning ('off', 'backtrace'); \
 		 makeinfo_program (cstrcat (makeinfo_program (), ' -I doc/')); \
 		 targets = '$(shell find doc/ -name "*.texinfo")'; \
 		 targets = strsplit (targets, ' '); \
@@ -333,6 +334,7 @@ doctest-docstrings: $(OCT_COMPILED)
 		--eval \
 		"pkg load doctest; \
 		 set (0, 'defaultfigurevisible', 'off'); \
+		 warning ('off', 'backtrace'); \
 		 targets = '@infsup @infsupdec $(shell find inst/ src/ -maxdepth 1 -regex ".*\\.\\(m\\|oct\\)" -printf "%f\\n" | cut -f1 -d.)'; \
 		 targets = strsplit (targets, ' '); \
 		 success = doctest (targets); \
