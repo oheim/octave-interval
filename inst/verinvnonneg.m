@@ -95,19 +95,19 @@ function [nonneg, As] = verinvnonneg (A)
     nonneg = 0;
     return
   endif
-  if (all (all (Bl.inf >= 0)) && all (all (Bu.inf >= 0)))
+  if (all (all (inf (Bl) >= 0)) && all (all (inf (Bu) >= 0)))
           # verified inverse nonnegative; Kuttler, Math. of Comp. 1971
     nonneg = 1;
     return
   endif
-  if (any ((Bl.sup < 0)(:)))
+  if (any ((sup (Bl) < 0)(:)))
     nonneg = 0;
-    As=Al; # A.inf verified not inverse nonnegative
+    As = Al; # inf (A) verified not inverse nonnegative
     return
   endif
-  if (any ((Bu.sup < 0)(:)))
+  if (any ((sup (Bu) < 0)(:)))
     nonneg = 0;
-    As = Au; # A.sup verified not inverse nonnegative
+    As = Au; # sup (A) verified not inverse nonnegative
     return
   end
 endfunction

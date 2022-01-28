@@ -106,6 +106,11 @@ endfunction
 %! x = infsupdec (magic (3), magic (3) + 1);
 %! assert (x(1) == infsupdec (8, 9));
 %! assert (x(:, 2) == infsupdec ([1; 5; 9], [2; 6; 10]));
+
+%!assert (infsupdec (3).inf, 3);
+
+%!xtest <61898>
+%! x = infsupdec (magic (3), magic (3) + 1);
 %! assert (x.inf, magic (3));
 
 %!assert (isequal (reshape (infsupdec (1:16), 2, 2, 2, 2)(2, 7), infsupdec (14)))

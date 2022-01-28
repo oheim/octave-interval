@@ -95,7 +95,7 @@ function [evc, lambda, As] = vereigvec (A, x)
   right = Tz * x1 * x1' * (ac + Tz * Delta * Tz)' * Tz; # right-hand side of the inequality
 
   ## inequality verified not to be satisfied
-  if (any ((right.sup < left.inf)(:)))
+  if (any ((sup (right) < inf (left))(:)))
     ## verified not to be an eigenvector
     evc = 0;
     lambda = infsup ();
@@ -104,7 +104,7 @@ function [evc, lambda, As] = vereigvec (A, x)
   endif
 
   ## inequality verified to be satisfied
-  if (all (all (left.sup <= right.inf))) # verified to be an eigenvector; Rohn, SIMAX 1993, Thm. 4.1
+  if (all (all (sup (left) <= inf (right)))) # verified to be an eigenvector; Rohn, SIMAX 1993, Thm. 4.1
     B = find (x ~= 0);
     denleft = (Tz * ac * Tz - Delta) * abs (x);
     denright = (Tz * ac * Tz + Delta) * abs (x);
@@ -114,8 +114,8 @@ function [evc, lambda, As] = vereigvec (A, x)
     num = num(B);
     left = denleft ./ num;     # left  ratio
     right = denright ./ num;   # right ratio
-    lambdal = max (left.sup);  # verified lower bound of lambda
-    lambdau = min (right.inf); # verified upper bound of lambda
+    lambdal = max (sup (left));  # verified lower bound of lambda
+    lambdau = min (inf (right)); # verified upper bound of lambda
     if (lambdal > lambdau)
       ## bounds contradict: no verified solution
       evc = -1;
@@ -175,7 +175,7 @@ function As = versingnull (A, x)
   [Ac, Delta] = rad (A);
   oeprl = abs (Ac * xi);            # Oettli-Prager inequality, left  side
   oeprr = Delta * abs (xi);         # Oettli-Prager inequality, right side
-  if (all (oeprl.sup <= oeprr.inf)) # Oettli-Prager inequality satisfied, singularity of A verified
+  if (all (sup (oeprl) <= inf (oeprr))) # Oettli-Prager inequality satisfied, singularity of A verified
     y = (Ac * xi) ./ oeprr;
     y(isempty (y)) = infsup (1, 1); # case of both numerator and denominator being zero
     As = Ac - (diag (y) * Delta) * diag (z); # construction of singular As ...

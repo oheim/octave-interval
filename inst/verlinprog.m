@@ -154,7 +154,7 @@ function [flag, x, y, h] = verlinprog (A, b, c)
   A = infsup (A);
   crit = c' - yB' * A; # criterial row (dual feasibility)
   crit = crit(N);      # nonbasic part of it
-  if (~all (crit.inf >= 0)) # verified feasible dual solution not found
+  if (~all (inf (crit) >= 0)) # verified feasible dual solution not found
     x = xo; % candidate for optimum outputted as feasible solution
     flag = "verified feasible";
     return
@@ -207,7 +207,7 @@ function [x, B, N] = veropt (A, b, c)
     AB = full (AB); # only the square submatrix taken full (because of mldivide)
   endif
   xB = mldivide (infsup (AB), infsup (b));
-  if (isempty (xB(1)) || ~all (xB.inf >= 0))
+  if (isempty (xB(1)) || ~all (inf (xB) >= 0))
                                # verified "optimal" solution not found
     return
   endif
@@ -242,7 +242,7 @@ function y = verinfeas (A, b)
     yf = infsup (yf);                  # (i.e., should satisfy A'*y>=0, b'*y<0)
     alpha = A' * yf;
     beta = b' * yf;
-    if (all (alpha.inf >= 0)) && (beta.sup < 0)
+    if (all (inf (alpha) >= 0)) && (sup (beta) < 0)
                                 # infeasibility verified
       y=yf; # Farkas vector outputted
     endif

@@ -114,7 +114,7 @@ function [x, As] = verintlinineqs (A, b)
     xxi = xxi(1:n) - xxi(n+1:2*n); # interval vector of the original size
 
     ## noninterval vectors; candidates for strong solution
-    X = [xx(1:n)-xx(n+1:2*n) xxi.inf xxi.mid xxi.sup];
+    X = [xx(1:n)-xx(n+1:2*n) inf(xxi) mid(xxi) sup(xxi)];
 
     [Ac, Delta] = rad (A);
     [bc, delta] = rad (b);
@@ -123,7 +123,7 @@ function [x, As] = verintlinineqs (A, b)
       left = Ac * infsup (x1) - bc;
       right = -Delta * infsup (abs(x1)) - delta;
 
-      if (all (left.sup <= right.inf))
+      if (all (sup (left) <= inf (right)))
         ## Fiedler et al., (2.94); strong solution found
         x = x1; # verified strong solution
         return
@@ -174,7 +174,7 @@ function As = vernull (A, x)
   [Ac, Delta] = rad (A);
   oeprl = abs (Ac * xi);                      % Oettli-Prager inequality, left  side
   oeprr = Delta * abs (xi);                   % Oettli-Prager inequality, right side
-  if (all (oeprl.sup <= oeprr.inf))           % Oettli-Prager inequality satisfied, x verified null vector of A
+  if (all (sup (oeprl) <= inf (oeprr)))       % Oettli-Prager inequality satisfied, x verified null vector of A
     y = (Ac * xi) ./ oeprr;
     y(isempty (y)) = 1;                     % case of both numerator and denominator being zero
     As = Ac - (diag (y) * Delta) * diag(z); % construction of As ...

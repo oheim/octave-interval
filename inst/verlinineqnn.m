@@ -110,7 +110,7 @@ function x = verlinineqnninner (A, b)
 
   if (not (any (isnan (x)(:))))
     left = A * infsup (x); # interval quantity
-    if (all (left.sup <= b) && all (x >= 0))
+    if (all (sup (left) <= b) && all (x >= 0))
                                 # verified solution
       return
     endif
@@ -122,7 +122,7 @@ function x = verlinineqnninner (A, b)
 
   if (not (any (isnan (x)(:))))
     left = A * infsup (x); # interval quantity
-    if (all (left.sup <= b) && all (x >= 0))
+    if (all (sup (left) <= b) && all (x >= 0))
                                 # verified solution
       return
     endif

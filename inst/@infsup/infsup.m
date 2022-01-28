@@ -1319,22 +1319,22 @@ endfunction
 %!# N-dimensional arrays
 %!test
 %! x = infsup (zeros (2, 2, 2));
-%! assert (x.inf, zeros (2, 2, 2));
-%! assert (x.sup, zeros (2, 2, 2));
+%! assert (inf (x), zeros (2, 2, 2));
+%! assert (sup (x), zeros (2, 2, 2));
 %!test
 %! x = infsup (zeros (2, 2, 2), ones (2, 2, 2));
-%! assert (x.inf, zeros (2, 2, 2));
-%! assert (x.sup, ones (2, 2, 2));
+%! assert (inf (x), zeros (2, 2, 2));
+%! assert (sup (x), ones (2, 2, 2));
 %!test
 %! x = infsup (zeros (2, 1, 2, 1, 2, 1), ones (1, 3, 1, 3, 1, 3));
-%! assert (x.inf, zeros (2, 3, 2, 3, 2, 3));
-%! assert (x.sup, ones (2, 3, 2, 3, 2, 3));
+%! assert (inf (x), zeros (2, 3, 2, 3, 2, 3));
+%! assert (sup (x), ones (2, 3, 2, 3, 2, 3));
 %!test
 %! c1 = reshape ({1, 2, 3, 4, 5, 6, 7, 8}, 2, 2, 2);
 %! c2 = reshape ({2, 3, 4, 5, 6, 7, 8, 9}, 2, 2, 2);
 %! x = infsup (c1, c2);
-%! assert (x.inf, reshape (1:8, 2, 2, 2));
-%! assert (x.sup, reshape (2:9, 2, 2, 2));
+%! assert (inf (x), reshape (1:8, 2, 2, 2));
+%! assert (sup (x), reshape (2:9, 2, 2, 2));
 
 %!shared testdata
 %! # Load compiled test data (from src/test/*.itl)

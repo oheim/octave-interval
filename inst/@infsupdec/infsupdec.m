@@ -478,26 +478,26 @@ endfunction
 %!# N-dimensional arrays
 %!test
 %! x = infsupdec (zeros (2, 2, 2));
-%! assert (x.inf, zeros (2, 2, 2));
-%! assert (x.sup, zeros (2, 2, 2));
+%! assert (inf (x), zeros (2, 2, 2));
+%! assert (sup (x), zeros (2, 2, 2));
 %! assert (decorationpart (x), repmat ({"com"}, [2, 2, 2]));
 %!test
 %! x = infsupdec (zeros (2, 2, 2), ones (2, 2, 2), repmat ({"trv"}, [2, 2, 2]));
-%! assert (x.inf, zeros (2, 2, 2));
-%! assert (x.sup, ones (2, 2, 2));
+%! assert (inf (x), zeros (2, 2, 2));
+%! assert (sup (x), ones (2, 2, 2));
 %! assert (decorationpart (x), repmat ({"trv"}, [2, 2, 2]));
 %!test
 %! x = infsupdec (zeros (1, 1, 2), ones (1, 2, 1), {"trv"; "trv"});
-%! assert (x.inf, zeros (2, 2, 2));
-%! assert (x.sup, ones (2, 2, 2));
+%! assert (inf (x), zeros (2, 2, 2));
+%! assert (sup (x), ones (2, 2, 2));
 %! assert (decorationpart (x), repmat ({"trv"}, [2, 2, 2]));
 %!test
 %! c1 = reshape ({1, 2, 3, 4, 5, 6, 7, 8}, 2, 2, 2);
 %! c2 = reshape ({2, 3, 4, 5, 6, 7, 8, 9}, 2, 2, 2);
 %! decpart = reshape ({"trv", "def", "dac", "com", "trv", "def", "dac", "com"}, 2, 2, 2);
 %! x = infsupdec (c1, c2, decpart);
-%! assert (x.inf, reshape (1:8, 2, 2, 2));
-%! assert (x.sup, reshape (2:9, 2, 2, 2));
+%! assert (inf (x), reshape (1:8, 2, 2, 2));
+%! assert (sup (x), reshape (2:9, 2, 2, 2));
 %! assert (decorationpart (x), decpart)
 
 %!shared testdata

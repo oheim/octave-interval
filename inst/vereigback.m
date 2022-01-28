@@ -80,7 +80,7 @@ function [lambda, X, ep] = vereigback (A)
       ll = infsup (ll);
       xx = infsup (xx);
       epi = norm ((A - ll .* I) * xx, "inf") ./ norm (xx, 1); # main formula
-      ep(i) = epi.sup;
+      ep(i) = sup (epi);
     end
   endif
 
