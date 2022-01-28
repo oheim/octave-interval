@@ -21,7 +21,7 @@
 ##
 ## Scalars (1x1 vectors) are subsets of the more general vector and
 ## @code{isvector} will return true for these objects as well.
-## @seealso{@@infsup/isscalar, @@infsup/ismatrix}
+## @seealso{@@infsup/isscalar}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

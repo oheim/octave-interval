@@ -19,7 +19,7 @@
 ##
 ## Return true if @var{A} is a square interval matrix.
 ##
-## @seealso{@@infsup/isvector, @@infsup/ismatrix, @@infsup/isscalar}
+## @seealso{@@infsup/isvector, @@infsup/isscalar}
 ## @end defmethod
 
 ## Author: Oliver Heimlich

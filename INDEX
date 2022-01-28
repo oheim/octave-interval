@@ -183,7 +183,6 @@ Utility function
  @infsup/end
  @infsup/horzcat
  @infsup/iscolumn
- @infsup/ismatrix
  @infsup/isrow
  @infsup/isscalar
  @infsup/issquare

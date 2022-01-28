@@ -22,7 +22,7 @@
 ## Scalars (1x1 matrices) are subsets of the more general vector or matrix and
 ## @code{isvector} and @code{ismatrix} will return true for these objects as
 ## well.
-## @seealso{@@infsup/isvector, @@infsup/ismatrix}
+## @seealso{@@infsup/isvector}
 ## @end defmethod
 
 ## Author: Oliver Heimlich
