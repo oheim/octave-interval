@@ -124,20 +124,22 @@ DIST_IMAGE_OBJ = $(addprefix .dist/,$(IMAGE_OBJ))
 	@pdftocairo -png -singlefile -transp -r 120 "$<" ".dist/doc/image/$*.svg"
 .dist/doc/image/%.svg.eps: doc/image/%.svg
 	@mkdir -p .dist/doc/image
-	@echo " [INKSCAPE --export-eps] $<"
-	@inkscape --without-gui \
+	@echo " [INKSCAPE --export-type=eps] $<"
+	@inkscape --batch-process \
 		--export-ignore-filters \
-		--export-eps="$@" \
+		--export-type=eps \
+		--export-filename="$@" \
 		"$<" > /dev/null
 	@# Make the build reproducible and remove timestamp metadata
 	@grep --invert-match "^%% CreationDate: " "$@" > "$@_"
 	@mv "$@_" "$@"
 .dist/doc/image/%.svg.pdf: doc/image/%.svg
 	@mkdir -p .dist/doc/image
-	@echo " [INKSCAPE --export-pdf] $<"
-	@inkscape --without-gui \
+	@echo " [INKSCAPE --export-type=pdf] $<"
+	@inkscape --batch-process \
 		--export-ignore-filters \
-		--export-pdf="$@" \
+		--export-type=pdf \
+		--export-filename="$@" \
 		"$<" > /dev/null
 
 ## Generated text files
@@ -375,7 +377,7 @@ doc/image/%.svg: doc/image/%.ly
 	@# .pdf -> .ps (convert font glyphs to outline shapes)
 	@gs -q -o ".build/$<.ps" -dNOCACHE -sDEVICE=ps2write ".build/$<.pdf"
 	@# .ps -> .svg
-	@inkscape --without-gui --export-ignore-filters --export-plain-svg="$@" ".build/$<.ps"
+	@inkscape --batch-process --export-ignore-filters --export-filename="$@" --export-type=svg ".build/$<.ps"
 endif
 
 ## Push the new release to Debian
