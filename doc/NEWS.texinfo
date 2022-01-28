@@ -15,7 +15,7 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
-@release{3.2.1, XXXX-YY-ZZ}
+@release{3.2.1, 2022-01-28}
 This bugfix release fixes compatibility issues with new versions of GNU Octave.
 
 @itemize
