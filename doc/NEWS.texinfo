@@ -20,7 +20,8 @@
 @itemize
 @item
     subsref: Access to interval properties using field syntax, e. g., @code{x.inf} and @code{x.sup}, has been fixed for Octave 7 and later (bug #61898).
-
+@item
+    mpfr_matrix_mul_d: Changed a non-deterministic test into a demo (bug #54956).
 @end itemize
 
 @release{3.2.1, 2022-01-28}

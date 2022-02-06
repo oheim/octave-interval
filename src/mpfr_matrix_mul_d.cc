@@ -153,26 +153,18 @@ DEFUN_DLD (mpfr_matrix_mul_d, args, nargout,
 %!  assert (l, [101, 71, 53; 71, 83, 71; 53, 71, 101]);
 %!  assert (u, [134, 104, 86; 104, 116, 104; 86, 104, 134]);
 
-%!test;
-%!  if (((exist ("__octave_config_info__") && ...
-%!                __octave_config_info__.ENABLE_OPENMP) || ...
-%!       (not (exist ("__octave_config_info__")) && ...
-%!                  octave_config_info ("features").OPENMP)) ...
-%!       && nproc ("overridable") > 1)
-%!    ## OpenMP is enabled and may use more than one thread.
-%!    ## We should observe speed-ups by that.
-%!    A = vec (magic (2000));
-%!    tic;
-%!    mpfr_matrix_mul_d (A', A, A', A);
-%!    time_per_element = toc;
-%!    A = [A A];
-%!    tic;
-%!    mpfr_matrix_mul_d (A', A, A', A);
-%!    time_per_element_parallel = toc / numel (ans);
+%!demo
+%!  processors = nproc ('overridable');
 %!
-%!    ## Ideally, the runtime would be cut in half (at least),
-%!    ## however, there is an overhead, so let's be pessimistic and
-%!    ## assume that the parallel execution is at least 20% faster.
-%!    assert (time_per_element > 1.2 * time_per_element_parallel)
-%!  endif
+%!  A = vec (magic (2000));
+%!  tic;
+%!  for i = 1:processors
+%!    mpfr_matrix_mul_d (A', A, A', A);
+%!  endfor
+%!  printf ('Time for %d vector dot products: %d seconds\n', processors, toc)
+%!
+%!  B = repmat (A, 1, processors);
+%!  tic;
+%!  mpfr_matrix_mul_d (B', A, B', A);
+%!  printf ('Time for %d vector dot products running in parallel: %d seconds\n', processors, toc)
 */
