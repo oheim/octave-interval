@@ -21,6 +21,8 @@
 @item
     subsref: Access to interval properties using field syntax, e. g., @code{x.inf} and @code{x.sup}, has been fixed for Octave 7 and later (bug #61898).
 @item
+    linspace and mince: To better match the core function @code{linspace}, non-vector input produces an error now.  Handling of row vectors and empty vectors has been improved (bug #52934).
+@item
     mpfr_matrix_mul_d: Changed a non-deterministic test into a demo (bug #54956).
 @end itemize
 
