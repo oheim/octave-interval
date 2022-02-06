@@ -379,11 +379,3 @@ doc/image/%.svg: doc/image/%.ly
 	@# .ps -> .svg
 	@inkscape --batch-process --export-ignore-filters --export-filename="$@" --export-type=svg ".build/$<.ps"
 endif
-
-## Push the new release to Debian
-## (inspired by https://xkcd.com/1597/ because I always forget the required commands)
-.PHONY: debian
-debian:
-	cp ".dist/$(PACKAGE)-$(VERSION).tar.gz" "../Debian/octave-$(PACKAGE)_$(VERSION).orig.tar.gz"
-	(cd ../Debian/octave-$(PACKAGE) && \
-	 gbp import-orig ../octave-$(PACKAGE)_$(VERSION).orig.tar.gz --pristine-tar)
