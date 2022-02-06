@@ -52,7 +52,7 @@
 ## Keywords: interval
 ## Created: 2014-10-29
 
-function A = subsref (A, S)
+function varargout = subsref (A, S)
 
   if (nargin ~= 2)
     print_usage ();
@@ -89,19 +89,27 @@ function A = subsref (A, S)
     A = subsref (A, S(2 : end));
   endif
 
+  # Since Octave 7 it is possible that "." indexing produces a list of outputs;
+  # one for each element in the non-scalar object.
+  # We don't need that feature yet, because we always return a single object.
+  # However, we must declare a varargout return value to prevent runtime errors (bug #61898).
+  varargout = {A};
+
 endfunction
 
 %!assert (infsup (magic (3))([1, 2, 3]) == magic (3)([1, 2, 3]));
 
-%!# from the documentation string
 %!test
 %! x = infsup (magic (3), magic (3) + 1);
 %! assert (x(1) == infsup (8, 9));
+
+%!test
+%! x = infsup (magic (3), magic (3) + 1);
 %! assert (x(:, 2) == infsup ([1; 5; 9], [2; 6; 10]));
 
 %!assert (infsup (3).inf, 3);
 
-%!xtest <61898>
+%!test
 %! x = infsup (magic (3), magic (3) + 1);
 %! assert (x.inf, magic (3));
 

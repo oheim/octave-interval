@@ -53,7 +53,7 @@
 ## Keywords: interval
 ## Created: 2014-11-02
 
-function A = subsref (A, S)
+function varargout = subsref (A, S)
 
   if (nargin ~= 2)
     print_usage ();
@@ -97,19 +97,24 @@ function A = subsref (A, S)
     A = subsref (A, S(2 : end));
   endif
 
+  # See @infsup/subsref about why we need varargout.
+  varargout = {A};
+
 endfunction
 
 %!assert (isequal (infsupdec (magic (3))([1, 2, 3]), infsupdec (magic (3)([1, 2, 3]))));
 
-%!# from the documentation string
 %!test
 %! x = infsupdec (magic (3), magic (3) + 1);
 %! assert (x(1) == infsupdec (8, 9));
+
+%!test
+%! x = infsupdec (magic (3), magic (3) + 1);
 %! assert (x(:, 2) == infsupdec ([1; 5; 9], [2; 6; 10]));
 
 %!assert (infsupdec (3).inf, 3);
 
-%!xtest <61898>
+%!test
 %! x = infsupdec (magic (3), magic (3) + 1);
 %! assert (x.inf, magic (3));
 

@@ -15,6 +15,14 @@
 @center GNU Octave Interval Package
 @center Summary of important user-visible changes
 
+@release{3.2.2, XXXX-XX-XX}
+
+@itemize
+@item
+    subsref: Access to interval properties using field syntax, e. g., @code{x.inf} and @code{x.sup}, has been fixed for Octave 7 and later (bug #61898).
+
+@end itemize
+
 @release{3.2.1, 2022-01-28}
 This bugfix release fixes compatibility issues with new versions of GNU Octave.
 
@@ -33,8 +41,6 @@ This bugfix release fixes compatibility issues with new versions of GNU Octave.
     Interval constants for @code{pi} and @code{e} in Octave 7 and later have been fixed.  This also fixes several trigonometric functions, which have produced wrong results in Octave 7.
 @item
     Compilation errors during package installation with Octave 8 and later have been fixed (bug #61568).
-@item
-
 @end itemize
 
 
