@@ -96,3 +96,6 @@ endfunction
 %! x = linspace (infsup (0), infsup (0));
 %! assert (all (signbit (inf (x))));
 %! assert (all (not (signbit (sup (x)))));
+
+%!error <linspace: BASE and LIMIT must be scalars or vectors>
+%!  linspace (infsup (zeros (2)), infsup (ones (2)), 3)

@@ -88,3 +88,5 @@ function x = mince (x, n)
 endfunction
 
 %!assert (isequal (mince (infsup (0, 10), 10), infsup (0 : 9, 1 : 10)));
+
+%!assert (size (mince (infsup (zeros (1, 0), ones (1, 0)), 2)), [0 2]);

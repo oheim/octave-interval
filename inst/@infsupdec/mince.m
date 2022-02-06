@@ -72,3 +72,5 @@ function result = mince (x, n)
 endfunction
 
 %!assert (isequal (mince (infsupdec (0, 10), 10), infsupdec (0 : 9, 1 : 10, "trv")));
+
+%!assert (size (mince (infsupdec (zeros (1, 0), ones (1, 0)), 2)), [0 2]);

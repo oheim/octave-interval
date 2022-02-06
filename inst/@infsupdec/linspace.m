@@ -80,3 +80,6 @@ function result = linspace (base, limit, n)
 endfunction
 
 %!assert (isequal (linspace (infsupdec (0), infsupdec (10), 9), infsupdec (linspace (0, 10, 9))));
+
+%!error <linspace: BASE and LIMIT must be scalars or vectors>
+%!  linspace (infsupdec (zeros (2)), infsupdec (ones (2)), 3)
