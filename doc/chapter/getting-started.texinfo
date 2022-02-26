@@ -121,9 +121,8 @@ Beware of the conversion pitfall
 ## The numeric constant 0.3 is an approximation of the
 ## decimal number 0.3.  An interval around this approximation
 ## will not contain the decimal number 0.3.
-output_precision (17)
-infsupdec (0.3)
-  @result{} ans ⊂ [0.29999999999999998, 0.29999999999999999]_com
+sprintf("%[.17g]", infsupdec (0.3))
+  @result{} ans = [0.29999999999999998, 0.29999999999999999]_com
 @end group
 @end example
 @example
@@ -417,8 +416,8 @@ A \ [3; 0]
   @print{} warning: ...matrix singular to machine precision...
   @result{} ans =
 
-       0.60000
-       0.00000
+       0.6000
+            0
 @end group
 @end example
 @example
