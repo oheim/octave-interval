@@ -26,6 +26,8 @@
     intervaltotext: Fix missing sign for upper interval boundary @code{+inf}.
 @item
     mpfr_matrix_mul_d: Changed a non-deterministic test into a demo (bug #54956).
+@item
+    Minor changes in the package manual to reflect output format changes in recent versions of Octave.  Also improvement of compatibility with the doctest package (bug #55969).
 @end itemize
 
 @release{3.2.1, 2022-01-28}
