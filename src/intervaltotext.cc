@@ -53,7 +53,7 @@ struct interval_format
 
   // how Empty, Entire, and NaI are output
   text_case special_case;
-  // whether Entire becomes [Entire] or [-Inf, Inf] (only in inf-sup form)
+  // whether Entire becomes [Entire] or [-inf, inf] (only in inf-sup form)
   bool entire_boundaries;
 
   // [-1, 1], [-1, +1], [+1, +2]
@@ -395,6 +395,7 @@ struct shared_conversion_resources
 std::string
 mpfr_to_string_d
 (
+  const interval_format &layout,
   shared_conversion_resources &stat,
   const bool &force_sign,
   const double &x,
@@ -412,7 +413,7 @@ mpfr_to_string_d
   mpfr_sprintf (stat.buf, string_template, rnd, stat.mp);
   std::string retval(stat.buf);
 
-  if (stat.is_exact)
+  if (stat.is_exact && std::isfinite (x))
     {
       mpfr_rnd_t complementary_rnd;
       switch (rnd)
@@ -426,6 +427,40 @@ mpfr_to_string_d
 
       mpfr_sprintf (stat.buf, string_template, complementary_rnd, stat.mp);
       stat.is_exact = (retval == stat.buf);
+    }
+
+  if (force_sign && (x == std::numeric_limits <double>::infinity ()))
+    {
+      // MPFR always outputs inf without a sign.
+      // We must correct this.
+      std::size_t space_pos;
+      if (layout.left_justify)
+        space_pos = retval.find_first_of (' ');
+      else 
+        space_pos = retval.find_last_of (" +");
+      
+      // Check if MPFR really did not produce a sign,
+      // which might change in a future version.
+      bool fix_missing_sign;
+      if (layout.left_justify)
+        fix_missing_sign = (retval.at(0) != '+');
+      else if (space_pos == std::string::npos)
+        fix_missing_sign = true;
+      else
+        fix_missing_sign = (retval.at(space_pos) != '+');
+      
+      // Add missing sign for +inf.
+      if (fix_missing_sign) {
+        if (space_pos == std::string::npos)
+          retval.insert (0, 1, '+');
+        else if (layout.left_justify)
+          {
+            retval.replace (1, space_pos, retval.substr (0, space_pos));
+            retval.replace (0, 1, 1, '+');
+          }
+        else
+          retval.replace (space_pos, 1, 1, '+');
+      }
     }
 
   return retval;
@@ -571,7 +606,7 @@ double_to_string
   if (is_exact_hexadecimal (layout))
     retval = double_to_exact_hex_string (layout, stat, force_sign, x);
   else
-    retval = mpfr_to_string_d (stat, force_sign, x, rnd);
+    retval = mpfr_to_string_d (layout, stat, force_sign, x, rnd);
 
   // Never display zeros with a sign, even for force_sign == true.
   // For interval arithmetic, according to IEEE Std 1788-2015, there is no
@@ -1060,7 +1095,7 @@ DEFUN_DLD (intervaltotext, args, nargout,
   "@item c\n"
   "Use lower case for Entire, Empty, and NaI\n"
   "@item <\n"
-  "Output Entire as @code{[-Inf, +Inf]} instead of @code{[Entire]}\n"
+  "Output Entire as @code{[-inf, +inf]} instead of @code{[Entire]}\n"
   "@item -\n"
   "Left justify within the given field width\n"
   "@item +\n"
@@ -1281,11 +1316,17 @@ DEFUN_DLD (intervaltotext, args, nargout,
 %!assert (intervaltotext (infsup (), "[cg]"), "[empty]");
 
 %!assert (intervaltotext (infsup (-inf, inf), "[g]"), "[Entire]");
-%!assert (intervaltotext (infsup (-inf, inf), "[<g]"), "[-inf, inf]");
+%!assert (intervaltotext (infsup (-inf, inf), "[<g]"), "[-inf, +inf]");
+%!assert (intervaltotext (infsup (-inf, inf), "[<+g]"), "[-inf, +inf]");
+%!assert (intervaltotext (infsup (-inf, inf), "[< g]"), "[-inf, inf]");
 
 %!assert (intervaltotext (infsup (2, 3), "[3g]"), "[  2,   3]");
 %!assert (intervaltotext (infsup (2, 3), "[-3g]"), "[2  , 3  ]");
 %!assert (intervaltotext (infsup (2, 3), "[03g]"), "[002, 003]");
+%!assert (intervaltotext (infsup (-inf, inf), "[5g]"), "[Entire]");
+%!assert (intervaltotext (infsup (-inf, inf), "[<5g]"), "[ -inf,  +inf]");
+%!assert (intervaltotext (infsup (-inf, inf), "[<-5g]"), "[-inf , +inf ]");
+%!assert (intervaltotext (infsup (-inf, inf), "[<05g]"), "[ -inf,  +inf]");
 
 %!assert (intervaltotext (infsup (2, 3), "[+g]"), "[+2, +3]");
 %!assert (intervaltotext (infsup (2, 3), "[ g]"), "[2, 3]");
@@ -1297,7 +1338,7 @@ DEFUN_DLD (intervaltotext, args, nargout,
 %!assert (intervaltotext (infsup (2, 3), "[f]"), "[2.000000, 3.000000]");
 %!assert (intervaltotext (infsup (2, 3), "[e]"), "[2.000000e+00, 3.000000e+00]");
 %!assert (intervaltotext (infsup (2, 3), "[E]"), "[2.000000E+00, 3.000000E+00]");
-%!assert (intervaltotext (infsup (-inf, inf), "[<F]"), "[-INF, INF]");
+%!assert (intervaltotext (infsup (-inf, inf), "[<F]"), "[-INF, +INF]");
 
 %!assert (intervaltotext (infsup (2, 3), "?g"), "2.5?5");
 %!assert (intervaltotext (infsup (2, 3), "9:?g"), "    2.5?5");
