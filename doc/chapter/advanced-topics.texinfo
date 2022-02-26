@@ -196,7 +196,7 @@ infsupdec ("5?32e2") # uncertain form with ulp count
 @example
 @group
 infsupdec ("-42??u") # unbound uncertain form
-  @result{} ans = [-42, +Inf]_dac
+  @result{} ans = [-42, +inf]_dac
 @end group
 @end example
 
